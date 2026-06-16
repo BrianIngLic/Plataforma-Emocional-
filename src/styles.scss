@@ -1,1 +1,74 @@
 /* You can add global styles to this file, and also import other style files */
+@import '@angular/material/prebuilt-themes/azure-blue.css';
+
+/* THEME VARIABLES - MODO CLARO (Default / Light) */
+:root {
+  --bg-main: #f8fafc;
+  --bg-card: #ffffff;
+  --bg-sidebar: linear-gradient(135deg, #1e1b4b, #0f172a);
+  
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-sidebar: #ffffff;
+  --text-sidebar-muted: #94a3b8;
+  
+  --border-color: #cbd5e1;
+  --input-bg: #f1f5f9;
+  
+  --btn-primary-bg: linear-gradient(to right, #6366f1, #8b5cf6);
+  --btn-primary-text: #ffffff;
+  --btn-secondary-bg: #ffffff;
+  --btn-secondary-border: #cbd5e1;
+  --btn-secondary-text: #334155;
+  
+  --accent-purple: #8b5cf6;
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(0, 0, 0, 0.1);
+}
+
+/* THEME VARIABLES - MODO OSCURO (Automático según el Sistema Operativo) */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-main: #0f172a; 
+    --bg-card: #141c2f; 
+    --bg-sidebar: linear-gradient(135deg, #16123a, #0b1121);
+    
+    --text-primary: #f8fafc;
+    --text-secondary: #cbd5e1;
+    --text-sidebar: #ffffff;
+    --text-sidebar-muted: #94a3b8;
+    
+    --border-color: rgba(255, 255, 255, 0.1);
+    --input-bg: #1e293b;
+    
+    --btn-primary-bg: linear-gradient(to right, #a78bfa, #818cf8, #5eead4);
+    --btn-primary-text: #0f172a;
+    --btn-secondary-bg: transparent;
+    --btn-secondary-border: rgba(255, 255, 255, 0.1);
+    --btn-secondary-text: #cbd5e1;
+    
+    --accent-purple: #c084fc;
+    --glass-bg: rgba(255, 255, 255, 0.03);
+    --glass-border: rgba(255, 255, 255, 0.05);
+  }
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', 'Roboto', 'Segoe UI', sans-serif;
+  background-color: var(--bg-main);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Scrollbar personalizado */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 4px;
+}

@@ -1,0 +1,114 @@
+<div class="auth-layout">
+  
+  <!-- Lado Izquierdo: Sidebar Educativo -->
+  <aside class="auth-sidebar">
+    <div class="sidebar-content">
+      <div class="brand">
+        <div class="logo-icon">🌿</div>
+        <div class="brand-text">
+          <h1>EmolA</h1>
+          <span>Bienestar emocional</span>
+        </div>
+      </div>
+
+      <div class="graphic-dots">
+        <span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span>
+        <span class="dot d4"></span><span class="dot d5"></span><span class="dot d6"></span>
+      </div>
+
+      <div class="hero-text">
+        <h2>Un espacio seguro<br><em>para sanar.</em></h2>
+        <p>Acompañamiento emocional con inteligencia artificial, adaptado a tu ritmo y necesidades.</p>
+      </div>
+
+      <ul class="features-list">
+        <li>
+          <span class="feat-icon">💬</span> Chat emocional con texto y voz
+        </li>
+        <li>
+          <span class="feat-icon">✨</span> Diario personal con análisis IA
+        </li>
+        <li>
+          <span class="feat-icon">🥗</span> Seguimiento nutricional integrado
+        </li>
+      </ul>
+
+      <div class="testimonial-card">
+        <p>"Escribir en mi diario y conversar con EmolA me ayudó a entender mis emociones de una manera que nunca había logrado antes."</p>
+        <div class="author">
+          <div class="avatar">S</div>
+          <div class="author-info">
+            <strong>Sofía R.</strong>
+            <span>Estudiante · 22 años</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Lado Derecho: Formulario de Login -->
+  <main class="auth-main">
+    
+    <div class="form-wrapper">
+      <div class="form-header">
+        <h2>Bienvenido de vuelta</h2>
+        <p>Continúa tu proceso de bienestar.</p>
+      </div>
+
+      <form (ngSubmit)="onLogin()" #loginForm="ngForm" class="login-form">
+        <div class="form-group">
+          <label for="matricula">MATRÍCULA INSTITUCIONAL</label>
+          <div class="input-icon-wrapper">
+            <span class="icon">✉️</span>
+            <input 
+              type="text" 
+              id="matricula" 
+              name="matricula" 
+              [(ngModel)]="matricula" 
+              placeholder="Ej. 202112345" 
+              required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="password">CONTRASEÑA</label>
+          <div class="input-icon-wrapper">
+            <span class="icon">🔒</span>
+            <input 
+              type="password" 
+              id="password" 
+              name="password" 
+              [(ngModel)]="pass" 
+              placeholder="••••••••" 
+              required>
+          </div>
+        </div>
+
+        <div class="forgot-password">
+          <a href="#">¿Olvidaste tu contraseña?</a>
+        </div>
+
+        <div *ngIf="errorMessage" class="error-alert">
+          {{ errorMessage }}
+        </div>
+
+        <button type="submit" class="btn-primary" [disabled]="!loginForm.valid">
+          Entrar &rarr;
+        </button>
+
+        <div class="divider">
+          <span>o continúa con</span>
+        </div>
+
+        <div class="social-logins">
+          <button type="button" class="btn-social">Google</button>
+          <button type="button" class="btn-social">Microsoft</button>
+        </div>
+      </form>
+
+      <div class="auth-footer">
+        <p>¿No tienes cuenta? <a routerLink="/auth/register">Regístrate gratis</a></p>
+      </div>
+    </div>
+  </main>
+</div>

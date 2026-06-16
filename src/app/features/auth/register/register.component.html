@@ -1,0 +1,176 @@
+<div class="auth-container">
+  <div class="glass-card stepper-card">
+    <div class="brand-header">
+      <h2>Apertura de Expediente</h2>
+      <p>Plataforma Emocional BUAP</p>
+    </div>
+
+    <!-- Angular Material Stepper adaptado a nuestro Glassmorphism Theme -->
+    <mat-stepper linear #stepper class="custom-stepper">
+      
+      <!-- PASO 1: Credenciales -->
+      <mat-step [stepControl]="credentialsFormGroup" label="Credenciales">
+        <form [formGroup]="credentialsFormGroup" class="step-form">
+          <p class="step-description">Ingresa tu número de matrícula institucional para comenzar.</p>
+          
+          <mat-form-field appearance="outline">
+            <mat-label>Matrícula</mat-label>
+            <input matInput formControlName="matricula" placeholder="Ej. 202112345" required>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Contraseña</mat-label>
+            <input matInput type="password" formControlName="password" required>
+            <mat-error *ngIf="credentialsFormGroup.get('password')?.hasError('required')">
+              La contraseña es obligatoria.
+            </mat-error>
+            <mat-error *ngIf="credentialsFormGroup.get('password')?.hasError('minlength')">
+              Debe tener al menos 6 caracteres.
+            </mat-error>
+          </mat-form-field>
+
+          <div class="stepper-actions">
+            <button mat-flat-button color="primary" matStepperNext>Siguiente</button>
+          </div>
+        </form>
+      </mat-step>
+
+      <!-- PASO 2: Perfil -->
+      <mat-step [stepControl]="profileFormGroup" label="Perfil">
+        <form [formGroup]="profileFormGroup" class="step-form">
+          <p class="step-description">¿Cómo te llamas?</p>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Nombre(s)</mat-label>
+            <input matInput formControlName="firstName" required>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Apellidos</mat-label>
+            <input matInput formControlName="lastName" required>
+          </mat-form-field>
+
+          <div class="stepper-actions">
+            <button mat-button matStepperPrevious>Atrás</button>
+            <button mat-flat-button color="primary" matStepperNext>Siguiente</button>
+          </div>
+        </form>
+      </mat-step>
+
+      <!-- PASO 3: Cuestionario Clínico EAT-26 (Parte 1) -->
+      <mat-step [stepControl]="clinicalPart1FormGroup" label="Test Clínico (Pt. 1)">
+        <form [formGroup]="clinicalPart1FormGroup" class="step-form eat26-form">
+          <div class="eat26-header">
+            <h3>Test de Actitudes Alimentarias (EAT-26)</h3>
+            <p>Parte 1 de 2: Por favor, responde con la mayor sinceridad posible. No hay respuestas correctas o incorrectas.</p>
+          </div>
+
+          <!-- Parte B: 26 Preguntas -->
+          <div class="questions-section">
+            <h4>Sección de Declaraciones</h4>
+            
+            <div class="eat26-grid">
+              <div class="grid-header">
+                <div class="header-question"></div> <!-- Columna vacía para alinear el texto -->
+                <div class="header-opt" *ngFor="let opt of eatOptions"><span>{{ opt }}</span></div>
+              </div>
+
+              <mat-radio-group *ngFor="let q of partBQuestions" [formControlName]="q.id" class="grid-row">
+                <div class="row-question">{{ q.text }}</div>
+                <div class="row-radio" *ngFor="let opt of eatOptions">
+                  <mat-radio-button [value]="opt" color="primary"></mat-radio-button>
+                </div>
+              </mat-radio-group>
+            </div>
+          </div>
+
+          <div class="error-msg" *ngIf="clinicalPart1FormGroup.invalid && clinicalPart1FormGroup.touched">
+            Por favor, responde todas las preguntas para continuar.
+          </div>
+
+          <div class="stepper-actions">
+            <button mat-button matStepperPrevious>Atrás</button>
+            <button mat-flat-button color="primary" matStepperNext [disabled]="clinicalPart1FormGroup.invalid">Siguiente</button>
+          </div>
+        </form>
+      </mat-step>
+
+      <!-- PASO 4: Cuestionario Clínico EAT-26 (Parte 2) -->
+      <mat-step [stepControl]="clinicalPart2FormGroup" label="Test Clínico (Pt. 2)">
+        <form [formGroup]="clinicalPart2FormGroup" class="step-form eat26-form">
+          <div class="eat26-header">
+            <h3>Test de Actitudes Alimentarias (EAT-26)</h3>
+            <p>Parte 2 de 2: Preguntas de comportamiento sobre los últimos 6 meses.</p>
+          </div>
+
+          <!-- Parte C: Preguntas de Comportamiento -->
+          <div class="questions-section">
+            <h4>En los últimos 6 meses, ¿has...</h4>
+            
+            <div class="eat26-grid behavioral-grid">
+              <div class="grid-header">
+                <div class="header-question"></div>
+                <div class="header-opt" *ngFor="let opt of behavioralOptions"><span>{{ opt }}</span></div>
+              </div>
+
+              <mat-radio-group *ngFor="let b of partCQuestions" [formControlName]="b.id" class="grid-row">
+                <div class="row-question">{{ b.text }}</div>
+                <div class="row-radio" *ngFor="let opt of behavioralOptions">
+                  <mat-radio-button [value]="opt" color="primary"></mat-radio-button>
+                </div>
+              </mat-radio-group>
+            </div>
+
+            <!-- Pregunta E (Yes/No) -->
+            <div class="question-item isolated-question">
+              <p class="question-text">E. ¿Has perdido 10 kg (20 libras) o más en los últimos 6 meses?</p>
+              <mat-radio-group formControlName="bE" class="radio-options">
+                <mat-radio-button value="Yes" color="primary">Sí</mat-radio-button>
+                <mat-radio-button value="No" color="primary">No</mat-radio-button>
+              </mat-radio-group>
+            </div>
+          </div>
+
+          <div class="error-msg" *ngIf="clinicalPart2FormGroup.invalid && clinicalPart2FormGroup.touched">
+            Por favor, responde todas las preguntas para continuar.
+          </div>
+
+          <div class="stepper-actions">
+            <button mat-button matStepperPrevious>Atrás</button>
+            <button mat-flat-button color="primary" matStepperNext [disabled]="clinicalPart2FormGroup.invalid">Siguiente</button>
+          </div>
+        </form>
+      </mat-step>
+
+      <!-- PASO 5: Consentimiento y Finalización -->
+      <mat-step [stepControl]="consentFormGroup" label="Términos">
+        <form [formGroup]="consentFormGroup" class="step-form text-center">
+          <div class="disclaimer-box">
+            <h3>⚠️ Importante</h3>
+            <p>EmolA es un asistente basado en Inteligencia Artificial. <strong>No sustituye bajo ninguna circunstancia el diagnóstico ni la terapia con un profesional de la salud mental.</strong></p>
+          </div>
+
+          <mat-checkbox formControlName="acceptedTerms" color="primary" class="consent-check">
+            He leído y acepto los términos y condiciones.
+          </mat-checkbox>
+
+          <div class="stepper-actions submit-actions">
+            <button mat-button matStepperPrevious [disabled]="isSubmitting">Atrás</button>
+            <button 
+              mat-flat-button 
+              color="accent" 
+              (click)="submitRegistration()" 
+              [disabled]="consentFormGroup.invalid || isSubmitting">
+              {{ isSubmitting ? 'Creando expediente...' : 'Finalizar Registro' }}
+            </button>
+          </div>
+        </form>
+      </mat-step>
+
+    </mat-stepper>
+
+    <div class="auth-footer">
+      <p>¿Ya tienes expediente? <a routerLink="/auth/login">Inicia Sesión</a></p>
+    </div>
+  </div>
+</div>

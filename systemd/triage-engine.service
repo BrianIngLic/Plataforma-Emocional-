@@ -1,0 +1,15 @@
+[Unit]
+Description=Ecosistema de Asistencia Emocional - Motor de Triage
+After=network.target
+
+[Service]
+Type=simple
+User=ulises
+WorkingDirectory=/home/ulises/Documentos/RAG/Ecosistema-de-Asistencia-Emocional-con-IA-Generativa
+ExecStart=/home/ulises/Documentos/RAG/Ecosistema-de-Asistencia-Emocional-con-IA-Generativa/.venv/bin/python3 /home/ulises/Documentos/RAG/Ecosistema-de-Asistencia-Emocional-con-IA-Generativa/engine.py
+Restart=always
+RestartSec=5
+Environment=PYTHONPATH=/home/ulises/Documentos/RAG/Ecosistema-de-Asistencia-Emocional-con-IA-Generativa
+
+[Install]
+WantedBy=multi-user.target

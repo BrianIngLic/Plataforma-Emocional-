@@ -1,0 +1,74 @@
+# ============================================================
+# RECURSOS DE CRISIS Y DERIVACIÓN — ECOSISTEMA DE ASISTENCIA EMOCIONAL
+# ============================================================
+# Este archivo contiene los recursos de ayuda verificados que el
+# sistema debe proporcionar cuando se activa un override (nivel ROJO).
+#
+# INSTRUCCIONES PARA EL EQUIPO:
+# 1. Verifica cada número llamando antes de incluirlo en producción
+# 2. Agrega recursos nuevos siguiendo el mismo formato
+# 3. Marca con [VERIFICADO] o [PENDIENTE] según corresponda
+# 4. Última actualización: 2026-06-16
+# ============================================================
+
+## LÍNEAS DE CRISIS NACIONALES (24/7)
+
+NOMBRE: Línea de la Vida (Secretaría de Salud)
+TELÉFONO: 800 911 2000
+HORARIO: 24 horas, 365 días
+COSTO: Gratuito
+SERVICIO: Prevención de adicciones, depresión, ansiedad, riesgo suicida
+ESTADO: [PENDIENTE VERIFICAR]
+
+NOMBRE: Emergencias (número universal)
+TELÉFONO: 911
+HORARIO: 24 horas, 365 días
+COSTO: Gratuito
+SERVICIO: Emergencias que representen peligro inmediato para la vida
+ESTADO: [VERIFICADO]
+
+## LÍNEAS DE CRISIS BUAP (COMUNIDAD ESTUDIANTIL)
+
+NOMBRE: Línea de Atención a Crisis Emocional BUAP
+TELÉFONO: 222 344 8905
+HORARIO: Lunes a domingo, 9:00 a 21:00 horas
+COSTO: Gratuito (requiere matrícula activa)
+SERVICIO: Contención psicológica vía telefónica para estudiantes BUAP
+ESTADO: [PENDIENTE VERIFICAR]
+
+## OPCIONES DE ATENCIÓN EN PUEBLA
+
+NOMBRE: Instituto de la Juventud del Municipio de Puebla (IJMP)
+TELÉFONO: 222 213 0002
+HORARIO: Lunes a viernes, 9:00 a 15:00 horas
+COSTO: Gratuito (jóvenes 15-29 años)
+SERVICIO: Atención psicológica presencial
+DIRECCIÓN: 4 Oriente #214, Colonia Centro, Puebla
+ESTADO: [PENDIENTE VERIFICAR]
+
+NOMBRE: Secretaría de las Mujeres de Puebla
+TELÉFONO: 222 232 3738
+WHATSAPP: 222 356 4020
+HORARIO: Horario laboral
+COSTO: Gratuito
+SERVICIO: Asesoría jurídica y psicológica
+DIRECCIÓN: 2 Sur #902, Col. Centro, Puebla
+ESTADO: [PENDIENTE VERIFICAR]
+
+NOMBRE: Sistema Municipal DIF Puebla Capital
+TELÉFONO: 222 214 0000 ext. 246
+HORARIO: Horario laboral
+COSTO: Gratuito
+SERVICIO: Atención y orientación psicológica
+DIRECCIÓN: Av. Eduardo Cue Merlo 201, San Baltazar Campeche, Puebla
+ESTADO: [PENDIENTE VERIFICAR]
+
+## AGREGA AQUÍ RECURSOS ADICIONALES
+## (sigue el mismo formato de arriba)
+
+# NOMBRE:
+# TELÉFONO:
+# HORARIO:
+# COSTO:
+# SERVICIO:
+# ESTADO: [PENDIENTE VERIFICAR]

@@ -1,0 +1,71 @@
+<div class="diary-layout">
+  <!-- Columna Izquierda: Calendario -->
+  <section class="calendar-section">
+    <div class="calendar-header">
+      <h2>Calendario Emocional</h2>
+      <p>Mes Actual</p>
+    </div>
+    
+    <div class="calendar-grid">
+      <div class="day-name">Lun</div><div class="day-name">Mar</div><div class="day-name">Mié</div>
+      <div class="day-name">Jue</div><div class="day-name">Vie</div><div class="day-name">Sáb</div>
+      <div class="day-name">Dom</div>
+      
+      <!-- Offset mock -->
+      <div class="calendar-day empty"></div>
+      
+      <!-- Days -->
+      <div class="calendar-day" *ngFor="let day of calendarDays" [ngClass]="{'has-entry': day === 15 || day === 14}">
+        <span class="date">{{ day }}</span>
+        <!-- Mock indicators de estado de ánimo -->
+        <span class="mood-indicator" *ngIf="day === 15">😰</span>
+        <span class="mood-indicator" *ngIf="day === 14">😊</span>
+      </div>
+    </div>
+    
+    <div class="history-list">
+      <h3>Historial Reciente</h3>
+      <div class="history-card" *ngFor="let entry of entries()">
+        <div class="card-header">
+          <span class="date">{{ entry.date | date:'dd/MM/yyyy HH:mm' }}</span>
+          <div class="moods">
+            <span *ngFor="let mood of entry.moods" class="mood-chip">{{ mood }}</span>
+          </div>
+        </div>
+        <p class="content">{{ entry.content }}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Columna Derecha: Editor -->
+  <section class="editor-section">
+    <div class="editor-container">
+      <h2>¿Cómo te sientes hoy?</h2>
+      <p class="subtitle">Selecciona las emociones que mejor te describen en este momento (puedes marcar varias).</p>
+      
+      <div class="mood-tracker">
+        <button class="mood-btn" 
+                *ngFor="let mood of availableMoods" 
+                [class.selected]="selectedMoods.includes(mood.icon + ' ' + mood.label)"
+                (click)="toggleMood(mood.label, mood.icon)">
+          <span class="icon">{{ mood.icon }}</span>
+          <span class="label">{{ mood.label }}</span>
+        </button>
+      </div>
+
+      <div class="text-editor">
+        <textarea [(ngModel)]="diaryContent" 
+                  placeholder="Escribe tus pensamientos aquí. Este es un espacio seguro para ti..."></textarea>
+      </div>
+      
+      <div class="editor-actions">
+        <p class="privacy-note">
+          <mat-icon>lock</mat-icon> Tu diario es analizado por IA y es privado. Solo en casos de alto riesgo clínico se alertará al psicólogo para cuidarte.
+        </p>
+        <button mat-flat-button color="primary" class="save-btn" (click)="saveDiary()">
+          Guardar Entrada
+        </button>
+      </div>
+    </div>
+  </section>
+</div>

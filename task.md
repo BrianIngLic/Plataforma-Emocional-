@@ -36,4 +36,48 @@
 - `[x]` Redirección por defecto: Si no hay token, redirigir a `/auth/login`.
 
 ---
-*(Skills 3 a 6 continúan pausadas en el backlog)*
+
+## Skill 3: EmolA Chat Estudiantil (Fase actual: Ejecución)
+**3.1. Arquitectura y Servicios (`core/services/chat.service.ts`)**
+- `[x]` Desarrollar `ChatService` utilizando *Signals* para manejar el estado reactivo de los mensajes en memoria.
+- `[x]` Implementar métodos simulados (`sendMessageMock()`) que reciban texto y devuelvan una respuesta falsa de la IA con un ligero retraso de tiempo, preparándolo para la conexión real.
+
+**3.2. Layout Base (`features/chat/dashboard`)**
+- `[x]` Maquetar un layout principal de 2 columnas usando CSS Grid.
+- `[x]` Columna Izquierda (Sidebar): Historial de conversaciones previas y botón "Nuevo Chat".
+- `[x]` Columna Derecha: Área principal de mensajería activa.
+
+**3.3. Interfaz de Conversación (`features/chat/components`)**
+- `[x]` Desarrollar el componente de la ventana de mensajes (`MessageList`).
+- `[x]` Diseñar burbujas de chat diferenciadas (Usuario a la derecha, IA a la izquierda).
+- `[x]` Aplicar auto-scroll hacia abajo cuando entra un nuevo mensaje.
+
+**3.4. Componente de Entrada (`features/chat/input-bar`)**
+- `[x]` Diseñar la barra inferior con input de texto responsivo y botón de envío integrado.
+- `[x]` Añadir lógica para evitar envíos vacíos y permitir usar la tecla `Enter` para disparar la acción.
+
+**3.5. Ruteo y Protección (`app.routes.ts`)**
+- `[x]` Configurar el ruteo Lazy-Loaded hacia el módulo de chat en la ruta principal (ej. `/dashboard`).
+- `[x]` Proteger la ruta asegurando que deba pasar por el `AuthGuard`.
+
+---
+
+## Skill 6: Mi Diario Personal (Fase actual: Ejecución)
+
+**6.0. Refactorización de Layout Central (`features/dashboard`)**
+- `[x]` Extraer el Sidebar de Chat hacia un componente global `DashboardLayoutComponent`.
+- `[x]` Configurar `<router-outlet>` y redirigir `/dashboard` a `/dashboard/chat`.
+
+**6.1. Servicio de Datos (`core/services/diary.service.ts`)**
+- `[x]` Desarrollar `DiaryService` para manejar el estado reactivo de las entradas del diario (CRUD simulado).
+
+**6.2. Interfaz de Usuario (`features/diary`)**
+- `[x]` Componente Principal: Vista dividida (Calendario interactivo a la izquierda, editor a la derecha).
+- `[x]` Editor: Campo de texto libre y selector Múltiple de Estado de Ánimo (Mood Tracker con iconos).
+- `[x]` Historial: Lógica del calendario para mostrar iconos en días con entradas guardadas.
+
+**6.3. Integración en el Dashboard**
+- `[x]` Crear `diary.routes.ts` y conectarlo como ruta hija bajo `/dashboard/diary`.
+- `[x]` Hacer que el botón "Mi Diario" del menú de navegación navegue dinámicamente a la ruta.
+
+*(Skills 4 y 5 continúan pausadas en el backlog)*

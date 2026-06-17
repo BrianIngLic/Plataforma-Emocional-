@@ -8,13 +8,12 @@ export const routes: Routes = [
   },
   {
     path: 'dashboard',
-    // Componente placeholder protegido por el guard
-    loadComponent: () => import('./app').then(m => m.App),
+    loadChildren: () => import('./features/dashboard-layout/dashboard.routes').then(m => m.DASHBOARD_ROUTES),
     canActivate: [authGuard]
   },
   {
     path: '',
-    redirectTo: 'auth',
+    redirectTo: 'dashboard',
     pathMatch: 'full'
   }
 ];

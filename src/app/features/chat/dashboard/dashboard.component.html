@@ -1,0 +1,90 @@
+<!-- Área de Chat Principal (Sin Sidebar, ahora inyectada por el RouterOutlet) -->
+<main class="chat-main">
+  <header class="chat-header">
+    <div class="ai-info">
+        <div class="ai-avatar">
+          <mat-icon>auto_awesome</mat-icon>
+        </div>
+        <div class="ai-status">
+          <h2>EmolA — <span>Asistente Emocional</span></h2>
+          <p><span class="status-dot"></span> En línea · Modo texto</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button class="mode-toggle">
+          <mat-icon>send</mat-icon> Texto
+        </button>
+        <button class="mode-toggle inactive">
+          <mat-icon>mic</mat-icon> Voz
+        </button>
+      </div>
+    </header>
+
+    <!-- Historial de Conversación -->
+    <div class="messages-container" #chatScroll>
+      <div class="message-wrapper" 
+           *ngFor="let msg of messages()" 
+           [ngClass]="msg.role === 'user' ? 'user-message' : 'ai-message'">
+        
+        <div class="ai-icon" *ngIf="msg.role === 'assistant'">
+          <mat-icon>auto_awesome</mat-icon>
+        </div>
+        
+        <div class="message-bubble">
+          <!-- Renderizado Markdown para la IA -->
+          <markdown *ngIf="msg.role === 'assistant'" [data]="msg.content"></markdown>
+          <!-- Texto simple para el usuario -->
+          <p *ngIf="msg.role === 'user'">{{ msg.content }}</p>
+          
+          <div class="timestamp">{{ msg.timestamp | date:'HH:mm' }}</div>
+        </div>
+
+      </div>
+
+      <!-- Indicador de Escribiendo -->
+      <div class="message-wrapper ai-message" *ngIf="isTyping()">
+        <div class="ai-icon">
+          <mat-icon>auto_awesome</mat-icon>
+        </div>
+        <div class="message-bubble typing-indicator">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sugerencias (Ocultar si hay muchos mensajes, por diseño lo dejamos visible) -->
+    <div class="suggestions-row" *ngIf="messages().length <= 2">
+      <button class="suggestion-chip" *ngFor="let sug of suggestions" (click)="sendSuggestion(sug)">
+        {{ sug }}
+      </button>
+    </div>
+
+    <!-- Input Box -->
+    <div class="input-area">
+      <div class="input-container">
+        <div class="input-actions-left">
+          <mat-icon>attach_file</mat-icon>
+          <mat-icon>image</mat-icon>
+          <mat-icon>sentiment_satisfied_alt</mat-icon>
+        </div>
+        
+        <input type="text" 
+               [(ngModel)]="inputText" 
+               (keyup.enter)="sendMessage()" 
+               placeholder="Escribe un mensaje..."
+               [disabled]="isTyping()">
+               
+        <div class="input-actions-right">
+          <mat-icon class="mic-icon">mic</mat-icon>
+          <button class="send-btn" (click)="sendMessage()" [disabled]="!inputText.trim() || isTyping()">
+            <mat-icon>send</mat-icon>
+          </button>
+        </div>
+      </div>
+      <p class="disclaimer">EmolA puede cometer errores. No reemplaza apoyo profesional.</p>
+    </div>
+
+    <button class="help-fab">
+      <mat-icon>question_mark</mat-icon>
+    </button>
+  </main>

@@ -1,0 +1,78 @@
+<div class="app-layout">
+  <!-- Columna Izquierda: Sidebar Global -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="logo">
+        <mat-icon>eco</mat-icon>
+      </div>
+      <div class="brand-text">
+        <h2>EmolA</h2>
+        <p>Bienestar emocional</p>
+      </div>
+    </div>
+
+    <button class="new-chat-btn">
+      <mat-icon>add</mat-icon> Nuevo chat
+    </button>
+
+    <nav class="nav-menu">
+      <a class="nav-item" routerLink="/dashboard/chat" routerLinkActive="active">
+        <mat-icon>chat_bubble_outline</mat-icon>
+        <div class="nav-text">
+          <span>Asistente</span>
+          <small>Texto & Voz</small>
+        </div>
+      </a>
+      <a class="nav-item" routerLink="/dashboard/diary" routerLinkActive="active">
+        <mat-icon>menu_book</mat-icon>
+        <div class="nav-text">
+          <span>Mi Diario</span>
+          <small>Personal</small>
+        </div>
+      </a>
+      <a class="nav-item">
+        <mat-icon>restaurant</mat-icon>
+        <div class="nav-text">
+          <span>Alimentario</span>
+          <small>Nutrición</small>
+        </div>
+      </a>
+    </nav>
+
+    <div class="recent-chats">
+      <h3 class="section-title">RECIENTES</h3>
+      <div class="recent-item">
+        <span>Manejo del estrés laboral</span>
+        <small>Hace 2h</small>
+      </div>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="footer-link">
+        <mat-icon>bar_chart</mat-icon> Estadísticas
+      </div>
+      <div class="footer-link">
+        <mat-icon>settings</mat-icon> Configuración
+      </div>
+      
+      <div class="user-profile">
+        <div class="avatar">
+          <mat-icon>person</mat-icon>
+        </div>
+        <div class="user-info">
+          <span>ca</span>
+          <small><mat-icon>school</mat-icon> Estudiante</small>
+        </div>
+      </div>
+      
+      <div class="footer-link logout" (click)="logout()">
+        <mat-icon>logout</mat-icon> Cerrar sesión
+      </div>
+    </div>
+  </aside>
+
+  <!-- Área de Contenido Dinámico (Chat, Diario, etc) -->
+  <main class="content-area">
+    <router-outlet></router-outlet>
+  </main>
+</div>

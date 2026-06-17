@@ -34,3 +34,8 @@ El sistema está compuesto por un Frontend Angular, un Backend PostgREST (Postgr
 - **Triage Visual:** Listado de pacientes. Si el núcleo de IA asigna un `urgency_score` alto en un chat activo, el estudiante aparece en rojo hasta arriba de la cola del psicólogo.
 - **Visor Clínico:** Pantalla donde el psicólogo puede leer TODO el historial de la conversación que tuvo EmolA con el estudiante.
 - **Gestor de Citas:** Interfaz para que el psicólogo asigne un estatus (rutina, seguimiento, urgencia) y programe una fecha en un calendario interno.
+
+### Skill 6: Mi Diario (Personal)
+- Interfaz privada para que el estudiante registre sus pensamientos y estado de ánimo diario.
+- Integración visual alineada al ecosistema (Glassmorphism / Modo Dinámico).
+- Componente de "Mood Tracker" (Registro de Emociones).

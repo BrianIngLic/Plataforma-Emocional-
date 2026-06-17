@@ -30,10 +30,14 @@ El sistema está compuesto por un Frontend Angular, un Backend PostgREST (Postgr
 - Dashboard con barras de progreso para proteínas, grasas y carbohidratos.
 - Listado de comidas agrupadas por tiempo (desayuno, etc.).
 
-### Skill 5: Command Center Clínico y Gestor de Agenda (Psicólogo)
-- **Triage Visual:** Listado de pacientes. Si el núcleo de IA asigna un `urgency_score` alto en un chat activo, el estudiante aparece en rojo hasta arriba de la cola del psicólogo.
-- **Visor Clínico:** Pantalla donde el psicólogo puede leer TODO el historial de la conversación que tuvo EmolA con el estudiante.
-- **Gestor de Citas:** Interfaz para que el psicólogo asigne un estatus (rutina, seguimiento, urgencia) y programe una fecha en un calendario interno.
+### Skill 5: Command Center Clínico (Dashboard del Psicólogo)
+- **Dashboard Principal (Triage):** Vista de alto nivel con estadísticas, lista de casos de emergencia (`urgency_score` alto), agenda del día y métricas (gráficas).
+- **Directorio de Pacientes:** Tabla filtrable y buscable con los pacientes asignados y su nivel de riesgo.
+- **Visor Clínico Integral (Perfil):** Pantalla de detalle del paciente (basado en `PatientProfile.tsx`) que incluye:
+  - Información de contacto y clínica (Diagnóstico, Tratamiento, Medicamentos).
+  - Gráfica de progreso (ej. PHQ-9).
+  - **Superpoder EmolA:** Interfaz donde el psicólogo puede leer el historial de chat de la IA con el estudiante.
+- **Agenda Clínica:** Pantalla dedicada con vista de calendario para organizar, agendar y cancelar citas de los pacientes basadas en recomendaciones del núcleo IA.
 
 ### Skill 6: Mi Diario (Personal)
 - Interfaz privada para que el estudiante registre sus pensamientos y estado de ánimo diario.

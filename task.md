@@ -80,4 +80,31 @@
 - `[x]` Crear `diary.routes.ts` y conectarlo como ruta hija bajo `/dashboard/diary`.
 - `[x]` Hacer que el botón "Mi Diario" del menú de navegación navegue dinámicamente a la ruta.
 
-*(Skills 4 y 5 continúan pausadas en el backlog)*
+---
+
+## Skill 5: Command Center Clínico (Fase actual: Ejecución)
+
+**5.1. Enrutamiento y Layout del Psicólogo (`features/psychologist`)**
+- `[x]` Configurar `psychologist.routes.ts` (`/psychologist/dashboard`, `/psychologist/patients`).
+- `[x]` Crear un Layout dedicado para el rol clínico (con un sidebar distinto al del estudiante).
+
+**5.2. Dashboard Principal de Triage (`dashboard.component`)**
+- `[x]` Migrar y adaptar el `Dashboard.tsx` de React a Angular.
+- `[x]` Integrar tarjetas estadísticas, lista de emergencias (`urgency_score`), y agenda diaria simulada.
+- `[x]` Integrar gráficas (`Recharts` equivalente en Angular, como `ngx-charts` o Chart.js).
+
+**5.3. Directorio de Pacientes (`patients-list.component`)**
+- `[x]` Migrar `Patients.tsx` a Angular.
+- `[x]` Implementar la tabla con filtros por nombre y niveles de riesgo.
+
+**5.4. Visor Clínico Integral (`patient-profile.component`)**
+- `[x]` Migrar `PatientProfile.tsx` a Angular (Gráficas de progreso, historial de sesiones).
+- `[x]` Integrar la visualización del análisis de EmolA (Chat Inteligente) desde la perspectiva clínica.
+- `[x]` Integrar la visualización del "Mi Diario" (Skill 6) en el perfil del paciente.
+
+**5.5. Agenda Clínica (`agenda.component`)**
+- `[x]` Desarrollar la interfaz visual del calendario (CSS Grid mensual/semanal).
+- `[x]` Lógica de gestión de citas (ver detalles de la cita, marcar completada, agendar nueva cita).
+- `[x]` Integrar ruta `/psychologist/agenda` y enlazar con el botón en el layout.
+
+*(Skill 4 continúa pausada en el backlog)*

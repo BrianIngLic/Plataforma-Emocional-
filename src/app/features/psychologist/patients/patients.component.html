@@ -1,0 +1,68 @@
+<div class="patients-container">
+  <!-- Header -->
+  <div class="header-row">
+    <div class="title-section">
+      <h2>Directorio de Pacientes</h2>
+      <p>{{filteredPatients.length}} pacientes en total</p>
+    </div>
+    <div class="action-buttons">
+      <button class="btn btn-outline"><mat-icon>filter_list</mat-icon> Filtros</button>
+      <button class="btn btn-primary"><mat-icon>add</mat-icon> Nuevo Paciente</button>
+    </div>
+  </div>
+
+  <!-- Search -->
+  <div class="search-box">
+    <mat-icon class="search-icon">search</mat-icon>
+    <input type="text" placeholder="Buscar por nombre o diagnóstico..." [(ngModel)]="searchTerm" />
+  </div>
+
+  <!-- Table -->
+  <div class="table-card">
+    <div class="table-responsive">
+      <table>
+        <thead>
+          <tr>
+            <th>Nombre del Paciente</th>
+            <th>Diagnóstico</th>
+            <th>Última Sesión</th>
+            <th>Estado</th>
+            <th class="text-right">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let patient of filteredPatients">
+            <td>
+              <div class="patient-cell">
+                <div class="avatar-icon"><mat-icon>person</mat-icon></div>
+                <div class="patient-info">
+                  <span class="name">{{patient.firstName}} {{patient.lastName}}</span>
+                  <span class="id">ID: {{patient.id}}</span>
+                </div>
+              </div>
+            </td>
+            <td><span class="diagnosis">{{patient.diagnosis}}</span></td>
+            <td><span class="date">{{patient.lastSession}}</span></td>
+            <td>
+              <span class="state-badge" [ngClass]="patient.state">
+                <div class="dot"></div>
+                {{ patient.state === 'critical' ? 'Crítico' : (patient.state === 'active' ? 'Activo' : 'Inactivo') }}
+              </span>
+            </td>
+            <td class="actions-cell">
+              <button class="action-btn view" title="Ver Perfil" (click)="viewProfile(patient.id)"><mat-icon>visibility</mat-icon></button>
+              <button class="action-btn edit" title="Editar"><mat-icon>edit</mat-icon></button>
+              <button class="action-btn history" title="Historial"><mat-icon>description</mat-icon></button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state" *ngIf="filteredPatients.length === 0">
+      <mat-icon>person_off</mat-icon>
+      <p>No se encontraron pacientes con ese criterio.</p>
+    </div>
+  </div>
+</div>

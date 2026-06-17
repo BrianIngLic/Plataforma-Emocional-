@@ -1,0 +1,107 @@
+<div class="agenda-container">
+  <div class="header-actions">
+    <div class="title-section">
+      <h2><mat-icon>calendar_month</mat-icon> Agenda Clínica</h2>
+      <p>Gestión de sesiones y disponibilidad</p>
+    </div>
+    <button class="btn btn-primary" (click)="openNewAppointment()">
+      <mat-icon>add</mat-icon> Nueva Cita
+    </button>
+  </div>
+
+  <div class="agenda-grid">
+    <!-- CALENDARIO -->
+    <div class="card calendar-card">
+      <div class="calendar-header">
+        <button class="icon-btn"><mat-icon>chevron_left</mat-icon></button>
+        <h3>{{currentMonthName}}</h3>
+        <button class="icon-btn"><mat-icon>chevron_right</mat-icon></button>
+      </div>
+
+      <div class="calendar-grid">
+        <div class="weekday" *ngFor="let d of weekDays">{{d}}</div>
+        
+        <div class="day-cell" *ngFor="let day of daysInMonth" 
+             [ngClass]="{'other-month': !day.isCurrentMonth, 'selected': day.isSelected, 'has-events': day.hasAppointments}"
+             (click)="day.isCurrentMonth && selectDay(day.number)">
+          <div class="day-number">{{day.number}}</div>
+          <div class="event-dot" *ngIf="day.hasAppointments && day.isCurrentMonth"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DETALLE DEL DÍA -->
+    <div class="card day-detail-card">
+      <div class="detail-header">
+        <h3>Citas del Día</h3>
+        <p class="date-str">{{selectedDay}} de {{currentMonthName}}</p>
+      </div>
+
+      <div class="appointments-list">
+        <!-- Vacio -->
+        <div class="empty-state" *ngIf="selectedAppointments.length === 0">
+          <mat-icon>event_available</mat-icon>
+          <p>No hay citas programadas para este día.</p>
+        </div>
+
+        <!-- Lista -->
+        <div class="appointment-item" *ngFor="let app of selectedAppointments">
+          <div class="time-col">
+            <span class="time">{{app.time}}</span>
+          </div>
+          <div class="info-col">
+            <span class="patient">{{app.patient}}</span>
+            <span class="type">{{app.type}}</span>
+          </div>
+          <div class="status-col">
+            <span class="status-badge" [ngClass]="app.status">
+              {{app.status === 'urgent' ? 'Urgente' : app.status === 'confirmed' ? 'Confirmada' : app.status === 'pending' ? 'Pendiente' : 'Completada'}}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Nueva Cita -->
+  <div class="modal-backdrop" *ngIf="showNewAppointmentModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Programar Nueva Cita</h3>
+        <button class="icon-btn close" (click)="closeModal()"><mat-icon>close</mat-icon></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Paciente</label>
+          <select class="form-control">
+            <option>Seleccionar paciente...</option>
+            <option>Sara Lindqvist (ALTO RIESGO)</option>
+            <option>Elena Marchetti</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Fecha</label>
+            <input type="date" class="form-control" />
+          </div>
+          <div class="form-group">
+            <label>Hora</label>
+            <input type="time" class="form-control" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Tipo de Sesión</label>
+          <select class="form-control">
+            <option>Terapia Individual</option>
+            <option>Intervención de Crisis</option>
+            <option>Evaluación Inicial</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" (click)="closeModal()">Cancelar</button>
+        <button class="btn btn-primary" (click)="closeModal()">Guardar Cita</button>
+      </div>
+    </div>
+  </div>
+</div>

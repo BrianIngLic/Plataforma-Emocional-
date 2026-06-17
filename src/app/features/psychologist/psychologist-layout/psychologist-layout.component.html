@@ -1,0 +1,67 @@
+<div class="app-layout">
+  <!-- Columna Izquierda: Sidebar Clínico -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="logo">
+        <mat-icon>local_hospital</mat-icon>
+      </div>
+      <div class="brand-text">
+        <h2>Command Center</h2>
+        <p>Portal Clínico</p>
+      </div>
+    </div>
+
+    <button class="new-action-btn">
+      <mat-icon>add</mat-icon> Nueva Cita
+    </button>
+
+    <nav class="nav-menu">
+      <a class="nav-item" routerLink="/psychologist/dashboard" routerLinkActive="active">
+        <mat-icon>dashboard</mat-icon>
+        <div class="nav-text">
+          <span>Triage Visual</span>
+          <small>Panorama General</small>
+        </div>
+      </a>
+      <a class="nav-item" routerLink="/psychologist/patients" routerLinkActive="active" [routerLinkActiveOptions]="{exact: false}">
+        <mat-icon>people</mat-icon>
+        <div class="nav-text">
+          <span>Pacientes</span>
+          <small>Directorio</small>
+        </div>
+      </a>
+      <a class="nav-item" routerLink="/psychologist/agenda" routerLinkActive="active">
+        <mat-icon>event_note</mat-icon>
+        <div class="nav-text">
+          <span>Agenda</span>
+          <small>Citas y Horarios</small>
+        </div>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="footer-link">
+        <mat-icon>settings</mat-icon> Ajustes Clínicos
+      </div>
+      
+      <div class="user-profile">
+        <div class="avatar">
+          <mat-icon>psychology</mat-icon>
+        </div>
+        <div class="user-info">
+          <span>Dra. Rivera</span>
+          <small>Psicóloga Titular</small>
+        </div>
+      </div>
+      
+      <div class="footer-link logout" (click)="logout()">
+        <mat-icon>logout</mat-icon> Cerrar sesión
+      </div>
+    </div>
+  </aside>
+
+  <!-- Área de Contenido Dinámico Clínico -->
+  <main class="content-area">
+    <router-outlet></router-outlet>
+  </main>
+</div>

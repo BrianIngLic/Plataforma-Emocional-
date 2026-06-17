@@ -12,6 +12,11 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
   {
+    path: 'psychologist',
+    loadChildren: () => import('./features/psychologist/psychologist.routes').then(m => m.PSYCHOLOGIST_ROUTES),
+    canActivate: [authGuard]
+  },
+  {
     path: '',
     redirectTo: 'dashboard',
     pathMatch: 'full'

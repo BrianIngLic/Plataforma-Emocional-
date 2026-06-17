@@ -12,8 +12,13 @@ export class AuthService {
   public currentUser = signal<{ matricula: string, role: string } | null>(null);
   public isLoggedIn = signal<boolean>(false);
 
-  constructor() {}
-
+  constructor() {
+    // Recuperar sesión si existe token al recargar
+    if (this.getToken()) {
+      this.isLoggedIn.set(true);
+      this.currentUser.set({ matricula: 'Admin', role: 'Psicologo' });
+    }
+  }
   /**
    * Simula un inicio de sesión contra PostgREST.
    * @param matricula Número de control del usuario

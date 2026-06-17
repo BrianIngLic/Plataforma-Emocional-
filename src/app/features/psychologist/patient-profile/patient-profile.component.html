@@ -1,0 +1,114 @@
+<div class="profile-container">
+  <!-- Back button -->
+  <button class="back-btn" (click)="goBack()">
+    <mat-icon>arrow_back</mat-icon> Volver al Directorio
+  </button>
+
+  <!-- Header Card -->
+  <div class="card header-card">
+    <div class="patient-header">
+      <div class="avatar"><mat-icon>person</mat-icon></div>
+      <div class="info">
+        <h1>{{patient.firstName}} {{patient.lastName}}</h1>
+        <p>{{patient.age}} años • {{patient.gender}} • ID: {{patient.id}}</p>
+        <div class="badges">
+          <span *ngIf="patient.state === 'Critical'" class="badge critical"><mat-icon>warning</mat-icon> Crítico</span>
+          <span *ngIf="patient.state === 'Active'" class="badge active">Activo</span>
+          <span class="badge neutral">Riesgo: {{patient.riskLevel}}</span>
+        </div>
+      </div>
+      <div class="stats">
+        <div class="stat-box">
+          <div class="stat-title"><mat-icon>calendar_today</mat-icon> Sesiones</div>
+          <div class="stat-value">{{patient.sessionCount}}</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-title"><mat-icon class="text-green">schedule</mat-icon> Próxima</div>
+          <div class="stat-value">{{patient.nextSession}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="content-grid">
+    <!-- Left Column (General Info & Progress) -->
+    <div class="col-main">
+      <!-- Clinical Info -->
+      <div class="card">
+        <h2 class="card-title"><mat-icon class="text-primary">assignment</mat-icon> Información Clínica</h2>
+        <div class="info-grid">
+          <div>
+            <label>Diagnóstico</label>
+            <p>{{patient.diagnosis}}</p>
+          </div>
+          <div>
+            <label>Plan de Tratamiento</label>
+            <p>{{patient.treatmentPlan}}</p>
+          </div>
+          <div>
+            <label>Medicamentos</label>
+            <ul><li *ngFor="let med of patient.medications"><mat-icon class="text-primary">medication</mat-icon> {{med}}</li></ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- EmolA AI Insights -->
+      <div class="card ai-card">
+        <h2 class="card-title"><mat-icon class="text-purple">smart_toy</mat-icon> Análisis de EmolA (IA)</h2>
+        <div class="ai-content">
+          <div class="sentiment-box">
+            <label>Sentimiento Dominante Semanal</label>
+            <div class="sentiment-value text-purple">Depresivo / Ansioso</div>
+          </div>
+          <p class="ai-text"><strong>Resumen de interacciones:</strong> El paciente ha reportado episodios de ideación de autolesión en conversaciones nocturnas. El sistema detectó palabras clave críticas el 16 de Junio. Se recomienda intervención en la próxima sesión.</p>
+        </div>
+      </div>
+
+      <!-- Progress Chart -->
+      <div class="card">
+        <h2 class="card-title"><mat-icon class="text-blue">trending_up</mat-icon> Evolución PHQ-9</h2>
+        <div class="chart-wrapper">
+           <canvas baseChart [data]="lineChartData" [options]="lineChartOptions" type="line"></canvas>
+        </div>
+      </div>
+      
+      <!-- Mi Diario (Skill 6 integration) -->
+      <div class="card">
+        <h2 class="card-title"><mat-icon class="text-amber">book</mat-icon> Últimas Entradas de Diario</h2>
+        <div class="diary-list">
+           <div class="diary-item" *ngFor="let entry of diaryEntries">
+             <div class="diary-header">
+               <span class="date">{{entry.date}}</span>
+               <span class="mood"><mat-icon [ngClass]="entry.moodColor">{{entry.moodIcon}}</mat-icon> {{entry.mood}}</span>
+             </div>
+             <p class="content">"{{entry.content}}"</p>
+           </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column (Notes & History) -->
+    <div class="col-side">
+      <!-- Clinical Notes -->
+      <div class="card notes-card" [ngClass]="{'critical-bg': patient.state === 'Critical'}">
+        <h2 class="card-title"><mat-icon class="text-primary">edit_note</mat-icon> Notas Clínicas</h2>
+        <p>{{patient.notes}}</p>
+      </div>
+
+      <!-- Session History -->
+      <div class="card">
+        <h2 class="card-title"><mat-icon class="text-primary">history</mat-icon> Historial de Sesiones</h2>
+        <div class="session-list">
+          <div class="session-item" *ngFor="let session of sessionHistory">
+            <div class="session-top">
+              <span class="date">{{session.date}}</span>
+              <span class="mood-badge" [ngClass]="session.mood.toLowerCase()">{{session.mood}}</span>
+            </div>
+            <span class="type">{{session.type}} • {{session.duration}}</span>
+            <p class="notes">{{session.notes}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

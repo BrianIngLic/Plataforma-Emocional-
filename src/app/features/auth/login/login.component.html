@@ -57,15 +57,15 @@
 
       <form (ngSubmit)="onLogin()" #loginForm="ngForm" class="login-form">
         <div class="form-group">
-          <label for="matricula">MATRÍCULA INSTITUCIONAL</label>
+          <label for="email">CORREO ELECTRÓNICO</label>
           <div class="input-icon-wrapper">
             <span class="icon">✉️</span>
             <input 
-              type="text" 
-              id="matricula" 
-              name="matricula" 
-              [(ngModel)]="matricula" 
-              placeholder="Ej. 202112345" 
+              type="email" 
+              id="email" 
+              name="email" 
+              [(ngModel)]="email" 
+              placeholder="Ej. usuario@correo.com" 
               required>
           </div>
         </div>

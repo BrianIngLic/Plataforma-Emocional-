@@ -108,3 +108,29 @@
 - `[x]` Integrar ruta `/psychologist/agenda` y enlazar con el botón en el layout.
 
 *(Skill 4 continúa pausada en el backlog)*
+
+---
+
+## Backlog Pendiente
+**Skill 8: Módulo de Administración (Core System)**
+- `[ ]` Dashboard de Administrador (`admin-layout.component`).
+- `[ ]` Formulario seguro de Alta de Personal Clínico (Psicólogos).
+- `[ ]` Panel de gestión de usuarios (suspensión, reactivación).
+
+---
+
+## Fase de Integración (Backend: PostgreSQL / PostgREST)
+
+**7.1. Configuración del Entorno**
+- `[x]` Configurar `environments/environment.ts` con credenciales de la API y llave de cifrado E2EE.
+- `[x]` Instalar cliente (Supabase JS o HttpClient) y librería criptográfica (`crypto-js`).
+- `[x]` Crear servicio base de conexión (`supabase.service.ts` y `crypto.service.ts`).
+
+**7.2. Refactorización de Autenticación**
+- `[x]` Conectar `auth.service.ts` con la base de datos para login real y manejo de sesión JWT.
+- `[x]` Conectar el stepper de registro (`register.component.ts`) para guardar datos en las tablas `users`, `profiles` y `student_clinical_records`.
+
+**7.3. Refactorización de Skills**
+- `[x]` Conectar `chat.service.ts` con la tabla `messages`.
+- `[x]` Conectar `diary.service.ts` (si existe la tabla, pendiente de crear en schema) o simular.
+- `[x]` Conectar listado de pacientes del psicólogo con las tablas reales.

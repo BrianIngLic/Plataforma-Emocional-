@@ -3,7 +3,7 @@
   <section class="calendar-section">
     <div class="calendar-header">
       <h2>Calendario Emocional</h2>
-      <p>Mes Actual</p>
+      <p>{{ monthName }} {{ year }}</p>
     </div>
     
     <div class="calendar-grid">
@@ -11,15 +11,14 @@
       <div class="day-name">Jue</div><div class="day-name">Vie</div><div class="day-name">Sáb</div>
       <div class="day-name">Dom</div>
       
-      <!-- Offset mock -->
-      <div class="calendar-day empty"></div>
+      <!-- Offsets -->
+      <div class="calendar-day empty" *ngFor="let blank of blankDays"></div>
       
       <!-- Days -->
-      <div class="calendar-day" *ngFor="let day of calendarDays" [ngClass]="{'has-entry': day === 15 || day === 14}">
+      <div class="calendar-day" *ngFor="let day of calendarDays" [ngClass]="{'has-entry': getMoodForDay(day) !== null}">
         <span class="date">{{ day }}</span>
-        <!-- Mock indicators de estado de ánimo -->
-        <span class="mood-indicator" *ngIf="day === 15">😰</span>
-        <span class="mood-indicator" *ngIf="day === 14">😊</span>
+        <!-- Indicador de estado de ánimo dinámico -->
+        <span class="mood-indicator" *ngIf="getMoodForDay(day)">{{ getMoodForDay(day) }}</span>
       </div>
     </div>
     

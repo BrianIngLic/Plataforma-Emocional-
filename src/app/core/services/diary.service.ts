@@ -1,4 +1,7 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
+import { SupabaseService } from './supabase.service';
+import { CryptoService } from './crypto.service';
+import { AuthService } from './auth.service';
 
 export interface DiaryEntry {
   id: string;
@@ -12,35 +15,76 @@ export interface DiaryEntry {
   providedIn: 'root'
 })
 export class DiaryService {
-  private entriesSignal = signal<DiaryEntry[]>([
-    {
-      id: '1',
-      date: new Date().toISOString(),
-      content: 'Hoy me sentí un poco agobiado por los exámenes, pero logré relajarme al final del día platicando con un amigo.',
-      moods: ['😰 Ansioso', '😌 Relajado'],
-      highRisk: false
-    }
-  ]);
+  private supabaseService = inject(SupabaseService);
+  private cryptoService = inject(CryptoService);
+  private authService = inject(AuthService);
+
+  private entriesSignal = signal<DiaryEntry[]>([]);
   public entries = this.entriesSignal.asReadonly();
 
-  saveEntry(content: string, moods: string[]) {
-    // Simulador simple de NLP para detectar riesgo (Mock del Core de IA)
+  constructor() {
+    this.loadEntries();
+  }
+
+  async loadEntries() {
+    const user = this.authService.currentUser();
+    if (!user) return;
+
+    const { data, error } = await this.supabaseService.supabase
+      .from('diary_entries')
+      .select('*')
+      .eq('student_id', user.id)
+      .order('created_at', { ascending: false });
+
+    if (data && !error) {
+      const parsedEntries = data.map(row => ({
+        id: row.id,
+        date: row.created_at,
+        content: this.cryptoService.decrypt(row.content), // Desciframos el contenido
+        moods: row.moods || [],
+        highRisk: row.high_risk
+      }));
+      this.entriesSignal.set(parsedEntries);
+    }
+  }
+
+  async saveEntry(content: string, moods: string[]) {
+    const user = this.authService.currentUser();
+    if (!user) return;
+
+    // Detectar riesgo antes de cifrar (Mock del Core de IA)
     const lowerContent = content.toLowerCase();
     const highRiskWords = ['morir', 'suicidio', 'no vale la pena', 'acabar con todo', 'no quiero vivir'];
     const isHighRisk = highRiskWords.some(word => lowerContent.includes(word));
 
-    const newEntry: DiaryEntry = {
-      id: Math.random().toString(36).substring(2, 9),
-      date: new Date().toISOString(),
-      content,
-      moods,
-      highRisk: isHighRisk
-    };
+    // Cifrar el contenido para Privacidad Zero-Knowledge
+    const encryptedContent = this.cryptoService.encrypt(content);
 
-    this.entriesSignal.update(entries => [newEntry, ...entries]);
+    const { data, error } = await this.supabaseService.supabase
+      .from('diary_entries')
+      .insert({
+        student_id: user.id,
+        content: encryptedContent,
+        moods: moods,
+        high_risk: isHighRisk
+      })
+      .select()
+      .single();
 
-    if (isHighRisk) {
-      console.warn('ALERTA CLÍNICA: Entrada marcada con alto riesgo. El psicólogo ha sido notificado.');
+    if (data && !error) {
+      const newEntry: DiaryEntry = {
+        id: data.id,
+        date: data.created_at,
+        content: content, // Mantenemos el texto plano en la UI actual
+        moods: data.moods,
+        highRisk: data.high_risk
+      };
+      
+      this.entriesSignal.update(entries => [newEntry, ...entries]);
+
+      if (isHighRisk) {
+        console.warn('ALERTA CLÍNICA: Entrada marcada con alto riesgo.');
+      }
     }
   }
 }

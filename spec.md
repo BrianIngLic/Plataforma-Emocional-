@@ -43,3 +43,8 @@ El sistema está compuesto por un Frontend Angular, un Backend PostgREST (Postgr
 - Interfaz privada para que el estudiante registre sus pensamientos y estado de ánimo diario.
 - Integración visual alineada al ecosistema (Glassmorphism / Modo Dinámico).
 - Componente de "Mood Tracker" (Registro de Emociones).
+
+### Skill 8: Módulo de Administración (Core System)
+- Interfaz exclusiva para el rol 'Admin'.
+- Panel de control para gestionar altas, bajas y modificaciones del personal clínico (Psicólogos).
+- Asignación manual de pacientes (Estudiantes) a psicólogos específicos (opcional, dependiendo de la política de la clínica).

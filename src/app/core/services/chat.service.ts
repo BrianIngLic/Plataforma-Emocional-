@@ -1,4 +1,7 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
+import { SupabaseService } from './supabase.service';
+import { CryptoService } from './crypto.service';
+import { AuthService } from './auth.service';
 
 export interface ChatMessage {
   id: string;
@@ -12,46 +15,127 @@ export interface ChatMessage {
   providedIn: 'root'
 })
 export class ChatService {
-  // Estado reactivo de los mensajes
+  private supabaseService = inject(SupabaseService);
+  private cryptoService = inject(CryptoService);
+  private authService = inject(AuthService);
+
   private messagesSignal = signal<ChatMessage[]>([]);
   public messages = this.messagesSignal.asReadonly();
 
-  // Estado de carga/escritura
   private isTypingSignal = signal<boolean>(false);
   public isTyping = this.isTypingSignal.asReadonly();
 
+  private activeChatId: string | null = null;
+
   constructor() {
-    // Mensaje de bienvenida inicial
-    this.messagesSignal.set([
-      {
-        id: this.generateId(),
-        role: 'assistant',
-        content: '¡Hola! Soy EmolA, tu asistente emocional. ¿Cómo te sientes hoy?',
-        timestamp: new Date()
-      }
-    ]);
+    // Al instanciar, intentamos recuperar el chat activo de Supabase
+    setTimeout(() => this.initChat(), 500); 
   }
 
-  // Enviar mensaje real a la UI e iniciar mock
-  async sendMessage(content: string) {
-    if (!content.trim()) return;
+  async initChat() {
+    const user = this.authService.currentUser();
+    if (!user) return;
 
-    // 1. Agregar mensaje del usuario
+    // Buscar si hay un chat activo hoy
+    const { data: chats } = await this.supabaseService.supabase
+      .from('chats')
+      .select('id')
+      .eq('student_id', user.id)
+      .eq('status', 'active')
+      .order('created_at', { ascending: false })
+      .limit(1);
+
+    if (chats && chats.length > 0) {
+      this.activeChatId = chats[0].id;
+      await this.loadMessages();
+    } else {
+      // Crear nuevo chat
+      const { data: newChat } = await this.supabaseService.supabase
+        .from('chats')
+        .insert({
+          student_id: user.id,
+          title: this.cryptoService.encrypt('Sesión del ' + new Date().toLocaleDateString())
+        })
+        .select()
+        .single();
+        
+      if (newChat) {
+        this.activeChatId = newChat.id;
+        // Mensaje de bienvenida local (no hace falta guardarlo en DB)
+        this.messagesSignal.set([{
+          id: 'welcome',
+          role: 'assistant',
+          content: '¡Hola! Soy EmolA, tu asistente emocional. ¿Cómo te sientes hoy?',
+          timestamp: new Date()
+        }]);
+      }
+    }
+  }
+
+  private async loadMessages() {
+    if (!this.activeChatId) return;
+
+    const { data } = await this.supabaseService.supabase
+      .from('messages')
+      .select('*')
+      .eq('chat_id', this.activeChatId)
+      .order('timestamp', { ascending: true });
+
+    if (data) {
+      const msgs: ChatMessage[] = data.map(row => ({
+        id: row.id,
+        role: row.sender_type as 'user' | 'assistant',
+        content: this.cryptoService.decrypt(row.content),
+        timestamp: new Date(row.timestamp)
+      }));
+      
+      if (msgs.length === 0) {
+        msgs.push({
+          id: 'welcome',
+          role: 'assistant',
+          content: '¡Hola! Soy EmolA, tu asistente emocional. ¿Cómo te sientes hoy?',
+          timestamp: new Date()
+        });
+      }
+      this.messagesSignal.set(msgs);
+    }
+  }
+
+  async sendMessage(content: string) {
+    if (!content.trim() || !this.activeChatId) return;
+
+    // 1. Mostrar mensaje del usuario inmediatamente
     const userMsg: ChatMessage = {
-      id: this.generateId(),
+      id: Math.random().toString(36).substring(2, 9),
       role: 'user',
       content: content.trim(),
       timestamp: new Date()
     };
-    
     this.messagesSignal.update(msgs => [...msgs, userMsg]);
     this.isTypingSignal.set(true);
 
-    // 2. Simular retraso de red (pensando...)
+    // Guardar en Supabase (cifrado E2EE)
+    await this.supabaseService.supabase.from('messages').insert({
+      chat_id: this.activeChatId,
+      sender_type: 'user',
+      content: this.cryptoService.encrypt(content.trim())
+    });
+
+    // 2. Simular retraso de red
     await this.delay(800 + Math.random() * 1000);
 
-    // 3. Crear mensaje vacío de la IA para iniciar streaming
-    const aiMsgId = this.generateId();
+    // 3. Simular respuesta del LLM
+    const aiResponse = this.getMockResponse(content);
+
+    // Guardar respuesta de IA en Supabase (cifrado E2EE)
+    const { data: aiData } = await this.supabaseService.supabase.from('messages').insert({
+      chat_id: this.activeChatId,
+      sender_type: 'assistant',
+      content: this.cryptoService.encrypt(aiResponse)
+    }).select().single();
+
+    const aiMsgId = aiData ? aiData.id : Math.random().toString(36).substring(2, 9);
+    
     const aiMsg: ChatMessage = {
       id: aiMsgId,
       role: 'assistant',
@@ -63,49 +147,33 @@ export class ChatService {
     this.messagesSignal.update(msgs => [...msgs, aiMsg]);
     this.isTypingSignal.set(false);
 
-    // 4. Iniciar streaming falso
-    this.streamMockResponse(aiMsgId, this.getMockResponse(content));
+    // 4. Stream visual en la UI
+    this.streamMockResponse(aiMsgId, aiResponse);
   }
 
   private async streamMockResponse(messageId: string, fullText: string) {
-    // Dividimos por tokens/palabras para simular un LLM
     const chunks = fullText.split(' ');
     let currentText = '';
 
     for (let i = 0; i < chunks.length; i++) {
       currentText += (i === 0 ? '' : ' ') + chunks[i];
-      
-      // Actualizar el mensaje específico con el texto que va llegando
       this.messagesSignal.update(msgs => 
         msgs.map(m => m.id === messageId ? { ...m, content: currentText } : m)
       );
-
-      // Pequeña pausa entre palabras para simular la generación de tokens (como ChatGPT)
       await this.delay(30 + Math.random() * 60);
     }
 
-    // Terminar streaming
     this.messagesSignal.update(msgs => 
       msgs.map(m => m.id === messageId ? { ...m, isStreaming: false } : m)
     );
   }
 
-  // Base de conocimientos simulada temporalmente
   private getMockResponse(input: string): string {
     const lowerInput = input.toLowerCase();
-    
-    if (lowerInput.includes('estrés') || lowerInput.includes('ansios') || lowerInput.includes('trabajo')) {
-      return 'Entiendo, la ansiedad es algo que muchas personas enfrentan. Es valiente que lo reconozcas y lo compartas.\n\nAquí tienes **3 técnicas** que te pueden ayudar ahora mismo:\n1. **Respiración 4-7-8**: Inhala en 4s, sostén 7s y exhala en 8s.\n2. **Técnica 5-4-3-2-1**: Nombra 5 cosas que ves, 4 que tocas, etc.\n3. Salir a caminar 5 minutos.\n\nCuéntame más: ¿hay algo específico que esté generando esa sensación?';
+    if (lowerInput.includes('estrés') || lowerInput.includes('ansios')) {
+      return 'Entiendo, la ansiedad es algo que muchas personas enfrentan. ¿Hay algo específico que la detone?';
     }
-    if (lowerInput.includes('hola') || lowerInput.includes('buenos dias')) {
-      return '¡Hola de nuevo! Estoy aquí para escucharte sin juzgar. Puedes escribirme lo que sea que tengas en mente. ¿Qué tal va tu semana?';
-    }
-    
-    return `He leído lo que me comentas sobre "${input.substring(0, 20)}...". Es completamente válido sentirse así. ¿Hay algo en particular que creas que detonó este sentimiento hoy?`;
-  }
-
-  private generateId(): string {
-    return Math.random().toString(36).substring(2, 9);
+    return `He leído lo que me comentas sobre "${input.substring(0, 20)}...". Es válido sentirse así. ¿Qué más pasó?`;
   }
 
   private delay(ms: number) {

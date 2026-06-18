@@ -19,26 +19,26 @@ export class LoginComponent {
   private authService = inject(AuthService);
   private router = inject(Router);
 
-  matricula: string = '';
+  email: string = '';
   pass: string = '';
   errorMessage: string = '';
   showPassword = false;
 
-  onLogin() {
+  async onLogin() {
     this.errorMessage = '';
     
-    if (!this.matricula || !this.pass) {
-      this.errorMessage = 'Por favor ingresa tu matrícula y contraseña.';
+    if (!this.email || !this.pass) {
+      this.errorMessage = 'Por favor ingresa tu correo y contraseña.';
       return;
     }
 
-    const success = this.authService.login(this.matricula, this.pass);
+    const success = await this.authService.login(this.email, this.pass);
     
     if (success) {
       // Redirigir al panel principal
       this.router.navigate(['/']);
     } else {
-      this.errorMessage = 'Matrícula o contraseña incorrectos.';
+      this.errorMessage = 'Correo o contraseña incorrectos.';
     }
   }
 }

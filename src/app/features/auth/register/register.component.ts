@@ -42,6 +42,7 @@ export class RegisterComponent {
   // Paso 1: Credenciales
   credentialsFormGroup = this.fb.group({
     matricula: ['', Validators.required],
+    email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(6)]],
   });
 
@@ -121,7 +122,8 @@ export class RegisterComponent {
 
   isSubmitting = false;
 
-  submitRegistration() {
+  async submitRegistration() {
+    console.log(this.credentialsFormGroup.value);
     if (this.consentFormGroup.invalid || this.clinicalPart1FormGroup.invalid || this.clinicalPart2FormGroup.invalid) {
       this.clinicalPart1FormGroup.markAllAsTouched();
       this.clinicalPart2FormGroup.markAllAsTouched();
@@ -130,21 +132,29 @@ export class RegisterComponent {
 
     this.isSubmitting = true;
     const matricula = this.credentialsFormGroup.value.matricula!;
+    const email = this.credentialsFormGroup.value.email!;
+    const password = this.credentialsFormGroup.value.password!;
+    const firstName = this.profileFormGroup.value.firstName!;
+    const lastName = this.profileFormGroup.value.lastName!;
     
-    const registerSuccess = this.authService.login(matricula, this.credentialsFormGroup.value.password!);
+    const userId = await this.authService.register(matricula, email, password, firstName, lastName);
 
-    if (registerSuccess) {
+    if (userId) {
       // Extraemos todo el payload del test EAT-26 uniendo ambas partes
       const clinicalData = {
         ...this.clinicalPart1FormGroup.value,
         ...this.clinicalPart2FormGroup.value
       };
-      const conditions = [JSON.stringify(clinicalData)]; // Almacenado temporalmente
+      const conditions = [JSON.stringify(clinicalData)]; 
       
-      this.clinicalService.submitClinicalRecords(matricula, conditions, true).subscribe(() => {
-        this.isSubmitting = false;
+      const success = await this.clinicalService.submitClinicalRecords(matricula, conditions, true);
+      this.isSubmitting = false;
+      if (success) {
         this.router.navigate(['/']); 
-      });
+      }
+    } else {
+      this.isSubmitting = false;
+      console.error("Error al registrar el usuario");
     }
   }
 }

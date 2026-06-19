@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
+import { RouterOutlet, RouterLink, RouterLinkActive, Router } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { AuthService } from '../../../core/services/auth.service';
 
@@ -13,8 +13,19 @@ import { AuthService } from '../../../core/services/auth.service';
 })
 export class PsychologistLayoutComponent {
   authService = inject(AuthService);
+  router = inject(Router);
 
-  logout() {
+  isSidebarCollapsed = false;
+
+  get currentUser() {
+    return this.authService.currentUser();
+  }
+
+  toggleSidebar() {
+    this.isSidebarCollapsed = !this.isSidebarCollapsed;
+  }
+
+  async logout() {
     this.authService.logout();
   }
 }

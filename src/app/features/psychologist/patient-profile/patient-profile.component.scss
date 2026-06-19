@@ -71,3 +71,168 @@
 .text-amber { color: #f59e0b; }
 .text-green { color: #10b981; }
 .text-red { color: #ef4444; }
+
+/* Nuevo Full Width Diary Layout */
+.full-width-section {
+  margin-top: 1.5rem;
+}
+
+.diary-dashboard-layout {
+  display: grid;
+  grid-template-columns: 1.2fr 2fr;
+  gap: 1.5rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  overflow: hidden;
+  
+  @media (max-width: 1024px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Calendar Section */
+.calendar-section {
+  padding: 1.5rem;
+  border-right: 1px solid var(--border-color);
+
+  @media (max-width: 1024px) {
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .calendar-header {
+    margin-bottom: 1.5rem;
+    h2 { margin: 0; font-size: 1.1rem; font-weight: 600; color: var(--text-primary); display: flex; align-items: center; gap: 0.5rem; mat-icon { font-size: 20px; width: 20px; height: 20px; } }
+    
+    .month-nav {
+      display: flex; align-items: center; gap: 1rem; margin-top: 0.5rem;
+      .clickable-month {
+        margin: 0; font-size: 0.95rem; color: var(--text-primary); font-weight: 600; font-family: monospace; display: flex; align-items: center; cursor: pointer; padding: 4px 8px; border-radius: 6px; transition: background 0.2s;
+        &:hover { background: rgba(14, 165, 233, 0.1); }
+        .dropdown-icon { font-size: 18px; width: 18px; height: 18px; color: var(--text-secondary); margin-left: 2px; }
+      }
+      .nav-btn { background: transparent; border: 1px solid var(--border-color); border-radius: 50%; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text-secondary); transition: all 0.2s; &:hover { background: rgba(14, 165, 233, 0.1); color: #0ea5e9; border-color: #0ea5e9; } mat-icon { font-size: 18px; width: 18px; height: 18px; } }
+    }
+  }
+
+  .calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+
+    .day-name {
+      text-align: center;
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      padding-bottom: 0.5rem;
+    }
+
+    .calendar-day {
+      aspect-ratio: 1;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      transition: all 0.2s;
+
+      &.empty { background: transparent; border-color: transparent; }
+      
+      .date { font-size: 0.75rem; color: var(--text-secondary); font-family: monospace; z-index: 1; }
+      .mood-indicator { font-size: 1.2rem; margin-top: 2px; z-index: 1; }
+
+      &.has-entry {
+        background: rgba(14, 165, 233, 0.05);
+        border-color: rgba(14, 165, 233, 0.2);
+        cursor: pointer;
+        &:hover { background: rgba(14, 165, 233, 0.15); transform: translateY(-2px); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+      }
+
+      &.selected {
+        background: rgba(14, 165, 233, 0.2);
+        border-color: #0ea5e9;
+        box-shadow: 0 0 0 2px rgba(14, 165, 233, 0.3);
+      }
+    }
+  }
+
+  .months-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-top: 1rem;
+
+    .month-box {
+      padding: 1rem 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--input-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s;
+
+      &:hover {
+        background: rgba(14, 165, 233, 0.05);
+        color: #0ea5e9;
+        border-color: #0ea5e9;
+        transform: translateY(-2px);
+      }
+
+      &.current-month {
+        background: #0ea5e9;
+        color: white;
+        border-color: #0ea5e9;
+      }
+    }
+  }
+}
+
+/* Entries Section */
+.entries-section {
+  padding: 1.5rem;
+
+  .entries-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    h3 { margin: 0; font-size: 1.1rem; font-weight: 600; color: var(--text-primary); }
+    button { font-size: 0.8rem; color: #0ea5e9; }
+  }
+
+  .diary-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-height: 400px;
+    overflow-y: auto;
+    padding-right: 0.5rem;
+
+    &::-webkit-scrollbar { width: 6px; }
+    &::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); border-radius: 4px; }
+
+    .diary-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      padding: 1.25rem;
+      border-radius: 12px;
+      
+      .diary-header {
+        display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;
+        .date { font-size: 0.8rem; font-family: monospace; color: var(--text-secondary); }
+        .mood { display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.75rem; font-weight: 600; color: var(--text-primary); mat-icon { font-size: 16px; width: 16px; height: 16px; } }
+      }
+      .content { margin: 0; font-size: 0.95rem; line-height: 1.5; color: var(--text-secondary); font-style: italic; }
+    }
+  }
+}

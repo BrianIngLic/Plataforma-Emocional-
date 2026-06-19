@@ -1,78 +1,87 @@
-<div class="app-layout">
+<div class="layout-container">
   <!-- Columna Izquierda: Sidebar Global -->
-  <aside class="sidebar">
+  <aside class="sidebar" [class.collapsed]="isSidebarCollapsed">
     <div class="sidebar-header">
-      <div class="logo">
-        <mat-icon>eco</mat-icon>
+      <div class="brand">
+        <div class="logo">
+          <mat-icon>eco</mat-icon>
+        </div>
+        <div class="brand-text">
+          <h2>EmolA</h2>
+          <p>Bienestar</p>
+        </div>
       </div>
-      <div class="brand-text">
-        <h2>EmolA</h2>
-        <p>Bienestar emocional</p>
-      </div>
+      <button class="btn-icon hamburger" (click)="toggleSidebar()">
+        <mat-icon>menu</mat-icon>
+      </button>
     </div>
 
-    <button class="new-chat-btn">
-      <mat-icon>add</mat-icon> Nuevo chat
-    </button>
+    <div class="sidebar-content">
+      <button class="new-action-btn">
+        <mat-icon>add</mat-icon> 
+        <span class="btn-text">Nuevo chat</span>
+      </button>
 
-    <nav class="nav-menu">
-      <a class="nav-item" routerLink="/dashboard/chat" routerLinkActive="active">
-        <mat-icon>chat_bubble_outline</mat-icon>
-        <div class="nav-text">
-          <span>Asistente</span>
-          <small>Texto & Voz</small>
-        </div>
-      </a>
-      <a class="nav-item" routerLink="/dashboard/diary" routerLinkActive="active">
-        <mat-icon>menu_book</mat-icon>
-        <div class="nav-text">
-          <span>Mi Diario</span>
-          <small>Personal</small>
-        </div>
-      </a>
-      <a class="nav-item">
-        <mat-icon>restaurant</mat-icon>
-        <div class="nav-text">
-          <span>Alimentario</span>
-          <small>Nutrición</small>
-        </div>
-      </a>
-    </nav>
+      <nav class="nav-menu">
+        <a class="nav-item" routerLink="/dashboard/chat" routerLinkActive="active">
+          <mat-icon>chat_bubble_outline</mat-icon>
+          <div class="nav-text">
+            <span>Asistente</span>
+            <small>Texto & Voz</small>
+          </div>
+        </a>
+        <a class="nav-item" routerLink="/dashboard/diary" routerLinkActive="active">
+          <mat-icon>menu_book</mat-icon>
+          <div class="nav-text">
+            <span>Mi Diario</span>
+            <small>Personal</small>
+          </div>
+        </a>
+        <a class="nav-item">
+          <mat-icon>restaurant</mat-icon>
+          <div class="nav-text">
+            <span>Alimentario</span>
+            <small>Nutrición</small>
+          </div>
+        </a>
+      </nav>
 
-    <div class="recent-chats">
-      <h3 class="section-title">RECIENTES</h3>
-      <div class="recent-item">
-        <span>Manejo del estrés laboral</span>
-        <small>Hace 2h</small>
+      <div class="recent-chats">
+        <h3 class="section-title">RECIENTES</h3>
+        <div class="recent-item">
+          <span class="recent-text">Manejo del estrés laboral</span>
+          <small class="recent-time">Hace 2h</small>
+          <mat-icon class="recent-icon">history</mat-icon>
+        </div>
       </div>
     </div>
 
     <div class="sidebar-footer">
       <div class="footer-link">
-        <mat-icon>bar_chart</mat-icon> Estadísticas
+        <mat-icon>bar_chart</mat-icon> <span class="nav-text">Estadísticas</span>
       </div>
       <div class="footer-link">
-        <mat-icon>settings</mat-icon> Configuración
+        <mat-icon>settings</mat-icon> <span class="nav-text">Configuración</span>
       </div>
       
-      <div class="user-profile">
+      <div class="user-profile" *ngIf="currentUser">
         <div class="avatar">
           <mat-icon>person</mat-icon>
         </div>
         <div class="user-info">
-          <span>ca</span>
-          <small><mat-icon>school</mat-icon> Estudiante</small>
+          <span class="name" style="text-transform: capitalize;">{{ currentUser.name || 'Estudiante' }}</span>
+          <small class="role"><mat-icon>school</mat-icon> {{ currentUser.role || 'Estudiante' }}</small>
         </div>
       </div>
       
       <div class="footer-link logout" (click)="logout()">
-        <mat-icon>logout</mat-icon> Cerrar sesión
+        <mat-icon>logout</mat-icon> <span class="nav-text">Cerrar sesión</span>
       </div>
     </div>
   </aside>
 
   <!-- Área de Contenido Dinámico (Chat, Diario, etc) -->
-  <main class="content-area">
+  <main class="main-content" [class.expanded]="isSidebarCollapsed">
     <router-outlet></router-outlet>
   </main>
 </div>

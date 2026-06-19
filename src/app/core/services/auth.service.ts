@@ -1,43 +1,62 @@
 import { Injectable, signal } from '@angular/core';
 import { SupabaseService } from './supabase.service';
 import { CryptoService } from './crypto.service';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  public currentUser = signal<{ matricula: string, role: string, id: string } | null>(null);
+  public currentUser = signal<{ matricula: string, role: string, id: string, name: string } | null>(null);
   public isLoggedIn = signal<boolean>(false);
 
   constructor(
     private supabaseService: SupabaseService,
-    private cryptoService: CryptoService
+    private cryptoService: CryptoService,
+    private router: Router
   ) {
     this.checkSession();
   }
 
-  private async checkSession() {
+  public async checkSession(): Promise<boolean> {
+    if (this.isLoggedIn()) return true;
+
     const { data: { session } } = await this.supabaseService.supabase.auth.getSession();
     if (session) {
       await this.loadUserProfile(session.user.id);
+      return true;
     }
+    return false;
   }
 
   private async loadUserProfile(userId: string) {
     const { data, error } = await this.supabaseService.supabase
       .from('users')
-      .select('matricula, roles(name)')
+      .select('matricula, role_id, profiles(first_name, last_name)')
       .eq('id', userId)
       .single();
 
     if (data) {
+      let roleName = 'Estudiante';
+      if (data.role_id === 3 || data.role_id === '3') roleName = 'Psicologo';
+      if (data.role_id === 1 || data.role_id === '1') roleName = 'Admin';
+
+      let fullName = 'Usuario';
+      if (data.profiles) {
+        // @ts-ignore
+        const p = Array.isArray(data.profiles) ? data.profiles[0] : data.profiles;
+        if (p) fullName = `${p.first_name || ''} ${p.last_name || ''}`.trim();
+      }
+
       this.currentUser.set({ 
         matricula: data.matricula, 
-        // @ts-ignore
-        role: data.roles?.name || 'Estudiante',
-        id: userId
+        role: roleName,
+        id: userId,
+        name: fullName || 'Usuario'
       });
       this.isLoggedIn.set(true);
+    } else if (error) {
+      console.error('Error loading user profile:', error.message);
     }
   }
 
@@ -51,7 +70,7 @@ export class AuthService {
       if (error || !data.session) {
         if (error?.message?.includes('Failed to fetch') || error?.message?.includes('Network request failed')) {
            console.warn('⚠️ MODO OFFLINE ACTIVADO: Supabase no detectado. Login simulado.');
-           this.activateMockSession(matricula);
+           this.activateMockSession(email);
            return true;
         }
         console.error('Error en login:', error?.message);
@@ -62,7 +81,7 @@ export class AuthService {
       return true;
     } catch (e) {
       console.warn('⚠️ MODO OFFLINE ACTIVADO: Login simulado por excepción de red.');
-      this.activateMockSession(matricula);
+      this.activateMockSession(email);
       return true;
     }
   }
@@ -120,7 +139,8 @@ export class AuthService {
     this.currentUser.set({ 
       matricula: matricula, 
       role: role,
-      id: 'mock-user-id-123'
+      id: 'mock-user-id-123',
+      name: 'Usuario Offline'
     });
     this.isLoggedIn.set(true);
   }
@@ -129,5 +149,6 @@ export class AuthService {
     await this.supabaseService.supabase.auth.signOut();
     this.currentUser.set(null);
     this.isLoggedIn.set(false);
+    this.router.navigate(['/auth/login']);
   }
 }

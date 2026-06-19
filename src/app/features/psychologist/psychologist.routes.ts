@@ -23,6 +23,10 @@ export const PSYCHOLOGIST_ROUTES: Routes = [
         loadComponent: () => import('./patient-profile/patient-profile.component').then(m => m.PatientProfileComponent)
       },
       {
+        path: 'settings',
+        loadComponent: () => import('./settings/settings.component').then(m => m.SettingsComponent)
+      },
+      {
         path: '',
         redirectTo: 'dashboard',
         pathMatch: 'full'

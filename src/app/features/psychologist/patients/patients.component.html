@@ -3,11 +3,11 @@
   <div class="header-row">
     <div class="title-section">
       <h2>Directorio de Pacientes</h2>
-      <p>{{filteredPatients.length}} pacientes en total</p>
+      <p>{{myPatients.length}} pacientes asignados a tu cargo</p>
     </div>
     <div class="action-buttons">
       <button class="btn btn-outline"><mat-icon>filter_list</mat-icon> Filtros</button>
-      <button class="btn btn-primary"><mat-icon>add</mat-icon> Nuevo Paciente</button>
+      <button class="btn btn-primary" (click)="showGlobalModal = true"><mat-icon>person_add</mat-icon> Nuevo Paciente</button>
     </div>
   </div>
 
@@ -26,6 +26,7 @@
             <th>Nombre del Paciente</th>
             <th>Diagnóstico</th>
             <th>Última Sesión</th>
+            <th>Próxima Sesión</th>
             <th>Estado</th>
             <th class="text-right">Acciones</th>
           </tr>
@@ -43,17 +44,18 @@
             </td>
             <td><span class="diagnosis">{{patient.diagnosis}}</span></td>
             <td><span class="date">{{patient.lastSession}}</span></td>
+            <td><span class="date text-amber">{{patient.nextSession}}</span></td>
             <td>
               <span class="state-badge" [ngClass]="patient.state">
                 <div class="dot"></div>
                 {{ patient.state === 'critical' ? 'Crítico' : (patient.state === 'active' ? 'Activo' : 'Inactivo') }}
               </span>
             </td>
-            <td class="actions-cell">
-              <button class="action-btn view" title="Ver Perfil" (click)="viewProfile(patient.id)"><mat-icon>visibility</mat-icon></button>
-              <button class="action-btn edit" title="Editar"><mat-icon>edit</mat-icon></button>
-              <button class="action-btn history" title="Historial"><mat-icon>description</mat-icon></button>
-            </td>
+              <td class="actions-cell">
+                <button class="action-btn view" title="Ver Perfil" (click)="viewProfile(patient.id)"><mat-icon>visibility</mat-icon></button>
+                <button class="action-btn edit" title="Editar"><mat-icon>edit</mat-icon></button>
+                <button class="action-btn history" title="Historial"><mat-icon>description</mat-icon></button>
+              </td>
           </tr>
         </tbody>
       </table>
@@ -62,7 +64,40 @@
     <!-- Empty State -->
     <div class="empty-state" *ngIf="filteredPatients.length === 0">
       <mat-icon>person_off</mat-icon>
-      <p>No se encontraron pacientes con ese criterio.</p>
+      <p>No tienes pacientes asignados que coincidan con tu búsqueda.</p>
+    </div>
+  </div>
+
+  <!-- Modal Directorio Global -->
+  <div class="modal-overlay" *ngIf="showGlobalModal" (click)="showGlobalModal = false">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>Buscar Estudiante en Plataforma</h2>
+        <button class="close-btn" (click)="showGlobalModal = false"><mat-icon>close</mat-icon></button>
+      </div>
+      
+      <div class="search-box">
+        <mat-icon class="search-icon">search</mat-icon>
+        <input type="text" placeholder="Buscar por nombre o matrícula..." [(ngModel)]="globalSearchTerm" />
+      </div>
+
+      <div class="global-list">
+        <div class="global-item" *ngFor="let patient of filteredGlobalPatients">
+          <div class="avatar-icon"><mat-icon>person</mat-icon></div>
+          <div class="info">
+            <span class="name">{{patient.firstName}} {{patient.lastName}}</span>
+            <span class="mat">Matrícula: {{patient.matricula || 'No registrada'}}</span>
+          </div>
+          <button class="btn btn-primary btn-sm" (click)="assignPatient(patient.id)">
+            <mat-icon>person_add</mat-icon> Asignarme
+          </button>
+        </div>
+        
+        <div class="empty-state" *ngIf="filteredGlobalPatients.length === 0">
+          <mat-icon>search_off</mat-icon>
+          <p>No se encontraron estudiantes no asignados con ese criterio.</p>
+        </div>
+      </div>
     </div>
   </div>
 </div>

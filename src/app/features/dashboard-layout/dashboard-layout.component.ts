@@ -13,6 +13,16 @@ import { AuthService } from '../../core/services/auth.service';
 })
 export class DashboardLayoutComponent {
   authService = inject(AuthService);
+  
+  isSidebarCollapsed = false;
+
+  get currentUser() {
+    return this.authService.currentUser();
+  }
+
+  toggleSidebar() {
+    this.isSidebarCollapsed = !this.isSidebarCollapsed;
+  }
 
   logout() {
     this.authService.logout();

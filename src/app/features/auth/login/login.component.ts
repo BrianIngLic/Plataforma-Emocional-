@@ -35,8 +35,13 @@ export class LoginComponent {
     const success = await this.authService.login(this.email, this.pass);
     
     if (success) {
-      // Redirigir al panel principal
-      this.router.navigate(['/']);
+      const user = this.authService.currentUser();
+      
+      if (user?.role === 'Psicologo') {
+        this.router.navigate(['/psychologist']);
+      } else {
+        this.router.navigate(['/']);
+      }
     } else {
       this.errorMessage = 'Correo o contraseña incorrectos.';
     }

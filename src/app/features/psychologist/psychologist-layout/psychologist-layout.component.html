@@ -1,67 +1,78 @@
-<div class="app-layout">
-  <!-- Columna Izquierda: Sidebar Clínico -->
-  <aside class="sidebar">
+<div class="layout-container">
+  <!-- Sidebar -->
+  <aside class="sidebar" [class.collapsed]="isSidebarCollapsed">
+    
     <div class="sidebar-header">
-      <div class="logo">
-        <mat-icon>local_hospital</mat-icon>
+      <div class="brand">
+        <div class="logo">
+          <mat-icon>add_box</mat-icon>
+        </div>
+        <div class="brand-text">
+          <h2>Command Center</h2>
+          <p>Portal Clínico</p>
+        </div>
       </div>
-      <div class="brand-text">
-        <h2>Command Center</h2>
-        <p>Portal Clínico</p>
-      </div>
+      <button class="btn-icon hamburger" (click)="toggleSidebar()">
+        <mat-icon>menu</mat-icon>
+      </button>
     </div>
 
-    <button class="new-action-btn">
-      <mat-icon>add</mat-icon> Nueva Cita
-    </button>
+    <div class="sidebar-content">
+      <button class="new-appt-btn">
+        <mat-icon>add</mat-icon>
+        <span class="btn-text">Nueva Cita</span>
+      </button>
 
-    <nav class="nav-menu">
-      <a class="nav-item" routerLink="/psychologist/dashboard" routerLinkActive="active">
-        <mat-icon>dashboard</mat-icon>
-        <div class="nav-text">
-          <span>Triage Visual</span>
-          <small>Panorama General</small>
-        </div>
-      </a>
-      <a class="nav-item" routerLink="/psychologist/patients" routerLinkActive="active" [routerLinkActiveOptions]="{exact: false}">
-        <mat-icon>people</mat-icon>
-        <div class="nav-text">
-          <span>Pacientes</span>
-          <small>Directorio</small>
-        </div>
-      </a>
-      <a class="nav-item" routerLink="/psychologist/agenda" routerLinkActive="active">
-        <mat-icon>event_note</mat-icon>
-        <div class="nav-text">
-          <span>Agenda</span>
-          <small>Citas y Horarios</small>
-        </div>
-      </a>
-    </nav>
+      <nav class="nav-menu">
+        <a routerLink="./dashboard" routerLinkActive="active" class="nav-item">
+          <mat-icon>dashboard</mat-icon>
+          <div class="nav-text">
+            <span>Triage Visual</span>
+            <small>Panorama General</small>
+          </div>
+        </a>
+        <a routerLink="./patients" routerLinkActive="active" class="nav-item">
+          <mat-icon>people</mat-icon>
+          <div class="nav-text">
+            <span>Pacientes</span>
+            <small>Directorio</small>
+          </div>
+        </a>
+        <a routerLink="./agenda" routerLinkActive="active" class="nav-item">
+          <mat-icon>calendar_today</mat-icon>
+          <div class="nav-text">
+            <span>Agenda</span>
+            <small>Citas y Horarios</small>
+          </div>
+        </a>
+      </nav>
+    </div>
 
     <div class="sidebar-footer">
-      <div class="footer-link">
-        <mat-icon>settings</mat-icon> Ajustes Clínicos
-      </div>
-      
-      <div class="user-profile">
+      <a routerLink="./settings" routerLinkActive="active" class="nav-item settings">
+        <mat-icon>settings</mat-icon>
+        <span class="nav-text">Ajustes Clínicos</span>
+      </a>
+
+      <div class="user-profile" *ngIf="currentUser">
         <div class="avatar">
           <mat-icon>psychology</mat-icon>
         </div>
         <div class="user-info">
-          <span>Dra. Rivera</span>
-          <small>Psicóloga Titular</small>
+          <span class="name">{{ currentUser.name | titlecase }}</span>
+          <span class="role">Psicólogo</span>
         </div>
       </div>
-      
-      <div class="footer-link logout" (click)="logout()">
-        <mat-icon>logout</mat-icon> Cerrar sesión
-      </div>
+
+      <button class="logout-btn" (click)="logout()">
+        <mat-icon>logout</mat-icon>
+        <span class="nav-text">Cerrar sesión</span>
+      </button>
     </div>
   </aside>
 
-  <!-- Área de Contenido Dinámico Clínico -->
-  <main class="content-area">
+  <!-- Main Content -->
+  <main class="main-content" [class.expanded]="isSidebarCollapsed">
     <router-outlet></router-outlet>
   </main>
 </div>

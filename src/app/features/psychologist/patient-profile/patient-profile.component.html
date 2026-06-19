@@ -4,8 +4,14 @@
     <mat-icon>arrow_back</mat-icon> Volver al Directorio
   </button>
 
-  <!-- Header Card -->
-  <div class="card header-card">
+  <div *ngIf="loading" class="loading-state" style="text-align: center; padding: 4rem; color: var(--text-secondary);">
+    <mat-icon style="animation: pulse 2s infinite; font-size: 40px; width: 40px; height: 40px; margin-bottom: 1rem;">hourglass_empty</mat-icon>
+    <p>Descifrando expediente clínico...</p>
+  </div>
+
+  <ng-container *ngIf="!loading && patient">
+    <!-- Header Card -->
+    <div class="card header-card">
     <div class="patient-header">
       <div class="avatar"><mat-icon>person</mat-icon></div>
       <div class="info">
@@ -72,19 +78,7 @@
         </div>
       </div>
       
-      <!-- Mi Diario (Skill 6 integration) -->
-      <div class="card">
-        <h2 class="card-title"><mat-icon class="text-amber">book</mat-icon> Últimas Entradas de Diario</h2>
-        <div class="diary-list">
-           <div class="diary-item" *ngFor="let entry of diaryEntries">
-             <div class="diary-header">
-               <span class="date">{{entry.date}}</span>
-               <span class="mood"><mat-icon [ngClass]="entry.moodColor">{{entry.moodIcon}}</mat-icon> {{entry.mood}}</span>
-             </div>
-             <p class="content">"{{entry.content}}"</p>
-           </div>
-        </div>
-      </div>
+
     </div>
 
     <!-- Right Column (Notes & History) -->
@@ -109,6 +103,74 @@
           </div>
         </div>
       </div>
+    </div> <!-- Cierre de col-side -->
+  </div> <!-- Cierre de content-grid -->
+
+  <!-- Full Width Section: Diario Emocional interactivo -->
+  <div class="full-width-section">
+    <div class="diary-dashboard-layout">
+      <!-- Calendario -->
+      <section class="calendar-section">
+        <div class="calendar-header">
+          <h2><mat-icon class="text-amber">book</mat-icon> Calendario Emocional</h2>
+          <div class="month-nav">
+            <button class="nav-btn" (click)="prev()"><mat-icon>chevron_left</mat-icon></button>
+            <p class="clickable-month" (click)="toggleMode()">
+              {{ calendarMode === 'days' ? monthName + ' ' + year : year }}
+              <mat-icon class="dropdown-icon">{{ calendarMode === 'days' ? 'arrow_drop_down' : 'arrow_drop_up' }}</mat-icon>
+            </p>
+            <button class="nav-btn" (click)="next()"><mat-icon>chevron_right</mat-icon></button>
+          </div>
+        </div>
+        
+        <!-- Vista de Días -->
+        <div class="calendar-grid" *ngIf="calendarMode === 'days'">
+          <div class="day-name">Lun</div><div class="day-name">Mar</div><div class="day-name">Mié</div>
+          <div class="day-name">Jue</div><div class="day-name">Vie</div><div class="day-name">Sáb</div>
+          <div class="day-name">Dom</div>
+          
+          <div class="calendar-day empty" *ngFor="let blank of blankDays"></div>
+          
+          <div class="calendar-day" *ngFor="let day of calendarDays" 
+               [ngClass]="{'has-entry': getMoodForDay(day) !== null, 'selected': selectedDate === day}"
+               (click)="getMoodForDay(day) ? selectDate(day) : null">
+            <span class="date">{{ day }}</span>
+            <span class="mood-indicator" *ngIf="getMoodForDay(day)">{{ getMoodForDay(day) }}</span>
+          </div>
+        </div>
+
+        <!-- Vista de Meses -->
+        <div class="months-grid" *ngIf="calendarMode === 'months'">
+          <div class="month-box" *ngFor="let m of monthsList; let i = index"
+               [ngClass]="{'current-month': i === currentDate.getMonth()}"
+               (click)="selectMonth(i)">
+            {{ m.substring(0, 3).toUpperCase() }}
+          </div>
+        </div>
+      </section>
+
+      <!-- Visor de Entradas -->
+      <section class="entries-section">
+        <div class="entries-header">
+          <h3>{{ selectedDate ? 'Entradas del ' + selectedDate + ' de ' + monthName : 'Últimas Entradas' }}</h3>
+          <button mat-button *ngIf="selectedDate !== null" (click)="selectDate(selectedDate)">Ver Todas</button>
+        </div>
+
+        <div class="empty-state" *ngIf="displayedDiaryEntries.length === 0" style="padding: 2rem; text-align: center; color: var(--text-secondary);">
+          <p>No hay entradas para mostrar en este día.</p>
+        </div>
+
+        <div class="diary-list" *ngIf="displayedDiaryEntries.length > 0">
+           <div class="diary-item" *ngFor="let entry of displayedDiaryEntries">
+             <div class="diary-header">
+               <span class="date">{{entry.date}}</span>
+               <span class="mood"><mat-icon [ngClass]="entry.moodColor">{{entry.moodIcon}}</mat-icon> {{entry.mood}}</span>
+             </div>
+             <p class="content">"{{entry.content}}"</p>
+           </div>
+        </div>
+      </section>
     </div>
   </div>
+  </ng-container>
 </div>

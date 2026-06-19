@@ -52,6 +52,7 @@ CREATE TABLE public.profiles (
 CREATE TABLE public.student_clinical_records (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     student_id UUID REFERENCES public.users(id) ON DELETE CASCADE,
+    primary_psychologist_id UUID REFERENCES public.users(id) ON DELETE SET NULL,
     known_conditions TEXT[] DEFAULT '{}',
     consent_given BOOLEAN DEFAULT FALSE,
     additional_notes TEXT, -- Texto cifrado E2EE
@@ -96,6 +97,29 @@ CREATE TABLE public.appointments (
     priority_level VARCHAR(20) DEFAULT 'Routine',
     status VARCHAR(20) DEFAULT 'Scheduled',
     notes TEXT, -- Cifrado E2EE
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- =========================================================================================
+-- 5.1. CONFIGURACIÓN DE AGENDA Y HORARIOS (SKILL 7)
+-- =========================================================================================
+
+CREATE TABLE public.psychologist_settings (
+    psychologist_id UUID PRIMARY KEY REFERENCES public.users(id) ON DELETE CASCADE,
+    session_duration INTEGER DEFAULT 50,
+    working_days JSONB DEFAULT '{}', -- Ejemplo: {"monday": {"start": "09:00", "end": "17:00"}}
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Nota: psychologist_id es NULL si es una excepción global creada por un Admin para todos
+CREATE TABLE public.psychologist_exceptions (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    psychologist_id UUID REFERENCES public.users(id) ON DELETE CASCADE,
+    exception_date DATE NOT NULL,
+    start_time TIME WITHOUT TIME ZONE,
+    end_time TIME WITHOUT TIME ZONE,
+    description TEXT,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -150,6 +174,8 @@ ALTER TABLE public.chats ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.messages ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.appointments ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.diary_entries ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.psychologist_settings ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.psychologist_exceptions ENABLE ROW LEVEL SECURITY;
 
 -- Política de Usuarios: Un usuario solo puede ver y editar su propia data pública
 CREATE POLICY user_own_data ON public.users FOR ALL USING (id = auth.uid());
@@ -168,3 +194,62 @@ CREATE POLICY diary_own_data ON public.diary_entries FOR ALL USING (student_id =
 CREATE POLICY clinical_own_data ON public.student_clinical_records FOR ALL USING (student_id = auth.uid());
 CREATE POLICY appointments_own_data ON public.appointments FOR ALL USING (student_id = auth.uid() OR psychologist_id = auth.uid());
 
+-- =========================================================================================
+-- 9. FUNCIONES DE SEGURIDAD (Evitar recursión infinita en RLS)
+-- =========================================================================================
+CREATE OR REPLACE FUNCTION public.get_auth_role()
+RETURNS integer
+LANGUAGE sql
+SECURITY DEFINER
+AS $$
+  SELECT role_id FROM public.users WHERE id = auth.uid();
+$$;
+
+-- Políticas para Psicólogos (Skill 5.3):
+-- 1. Los psicólogos pueden ver la tabla pública de usuarios si estos son estudiantes (role_id = 2)
+CREATE POLICY psychologist_read_users ON public.users FOR SELECT USING (
+    public.get_auth_role() = 3 AND role_id = 2
+);
+
+-- 2. Los psicólogos pueden ver el perfil público de cualquier estudiante
+CREATE POLICY psychologist_read_profiles ON public.profiles FOR SELECT USING (
+    public.get_auth_role() = 3
+);
+
+-- 3. Los psicólogos pueden ver todos los expedientes clínicos de estudiantes
+CREATE POLICY psychologist_read_clinical ON public.student_clinical_records FOR SELECT USING (
+    public.get_auth_role() = 3
+);
+
+-- 4. Los psicólogos pueden actualizar los expedientes (asignarse como tratante)
+CREATE POLICY psychologist_update_clinical ON public.student_clinical_records FOR UPDATE USING (
+    public.get_auth_role() = 3
+);
+
+-- 5. Los psicólogos pueden ver las entradas del diario de los pacientes (Skill 5.5)
+CREATE POLICY psychologist_read_diary ON public.diary_entries FOR SELECT USING (
+    public.get_auth_role() = 3
+);
+
+-- 6. Los psicólogos pueden ver y editar sus propios ajustes
+CREATE POLICY psychologist_own_settings ON public.psychologist_settings FOR ALL USING (
+    psychologist_id = auth.uid()
+);
+
+-- 7. Los psicólogos pueden ver y editar sus propias excepciones
+CREATE POLICY psychologist_own_exceptions ON public.psychologist_exceptions FOR ALL USING (
+    psychologist_id = auth.uid()
+);
+
+-- 8. Los estudiantes pueden leer los ajustes y excepciones para el auto-registro
+CREATE POLICY student_read_settings ON public.psychologist_settings FOR SELECT USING (
+    public.get_auth_role() = 2
+);
+CREATE POLICY student_read_exceptions ON public.psychologist_exceptions FOR SELECT USING (
+    public.get_auth_role() = 2 OR psychologist_id IS NULL
+);
+
+-- 9. Los admins pueden ver y crear excepciones globales
+CREATE POLICY admin_global_exceptions ON public.psychologist_exceptions FOR ALL USING (
+    public.get_auth_role() = 1
+);

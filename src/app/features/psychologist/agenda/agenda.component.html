@@ -1,107 +1,120 @@
-<div class="agenda-container">
-  <div class="header-actions">
-    <div class="title-section">
-      <h2><mat-icon>calendar_month</mat-icon> Agenda Clínica</h2>
-      <p>Gestión de sesiones y disponibilidad</p>
-    </div>
-    <button class="btn btn-primary" (click)="openNewAppointment()">
-      <mat-icon>add</mat-icon> Nueva Cita
-    </button>
-  </div>
-
-  <div class="agenda-grid">
-    <!-- CALENDARIO -->
-    <div class="card calendar-card">
+<div class="agenda-layout">
+  
+  <!-- Columna Izquierda: Mini-Calendario -->
+  <div class="calendar-sidebar">
+    <div class="calendar-card">
       <div class="calendar-header">
-        <button class="icon-btn"><mat-icon>chevron_left</mat-icon></button>
-        <h3>{{currentMonthName}}</h3>
-        <button class="icon-btn"><mat-icon>chevron_right</mat-icon></button>
+        <button class="btn-icon" (click)="previousMonth()"><mat-icon>chevron_left</mat-icon></button>
+        <div class="month-title" (click)="toggleViewMode()">{{ monthYearString | titlecase }} <span class="arrow">▼</span></div>
+        <button class="btn-icon" (click)="nextMonth()"><mat-icon>chevron_right</mat-icon></button>
       </div>
 
-      <div class="calendar-grid">
-        <div class="weekday" *ngFor="let d of weekDays">{{d}}</div>
-        
-        <div class="day-cell" *ngFor="let day of daysInMonth" 
-             [ngClass]="{'other-month': !day.isCurrentMonth, 'selected': day.isSelected, 'has-events': day.hasAppointments}"
-             (click)="day.isCurrentMonth && selectDay(day.number)">
-          <div class="day-number">{{day.number}}</div>
-          <div class="event-dot" *ngIf="day.hasAppointments && day.isCurrentMonth"></div>
+      <!-- Vista de Días -->
+      <div class="calendar-grid" *ngIf="viewMode === 'days'">
+        <div class="weekday-header">L</div>
+        <div class="weekday-header">M</div>
+        <div class="weekday-header">X</div>
+        <div class="weekday-header">J</div>
+        <div class="weekday-header">V</div>
+        <div class="weekday-header">S</div>
+        <div class="weekday-header">D</div>
+
+        <div *ngFor="let day of calendarDays" 
+             class="day-cell"
+             [class.other-month]="!day.isCurrentMonth"
+             [class.selected]="selectedDate && day.date.getTime() === selectedDate.getTime()"
+             (click)="selectDate(day)">
+          <span class="date-number">{{ day.date.getDate() }}</span>
+          <span class="appointment-dot" *ngIf="day.hasAppointments"></span>
         </div>
       </div>
-    </div>
 
-    <!-- DETALLE DEL DÍA -->
-    <div class="card day-detail-card">
-      <div class="detail-header">
-        <h3>Citas del Día</h3>
-        <p class="date-str">{{selectedDay}} de {{currentMonthName}}</p>
-      </div>
-
-      <div class="appointments-list">
-        <!-- Vacio -->
-        <div class="empty-state" *ngIf="selectedAppointments.length === 0">
-          <mat-icon>event_available</mat-icon>
-          <p>No hay citas programadas para este día.</p>
-        </div>
-
-        <!-- Lista -->
-        <div class="appointment-item" *ngFor="let app of selectedAppointments">
-          <div class="time-col">
-            <span class="time">{{app.time}}</span>
-          </div>
-          <div class="info-col">
-            <span class="patient">{{app.patient}}</span>
-            <span class="type">{{app.type}}</span>
-          </div>
-          <div class="status-col">
-            <span class="status-badge" [ngClass]="app.status">
-              {{app.status === 'urgent' ? 'Urgente' : app.status === 'confirmed' ? 'Confirmada' : app.status === 'pending' ? 'Pendiente' : 'Completada'}}
-            </span>
-          </div>
+      <!-- Vista de Meses -->
+      <div class="months-grid" *ngIf="viewMode === 'months'">
+        <div class="month-box" *ngFor="let month of monthsList; let i = index" (click)="selectMonth(i)">
+          {{ month }}
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Modal Nueva Cita -->
-  <div class="modal-backdrop" *ngIf="showNewAppointmentModal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3>Programar Nueva Cita</h3>
-        <button class="icon-btn close" (click)="closeModal()"><mat-icon>close</mat-icon></button>
-      </div>
-      <div class="modal-body">
-        <div class="form-group">
-          <label>Paciente</label>
-          <select class="form-control">
-            <option>Seleccionar paciente...</option>
-            <option>Sara Lindqvist (ALTO RIESGO)</option>
-            <option>Elena Marchetti</option>
-          </select>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label>Fecha</label>
-            <input type="date" class="form-control" />
-          </div>
-          <div class="form-group">
-            <label>Hora</label>
-            <input type="time" class="form-control" />
-          </div>
-        </div>
-        <div class="form-group">
-          <label>Tipo de Sesión</label>
-          <select class="form-control">
-            <option>Terapia Individual</option>
-            <option>Intervención de Crisis</option>
-            <option>Evaluación Inicial</option>
-          </select>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-outline" (click)="closeModal()">Cancelar</button>
-        <button class="btn btn-primary" (click)="closeModal()">Guardar Cita</button>
+  <!-- Columna Derecha: Búsqueda y Agenda Diaria / Resultados -->
+  <div class="agenda-main">
+    
+    <!-- Barra superior de Búsqueda -->
+    <div class="top-bar">
+      <div class="search-box">
+        <mat-icon>search</mat-icon>
+        <input type="text" placeholder="Búsqueda avanzada por nombre de paciente..." [(ngModel)]="searchQuery" (keyup.enter)="performSearch()">
+        <button class="btn btn-primary btn-sm" (click)="performSearch()" [disabled]="!searchQuery">Buscar</button>
       </div>
     </div>
+
+    <!-- Resultados de Búsqueda -->
+    <div class="daily-agenda-card" *ngIf="searchResults">
+      <div class="daily-header">
+        <h3>Resultados de Búsqueda</h3>
+        <p class="subtitle">{{searchResults.length}} citas encontradas para "{{searchQuery}}"</p>
+      </div>
+      <div class="daily-content">
+        <div class="appointments-list">
+          <div class="appointment-card" *ngFor="let appt of searchResults">
+            <div class="appt-date">
+              <div class="day">{{ appt.scheduled_date | date:'dd MMM' }}</div>
+              <div class="year">{{ appt.scheduled_date | date:'yyyy' }}</div>
+            </div>
+            <div class="appt-time">
+              {{ appt.scheduled_date | date:'shortTime' }}
+            </div>
+            <div class="appt-details">
+              <div class="patient-name">{{ appt.student.profiles.first_name }} {{ appt.student.profiles.last_name }}</div>
+              <div class="appt-type">{{ appt.priority_level }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Agenda Diaria (Línea de tiempo) -->
+    <div class="daily-agenda-card" *ngIf="selectedDate && !searchResults">
+      <div class="daily-header">
+        <h3>Línea de Tiempo</h3>
+        <p class="subtitle">{{ selectedDate | date:'longDate' }}</p>
+      </div>
+
+      <div class="loading-state" *ngIf="isLoading">
+        <div class="spinner"></div>
+        <p>Sincronizando agenda...</p>
+      </div>
+
+      <div class="daily-content" *ngIf="!isLoading">
+        
+        <div class="empty-timeline" *ngIf="timelineItems.length === 0">
+          <mat-icon>free_breakfast</mat-icon>
+          <p>No hay eventos registrados para este día.</p>
+        </div>
+
+        <div class="timeline" *ngIf="timelineItems.length > 0">
+          <div class="timeline-item" *ngFor="let item of timelineItems" [ngClass]="item.type">
+            <div class="time-col">{{ item.time }}</div>
+            <div class="marker-col"><div class="dot"></div><div class="line"></div></div>
+            <div class="content-col">
+              <div class="card-content">
+                <div class="header">
+                  <mat-icon *ngIf="item.type === 'block'">access_time</mat-icon>
+                  <mat-icon *ngIf="item.type === 'exception'">event_busy</mat-icon>
+                  <mat-icon *ngIf="item.type === 'appointment'">person</mat-icon>
+                  <strong>{{ item.title }}</strong>
+                </div>
+                <p>{{ item.desc }}</p>
+                <span class="extra" *ngIf="item.extra">{{ item.extra }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
   </div>
 </div>

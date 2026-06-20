@@ -18,6 +18,11 @@
           <label>Duración promedio por sesión (minutos)</label>
           <input type="number" [(ngModel)]="sessionDuration" min="15" max="120" step="5">
         </div>
+        
+        <div class="duration-control" style="margin-top: 15px; margin-bottom: 20px;">
+          <label>Lugar de Atención (Ej. Consultorio 4A o Link de Zoom)</label>
+          <input type="text" [(ngModel)]="location" placeholder="Escribe el enlace o consultorio..." style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ccc; margin-top: 5px;">
+        </div>
 
         <div class="days-list">
           <div class="day-item" *ngFor="let day of weekDays">

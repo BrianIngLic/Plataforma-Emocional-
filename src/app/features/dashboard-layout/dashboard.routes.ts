@@ -15,6 +15,10 @@ export const DASHBOARD_ROUTES: Routes = [
         loadChildren: () => import('../diary/diary.routes').then(m => m.DIARY_ROUTES)
       },
       {
+        path: 'book-appointment',
+        loadComponent: () => import('./student-agenda/student-agenda.component').then(m => m.StudentAgendaComponent)
+      },
+      {
         path: '',
         redirectTo: 'chat',
         pathMatch: 'full'

@@ -136,15 +136,23 @@ export class AgendaComponent implements OnInit {
     // En Supabase, para buscar por perfiles anidados necesitamos algo especial o hacer dos consultas.
     // Como V1, busquemos las citas y filtremos en memoria si no podemos hacer inner join con ilike.
     
-    const { data: appts } = await this.supabase
+    const { data, error } = await this.supabase
       .from('appointments')
       .select('*, student:users(profiles(first_name, last_name, avatar_url))')
       .eq('psychologist_id', this.currentUserId)
       .order('scheduled_date', { ascending: false });
 
-    if (appts) {
+    if (error) {
+      console.error('Error fetching appointments:', error);
+      alert('Error cargando citas del psicólogo: ' + error.message + '\nHint: ' + (error.hint || ''));
+      return;
+    }
+    
+    console.log(`🔍 CITAS DEL PSICOLOGO:`, data);
+
+    if (data) {
       const q = this.searchQuery.toLowerCase();
-      this.searchResults = appts.filter((a: any) => {
+      this.searchResults = data.filter((a: any) => {
         const fname = a.student?.profiles?.first_name?.toLowerCase() || '';
         const lname = a.student?.profiles?.last_name?.toLowerCase() || '';
         return fname.includes(q) || lname.includes(q);

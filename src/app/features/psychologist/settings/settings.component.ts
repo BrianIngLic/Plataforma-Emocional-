@@ -2,21 +2,25 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { AgendaService, WorkingDaysMap } from '../../../core/services/agenda.service';
 import { AuthService } from '../../../core/services/auth.service';
+import { FeedbackModalComponent } from '../../../shared/components/feedback-modal/feedback-modal.component';
 
 @Component({
   selector: 'app-settings',
   standalone: true,
-  imports: [CommonModule, FormsModule, MatIconModule],
+  imports: [CommonModule, FormsModule, MatIconModule, MatDialogModule],
   templateUrl: './settings.component.html',
   styleUrls: ['./settings.component.scss']
 })
 export class SettingsComponent implements OnInit {
   authService = inject(AuthService);
   agendaService = inject(AgendaService);
+  dialog = inject(MatDialog);
 
   sessionDuration: number = 50;
+  location: string = '';
   today = new Date().toISOString().split('T')[0];
   
   weekDays = [
@@ -51,6 +55,7 @@ export class SettingsComponent implements OnInit {
     const settings = await this.agendaService.getSettings(this.currentUserId);
     if (settings) {
       this.sessionDuration = settings.session_duration;
+      this.location = settings.location || '';
       const dbDays: WorkingDaysMap = settings.working_days || {};
       
       this.weekDays = this.weekDays.map(day => {
@@ -80,12 +85,11 @@ export class SettingsComponent implements OnInit {
     }
 
     try {
-      await this.agendaService.saveSettings(this.currentUserId, this.sessionDuration, workingDaysMap);
-      this.successMessage = 'Ajustes guardados correctamente.';
-      setTimeout(() => this.successMessage = '', 3000);
+      await this.agendaService.saveSettings(this.currentUserId, this.sessionDuration, workingDaysMap, this.location);
+      this.showFeedback('success', '¡Ajustes Guardados!', 'Tus horarios han sido actualizados exitosamente.');
     } catch (e) {
       console.error(e);
-      alert('Error al guardar ajustes');
+      this.showFeedback('error', 'Error', 'Ocurrió un error al guardar los ajustes.');
     }
     this.isSaving = false;
   }
@@ -95,7 +99,7 @@ export class SettingsComponent implements OnInit {
     
     // Validar que no sea fecha pasada por si acaso
     if (this.newExceptionDate < this.today) {
-      alert('No puedes bloquear días anteriores a hoy.');
+      this.showFeedback('error', 'Fecha Inválida', 'No puedes bloquear días anteriores a hoy.');
       return;
     }
 
@@ -117,9 +121,10 @@ export class SettingsComponent implements OnInit {
       this.newExceptionDate = '';
       this.newExceptionDesc = '';
       this.newExceptionIsFullDay = true;
+      this.showFeedback('success', 'Día Bloqueado', 'La excepción ha sido añadida a tu agenda.');
     } catch (e) {
       console.error(e);
-      alert('Error al añadir excepción');
+      this.showFeedback('error', 'Error', 'Ocurrió un error al añadir el bloqueo.');
     }
   }
 
@@ -127,9 +132,10 @@ export class SettingsComponent implements OnInit {
     try {
       await this.agendaService.deleteException(id);
       this.exceptions = this.exceptions.filter(e => e.id !== id);
+      this.showFeedback('success', 'Bloqueo Eliminado', 'El día ha sido desbloqueado de tu agenda.');
     } catch (e) {
       console.error(e);
-      alert('Error al eliminar excepción');
+      this.showFeedback('error', 'Error', 'No se pudo eliminar el bloqueo.');
     }
   }
 
@@ -139,5 +145,12 @@ export class SettingsComponent implements OnInit {
 
   removeTimeBlock(day: any, index: number) {
     day.blocks.splice(index, 1);
+  }
+
+  showFeedback(type: 'success' | 'error', title: string, message: string) {
+    this.dialog.open(FeedbackModalComponent, {
+      width: '400px',
+      data: { type, title, message }
+    });
   }
 }

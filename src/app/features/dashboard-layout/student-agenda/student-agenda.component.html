@@ -1,0 +1,105 @@
+<div class="agenda-container">
+  
+  <!-- MOCK DEBUG BANNER -->
+  <div class="debug-banner">
+    <div class="banner-title">
+      <mat-icon>psychology_alt</mat-icon>
+      <span>IA Triage Simulator</span>
+    </div>
+    <div class="urgency-toggles">
+      <button [class.active]="urgencyLevel() === 'bajo_riesgo'" (click)="changeUrgency('bajo_riesgo')" class="urg-btn low">Bajo Riesgo</button>
+      <button [class.active]="urgencyLevel() === 'medio_riesgo'" (click)="changeUrgency('medio_riesgo')" class="urg-btn med">Medio Riesgo</button>
+      <button [class.active]="urgencyLevel() === 'alto_riesgo'" (click)="changeUrgency('alto_riesgo')" class="urg-btn high">Alto Riesgo</button>
+    </div>
+  </div>
+
+  <div class="header">
+    <h1>Agendar Sesión</h1>
+    <p>Selecciona un día y hora disponible según tu evaluación de IA.</p>
+  </div>
+
+  <div class="layout" *ngIf="!loading; else spinner">
+    
+    <div *ngIf="errorMsg" class="error-banner" style="grid-column: 1 / -1; background: #fee2e2; color: #ef4444; padding: 1rem; border-radius: 8px; margin-bottom: 1rem; text-align: center;">
+      <mat-icon style="vertical-align: middle; margin-right: 8px;">error_outline</mat-icon>
+      {{ errorMsg }}
+    </div>
+
+    <div *ngIf="hasActiveReservation && activeReservationDetails" class="active-reservation-banner" style="grid-column: 1 / -1; background: #f3e8ff; color: #7c3aed; border: 1px solid #d8b4fe; padding: 1rem; border-radius: 8px; margin-bottom: 1rem; text-align: center;">
+      <mat-icon style="vertical-align: middle; margin-right: 8px;">event_available</mat-icon>
+      Ya tienes una cita programada para el <strong>{{ formatSpanishDate(activeReservationDetails.date) }}</strong> a las <strong>{{ activeReservationDetails.time.substring(0,5) }}</strong>. No necesitas agendar otra.
+    </div>
+
+    <!-- CALENDARIO -->
+    <div class="calendar-card">
+      <div class="cal-header">
+        <button (click)="prevMonth()" class="nav-btn"><mat-icon>chevron_left</mat-icon></button>
+        <span class="month-title">{{ monthYear | titlecase }}</span>
+        <button (click)="nextMonth()" class="nav-btn"><mat-icon>chevron_right</mat-icon></button>
+      </div>
+      
+      <div class="cal-grid">
+        <div class="weekday">Dom</div><div class="weekday">Lun</div><div class="weekday">Mar</div>
+        <div class="weekday">Mié</div><div class="weekday">Jue</div><div class="weekday">Vie</div><div class="weekday">Sáb</div>
+        
+        <div *ngFor="let day of calendarDays" 
+             class="day-cell" 
+             [class.muted]="!day.isCurrentMonth"
+             [class.today]="isToday(day.date)"
+             [class.available]="day.hasSlots"
+             [class.blind]="day.status === 'blind'"
+             [class.blocked]="day.status === 'blocked'"
+             [class.off]="day.status === 'off'"
+             [class.full]="day.status === 'full'"
+             [class.selected]="selectedDateStr() === (day.date.getFullYear() + '-' + ('0'+(day.date.getMonth()+1)).slice(-2) + '-' + ('0'+day.date.getDate()).slice(-2))"
+             (click)="selectDay(day)">
+          <span class="day-number">{{ day.date.getDate() }}</span>
+          
+          <!-- Indicador verde si hay cupo -->
+          <div class="indicator" *ngIf="day.hasSlots"></div>
+          
+          <!-- Iconos para días bloqueados o fuera de rango visual -->
+          <mat-icon class="status-icon block-icon" *ngIf="day.status === 'blocked' || day.status === 'full'">block</mat-icon>
+          <mat-icon class="status-icon blind-icon" *ngIf="day.status === 'blind'">visibility_off</mat-icon>
+        </div>
+      </div>
+    </div>
+
+    <!-- HUECOS DISPONIBLES -->
+    <div class="slots-card">
+      <div *ngIf="selectedDateStr(); else noDay">
+        <h3>Horarios Disponibles</h3>
+        <p class="subtitle">{{ selectedDateStr() | date:'mediumDate' }}</p>
+        
+        <div class="slots-grid">
+        <button *ngFor="let slot of availableSlots()" 
+                class="slot-btn"
+                [class.my-reservation]="slot.status === 'my_reservation'"
+                (click)="openModal(slot)">
+          <mat-icon *ngIf="slot.status === 'my_reservation'">event_available</mat-icon>
+          <mat-icon *ngIf="slot.status !== 'my_reservation'">schedule</mat-icon>
+          {{ slot.time }}
+        </button>
+      </div>
+        
+        <div *ngIf="availableSlots().length === 0" class="empty-state">
+          No hay más horarios para este día.
+        </div>
+      </div>
+      
+      <ng-template #noDay>
+        <div class="empty-state">
+          <mat-icon>event_available</mat-icon>
+          <p>Selecciona un día marcado en verde en el calendario.</p>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+
+  <ng-template #spinner>
+    <div class="spinner-container">
+      <p>Consultando disponibilidad en tiempo real...</p>
+    </div>
+  </ng-template>
+
+</div>

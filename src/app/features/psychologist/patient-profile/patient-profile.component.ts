@@ -158,6 +158,7 @@ export class PatientProfileComponent implements OnInit {
 
           return {
             id: a.id,
+            rawDate: d,
             date: `${day} - ${month} - ${year}`,
             time: a.start_time ? a.start_time.substring(0,5) : '',
             status: a.status,

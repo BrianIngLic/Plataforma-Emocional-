@@ -101,10 +101,15 @@
             <div class="content-col">
               <div class="card-content">
                 <div class="header">
-                  <mat-icon *ngIf="item.type === 'block'">access_time</mat-icon>
-                  <mat-icon *ngIf="item.type === 'exception'">event_busy</mat-icon>
-                  <mat-icon *ngIf="item.type === 'appointment'">person</mat-icon>
-                  <strong>{{ item.title }}</strong>
+                  <div class="title-area">
+                    <mat-icon *ngIf="item.type === 'block'">access_time</mat-icon>
+                    <mat-icon *ngIf="item.type === 'exception'">event_busy</mat-icon>
+                    <mat-icon *ngIf="item.type === 'appointment'">person</mat-icon>
+                    <strong>{{ item.title }}</strong>
+                  </div>
+                  <button *ngIf="item.type === 'appointment'" class="btn-icon view-profile-btn" [routerLink]="['/psychologist/patients', item.data.student_id]" title="Ver Perfil del Paciente">
+                    <mat-icon>visibility</mat-icon>
+                  </button>
                 </div>
                 <p>{{ item.desc }}</p>
                 <span class="extra" *ngIf="item.extra">{{ item.extra }}</span>

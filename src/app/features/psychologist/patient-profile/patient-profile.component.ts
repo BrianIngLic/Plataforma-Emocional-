@@ -2,6 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { SupabaseService } from '../../../core/services/supabase.service';
 import { CryptoService } from '../../../core/services/crypto.service';
 import { BaseChartDirective } from 'ng2-charts';
@@ -17,14 +18,13 @@ import { ChartConfiguration, ChartOptions } from 'chart.js';
 export class PatientProfileComponent implements OnInit {
   supabase = inject(SupabaseService).supabase;
   crypto = inject(CryptoService);
+  dialog = inject(MatDialog);
 
   patient: any = null;
   diaryEntries: any[] = [];
   loading = true;
 
-  sessionHistory = [
-    { date: "Próximamente", type: "Terapia Individual", duration: "50 min", mood: "Regular", notes: "Historial de sesiones estará disponible en la próxima versión." }
-  ];
+  sessionHistory: any[] = [];
 
   public lineChartData: ChartConfiguration<'line'>['data'] = {
     labels: ['Sem 1', 'Sem 2', 'Sem 3', 'Sem 4', 'Sem 5', 'Sem 6', 'Sem 7', 'Sem 8'],
@@ -141,12 +141,64 @@ export class PatientProfileComponent implements OnInit {
           };
         });
       }
+      // 3. Fetch session history
+      const { data: appts } = await this.supabase
+        .from('appointments')
+        .select('*')
+        .eq('student_id', id)
+        .order('scheduled_date', { ascending: false })
+        .order('start_time', { ascending: false });
+
+      if (appts) {
+        this.sessionHistory = appts.map(a => {
+          const d = new Date(a.scheduled_date.substring(0, 10) + 'T12:00:00');
+          const day = d.getDate().toString().padStart(2, '0');
+          const month = (d.getMonth() + 1).toString().padStart(2, '0');
+          const year = d.getFullYear();
+
+          return {
+            id: a.id,
+            date: `${day} - ${month} - ${year}`,
+            time: a.start_time ? a.start_time.substring(0,5) : '',
+            status: a.status,
+            type: "Terapia Individual",
+            duration: "50 min",
+            notes: a.notes || 'Sin notas registradas.',
+            mood: a.status === 'scheduled' ? 'Programada' : a.status === 'completed' ? 'Completada' : 'Ausente'
+          }
+        });
+
+        // Actualizar estadísticas del paciente basándose en las citas reales
+        const completedSessions = appts.filter((a: any) => a.status === 'completed').length;
+        
+        // Encontrar la próxima sesión programada (la más cercana en el futuro o la primera programada)
+        const scheduledAppts = appts
+          .filter((a: any) => a.status === 'scheduled')
+          .sort((a: any, b: any) => new Date(a.scheduled_date).getTime() - new Date(b.scheduled_date).getTime());
+          
+        let nextSessionText = "Por agendar";
+        if (scheduledAppts.length > 0) {
+          const nextAppt = scheduledAppts[0];
+          const d = new Date(nextAppt.scheduled_date.substring(0, 10) + 'T12:00:00');
+          const day = d.getDate().toString().padStart(2, '0');
+          const month = (d.getMonth() + 1).toString().padStart(2, '0');
+          nextSessionText = `${day}/${month}/${d.getFullYear()}`;
+        }
+
+        this.patient.sessionCount = completedSessions;
+        this.patient.nextSession = nextSessionText;
+      }
+
     } catch (err) {
       console.error('Unexpected error loading patient data:', err);
     }
 
     this.generateCalendar();
     this.loading = false;
+  }
+
+  openPostSessionModal(session: any) {
+    this.router.navigate(['/psychologist/clinical-note', session.id]);
   }
 
   generateCalendar() {
@@ -209,6 +261,13 @@ export class PatientProfileComponent implements OnInit {
     return null;
   }
 
+  hasSessionForDay(day: number): boolean {
+    return this.sessionHistory.some(s => {
+      const d = new Date(s.rawDate);
+      return d.getDate() === day && d.getMonth() === this.currentDate.getMonth() && d.getFullYear() === this.year;
+    });
+  }
+
   selectDate(day: number) {
     if (this.selectedDate === day) {
       this.selectedDate = null;
@@ -226,6 +285,16 @@ export class PatientProfileComponent implements OnInit {
       );
     }
     return this.diaryEntries.slice(0, 3);
+  }
+
+  get displayedSessions() {
+    if (this.selectedDate !== null) {
+      return this.sessionHistory.filter(s => {
+        const d = new Date(s.rawDate);
+        return d.getDate() === this.selectedDate && d.getMonth() === this.currentDate.getMonth() && d.getFullYear() === this.year;
+      });
+    }
+    return [];
   }
 
   goBack() {

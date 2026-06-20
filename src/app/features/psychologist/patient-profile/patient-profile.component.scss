@@ -144,13 +144,26 @@
       &.empty { background: transparent; border-color: transparent; }
       
       .date { font-size: 0.75rem; color: var(--text-secondary); font-family: monospace; z-index: 1; }
-      .mood-indicator { font-size: 1.2rem; margin-top: 2px; z-index: 1; }
+      
+      .indicators {
+        display: flex; gap: 4px; justify-content: center; align-items: center; z-index: 1; margin-top: 2px;
+        .mood-indicator { font-size: 1.1rem; }
+        .session-indicator { color: #0ea5e9; mat-icon { font-size: 14px; width: 14px; height: 14px; } }
+      }
 
       &.has-entry {
         background: rgba(14, 165, 233, 0.05);
         border-color: rgba(14, 165, 233, 0.2);
         cursor: pointer;
         &:hover { background: rgba(14, 165, 233, 0.15); transform: translateY(-2px); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+      }
+
+      &.has-session {
+        background: rgba(14, 165, 233, 0.1);
+        border-color: #0ea5e9;
+        cursor: pointer;
+        &:hover { background: rgba(14, 165, 233, 0.2); transform: translateY(-2px); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+        .date { color: #0ea5e9; font-weight: bold; }
       }
 
       &.selected {

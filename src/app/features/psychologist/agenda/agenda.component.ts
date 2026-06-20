@@ -2,6 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 import { AgendaService } from '../../../core/services/agenda.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { SupabaseService } from '../../../core/services/supabase.service';
@@ -16,7 +17,7 @@ interface CalendarDay {
 @Component({
   selector: 'app-agenda',
   standalone: true,
-  imports: [CommonModule, MatIconModule, FormsModule],
+  imports: [CommonModule, MatIconModule, FormsModule, RouterModule],
   templateUrl: './agenda.component.html',
   styleUrls: ['./agenda.component.scss']
 })
@@ -138,7 +139,7 @@ export class AgendaComponent implements OnInit {
     
     const { data, error } = await this.supabase
       .from('appointments')
-      .select('*, student:users(profiles(first_name, last_name, avatar_url))')
+      .select('*, student:users!appointments_student_id_fkey(profiles(first_name, last_name, avatar_url))')
       .eq('psychologist_id', this.currentUserId)
       .order('scheduled_date', { ascending: false });
 
@@ -168,7 +169,12 @@ export class AgendaComponent implements OnInit {
   async loadDayDetails(date: Date) {
     if (!this.currentUserId) return;
     
-    const dateString = date.toISOString().split('T')[0];
+    // Obtener fecha en formato local YYYY-MM-DD
+    const yyyy = date.getFullYear();
+    const mm = String(date.getMonth() + 1).padStart(2, '0');
+    const dd = String(date.getDate()).padStart(2, '0');
+    const dateString = `${yyyy}-${mm}-${dd}`;
+    
     const dayOfWeekNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
     const dayName = dayOfWeekNames[date.getDay()];
 
@@ -188,19 +194,15 @@ export class AgendaComponent implements OnInit {
       
     this.dayExceptions = excs || [];
 
-    // 3. Obtener Citas de este día
-    const startOfDay = new Date(date);
-    startOfDay.setHours(0,0,0,0);
-    const endOfDay = new Date(date);
-    endOfDay.setHours(23,59,59,999);
-
-    const { data: appts } = await this.supabase
+    // 3. Obtener Citas de este día exacto
+    const { data: appts, error } = await this.supabase
       .from('appointments')
-      .select('*, student:users(profiles(first_name, last_name, avatar_url))')
+      .select('*, student:users!appointments_student_id_fkey(profiles(first_name, last_name, avatar_url))')
       .eq('psychologist_id', this.currentUserId)
-      .gte('scheduled_date', startOfDay.toISOString())
-      .lte('scheduled_date', endOfDay.toISOString())
-      .order('scheduled_date', { ascending: true });
+      .eq('scheduled_date', dateString)
+      .order('start_time', { ascending: true });
+
+    if (error) console.error('Error fetching appointments:', error);
 
     this.dayAppointments = appts || [];
 
@@ -237,12 +239,14 @@ export class AgendaComponent implements OnInit {
 
     // 3. Citas
     this.dayAppointments.forEach(a => {
-      const time = new Date(a.scheduled_date).toTimeString().substring(0,5);
+      // Extraemos HH:MM directamente de start_time (ej: '16:30:00' -> '16:30')
+      const time = a.start_time ? a.start_time.substring(0,5) : '00:00';
+      
       this.timelineItems.push({
         time: time,
         type: 'appointment',
-        title: `Cita: ${a.student?.profiles?.first_name} ${a.student?.profiles?.last_name}`,
-        desc: `Prioridad: ${a.priority_level}`,
+        title: `Cita: ${a.student?.profiles?.first_name || 'Paciente'} ${a.student?.profiles?.last_name || ''}`,
+        desc: `Estado: ${a.status === 'scheduled' ? 'Confirmada' : a.status}`,
         data: a
       });
     });

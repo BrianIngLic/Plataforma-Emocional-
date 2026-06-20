@@ -27,6 +27,10 @@ export const PSYCHOLOGIST_ROUTES: Routes = [
         loadComponent: () => import('./settings/settings.component').then(m => m.SettingsComponent)
       },
       {
+        path: 'clinical-note/:id',
+        loadComponent: () => import('./clinical-note/clinical-note.component').then(m => m.ClinicalNoteComponent)
+      },
+      {
         path: '',
         redirectTo: 'dashboard',
         pathMatch: 'full'

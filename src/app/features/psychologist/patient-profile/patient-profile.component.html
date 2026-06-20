@@ -81,13 +81,8 @@
 
     </div>
 
-    <!-- Right Column (Notes & History) -->
+    <!-- Right Column (History) -->
     <div class="col-side">
-      <!-- Clinical Notes -->
-      <div class="card notes-card" [ngClass]="{'critical-bg': patient.state === 'Critical'}">
-        <h2 class="card-title"><mat-icon class="text-primary">edit_note</mat-icon> Notas Clínicas</h2>
-        <p>{{patient.notes}}</p>
-      </div>
 
       <!-- Session History -->
       <div class="card">
@@ -95,11 +90,20 @@
         <div class="session-list">
           <div class="session-item" *ngFor="let session of sessionHistory">
             <div class="session-top">
-              <span class="date">{{session.date}}</span>
-              <span class="mood-badge" [ngClass]="session.mood.toLowerCase()">{{session.mood}}</span>
+              <span class="date">{{session.date}} <span *ngIf="session.time">a las {{session.time}}</span></span>
+              <span class="mood-badge" [ngClass]="session.status.toLowerCase()">{{session.mood}}</span>
             </div>
             <span class="type">{{session.type}} • {{session.duration}}</span>
-            <p class="notes">{{session.notes}}</p>
+            
+            <div style="display: flex; gap: 8px; margin-top: 10px;">
+              <button class="btn btn-primary btn-sm" style="display: inline-flex; align-items: center; gap: 4px; border: none; background: #0ea5e9; color: white; padding: 6px 12px; border-radius: 6px; cursor: pointer;" *ngIf="session.status === 'scheduled'" (click)="openPostSessionModal(session)">
+                 <mat-icon style="font-size: 18px; width: 18px; height: 18px;">edit_note</mat-icon> Finalizar Cita / Añadir Nota
+              </button>
+              
+              <button class="btn btn-outline btn-sm" style="display: inline-flex; align-items: center; gap: 4px; border: 1px solid #cbd5e1; background: white; color: #475569; padding: 6px 12px; border-radius: 6px; cursor: pointer;" *ngIf="session.status === 'completed' || session.status === 'no_show'" (click)="openPostSessionModal(session)">
+                 <mat-icon style="font-size: 18px; width: 18px; height: 18px;">visibility</mat-icon> Ver Detalles
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -132,10 +136,13 @@
           <div class="calendar-day empty" *ngFor="let blank of blankDays"></div>
           
           <div class="calendar-day" *ngFor="let day of calendarDays" 
-               [ngClass]="{'has-entry': getMoodForDay(day) !== null, 'selected': selectedDate === day}"
-               (click)="getMoodForDay(day) ? selectDate(day) : null">
+               [ngClass]="{'has-entry': getMoodForDay(day) !== null, 'has-session': hasSessionForDay(day), 'selected': selectedDate === day}"
+               (click)="(getMoodForDay(day) || hasSessionForDay(day)) ? selectDate(day) : null">
             <span class="date">{{ day }}</span>
-            <span class="mood-indicator" *ngIf="getMoodForDay(day)">{{ getMoodForDay(day) }}</span>
+            <div class="indicators">
+              <span class="mood-indicator" *ngIf="getMoodForDay(day)">{{ getMoodForDay(day) }}</span>
+              <span class="session-indicator" *ngIf="hasSessionForDay(day)"><mat-icon>psychology</mat-icon></span>
+            </div>
           </div>
         </div>
 
@@ -152,12 +159,25 @@
       <!-- Visor de Entradas -->
       <section class="entries-section">
         <div class="entries-header">
-          <h3>{{ selectedDate ? 'Entradas del ' + selectedDate + ' de ' + monthName : 'Últimas Entradas' }}</h3>
-          <button mat-button *ngIf="selectedDate !== null" (click)="selectDate(selectedDate)">Ver Todas</button>
+          <h3>{{ selectedDate ? 'Actividad del ' + selectedDate + ' de ' + monthName : 'Última Actividad' }}</h3>
+          <button mat-button *ngIf="selectedDate !== null" (click)="selectDate(selectedDate)">Ver Todo</button>
         </div>
 
-        <div class="empty-state" *ngIf="displayedDiaryEntries.length === 0" style="padding: 2rem; text-align: center; color: var(--text-secondary);">
-          <p>No hay entradas para mostrar en este día.</p>
+        <div class="empty-state" *ngIf="displayedDiaryEntries.length === 0 && displayedSessions.length === 0" style="padding: 2rem; text-align: center; color: var(--text-secondary);">
+          <p>No hay actividad para mostrar en este día.</p>
+        </div>
+
+        <div class="diary-list" *ngIf="displayedSessions.length > 0" style="margin-bottom: 1rem;">
+           <div class="diary-item" *ngFor="let session of displayedSessions" style="border-left: 4px solid #0ea5e9;">
+             <div class="diary-header">
+               <span class="date">Sesión Programada <span *ngIf="session.time">• {{session.time}}</span></span>
+               <span class="mood" style="color: #0ea5e9;"><mat-icon>psychology</mat-icon> {{session.status === 'completed' ? 'Completada' : session.status === 'no_show' ? 'Ausente' : 'Pendiente'}}</span>
+             </div>
+             <p class="content" style="font-style: normal; font-weight: 500; color: #334155;">Terapia Individual</p>
+             <button class="btn btn-outline btn-sm" style="display: inline-flex; align-items: center; gap: 4px; border: 1px solid #cbd5e1; background: white; color: #475569; padding: 6px 12px; border-radius: 6px; cursor: pointer; margin-top: 10px;" *ngIf="session.status === 'completed' || session.status === 'no_show'" (click)="openPostSessionModal(session)">
+                 <mat-icon style="font-size: 18px; width: 18px; height: 18px;">visibility</mat-icon> Ver Detalles de la Sesión
+             </button>
+           </div>
         </div>
 
         <div class="diary-list" *ngIf="displayedDiaryEntries.length > 0">

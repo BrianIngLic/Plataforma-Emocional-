@@ -37,7 +37,9 @@ export class LoginComponent {
     if (success) {
       const user = this.authService.currentUser();
       
-      if (user?.role === 'Admin') {
+      if (user?.requires_password_change) {
+        this.router.navigate(['/auth/force-change']);
+      } else if (user?.role === 'Admin') {
         this.router.navigate(['/admin']);
       } else if (user?.role === 'Psicologo') {
         this.router.navigate(['/psychologist']);

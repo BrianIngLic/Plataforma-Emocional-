@@ -1,5 +1,24 @@
 <div class="agenda-container">
 
+  <!-- Action Bar -->
+  <div class="action-bar" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+    <div class="week-selector">
+      <button class="nav-btn" (click)="prevWeek()"><mat-icon>chevron_left</mat-icon></button>
+      <div class="current-week">
+        <span class="bold">Semana Actual</span>
+        <span class="date-range" *ngIf="weekOffset === 0">08 Abr - 12 Abr</span>
+        <span class="date-range" *ngIf="weekOffset !== 0">Offset: {{ weekOffset }} semanas</span>
+      </div>
+      <button class="nav-btn" (click)="nextWeek()"><mat-icon>chevron_right</mat-icon></button>
+      <button class="today-btn" *ngIf="weekOffset !== 0" (click)="resetWeek()">Hoy</button>
+    </div>
+
+    <button class="import-holidays-btn" (click)="loadHolidays()" [disabled]="isImportingHolidays" style="display: flex; align-items: center; gap: 8px; background: #8b5cf6; color: white; border: none; padding: 8px 16px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: background 0.2s;">
+      <mat-icon>event_busy</mat-icon>
+      <span>{{ isImportingHolidays ? 'Importando...' : 'Importar Festivos Oficiales' }}</span>
+    </button>
+  </div>
+
   <!-- KPI Metrics Strip -->
   <div class="kpis-grid">
     <div class="kpi-card blue">

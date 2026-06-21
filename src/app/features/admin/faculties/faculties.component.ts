@@ -1,13 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartConfiguration, ChartOptions } from 'chart.js';
+import { FacultyService, Faculty as DBFaculty, Campus } from '../../../core/services/faculty.service';
+import { AdminStatsService } from '../services/admin-stats.service';
+import { FeedbackModalComponent } from '../../../shared/components/feedback-modal/feedback-modal.component';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 
-interface Faculty {
+interface AdminFaculty {
   id: string;
   name: string;
+  campus_name: string;
   patients: number;
   capacity: number;
   psychologists: number;
@@ -22,25 +27,26 @@ interface Faculty {
 @Component({
   selector: 'app-faculties',
   standalone: true,
-  imports: [CommonModule, MatIconModule, FormsModule, BaseChartDirective],
+  imports: [CommonModule, MatIconModule, FormsModule, BaseChartDirective, MatDialogModule],
   templateUrl: './faculties.component.html',
   styleUrls: ['./faculties.component.scss']
 })
 export class FacultiesComponent implements OnInit {
 
-  faculties: Faculty[] = [
-    { id: 'eng', name: 'Engineering', patients: 87, capacity: 90, psychologists: 2, demand: 'Critical', risk: 'High', avgSessionsWeek: 28, dropoutRate: 8, newThisMonth: 7, topDiagnosis: 'Anxiety / Academic stress' },
-    { id: 'med', name: 'Medicine', patients: 64, capacity: 80, psychologists: 2, demand: 'High', risk: 'Moderate', avgSessionsWeek: 21, dropoutRate: 5, newThisMonth: 5, topDiagnosis: 'Burnout / Depression' },
-    { id: 'law', name: 'Law', patients: 52, capacity: 60, psychologists: 1, demand: 'High', risk: 'High', avgSessionsWeek: 18, dropoutRate: 11, newThisMonth: 4, topDiagnosis: 'Anxiety / Perfectionism' },
-    { id: 'arts', name: 'Arts & Humanities', patients: 43, capacity: 70, psychologists: 1, demand: 'Moderate', risk: 'Low', avgSessionsWeek: 15, dropoutRate: 4, newThisMonth: 3, topDiagnosis: 'Depression / Identity' },
-    { id: 'sci', name: 'Sciences', patients: 38, capacity: 60, psychologists: 1, demand: 'Moderate', risk: 'Moderate', avgSessionsWeek: 13, dropoutRate: 6, newThisMonth: 2, topDiagnosis: 'ADHD / Anxiety' },
-    { id: 'edu', name: 'Education', patients: 29, capacity: 50, psychologists: 1, demand: 'Low', risk: 'Low', avgSessionsWeek: 10, dropoutRate: 3, newThisMonth: 1, topDiagnosis: 'Stress / Vocational' }
-  ];
+  faculties: AdminFaculty[] = [];
+  loading = true;
+  campuses: Campus[] = [];
 
-  sortBy: 'demand' | 'patients' | 'name' = 'demand';
+  sortBy: string = 'demand';
   compareIds: string[] = [];
   showCompareModal = false;
-  selectedFacultyForDetail: Faculty | null = null;
+  selectedFacultyForDetail: AdminFaculty | null = null;
+  
+  // Add Faculty Form State
+  showAddModal = false;
+  newFacultyName = '';
+  newFacultyCampusId: number | '' = '';
+  isSubmitting = false;
 
   // Radar Chart Configuration for detail modal
   public radarChartData: ChartConfiguration<'radar'>['data'] = {
@@ -81,9 +87,28 @@ export class FacultiesComponent implements OnInit {
     }
   };
 
-  constructor() { }
+  // Agregamos la inyección
+  private adminStats = inject(AdminStatsService);
+
+  constructor(
+    private facultyService: FacultyService,
+    private dialog: MatDialog
+  ) { }
 
   ngOnInit(): void {
+    this.loadData();
+  }
+
+  async loadData() {
+    this.loading = true;
+    this.campuses = await this.facultyService.getCampuses();
+    await this.loadFaculties();
+  }
+
+  async loadFaculties() {
+    this.loading = true;
+    this.faculties = await this.adminStats.getFacultiesWithStats();
+    this.loading = false;
   }
 
   get sortedFaculties() {
@@ -131,7 +156,7 @@ export class FacultiesComponent implements OnInit {
     return this.compareIds.includes(id);
   }
 
-  getPct(f: Faculty): number {
+  getPct(f: AdminFaculty): number {
     return Math.round((f.patients / f.capacity) * 100);
   }
 
@@ -166,7 +191,7 @@ export class FacultiesComponent implements OnInit {
     return map[risk as keyof typeof map] || '';
   }
 
-  viewDetail(f: Faculty) {
+  viewDetail(f: AdminFaculty) {
     this.selectedFacultyForDetail = f;
     const pct = this.getPct(f);
     const demandVal = { Critical: 100, High: 75, Moderate: 50, Low: 25 }[f.demand];
@@ -189,5 +214,38 @@ export class FacultiesComponent implements OnInit {
 
   closeCompare() {
     this.showCompareModal = false;
+  }
+
+  openAddModal() {
+    this.showAddModal = true;
+    this.newFacultyName = '';
+    this.newFacultyCampusId = '';
+  }
+
+  closeAddModal() {
+    this.showAddModal = false;
+  }
+
+  async addFaculty() {
+    if (!this.newFacultyName.trim() || this.newFacultyCampusId === '') return;
+
+    this.isSubmitting = true;
+    const { data, error } = await this.facultyService.createFaculty(this.newFacultyName, Number(this.newFacultyCampusId));
+    this.isSubmitting = false;
+
+    if (!error) {
+      this.closeAddModal();
+      this.dialog.open(FeedbackModalComponent, {
+        width: '400px',
+        data: { type: 'success', title: 'Facultad Creada', message: 'La facultad se ha registrado exitosamente en la base de datos.' }
+      });
+      this.loadFaculties(); // Recargar la lista
+    } else {
+      console.error('Error creating faculty:', error);
+      this.dialog.open(FeedbackModalComponent, {
+        width: '400px',
+        data: { type: 'error', title: 'Error', message: 'No se pudo crear la facultad. Verifica la consola.' }
+      });
+    }
   }
 }

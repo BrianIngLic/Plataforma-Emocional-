@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } 
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartConfiguration, ChartOptions } from 'chart.js';
 import { SupabaseService } from '../../../core/services/supabase.service';
+import { AdminStatsService } from '../services/admin-stats.service';
 
 interface Psychologist {
   id: string;
@@ -33,16 +34,11 @@ export class PsychologistsComponent implements OnInit {
   supabase = inject(SupabaseService).supabase;
   fb = inject(FormBuilder);
 
-  psychologists: Psychologist[] = [
-    { id: 'p1', name: 'Dr. Rivera', faculty: 'Engineering', patients: 38, capacity: 40, attendanceRate: 91, sessionsCompleted: 182, sessionsScheduled: 200, evaluation: 4.8, alert: 'overload', specialty: 'Anxiety / Academic stress', avgSessionDuration: 52, dropouts: 2 },
-    { id: 'p2', name: 'Dr. Osei', faculty: 'Medicine', patients: 35, capacity: 40, attendanceRate: 88, sessionsCompleted: 156, sessionsScheduled: 180, evaluation: 4.6, alert: 'overload', specialty: 'Burnout / Depression', avgSessionDuration: 55, dropouts: 3 },
-    { id: 'p3', name: 'Dr. Nakamura', faculty: 'Sciences', patients: 22, capacity: 35, attendanceRate: 94, sessionsCompleted: 105, sessionsScheduled: 112, evaluation: 4.9, alert: 'none', specialty: 'ADHD / Cognitive', avgSessionDuration: 50, dropouts: 1 },
-    { id: 'p4', name: 'Dr. Müller', faculty: 'Law', patients: 31, capacity: 35, attendanceRate: 79, sessionsCompleted: 120, sessionsScheduled: 155, evaluation: 3.9, alert: 'low-perf', specialty: 'Anxiety / Perfectionism', avgSessionDuration: 48, dropouts: 7 },
-    { id: 'p5', name: 'Dr. Santos', faculty: 'Education', patients: 14, capacity: 30, attendanceRate: 86, sessionsCompleted: 64, sessionsScheduled: 75, evaluation: 4.2, alert: 'few-patients', specialty: 'Stress / Vocational', avgSessionDuration: 50, dropouts: 1 },
-    { id: 'p6', name: 'Dr. Al-Farsi', faculty: 'Arts & Humanities', patients: 29, capacity: 35, attendanceRate: 90, sessionsCompleted: 138, sessionsScheduled: 155, evaluation: 4.5, alert: 'none', specialty: 'Depression / Identity', avgSessionDuration: 53, dropouts: 2 }
-  ];
+  adminStats = inject(AdminStatsService);
 
-  selectedFilter: 'all' | 'overload' | 'low-perf' | 'few-patients' | 'none' = 'all';
+  psychologists: Psychologist[] = [];
+
+  selectedFilter: string = 'all';
   selectedPsychologist: Psychologist | null = null;
   
   // Registration Form state
@@ -84,8 +80,9 @@ export class PsychologistsComponent implements OnInit {
     }
   };
 
-  ngOnInit(): void {
+  async ngOnInit() {
     this.initForm();
+    this.psychologists = await this.adminStats.getPsychologistsWithStats();
   }
 
   initForm() {
@@ -95,6 +92,7 @@ export class PsychologistsComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       matricula: ['', [Validators.required, Validators.minLength(4)]],
+      cedula: ['', [Validators.required, Validators.minLength(5)]],
       faculty: ['Engineering', [Validators.required]],
       specialty: ['', [Validators.required]],
       capacity: [35, [Validators.required, Validators.min(10), Validators.max(100)]]
@@ -174,6 +172,7 @@ export class PsychologistsComponent implements OnInit {
 
   closeAddModal() {
     this.showAddModal = false;
+    this.createdCredentials = null;
   }
 
   async onSubmit() {
@@ -186,7 +185,7 @@ export class PsychologistsComponent implements OnInit {
     this.formErrorMessage = '';
     this.formSuccessMessage = '';
 
-    const { firstName, lastName, email, password, matricula, faculty, specialty, capacity } = this.addForm.value;
+    const { firstName, lastName, email, password, matricula, cedula, faculty, specialty, capacity } = this.addForm.value;
 
     try {
       // 1. Intentamos crear en Supabase Auth
@@ -206,19 +205,30 @@ export class PsychologistsComponent implements OnInit {
         const { error: userError } = await this.supabase.from('users').insert({
           id: userId,
           matricula: matricula,
-          role_id: 3
+          role_id: 3,
+          requires_password_change: true
         });
 
         if (userError) console.error('Error insertando usuario en BD:', userError.message);
 
-        // 3. Insertamos en public.profiles
+        // 3. Insertamos en public.profiles (Añadimos facultad y cédula)
         const { error: profileError } = await this.supabase.from('profiles').insert({
           user_id: userId,
           first_name: firstName,
-          last_name: lastName
+          last_name: lastName,
+          faculty: faculty,
+          cedula: cedula
         });
 
         if (profileError) console.error('Error insertando perfil en BD:', profileError.message);
+
+        // 4. Guardamos la configuración del psicólogo (Capacidad de pacientes)
+        const { error: settingsError } = await this.supabase.from('psychologist_settings').insert({
+          psychologist_id: userId,
+          capacity: capacity
+        });
+        
+        if (settingsError) console.error('Error configurando psicólogo:', settingsError.message);
       }
 
       // Agregamos localmente para visualización interactiva inmediata
@@ -232,7 +242,7 @@ export class PsychologistsComponent implements OnInit {
         sessionsCompleted: 0,
         sessionsScheduled: 0,
         evaluation: 5.0,
-        alert: 'few-patients', // empieza con 0 pacientes, por ende tiene baja utilización
+        alert: 'few-patients',
         specialty: specialty,
         avgSessionDuration: 50,
         dropouts: 0
@@ -241,9 +251,10 @@ export class PsychologistsComponent implements OnInit {
       this.psychologists.unshift(newPsych);
 
       this.formSuccessMessage = 'Psicólogo registrado exitosamente en el sistema.';
-      setTimeout(() => {
-        this.showAddModal = false;
-      }, 2000);
+      this.generateCredentialsPDF(`Dr. ${firstName} ${lastName}`, email, password);
+      
+      // En lugar de cerrar el modal, dejamos que el usuario interactúe con los botones de éxito
+      this.createdCredentials = { name: `Dr. ${firstName} ${lastName}`, email, password };
 
     } catch (err: any) {
       console.warn('⚠️ MODO OFFLINE/SIMULADO: Agregando psicólogo de forma simulada en memoria por error de red.');
@@ -266,11 +277,67 @@ export class PsychologistsComponent implements OnInit {
 
       this.psychologists.unshift(newPsych);
       this.formSuccessMessage = 'Psicólogo registrado exitosamente (Modo Simulado).';
-      setTimeout(() => {
-        this.showAddModal = false;
-      }, 2000);
+      this.generateCredentialsPDF(`Dr. ${firstName} ${lastName}`, email, password);
+      this.createdCredentials = { name: `Dr. ${firstName} ${lastName}`, email, password };
     } finally {
       this.isSubmitting = false;
     }
+  }
+
+  createdCredentials: { name: string, email: string, password: string } | null = null;
+
+  generateRandomPassword() {
+    const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*';
+    let pass = '';
+    for (let i = 0; i < 12; i++) {
+      pass += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    this.addForm.patchValue({ password: pass });
+  }
+
+  generateCredentialsPDF(name: string, email: string, pass: string) {
+    import('jspdf').then(({ jsPDF }) => {
+      const doc = new jsPDF();
+      
+      doc.setFontSize(22);
+      doc.setTextColor(37, 99, 235);
+      doc.text('Plataforma de Asistencia Emocional', 105, 30, { align: 'center' });
+      
+      doc.setFontSize(16);
+      doc.setTextColor(0, 0, 0);
+      doc.text('Credenciales de Acceso Oficiales', 105, 45, { align: 'center' });
+      
+      doc.setFontSize(12);
+      doc.text(`Estimado/a ${name},`, 20, 70);
+      doc.text('Su cuenta como especialista clínico ha sido creada exitosamente en la plataforma.', 20, 80);
+      
+      doc.setDrawColor(200);
+      doc.setFillColor(245, 245, 245);
+      doc.roundedRect(20, 95, 170, 50, 3, 3, 'FD');
+      
+      doc.setFont('helvetica', 'bold');
+      doc.text('Correo electrónico:', 30, 110);
+      doc.text('Contraseña temporal:', 30, 125);
+      
+      doc.setFont('helvetica', 'normal');
+      doc.text(email, 75, 110);
+      doc.text(pass, 80, 125);
+      
+      doc.text('Por motivos de seguridad, el sistema le exigirá cambiar esta contraseña', 20, 165);
+      doc.text('en su primer inicio de sesión.', 20, 172);
+      
+      doc.setTextColor(37, 99, 235);
+      doc.text('Enlace de acceso: https://plataforma-emocional.com', 20, 190);
+      
+      doc.save(`Credenciales_${name.replace(/ /g, '_')}.pdf`);
+    });
+  }
+
+  sendEmail() {
+    if (!this.createdCredentials) return;
+    const { name, email, password } = this.createdCredentials;
+    const subject = encodeURIComponent('Credenciales de Acceso - Plataforma Emocional');
+    const body = encodeURIComponent(`Estimado/a ${name},\n\nAdjunto a este correo encontrará (o debió recibir previamente) el archivo PDF con sus credenciales oficiales.\n\nPor si acaso, le recordamos sus datos de acceso:\nCorreo: ${email}\nContraseña Temporal: ${password}\n\nSe le solicitará cambiar la contraseña en su primer inicio de sesión.\n\nSaludos cordiales.`);
+    window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
   }
 }

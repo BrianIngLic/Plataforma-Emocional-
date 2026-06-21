@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartConfiguration, ChartOptions } from 'chart.js';
+import { AdminStatsService, OverviewMetrics } from '../services/admin-stats.service';
 
 @Component({
   selector: 'app-overview',
@@ -13,29 +14,22 @@ import { ChartConfiguration, ChartOptions } from 'chart.js';
 })
 export class OverviewComponent implements OnInit {
 
+  private adminStats = inject(AdminStatsService);
+
+  metrics: OverviewMetrics | null = null;
+  loading = true;
+
   kpis = [
-    { label: 'Active Patients', value: '313', sub: '↑ 12 new this month', icon: 'people', class: 'blue' },
-    { label: 'Psychologists', value: '6', sub: '5 with active caseload', icon: 'assignment_ind', class: 'violet' },
-    { label: 'Sessions Today', value: '47', sub: 'Across 6 faculties', icon: 'calendar_today', class: 'emerald' },
-    { label: 'Active Alerts', value: '5', sub: '2 critical, 3 attention', icon: 'warning', class: 'red' }
+    { label: 'Active Patients', value: '0', sub: 'Calculando...', icon: 'people', class: 'blue' },
+    { label: 'Psychologists', value: '0', sub: 'Calculando...', icon: 'assignment_ind', class: 'violet' },
+    { label: 'Sessions Today', value: '0', sub: 'Calculando...', icon: 'calendar_today', class: 'emerald' },
+    { label: 'Active Alerts', value: '0', sub: 'Calculando...', icon: 'warning', class: 'red' }
   ];
 
-  patientsByFaculty = [
-    { faculty: 'Engineering', patients: 87, color: '#3b82f6' },
-    { faculty: 'Medicine', patients: 64, color: '#0ea5e9' },
-    { faculty: 'Law', patients: 52, color: '#10b981' },
-    { faculty: 'Arts', patients: 43, color: '#f59e0b' },
-    { faculty: 'Sciences', patients: 38, color: '#8b5cf6' },
-    { faculty: 'Education', patients: 29, color: '#ec4899' }
-  ];
+  patientsByFaculty: { faculty: string, patients: number, color: string }[] = [];
 
   occupancyByPsychologist = [
-    { name: 'Dr. Rivera', patients: 38, capacity: 40, pct: 95 },
-    { name: 'Dr. Osei', patients: 35, capacity: 40, pct: 88 },
-    { name: 'Dr. Nakamura', patients: 22, capacity: 35, pct: 63 },
-    { name: 'Dr. Müller', patients: 31, capacity: 35, pct: 89 },
-    { name: 'Dr. Santos', patients: 14, capacity: 30, pct: 47 },
-    { name: 'Dr. Al-Farsi', patients: 29, capacity: 35, pct: 83 }
+    { name: 'Cargando datos...', patients: 0, capacity: 1, pct: 0 }
   ];
 
   // 1. Trend Line Chart
@@ -89,14 +83,8 @@ export class OverviewComponent implements OnInit {
 
   // 2. Horizontal Bar Chart (Faculty Patients)
   public barChartData: ChartConfiguration<'bar'>['data'] = {
-    labels: this.patientsByFaculty.map(f => f.faculty),
-    datasets: [
-      {
-        data: this.patientsByFaculty.map(f => f.patients),
-        backgroundColor: this.patientsByFaculty.map(f => f.color),
-        borderRadius: 4
-      }
-    ]
+    labels: [],
+    datasets: [{ data: [], backgroundColor: [], borderRadius: 4 }]
   };
 
   public barChartOptions: ChartOptions<'bar'> = {
@@ -120,7 +108,34 @@ export class OverviewComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit(): void {
+  async ngOnInit() {
+    await this.loadStats();
+  }
+
+  async loadStats() {
+    this.loading = true;
+    this.metrics = await this.adminStats.getOverviewMetrics();
+    
+    this.kpis = [
+      { label: 'Pacientes Activos', value: String(this.metrics.activePatients), sub: `↑ ${this.metrics.newPatientsThisMonth} nuevos este mes`, icon: 'people', class: 'blue' },
+      { label: 'Psicólogos', value: String(this.metrics.psychologists), sub: `${this.metrics.activePsychologists} con carga activa`, icon: 'assignment_ind', class: 'violet' },
+      { label: 'Sesiones Hoy', value: String(this.metrics.sessionsToday), sub: 'A través de la red', icon: 'calendar_today', class: 'emerald' },
+      { label: 'Alertas Activas', value: String(this.metrics.activeAlerts), sub: 'En proceso', icon: 'warning', class: 'red' }
+    ];
+
+    const facData = await this.adminStats.getPatientsByFaculty();
+    this.patientsByFaculty = facData.map(f => ({ faculty: f.label, patients: f.value, color: f.color || '#3b82f6' }));
+    
+    this.barChartData = {
+      labels: this.patientsByFaculty.map(f => f.faculty),
+      datasets: [{
+        data: this.patientsByFaculty.map(f => f.patients),
+        backgroundColor: this.patientsByFaculty.map(f => f.color),
+        borderRadius: 4
+      }]
+    };
+
+    this.loading = false;
   }
 
   getOccupancyColor(pct: number): string {

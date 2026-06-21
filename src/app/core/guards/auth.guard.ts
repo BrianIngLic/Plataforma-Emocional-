@@ -13,6 +13,11 @@ export const authGuard: CanActivateFn = async (route, state) => {
   const hasSession = await authService.checkSession();
   
   if (hasSession) {
+    const user = authService.currentUser();
+    if (user?.requires_password_change) {
+      router.navigate(['/auth/force-change']);
+      return false;
+    }
     return true; // Acceso permitido
   }
 

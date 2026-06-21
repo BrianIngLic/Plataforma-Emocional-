@@ -10,6 +10,10 @@ export const AUTH_ROUTES: Routes = [
     loadComponent: () => import('./register/register.component').then(m => m.RegisterComponent)
   },
   {
+    path: 'force-change',
+    loadComponent: () => import('./force-change-password/force-change-password.component').then(m => m.ForceChangePasswordComponent)
+  },
+  {
     path: '',
     redirectTo: 'login',
     pathMatch: 'full'

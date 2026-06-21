@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
   providedIn: 'root'
 })
 export class AuthService {
-  public currentUser = signal<{ matricula: string, role: string, id: string, name: string, faculty?: string } | null>(null);
+  public currentUser = signal<{ matricula: string, role: string, id: string, name: string, faculty?: string, requires_password_change?: boolean } | null>(null);
   public isLoggedIn = signal<boolean>(false);
 
   constructor(
@@ -30,11 +30,17 @@ export class AuthService {
   }
 
   private async loadUserProfile(userId: string) {
+    console.log(`[DEBUG] Autenticado con ID de Supabase: ${userId}`);
+    
     let { data, error } = await this.supabaseService.supabase
       .from('users')
-      .select('matricula, role_id, profiles(first_name, last_name, faculty)')
+      .select('matricula, role_id, requires_password_change, profiles(first_name, last_name, faculty)')
       .eq('id', userId)
       .single();
+
+    if (data) {
+      console.log(`[DEBUG] Rol leído de public.users: ${data.role_id}`);
+    }
 
     // Fallback: si falla por la columna faculty (que aún no se crea en BD), intentar sin ella
     if (error && (error.message.includes('faculty') || error.code === 'PGRST200')) {
@@ -68,7 +74,8 @@ export class AuthService {
         role: roleName,
         id: userId,
         name: fullName || 'Usuario',
-        faculty: facultyName
+        faculty: facultyName,
+        requires_password_change: data.requires_password_change === true
       });
       this.isLoggedIn.set(true);
     } else if (error) {

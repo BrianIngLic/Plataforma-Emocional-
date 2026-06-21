@@ -1,6 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
+import { AdminExceptionsService } from '../services/admin-exceptions.service';
+import { AdminStatsService } from '../services/admin-stats.service';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { FeedbackModalComponent } from '../../../shared/components/feedback-modal/feedback-modal.component';
 
 interface Appointment {
   id: number;
@@ -16,7 +20,7 @@ interface Appointment {
 @Component({
   selector: 'app-agenda',
   standalone: true,
-  imports: [CommonModule, MatIconModule],
+  imports: [CommonModule, MatIconModule, MatDialogModule],
   templateUrl: './agenda.component.html',
   styleUrls: ['./agenda.component.scss']
 })
@@ -25,31 +29,11 @@ export class AgendaComponent implements OnInit {
   days = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
   hours = ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00'];
 
-  appointments: Appointment[] = [
-    { id: 1, psychologist: 'Dr. Rivera', patient: 'Elena M.', faculty: 'Engineering', day: 0, hour: 1, type: 'Seguimiento', status: 'confirmed' },
-    { id: 2, psychologist: 'Dr. Rivera', patient: 'Sara L.', faculty: 'Engineering', day: 0, hour: 3, type: 'Crisis', status: 'urgent' },
-    { id: 3, psychologist: 'Dr. Osei', patient: 'David O.', faculty: 'Medicine', day: 0, hour: 2, type: 'Evaluación', status: 'confirmed' },
-    { id: 4, psychologist: 'Dr. Osei', patient: 'Lena B.', faculty: 'Medicine', day: 1, hour: 1, type: 'Seguimiento', status: 'pending' },
-    { id: 5, psychologist: 'Dr. Müller', patient: 'Tomás R.', faculty: 'Law', day: 1, hour: 5, type: 'Seguimiento', status: 'confirmed' },
-    { id: 6, psychologist: 'Dr. Müller', patient: 'Carla D.', faculty: 'Law', day: 2, hour: 4, type: 'EMDR', status: 'confirmed' },
-    { id: 7, psychologist: 'Dr. Nakamura', patient: 'Kenji W.', faculty: 'Sciences', day: 2, hour: 9, type: 'Teleterapia', status: 'pending' },
-    { id: 8, psychologist: 'Dr. Al-Farsi', patient: 'Amina H.', faculty: 'Arts', day: 3, hour: 7, type: 'Grupal', status: 'confirmed' },
-    { id: 9, psychologist: 'Dr. Santos', patient: 'Marco F.', faculty: 'Education', day: 3, hour: 2, type: 'Seguimiento', status: 'confirmed' },
-    { id: 10, psychologist: 'Dr. Rivera', patient: 'Yusuf A.', faculty: 'Engineering', day: 4, hour: 1, type: 'Crisis', status: 'urgent' },
-    { id: 11, psychologist: 'Dr. Osei', patient: 'Ana P.', faculty: 'Medicine', day: 4, hour: 3, type: 'Evaluación', status: 'confirmed' },
-    { id: 12, psychologist: 'Dr. Müller', patient: 'Ben S.', faculty: 'Law', day: 1, hour: 8, type: 'Seguimiento', status: 'confirmed' },
-    { id: 13, psychologist: 'Dr. Al-Farsi', patient: 'Mia K.', faculty: 'Arts', day: 0, hour: 6, type: 'Seguimiento', status: 'confirmed' },
-    { id: 14, psychologist: 'Dr. Santos', patient: 'Leo R.', faculty: 'Education', day: 2, hour: 0, type: 'Evaluación', status: 'pending' }
-  ];
+  private adminStats = inject(AdminStatsService);
 
-  occupancyByFaculty = [
-    { faculty: 'Engineering', total: 52, filled: 48, color: '#3b82f6' },
-    { faculty: 'Medicine', total: 48, filled: 40, color: '#0ea5e9' },
-    { faculty: 'Law', total: 40, filled: 35, color: '#10b981' },
-    { faculty: 'Arts & Humanities', total: 35, filled: 27, color: '#f59e0b' },
-    { faculty: 'Sciences', total: 30, filled: 22, color: '#8b5cf6' },
-    { faculty: 'Education', total: 25, filled: 18, color: '#ec4899' }
-  ];
+  appointments: Appointment[] = [];
+
+  occupancyByFaculty: any[] = [];
 
   weekOffset = 0;
   selectedAppt: Appointment | null = null;
@@ -59,11 +43,86 @@ export class AgendaComponent implements OnInit {
   occupancyPct = 0;
   urgentCount = 0;
   confirmedCount = 0;
+  
+  isImportingHolidays = false;
+
+  private exceptionsService = inject(AdminExceptionsService);
+  private dialog = inject(MatDialog);
 
   constructor() { }
 
-  ngOnInit(): void {
+  async loadHolidays() {
+    this.isImportingHolidays = true;
+    const year = new Date().getFullYear();
+    
+    try {
+      const result = await this.exceptionsService.importHolidaysToSupabase(year);
+      if (result.success) {
+        this.dialog.open(FeedbackModalComponent, {
+          width: '400px',
+          data: { type: 'success', title: 'Festivos Importados', message: `Se han registrado ${result.count} días festivos globales para ${year} (API Nager.Date).` }
+        });
+      } else {
+        throw new Error('Error en importación');
+      }
+    } catch (err) {
+      this.dialog.open(FeedbackModalComponent, {
+        width: '400px',
+        data: { type: 'error', title: 'Error de Importación', message: 'No se pudieron cargar los festivos. Verifique su conexión y configuración de Supabase.' }
+      });
+    } finally {
+      this.isImportingHolidays = false;
+    }
+  }
+
+  async ngOnInit() {
+    await this.loadAppointments();
     this.calculateMetrics();
+  }
+
+  async loadAppointments() {
+    const now = new Date();
+    // Aproximación: Lunes a Viernes de la semana actual
+    const day = now.getDay();
+    const diff = now.getDate() - day + (day === 0 ? -6 : 1); // ajusta cuando el día es domingo
+    const startOfWeek = new Date(now.setDate(diff));
+    const endOfWeek = new Date(now.setDate(diff + 6));
+    
+    startOfWeek.setHours(0,0,0,0);
+    endOfWeek.setHours(23,59,59,999);
+
+    const dbAppts = await this.adminStats.getAgendaAppointments(startOfWeek, endOfWeek);
+
+    this.appointments = dbAppts.map((a: any) => {
+      const dDate = new Date(a.date + 'T00:00:00'); // Evitar timezone shift
+      let dayIdx = dDate.getDay() - 1; 
+      if (dayIdx < 0) dayIdx = 0; 
+      if (dayIdx > 4) dayIdx = 4;
+
+      let hourIdx = parseInt(a.startTime.split(':')[0]) - 8;
+      if (hourIdx < 0) hourIdx = 0;
+      if (hourIdx > 9) hourIdx = 9;
+
+      return {
+        id: a.id,
+        psychologist: a.psychologist,
+        patient: a.patient,
+        faculty: a.faculty,
+        day: dayIdx,
+        hour: hourIdx,
+        type: a.type,
+        status: a.status
+      };
+    });
+
+    const facStats = await this.adminStats.getFacultiesWithStats();
+    const colors = ['#3b82f6', '#0ea5e9', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899'];
+    this.occupancyByFaculty = facStats.map((f, i) => ({
+      faculty: f.name,
+      total: f.capacity,
+      filled: f.patients,
+      color: colors[i % colors.length]
+    }));
   }
 
   calculateMetrics() {

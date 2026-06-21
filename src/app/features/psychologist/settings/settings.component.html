@@ -100,7 +100,7 @@
 
         <div class="exceptions-list">
           <h4>Próximos bloqueos configurados</h4>
-          <div class="exception-item" *ngFor="let exc of exceptions">
+          <div class="exception-item" *ngFor="let exc of upcomingExceptions">
             <div class="exc-info">
               <span class="date">{{ exc.exception_date | date:'longDate' }}</span>
               <span class="time" *ngIf="exc.start_time && exc.end_time">De {{exc.start_time.substring(0,5)}} a {{exc.end_time.substring(0,5)}}</span>
@@ -113,7 +113,7 @@
             </button>
           </div>
           
-          <div class="empty-state" *ngIf="exceptions.length === 0">
+          <div class="empty-state" *ngIf="upcomingExceptions.length === 0">
             <mat-icon>calendar_today</mat-icon>
             <p>No tienes días bloqueados configurados.</p>
           </div>

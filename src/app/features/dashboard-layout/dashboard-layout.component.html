@@ -17,7 +17,7 @@
     </div>
 
     <div class="sidebar-content">
-      <button class="new-action-btn">
+      <button class="new-action-btn" (click)="onNewAction()">
         <mat-icon>add</mat-icon> 
         <span class="btn-text">Nuevo chat</span>
       </button>
@@ -53,11 +53,11 @@
         </a>
       </nav>
 
-      <div class="recent-chats">
+      <div class="recent-chats" *ngIf="showChatHistory">
         <h3 class="section-title">RECIENTES</h3>
-        <div class="recent-item">
-          <span class="recent-text">Manejo del estrés laboral</span>
-          <small class="recent-time">Hace 2h</small>
+        <div class="recent-item" *ngFor="let chat of chatHistory" (click)="loadChat(chat.id)" style="cursor: pointer;">
+          <span class="recent-text" title="{{chat.title}}">{{ chat.title.substring(0, 15) }}{{chat.title.length > 15 ? '...' : ''}}</span>
+          <small class="recent-time" style="margin-left: auto;">{{ chat.created_at | date:'dd/MM' }}</small>
           <mat-icon class="recent-icon">history</mat-icon>
         </div>
       </div>

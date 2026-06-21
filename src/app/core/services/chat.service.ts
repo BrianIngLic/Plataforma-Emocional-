@@ -101,6 +101,61 @@ export class ChatService {
     }
   }
 
+  async startNewChat() {
+    const user = this.authService.currentUser();
+    if (!user) return;
+    
+    // Si el chat actual está vacío, no creamos otro.
+    const currentMsgs = this.messagesSignal();
+    if (currentMsgs.length <= 1) return;
+
+    // Crear nuevo chat
+    const { data: newChat } = await this.supabaseService.supabase
+      .from('chats')
+      .insert({
+        student_id: user.id,
+        title: this.cryptoService.encrypt('Nueva Conversación')
+      })
+      .select()
+      .single();
+      
+    if (newChat) {
+      this.activeChatId = newChat.id;
+      this.messagesSignal.set([{
+        id: 'welcome',
+        role: 'assistant',
+        content: '¡Hola! Soy EmolA, tu asistente emocional. ¿Cómo te sientes hoy?',
+        timestamp: new Date()
+      }]);
+    }
+  }
+
+  async getChatHistory() {
+    const user = this.authService.currentUser();
+    if (!user) return [];
+    
+    const { data } = await this.supabaseService.supabase
+      .from('chats')
+      .select('id, title, created_at')
+      .eq('student_id', user.id)
+      .order('created_at', { ascending: false })
+      .limit(10);
+      
+    if (data) {
+      return data.map(c => {
+        let decTitle = 'Chat sin título';
+        try { decTitle = this.cryptoService.decrypt(c.title); } catch(e){}
+        return { ...c, title: decTitle };
+      });
+    }
+    return [];
+  }
+
+  async loadSpecificChat(chatId: string) {
+    this.activeChatId = chatId;
+    await this.loadMessages();
+  }
+
   async sendMessage(content: string) {
     if (!content.trim() || !this.activeChatId) return;
 

@@ -45,6 +45,10 @@ export class SettingsComponent implements OnInit {
 
   get currentUserId() { return this.authService.currentUser()?.id; }
 
+  get upcomingExceptions() {
+    return this.exceptions.filter(e => e.exception_date >= this.today);
+  }
+
   async ngOnInit() {
     await this.loadSettings();
     await this.loadExceptions();
@@ -74,6 +78,23 @@ export class SettingsComponent implements OnInit {
 
   async saveSettings() {
     if (!this.currentUserId) return;
+    
+    // Validación de bloques de tiempo
+    for (const day of this.weekDays) {
+      if (day.active) {
+        for (const block of day.blocks) {
+          if (!block.start || !block.end) {
+            this.showFeedback('error', 'Horario Inválido', `Por favor completa las horas en el día ${day.label}.`);
+            return;
+          }
+          if (block.start >= block.end) {
+            this.showFeedback('error', 'Horario Inválido', `En el día ${day.label}, la hora de inicio (${block.start}) no puede ser igual o posterior a la hora de fin (${block.end}).`);
+            return;
+          }
+        }
+      }
+    }
+
     this.isSaving = true;
     
     const workingDaysMap: WorkingDaysMap = {};

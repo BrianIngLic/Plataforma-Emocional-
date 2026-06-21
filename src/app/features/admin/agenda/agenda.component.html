@@ -1,0 +1,181 @@
+<div class="agenda-container">
+
+  <!-- KPI Metrics Strip -->
+  <div class="kpis-grid">
+    <div class="kpi-card blue">
+      <div class="kpi-icon"><mat-icon>calendar_today</mat-icon></div>
+      <div class="kpi-content">
+        <span class="label">Citas Totales</span>
+        <span class="value">{{ appointments.length }}</span>
+        <span class="sub">Esta semana</span>
+      </div>
+    </div>
+    
+    <div class="kpi-card" [ngClass]="occupancyPct >= 85 ? 'red' : 'green'">
+      <div class="kpi-icon"><mat-icon>schedule</mat-icon></div>
+      <div class="kpi-content">
+        <span class="label">Ocupación Agenda</span>
+        <span class="value">{{ occupancyPct }}%</span>
+        <span class="sub">{{ filledSlots }}/{{ totalSlots }} espacios</span>
+      </div>
+    </div>
+    
+    <div class="kpi-card red">
+      <div class="kpi-icon"><mat-icon>error</mat-icon></div>
+      <div class="kpi-content">
+        <span class="label">Sesiones Urgentes</span>
+        <span class="value">{{ urgentCount }}</span>
+        <span class="sub">Prioridad inmediata</span>
+      </div>
+    </div>
+    
+    <div class="kpi-card green">
+      <div class="kpi-icon"><mat-icon>check_circle</mat-icon></div>
+      <div class="kpi-content">
+        <span class="label">Confirmadas</span>
+        <span class="value">{{ confirmedCount }}</span>
+        <span class="sub">Bloqueadas</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Saturated Schedules Warning -->
+  <div class="warning-banner" *ngIf="saturatedFaculties.length > 0">
+    <div class="warning-icon"><mat-icon>warning</mat-icon></div>
+    <div class="warning-text">
+      <h4>Agendas Saturadas Detectadas</h4>
+      <p>
+        Las facultades <strong>{{ saturatedFacultiesNamesString }}</strong> 
+        tienen disponibilidad críticamente baja. Se recomienda redistribuir las solicitudes de citas.
+      </p>
+    </div>
+  </div>
+
+  <!-- Main Grid + Sidebar -->
+  <div class="agenda-grid-layout">
+    
+    <!-- Left: Weekly Grid Table -->
+    <div class="panel grid-panel">
+      <div class="panel-header border-b">
+        <div class="panel-title-wrapper">
+          <mat-icon class="title-icon blue">date_range</mat-icon>
+          <span class="panel-title">
+            Semana {{ weekOffset === 0 ? 'Actual' : weekOffset > 0 ? '+' + weekOffset : weekOffset }}
+          </span>
+        </div>
+        
+        <div class="week-controls">
+          <button (click)="prevWeek()" class="control-btn"><mat-icon>chevron_left</mat-icon></button>
+          <button (click)="resetWeek()" class="control-btn text">Hoy</button>
+          <button (click)="nextWeek()" class="control-btn"><mat-icon>chevron_right</mat-icon></button>
+        </div>
+      </div>
+
+      <div class="grid-table-container">
+        <table class="grid-table">
+          <thead>
+            <tr>
+              <th class="time-header-cell">Hora</th>
+              <th *ngFor="let d of days">{{ d }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let hour of hours; let hi = index">
+              <td class="time-cell">{{ hour }}</td>
+              <td *ngFor="let d of days; let di = index" class="appt-cell">
+                <!-- If appointment exists -->
+                <button 
+                  *ngIf="getApptAt(di, hi) as appt" 
+                  (click)="selectAppt(appt)"
+                  class="appt-block"
+                  [ngClass]="getStatusClass(appt.status)"
+                >
+                  <p class="patient-name">{{ appt.patient }}</p>
+                  <p class="psychologist-name">{{ appt.psychologist.split(' ')[1] }}</p>
+                </button>
+                
+                <!-- Blank cell -->
+                <div *ngIf="!getApptAt(di, hi)" class="empty-cell"></div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Right: Sidebar Availability + Details -->
+    <div class="side-panel-column">
+      
+      <!-- Faculty availability progess list -->
+      <div class="panel">
+        <div class="panel-header border-b">
+          <div class="panel-title-wrapper">
+            <mat-icon class="title-icon blue">business</mat-icon>
+            <span class="panel-title">Disponibilidad por Facultad</span>
+          </div>
+        </div>
+        
+        <div class="availability-list">
+          <div class="availability-item" *ngFor="let f of occupancyByFaculty">
+            <div class="item-header">
+              <span class="fac-name">{{ f.faculty }}</span>
+              <span class="fac-free">{{ f.total - f.filled }} libres</span>
+            </div>
+            <div class="progress-bar-bg">
+              <div 
+                class="progress-bar-fill" 
+                [style.width]="(f.filled / f.total * 100) + '%'"
+                [style.backgroundColor]="getOccupancyBarColor((f.filled / f.total * 100), f.color)"
+              ></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Selected Appointment Detail Card -->
+      <div class="panel detail-panel" *ngIf="selectedAppt">
+        <div class="panel-header border-b">
+          <span class="panel-title">Detalle de la Cita</span>
+          <button class="close-detail-btn" (click)="selectedAppt = null">Cerrar</button>
+        </div>
+
+        <div class="detail-body">
+          <div class="detail-row">
+            <small>Paciente</small>
+            <span>{{ selectedAppt.patient }}</span>
+          </div>
+          <div class="detail-row">
+            <small>Psicólogo</small>
+            <span>{{ selectedAppt.psychologist }}</span>
+          </div>
+          <div class="detail-row">
+            <small>Facultad</small>
+            <span>{{ selectedAppt.faculty }}</span>
+          </div>
+          <div class="detail-row">
+            <small>Tipo de Consulta</small>
+            <span>{{ selectedAppt.type }}</span>
+          </div>
+          <div class="detail-row">
+            <small>Día / Hora</small>
+            <span>{{ days[selectedAppt.day] }} a las {{ hours[selectedAppt.hour] }}</span>
+          </div>
+          <div class="detail-row split">
+            <small>Estado</small>
+            <span class="badge inline" [ngClass]="getStatusClass(selectedAppt.status)">
+              {{ getStatusText(selectedAppt.status) }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel empty-detail-panel" *ngIf="!selectedAppt">
+        <mat-icon>access_time</mat-icon>
+        <p>Selecciona una cita del calendario para ver sus detalles específicos.</p>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

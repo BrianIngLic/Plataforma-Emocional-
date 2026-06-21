@@ -151,14 +151,25 @@ export class AuthService {
 
   // Método auxiliar para activar la sesión en modo offline
   private activateMockSession(matricula: string, faculty: string = '') {
-    // Si la matrícula tiene la palabra admin, le damos rol de psicólogo
-    const role = matricula.toLowerCase().includes('admin') ? 'Psicologo' : 'Estudiante';
+    const term = matricula.toLowerCase();
+    let role = 'Estudiante';
+    let name = 'Usuario Offline';
+    
+    if (term.includes('admin')) {
+      role = 'Admin';
+      name = 'Administrador de Sistema';
+    } else if (term.includes('psic') || term.includes('doctor') || term.includes('rivera') || term.includes('osei')) {
+      role = 'Psicologo';
+      name = 'Dr. Rivera (Simulado)';
+    }
+
     this.currentUser.set({ 
       matricula: matricula, 
       role: role,
       id: 'mock-user-id-123',
-      name: 'Usuario Offline',
+      name: name,
       faculty: faculty
+
     });
     this.isLoggedIn.set(true);
   }

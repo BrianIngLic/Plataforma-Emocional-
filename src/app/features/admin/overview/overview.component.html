@@ -1,0 +1,88 @@
+<div class="overview-container">
+
+  <!-- KPI Cards -->
+  <div class="kpi-grid">
+    <div class="kpi-card" *ngFor="let kpi of kpis" [ngClass]="kpi.class">
+      <div class="icon-wrapper">
+        <mat-icon>{{ kpi.icon }}</mat-icon>
+      </div>
+      <div class="kpi-info">
+        <span class="kpi-label">{{ kpi.label }}</span>
+        <span class="kpi-value">{{ kpi.value }}</span>
+        <span class="kpi-sub">{{ kpi.sub }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Faculty Quick Strip -->
+  <div class="faculty-strip">
+    <div class="strip-item" *ngFor="let f of patientsByFaculty">
+      <div class="strip-icon" [style.backgroundColor]="f.color + '1a'">
+        <mat-icon [style.color]="f.color">business</mat-icon>
+      </div>
+      <span class="strip-value">{{ f.patients }}</span>
+      <span class="strip-label">{{ f.faculty }}</span>
+    </div>
+  </div>
+
+  <!-- Charts Row -->
+  <div class="charts-row">
+    <!-- Trend Chart -->
+    <div class="panel col-3">
+      <div class="panel-header">
+        <div class="panel-title-wrapper">
+          <mat-icon class="title-icon green">trending_up</mat-icon>
+          <span class="panel-title">Tendencia de Atención Mensual</span>
+        </div>
+        <div class="panel-legend">
+          <span class="legend-item"><span class="dot blue"></span>Sesiones</span>
+          <span class="legend-item"><span class="dot green"></span>Nuevos</span>
+          <span class="legend-item"><span class="dot red"></span>Bajas</span>
+        </div>
+      </div>
+      <div class="chart-container">
+        <canvas baseChart [data]="lineChartData" [options]="lineChartOptions" type="line"></canvas>
+      </div>
+    </div>
+
+    <!-- Patients by Faculty Bar -->
+    <div class="panel col-2">
+      <div class="panel-header">
+        <div class="panel-title-wrapper">
+          <mat-icon class="title-icon blue">business</mat-icon>
+          <span class="panel-title">Pacientes por Facultad</span>
+        </div>
+      </div>
+      <div class="chart-container">
+        <canvas baseChart [data]="barChartData" [options]="barChartOptions" type="bar"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Psychologist Caseload Table -->
+  <div class="panel">
+    <div class="panel-header">
+      <div class="panel-title-wrapper">
+        <mat-icon class="title-icon purple">assignment_ind</mat-icon>
+        <span class="panel-title">Ocupación y Carga de Trabajo de Psicólogos</span>
+      </div>
+      <div class="occupancy-legends">
+        <span class="legend-item"><span class="dot red"></span>&ge;90% Sobrecarga</span>
+        <span class="legend-item"><span class="dot amber"></span>75-89% Moderada</span>
+        <span class="legend-item"><span class="dot green"></span>&lt;75% Saludable</span>
+      </div>
+    </div>
+    
+    <div class="occupancy-list">
+      <div class="occupancy-row" *ngFor="let item of occupancyByPsychologist">
+        <span class="psych-name">{{ item.name }}</span>
+        <div class="progress-container">
+          <div class="progress-bar" [style.width]="item.pct + '%'" [style.backgroundColor]="getOccupancyColor(item.pct)"></div>
+        </div>
+        <span class="psych-pct" [style.color]="getOccupancyColor(item.pct)">{{ item.pct }}%</span>
+        <span class="psych-ratio">{{ item.patients }} / {{ item.capacity }} pacientes</span>
+      </div>
+    </div>
+  </div>
+
+</div>

@@ -37,7 +37,9 @@ export class LoginComponent {
     if (success) {
       const user = this.authService.currentUser();
       
-      if (user?.role === 'Psicologo') {
+      if (user?.role === 'Admin') {
+        this.router.navigate(['/admin']);
+      } else if (user?.role === 'Psicologo') {
         this.router.navigate(['/psychologist']);
       } else {
         this.router.navigate(['/']);

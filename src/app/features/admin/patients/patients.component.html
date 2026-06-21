@@ -1,0 +1,111 @@
+<div class="patients-container">
+
+  <!-- KPI Cards -->
+  <div class="kpis-grid">
+    <div class="kpi-card blue">
+      <div class="kpi-icon"><mat-icon>people</mat-icon></div>
+      <div class="kpi-content">
+        <span class="label">Pacientes Totales</span>
+        <span class="value">{{ total }}</span>
+        <span class="sub">Todas las facultades</span>
+      </div>
+    </div>
+    
+    <div class="kpi-card green">
+      <div class="kpi-icon"><mat-icon>check_circle</mat-icon></div>
+      <div class="kpi-content">
+        <span class="label">Activos</span>
+        <span class="value">{{ totalActive }}</span>
+        <span class="sub">{{ ((totalActive/total)*100).toFixed(0) }}% del total</span>
+      </div>
+    </div>
+    
+    <div class="kpi-card red">
+      <div class="kpi-icon"><mat-icon>person_remove</mat-icon></div>
+      <div class="kpi-content">
+        <span class="label">Bajas (Dropout)</span>
+        <span class="value">{{ totalDropout }}</span>
+        <span class="sub">Tasa de deserción: {{ dropoutRate }}%</span>
+      </div>
+    </div>
+    
+    <div class="kpi-card purple">
+      <div class="kpi-icon"><mat-icon>sentiment_very_satisfied</mat-icon></div>
+      <div class="kpi-content">
+        <span class="label">Altas Médicas</span>
+        <span class="value">{{ totalDischarged }}</span>
+        <span class="sub">Tratamiento finalizado</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Status by Faculty Stacked Bar Chart -->
+  <div class="panel">
+    <div class="panel-header">
+      <div class="panel-title-wrapper">
+        <mat-icon class="title-icon blue">business</mat-icon>
+        <span class="panel-title">Estado del Paciente por Facultad</span>
+      </div>
+      <div class="chart-legends">
+        <span class="legend-item"><span class="dot green"></span>Activos</span>
+        <span class="legend-item"><span class="dot red"></span>Bajas</span>
+        <span class="legend-item"><span class="dot grey"></span>Egresados</span>
+      </div>
+    </div>
+    <div class="chart-wrapper font-mono">
+      <canvas baseChart [data:="stackedBarData" [data]="stackedBarData" [options]="stackedBarOptions" type="bar"></canvas>
+    </div>
+  </div>
+
+  <!-- Lower Charts Row -->
+  <div class="charts-row">
+    <!-- Growth Trends Chart -->
+    <div class="panel col-3">
+      <div class="panel-header">
+        <div class="panel-title-wrapper">
+          <mat-icon class="title-icon green">trending_up</mat-icon>
+          <span class="panel-title">Flujo de Pacientes & Tendencia Neta</span>
+        </div>
+        <span class="badge green">+{{ netGrowth }} en total</span>
+      </div>
+      <div class="chart-legends-line">
+        <span class="legend-item"><span class="dot green"></span>Nuevos</span>
+        <span class="legend-item"><span class="dot red"></span>Bajas</span>
+        <span class="legend-item"><span class="dot blue dashed"></span>Neto</span>
+      </div>
+      <div class="chart-wrapper">
+        <canvas baseChart [data]="lineChartData" [options]="lineChartOptions" type="line"></canvas>
+      </div>
+    </div>
+
+    <!-- Diagnosis distribution Doughnut Chart -->
+    <div class="panel col-2">
+      <div class="panel-header">
+        <div class="panel-title-wrapper">
+          <mat-icon class="title-icon purple">pie_chart</mat-icon>
+          <span class="panel-title">Distribución por Diagnóstico</span>
+        </div>
+      </div>
+      
+      <div class="doughnut-content">
+        <div class="doughnut-chart-wrapper">
+          <canvas baseChart [data]="pieChartData" [options]="pieChartOptions" type="doughnut"></canvas>
+        </div>
+        
+        <div class="diagnosis-indicators">
+          <div class="indicator-row" *ngFor="let item of diagnosisDistribution">
+            <div class="indicator-name">
+              <span class="diag-dot" [style.backgroundColor]="item.color"></span>
+              <span>{{ item.name }}</span>
+            </div>
+            <div class="indicator-bar-container">
+              <div class="indicator-bar-fill" [style.width]="item.value + '%'" [style.backgroundColor]="item.color"></div>
+            </div>
+            <span class="indicator-val">{{ item.value }}%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

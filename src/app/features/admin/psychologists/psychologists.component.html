@@ -1,0 +1,307 @@
+<div class="psych-container">
+
+  <!-- Overview Stats Filters -->
+  <div class="stats-pills">
+    <button 
+      class="pill red" 
+      (click)="selectedFilter = (selectedFilter === 'overload' ? 'all' : 'overload')"
+      [class.active]="selectedFilter === 'overload'"
+    >
+      <mat-icon>warning</mat-icon>
+      <div class="pill-info">
+        <span class="value">{{ alertCounts.overload }}</span>
+        <span class="label">Sobrecargados</span>
+      </div>
+    </button>
+    
+    <button 
+      class="pill amber" 
+      (click)="selectedFilter = (selectedFilter === 'low-perf' ? 'all' : 'low-perf')"
+      [class.active]="selectedFilter === 'low-perf'"
+    >
+      <mat-icon>trending_down</mat-icon>
+      <div class="pill-info">
+        <span class="value">{{ alertCounts['low-perf'] }}</span>
+        <span class="label">Bajo Rendimiento</span>
+      </div>
+    </button>
+    
+    <button 
+      class="pill blue" 
+      (click)="selectedFilter = (selectedFilter === 'few-patients' ? 'all' : 'few-patients')"
+      [class.active]="selectedFilter === 'few-patients'"
+    >
+      <mat-icon>people</mat-icon>
+      <div class="pill-info">
+        <span class="value">{{ alertCounts['few-patients'] }}</span>
+        <span class="label">Baja Carga</span>
+      </div>
+    </button>
+  </div>
+
+  <!-- Filter Selector Bar + Add Button -->
+  <div class="filter-action-bar">
+    <div class="filters">
+      <button 
+        *ngFor="let filter of ['all', 'overload', 'low-perf', 'few-patients', 'none']"
+        (click)="selectedFilter = filter"
+        [class.active]="selectedFilter === filter"
+        class="filter-tab"
+      >
+        <span>
+          {{ 
+            filter === 'all' ? 'Todos' : 
+            filter === 'none' ? 'Sin Alerta' : 
+            filter === 'overload' ? 'Sobrecarga' :
+            filter === 'low-perf' ? 'Bajo Rendimiento' : 'Baja Utilización'
+          }}
+        </span>
+      </button>
+    </div>
+    
+    <button class="add-psych-btn" (click)="openAddModal()">
+      <mat-icon>add</mat-icon>
+      <span>Alta de Psicólogo</span>
+    </button>
+  </div>
+
+  <!-- Roster Panel -->
+  <div class="panel">
+    <div class="panel-header">
+      <div class="panel-title-wrapper">
+        <mat-icon class="title-icon purple">assignment_ind</mat-icon>
+        <span class="panel-title">Personal Clínico Registrado</span>
+      </div>
+      <span class="panel-sub">{{ filteredPsychologists.length }} psicólogos en lista</span>
+    </div>
+
+    <div class="psych-list">
+      <div 
+        class="psych-row" 
+        *ngFor="let p of filteredPsychologists"
+        [ngClass]="p.alert === 'overload' ? 'border-l-red' : p.alert === 'low-perf' ? 'border-l-amber' : p.alert === 'few-patients' ? 'border-l-blue' : ''"
+      >
+        <!-- Profile Avatar & Identity -->
+        <div class="psych-identity">
+          <div class="psych-avatar">
+            {{ p.name.split(' ')[1]?.substring(0, 2) || 'Dr' }}
+          </div>
+          <div class="psych-info">
+            <span class="psych-name">{{ p.name }}</span>
+            <small class="psych-faculty">{{ p.faculty }}</small>
+          </div>
+        </div>
+
+        <!-- Patients caseload ratio -->
+        <div class="caseload-info">
+          <span class="info-label">Pacientes</span>
+          <span class="info-value">
+            {{ p.patients }}
+            <span class="divider">/</span>
+            <span class="total">{{ p.capacity }}</span>
+          </span>
+        </div>
+
+        <!-- Caseload progress bar -->
+        <div class="caseload-progress">
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" [style.width]="getPct(p) + '%'" [style.backgroundColor]="getChargeColor(getPct(p))"></div>
+          </div>
+          <span class="progress-pct" [style.color]="getChargeColor(getPct(p))">{{ getPct(p) }}%</span>
+        </div>
+
+        <!-- Attendance Rate -->
+        <div class="metric-col">
+          <span class="info-label">Asistencia</span>
+          <span class="info-value">{{ p.attendanceRate }}%</span>
+        </div>
+
+        <!-- Efficiency -->
+        <div class="metric-col">
+          <span class="info-label">Eficiencia</span>
+          <span class="info-value">{{ getEfficiency(p) }}%</span>
+        </div>
+
+        <!-- Rating Evaluation Stars -->
+        <div class="rating-col">
+          <span class="info-label">Evaluación</span>
+          <div class="stars-row">
+            <mat-icon 
+              *ngFor="let star of getRatingStars(p.evaluation)"
+              [ngClass]="star === 1 ? 'star-filled' : 'star-empty'"
+            >
+              star
+            </mat-icon>
+            <span class="rating-number">{{ p.evaluation | number:'1.1-1' }}</span>
+          </div>
+        </div>
+
+        <!-- Alert Badge -->
+        <div class="badge-col">
+          <span class="badge" [ngClass]="getAlertClass(p.alert)">
+            {{ getAlertText(p.alert) }}
+          </span>
+        </div>
+
+        <!-- Actions -->
+        <button class="details-btn" (click)="viewDetail(p)">
+          <span>Detalles</span>
+          <mat-icon>chevron_right</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Detail Modal -->
+  <div class="modal-overlay" *ngIf="selectedPsychologist" (click)="closeDetail()">
+    <div class="modal-card detail-modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <div class="psych-modal-identity">
+          <h3>{{ selectedPsychologist.name }}</h3>
+          <p>{{ selectedPsychologist.faculty }} · {{ selectedPsychologist.specialty }}</p>
+        </div>
+        <button class="modal-close-btn" (click)="closeDetail()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Caseload progress bar -->
+        <div class="modal-caseload">
+          <div class="caseload-labels">
+            <span>Nivel de Carga</span>
+            <span [style.color]="getChargeColor(getPct(selectedPsychologist))" class="bold">
+              {{ getPct(selectedPsychologist) }}% ({{ selectedPsychologist.patients }} / {{ selectedPsychologist.capacity }})
+            </span>
+          </div>
+          <div class="progress-bar-bg large">
+            <div class="progress-bar-fill" [style.width]="getPct(selectedPsychologist) + '%'" [style.backgroundColor]="getChargeColor(getPct(selectedPsychologist))"></div>
+          </div>
+        </div>
+
+        <!-- Bar Chart wrapper -->
+        <div class="chart-wrapper">
+          <canvas baseChart [data]="barChartData" [options]="barChartOptions" type="bar"></canvas>
+        </div>
+
+        <!-- Stats details grid -->
+        <div class="modal-stats-grid">
+          <div class="stat-grid-card">
+            <small>Sesiones Completadas</small>
+            <span>{{ selectedPsychologist.sessionsCompleted }}</span>
+          </div>
+          <div class="stat-grid-card">
+            <small>Sesiones Programadas</small>
+            <span>{{ selectedPsychologist.sessionsScheduled }}</span>
+          </div>
+          <div class="stat-grid-card">
+            <small>Tasa de Asistencia</small>
+            <span>{{ selectedPsychologist.attendanceRate }}%</span>
+          </div>
+          <div class="stat-grid-card">
+            <small>Eficiencia Operativa</small>
+            <span>{{ getEfficiency(selectedPsychologist) }}%</span>
+          </div>
+          <div class="stat-grid-card">
+            <small>Abandonos del Tratamiento</small>
+            <span class="red-text">{{ selectedPsychologist.dropouts }} pacientes</span>
+          </div>
+          <div class="stat-grid-card">
+            <small>Duración Promedio Sesión</small>
+            <span>{{ selectedPsychologist.avgSessionDuration }} min</span>
+          </div>
+        </div>
+
+        <!-- Rating Evaluation footer -->
+        <div class="modal-rating-footer">
+          <span>Evaluación de Pacientes</span>
+          <div class="stars-row large">
+            <mat-icon 
+              *ngFor="let star of getRatingStars(selectedPsychologist.evaluation)"
+              [ngClass]="star === 1 ? 'star-filled' : 'star-empty'"
+            >
+              star
+            </mat-icon>
+            <span class="rating-number">{{ selectedPsychologist.evaluation | number:'1.1-1' }} / 5.0</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Secure Add Psychologist Modal (Formulario seguro de Alta de Personal Clínico) -->
+  <div class="modal-overlay" *ngIf="showAddModal" (click)="closeAddModal()">
+    <div class="modal-card form-modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <div class="modal-title-wrapper">
+          <mat-icon class="text-blue">person_add</mat-icon>
+          <h3>Alta Segura de Personal Clínico</h3>
+        </div>
+        <button class="modal-close-btn" (click)="closeAddModal()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <form [formGroup]="addForm" (ngSubmit)="onSubmit()" class="add-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="firstName">Nombre *</label>
+              <input id="firstName" type="text" formControlName="firstName" placeholder="Nombre" />
+            </div>
+            <div class="form-group">
+              <label for="lastName">Apellidos *</label>
+              <input id="lastName" type="text" formControlName="lastName" placeholder="Apellidos" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="email">Correo Electrónico *</label>
+            <input id="email" type="email" formControlName="email" placeholder="ejemplo@mindtrack.com" />
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="matricula">Cédula / Cód. Empleado *</label>
+              <input id="matricula" type="text" formControlName="matricula" placeholder="M-1002" />
+            </div>
+            <div class="form-group">
+              <label for="password">Contraseña Provisional *</label>
+              <input id="password" type="password" formControlName="password" placeholder="Contraseña de acceso" />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="faculty">Facultad Principal *</label>
+              <select id="faculty" formControlName="faculty">
+                <option *ngFor="let fac of faculties" [value]="fac">{{ fac }}</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="capacity">Capacidad de Pacientes *</label>
+              <input id="capacity" type="number" formControlName="capacity" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="specialty">Especialidad Clínica *</label>
+            <input id="specialty" type="text" formControlName="specialty" placeholder="e.g. Ansiedad, Terapia Familiar, Trauma" />
+          </div>
+
+          <div class="form-actions">
+            <span class="error-msg" *ngIf="formErrorMessage">{{ formErrorMessage }}</span>
+            <span class="success-msg" *ngIf="formSuccessMessage">{{ formSuccessMessage }}</span>
+            
+            <button type="button" class="cancel-btn" (click)="closeAddModal()" [disabled]="isSubmitting">Cancelar</button>
+            <button type="submit" class="submit-btn" [disabled]="isSubmitting">
+              <span *ngIf="!isSubmitting">Registrar Psicólogo</span>
+              <span *ngIf="isSubmitting">Registrando...</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+</div>

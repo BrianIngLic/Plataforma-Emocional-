@@ -20,9 +20,9 @@
           </select>
         </div>
 
-        <div class="actions" style="margin-top: 2rem;">
-          <button class="btn btn-primary" (click)="saveSettings()" [disabled]="isSaving || !selectedFaculty">
-            <mat-icon>save</mat-icon> Guardar Cambios
+        <div class="actions" style="margin-top: 2rem; display: flex; justify-content: flex-end;">
+          <button mat-flat-button color="primary" (click)="confirmSave()" [disabled]="isSaving || !selectedFaculty" style="padding: 6px 24px;">
+            <mat-icon style="margin-right: 8px;">save</mat-icon> Guardar Cambios
           </button>
         </div>
       </div>

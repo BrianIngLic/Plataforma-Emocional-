@@ -2,6 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { AuthService } from '../../../core/services/auth.service';
 import { FacultyService, Faculty } from '../../../core/services/faculty.service';
@@ -11,7 +12,7 @@ import { FeedbackModalComponent } from '../../../shared/components/feedback-moda
 @Component({
   selector: 'app-student-settings',
   standalone: true,
-  imports: [CommonModule, FormsModule, MatIconModule, MatDialogModule],
+  imports: [CommonModule, FormsModule, MatIconModule, MatButtonModule, MatDialogModule],
   templateUrl: './student-settings.component.html',
   styleUrls: ['./student-settings.component.scss']
 })
@@ -37,37 +38,56 @@ export class StudentSettingsComponent implements OnInit {
     }
   }
 
-  async saveSettings() {
-    const user = this.currentUser;
-    if (!user || !this.selectedFaculty) return;
+  confirmSave() {
+    if (!this.selectedFaculty) return;
 
+    const dialogRef = this.dialog.open(FeedbackModalComponent, {
+      width: '400px',
+      data: {
+        type: 'confirm',
+        title: 'Confirmar Cambio',
+        message: '¿Estás seguro que deseas cambiar tu facultad? Esto podría afectar la lista de especialistas disponibles para ti.',
+        btnText: 'Sí, cambiar',
+        cancelBtnText: 'Cancelar'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.performSave();
+      }
+    });
+  }
+
+  async performSave() {
     this.isSaving = true;
-    try {
-      // Update in profiles
+    const user = this.authService.currentUser();
+    
+    if (user && user.id) {
       const { error } = await this.supabaseService.supabase
         .from('profiles')
         .update({ faculty: this.selectedFaculty })
         .eq('user_id', user.id);
+        
+      this.isSaving = false;
 
-      if (error) throw error;
+      if (!error) {
+        this.authService.currentUser.set({
+          ...user,
+          faculty: this.selectedFaculty
+        });
 
-      // Update local state
-      this.authService.currentUser.set({
-        ...user,
-        faculty: this.selectedFaculty
-      });
-
-      this.dialog.open(FeedbackModalComponent, {
-        width: '400px',
-        data: { type: 'success', title: 'Ajustes Guardados', message: 'Tu facultad ha sido actualizada correctamente.' }
-      });
-    } catch (e) {
-      console.error(e);
-      this.dialog.open(FeedbackModalComponent, {
-        width: '400px',
-        data: { type: 'error', title: 'Error', message: 'Ocurrió un problema al guardar tus ajustes.' }
-      });
-    } finally {
+        this.dialog.open(FeedbackModalComponent, {
+          width: '400px',
+          data: { type: 'success', title: 'Ajustes Guardados', message: 'Tu facultad ha sido actualizada correctamente.' }
+        });
+      } else {
+        this.dialog.open(FeedbackModalComponent, {
+          width: '400px',
+          data: { type: 'error', title: 'Error', message: 'No se pudo guardar la configuración.' }
+        });
+      }
+    } else {
       this.isSaving = false;
     }
   }

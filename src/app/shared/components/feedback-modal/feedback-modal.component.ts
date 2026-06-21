@@ -1,19 +1,21 @@
 import { Component, Inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 
 export interface FeedbackModalData {
-  type: 'success' | 'error';
+  type: 'success' | 'error' | 'confirm';
   title: string;
   message: string;
   btnText?: string;
+  cancelBtnText?: string;
 }
 
 @Component({
   selector: 'app-feedback-modal',
   standalone: true,
-  imports: [CommonModule, MatButtonModule, MatDialogModule],
+  imports: [CommonModule, MatButtonModule, MatIconModule, MatDialogModule],
   template: `
     <div class="feedback-container">
       <div class="icon-wrapper">
@@ -35,20 +37,30 @@ export interface FeedbackModalData {
             <div class="icon-circle"></div>
           </div>
         </div>
+        <!-- Confirm Warning Animation -->
+        <div *ngIf="data.type === 'confirm'" class="warning-icon">
+          <mat-icon style="font-size: 64px; width: 64px; height: 64px; color: #f59e0b;">warning_amber</mat-icon>
+        </div>
       </div>
 
-      <h2 class="title" [class.success]="data.type === 'success'" [class.error]="data.type === 'error'">
+      <h2 class="title" [class.success]="data.type === 'success'" [class.error]="data.type === 'error'" [class.warning]="data.type === 'confirm'">
         {{ data.title }}
       </h2>
       
       <p class="message">{{ data.message }}</p>
 
-      <button mat-flat-button 
-              [class.btn-success]="data.type === 'success'"
-              [class.btn-error]="data.type === 'error'"
-              (click)="close()">
-        {{ data.btnText || 'Aceptar' }}
-      </button>
+      <div class="actions" style="display: flex; gap: 12px; margin-top: 10px;">
+        <button *ngIf="data.type === 'confirm'" mat-stroked-button (click)="cancel()">
+          {{ data.cancelBtnText || 'Cancelar' }}
+        </button>
+        <button mat-flat-button 
+                [class.btn-success]="data.type === 'success'"
+                [class.btn-error]="data.type === 'error'"
+                [class.btn-warning]="data.type === 'confirm'"
+                (click)="close()">
+          {{ data.btnText || (data.type === 'confirm' ? 'Confirmar' : 'Aceptar') }}
+        </button>
+      </div>
     </div>
   `,
   styles: [`
@@ -82,8 +94,18 @@ export interface FeedbackModalData {
       border-radius: 8px;
       font-weight: 600;
     }
-    .btn-success { background: #10b981; color: white; }
-    .btn-error { background: #ef4444; color: white; }
+    .btn-success { background: #10b981 !important; color: white !important; }
+    .btn-error { background: #ef4444 !important; color: white !important; }
+    .btn-warning { background: #0a66c2 !important; color: white !important; }
+
+    .warning-icon {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 
     /* Success Animation inspired by SweetAlert */
     .success-checkmark {
@@ -260,5 +282,9 @@ export class FeedbackModalComponent {
 
   close(): void {
     this.dialogRef.close(true);
+  }
+
+  cancel(): void {
+    this.dialogRef.close(false);
   }
 }

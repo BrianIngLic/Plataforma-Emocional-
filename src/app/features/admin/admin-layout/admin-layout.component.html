@@ -1,0 +1,90 @@
+<div class="layout-container">
+  <!-- Sidebar -->
+  <aside class="sidebar" [class.collapsed]="isSidebarCollapsed">
+    
+    <div class="sidebar-header">
+      <div class="brand">
+        <div class="logo">
+          <mat-icon>shield</mat-icon>
+        </div>
+        <div class="brand-text">
+          <h2>MindTrack</h2>
+          <p>Consola Admin</p>
+        </div>
+      </div>
+      <button class="btn-icon hamburger" (click)="toggleSidebar()">
+        <mat-icon>menu</mat-icon>
+      </button>
+    </div>
+
+    <div class="sidebar-content">
+      <nav class="nav-menu">
+        <a *ngFor="let item of navItems" [routerLink]="item.path" routerLinkActive="active" class="nav-item">
+          <div class="icon-wrapper">
+            <mat-icon>{{ item.icon }}</mat-icon>
+            <span *ngIf="item.badge && isSidebarCollapsed" class="mini-badge-pulse"></span>
+          </div>
+          <div class="nav-text">
+            <span class="nav-label-wrapper">
+              {{ item.label }}
+              <span *ngIf="item.badge" class="badge-pulse">{{ item.badge }}</span>
+            </span>
+            <small>{{ item.sub }}</small>
+          </div>
+        </a>
+      </nav>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="user-profile" *ngIf="currentUser">
+        <div class="avatar">
+          <mat-icon>admin_panel_settings</mat-icon>
+        </div>
+        <div class="user-info">
+          <span class="name">{{ currentUser.name | titlecase }}</span>
+          <span class="role">Administrador</span>
+        </div>
+      </div>
+
+      <button class="logout-btn" (click)="logout()">
+        <mat-icon>logout</mat-icon>
+        <span class="nav-text">Cerrar sesión</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main Content Area -->
+  <main class="main-content" [class.expanded]="isSidebarCollapsed">
+    <!-- Top Header -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="btn-icon hamburger mobile-only" (click)="toggleSidebar()">
+          <mat-icon>menu</mat-icon>
+        </button>
+        <div class="title-section">
+          <h1>Consola de Control</h1>
+          <p class="date-string">{{ todayDateString }}</p>
+        </div>
+      </div>
+      
+      <div class="topbar-right">
+        <!-- Return to clinician view -->
+        <a routerLink="/psychologist/dashboard" class="clinician-view-btn">
+          <mat-icon>arrow_back</mat-icon>
+          <span>Vista Clínica</span>
+        </a>
+
+        <!-- Notifications/Alerts -->
+        <a routerLink="./alerts" class="alert-bell-btn">
+          <mat-icon>notifications</mat-icon>
+          <span class="bell-badge">5</span>
+        </a>
+      </div>
+    </header>
+
+    <!-- Subpage Router Outlet -->
+    <div class="content-body">
+      <router-outlet></router-outlet>
+    </div>
+  </main>
+</div>

@@ -1,0 +1,199 @@
+<div class="reports-container">
+
+  <!-- Tab Bar + Actions Header -->
+  <div class="reports-header-strip">
+    <div class="tab-group">
+      <button 
+        class="tab-btn" 
+        (click)="selectedTab = 'faculty'"
+        [class.active]="selectedTab === 'faculty'"
+      >
+        <mat-icon>business</mat-icon>
+        <span>Por Facultad</span>
+      </button>
+      
+      <button 
+        class="tab-btn" 
+        (click)="selectedTab = 'psychologist'"
+        [class.active]="selectedTab === 'psychologist'"
+      >
+        <mat-icon>assignment_ind</mat-icon>
+        <span>Por Psicólogo</span>
+      </button>
+      
+      <button 
+        class="tab-btn" 
+        (click)="selectedTab = 'period'"
+        [class.active]="selectedTab === 'period'"
+      >
+        <mat-icon>calendar_today</mat-icon>
+        <span>Por Período</span>
+      </button>
+    </div>
+
+    <div class="header-actions">
+      <div class="filter-badge">
+        <mat-icon>filter_alt</mat-icon>
+        <span class="font-mono">Jun 2025 – Jul 2025</span>
+      </div>
+      
+      <button class="export-btn">
+        <mat-icon>download</mat-icon>
+        <span>Exportar CSV</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Page Content View based on Selected Tab -->
+  <div class="report-content-body">
+    <h3 class="report-section-title">
+      <mat-icon>insert_chart</mat-icon>
+      <span>
+        Reporte: 
+        {{ 
+          selectedTab === 'faculty' ? 'Distribución por Facultad' : 
+          selectedTab === 'psychologist' ? 'Desempeño del Psicólogo' : 'Evolución por Período' 
+        }}
+      </span>
+    </h3>
+
+    <!-- 1. Faculty Report View -->
+    <div class="tab-view-container" *ngIf="selectedTab === 'faculty'">
+      <!-- Chart -->
+      <div class="panel">
+        <div class="panel-header border-b">
+          <span class="title">Sesiones por Facultad</span>
+        </div>
+        <div class="chart-wrapper">
+          <canvas baseChart [data]="facultyChartData" [options]="facultyChartOptions" type="bar"></canvas>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div class="panel table-panel">
+        <div class="table-container">
+          <table class="report-table">
+            <thead>
+              <tr>
+                <th>Facultad</th>
+                <th>Sesiones Totales</th>
+                <th>Pacientes Registrados</th>
+                <th>Casos de Baja (Dropouts)</th>
+                <th>Duración Promedio</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of facultyReport; let i = index">
+                <td class="flex-cell">
+                  <span class="color-bullet" [style.backgroundColor]="COLORS[i]"></span>
+                  <span class="bold">{{ item.faculty }}</span>
+                </td>
+                <td class="font-mono">{{ item.sessions }}</td>
+                <td class="font-mono">{{ item.patients }}</td>
+                <td class="font-mono" [ngClass]="item.dropout >= 5 ? 'red-text' : 'green-text'">
+                  {{ item.dropout }}
+                </td>
+                <td class="font-mono">{{ item.avg }} min</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Psychologist Report View -->
+    <div class="tab-view-container" *ngIf="selectedTab === 'psychologist'">
+      <!-- Chart -->
+      <div class="panel">
+        <div class="panel-header border-b">
+          <span class="title">Sesiones (Azul) vs Tasa de Asistencia (Verde)</span>
+        </div>
+        <div class="chart-wrapper">
+          <canvas baseChart [data]="psychChartData" [options]="psychChartOptions" type="bar"></canvas>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div class="panel table-panel">
+        <div class="table-container">
+          <table class="report-table">
+            <thead>
+              <tr>
+                <th>Psicólogo</th>
+                <th>Sesiones Completadas</th>
+                <th>Pacientes Activos</th>
+                <th>Tasa de Asistencia</th>
+                <th>Eficiencia Operativa</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of psychReport">
+                <td class="bold">{{ item.name }}</td>
+                <td class="font-mono">{{ item.sessions }}</td>
+                <td class="font-mono">{{ item.patients }}</td>
+                <td class="font-mono bold" [ngClass]="item.attendance < 80 ? 'red-text' : 'green-text'">
+                  {{ item.attendance }}%
+                </td>
+                <td class="font-mono bold" [ngClass]="item.efficiency < 80 ? 'amber-text' : 'green-text'">
+                  {{ item.efficiency }}%
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Period Report View -->
+    <div class="tab-view-container" *ngIf="selectedTab === 'period'">
+      <!-- Two Charts Row -->
+      <div class="period-charts-grid">
+        <div class="panel">
+          <div class="panel-header border-b">
+            <span class="title">Volumen de Sesiones</span>
+          </div>
+          <div class="chart-wrapper">
+            <canvas baseChart [data]="periodLineChartData" [options]="periodLineChartOptions" type="line"></canvas>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header border-b">
+            <span class="title">Nuevos Ingresos vs Deserciones</span>
+          </div>
+          <div class="chart-wrapper">
+            <canvas baseChart [data]="periodBarChartData" [options]="periodBarChartOptions" type="bar"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div class="panel table-panel">
+        <div class="table-container">
+          <table class="report-table">
+            <thead>
+              <tr>
+                <th>Mes</th>
+                <th>Sesiones</th>
+                <th>Pacientes Nuevos</th>
+                <th>Deserciones</th>
+                <th>Score Promedio Bienestar</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of periodReport">
+                <td class="bold">{{ item.month }}</td>
+                <td class="font-mono">{{ item.sessions }}</td>
+                <td class="font-mono green-text">+{{ item.new }}</td>
+                <td class="font-mono red-text">-{{ item.dropouts }}</td>
+                <td class="font-mono bold">{{ item.avgScore }} / 10</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>

@@ -1,0 +1,44 @@
+import { Routes } from '@angular/router';
+import { AdminLayoutComponent } from './admin-layout/admin-layout.component';
+
+export const ADMIN_ROUTES: Routes = [
+  {
+    path: '',
+    component: AdminLayoutComponent,
+    children: [
+      {
+        path: 'overview',
+        loadComponent: () => import('./overview/overview.component').then(m => m.OverviewComponent)
+      },
+      {
+        path: 'faculties',
+        loadComponent: () => import('./faculties/faculties.component').then(m => m.FacultiesComponent)
+      },
+      {
+        path: 'psychologists',
+        loadComponent: () => import('./psychologists/psychologists.component').then(m => m.PsychologistsComponent)
+      },
+      {
+        path: 'patients',
+        loadComponent: () => import('./patients/patients.component').then(m => m.PatientsComponent)
+      },
+      {
+        path: 'reports',
+        loadComponent: () => import('./reports/reports.component').then(m => m.ReportsComponent)
+      },
+      {
+        path: 'agenda',
+        loadComponent: () => import('./agenda/agenda.component').then(m => m.AgendaComponent)
+      },
+      {
+        path: 'alerts',
+        loadComponent: () => import('./alerts/alerts.component').then(m => m.AlertsComponent)
+      },
+      {
+        path: '',
+        redirectTo: 'overview',
+        pathMatch: 'full'
+      }
+    ]
+  }
+];

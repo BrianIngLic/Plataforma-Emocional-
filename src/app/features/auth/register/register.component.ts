@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
@@ -9,9 +9,11 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 import { AuthService } from '../../../core/services/auth.service';
 import { ClinicalService } from '../../../core/services/clinical.service';
+import { FacultyService, Faculty } from '../../../core/services/faculty.service';
 
 /**
  * Componente de Registro (Standalone)
@@ -28,16 +30,21 @@ import { ClinicalService } from '../../../core/services/clinical.service';
     MatInputModule,
     MatButtonModule,
     MatCheckboxModule,
-    MatRadioModule
+    MatRadioModule,
+    MatAutocompleteModule
   ],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss']
 })
-export class RegisterComponent {
+export class RegisterComponent implements OnInit {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private clinicalService = inject(ClinicalService);
+  private facultyService = inject(FacultyService);
   private router = inject(Router);
+
+  faculties: Faculty[] = [];
+  filteredFaculties: Faculty[] = [];
 
   // Paso 1: Credenciales
   credentialsFormGroup = this.fb.group({
@@ -50,6 +57,7 @@ export class RegisterComponent {
   profileFormGroup = this.fb.group({
     firstName: ['', Validators.required],
     lastName: ['', Validators.required],
+    faculty: ['', Validators.required]
   });
 
   // Paso 3: Consentimiento
@@ -58,6 +66,21 @@ export class RegisterComponent {
   });
 
   isSubmitting = false;
+
+  async ngOnInit() {
+    this.faculties = await this.facultyService.getFaculties();
+    this.filteredFaculties = this.faculties;
+
+    // Escuchar cambios para el buscador
+    this.profileFormGroup.get('faculty')?.valueChanges.subscribe(value => {
+      this.filterFaculties(value || '');
+    });
+  }
+
+  filterFaculties(value: string) {
+    const filterValue = value.toLowerCase();
+    this.filteredFaculties = this.faculties.filter(f => f.name.toLowerCase().includes(filterValue));
+  }
 
   async submitRegistration() {
     if (this.credentialsFormGroup.invalid || this.profileFormGroup.invalid || this.consentFormGroup.invalid) {
@@ -73,8 +96,10 @@ export class RegisterComponent {
     const password = this.credentialsFormGroup.value.password!;
     const firstName = this.profileFormGroup.value.firstName!;
     const lastName = this.profileFormGroup.value.lastName!;
+    const faculty = this.profileFormGroup.value.faculty!;
     
-    const userId = await this.authService.register(matricula, email, password, firstName, lastName);
+    // Auth Service enviando faculty
+    const userId = await this.authService.register(matricula, email, password, firstName, lastName, faculty);
 
     if (userId) {
       // Crear un expediente clínico en blanco por defecto

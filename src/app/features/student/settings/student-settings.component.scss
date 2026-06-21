@@ -1,0 +1,109 @@
+.settings-container {
+  padding: 2rem;
+  max-width: 1000px;
+  margin: 0 auto;
+
+  .header-row {
+    margin-bottom: 2rem;
+    h2 {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.8rem;
+      margin: 0 0 0.5rem;
+      mat-icon { color: var(--primary-color); }
+    }
+    p {
+      color: var(--text-secondary);
+      margin: 0;
+    }
+  }
+
+  .settings-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .card {
+    background: var(--bg-card);
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+
+    .card-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+      
+      h3 {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin: 0 0 0.5rem;
+        font-size: 1.2rem;
+        mat-icon { color: var(--text-secondary); font-size: 20px; width: 20px; height: 20px; }
+      }
+      p {
+        margin: 0;
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+      }
+    }
+
+    .card-body {
+      padding: 1.5rem;
+    }
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    label {
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    .styled-select {
+      padding: 10px 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      font-size: 1rem;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      outline: none;
+
+      &:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(10, 102, 194, 0.1);
+      }
+    }
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &.btn-primary {
+      background: var(--primary-color);
+      color: white;
+      
+      &:hover:not([disabled]) {
+        background: #084f96;
+      }
+      
+      &[disabled] {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+    }
+  }
+}

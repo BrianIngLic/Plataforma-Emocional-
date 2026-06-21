@@ -6,6 +6,8 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { AgendaService, WorkingDaysMap } from '../../../core/services/agenda.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { FeedbackModalComponent } from '../../../shared/components/feedback-modal/feedback-modal.component';
+import { FacultyService, Faculty } from '../../../core/services/faculty.service';
+import { SupabaseService } from '../../../core/services/supabase.service';
 
 @Component({
   selector: 'app-settings',
@@ -17,7 +19,12 @@ import { FeedbackModalComponent } from '../../../shared/components/feedback-moda
 export class SettingsComponent implements OnInit {
   authService = inject(AuthService);
   agendaService = inject(AgendaService);
+  facultyService = inject(FacultyService);
+  supabaseService = inject(SupabaseService);
   dialog = inject(MatDialog);
+
+  faculties: Faculty[] = [];
+  selectedFaculty: string = '';
 
   sessionDuration: number = 50;
   location: string = '';
@@ -50,6 +57,12 @@ export class SettingsComponent implements OnInit {
   }
 
   async ngOnInit() {
+    this.faculties = await this.facultyService.getFaculties();
+    const user = this.authService.currentUser();
+    if (user && user.faculty) {
+      this.selectedFaculty = user.faculty;
+    }
+
     await this.loadSettings();
     await this.loadExceptions();
   }
@@ -78,6 +91,19 @@ export class SettingsComponent implements OnInit {
 
   async saveSettings() {
     if (!this.currentUserId) return;
+    
+    // Guardar la facultad en el perfil del psicólogo
+    if (this.selectedFaculty) {
+      await this.supabaseService.supabase
+        .from('profiles')
+        .update({ faculty: this.selectedFaculty })
+        .eq('user_id', this.currentUserId);
+        
+      const currentUser = this.authService.currentUser();
+      if (currentUser) {
+        this.authService.currentUser.set({ ...currentUser, faculty: this.selectedFaculty });
+      }
+    }
     
     // Validación de bloques de tiempo
     for (const day of this.weekDays) {

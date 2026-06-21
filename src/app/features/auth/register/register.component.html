@@ -61,6 +61,21 @@
             <input matInput formControlName="lastName" required>
           </mat-form-field>
 
+          <mat-form-field appearance="outline">
+            <mat-label>Facultad a la que perteneces</mat-label>
+            <input type="text"
+                   placeholder="Escribe para buscar..."
+                   matInput
+                   formControlName="faculty"
+                   [matAutocomplete]="auto"
+                   required>
+            <mat-autocomplete #auto="matAutocomplete">
+              <mat-option *ngFor="let f of filteredFaculties" [value]="f.name">
+                {{f.name}}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+
           <div class="stepper-actions">
             <button mat-button matStepperPrevious>Atrás</button>
             <button mat-flat-button color="primary" matStepperNext>Siguiente</button>

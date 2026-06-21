@@ -24,6 +24,14 @@
           <input type="text" [(ngModel)]="location" placeholder="Escribe el enlace o consultorio..." style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ccc; margin-top: 5px;">
         </div>
 
+        <div class="duration-control" style="margin-bottom: 25px;">
+          <label>Facultad Asignada</label>
+          <select [(ngModel)]="selectedFaculty" style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ccc; margin-top: 5px;">
+            <option value="" disabled>Selecciona tu facultad</option>
+            <option *ngFor="let f of faculties" [value]="f.name">{{ f.name }}</option>
+          </select>
+        </div>
+
         <div class="days-list">
           <div class="day-item" *ngFor="let day of weekDays">
             <div class="day-toggle">

@@ -53,14 +53,21 @@ export class StudentAgendaComponent implements OnInit {
   loading = true;
   errorMsg: string | null = null;
 
+  availablePsychologists: any[] = [];
+  studentFaculty: string = '';
+
   async ngOnInit() {
     this.generateCalendar(); 
     try {
       await this.fetchAssignedPsychologist();
       if (this.psychologistId) {
         await this.loadAvailability();
+      } else if (this.availablePsychologists.length === 0) {
+        if (!this.errorMsg) {
+          this.errorMsg = 'No se encontró ningún psicólogo disponible en tu facultad.';
+        }
+        this.loading = false;
       } else {
-        this.errorMsg = 'No se encontró ningún psicólogo disponible en el sistema. Dile a tu administrador que cree una cuenta de psicólogo.';
         this.loading = false;
       }
     } catch (e) {
@@ -73,6 +80,7 @@ export class StudentAgendaComponent implements OnInit {
   async fetchAssignedPsychologist() {
     const user = this.authService.currentUser();
     if (!user) return;
+    this.studentFaculty = user.faculty || '';
 
     // 1. Buscar psicólogo tratante del estudiante
     const { data: record, error } = await this.supabase
@@ -112,6 +120,65 @@ export class StudentAgendaComponent implements OnInit {
 
       const { data: sett } = await this.supabase.from('psychologist_settings').select('location').eq('psychologist_id', psyId).maybeSingle();
       if (sett) this.psychologistLocation = sett.location || 'Consultorio Virtual';
+    } else {
+      // No tiene psicólogo asignado, cargar directorio
+      await this.loadPsychologistsByFaculty();
+    }
+  }
+
+  async loadPsychologistsByFaculty() {
+    if (!this.studentFaculty) {
+      this.errorMsg = "No tienes una facultad asignada. Ve a configuración para asignarte una.";
+      return;
+    }
+
+    const { data, error } = await this.supabase
+      .from('users')
+      .select('id, role_id, profiles(first_name, last_name, avatar_url, faculty)')
+      .eq('role_id', 3);
+
+    if (data) {
+      this.availablePsychologists = data.map(u => {
+        const p = Array.isArray(u.profiles) ? u.profiles[0] : u.profiles;
+        return {
+          id: u.id,
+          name: `${p?.first_name || ''} ${p?.last_name || ''}`.trim() || 'Especialista',
+          avatar: p?.avatar_url || '',
+          faculty: p?.faculty || ''
+        };
+      }).filter(p => p.faculty === this.studentFaculty);
+      
+      if (this.availablePsychologists.length === 0) {
+        this.errorMsg = `No hay psicólogos disponibles en tu facultad (${this.studentFaculty}) actualmente.`;
+      }
+    }
+  }
+
+  async requestPsychologist(psyId: string) {
+    const user = this.authService.currentUser();
+    if (!user) return;
+    this.loading = true;
+    
+    const { error } = await this.supabase
+      .from('student_clinical_records')
+      .update({ primary_psychologist_id: psyId })
+      .eq('student_id', user.id);
+      
+    if (!error) {
+       this.showFeedback('success', 'Psicólogo Asignado', 'Se te ha asignado al especialista correctamente. Ya puedes agendar citas.');
+       this.availablePsychologists = [];
+       await this.fetchAssignedPsychologist();
+       if (this.psychologistId) await this.loadAvailability();
+    } else {
+       this.showFeedback('error', 'Error', 'No se pudo asignar el psicólogo. Asegúrate de tener tu expediente inicializado.');
+       this.loading = false;
+    }
+  }
+
+  async autoAssignPsychologist() {
+    if (this.availablePsychologists.length > 0) {
+       // Asignar al primero de la lista (simulación de menor cantidad de pacientes)
+       await this.requestPsychologist(this.availablePsychologists[0].id);
     }
   }
 

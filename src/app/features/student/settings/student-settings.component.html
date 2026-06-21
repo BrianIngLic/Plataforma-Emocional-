@@ -1,0 +1,31 @@
+<div class="settings-container">
+  <div class="header-row">
+    <h2><mat-icon>settings</mat-icon> Configuración de Perfil</h2>
+    <p>Ajusta tus datos académicos y personales.</p>
+  </div>
+
+  <div class="settings-grid">
+    <div class="card settings-card">
+      <div class="card-header">
+        <h3><mat-icon>school</mat-icon> Datos Académicos</h3>
+        <p>Tu facultad determina qué especialistas tienes disponibles para agendar citas.</p>
+      </div>
+      
+      <div class="card-body">
+        <div class="form-group">
+          <label>Facultad a la que perteneces</label>
+          <select [(ngModel)]="selectedFaculty" class="styled-select">
+            <option value="" disabled>Selecciona tu facultad</option>
+            <option *ngFor="let f of faculties" [value]="f.name">{{ f.name }}</option>
+          </select>
+        </div>
+
+        <div class="actions" style="margin-top: 2rem;">
+          <button class="btn btn-primary" (click)="saveSettings()" [disabled]="isSaving || !selectedFaculty">
+            <mat-icon>save</mat-icon> Guardar Cambios
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

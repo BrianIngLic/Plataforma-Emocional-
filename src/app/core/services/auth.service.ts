@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
   providedIn: 'root'
 })
 export class AuthService {
-  public currentUser = signal<{ matricula: string, role: string, id: string, name: string } | null>(null);
+  public currentUser = signal<{ matricula: string, role: string, id: string, name: string, faculty?: string } | null>(null);
   public isLoggedIn = signal<boolean>(false);
 
   constructor(
@@ -30,11 +30,22 @@ export class AuthService {
   }
 
   private async loadUserProfile(userId: string) {
-    const { data, error } = await this.supabaseService.supabase
+    let { data, error } = await this.supabaseService.supabase
       .from('users')
-      .select('matricula, role_id, profiles(first_name, last_name)')
+      .select('matricula, role_id, profiles(first_name, last_name, faculty)')
       .eq('id', userId)
       .single();
+
+    // Fallback: si falla por la columna faculty (que aún no se crea en BD), intentar sin ella
+    if (error && (error.message.includes('faculty') || error.code === 'PGRST200')) {
+      const fallback = await this.supabaseService.supabase
+        .from('users')
+        .select('matricula, role_id, profiles(first_name, last_name)')
+        .eq('id', userId)
+        .single();
+      data = fallback.data as any;
+      error = fallback.error;
+    }
 
     if (data) {
       let roleName = 'Estudiante';
@@ -42,17 +53,22 @@ export class AuthService {
       if (data.role_id === 1 || data.role_id === '1') roleName = 'Admin';
 
       let fullName = 'Usuario';
+      let facultyName = '';
       if (data.profiles) {
         // @ts-ignore
         const p = Array.isArray(data.profiles) ? data.profiles[0] : data.profiles;
-        if (p) fullName = `${p.first_name || ''} ${p.last_name || ''}`.trim();
+        if (p) {
+          fullName = `${p.first_name || ''} ${p.last_name || ''}`.trim();
+          facultyName = p.faculty || '';
+        }
       }
 
       this.currentUser.set({ 
         matricula: data.matricula, 
         role: roleName,
         id: userId,
-        name: fullName || 'Usuario'
+        name: fullName || 'Usuario',
+        faculty: facultyName
       });
       this.isLoggedIn.set(true);
     } else if (error) {
@@ -86,7 +102,7 @@ export class AuthService {
     }
   }
 
-  async register(matricula: string, email: string, pass: string, firstName: string, lastName: string): Promise<string | null> {
+  async register(matricula: string, email: string, pass: string, firstName: string, lastName: string, faculty: string): Promise<string | null> {
     
     try {
       // 1. Sign up en Supabase Auth
@@ -98,7 +114,7 @@ export class AuthService {
       if (authError || !authData.user) {
         if (authError?.message?.includes('Failed to fetch') || authError?.message?.includes('Network request failed')) {
            console.warn('⚠️ MODO OFFLINE ACTIVADO: Supabase no detectado. Registro simulado.');
-           this.activateMockSession(matricula);
+           this.activateMockSession(matricula, faculty);
            return 'mock-user-id-123';
         }
         console.error('Error en registro auth:', authError?.message);
@@ -119,7 +135,8 @@ export class AuthService {
     const { error: profileError } = await this.supabaseService.supabase.from('profiles').insert({
       user_id: userId,
       first_name: firstName,
-      last_name: lastName
+      last_name: lastName,
+      faculty: faculty
     });
     if (profileError) console.error('Error insertando profile:', profileError.message);
 
@@ -127,20 +144,21 @@ export class AuthService {
       return userId;
     } catch (e) {
       console.warn('⚠️ MODO OFFLINE ACTIVADO: Registro simulado por excepción de red.');
-      this.activateMockSession(matricula);
+      this.activateMockSession(matricula, faculty);
       return 'mock-user-id-123';
     }
   }
 
   // Método auxiliar para activar la sesión en modo offline
-  private activateMockSession(matricula: string) {
+  private activateMockSession(matricula: string, faculty: string = '') {
     // Si la matrícula tiene la palabra admin, le damos rol de psicólogo
     const role = matricula.toLowerCase().includes('admin') ? 'Psicologo' : 'Estudiante';
     this.currentUser.set({ 
       matricula: matricula, 
       role: role,
       id: 'mock-user-id-123',
-      name: 'Usuario Offline'
+      name: 'Usuario Offline',
+      faculty: faculty
     });
     this.isLoggedIn.set(true);
   }

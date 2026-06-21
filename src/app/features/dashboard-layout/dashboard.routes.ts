@@ -23,6 +23,10 @@ export const DASHBOARD_ROUTES: Routes = [
         loadComponent: () => import('./student-agenda/student-agenda.component').then(m => m.StudentAgendaComponent)
       },
       {
+        path: 'settings',
+        loadComponent: () => import('../student/settings/student-settings.component').then(m => m.StudentSettingsComponent)
+      },
+      {
         path: '',
         redirectTo: 'chat',
         pathMatch: 'full'

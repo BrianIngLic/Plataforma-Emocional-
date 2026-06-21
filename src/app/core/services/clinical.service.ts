@@ -47,4 +47,48 @@ export class ClinicalService {
       return true;
     }
   }
+
+  async getClinicalRecord(): Promise<any> {
+    const user = this.authService.currentUser();
+    if (!user) return null;
+
+    try {
+      const { data, error } = await this.supabaseService.supabase
+        .from('student_clinical_records')
+        .select('*')
+        .eq('student_id', user.id)
+        .single();
+      
+      if (error) {
+        console.error('Error obteniendo record clínico:', error.message);
+        return null;
+      }
+
+      if (data && data.additional_notes) {
+        data.decrypted_notes = this.cryptoService.decrypt(data.additional_notes);
+      }
+      return data;
+    } catch(e) {
+      return null;
+    }
+  }
+
+  async updateClinicalRecords(conditions: string[]): Promise<boolean> {
+    const user = this.authService.currentUser();
+    if (!user) return false;
+
+    const encryptedNotes = this.cryptoService.encrypt(conditions[0] || '{}');
+
+    try {
+      const { error } = await this.supabaseService.supabase
+        .from('student_clinical_records')
+        .update({ additional_notes: encryptedNotes })
+        .eq('student_id', user.id);
+
+      if (error) return false;
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
 }

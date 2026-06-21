@@ -70,6 +70,30 @@
         </div>
       </div>
 
+      <!-- Evaluación Alimentaria EAT-26 -->
+      <div class="card" *ngIf="eat26Result">
+        <h2 class="card-title"><mat-icon [ngClass]="eat26Result.hasRisk ? 'text-red' : 'text-green'">restaurant</mat-icon> Evaluación Alimentaria (EAT-26)</h2>
+        <div style="display: flex; gap: 20px; align-items: center; margin-top: 15px;">
+          <div [style.background]="eat26Result.hasRisk ? 'rgba(239,68,68,0.1)' : 'rgba(16,185,129,0.1)'" 
+               [style.color]="eat26Result.hasRisk ? '#ef4444' : '#10b981'" 
+               style="width: 80px; height: 80px; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0; border: 2px solid currentColor;">
+            <span style="font-size: 28px; line-height: 1;">{{ eat26Result.score }}</span>
+            <span style="font-size: 12px; opacity: 0.8;">PTS</span>
+          </div>
+          <div>
+            <h3 style="margin: 0 0 5px; font-size: 16px; color: var(--text-primary);">
+              {{ eat26Result.hasRisk ? 'Posible Riesgo Detectado' : 'Riesgo Bajo' }}
+            </h3>
+            <p style="margin: 0 0 8px; color: var(--text-secondary); font-size: 14px; line-height: 1.5;">
+              {{ eat26Result.interpretation }}
+            </p>
+            <div *ngIf="eat26Result.behavioralRisk" style="display: inline-flex; align-items: center; font-size: 12px; padding: 4px 8px; border-radius: 6px; background: rgba(239,68,68,0.1); color: #ef4444; font-weight: 600;">
+              <mat-icon style="font-size: 16px; width: 16px; height: 16px; margin-right: 4px;">warning</mat-icon> Alerta por comportamiento de purga / atracón
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- Progress Chart -->
       <div class="card">
         <h2 class="card-title"><mat-icon class="text-blue">trending_up</mat-icon> Evolución PHQ-9</h2>
@@ -137,7 +161,8 @@
           
           <div class="calendar-day" *ngFor="let day of calendarDays" 
                [ngClass]="{'has-entry': getMoodForDay(day) !== null, 'has-session': hasSessionForDay(day), 'selected': selectedDate === day}"
-               (click)="(getMoodForDay(day) || hasSessionForDay(day)) ? selectDate(day) : null">
+               (click)="selectDate(day)"
+               style="cursor: pointer;">
             <span class="date">{{ day }}</span>
             <div class="indicators">
               <span class="mood-indicator" *ngIf="getMoodForDay(day)">{{ getMoodForDay(day) }}</span>
@@ -164,7 +189,9 @@
         </div>
 
         <div class="empty-state" *ngIf="displayedDiaryEntries.length === 0 && displayedSessions.length === 0" style="padding: 2rem; text-align: center; color: var(--text-secondary);">
-          <p>No hay actividad para mostrar en este día.</p>
+          <mat-icon style="font-size: 48px; width: 48px; height: 48px; opacity: 0.5; margin-bottom: 1rem;">event_busy</mat-icon>
+          <p style="font-size: 1.1rem; font-weight: 500;">Ningún registro</p>
+          <p style="font-size: 0.9rem; opacity: 0.8;">El paciente no tiene entradas ni sesiones para esta fecha.</p>
         </div>
 
         <div class="diary-list" *ngIf="displayedSessions.length > 0" style="margin-bottom: 1rem;">

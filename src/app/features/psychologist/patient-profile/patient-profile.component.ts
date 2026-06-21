@@ -61,6 +61,8 @@ export class PatientProfileComponent implements OnInit {
   calendarMode: 'days' | 'months' = 'days';
   monthsList = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 
+  eat26Result: any = null;
+
   constructor(private route: ActivatedRoute, private router: Router) {}
 
   async ngOnInit() {
@@ -70,6 +72,50 @@ export class PatientProfileComponent implements OnInit {
     } else {
       this.goBack();
     }
+  }
+
+  calculateEat26Score(parsedNotes: any): any {
+    let score = 0;
+    let hasBehavioralRisk = false;
+
+    const scoreMapNormal: any = { 'Siempre': 3, 'Casi siempre': 2, 'A menudo': 1, 'A veces': 0, 'Rara vez': 0, 'Nunca': 0 };
+    const scoreMapQ26: any = { 'Siempre': 0, 'Casi siempre': 0, 'A menudo': 0, 'A veces': 1, 'Rara vez': 2, 'Nunca': 3 };
+
+    for (let i = 1; i <= 26; i++) {
+      const ans = parsedNotes['q' + i];
+      if (ans) {
+        if (i === 26) {
+          score += scoreMapQ26[ans] || 0;
+        } else {
+          score += scoreMapNormal[ans] || 0;
+        }
+      }
+    }
+
+    const behavioralIds = ['bA', 'bB', 'bC', 'bD'];
+    behavioralIds.forEach(id => {
+       const ans = parsedNotes[id];
+       if (ans && ans !== 'Nunca' && ans !== 'No') {
+          hasBehavioralRisk = true;
+       }
+    });
+    
+    if (parsedNotes['bE'] === 'Sí') {
+       hasBehavioralRisk = true;
+    }
+
+    const hasRisk = score >= 20 || hasBehavioralRisk;
+    
+    let interpretation = hasRisk 
+      ? 'Riesgo de Trastorno de Conducta Alimentaria (TCA). Se recomienda evaluación diagnóstica especializada.'
+      : 'Sin evidencia numérica de riesgo alto, sin embargo, el juicio clínico prevalece.';
+
+    return {
+      score,
+      hasRisk,
+      behavioralRisk: hasBehavioralRisk,
+      interpretation
+    };
   }
 
   async loadPatientData(id: string) {
@@ -97,6 +143,12 @@ export class PatientProfileComponent implements OnInit {
 
         if (notes) {
           notes = this.crypto.decrypt(notes);
+          try {
+            const parsedNotes = JSON.parse(notes);
+            if (parsedNotes.q1) {
+                this.eat26Result = this.calculateEat26Score(parsedNotes);
+            }
+          } catch(e) {}
         } else {
           notes = "Sin notas clínicas adicionales guardadas en el expediente.";
         }
@@ -112,8 +164,8 @@ export class PatientProfileComponent implements OnInit {
           medications: ["Ninguno registrado"],
           sessionCount: 0,
           nextSession: "Por agendar",
-          state: "Active",
-          riskLevel: conditions && conditions.length > 0 ? "Moderado" : "Bajo",
+          state: (this.eat26Result && this.eat26Result.hasRisk) ? "Critical" : "Active",
+          riskLevel: (this.eat26Result && this.eat26Result.hasRisk) ? "Alto" : (conditions && conditions.length > 0 ? "Moderado" : "Bajo"),
           notes: notes
         };
       }

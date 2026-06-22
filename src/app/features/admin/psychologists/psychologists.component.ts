@@ -6,6 +6,9 @@ import { BaseChartDirective } from 'ng2-charts';
 import { ChartConfiguration, ChartOptions } from 'chart.js';
 import { SupabaseService } from '../../../core/services/supabase.service';
 import { AdminStatsService } from '../services/admin-stats.service';
+import emailjs from '@emailjs/browser';
+import { createClient } from '@supabase/supabase-js';
+import { environment } from '../../../../environments/environment';
 
 interface Psychologist {
   id: string;
@@ -48,7 +51,7 @@ export class PsychologistsComponent implements OnInit {
   formSuccessMessage = '';
   isSubmitting = false;
 
-  faculties = ['Engineering', 'Medicine', 'Law', 'Arts & Humanities', 'Sciences', 'Education'];
+  faculties: string[] = [];
 
   // Detail Modal Bar Chart Configuration
   public barChartData: ChartConfiguration<'bar'>['data'] = {
@@ -82,7 +85,20 @@ export class PsychologistsComponent implements OnInit {
 
   async ngOnInit() {
     this.initForm();
+    await this.loadFaculties();
     this.psychologists = await this.adminStats.getPsychologistsWithStats();
+  }
+
+  async loadFaculties() {
+    const { data, error } = await this.supabase.from('faculties').select('name');
+    if (data && !error) {
+      this.faculties = data.map((f: any) => f.name);
+      if (this.faculties.length > 0) {
+        this.addForm.patchValue({ faculty: this.faculties[0] });
+      }
+    } else {
+      console.error('Error loading faculties:', error?.message);
+    }
   }
 
   initForm() {
@@ -91,11 +107,11 @@ export class PsychologistsComponent implements OnInit {
       lastName: ['', [Validators.required, Validators.minLength(2)]],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
-      matricula: ['', [Validators.required, Validators.minLength(4)]],
-      cedula: ['', [Validators.required, Validators.minLength(5)]],
-      faculty: ['Engineering', [Validators.required]],
+      matricula: ['', [Validators.required]],
+      cedula: ['', [Validators.required]],
+      faculty: [this.faculties.length > 0 ? this.faculties[0] : '', [Validators.required]],
       specialty: ['', [Validators.required]],
-      capacity: [35, [Validators.required, Validators.min(10), Validators.max(100)]]
+      capacity: [35, [Validators.required, Validators.min(1), Validators.max(200)]]
     });
   }
 
@@ -188,8 +204,12 @@ export class PsychologistsComponent implements OnInit {
     const { firstName, lastName, email, password, matricula, cedula, faculty, specialty, capacity } = this.addForm.value;
 
     try {
-      // 1. Intentamos crear en Supabase Auth
-      const { data: authData, error: authError } = await this.supabase.auth.signUp({
+      // 1. Usar un cliente secundario sin persistencia para no cerrar la sesión del Administrador
+      const secondarySupabase = createClient(environment.supabaseUrl, environment.supabaseKey, {
+        auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false }
+      });
+
+      const { data: authData, error: authError } = await secondarySupabase.auth.signUp({
         email,
         password
       });
@@ -231,7 +251,6 @@ export class PsychologistsComponent implements OnInit {
         if (settingsError) console.error('Error configurando psicólogo:', settingsError.message);
       }
 
-      // Agregamos localmente para visualización interactiva inmediata
       const newPsych: Psychologist = {
         id: 'p_new_' + Math.random().toString(36).substr(2, 9),
         name: `Dr. ${firstName} ${lastName}`,
@@ -250,35 +269,39 @@ export class PsychologistsComponent implements OnInit {
 
       this.psychologists.unshift(newPsych);
 
-      this.formSuccessMessage = 'Psicólogo registrado exitosamente en el sistema.';
-      this.generateCredentialsPDF(`Dr. ${firstName} ${lastName}`, email, password);
-      
-      // En lugar de cerrar el modal, dejamos que el usuario interactúe con los botones de éxito
+      this.formSuccessMessage = 'Generando credenciales...';
       this.createdCredentials = { name: `Dr. ${firstName} ${lastName}`, email, password };
+      
+      try {
+        const pdfBase64 = await this.generateCredentialsPDF(`Dr. ${firstName} ${lastName}`, email, password, false);
+        await emailjs.send(
+          'service_dh74lqw',
+          'template_cqpfamj',
+          {
+            name: `Dr. ${firstName} ${lastName}`,
+            email: email,
+            password: password
+          },
+          '2aEIeWZsxmuiq27jD'
+        );
+        this.formSuccessMessage = '¡Registro exitoso y correo enviado al psicólogo!';
+      } catch (err) {
+        console.error('Error enviando correo:', err);
+        this.formSuccessMessage = 'Psicólogo registrado. Asegúrate de configurar el SMTP y desplegar la Edge Function para el envío de correos.';
+      }
 
     } catch (err: any) {
-      console.warn('⚠️ MODO OFFLINE/SIMULADO: Agregando psicólogo de forma simulada en memoria por error de red.');
+      console.error('Error durante el registro:', err.message || err);
       
-      const newPsych: Psychologist = {
-        id: 'p_new_' + Math.random().toString(36).substr(2, 9),
-        name: `Dr. ${firstName} ${lastName}`,
-        faculty: faculty,
-        patients: 0,
-        capacity: Number(capacity),
-        attendanceRate: 100,
-        sessionsCompleted: 0,
-        sessionsScheduled: 0,
-        evaluation: 5.0,
-        alert: 'few-patients',
-        specialty: specialty,
-        avgSessionDuration: 50,
-        dropouts: 0
-      };
-
-      this.psychologists.unshift(newPsych);
-      this.formSuccessMessage = 'Psicólogo registrado exitosamente (Modo Simulado).';
-      this.generateCredentialsPDF(`Dr. ${firstName} ${lastName}`, email, password);
-      this.createdCredentials = { name: `Dr. ${firstName} ${lastName}`, email, password };
+      let errorMsg = 'Error al registrar el psicólogo. ';
+      if (err.message?.includes('duplicate key') || err.message?.includes('unique constraint') || err.message?.includes('already registered')) {
+        errorMsg += 'La Cédula / Cód. Empleado o el Correo ya están registrados en el sistema.';
+      } else {
+        errorMsg += err.message || 'Verifica la conexión a la base de datos.';
+      }
+      
+      this.formErrorMessage = errorMsg;
+      this.createdCredentials = null;
     } finally {
       this.isSubmitting = false;
     }
@@ -295,9 +318,10 @@ export class PsychologistsComponent implements OnInit {
     this.addForm.patchValue({ password: pass });
   }
 
-  generateCredentialsPDF(name: string, email: string, pass: string) {
-    import('jspdf').then(({ jsPDF }) => {
-      const doc = new jsPDF();
+  generateCredentialsPDF(name: string, email: string, pass: string, shouldSave: boolean = true): Promise<string> {
+    return new Promise((resolve) => {
+      import('jspdf').then(({ jsPDF }) => {
+        const doc = new jsPDF();
       
       doc.setFontSize(22);
       doc.setTextColor(37, 99, 235);
@@ -329,15 +353,42 @@ export class PsychologistsComponent implements OnInit {
       doc.setTextColor(37, 99, 235);
       doc.text('Enlace de acceso: https://plataforma-emocional.com', 20, 190);
       
-      doc.save(`Credenciales_${name.replace(/ /g, '_')}.pdf`);
+      if (shouldSave) {
+        doc.save(`Credenciales_${name.replace(/ /g, '_')}.pdf`);
+      }
+      
+      const pdfBase64 = btoa(doc.output());
+      resolve(pdfBase64);
     });
-  }
+  });
+}
 
-  sendEmail() {
+  isResendingEmail = false;
+  manualEmailSent = false;
+
+  async sendEmail() {
     if (!this.createdCredentials) return;
     const { name, email, password } = this.createdCredentials;
-    const subject = encodeURIComponent('Credenciales de Acceso - Plataforma Emocional');
-    const body = encodeURIComponent(`Estimado/a ${name},\n\nAdjunto a este correo encontrará (o debió recibir previamente) el archivo PDF con sus credenciales oficiales.\n\nPor si acaso, le recordamos sus datos de acceso:\nCorreo: ${email}\nContraseña Temporal: ${password}\n\nSe le solicitará cambiar la contraseña en su primer inicio de sesión.\n\nSaludos cordiales.`);
-    window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+    
+    this.isResendingEmail = true;
+    try {
+      await emailjs.send(
+        'service_dh74lqw',
+        'template_cqpfamj',
+        {
+          name: name,
+          email: email,
+          password: password
+        },
+        '2aEIeWZsxmuiq27jD'
+      );
+      
+      this.manualEmailSent = true;
+    } catch (err: any) {
+      console.error('Error al reenviar correo:', err);
+      alert('Error enviando el correo. Detalle: ' + (err.message || 'Fallo de red'));
+    } finally {
+      this.isResendingEmail = false;
+    }
   }
 }

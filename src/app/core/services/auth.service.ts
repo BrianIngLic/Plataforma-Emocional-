@@ -134,7 +134,8 @@ export class AuthService {
     const { error: userError } = await this.supabaseService.supabase.from('users').insert({
       id: userId,
       matricula: matricula,
-      role_id: 2 // Asumiendo que 2 es 'Estudiante'
+      role_id: 2, // Asumiendo que 2 es 'Estudiante'
+      requires_password_change: false
     });
     if (userError) console.error('Error insertando user:', userError.message);
 

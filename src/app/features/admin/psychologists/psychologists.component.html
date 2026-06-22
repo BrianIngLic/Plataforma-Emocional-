@@ -244,21 +244,24 @@
 
       <div class="modal-body">
         <!-- Vista de Éxito -->
-        <div *ngIf="createdCredentials" class="success-state" style="text-align: center; padding: 2rem;">
-          <mat-icon style="font-size: 48px; width: 48px; height: 48px; color: #10b981; margin-bottom: 1rem;">check_circle</mat-icon>
-          <h3 style="color: #f8fafc; font-size: 1.5rem; margin-bottom: 0.5rem;">¡Personal Registrado!</h3>
-          <p style="color: #94a3b8; margin-bottom: 1.5rem;">Las credenciales de acceso se han generado. El PDF incluye el enlace, correo y la contraseña provisional obligatoria.</p>
+        <div *ngIf="createdCredentials" class="success-state" style="text-align: center; padding: 2rem 1rem; display: flex; flex-direction: column; align-items: center;">
+          <mat-icon style="font-size: 56px; width: 56px; height: 56px; color: #10b981; margin-bottom: 1rem;">check_circle</mat-icon>
+          <h3 style="color: var(--text-primary, #1e293b); font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem; margin-top: 0;">¡Personal Registrado!</h3>
+          <p style="color: var(--text-secondary, #64748b); margin-bottom: 2rem; font-size: 0.95rem; max-width: 400px; line-height: 1.5;">Las credenciales de acceso se han generado. El PDF incluye el enlace, correo y la contraseña provisional obligatoria.</p>
           
-          <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-            <button type="button" class="submit-btn" style="background: #3b82f6; display: flex; align-items: center;" (click)="generateCredentialsPDF(createdCredentials.name, createdCredentials.email, createdCredentials.password)">
-              <mat-icon style="margin-right: 0.5rem;">picture_as_pdf</mat-icon> Descargar PDF
+          <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-bottom: 2rem; width: 100%;">
+            <button type="button" style="background: #3b82f6; color: white; border: none; border-radius: 8px; padding: 0.75rem 1.25rem; font-weight: 600; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; flex: 1; min-width: 150px; box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.3);" (click)="generateCredentialsPDF(createdCredentials.name, createdCredentials.email, createdCredentials.password)">
+              <mat-icon style="font-size: 18px; width: 18px; height: 18px;">picture_as_pdf</mat-icon> Descargar PDF
             </button>
-            <button type="button" class="submit-btn" style="background: #10b981; display: flex; align-items: center;" (click)="sendEmail()">
-              <mat-icon style="margin-right: 0.5rem;">email</mat-icon> Enviar Correo
+            <button type="button" style="background: #10b981; color: white; border: none; border-radius: 8px; padding: 0.75rem 1.25rem; font-weight: 600; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; flex: 1; min-width: 150px; box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.3);" [disabled]="isResendingEmail || manualEmailSent" (click)="sendEmail()" [ngStyle]="{'opacity': (isResendingEmail || manualEmailSent) ? '0.6' : '1', 'cursor': (isResendingEmail || manualEmailSent) ? 'not-allowed' : 'pointer'}">
+              <mat-icon style="font-size: 18px; width: 18px; height: 18px;">{{ manualEmailSent ? 'mark_email_read' : 'email' }}</mat-icon> 
+              <span *ngIf="!isResendingEmail && !manualEmailSent">Reenviar Correo</span>
+              <span *ngIf="isResendingEmail">Enviando...</span>
+              <span *ngIf="manualEmailSent">¡Correo Enviado!</span>
             </button>
           </div>
           
-          <button type="button" class="cancel-btn" style="margin-top: 2rem; width: 100%;" (click)="closeAddModal()">Cerrar y Volver al Panel</button>
+          <button type="button" style="width: 100%; background: transparent; border: 1px solid var(--border-color, rgba(0,0,0,0.1)); color: var(--text-secondary, #64748b); border-radius: 8px; padding: 0.75rem; font-weight: 600; font-size: 0.85rem; cursor: pointer;" (click)="closeAddModal()">Cerrar y Volver al Panel</button>
         </div>
 
         <!-- Formulario -->
@@ -274,14 +277,15 @@
             </div>
           </div>
 
-          <div class="form-group">
-            <label for="email">Correo Electrónico *</label>
-            <input id="email" type="email" formControlName="email" placeholder="ejemplo@mindtrack.com" />
-          </div>
-          
-          <div class="form-group">
-            <label for="cedula">Cédula Profesional *</label>
-            <input id="cedula" type="text" formControlName="cedula" placeholder="No. de Cédula" />
+          <div class="form-row">
+            <div class="form-group">
+              <label for="email">Correo Electrónico *</label>
+              <input id="email" type="email" formControlName="email" placeholder="ejemplo@mindtrack.com" />
+            </div>
+            <div class="form-group">
+              <label for="cedula">Cédula Profesional *</label>
+              <input id="cedula" type="text" formControlName="cedula" placeholder="No. de Cédula" />
+            </div>
           </div>
 
           <div class="form-row">
@@ -289,23 +293,26 @@
               <label for="matricula">Cédula / Cód. Empleado *</label>
               <input id="matricula" type="text" formControlName="matricula" placeholder="M-1002" />
             </div>
-            <div class="form-group">
-              <label for="password" style="display: flex; justify-content: space-between; align-items: center;">
-                <span>Contraseña Provisional *</span>
-                <button type="button" (click)="generateRandomPassword()" style="background: none; border: none; color: #3b82f6; cursor: pointer; font-size: 0.8rem; display: flex; align-items: center; gap: 0.2rem;">
-                  <mat-icon style="font-size: 14px; width: 14px; height: 14px;">autorenew</mat-icon> Generar
-                </button>
-              </label>
+            <div class="form-group" style="position: relative;">
+              <label for="password">Contraseña Provisional *</label>
+              <button type="button" (click)="generateRandomPassword()" style="position: absolute; right: 0; top: 0; background: none; border: none; color: #3b82f6; cursor: pointer; font-size: 0.8rem; display: flex; align-items: center; gap: 0.2rem; padding: 0;">
+                <mat-icon style="font-size: 14px; width: 14px; height: 14px;">autorenew</mat-icon> Generar
+              </button>
               <input id="password" type="text" formControlName="password" placeholder="Contraseña de acceso" />
             </div>
           </div>
 
+          <div class="form-group">
+            <label for="faculty">Facultad Principal *</label>
+            <select id="faculty" formControlName="faculty">
+              <option *ngFor="let fac of faculties" [value]="fac">{{ fac }}</option>
+            </select>
+          </div>
+
           <div class="form-row">
             <div class="form-group">
-              <label for="faculty">Facultad Principal *</label>
-              <select id="faculty" formControlName="faculty">
-                <option *ngFor="let fac of faculties" [value]="fac">{{ fac }}</option>
-              </select>
+              <label for="specialty">Especialidad Clínica *</label>
+              <input id="specialty" type="text" formControlName="specialty" placeholder="e.g. Ansiedad, Terapia Familiar" />
             </div>
             <div class="form-group">
               <label for="capacity">Capacidad de Pacientes *</label>
@@ -313,15 +320,12 @@
             </div>
           </div>
 
-          <div class="form-group">
-            <label for="specialty">Especialidad Clínica *</label>
-            <input id="specialty" type="text" formControlName="specialty" placeholder="e.g. Ansiedad, Terapia Familiar, Trauma" />
+          <div class="form-group" style="grid-column: span 2;">
+            <div *ngIf="formErrorMessage" style="color: #ef4444; font-size: 0.85rem; padding-top: 0.5rem;">{{ formErrorMessage }}</div>
+            <div *ngIf="formSuccessMessage" style="color: #10b981; font-size: 0.85rem; padding-top: 0.5rem;">{{ formSuccessMessage }}</div>
           </div>
 
-          <div class="form-actions">
-            <span class="error-msg" *ngIf="formErrorMessage">{{ formErrorMessage }}</span>
-            <span class="success-msg" *ngIf="formSuccessMessage">{{ formSuccessMessage }}</span>
-            
+          <div class="form-actions" style="justify-content: flex-end; width: 100%; border-top: 1px solid var(--border-color, rgba(0,0,0,0.1)); padding-top: 1.25rem; margin-top: 0.5rem; display: flex; gap: 1rem;">
             <button type="button" class="cancel-btn" (click)="closeAddModal()" [disabled]="isSubmitting">Cancelar</button>
             <button type="submit" class="submit-btn" [disabled]="isSubmitting">
               <span *ngIf="!isSubmitting">Registrar Psicólogo</span>

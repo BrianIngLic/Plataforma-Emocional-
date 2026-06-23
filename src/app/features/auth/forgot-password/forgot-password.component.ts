@@ -14,10 +14,12 @@ import { AuthService } from '../../../core/services/auth.service';
       <aside class="auth-sidebar">
         <div class="sidebar-content">
           <div class="brand">
-            <div class="logo-icon">🌿</div>
-            <div class="brand-text">
-              <h1>EmolA</h1>
-              <span>Bienestar emocional</span>
+            <div class="logo" style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 2rem;">
+              <img src="/amati-logo.svg" alt="Amati" style="width: 40px; height: 40px;" />
+              <div class="brand-text" style="display: flex; flex-direction: column; text-align: left;">
+                <h1>Amati</h1>
+                <span>Bienestar emocional</span>
+              </div>
             </div>
           </div>
           <div class="graphic-dots">

@@ -26,7 +26,7 @@ import { SupabaseService } from '../../../core/services/supabase.service';
         <div class="sheet-header">
           <div class="logo-area">
             <div class="logo">
-              <span class="logo-icon">🧠</span> EmolA
+              <img src="/amati-logo.svg" alt="Amati" style="width: 24px; height: 24px;" /> Amati
             </div>
             <div class="doc-title">NOTA DE EVOLUCIÓN CLÍNICA</div>
           </div>

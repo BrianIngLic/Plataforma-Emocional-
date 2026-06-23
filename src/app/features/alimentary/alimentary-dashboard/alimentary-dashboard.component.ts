@@ -60,7 +60,7 @@ interface ChatMessage {
           <div class="chat-header">
             <div class="avatar"><mat-icon>smart_toy</mat-icon></div>
             <div class="info">
-              <h2>EmolA Clínico</h2>
+              <h2>Amati Clínico</h2>
               <p>Desbloqueo de Módulo Alimentario</p>
             </div>
             <div class="hybrid-progress-container">
@@ -441,7 +441,7 @@ export class AlimentaryDashboardComponent implements OnInit, AfterViewChecked {
     this.answers[this.currentQuestion.id] = opt;
     this.isAiTyping = true;
 
-    // 2. Simular que EmolA está escribiendo
+    // 2. Simular que Amati está escribiendo
     const typingId = 'typing_' + Date.now();
     this.messages.push({ id: typingId, sender: 'ai', text: '', isTyping: true });
 

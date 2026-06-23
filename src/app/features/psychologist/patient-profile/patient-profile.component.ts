@@ -161,7 +161,7 @@ export class PatientProfileComponent implements OnInit {
           age: 22,
           gender: "Estudiante BUAP",
           diagnosis: conditions && conditions.length > 0 ? conditions.join(' + ') : "Evaluación Pendiente",
-          treatmentPlan: "TCC + Monitoreo con EmolA",
+          treatmentPlan: "TCC + Monitoreo con Amati",
           medications: ["Ninguno registrado"],
           sessionCount: 0,
           nextSession: "Por agendar",

@@ -22,7 +22,7 @@ El sistema está compuesto por un Frontend Angular, un Backend PostgREST (Postgr
 - Módulo de Recuperación de Contraseña (Forgot / Reset Password).
 - En el registro del estudiante, incluir el paso para contestar el cuestionario de afecciones conocidas (Depresión, Ansiedad, etc.) que se enlazará con la IA.
 
-### Skill 3: EmolA Chat (Estudiante)
+### Skill 3: Amati Chat (Estudiante)
 - Vista en modo oscuro.
 - Conexión HTTPS segura con el núcleo IA (FastAPI).
 - Interfaz de historial de chats a la izquierda, área principal de chat a la derecha.
@@ -37,7 +37,7 @@ El sistema está compuesto por un Frontend Angular, un Backend PostgREST (Postgr
 - **Visor Clínico Integral (Perfil):** Pantalla de detalle del paciente (basado en `PatientProfile.tsx`) que incluye:
   - Información de contacto y clínica (Diagnóstico, Tratamiento, Medicamentos).
   - Gráfica de progreso (ej. PHQ-9).
-  - **Superpoder EmolA:** Interfaz donde el psicólogo puede leer el historial de chat de la IA con el estudiante.
+  - **Superpoder Amati:** Interfaz donde el psicólogo puede leer el historial de chat de la IA con el estudiante.
 - **Agenda Clínica:** Pantalla dedicada con vista de calendario para organizar, agendar y cancelar citas de los pacientes basadas en recomendaciones del núcleo IA.
 
 ### Skill 6: Mi Diario (Personal)

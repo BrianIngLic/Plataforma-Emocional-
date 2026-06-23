@@ -43,7 +43,7 @@
 
 ---
 
-## Skill 3: EmolA Chat Estudiantil (Fase actual: Ejecución)
+## Skill 3: Amati Chat Estudiantil (Fase actual: Ejecución)
 **3.1. Arquitectura y Servicios (`core/services/chat.service.ts`)**
 - `[x]` Desarrollar `ChatService` utilizando *Signals* para manejar el estado reactivo de los mensajes en memoria.
 - `[x]` Implementar métodos simulados (`sendMessageMock()`) que reciban texto y devuelvan una respuesta falsa de la IA con un ligero retraso de tiempo, preparándolo para la conexión real.
@@ -105,7 +105,7 @@
 
 **5.4. Visor Clínico Integral (`patient-profile.component`)**
 - `[x]` Migrar `PatientProfile.tsx` a Angular (Gráficas de progreso, historial de sesiones).
-- `[x]` Integrar la visualización del análisis de EmolA (Chat Inteligente) desde la perspectiva clínica.
+- `[x]` Integrar la visualización del análisis de Amati (Chat Inteligente) desde la perspectiva clínica.
 - `[x]` Integrar la visualización del "Mi Diario" (Skill 6) en el perfil del paciente.
 
 **5.5. Agenda Clínica (`agenda.component`)**

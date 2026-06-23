@@ -3,13 +3,13 @@
   <aside class="sidebar" [class.collapsed]="isSidebarCollapsed">
     <div class="sidebar-header">
       <div class="brand">
-        <div class="logo">
-          <mat-icon>eco</mat-icon>
-        </div>
-        <div class="brand-text">
-          <h2>EmolA</h2>
-          <p>Bienestar</p>
-        </div>
+        <a href="/" class="logo-link" style="display: flex; align-items: center; gap: 8px; text-decoration: none;">
+          <img src="/amati-logo.svg" alt="Amati Logo" style="width: 36px; height: 36px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));" />
+          <div class="brand-text">
+            <h2>Amati</h2>
+            <p>Estudiante</p>
+          </div>
+        </a>
       </div>
       <button class="btn-icon hamburger" (click)="toggleSidebar()">
         <mat-icon>menu</mat-icon>

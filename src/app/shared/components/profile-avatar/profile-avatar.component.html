@@ -1,0 +1,30 @@
+<div class="avatar-manager">
+  <div class="avatar-preview">
+    <div class="avatar-circle">
+      <img *ngIf="currentAvatarUrl" [src]="currentAvatarUrl" alt="Avatar del usuario" />
+      <span *ngIf="!currentAvatarUrl" class="initial">{{ userInitial }}</span>
+      
+      <div class="loading-overlay" *ngIf="isUploading">
+        <mat-icon class="spinner">autorenew</mat-icon>
+      </div>
+    </div>
+  </div>
+
+  <div class="avatar-actions">
+    <h3>Foto de Perfil</h3>
+    <p>Sube tu propia foto o genera un avatar ilustrado automáticamente.</p>
+    
+    <div class="button-group">
+      <!-- Input oculto para archivo -->
+      <input type="file" #fileInput (change)="onFileSelected($event)" accept="image/*" style="display: none;">
+      
+      <button class="btn-primary" (click)="fileInput.click()" [disabled]="isUploading">
+        <mat-icon>upload</mat-icon> Subir Foto
+      </button>
+
+      <button class="btn-secondary" (click)="generateDiceBear()" [disabled]="isUploading">
+        <mat-icon>casino</mat-icon> Generar Avatar
+      </button>
+    </div>
+  </div>
+</div>

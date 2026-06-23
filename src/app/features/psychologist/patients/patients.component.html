@@ -35,7 +35,9 @@
           <tr *ngFor="let patient of filteredPatients">
             <td>
               <div class="patient-cell">
-                <div class="avatar-icon"><mat-icon>person</mat-icon></div>
+                <div class="avatar-icon" [style.background-image]="patient.avatarUrl ? 'url(' + patient.avatarUrl + ')' : ''" [style.background-size]="'cover'" [style.background-position]="'center'">
+                  <mat-icon *ngIf="!patient.avatarUrl">person</mat-icon>
+                </div>
                 <div class="patient-info">
                   <span class="name">{{patient.firstName}} {{patient.lastName}}</span>
                   <span class="id">ID: {{patient.id}}</span>
@@ -83,7 +85,9 @@
 
       <div class="global-list">
         <div class="global-item" *ngFor="let patient of filteredGlobalPatients">
-          <div class="avatar-icon"><mat-icon>person</mat-icon></div>
+          <div class="avatar-icon" [style.background-image]="patient.avatarUrl ? 'url(' + patient.avatarUrl + ')' : ''" [style.background-size]="'cover'" [style.background-position]="'center'">
+            <mat-icon *ngIf="!patient.avatarUrl">person</mat-icon>
+          </div>
           <div class="info">
             <span class="name">{{patient.firstName}} {{patient.lastName}}</span>
             <span class="mat">Matrícula: {{patient.matricula || 'No registrada'}}</span>

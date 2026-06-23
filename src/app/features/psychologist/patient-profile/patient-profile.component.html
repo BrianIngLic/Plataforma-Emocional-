@@ -13,7 +13,9 @@
     <!-- Header Card -->
     <div class="card header-card">
     <div class="patient-header">
-      <div class="avatar"><mat-icon>person</mat-icon></div>
+      <div class="avatar" [style.background-image]="patient.avatarUrl ? 'url(' + patient.avatarUrl + ')' : ''" [style.background-size]="'cover'" [style.background-position]="'center'">
+        <mat-icon *ngIf="!patient.avatarUrl">person</mat-icon>
+      </div>
       <div class="info">
         <h1>{{patient.firstName}} {{patient.lastName}}</h1>
         <p>{{patient.age}} años • {{patient.gender}} • ID: {{patient.id}}</p>

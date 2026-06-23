@@ -157,6 +157,7 @@ export class PatientProfileComponent implements OnInit {
           id: userData.id,
           firstName: p?.first_name || 'Paciente',
           lastName: p?.last_name || 'Sin Nombre',
+          avatarUrl: p?.avatar_url || '',
           age: 22,
           gender: "Estudiante BUAP",
           diagnosis: conditions && conditions.length > 0 ? conditions.join(' + ') : "Evaluación Pendiente",

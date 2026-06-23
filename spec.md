@@ -45,6 +45,12 @@ El sistema está compuesto por un Frontend Angular, un Backend PostgREST (Postgr
 - Integración visual alineada al ecosistema (Glassmorphism / Modo Dinámico).
 - Componente de "Mood Tracker" (Registro de Emociones).
 
+### Skill 7: Gestión de Perfil y Avatares (Cross-Role)
+- Módulo transversal disponible para Estudiantes, Psicólogos y Administradores.
+- Capacidad de subir una fotografía local (Profile Picture) o seleccionar un Avatar predeterminado.
+- Integración con **Supabase Storage** para el alojamiento seguro de las imágenes y actualización del registro en la tabla `profiles`.
+- Reemplazo global de los avatares genéricos de texto por las imágenes cargadas en el sidebar y menús de navegación superior.
+
 ### Skill 8: Módulo de Administración (Core System)
 - Interfaz exclusiva para el rol 'Admin'.
 - Panel de control para gestionar altas, bajas y modificaciones del personal clínico (Psicólogos).

@@ -8,11 +8,12 @@ import { AuthService } from '../../../core/services/auth.service';
 import { FeedbackModalComponent } from '../../../shared/components/feedback-modal/feedback-modal.component';
 import { FacultyService, Faculty } from '../../../core/services/faculty.service';
 import { SupabaseService } from '../../../core/services/supabase.service';
+import { ProfileAvatarComponent } from '../../../shared/components/profile-avatar/profile-avatar.component';
 
 @Component({
   selector: 'app-settings',
   standalone: true,
-  imports: [CommonModule, FormsModule, MatIconModule, MatDialogModule],
+  imports: [CommonModule, FormsModule, MatIconModule, MatDialogModule, ProfileAvatarComponent],
   templateUrl: './settings.component.html',
   styleUrls: ['./settings.component.scss']
 })
@@ -23,6 +24,7 @@ export class SettingsComponent implements OnInit {
   supabaseService = inject(SupabaseService);
   dialog = inject(MatDialog);
 
+  activeTab: 'perfil' | 'agenda' = 'perfil';
   faculties: Faculty[] = [];
   selectedFaculty: string = '';
 
@@ -54,6 +56,10 @@ export class SettingsComponent implements OnInit {
 
   get upcomingExceptions() {
     return this.exceptions.filter(e => e.exception_date >= this.today);
+  }
+
+  setTab(tab: 'perfil' | 'agenda') {
+    this.activeTab = tab;
   }
 
   async ngOnInit() {

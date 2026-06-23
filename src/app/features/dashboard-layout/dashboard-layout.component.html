@@ -72,8 +72,8 @@
       </div>
       
       <div class="user-profile" *ngIf="currentUser">
-        <div class="avatar">
-          <mat-icon>person</mat-icon>
+        <div class="avatar" [style.background-image]="currentUser.avatar_url ? 'url(' + currentUser.avatar_url + ')' : ''" [style.background-size]="'cover'" [style.background-position]="'center'">
+          <mat-icon *ngIf="!currentUser.avatar_url">person</mat-icon>
         </div>
         <div class="user-info">
           <span class="name" style="text-transform: capitalize;">{{ currentUser.name || 'Estudiante' }}</span>

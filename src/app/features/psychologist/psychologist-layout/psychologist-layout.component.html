@@ -55,8 +55,8 @@
       </a>
 
       <div class="user-profile" *ngIf="currentUser">
-        <div class="avatar">
-          <mat-icon>psychology</mat-icon>
+        <div class="avatar" [style.background-image]="currentUser.avatar_url ? 'url(' + currentUser.avatar_url + ')' : ''" [style.background-size]="'cover'" [style.background-position]="'center'">
+          <mat-icon *ngIf="!currentUser.avatar_url">psychology</mat-icon>
         </div>
         <div class="user-info">
           <span class="name">{{ currentUser.name | titlecase }}</span>

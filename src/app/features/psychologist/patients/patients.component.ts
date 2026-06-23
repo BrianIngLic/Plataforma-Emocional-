@@ -46,7 +46,7 @@ export class PatientsComponent implements OnInit {
     // Intentar traer de la base de datos real
     const { data, error } = await this.supabase
       .from('users')
-      .select('id, matricula, profiles(first_name, last_name), student_clinical_records!student_clinical_records_student_id_fkey(known_conditions, primary_psychologist_id)')
+      .select('id, matricula, profiles(first_name, last_name, avatar_url), student_clinical_records!student_clinical_records_student_id_fkey(known_conditions, primary_psychologist_id)')
       .eq('role_id', 2);
       
     console.log('--- DEBUG loadPatients ---');
@@ -73,6 +73,7 @@ export class PatientsComponent implements OnInit {
           matricula: u.matricula,
           firstName: Array.isArray(u.profiles) ? u.profiles[0]?.first_name : u.profiles?.first_name,
           lastName: Array.isArray(u.profiles) ? u.profiles[0]?.last_name : u.profiles?.last_name,
+          avatarUrl: Array.isArray(u.profiles) ? u.profiles[0]?.avatar_url : u.profiles?.avatar_url,
           diagnosis: diagnosis, 
           lastSession: new Date().toISOString().split('T')[0],
           nextSession: "Por agendar",

@@ -117,6 +117,32 @@
 
 ---
 
+## Skill 7: Gestión de Perfil y Avatares (Fase actual: Planeación SDD)
+
+**7.1. Configuración de Base de Datos y Storage**
+- `[x]` Crear un nuevo Bucket en Supabase Storage llamado `avatars`.
+- `[x]` Configurar Políticas de Seguridad (RLS) en el bucket (Lectura pública, Escritura solo para usuarios autenticados propios).
+- `[x]` Añadir la columna `avatar_url` (tipo TEXT) a la tabla `profiles` en la base de datos.
+
+**7.2. Capa de Servicios (`core/services/profile.service.ts`)**
+- `[x]` Crear servicio dedicado a perfiles (`ProfileService`).
+- `[x]` Implementar método `uploadAvatar(file: File)` para subir la imagen al Supabase Storage.
+- `[x]` Implementar método `updateAvatarUrl(url: string)` para guardar la ruta en `public.profiles`.
+- `[x]` Actualizar `AuthService.loadUserProfile()` para recuperar y guardar el `avatar_url` en el estado global (Signals).
+
+**7.3. Interfaz de Configuración de Perfil (`features/settings/profile`)**
+- `[x]` Crear vista unificada de configuración de perfil aplicable a todos los roles.
+- `[x]` Componente visual de carga: Drag & Drop para subir imagen, o selector para armar un Avatar predefinido.
+- `[x]` Lógica de visualización previa (Preview) de la imagen recortada en formato circular antes de guardar.
+- `[x]` Botones de "Guardar Cambios" conectados con el UI Kit (notificaciones de éxito).
+
+**7.4. Integración Transversal (Layouts)**
+- `[x]` Modificar `DashboardLayoutComponent` (Estudiante) para consumir y mostrar el `avatar_url` en el menú.
+- `[x]` Modificar `PsychologistLayoutComponent` para mostrar el avatar.
+- `[x]` Modificar Navbar / Top Menu general para que reaccione dinámicamente si el `currentUser` cambia su foto.
+
+---
+
 ## Backlog Pendiente
 **Skill 8: Módulo de Administración (Core System)**
 - `[ ]` Dashboard de Administrador (`admin-layout.component`).
@@ -127,16 +153,16 @@
 
 ## Fase de Integración (Backend: PostgreSQL / PostgREST)
 
-**7.1. Configuración del Entorno**
+**9.1. Configuración del Entorno**
 - `[x]` Configurar `environments/environment.ts` con credenciales de la API y llave de cifrado E2EE.
 - `[x]` Instalar cliente (Supabase JS o HttpClient) y librería criptográfica (`crypto-js`).
 - `[x]` Crear servicio base de conexión (`supabase.service.ts` y `crypto.service.ts`).
 
-**7.2. Refactorización de Autenticación**
+**9.2. Refactorización de Autenticación**
 - `[x]` Conectar `auth.service.ts` con la base de datos para login real y manejo de sesión JWT.
 - `[x]` Conectar el stepper de registro (`register.component.ts`) para guardar datos en las tablas `users`, `profiles` y `student_clinical_records`.
 
-**7.3. Refactorización de Skills**
+**9.3. Refactorización de Skills**
 - `[x]` Conectar `chat.service.ts` con la tabla `messages`.
 - `[x]` Conectar `diary.service.ts` (si existe la tabla, pendiente de crear en schema) o simular.
 - `[x]` Conectar listado de pacientes del psicólogo con las tablas reales.

@@ -92,7 +92,7 @@
           </div>
 
           <mat-checkbox formControlName="acceptedTerms" color="primary" class="consent-check">
-            He leído y acepto los términos y condiciones.
+            He leído y acepto el <a href="#" (click)="openPrivacyModal($event)" style="color: var(--accent-purple); text-decoration: underline;">Aviso de Privacidad y Términos de Uso</a>.
           </mat-checkbox>
 
           <div class="stepper-actions submit-actions">
@@ -112,6 +112,41 @@
 
     <div class="auth-footer">
       <p>¿Ya tienes expediente? <a routerLink="/auth/login">Inicia Sesión</a></p>
+    </div>
+  </div>
+</div>
+
+<!-- Privacy Policy Modal -->
+<div class="privacy-modal-overlay" *ngIf="showPrivacyModal" (click)="closePrivacyModal()">
+  <div class="privacy-modal-card" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>Aviso de Privacidad y Términos de Uso</h2>
+      <button class="close-btn" (click)="closePrivacyModal()">✖</button>
+    </div>
+    <div class="modal-content">
+      <p><strong>Plataforma de Asistencia Emocional con Inteligencia Artificial</strong></p>
+      <p>En estricto cumplimiento a lo previsto en los artículos 6° fracciones II y III, y 16 Segundo Párrafo de la Constitución Política de los Estados Unidos Mexicanos; así como en la Ley aplicable de Protección de Datos Personales, la <strong>Plataforma de Asistencia Emocional</strong> (en adelante "La Plataforma") le informa que los datos personales, emocionales y clínicos que se recaban con motivo de su registro y uso de este ecosistema, son utilizados única y exclusivamente para fines de seguimiento, evaluación y asistencia psicológica.</p>
+      <p>Por tanto, respecto al tratamiento de dichos datos, La Plataforma hace de su conocimiento que:</p>
+      <ol>
+        <li>Cuenta con las medidas administrativas, técnicas y físicas necesarias para garantizar la seguridad, encriptación y estricta confidencialidad en el manejo y custodia de su información.</li>
+        <li>Procura que los datos almacenados sean exactos y actualizados.</li>
+        <li>En caso de tener conocimiento de algún dato personal inexacto o incompleto, procederá a sustituir, rectificar o completar los mismos a petición del titular.</li>
+        <li>Evitará estrictamente la transferencia de datos personales sin la autorización previa del titular, y dicha transferencia únicamente se realizará por orden de una autoridad competente o en situaciones de emergencia vital inminente.</li>
+      </ol>
+      <p><strong>Cláusulas y Condiciones sobre el Uso de Inteligencia Artificial</strong></p>
+      <p>Al completar su registro en La Plataforma, usted es consciente, comprende y acepta expresamente las siguientes condiciones operativas y tecnológicas:</p>
+      <ul>
+        <li><strong>Estatus de Prototipo Beta:</strong> El presente ecosistema tecnológico se encuentra actualmente en una fase de desarrollo, validación y experimentación (Prototipo Beta). Por ende, el servicio se proporciona "tal cual", sujeto a posibles interrupciones, errores técnicos y actualizaciones continuas.</li>
+        <li><strong>Procesamiento mediante IA Generativa:</strong> Parte de los análisis de sentimientos, interacciones conversacionales (EmolA) y detección de patrones de riesgo, son impulsados por modelos de Inteligencia Artificial Generativa.</li>
+        <li><strong>Margen de Inexactitud e Imprecisión:</strong> La Inteligencia Artificial es una herramienta basada en probabilidades matemáticas, no en juicio clínico humano. Por su propia naturaleza, las respuestas, interpretaciones y análisis generados por la IA pueden llegar a ser <strong>inexactos, incompletos, sesgados o fuera de contexto</strong>.</li>
+        <li><strong>Deslinde de Responsabilidades Médicas:</strong> Las interacciones y resultados emitidos por la Inteligencia Artificial <strong>NO constituyen ni sustituyen en ningún caso el diagnóstico, tratamiento, prescripción o consejo de un profesional de la salud mental certificado</strong>. La Plataforma y su equipo de desarrollo se deslindan de cualquier responsabilidad médica, legal o moral derivada de las decisiones, acciones u omisiones tomadas por el usuario basándose en los textos generados por la IA.</li>
+        <li><strong>Protocolo de Emergencia:</strong> En caso de experimentar una crisis aguda, pensamientos de autolesión o requerir asistencia inmediata, el usuario no debe depender de la Inteligencia Artificial, debiendo acudir inmediatamente a los servicios de emergencia de su localidad o a profesionales humanos certificados.</li>
+      </ul>
+      <p>Para ejercer sus derechos derivados de la protección de datos en posesión de La Plataforma, podrá dirigirse directamente con la administración del sistema a través del correo de soporte designado o con su profesional clínico asignado.</p>
+      <p style="text-align: center; font-style: italic; margin-top: 1.5rem; color: var(--text-secondary);">“Innovación Tecnológica al Servicio del Bienestar Humano”</p>
+    </div>
+    <div class="modal-footer">
+      <button mat-flat-button color="primary" (click)="closePrivacyModal()">Cerrar y Entendido</button>
     </div>
   </div>
 </div>

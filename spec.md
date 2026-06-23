@@ -26,7 +26,7 @@ El sistema está compuesto por un Frontend Angular, un Backend PostgREST (Postgr
 - Conexión HTTPS segura con el núcleo IA (FastAPI).
 - Interfaz de historial de chats a la izquierda, área principal de chat a la derecha.
 
-### Skill 4: NutriMind (Módulo Alimentario)
+### Skill 4: NutriMind (  Módulo Alimentario)
 - Dashboard con barras de progreso para proteínas, grasas y carbohidratos.
 - Listado de comidas agrupadas por tiempo (desayuno, etc.).
 

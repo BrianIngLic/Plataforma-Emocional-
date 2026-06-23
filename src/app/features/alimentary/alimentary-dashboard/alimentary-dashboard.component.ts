@@ -63,8 +63,15 @@ interface ChatMessage {
               <h2>EmolA Clínico</h2>
               <p>Desbloqueo de Módulo Alimentario</p>
             </div>
-            <div class="progress-indicator">
-              <span>{{ currentQuestionIndex }} / {{ totalQuestions }}</span>
+            <div class="hybrid-progress-container">
+              <div class="water-bar">
+                <div class="water-fill" [style.width.%]="getProgressRatio() * 100"></div>
+                <div class="dolphin-wrapper" [class.jumping]="isJumping" [style.left.%]="getProgressRatio() * 100">
+                  <div class="dolphin-bob">
+                    <div class="dolphin-emoji">🐬</div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -172,9 +179,41 @@ interface ChatMessage {
         h2 { margin: 0; font-size: 1.1rem; color: var(--text-primary); }
         p { margin: 0; font-size: 0.8rem; color: #0ea5e9; font-weight: 600; }
       }
-      .progress-indicator {
-        background: white; border: 1px solid var(--border-color); padding: 4px 12px; border-radius: 20px;
-        font-family: monospace; font-weight: bold; color: var(--text-secondary); font-size: 0.85rem;
+      .hybrid-progress-container {
+        margin-left: auto; width: 200px;
+        display: flex; align-items: center; justify-content: flex-end;
+      }
+      .water-bar {
+        position: relative; width: 100%; height: 12px; background: rgba(14, 165, 233, 0.1); border-radius: 6px;
+      }
+      .water-fill {
+        position: absolute; top: 0; left: 0; height: 100%; border-radius: 6px;
+        transition: width 0.6s linear;
+        background-color: #7dd3fc;
+        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="30" height="12" viewBox="0 0 30 12"><path d="M0,6 Q7.5,2 15,6 T30,6 L30,12 L0,12 Z" fill="%230ea5e9"/></svg>');
+        background-size: 30px 12px;
+        animation: waterFlow 1.5s linear infinite;
+      }
+      .dolphin-wrapper {
+        position: absolute; top: -13px; width: 30px; height: 30px;
+        transition: left 0.6s linear;
+        margin-left: -15px;
+        z-index: 10;
+      }
+      .dolphin-wrapper.jumping {
+        animation: jumpY 0.6s ease-in-out forwards;
+      }
+      .dolphin-bob {
+        width: 100%; height: 100%;
+        animation: floatBob 2s ease-in-out infinite;
+      }
+      .dolphin-emoji {
+        font-size: 1.5rem;
+        transform: scaleX(-1) rotate(-50deg);
+        filter: saturate(0.2) brightness(0.8) drop-shadow(-2px 4px 4px rgba(71, 85, 105, 0.4));
+      }
+      .dolphin-wrapper.jumping .dolphin-emoji {
+        animation: diveRotate 0.6s ease-in-out forwards;
       }
     }
 
@@ -247,6 +286,25 @@ interface ChatMessage {
     @keyframes blink {
       0%, 80%, 100% { opacity: 0.3; } 40% { opacity: 1; }
     }
+    @keyframes waterFlow {
+      from { background-position: 30px 0; }
+      to { background-position: 0 0; }
+    }
+    @keyframes jumpY {
+      0%   { transform: translateY(0); }
+      50%  { transform: translateY(-25px); }
+      100% { transform: translateY(0); }
+    }
+    @keyframes floatBob {
+      0%, 100% { transform: translateY(0); }
+      50%      { transform: translateY(-3px); }
+    }
+    @keyframes diveRotate {
+      0%   { transform: scaleX(-1) rotate(-10deg); }
+      40%  { transform: scaleX(-1) rotate(-50deg); }
+      70%  { transform: scaleX(-1) rotate(-90deg); }
+      100% { transform: scaleX(-1) rotate(-50deg); }
+    }
   `]
 })
 export class AlimentaryDashboardComponent implements OnInit, AfterViewChecked {
@@ -300,12 +358,18 @@ export class AlimentaryDashboardComponent implements OnInit, AfterViewChecked {
 
   totalQuestions = this.questions.length;
   currentQuestionIndex = 0;
+  completedQuestions = 0;
+  isJumping = false;
   answers: any = {};
   
   messages: ChatMessage[] = [];
 
   get currentQuestion() {
     return this.questions[this.currentQuestionIndex];
+  }
+
+  getProgressRatio() {
+    return this.totalQuestions > 0 ? this.completedQuestions / this.totalQuestions : 0;
   }
 
   async ngOnInit() {
@@ -361,6 +425,10 @@ export class AlimentaryDashboardComponent implements OnInit, AfterViewChecked {
   }
 
   selectOption(opt: string) {
+    this.completedQuestions++;
+    this.isJumping = true;
+    setTimeout(() => this.isJumping = false, 600);
+
     // 1. Mostrar respuesta del usuario
     this.messages.push({
       id: 'a_' + this.currentQuestionIndex,

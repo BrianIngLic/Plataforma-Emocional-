@@ -55,3 +55,8 @@ El sistema está compuesto por un Frontend Angular, un Backend PostgREST (Postgr
 - Interfaz exclusiva para el rol 'Admin'.
 - Panel de control para gestionar altas, bajas y modificaciones del personal clínico (Psicólogos).
 - Asignación manual de pacientes (Estudiantes) a psicólogos específicos (opcional, dependiendo de la política de la clínica).
+
+### Skill 9: RoleGuard Security (Barrera de Roles)
+- Implementación de seguridad transversal en Angular (Route Guards).
+- Restricción de acceso basado en el `role` del usuario (Estudiante, Psicólogo, Admin).
+- Redirección automática al módulo o dashboard correspondiente al rol real en caso de un intento de acceso no autorizado, protegiendo la confidencialidad de la clínica.

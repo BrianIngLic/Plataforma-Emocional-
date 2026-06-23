@@ -149,6 +149,11 @@
 - `[ ]` Formulario seguro de Alta de Personal Clínico (Psicólogos).
 - `[ ]` Panel de gestión de usuarios (suspensión, reactivación).
 
+**Skill 9: RoleGuard Security (Fase actual: Ejecutada)**
+- `[x]` Crear funcional `roleGuard` (`core/guards/role.guard.ts`) que evalúe `expectedRole`.
+- `[x]` Lógica de redirección inteligente al panel base correspondiente (`/dashboard`, `/psychologist`, `/admin`).
+- `[x]` Inyectar `roleGuard` y metadatos `data: { expectedRole }` en `app.routes.ts`.
+
 ---
 
 ## Fase de Integración (Backend: PostgreSQL / PostgREST)

@@ -16,6 +16,7 @@ export const routes: Routes = [
     loadChildren: () => import('./features/psychologist/psychologist.routes').then(m => m.PSYCHOLOGIST_ROUTES),
     canActivate: [authGuard]
   },
+  
   {
     path: 'admin',
     loadChildren: () => import('./features/admin/admin.routes').then(m => m.ADMIN_ROUTES),

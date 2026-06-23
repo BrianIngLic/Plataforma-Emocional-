@@ -182,6 +182,38 @@ export class AuthService {
     this.isLoggedIn.set(true);
   }
 
+  async requestPasswordReset(email: string): Promise<boolean> {
+    try {
+      const { error } = await this.supabaseService.supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: window.location.origin + '/auth/reset-password',
+      });
+      if (error) {
+        console.error('Error solicitando reset de contraseña:', error.message);
+        return false;
+      }
+      return true;
+    } catch (e) {
+      console.error('Excepción al solicitar reset:', e);
+      return false;
+    }
+  }
+
+  async updatePassword(newPass: string): Promise<boolean> {
+    try {
+      const { error } = await this.supabaseService.supabase.auth.updateUser({
+        password: newPass
+      });
+      if (error) {
+        console.error('Error actualizando contraseña:', error.message);
+        return false;
+      }
+      return true;
+    } catch (e) {
+      console.error('Excepción al actualizar contraseña:', e);
+      return false;
+    }
+  }
+
   async logout(): Promise<void> {
     await this.supabaseService.supabase.auth.signOut();
     this.currentUser.set(null);

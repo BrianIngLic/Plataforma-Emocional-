@@ -19,6 +19,7 @@ El sistema está compuesto por un Frontend Angular, un Backend PostgREST (Postgr
 
 ### Skill 2: Autenticación y Onboarding Clínico
 - Crear módulos Angular de login y registro.
+- Módulo de Recuperación de Contraseña (Forgot / Reset Password).
 - En el registro del estudiante, incluir el paso para contestar el cuestionario de afecciones conocidas (Depresión, Ansiedad, etc.) que se enlazará con la IA.
 
 ### Skill 3: EmolA Chat (Estudiante)

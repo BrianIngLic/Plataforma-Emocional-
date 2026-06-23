@@ -35,6 +35,12 @@
 - `[x]` Configurar Lazy Loading (`loadComponent` o `loadChildren`) para la ruta `/auth`.
 - `[x]` Redirección por defecto: Si no hay token, redirigir a `/auth/login`.
 
+**2.6. Feature: Recuperación de Contraseña (`features/auth/forgot-password`)**
+- `[x]` Añadir métodos `requestPasswordReset` y `updatePassword` en `AuthService`.
+- `[x]` Crear vista de `forgot-password` para solicitar el link con el correo.
+- `[x]` Crear vista de `reset-password` para capturar el token e ingresar la nueva contraseña.
+- `[x]` Integrar SweetAlert / UI Kit ("spect kit") para notificaciones visuales del estado del correo.
+
 ---
 
 ## Skill 3: EmolA Chat Estudiantil (Fase actual: Ejecución)

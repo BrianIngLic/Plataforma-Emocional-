@@ -1,1 +1,85 @@
+<div class="layout-container">
+  <!-- Sidebar -->
+  <aside class="sidebar" [class.collapsed]="isSidebarCollapsed">
+    
+    <div class="sidebar-header">
+      <div class="brand">
+        <div class="logo">
+          <mat-icon>restaurant</mat-icon>
+        </div>
+        <div class="brand-text">
+          <h2>Nutrición Plus</h2>
+          <p>Portal Nutricional</p>
+        </div>
+      </div>
+      <button class="btn-icon hamburger" (click)="toggleSidebar()">
+        <mat-icon>menu</mat-icon>
+      </button>
+    </div>
 
+    <div class="sidebar-content">
+      <button class="new-plan-btn">
+        <mat-icon>add</mat-icon>
+        <span class="btn-text">Nuevo Plan</span>
+      </button>
+
+      <nav class="nav-menu">
+        <a routerLink="./dashboard" routerLinkActive="active" class="nav-item">
+          <mat-icon>dashboard</mat-icon>
+          <div class="nav-text">
+            <span>Dashboard</span>
+            <small>Resumen General</small>
+          </div>
+        </a>
+        <a routerLink="./clients" routerLinkActive="active" class="nav-item">
+          <mat-icon>people</mat-icon>
+          <div class="nav-text">
+            <span>Clientes</span>
+            <small>Gestión de Clientes</small>
+          </div>
+        </a>
+        <a routerLink="./plans" routerLinkActive="active" class="nav-item">
+          <mat-icon>menu_book</mat-icon>
+          <div class="nav-text">
+            <span>Planes Nutricionales</span>
+            <small>Dietas y Planes</small>
+          </div>
+        </a>
+        <a routerLink="./appointments" routerLinkActive="active" class="nav-item">
+          <mat-icon>calendar_today</mat-icon>
+          <div class="nav-text">
+            <span>Citas</span>
+            <small>Seguimiento</small>
+          </div>
+        </a>
+      </nav>
+    </div>
+
+    <div class="sidebar-footer">
+      <a routerLink="./settings" routerLinkActive="active" class="nav-item settings">
+        <mat-icon>settings</mat-icon>
+        <span class="nav-text">Configuración</span>
+      </a>
+
+      <div class="user-profile" *ngIf="currentUser">
+        <div class="avatar">
+          <mat-icon>person</mat-icon>
+        </div>
+        <div class="user-info">
+          <span class="name">{{ currentUser.name | titlecase }}</span>
+          <span class="role">Nutricionista</span>
+        </div>
+      </div>
+
+      <button class="logout-btn" (click)="logout()">
+        <mat-icon>logout</mat-icon>
+        <span class="nav-text">Cerrar sesión</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content" [class.expanded]="isSidebarCollapsed">
+    <router-outlet></router-outlet>
+  </main>
+</div>

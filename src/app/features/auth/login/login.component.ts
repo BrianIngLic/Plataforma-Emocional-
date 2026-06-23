@@ -43,6 +43,8 @@ export class LoginComponent {
         this.router.navigate(['/admin']);
       } else if (user?.role === 'Psicologo') {
         this.router.navigate(['/psychologist']);
+      } else if (user?.role === 'Nutricionista') {
+        this.router.navigate(['/nutritionist']);
       } else {
         this.router.navigate(['/']);
       }

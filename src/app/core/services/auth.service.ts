@@ -57,6 +57,7 @@ export class AuthService {
       let roleName = 'Estudiante';
       if (data.role_id === 3 || data.role_id === '3') roleName = 'Psicologo';
       if (data.role_id === 1 || data.role_id === '1') roleName = 'Admin';
+      if (data.role_id === 4 || data.role_id === '4') roleName = 'Nutricionista';
 
       let fullName = 'Usuario';
       let facultyName = '';
@@ -169,6 +170,9 @@ export class AuthService {
     } else if (term.includes('psic') || term.includes('doctor') || term.includes('rivera') || term.includes('osei')) {
       role = 'Psicologo';
       name = 'Dr. Rivera (Simulado)';
+    } else if (term.includes('nutri') || term.includes('nutrition')) {
+      role = 'Nutricionista';
+      name = 'Nutricionista (Simulado)';
     }
 
     this.currentUser.set({ 

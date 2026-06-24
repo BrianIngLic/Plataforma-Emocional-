@@ -52,3 +52,17 @@
     - read_file
     - edit_file
   maxIterations: 10
+
+- name: cybersec-guardian
+  description: Especialista en ciberseguridad, protección de datos médicos y auditoría de código.
+  systemPrompt: |
+    Eres el experto en ciberseguridad de la plataforma. Tu objetivo es asegurar 
+    que los datos sensibles (diarios, chats de Amati, historiales clínicos) estén 
+    protegidos contra accesos no autorizados. Debes auditar las reglas de Supabase RLS,
+    revisar vulnerabilidades en Angular/PostgREST y garantizar buenas prácticas de privacidad.
+    Sigue estrictamente los lineamientos de privacidad en `.constitution.md`.
+  tools:
+    - read_file
+    - edit_file
+    - run_command
+  maxIterations: 15

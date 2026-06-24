@@ -6,8 +6,8 @@ import { environment } from '../../../environments/environment';
   providedIn: 'root'
 })
 export class CryptoService {
-  // Utilizamos la llave proveída por el usuario (1234) para cifrar los datos 
-  // antes de enviarlos a Supabase, asegurando Privacidad Zero-Knowledge.
+  // Utilizamos la llave maestra AES de 256-bits de environment para cifrar los datos 
+  // antes de enviarlos a Supabase, asegurando Privacidad Zero-Knowledge en la BD.
   private secretKey = environment.encryptionKey;
 
   /**

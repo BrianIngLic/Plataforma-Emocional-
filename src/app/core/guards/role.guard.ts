@@ -1,6 +1,7 @@
 import { CanActivateFn, Router } from '@angular/router';
 import { inject } from '@angular/core';
 import { AuthService } from '../services/auth.service';
+import { AuditService } from '../services/audit.service';
 
 /**
  * Guard Funcional para proteger rutas basadas en el rol del usuario.
@@ -8,6 +9,7 @@ import { AuthService } from '../services/auth.service';
  */
 export const roleGuard: CanActivateFn = async (route, state) => {
   const authService = inject(AuthService);
+  const auditService = inject(AuditService);
   const router = inject(Router);
 
   // Asegurar que la sesión inicial se ha cargado antes de revisar el rol
@@ -34,7 +36,10 @@ export const roleGuard: CanActivateFn = async (route, state) => {
     return true; // Acceso permitido
   }
 
-  // Acceso Denegado: Redirección automática al panel correspondiente
+  // Acceso Denegado: Registrar en la bitácora de auditoría (Audit Logs)
+  await auditService.logUnauthorizedAccess(user.id, user.role, expectedRole, state.url);
+
+  // Redirección automática al panel correspondiente
   if (user.role === 'Admin') {
     router.navigate(['/admin']);
   } else if (user.role === 'Psicologo') {

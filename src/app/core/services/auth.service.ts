@@ -1,7 +1,8 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, signal, inject } from '@angular/core';
 import { SupabaseService } from './supabase.service';
 import { CryptoService } from './crypto.service';
 import { Router } from '@angular/router';
+import { AuditService } from './audit.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,16 +11,54 @@ export class AuthService {
   public currentUser = signal<{ matricula: string, role: string, id: string, name: string, faculty?: string, requires_password_change?: boolean, avatar_url?: string } | null>(null);
   public isLoggedIn = signal<boolean>(false);
 
+  private auditService = inject(AuditService);
+  private inactivityTimeout: any;
+  private readonly TIMEOUT_MS = 15 * 60 * 1000; // 15 minutos (NOM-024 / HIPAA)
+
   constructor(
     private supabaseService: SupabaseService,
     private cryptoService: CryptoService,
     private router: Router
   ) {
     this.checkSession();
+    this.initInactivityTracker();
+  }
+
+  /**
+   * Inicializa el rastreador de inactividad del usuario (eventos del DOM).
+   */
+  private initInactivityTracker() {
+    window.addEventListener('mousemove', () => this.resetInactivityTimer());
+    window.addEventListener('keydown', () => this.resetInactivityTimer());
+    window.addEventListener('scroll', () => this.resetInactivityTimer());
+    window.addEventListener('click', () => this.resetInactivityTimer());
+  }
+
+  /**
+   * Reinicia el temporizador de inactividad si el usuario está logueado.
+   */
+  private resetInactivityTimer() {
+    if (!this.isLoggedIn()) return;
+
+    if (this.inactivityTimeout) {
+      clearTimeout(this.inactivityTimeout);
+    }
+
+    this.inactivityTimeout = setTimeout(async () => {
+      console.warn('⏱️ [AuthService] Sesión expirada por inactividad (15 minutos). Cierre de sesión automático.');
+      const user = this.currentUser();
+      if (user) {
+        await this.auditService.logEvent('SESSION_TIMEOUT', `Cierre de sesión automático por inactividad (15 mins) para el rol ${user.role}.`, user.id);
+      }
+      await this.logout();
+    }, this.TIMEOUT_MS);
   }
 
   public async checkSession(): Promise<boolean> {
-    if (this.isLoggedIn()) return true;
+    if (this.isLoggedIn()) {
+      this.resetInactivityTimer();
+      return true;
+    }
 
     const { data: { session } } = await this.supabaseService.supabase.auth.getSession();
     if (session) {

@@ -57,7 +57,12 @@ export class RegisterComponent implements OnInit {
   profileFormGroup = this.fb.group({
     firstName: ['', Validators.required],
     lastName: ['', Validators.required],
-    faculty: ['', Validators.required]
+    faculty: ['', Validators.required],
+    programaEducativo: ['', Validators.required],
+    celular: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
+    antecedentesFamiliares: ['', Validators.required],
+    sexo: ['', Validators.required],
+    fechaNacimiento: ['', Validators.required]
   });
 
   // Paso 3: Consentimiento
@@ -82,6 +87,18 @@ export class RegisterComponent implements OnInit {
     this.filteredFaculties = this.faculties.filter(f => f.name.toLowerCase().includes(filterValue));
   }
 
+  calculateAge(birthDateString: string): number {
+    if (!birthDateString) return 0;
+    const today = new Date();
+    const birthDate = new Date(birthDateString);
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+    return age;
+  }
+
   async submitRegistration() {
     if (this.credentialsFormGroup.invalid || this.profileFormGroup.invalid || this.consentFormGroup.invalid) {
       this.credentialsFormGroup.markAllAsTouched();
@@ -102,9 +119,24 @@ export class RegisterComponent implements OnInit {
     const userId = await this.authService.register(matricula, email, password, firstName, lastName, faculty);
 
     if (userId) {
-      // Crear un expediente clínico en blanco por defecto
-      const emptyClinicalData = {};
-      const conditions = [JSON.stringify(emptyClinicalData)]; 
+      // Crear expediente clínico inicial con los datos generales del estudiante
+      const generalData = {
+        nombre: `${firstName} ${lastName}`,
+        unidad_academica: faculty,
+        programa_educativo: this.profileFormGroup.value.programaEducativo || '',
+        celular: this.profileFormGroup.value.celular || '',
+        correo: email,
+        antecedentes_familiares: this.profileFormGroup.value.antecedentesFamiliares || '',
+        sexo: this.profileFormGroup.value.sexo || '',
+        fecha_nacimiento: this.profileFormGroup.value.fechaNacimiento || '',
+        edad: this.profileFormGroup.value.fechaNacimiento ? this.calculateAge(this.profileFormGroup.value.fechaNacimiento) : 0
+      };
+
+      const initialClinicalData = {
+        general_data: generalData
+      };
+      
+      const conditions = [JSON.stringify(initialClinicalData)]; 
       
       const success = await this.clinicalService.submitClinicalRecords(matricula, conditions, true);
       this.isSubmitting = false;

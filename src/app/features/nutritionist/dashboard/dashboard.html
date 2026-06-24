@@ -1,1 +1,138 @@
-<p>dashboard works!</p>
+<div class="dashboard-container">
+  <!-- Stat Cards -->
+  <div class="stats-grid">
+    <div class="stat-card green">
+      <div class="icon-box"><mat-icon>people</mat-icon></div>
+      <div class="info">
+        <span class="label">Total Pacientes</span>
+        <span class="value">94</span>
+        <span class="sub">↑ 4 nuevos este mes</span>
+      </div>
+    </div>
+    <div class="stat-card red">
+      <div class="icon-box"><mat-icon>warning</mat-icon></div>
+      <div class="info">
+        <span class="label">Riesgo Nutricional</span>
+        <span class="value">4</span>
+        <span class="sub">2 requieren atención</span>
+      </div>
+    </div>
+    <div class="stat-card blue">
+      <div class="icon-box"><mat-icon>calendar_today</mat-icon></div>
+      <div class="info">
+        <span class="label">Consultas Hoy</span>
+        <span class="value">6</span>
+        <span class="sub">Siguiente: Sofía M. 08:30</span>
+      </div>
+    </div>
+    <div class="stat-card emerald">
+      <div class="icon-box"><mat-icon>verified</mat-icon></div>
+      <div class="info">
+        <span class="label">Apego Promedio</span>
+        <span class="value">74%</span>
+        <span class="sub">↑ 2% del mes pasado</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mid Row: Emergency + Agenda -->
+  <div class="mid-grid">
+    <!-- Casos Críticos -->
+    <div class="panel">
+      <div class="panel-header border-b">
+        <div class="title"><mat-icon class="text-red">emergency</mat-icon> Casos de Atención Prioritaria</div>
+        <a class="view-all">Ver todos <mat-icon>chevron_right</mat-icon></a>
+      </div>
+      <div class="panel-list">
+        <div class="list-item" *ngFor="let c of criticalCases">
+          <div class="indicator" [ngClass]="c.flag"></div>
+          <div class="item-content">
+            <span class="primary-text">{{c.patient}}</span>
+            <span class="secondary-text">{{c.diagnosis}}</span>
+          </div>
+          <div class="item-action text-right">
+            <span class="risk-badge" [ngClass]="c.risk.toLowerCase()">{{c.risk}}</span>
+            <span class="date">{{c.lastContact}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Agenda -->
+    <div class="panel">
+      <div class="panel-header border-b">
+        <div class="title"><mat-icon class="text-blue">schedule</mat-icon> Agenda del Día</div>
+        <span class="badge muted">{{agenda.length}} consultas</span>
+      </div>
+      <div class="panel-list">
+        <div class="list-item agenda-item" *ngFor="let s of agenda">
+          <div class="status-dot" [ngClass]="s.status"></div>
+          <span class="time">{{s.time}}</span>
+          <div class="item-content">
+            <span class="primary-text">{{s.patient}}</span>
+            <span class="secondary-text">{{s.type}}</span>
+          </div>
+          <span class="duration">{{s.duration}}m</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Alertas -->
+  <div class="panel alerts-panel">
+    <div class="panel-header border-b">
+      <div class="title"><mat-icon class="text-amber">notifications_active</mat-icon> Alertas de Registro y Diario</div>
+      <a class="view-all">Marcar todo leído <mat-icon>chevron_right</mat-icon></a>
+    </div>
+    <div class="panel-list">
+      <div class="list-item alert-item" *ngFor="let a of alerts" [ngClass]="{'bg-critical': a.level === 'critical'}">
+        <span class="alert-badge" [ngClass]="a.level">{{a.level}}</span>
+        <div class="item-content">
+          <span class="primary-text">{{a.patient}}</span>
+          <span class="secondary-text">{{a.message}}</span>
+        </div>
+        <span class="time">{{a.time}}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Charts Row -->
+  <div class="charts-grid">
+    <!-- Evolución de Apego -->
+    <div class="panel col-span-3">
+      <div class="panel-header border-b">
+        <div class="title"><mat-icon class="text-green">trending_up</mat-icon> Apego al Plan Alimentario (Semanal)</div>
+        <div class="legend">
+          <span class="legend-item"><div class="dot green"></div> Apego Alto</span>
+          <span class="legend-item"><div class="dot amber"></div> Apego Medio</span>
+          <span class="legend-item"><div class="dot red"></div> Apego Bajo</span>
+        </div>
+      </div>
+      <div class="chart-wrapper">
+        <canvas baseChart [data]="lineChartData" [options]="lineChartOptions" type="line"></canvas>
+      </div>
+    </div>
+
+    <!-- Distribución Objetivos -->
+    <div class="panel col-span-2">
+      <div class="panel-header border-b">
+        <div class="title"><mat-icon class="text-blue">pie_chart</mat-icon> Distribución por Objetivo</div>
+      </div>
+      <div class="chart-wrapper donut-wrapper">
+        <canvas baseChart [data]="pieChartData" [options]="pieChartOptions" type="doughnut"></canvas>
+      </div>
+      <div class="chart-legend-list">
+        <div class="legend-row" *ngFor="let l of pieChartLabels; let i = index">
+          <div class="name">
+            <div class="dot" [style.backgroundColor]="pieChartColors[i]"></div>
+            {{l}}
+          </div>
+          <div class="bar-container">
+            <div class="bar" [style.width]="pieChartValues[i] + '%'" [style.backgroundColor]="pieChartColors[i]"></div>
+          </div>
+          <div class="value">{{pieChartValues[i]}}%</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

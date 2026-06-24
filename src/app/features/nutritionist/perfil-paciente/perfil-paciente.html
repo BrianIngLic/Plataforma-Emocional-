@@ -1,0 +1,472 @@
+<div class="profile-container">
+  <!-- Back button -->
+  <button class="back-btn" (click)="goBack()">
+    <mat-icon>arrow_back</mat-icon> Volver al Directorio
+  </button>
+
+  <div *ngIf="loading" class="loading-state" style="text-align: center; padding: 4rem; color: var(--text-secondary);">
+    <mat-icon style="animation: pulse 2s infinite; font-size: 40px; width: 40px; height: 40px; margin-bottom: 1rem;">hourglass_empty</mat-icon>
+    <p>Descifrando expediente clínico...</p>
+  </div>
+
+  <ng-container *ngIf="!loading && patient">
+    <!-- Header Card -->
+    <div class="card header-card">
+      <div class="patient-header">
+        <div class="avatar"><mat-icon>person</mat-icon></div>
+        <div class="info">
+          <h1>{{patient.firstName}} {{patient.lastName}}</h1>
+          <p>{{patient.age}} años • {{patient.gender}} • ID: {{patient.id}}</p>
+          <div class="badges">
+            <span *ngIf="patient.state === 'Critical'" class="badge critical"><mat-icon>warning</mat-icon> Crítico</span>
+            <span *ngIf="patient.state === 'Active'" class="badge active">Activo</span>
+            <span class="badge neutral">Riesgo: {{patient.riskLevel}}</span>
+          </div>
+        </div>
+        <div class="stats">
+          <div class="stat-box">
+            <div class="stat-title"><mat-icon>calendar_today</mat-icon> Consultas</div>
+            <div class="stat-value">{{patient.sessionCount}}</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-title"><mat-icon class="text-green">schedule</mat-icon> Próxima</div>
+            <div class="stat-value">{{patient.nextSession}}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabs Navigation -->
+    <div class="profile-tabs" style="display: flex; gap: 0.5rem; border-bottom: 2px solid var(--border-color); margin-bottom: 1.5rem; padding-bottom: 0.25rem;">
+      <button (click)="activeTab = 'expediente'" [class.active]="activeTab === 'expediente'" class="tab-btn" style="padding: 0.75rem 1.5rem; border: none; background: transparent; color: var(--text-secondary); cursor: pointer; font-weight: 600; font-size: 0.95rem; border-bottom: 3px solid transparent; transition: all 0.2s;">
+        <mat-icon style="vertical-align: middle; margin-right: 4px; font-size: 20px; width: 20px; height: 20px;">assignment</mat-icon>Expediente Clínico
+      </button>
+      <button (click)="activeTab = 'recordatorio'" [class.active]="activeTab === 'recordatorio'" class="tab-btn" style="padding: 0.75rem 1.5rem; border: none; background: transparent; color: var(--text-secondary); cursor: pointer; font-weight: 600; font-size: 0.95rem; border-bottom: 3px solid transparent; transition: all 0.2s;">
+        <mat-icon style="vertical-align: middle; margin-right: 4px; font-size: 20px; width: 20px; height: 20px;">restaurant_menu</mat-icon>Recordatorio 24h
+      </button>
+      <button (click)="activeTab = 'diario'" [class.active]="activeTab === 'diario'" class="tab-btn" style="padding: 0.75rem 1.5rem; border: none; background: transparent; color: var(--text-secondary); cursor: pointer; font-weight: 600; font-size: 0.95rem; border-bottom: 3px solid transparent; transition: all 0.2s;">
+        <mat-icon style="vertical-align: middle; margin-right: 4px; font-size: 20px; width: 20px; height: 20px;">book</mat-icon>Diario y Citas
+      </button>
+    </div>
+
+    <!-- TABS CONTENT -->
+    <div class="tab-content-area">
+      <!-- PESTAÑA 1: EXPEDIENTE CLÍNICO -->
+      <div *ngIf="activeTab === 'expediente'" class="tab-pane">
+        <!-- PDF Download Button -->
+        <div style="display: flex; justify-content: flex-end; margin-bottom: 1.25rem;">
+          <button (click)="downloadPDF()" class="pdf-btn" style="display: inline-flex; align-items: center; gap: 0.5rem; background: #0ea5e9; color: white; border: none; padding: 0.65rem 1.25rem; border-radius: 10px; font-weight: bold; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 6px rgba(14, 165, 233, 0.15);">
+            <mat-icon>picture_as_pdf</mat-icon> Descargar Expediente PDF
+          </button>
+        </div>
+
+        <div class="content-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+          
+          <!-- Columna Izquierda: Datos Generales (Estudiante) -->
+          <div class="col-main" style="display: flex; flex-direction: column; gap: 1.5rem;">
+            <div class="card" style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.5rem;">
+              <h2 class="card-title" style="display: flex; align-items: center; gap: 0.5rem; color: var(--text-primary); font-size: 1.1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem; margin-top: 0; margin-bottom: 1.25rem;">
+                <mat-icon style="color: #10b981;">account_circle</mat-icon> Datos Generales (Estudiante)
+              </h2>
+              
+              <div class="general-data-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; font-size: 0.9rem;">
+                <div>
+                  <label style="display: block; font-size: 0.75rem; color: var(--text-secondary); text-transform: uppercase; margin-bottom: 0.25rem; font-weight: 600;">Nombre Completo</label>
+                  <p style="margin: 0; color: var(--text-primary); font-weight: 500;">{{ generalData?.nombre || patient.firstName + ' ' + patient.lastName }}</p>
+                </div>
+                <div>
+                  <label style="display: block; font-size: 0.75rem; color: var(--text-secondary); text-transform: uppercase; margin-bottom: 0.25rem; font-weight: 600;">Unidad Académica</label>
+                  <p style="margin: 0; color: var(--text-primary); font-weight: 500;">{{ generalData?.unidad_academica || 'N/A' }}</p>
+                </div>
+                <div>
+                  <label style="display: block; font-size: 0.75rem; color: var(--text-secondary); text-transform: uppercase; margin-bottom: 0.25rem; font-weight: 600;">Programa Educativo</label>
+                  <p style="margin: 0; color: var(--text-primary); font-weight: 500;">{{ generalData?.programa_educativo || 'N/A' }}</p>
+                </div>
+                <div>
+                  <label style="display: block; font-size: 0.75rem; color: var(--text-secondary); text-transform: uppercase; margin-bottom: 0.25rem; font-weight: 600;">Teléfono Celular</label>
+                  <p style="margin: 0; color: var(--text-primary); font-weight: 500;">{{ generalData?.celular || 'N/A' }}</p>
+                </div>
+                <div>
+                  <label style="display: block; font-size: 0.75rem; color: var(--text-secondary); text-transform: uppercase; margin-bottom: 0.25rem; font-weight: 600;">Correo Electrónico</label>
+                  <p style="margin: 0; color: var(--text-primary); font-weight: 500;">{{ generalData?.correo || 'N/A' }}</p>
+                </div>
+                <div>
+                  <label style="display: block; font-size: 0.75rem; color: var(--text-secondary); text-transform: uppercase; margin-bottom: 0.25rem; font-weight: 600;">Sexo</label>
+                  <p style="margin: 0; color: var(--text-primary); font-weight: 500;">{{ generalData?.sexo || 'N/A' }}</p>
+                </div>
+                <div>
+                  <label style="display: block; font-size: 0.75rem; color: var(--text-secondary); text-transform: uppercase; margin-bottom: 0.25rem; font-weight: 600;">Fecha de Nacimiento</label>
+                  <p style="margin: 0; color: var(--text-primary); font-weight: 500;">{{ generalData?.fecha_nacimiento || 'N/A' }}</p>
+                </div>
+                <div>
+                  <label style="display: block; font-size: 0.75rem; color: var(--text-secondary); text-transform: uppercase; margin-bottom: 0.25rem; font-weight: 600;">Edad</label>
+                  <p style="margin: 0; color: var(--text-primary); font-weight: 500;">{{ generalData?.edad || 'N/A' }} años</p>
+                </div>
+                <div style="grid-column: span 2;">
+                  <label style="display: block; font-size: 0.75rem; color: var(--text-secondary); text-transform: uppercase; margin-bottom: 0.25rem; font-weight: 600;">Antecedentes Familiares</label>
+                  <p style="margin: 0; color: var(--text-primary); font-weight: 500; white-space: pre-wrap;">{{ generalData?.antecedentes_familiares || 'Sin registrar' }}</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- EAT-26 Results -->
+            <div class="card" *ngIf="eat26Result" style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.5rem;">
+              <h2 class="card-title" style="display: flex; align-items: center; gap: 0.5rem; color: var(--text-primary); font-size: 1.1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem; margin-top: 0; margin-bottom: 1.25rem;">
+                <mat-icon [ngClass]="eat26Result.hasRisk ? 'text-red' : 'text-green'">restaurant</mat-icon> Evaluación Alimentaria (EAT-26)
+              </h2>
+              <div style="display: flex; gap: 20px; align-items: center;">
+                <div [style.background]="eat26Result.hasRisk ? 'rgba(239,68,68,0.1)' : 'rgba(16,185,129,0.1)'" 
+                     [style.color]="eat26Result.hasRisk ? '#ef4444' : '#10b981'" 
+                     style="width: 70px; height: 70px; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0; border: 2px solid currentColor;">
+                  <span style="font-size: 24px; line-height: 1;">{{ eat26Result.score }}</span>
+                  <span style="font-size: 10px; opacity: 0.8;">PTS</span>
+                </div>
+                <div>
+                  <h3 style="margin: 0 0 5px; font-size: 15px; color: var(--text-primary);">
+                    {{ eat26Result.hasRisk ? 'Posible Riesgo de TCA' : 'Riesgo Bajo' }}
+                  </h3>
+                  <p style="margin: 0 0 8px; color: var(--text-secondary); font-size: 0.85rem; line-height: 1.4;">
+                    {{ eat26Result.interpretation }}
+                  </p>
+                  <div *ngIf="eat26Result.behavioralRisk" style="display: inline-flex; align-items: center; font-size: 11px; padding: 2px 6px; border-radius: 4px; background: rgba(239,68,68,0.1); color: #ef4444; font-weight: 600;">
+                    <mat-icon style="font-size: 14px; width: 14px; height: 14px; margin-right: 4px;">warning</mat-icon> Alerta por conductas de riesgo
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- AI Insights -->
+            <div class="card ai-card" style="background: rgba(139, 92, 246, 0.03); border: 1px solid rgba(139, 92, 246, 0.2); border-radius: 12px; padding: 1.5rem;">
+              <h2 class="card-title" style="display: flex; align-items: center; gap: 0.5rem; color: var(--text-primary); font-size: 1.1rem; border-bottom: 1px solid rgba(139, 92, 246, 0.15); padding-bottom: 0.75rem; margin-top: 0; margin-bottom: 1.25rem;">
+                <mat-icon style="color: #8b5cf6;">smart_toy</mat-icon> Análisis de EmolA (IA)
+              </h2>
+              <div class="ai-content" style="font-size: 0.9rem;">
+                <div class="sentiment-box" style="margin-bottom: 0.75rem;">
+                  <label style="display: block; font-size: 0.75rem; color: var(--text-secondary); text-transform: uppercase; margin-bottom: 0.25rem; font-weight: 600;">Sentimiento Dominante Semanal</label>
+                  <div class="sentiment-value" style="font-weight: bold; color: #8b5cf6;">Estable / Motivado</div>
+                </div>
+                <p class="ai-text" style="margin: 0; line-height: 1.5; color: var(--text-primary);">El paciente ha mostrado una actitud positiva hacia su plan alimenticio, reportando una mejor relación con la comida en sus registros de diario. No se detectan patrones de comportamiento de riesgo o purgas esta semana.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Columna Derecha: Datos Específicos (Nutricionista) -->
+          <div class="col-side" style="display: flex; flex-direction: column; gap: 1.5rem;">
+            <div class="card" style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.5rem;">
+              <h2 class="card-title" style="display: flex; align-items: center; gap: 0.5rem; color: var(--text-primary); font-size: 1.1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem; margin-top: 0; margin-bottom: 1.25rem;">
+                <mat-icon style="color: #10b981;">health_and_safety</mat-icon> Datos Específicos de Nutrición
+              </h2>
+              
+              <form class="nutritionist-form" style="display: flex; flex-direction: column; gap: 1rem;">
+                <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                  <div class="form-group" style="display: flex; flex-direction: column; gap: 0.35rem;">
+                    <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-primary);">Problemas Gastrointestinales</label>
+                    <input [(ngModel)]="specificData.problemas_gastrointestinales" name="prob_gastro" type="text" placeholder="Ej. Gastritis, colitis, reflujo" style="padding: 0.5rem; border-radius: 8px; border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-primary); font-size: 0.85rem; outline: none;" />
+                  </div>
+                  
+                  <div class="form-group" style="display: flex; flex-direction: column; gap: 0.35rem;">
+                    <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-primary);">Alergias o Intolerancias</label>
+                    <input [(ngModel)]="specificData.alergia_intolerancia" name="alergia" type="text" placeholder="Ej. Lactosa, gluten, nueces" style="padding: 0.5rem; border-radius: 8px; border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-primary); font-size: 0.85rem; outline: none;" />
+                  </div>
+                </div>
+
+                <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                  <div class="form-group" style="display: flex; flex-direction: column; gap: 0.35rem;">
+                    <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-primary);">Enfermedad o Padecimiento</label>
+                    <input [(ngModel)]="specificData.enfermedad_padecimiento" name="enfermedad" type="text" placeholder="Ej. Hipotiroidismo, Diabetes" style="padding: 0.5rem; border-radius: 8px; border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-primary); font-size: 0.85rem; outline: none;" />
+                  </div>
+
+                  <div class="form-group" style="display: flex; flex-direction: column; gap: 0.35rem;">
+                    <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-primary);">Medicamentos que consume</label>
+                    <input [(ngModel)]="specificData.medicamentos_consumo" name="meds" type="text" placeholder="Ej. Metformina, Levotiroxina" style="padding: 0.5rem; border-radius: 8px; border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-primary); font-size: 0.85rem; outline: none;" />
+                  </div>
+                </div>
+
+                <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                  <div class="form-group" style="display: flex; flex-direction: column; gap: 0.35rem;">
+                    <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-primary);">Alimentos que no le gustan</label>
+                    <input [(ngModel)]="specificData.alimentos_desagrado" name="disliked" type="text" placeholder="Ej. Hígado, cebolla" style="padding: 0.5rem; border-radius: 8px; border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-primary); font-size: 0.85rem; outline: none;" />
+                  </div>
+
+                  <div class="form-group" style="display: flex; flex-direction: column; gap: 0.35rem;">
+                    <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-primary);">Actividad Física / Deporte</label>
+                    <input [(ngModel)]="specificData.actividad_fisica" name="deporte" type="text" placeholder="Ej. Correr, Natación, Gimnasio" style="padding: 0.5rem; border-radius: 8px; border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-primary); font-size: 0.85rem; outline: none;" />
+                  </div>
+                </div>
+
+                <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                  <div class="form-group" style="display: flex; flex-direction: column; gap: 0.35rem;">
+                    <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-primary);">Días a la semana de actividad</label>
+                    <input [(ngModel)]="specificData.dias_actividad" name="dias_act" type="number" placeholder="Ej. 3" style="padding: 0.5rem; border-radius: 8px; border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-primary); font-size: 0.85rem; outline: none;" />
+                  </div>
+
+                  <div class="form-group" style="display: flex; flex-direction: column; gap: 0.35rem;">
+                    <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-primary);">Tiempo al día (minutos)</label>
+                    <input [(ngModel)]="specificData.tiempo_actividad" name="tiempo_act" type="number" placeholder="Ej. 60" style="padding: 0.5rem; border-radius: 8px; border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-primary); font-size: 0.85rem; outline: none;" />
+                  </div>
+                </div>
+
+                <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                  <div class="form-group" style="display: flex; flex-direction: column; gap: 0.35rem;">
+                    <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-primary);">Comidas principales al día</label>
+                    <input [(ngModel)]="specificData.comidas_al_dia" name="comidas" type="number" placeholder="Ej. 3" style="padding: 0.5rem; border-radius: 8px; border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-primary); font-size: 0.85rem; outline: none;" />
+                  </div>
+
+                  <div class="form-group" style="display: flex; flex-direction: column; gap: 0.35rem;">
+                    <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-primary);">Colaciones al día</label>
+                    <input [(ngModel)]="specificData.colaciones_al_dia" name="colaciones" type="number" placeholder="Ej. 2" style="padding: 0.5rem; border-radius: 8px; border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-primary); font-size: 0.85rem; outline: none;" />
+                  </div>
+                </div>
+
+                <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                  <div class="form-group" style="display: flex; flex-direction: column; gap: 0.35rem;">
+                    <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-primary);">Consumo de agua (Litros)</label>
+                    <input [(ngModel)]="specificData.consumo_agua" name="agua" type="number" placeholder="Ej. 2" style="padding: 0.5rem; border-radius: 8px; border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-primary); font-size: 0.85rem; outline: none;" />
+                  </div>
+
+                  <div class="form-group" style="display: flex; flex-direction: column; gap: 0.35rem;">
+                    <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-primary);">Tiempo de sueño (horas)</label>
+                    <input [(ngModel)]="specificData.tiempo_sueno" name="sueno" type="number" placeholder="Ej. 8" style="padding: 0.5rem; border-radius: 8px; border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-primary); font-size: 0.85rem; outline: none;" />
+                  </div>
+                </div>
+
+                <div class="form-group" style="display: flex; flex-direction: column; gap: 0.35rem;">
+                  <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-primary);">Comidas que quisiera mantener</label>
+                  <input [(ngModel)]="specificData.comidas_mantener" name="comidas_keep" type="text" placeholder="Ej. Café en la mañana, avena" style="padding: 0.5rem; border-radius: 8px; border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-primary); font-size: 0.85rem; outline: none;" />
+                </div>
+
+                <div class="form-group" style="display: flex; flex-direction: column; gap: 0.35rem;">
+                  <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-primary);">Comentarios Nutricionales</label>
+                  <textarea [(ngModel)]="specificData.comentarios" name="comentarios_nutri" placeholder="Escriba aquí notas de evolución o plan específico..." rows="3" style="padding: 0.5rem; border-radius: 8px; border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-primary); font-size: 0.85rem; resize: none; outline: none;"></textarea>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- Frecuencia de Consumo Semanal (Frecuencia alimentaria) -->
+        <div class="card" style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem;">
+          <h2 class="card-title" style="display: flex; align-items: center; gap: 0.5rem; color: var(--text-primary); font-size: 1.1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem; margin-top: 0; margin-bottom: 1.25rem;">
+            <mat-icon style="color: #10b981;">trending_up</mat-icon> Consumo a la Semana (Días por Grupo de Alimento)
+          </h2>
+          
+          <form class="weekly-consumption-form" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem;">
+            <div class="form-group" style="display: flex; flex-direction: column; gap: 0.35rem;">
+              <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-primary);">Verduras (días)</label>
+              <input [(ngModel)]="weeklyConsumption.verduras" name="w_verduras" type="number" min="0" max="7" placeholder="0-7" style="padding: 0.5rem; border-radius: 8px; border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-primary); font-size: 0.85rem; outline: none;" />
+            </div>
+
+            <div class="form-group" style="display: flex; flex-direction: column; gap: 0.35rem;">
+              <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-primary);">Frutas (días)</label>
+              <input [(ngModel)]="weeklyConsumption.frutas" name="w_frutas" type="number" min="0" max="7" placeholder="0-7" style="padding: 0.5rem; border-radius: 8px; border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-primary); font-size: 0.85rem; outline: none;" />
+            </div>
+
+            <div class="form-group" style="display: flex; flex-direction: column; gap: 0.35rem;">
+              <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-primary);">Lácteos (días)</label>
+              <input [(ngModel)]="weeklyConsumption.lacteos" name="w_lacteos" type="number" min="0" max="7" placeholder="0-7" style="padding: 0.5rem; border-radius: 8px; border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-primary); font-size: 0.85rem; outline: none;" />
+            </div>
+
+            <div class="form-group" style="display: flex; flex-direction: column; gap: 0.35rem;">
+              <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-primary);">Cereales (días)</label>
+              <input [(ngModel)]="weeklyConsumption.cereales" name="w_cereales" type="number" min="0" max="7" placeholder="0-7" style="padding: 0.5rem; border-radius: 8px; border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-primary); font-size: 0.85rem; outline: none;" />
+            </div>
+
+            <div class="form-group" style="display: flex; flex-direction: column; gap: 0.35rem;">
+              <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-primary);">Leguminosas (días)</label>
+              <input [(ngModel)]="weeklyConsumption.leguminosas" name="w_leguminosas" type="number" min="0" max="7" placeholder="0-7" style="padding: 0.5rem; border-radius: 8px; border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-primary); font-size: 0.85rem; outline: none;" />
+            </div>
+
+            <div class="form-group" style="display: flex; flex-direction: column; gap: 0.35rem;">
+              <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-primary);">Azúcar (días)</label>
+              <input [(ngModel)]="weeklyConsumption.azucar" name="w_azucar" type="number" min="0" max="7" placeholder="0-7" style="padding: 0.5rem; border-radius: 8px; border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-primary); font-size: 0.85rem; outline: none;" />
+            </div>
+
+            <div class="form-group" style="display: flex; flex-direction: column; gap: 0.35rem;">
+              <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-primary);">AOA (Origen An.)</label>
+              <input [(ngModel)]="weeklyConsumption.aoa" name="w_aoa" type="number" min="0" max="7" placeholder="0-7" style="padding: 0.5rem; border-radius: 8px; border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-primary); font-size: 0.85rem; outline: none;" />
+            </div>
+
+            <div class="form-group" style="display: flex; flex-direction: column; gap: 0.35rem;">
+              <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-primary);">Aceites s/Prot.</label>
+              <input [(ngModel)]="weeklyConsumption.aceites" name="w_aceites" type="number" min="0" max="7" placeholder="0-7" style="padding: 0.5rem; border-radius: 8px; border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-primary); font-size: 0.85rem; outline: none;" />
+            </div>
+          </form>
+          
+          <div class="form-group" style="display: flex; flex-direction: column; gap: 0.35rem; margin-top: 1rem;">
+            <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-primary);">Comentarios del Consumo Semanal</label>
+            <textarea [(ngModel)]="weeklyConsumption.comentarios" name="w_comentarios" placeholder="Frecuencia de saltarse comidas, alimentos fuera de casa..." rows="2" style="padding: 0.5rem; border-radius: 8px; border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-primary); font-size: 0.85rem; resize: none; outline: none;"></textarea>
+          </div>
+        </div>
+
+        <!-- Action Button -->
+        <div style="display: flex; justify-content: flex-end; margin-top: 1rem;">
+          <button (click)="saveNutritionRecord()" [disabled]="isSavingRecord" style="display: inline-flex; align-items: center; gap: 0.5rem; background: #10b981; color: white; border: none; padding: 0.75rem 2rem; border-radius: 12px; font-weight: bold; cursor: pointer; transition: all 0.2s;">
+            <mat-icon>save</mat-icon> {{ isSavingRecord ? 'Guardando expediente...' : 'Guardar Expediente Clínico' }}
+          </button>
+        </div>
+      </div>
+
+      <!-- PESTAÑA 2: RECORDATORIO ALIMENTARIO (24H) -->
+      <div *ngIf="activeTab === 'recordatorio'" class="tab-pane">
+        <div class="card" style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.5rem;">
+          <h2 class="card-title" style="display: flex; align-items: center; gap: 0.5rem; color: var(--text-primary); font-size: 1.1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem; margin-top: 0; margin-bottom: 1.25rem;">
+            <mat-icon style="color: #10b981;">restaurant_menu</mat-icon> Historial de Recordatorio de 24 Horas
+          </h2>
+          
+          <div class="table-container" style="overflow-x: auto; width: 100%; border-radius: 8px; border: 1px solid var(--border-color);">
+            <table class="recall-table" style="width: 100%; border-collapse: collapse; min-width: 800px; text-align: left; font-size: 0.85rem;">
+              <thead>
+                <tr style="background: rgba(0,0,0,0.02); border-bottom: 2px solid var(--border-color); color: var(--text-secondary);">
+                  <th style="padding: 0.75rem;">Fecha</th>
+                  <th style="padding: 0.75rem;">Desayuno</th>
+                  <th style="padding: 0.75rem;">Colación 1</th>
+                  <th style="padding: 0.75rem;">Comida</th>
+                  <th style="padding: 0.75rem;">Colación 2</th>
+                  <th style="padding: 0.75rem;">Cena</th>
+                  <th style="padding: 0.75rem; text-align: right;">Calorías Totales</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let entry of recall24h" style="border-bottom: 1px solid var(--border-color); color: var(--text-primary);">
+                  <td style="padding: 0.75rem; font-weight: bold; font-family: monospace; white-space: nowrap;">{{ entry.date }}</td>
+                  <td style="padding: 0.75rem; max-width: 150px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;" [title]="entry.desayuno">{{ entry.desayuno || '-' }}</td>
+                  <td style="padding: 0.75rem; max-width: 150px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;" [title]="entry.colacion1">{{ entry.colacion1 || '-' }}</td>
+                  <td style="padding: 0.75rem; max-width: 150px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;" [title]="entry.comida">{{ entry.comida || '-' }}</td>
+                  <td style="padding: 0.75rem; max-width: 150px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;" [title]="entry.colacion2">{{ entry.colacion2 || '-' }}</td>
+                  <td style="padding: 0.75rem; max-width: 150px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;" [title]="entry.cena">{{ entry.cena || '-' }}</td>
+                  <td style="padding: 0.75rem; text-align: right; font-weight: bold; color: #10b981;">{{ entry.calorias_totales || 0 }} kcal</td>
+                </tr>
+                <tr *ngIf="recall24h.length === 0">
+                  <td colspan="7" style="padding: 3rem; text-align: center; color: var(--text-secondary);">
+                    <mat-icon style="font-size: 40px; width: 40px; height: 40px; opacity: 0.5; margin-bottom: 0.5rem;">restaurant</mat-icon>
+                    <p style="margin: 0; font-weight: 500;">El paciente aún no registra recordatorios diarios en su módulo alimentario.</p>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- PESTAÑA 3: DIARIO Y CITAS (LAYOUT ORIGINAL) -->
+      <div *ngIf="activeTab === 'diario'" class="tab-pane">
+        <div class="content-grid" style="margin-bottom: 1.5rem;">
+          <!-- Left Column (General Info & Progress) -->
+          <div class="col-main">
+            <!-- EmolA AI Insights (Legacy placeholder card) -->
+            <div class="card notes-card">
+              <h2 class="card-title"><mat-icon class="text-green">description</mat-icon> Notas Adicionales del Expediente</h2>
+              <p style="white-space: pre-wrap; font-size: 0.95rem; line-height: 1.5; color: var(--text-primary);">{{ patient.notes }}</p>
+            </div>
+          </div>
+
+          <!-- Right Column (History) -->
+          <div class="col-side">
+            <!-- Session History -->
+            <div class="card">
+              <h2 class="card-title"><mat-icon class="text-green">history</mat-icon> Historial de Consultas</h2>
+              <div class="session-list">
+                <div class="session-item" *ngFor="let session of sessionHistory">
+                  <div class="session-top">
+                    <span class="date">{{session.date}} <span *ngIf="session.time">a las {{session.time}}</span></span>
+                    <span class="mood-badge" [ngClass]="(session.status || 'unknown').toLowerCase()">{{session.mood}}</span>
+                  </div>
+                  <span class="type">{{session.type}} • {{session.duration}}</span>
+                  <p class="notes" *ngIf="session.notes">{{session.notes}}</p>
+                </div>
+                
+                <div class="empty-state" *ngIf="sessionHistory.length === 0">
+                  <mat-icon>calendar_today</mat-icon>
+                  <p>No hay consultas previas con este paciente.</p>
+                </div>
+              </div>
+            </div>
+          </div> <!-- Cierre de col-side -->
+        </div> <!-- Cierre de content-grid -->
+
+        <!-- Full Width Section: Diario Emocional interactivo (Legacy) -->
+        <div class="full-width-section">
+          <div class="diary-dashboard-layout">
+            <!-- Calendario -->
+            <section class="calendar-section">
+              <div class="calendar-header">
+                <h2><mat-icon class="text-amber">book</mat-icon> Calendario de Registro</h2>
+                <div class="month-nav">
+                  <button class="nav-btn" (click)="prev()"><mat-icon>chevron_left</mat-icon></button>
+                  <p class="clickable-month" (click)="toggleMode()">
+                    {{ calendarMode === 'days' ? monthName + ' ' + year : year }}
+                    <mat-icon class="dropdown-icon">{{ calendarMode === 'days' ? 'arrow_drop_down' : 'arrow_drop_up' }}</mat-icon>
+                  </p>
+                  <button class="nav-btn" (click)="next()"><mat-icon>chevron_right</mat-icon></button>
+                </div>
+              </div>
+              
+              <!-- Vista de Días -->
+              <div class="calendar-grid" *ngIf="calendarMode === 'days'">
+                <div class="day-name">Lun</div><div class="day-name">Mar</div><div class="day-name">Mié</div>
+                <div class="day-name">Jue</div><div class="day-name">Vie</div><div class="day-name">Sáb</div>
+                <div class="day-name">Dom</div>
+                
+                <div class="calendar-day empty" *ngFor="let blank of blankDays"></div>
+                
+                <div class="calendar-day" *ngFor="let day of calendarDays" 
+                     [ngClass]="{'has-entry': getMoodForDay(day) !== null, 'has-session': hasSessionForDay(day), 'selected': selectedDate === day}"
+                     (click)="selectDate(day)"
+                     style="cursor: pointer;">
+                  <span class="date">{{ day }}</span>
+                  <div class="indicators">
+                    <span class="mood-indicator" *ngIf="getMoodForDay(day)">{{ getMoodForDay(day) }}</span>
+                    <span class="session-indicator" *ngIf="hasSessionForDay(day)"><mat-icon>restaurant</mat-icon></span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Vista de Meses -->
+              <div class="months-grid" *ngIf="calendarMode === 'months'">
+                <div class="month-box" *ngFor="let m of monthsList; let i = index"
+                     [ngClass]="{'current-month': i === currentDate.getMonth()}"
+                     (click)="selectMonth(i)">
+                  {{ m.substring(0, 3).toUpperCase() }}
+                </div>
+              </div>
+            </section>
+
+            <!-- Visor de Entradas -->
+            <section class="entries-section">
+              <div class="entries-header">
+                <h3>{{ selectedDate ? 'Actividad del ' + selectedDate + ' de ' + monthName : 'Última Actividad' }}</h3>
+                <button mat-button *ngIf="selectedDate !== null" (click)="selectDate(selectedDate)">Ver Todo</button>
+              </div>
+
+              <div class="empty-state" *ngIf="displayedDiaryEntries.length === 0 && displayedSessions.length === 0" style="padding: 2rem; text-align: center; color: var(--text-secondary);">
+                <mat-icon style="font-size: 48px; width: 48px; height: 48px; opacity: 0.5; margin-bottom: 1rem;">event_busy</mat-icon>
+                <p style="font-size: 1.1rem; font-weight: 500;">Ningún registro</p>
+                <p style="font-size: 0.9rem; opacity: 0.8;">El paciente no tiene entradas ni consultas para esta fecha.</p>
+              </div>
+
+              <div class="diary-list" *ngIf="displayedSessions.length > 0" style="margin-bottom: 1rem;">
+                 <div class="diary-item" *ngFor="let session of displayedSessions" style="border-left: 4px solid #10b981;">
+                   <div class="diary-header">
+                     <span class="date">Consulta Nutricional <span *ngIf="session.time">• {{session.time}}</span></span>
+                     <span class="mood" style="color: #10b981;"><mat-icon>restaurant</mat-icon> {{session.status === 'completed' ? 'Completada' : session.status === 'no_show' ? 'Ausente' : 'Pendiente'}}</span>
+                   </div>
+                   <p class="content" style="font-style: normal; font-weight: 500; color: #334155;">Consulta de Seguimiento Nutricional</p>
+                 </div>
+              </div>
+
+              <div class="diary-list" *ngIf="displayedDiaryEntries.length > 0">
+                 <div class="diary-item" *ngFor="let entry of displayedDiaryEntries">
+                   <div class="diary-header">
+                     <span class="date">{{entry.date}}</span>
+                     <span class="mood"><mat-icon [ngClass]="entry.moodColor">{{entry.moodIcon}}</mat-icon> {{entry.mood}}</span>
+                   </div>
+                   <p class="content">"{{entry.content}}"</p>
+                 </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>

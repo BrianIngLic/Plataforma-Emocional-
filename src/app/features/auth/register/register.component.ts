@@ -10,6 +10,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule, provideNativeDateAdapter } from '@angular/material/core';
+
 
 import { AuthService } from '../../../core/services/auth.service';
 import { ClinicalService } from '../../../core/services/clinical.service';
@@ -31,8 +34,13 @@ import { FacultyService, Faculty } from '../../../core/services/faculty.service'
     MatButtonModule,
     MatCheckboxModule,
     MatRadioModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    MatDatepickerModule,
+    MatNativeDateModule
+
+
   ],
+  providers: [provideNativeDateAdapter()],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss']
 })
@@ -126,6 +134,12 @@ export class RegisterComponent implements OnInit {
     const firstName = this.profileFormGroup.value.firstName!;
     const lastName = this.profileFormGroup.value.lastName!;
     const faculty = this.profileFormGroup.value.faculty!;
+    const fecha = this.profileFormGroup.value.fechaNacimiento;
+
+    const fechaFormateada = fecha
+      ? new Date(fecha).toISOString().split('T')[0]
+      : '';
+
     
     // Auth Service enviando faculty
     const userId = await this.authService.register(matricula, email, password, firstName, lastName, faculty);
@@ -140,7 +154,7 @@ export class RegisterComponent implements OnInit {
         correo: email,
         antecedentes_familiares: this.profileFormGroup.value.antecedentesFamiliares || '',
         sexo: this.profileFormGroup.value.sexo || '',
-        fecha_nacimiento: this.profileFormGroup.value.fechaNacimiento || '',
+        fecha_nacimiento: fechaFormateada,
         edad: this.profileFormGroup.value.fechaNacimiento ? this.calculateAge(this.profileFormGroup.value.fechaNacimiento) : 0
       };
 

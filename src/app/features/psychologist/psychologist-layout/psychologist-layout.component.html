@@ -4,13 +4,13 @@
     
     <div class="sidebar-header">
       <div class="brand">
-        <div class="logo">
-          <mat-icon>add_box</mat-icon>
-        </div>
-        <div class="brand-text">
-          <h2>Command Center</h2>
-          <p>Portal Clínico</p>
-        </div>
+        <a href="/psychologist" class="logo-link" style="display: flex; align-items: center; gap: 8px; text-decoration: none;">
+          <img src="/amati-logo.svg" alt="Amati Logo" style="width: 36px; height: 36px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));" />
+          <div class="brand-text">
+            <h2>Amati</h2>
+            <p>Psicólogo</p>
+          </div>
+        </a>
       </div>
       <button class="btn-icon hamburger" (click)="toggleSidebar()">
         <mat-icon>menu</mat-icon>
@@ -55,8 +55,8 @@
       </a>
 
       <div class="user-profile" *ngIf="currentUser">
-        <div class="avatar">
-          <mat-icon>psychology</mat-icon>
+        <div class="avatar" [style.background-image]="currentUser.avatar_url ? 'url(' + currentUser.avatar_url + ')' : ''" [style.background-size]="'cover'" [style.background-position]="'center'">
+          <mat-icon *ngIf="!currentUser.avatar_url">psychology</mat-icon>
         </div>
         <div class="user-info">
           <span class="name">{{ currentUser.name | titlecase }}</span>

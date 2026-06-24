@@ -253,3 +253,27 @@ CREATE POLICY student_read_exceptions ON public.psychologist_exceptions FOR SELE
 CREATE POLICY admin_global_exceptions ON public.psychologist_exceptions FOR ALL USING (
     public.get_auth_role() = 1
 );
+
+-- =========================================================================================
+-- 10. SUPABASE STORAGE (BUCKETS)
+-- =========================================================================================
+
+-- Crear el bucket de avatares (público)
+INSERT INTO storage.buckets (id, name, public) VALUES ('avatars', 'avatars', true) ON CONFLICT DO NOTHING;
+
+-- Política: Lectura pública de avatares
+CREATE POLICY avatar_public_read ON storage.objects FOR SELECT USING (bucket_id = 'avatars');
+
+-- Política: Los usuarios solo pueden insertar y actualizar sus propios avatares
+CREATE POLICY avatar_insert ON storage.objects FOR INSERT WITH CHECK (
+    bucket_id = 'avatars' AND auth.uid() = owner
+);
+
+CREATE POLICY avatar_update ON storage.objects FOR UPDATE USING (
+    bucket_id = 'avatars' AND auth.uid() = owner
+);
+
+CREATE POLICY avatar_delete ON storage.objects FOR DELETE USING (
+    bucket_id = 'avatars' AND auth.uid() = owner
+);
+

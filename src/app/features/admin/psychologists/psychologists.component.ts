@@ -1,5 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, registerLocaleData } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BaseChartDirective } from 'ng2-charts';
@@ -9,10 +9,14 @@ import { AdminStatsService } from '../services/admin-stats.service';
 import emailjs from '@emailjs/browser';
 import { createClient } from '@supabase/supabase-js';
 import { environment } from '../../../../environments/environment';
+import localeEs from '@angular/common/locales/es';
+
+registerLocaleData(localeEs, 'es');
 
 interface Psychologist {
   id: string;
   name: string;
+  email: string;
   faculty: string;
   patients: number;
   capacity: number;
@@ -43,6 +47,16 @@ export class PsychologistsComponent implements OnInit {
 
   selectedFilter: string = 'all';
   selectedPsychologist: Psychologist | null = null;
+  activeTab: 'profile' | 'calendar' | 'stats' = 'profile';
+  
+  // Profile Edit State
+  editForm!: FormGroup;
+  isSavingProfile = false;
+
+  // Calendar State
+  currentMonthDate = new Date();
+  calendarDays: { date: Date, isCurrentMonth: boolean, isPast: boolean, blocked: boolean, appointments: number }[] = [];
+
   
   // Registration Form state
   showAddModal = false;
@@ -53,19 +67,16 @@ export class PsychologistsComponent implements OnInit {
 
   faculties: string[] = [];
 
-  // Detail Modal Bar Chart Configuration
+  // Chart Data
   public barChartData: ChartConfiguration<'bar'>['data'] = {
-    labels: ['Completed', 'Scheduled', 'Attendance %', 'Efficiency %'],
+    labels: [ 'Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul' ],
     datasets: [
-      {
-        data: [0, 0, 0, 0],
-        backgroundColor: ['#10b981', '#3b82f6', '#f59e0b', '#8b5cf6'],
-        borderRadius: 4
-      }
+      { data: [ 65, 59, 80, 81, 56, 55, 40 ], label: 'Sesiones Completadas', backgroundColor: '#6366f1' },
+      { data: [ 28, 48, 40, 19, 86, 27, 90 ], label: 'Inasistencias', backgroundColor: '#ef4444' }
     ]
   };
 
-  public barChartOptions: ChartOptions<'bar'> = {
+  public barChartOptions: ChartConfiguration<'bar'>['options'] = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
@@ -74,11 +85,11 @@ export class PsychologistsComponent implements OnInit {
     scales: {
       x: {
         grid: { display: false },
-        ticks: { color: '#94a3b8', font: { family: 'monospace', size: 9 } }
+        ticks: { color: '#64748b', font: { family: 'monospace', size: 9 } }
       },
       y: {
-        grid: { color: 'rgba(255, 255, 255, 0.05)' },
-        ticks: { color: '#94a3b8', font: { family: 'monospace', size: 9 } }
+        grid: { color: 'rgba(0, 0, 0, 0.1)' },
+        ticks: { color: '#64748b', font: { family: 'monospace', size: 9 } }
       }
     }
   };
@@ -110,6 +121,14 @@ export class PsychologistsComponent implements OnInit {
       matricula: ['', [Validators.required]],
       cedula: ['', [Validators.required]],
       faculty: [this.faculties.length > 0 ? this.faculties[0] : '', [Validators.required]],
+      specialty: ['', [Validators.required]],
+      capacity: [35, [Validators.required, Validators.min(1), Validators.max(200)]]
+    });
+
+    this.editForm = this.fb.group({
+      firstName: ['', [Validators.required, Validators.minLength(2)]],
+      lastName: ['', [Validators.required, Validators.minLength(2)]],
+      faculty: ['', [Validators.required]],
       specialty: ['', [Validators.required]],
       capacity: [35, [Validators.required, Validators.min(1), Validators.max(200)]]
     });
@@ -168,12 +187,143 @@ export class PsychologistsComponent implements OnInit {
 
   viewDetail(p: Psychologist) {
     this.selectedPsychologist = p;
+    this.activeTab = 'profile';
+    
+    // Parse first name / last name
+    const parts = p.name.replace('Dr. ', '').split(' ');
+    const first = parts[0] || '';
+    const last = parts.slice(1).join(' ') || '';
+
+    this.editForm.patchValue({
+      firstName: first,
+      lastName: last,
+      faculty: p.faculty,
+      specialty: p.specialty,
+      capacity: p.capacity
+    });
+
+    this.generateCalendar();
     const efficiency = this.getEfficiency(p);
     this.barChartData.datasets[0].data = [p.sessionsCompleted, p.sessionsScheduled, p.attendanceRate, efficiency];
   }
 
   closeDetail() {
     this.selectedPsychologist = null;
+  }
+
+  setTab(tab: 'profile' | 'calendar' | 'stats') {
+    this.activeTab = tab;
+  }
+
+  async saveProfileChanges() {
+    if (this.editForm.invalid || !this.selectedPsychologist) return;
+    this.isSavingProfile = true;
+
+    try {
+      const { firstName, lastName, faculty, specialty, capacity } = this.editForm.value;
+      const userId = this.selectedPsychologist.id;
+
+      const { error: pError } = await this.supabase
+        .from('profiles')
+        .update({ first_name: firstName, last_name: lastName, faculty: faculty })
+        .eq('user_id', userId);
+
+      if (pError) throw pError;
+
+      const { error: sError } = await this.supabase
+        .from('psychologist_settings')
+        .update({ capacity: capacity })
+        .eq('psychologist_id', userId);
+
+      if (sError) throw sError;
+
+      // Update local memory
+      this.selectedPsychologist.name = `Dr. ${firstName} ${lastName}`;
+      this.selectedPsychologist.faculty = faculty;
+      this.selectedPsychologist.specialty = specialty;
+      this.selectedPsychologist.capacity = capacity;
+
+      alert('Perfil actualizado correctamente.');
+    } catch (err) {
+      console.error('Error guardando perfil:', err);
+      alert('Hubo un error al actualizar el perfil.');
+    } finally {
+      this.isSavingProfile = false;
+    }
+  }
+
+  async generateCalendar() {
+    if (!this.selectedPsychologist) return;
+
+    const year = this.currentMonthDate.getFullYear();
+    const month = this.currentMonthDate.getMonth();
+    
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    const startDate = new Date(firstDay);
+    startDate.setDate(startDate.getDate() - startDate.getDay()); // Sunday start
+
+    const endDate = new Date(lastDay);
+    if (endDate.getDay() !== 6) {
+      endDate.setDate(endDate.getDate() + (6 - endDate.getDay())); // Saturday end
+    }
+
+    const { data: appts } = await this.supabase
+      .from('appointments')
+      .select('scheduled_date, status')
+      .eq('psychologist_id', this.selectedPsychologist.id)
+      .eq('status', 'completed')
+      .gte('scheduled_date', startDate.toISOString())
+      .lte('scheduled_date', endDate.toISOString());
+
+    const { data: excps } = await this.supabase
+      .from('exceptions')
+      .select('date')
+      .or(`psychologist_id.eq.${this.selectedPsychologist.id},psychologist_id.is.null`)
+      .gte('date', startDate.toISOString())
+      .lte('date', endDate.toISOString());
+
+    const apptMap: Record<string, number> = {};
+    if (appts) {
+      appts.forEach((a: any) => {
+        const d = a.scheduled_date.split('T')[0];
+        apptMap[d] = (apptMap[d] || 0) + 1;
+      });
+    }
+
+    const excpSet = new Set<string>();
+    if (excps) {
+      excps.forEach((e: any) => excpSet.add(e.date.split('T')[0]));
+    }
+
+    const days = [];
+    let d = new Date(startDate);
+    const today = new Date();
+    today.setHours(0,0,0,0);
+
+    while (d <= endDate) {
+      const isStr = new Date(d.getTime() - (d.getTimezoneOffset() * 60000)).toISOString().split('T')[0];
+      days.push({
+        date: new Date(d),
+        isCurrentMonth: d.getMonth() === month,
+        isPast: d < today,
+        blocked: excpSet.has(isStr),
+        appointments: apptMap[isStr] || 0
+      });
+      d.setDate(d.getDate() + 1);
+    }
+
+    this.calendarDays = days;
+  }
+
+  prevMonth() {
+    this.currentMonthDate = new Date(this.currentMonthDate.getFullYear(), this.currentMonthDate.getMonth() - 1, 1);
+    this.generateCalendar();
+  }
+
+  nextMonth() {
+    this.currentMonthDate = new Date(this.currentMonthDate.getFullYear(), this.currentMonthDate.getMonth() + 1, 1);
+    this.generateCalendar();
   }
 
   openAddModal() {
@@ -231,13 +381,14 @@ export class PsychologistsComponent implements OnInit {
 
         if (userError) console.error('Error insertando usuario en BD:', userError.message);
 
-        // 3. Insertamos en public.profiles (Añadimos facultad y cédula)
+        // 3. Insertamos en public.profiles (Añadimos facultad, cédula y email)
         const { error: profileError } = await this.supabase.from('profiles').insert({
           user_id: userId,
           first_name: firstName,
           last_name: lastName,
           faculty: faculty,
-          cedula: cedula
+          cedula: cedula,
+          email: email
         });
 
         if (profileError) console.error('Error insertando perfil en BD:', profileError.message);
@@ -254,6 +405,7 @@ export class PsychologistsComponent implements OnInit {
       const newPsych: Psychologist = {
         id: 'p_new_' + Math.random().toString(36).substr(2, 9),
         name: `Dr. ${firstName} ${lastName}`,
+        email: email,
         faculty: faculty,
         patients: 0,
         capacity: Number(capacity),

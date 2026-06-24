@@ -65,7 +65,7 @@ export class ChatService {
         this.messagesSignal.set([{
           id: 'welcome',
           role: 'assistant',
-          content: '¡Hola! Soy EmolA, tu asistente emocional. ¿Cómo te sientes hoy?',
+          content: '¡Hola! Soy Amati, tu asistente emocional. ¿Cómo te sientes hoy?',
           timestamp: new Date()
         }]);
       }
@@ -93,7 +93,7 @@ export class ChatService {
         msgs.push({
           id: 'welcome',
           role: 'assistant',
-          content: '¡Hola! Soy EmolA, tu asistente emocional. ¿Cómo te sientes hoy?',
+          content: '¡Hola! Soy Amati, tu asistente emocional. ¿Cómo te sientes hoy?',
           timestamp: new Date()
         });
       }
@@ -124,7 +124,7 @@ export class ChatService {
       this.messagesSignal.set([{
         id: 'welcome',
         role: 'assistant',
-        content: '¡Hola! Soy EmolA, tu asistente emocional. ¿Cómo te sientes hoy?',
+        content: '¡Hola! Soy Amati, tu asistente emocional. ¿Cómo te sientes hoy?',
         timestamp: new Date()
       }]);
     }

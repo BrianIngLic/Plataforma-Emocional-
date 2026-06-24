@@ -72,6 +72,18 @@ export class RegisterComponent implements OnInit {
 
   isSubmitting = false;
 
+  showPrivacyModal = false;
+
+  openPrivacyModal(event: Event) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.showPrivacyModal = true;
+  }
+
+  closePrivacyModal() {
+    this.showPrivacyModal = false;
+  }
+
   async ngOnInit() {
     this.faculties = await this.facultyService.getFaculties();
     this.filteredFaculties = this.faculties;

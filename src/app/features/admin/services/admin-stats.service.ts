@@ -181,50 +181,92 @@ export class AdminStatsService {
   async getPsychologistsWithStats(): Promise<any[]> {
     const supabase = this.supabaseService.supabase;
     
-    // Obtener usuarios con rol 3 (Psicólogos), sus perfiles y configuración
+    // 1. Obtener usuarios con rol 3 (Psicólogos), sus perfiles y configuración
     const { data: users, error } = await supabase
       .from('users')
       .select(`
         id, 
         role_id,
-        profiles(first_name, last_name, faculty),
+        profiles(first_name, last_name, faculty, email),
         psychologist_settings(capacity)
       `)
       .eq('role_id', 3);
 
-    console.log('[DEBUG] Consulta de Psicólogos (role_id=3):', users);
-    if (error) console.error('[DEBUG] Error en consulta:', error);
-
     if (error || !users) return [];
 
-    // En el futuro: Cruzar con appointments para calcular citas reales
-    // Por ahora simularemos los cálculos derivados usando la capacidad
+    // 2. Obtener la cantidad de pacientes asignados a cada psicólogo
+    const { data: records } = await supabase
+      .from('student_clinical_records')
+      .select('primary_psychologist_id')
+      .not('primary_psychologist_id', 'is', null);
+
+    const patientsMap: Record<string, number> = {};
+    if (records) {
+      records.forEach(r => {
+        if (r.primary_psychologist_id) {
+          patientsMap[r.primary_psychologist_id] = (patientsMap[r.primary_psychologist_id] || 0) + 1;
+        }
+      });
+    }
+
+    // 3. Obtener citas para calcular sesiones y asistencia
+    const { data: appointments } = await supabase
+      .from('appointments')
+      .select('psychologist_id, status')
+      .not('psychologist_id', 'is', null);
+
+    const apptMap: Record<string, { scheduled: number; completed: number; canceled: number; total: number }> = {};
+    if (appointments) {
+      appointments.forEach(a => {
+        if (a.psychologist_id) {
+          if (!apptMap[a.psychologist_id]) {
+            apptMap[a.psychologist_id] = { scheduled: 0, completed: 0, canceled: 0, total: 0 };
+          }
+          apptMap[a.psychologist_id].total += 1;
+          if (a.status === 'scheduled') apptMap[a.psychologist_id].scheduled += 1;
+          if (a.status === 'completed') apptMap[a.psychologist_id].completed += 1;
+          if (a.status === 'canceled') apptMap[a.psychologist_id].canceled += 1;
+        }
+      });
+    }
+
     return users.map(u => {
       const p = Array.isArray(u.profiles) ? u.profiles[0] : u.profiles;
       const s = Array.isArray(u.psychologist_settings) ? u.psychologist_settings[0] : u.psychologist_settings;
       
       const capacity = s?.capacity || 40;
-      const patients = Math.floor(Math.random() * capacity); // Temporally mock until patients are assigned
+      const patients = patientsMap[u.id] || 0;
       const pct = patients / capacity;
 
       let alert = 'none';
       if (pct > 0.85) alert = 'overload';
       else if (pct < 0.3) alert = 'few-patients';
+
+      const stats = apptMap[u.id] || { scheduled: 0, completed: 0, canceled: 0, total: 0 };
       
+      // Sesiones históricas que determinan eficiencia y asistencia
+      const pastSessions = stats.completed + stats.canceled;
+      const attendanceRate = pastSessions > 0 ? Math.round((stats.completed / pastSessions) * 100) : 100;
+      
+      // Evitar división por cero en el frontend para calcular "Eficiencia"
+      const sessionsScheduled = pastSessions > 0 ? pastSessions : 1;
+      const sessionsCompleted = pastSessions > 0 ? stats.completed : 1;
+
       return {
         id: u.id,
         name: `Dr. ${p?.first_name || ''} ${p?.last_name || ''}`.trim(),
+        email: p?.email || 'Sin correo registrado',
         faculty: p?.faculty || 'Sin asignar',
         patients: patients,
         capacity: capacity,
-        attendanceRate: 90 + Math.floor(Math.random() * 10),
-        sessionsCompleted: patients * 4,
-        sessionsScheduled: patients * 4 + Math.floor(Math.random() * 5),
-        evaluation: 4.0 + Math.random(),
+        attendanceRate: attendanceRate,
+        sessionsCompleted: sessionsCompleted,
+        sessionsScheduled: sessionsScheduled,
+        evaluation: 4.0 + Number(Math.random().toFixed(1)), // MOCK: Pendiente de implementar calificaciones
         alert: alert,
         specialty: 'General',
         avgSessionDuration: 50,
-        dropouts: Math.floor(Math.random() * 3)
+        dropouts: 0
       };
     });
   }

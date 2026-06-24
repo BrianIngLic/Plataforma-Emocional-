@@ -19,14 +19,15 @@ El sistema está compuesto por un Frontend Angular, un Backend PostgREST (Postgr
 
 ### Skill 2: Autenticación y Onboarding Clínico
 - Crear módulos Angular de login y registro.
+- Módulo de Recuperación de Contraseña (Forgot / Reset Password).
 - En el registro del estudiante, incluir el paso para contestar el cuestionario de afecciones conocidas (Depresión, Ansiedad, etc.) que se enlazará con la IA.
 
-### Skill 3: EmolA Chat (Estudiante)
+### Skill 3: Amati Chat (Estudiante)
 - Vista en modo oscuro.
 - Conexión HTTPS segura con el núcleo IA (FastAPI).
 - Interfaz de historial de chats a la izquierda, área principal de chat a la derecha.
 
-### Skill 4: NutriMind (Módulo Alimentario)
+### Skill 4: NutriMind (  Módulo Alimentario)
 - Dashboard con barras de progreso para proteínas, grasas y carbohidratos.
 - Listado de comidas agrupadas por tiempo (desayuno, etc.).
 
@@ -36,7 +37,7 @@ El sistema está compuesto por un Frontend Angular, un Backend PostgREST (Postgr
 - **Visor Clínico Integral (Perfil):** Pantalla de detalle del paciente (basado en `PatientProfile.tsx`) que incluye:
   - Información de contacto y clínica (Diagnóstico, Tratamiento, Medicamentos).
   - Gráfica de progreso (ej. PHQ-9).
-  - **Superpoder EmolA:** Interfaz donde el psicólogo puede leer el historial de chat de la IA con el estudiante.
+  - **Superpoder Amati:** Interfaz donde el psicólogo puede leer el historial de chat de la IA con el estudiante.
 - **Agenda Clínica:** Pantalla dedicada con vista de calendario para organizar, agendar y cancelar citas de los pacientes basadas en recomendaciones del núcleo IA.
 
 ### Skill 6: Mi Diario (Personal)
@@ -44,7 +45,18 @@ El sistema está compuesto por un Frontend Angular, un Backend PostgREST (Postgr
 - Integración visual alineada al ecosistema (Glassmorphism / Modo Dinámico).
 - Componente de "Mood Tracker" (Registro de Emociones).
 
+### Skill 7: Gestión de Perfil y Avatares (Cross-Role)
+- Módulo transversal disponible para Estudiantes, Psicólogos y Administradores.
+- Capacidad de subir una fotografía local (Profile Picture) o seleccionar un Avatar predeterminado.
+- Integración con **Supabase Storage** para el alojamiento seguro de las imágenes y actualización del registro en la tabla `profiles`.
+- Reemplazo global de los avatares genéricos de texto por las imágenes cargadas en el sidebar y menús de navegación superior.
+
 ### Skill 8: Módulo de Administración (Core System)
 - Interfaz exclusiva para el rol 'Admin'.
 - Panel de control para gestionar altas, bajas y modificaciones del personal clínico (Psicólogos).
 - Asignación manual de pacientes (Estudiantes) a psicólogos específicos (opcional, dependiendo de la política de la clínica).
+
+### Skill 9: RoleGuard Security (Barrera de Roles)
+- Implementación de seguridad transversal en Angular (Route Guards).
+- Restricción de acceso basado en el `role` del usuario (Estudiante, Psicólogo, Admin).
+- Redirección automática al módulo o dashboard correspondiente al rol real en caso de un intento de acceso no autorizado, protegiendo la confidencialidad de la clínica.

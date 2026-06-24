@@ -14,6 +14,14 @@ export const AUTH_ROUTES: Routes = [
     loadComponent: () => import('./force-change-password/force-change-password.component').then(m => m.ForceChangePasswordComponent)
   },
   {
+    path: 'forgot-password',
+    loadComponent: () => import('./forgot-password/forgot-password.component').then(m => m.ForgotPasswordComponent)
+  },
+  {
+    path: 'reset-password',
+    loadComponent: () => import('./reset-password/reset-password.component').then(m => m.ResetPasswordComponent)
+  },
+  {
     path: '',
     redirectTo: 'login',
     pathMatch: 'full'

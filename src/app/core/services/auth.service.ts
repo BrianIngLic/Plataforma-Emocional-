@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
   providedIn: 'root'
 })
 export class AuthService {
-  public currentUser = signal<{ matricula: string, role: string, id: string, name: string, faculty?: string, requires_password_change?: boolean } | null>(null);
+  public currentUser = signal<{ matricula: string, role: string, id: string, name: string, faculty?: string, requires_password_change?: boolean, avatar_url?: string } | null>(null);
   public isLoggedIn = signal<boolean>(false);
 
   constructor(
@@ -34,7 +34,7 @@ export class AuthService {
     
     let { data, error } = await this.supabaseService.supabase
       .from('users')
-      .select('matricula, role_id, requires_password_change, profiles(first_name, last_name, faculty)')
+      .select('matricula, role_id, requires_password_change, profiles(first_name, last_name, faculty, avatar_url)')
       .eq('id', userId)
       .single();
 
@@ -46,7 +46,7 @@ export class AuthService {
     if (error && (error.message.includes('faculty') || error.code === 'PGRST200')) {
       const fallback = await this.supabaseService.supabase
         .from('users')
-        .select('matricula, role_id, profiles(first_name, last_name)')
+        .select('matricula, role_id, profiles(first_name, last_name, avatar_url)')
         .eq('id', userId)
         .single();
       data = fallback.data as any;
@@ -61,12 +61,15 @@ export class AuthService {
 
       let fullName = 'Usuario';
       let facultyName = '';
+      let avatarUrl = '';
+      
       if (data.profiles) {
         // @ts-ignore
         const p = Array.isArray(data.profiles) ? data.profiles[0] : data.profiles;
         if (p) {
           fullName = `${p.first_name || ''} ${p.last_name || ''}`.trim();
           facultyName = p.faculty || '';
+          avatarUrl = p.avatar_url || '';
         }
       }
 
@@ -76,7 +79,8 @@ export class AuthService {
         id: userId,
         name: fullName || 'Usuario',
         faculty: facultyName,
-        requires_password_change: data.requires_password_change === true
+        requires_password_change: data.requires_password_change === true,
+        avatar_url: avatarUrl
       });
       this.isLoggedIn.set(true);
     } else if (error) {
@@ -184,6 +188,38 @@ export class AuthService {
 
     });
     this.isLoggedIn.set(true);
+  }
+
+  async requestPasswordReset(email: string): Promise<boolean> {
+    try {
+      const { error } = await this.supabaseService.supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: window.location.origin + '/auth/reset-password',
+      });
+      if (error) {
+        console.error('Error solicitando reset de contraseña:', error.message);
+        return false;
+      }
+      return true;
+    } catch (e) {
+      console.error('Excepción al solicitar reset:', e);
+      return false;
+    }
+  }
+
+  async updatePassword(newPass: string): Promise<boolean> {
+    try {
+      const { error } = await this.supabaseService.supabase.auth.updateUser({
+        password: newPass
+      });
+      if (error) {
+        console.error('Error actualizando contraseña:', error.message);
+        return false;
+      }
+      return true;
+    } catch (e) {
+      console.error('Excepción al actualizar contraseña:', e);
+      return false;
+    }
   }
 
   async logout(): Promise<void> {

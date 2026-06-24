@@ -30,7 +30,7 @@ export class PsychologistDashboardComponent implements OnInit {
   ];
 
   alerts = [
-    { id: 1, level: "critical", patient: "Sara Lindqvist", message: "Ideación de autolesión detectada por EmolA en el diario.", time: "08:42" },
+    { id: 1, level: "critical", patient: "Sara Lindqvist", message: "Ideación de autolesión detectada por Amati en el diario.", time: "08:42" },
     { id: 2, level: "warning", patient: "Marco Ferretti", message: "Faltó a 3 citas seguidas. Sin respuesta.", time: "Ayer" },
     { id: 3, level: "warning", patient: "Lena Braun", message: "Su puntuación PHQ-9 aumentó 8 puntos.", time: "Ayer" },
     { id: 4, level: "info", patient: "David Okafor", message: "Cuestionario de ansiedad pre-sesión completado.", time: "Hace 2h" }

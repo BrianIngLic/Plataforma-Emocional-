@@ -1,70 +1,161 @@
-<div class="diary-layout">
-  <!-- Columna Izquierda: Calendario -->
-  <section class="calendar-section">
-    <div class="calendar-header">
-      <h2>Calendario Emocional</h2>
-      <p>{{ monthName }} {{ year }}</p>
-    </div>
-    
-    <div class="calendar-grid">
-      <div class="day-name">Lun</div><div class="day-name">Mar</div><div class="day-name">Mié</div>
-      <div class="day-name">Jue</div><div class="day-name">Vie</div><div class="day-name">Sáb</div>
-      <div class="day-name">Dom</div>
-      
-      <!-- Offsets -->
-      <div class="calendar-day empty" *ngFor="let blank of blankDays"></div>
-      
-      <!-- Days -->
-      <div class="calendar-day" *ngFor="let day of calendarDays" [ngClass]="{'has-entry': getMoodForDay(day) !== null}">
-        <span class="date">{{ day }}</span>
-        <!-- Indicador de estado de ánimo dinámico -->
-        <span class="mood-indicator" *ngIf="getMoodForDay(day)">{{ getMoodForDay(day) }}</span>
+<div class="diary-therapeutic-layout">
+  <!-- Top Banner de Contención Emocional -->
+  <div class="therapeutic-banner">
+    <div class="banner-content">
+      <div class="avatar-calm">🌱</div>
+      <div class="affirmation-area">
+        <span class="welcome-title">Refugio de Bienestar Amati</span>
+        <p class="dynamic-text">“{{ dynamicAffirmation }}”</p>
       </div>
     </div>
+    <div class="gamification-header">
+      <div class="streak-box" title="Tu Racha de Autocuidado">
+        <span class="fire-icon">🔥</span>
+        <div class="streak-info">
+          <strong>{{ streakDays }} Días seguidos</strong>
+          <small *ngIf="streakShieldActive" class="shield-text">🛡️ Escudo de descanso activo</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pestañas de Navegación Terapéutica -->
+  <div class="therapeutic-tabs">
+    <button class="tab-btn" [class.active]="activeTab === 'write'" (click)="activeTab = 'write'">
+      <mat-icon>edit_note</mat-icon> Diario Emocional
+    </button>
+    <button class="tab-btn" [class.active]="activeTab === 'breathe'" (click)="activeTab = 'breathe'">
+      <mat-icon>self_improvement</mat-icon> Espacio de Respiración
+    </button>
+    <button class="tab-btn" [class.active]="activeTab === 'badges'" (click)="activeTab = 'badges'">
+      <mat-icon>workspace_premium</mat-icon> Mis Logros Emocionales
+    </button>
+  </div>
+
+  <!-- MAIN CONTAINER CON LAS 3 VISTAS -->
+  <div class="tab-content-container">
     
-    <div class="history-list">
-      <h3>Historial Reciente</h3>
-      <div class="history-card" *ngFor="let entry of entries()">
-        <div class="card-header">
-          <span class="date">{{ entry.date | date:'dd/MM/yyyy HH:mm' }}</span>
-          <div class="moods">
-            <span *ngFor="let mood of entry.moods" class="mood-chip">{{ mood }}</span>
+    <!-- VISTA 1: DIARIO Y CALENDARIO -->
+    <div class="diary-main-grid" *ngIf="activeTab === 'write'">
+      <!-- Columna Izquierda: Calendario e Historial unificados en una sola tarjeta premium -->
+      <section class="calendar-section sidebar-card">
+        <div class="calendar-header">
+          <h2>Calendario Emocional</h2>
+          <p>{{ monthName }} {{ year }}</p>
+        </div>
+        
+        <div class="calendar-grid">
+          <div class="day-name">Lun</div><div class="day-name">Mar</div><div class="day-name">Mié</div>
+          <div class="day-name">Jue</div><div class="day-name">Vie</div><div class="day-name">Sáb</div>
+          <div class="day-name">Dom</div>
+          
+          <!-- Offsets -->
+          <div class="calendar-day empty" *ngFor="let blank of blankDays"></div>
+          
+          <!-- Days -->
+          <div class="calendar-day" *ngFor="let day of calendarDays" [ngClass]="{'has-entry': getMoodForDay(day) !== null}">
+            <span class="date">{{ day }}</span>
+            <span class="mood-indicator" *ngIf="getMoodForDay(day)">{{ getMoodForDay(day) }}</span>
           </div>
         </div>
-        <p class="content">{{ entry.content }}</p>
+        
+        <hr class="section-divider" />
+
+        <div class="history-list">
+          <h3>Historial Reciente</h3>
+          <div class="history-card" *ngFor="let entry of entries()">
+            <div class="card-header">
+              <span class="date">{{ entry.date | date:'dd/MM/yyyy HH:mm' }}</span>
+              <div class="moods">
+                <span *ngFor="let mood of entry.moods" class="mood-chip">{{ mood }}</span>
+              </div>
+            </div>
+            <p class="content">{{ entry.content }}</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Columna Derecha: Editor Premium -->
+      <section class="editor-section">
+        <div class="editor-container">
+          <h2>¿Cómo te sientes hoy?</h2>
+          <p class="subtitle">Selecciona las emociones que mejor te describen en este momento (puedes marcar varias).</p>
+          
+          <div class="mood-tracker">
+            <button class="mood-btn" 
+                    *ngFor="let mood of availableMoods" 
+                    [class.selected]="selectedMoods.includes(mood.icon + ' ' + mood.label)"
+                    (click)="toggleMood(mood.label, mood.icon)">
+              <span class="icon">{{ mood.icon }}</span>
+              <span class="label">{{ mood.label }}</span>
+            </button>
+          </div>
+
+          <div class="text-editor">
+            <textarea [(ngModel)]="diaryContent" 
+                      placeholder="Escribe tus pensamientos aquí. Este es un espacio seguro y confidencial para ti..."></textarea>
+          </div>
+          
+          <div class="editor-actions">
+            <p class="privacy-note">
+              <mat-icon>lock</mat-icon> <span>Tu diario es privado y analizado por IA. Solo en alto riesgo se alertará a tu psicólogo para cuidarte.</span>
+            </p>
+            <button mat-flat-button color="primary" class="save-btn" (click)="saveDiary()">
+              Guardar Entrada
+            </button>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- VISTA 2: ESPACIO DE RESPIRACIÓN Y CALMA -->
+    <div class="breathe-container" *ngIf="activeTab === 'breathe'">
+      <div class="breathe-card">
+        <h2>Regulación Emocional y Calma</h2>
+        <p class="breathe-desc">La respiración consciente estimula el nervio vago, reduciendo los niveles de cortisol y deteniendo el ciclo de la ansiedad en pocos minutos.</p>
+        
+        <div class="breathe-circle-wrapper" (click)="startBreathing()">
+          <div class="breathe-ring" [ngClass]="breathePhase"></div>
+          <div class="breathe-center">
+            <span class="action-text">{{ isBreathing ? 'Detener' : 'Iniciar' }}</span>
+          </div>
+        </div>
+
+        <div class="phase-display">
+          <h3>{{ breatheText }}</h3>
+        </div>
+
+        <div class="breathe-instructions" *ngIf="!isBreathing">
+          <div class="inst-step"><span>1</span> Ponte en una postura cómoda y afloja los hombros.</div>
+          <div class="inst-step"><span>2</span> Al presionar Iniciar, el círculo se expandirá para indicar la inhalación.</div>
+          <div class="inst-step"><span>3</span> Mantén el aire cuando el círculo brille, y exhala al contraerse.</div>
+        </div>
       </div>
     </div>
-  </section>
 
-  <!-- Columna Derecha: Editor -->
-  <section class="editor-section">
-    <div class="editor-container">
-      <h2>¿Cómo te sientes hoy?</h2>
-      <p class="subtitle">Selecciona las emociones que mejor te describen en este momento (puedes marcar varias).</p>
-      
-      <div class="mood-tracker">
-        <button class="mood-btn" 
-                *ngFor="let mood of availableMoods" 
-                [class.selected]="selectedMoods.includes(mood.icon + ' ' + mood.label)"
-                (click)="toggleMood(mood.label, mood.icon)">
-          <span class="icon">{{ mood.icon }}</span>
-          <span class="label">{{ mood.label }}</span>
-        </button>
-      </div>
-
-      <div class="text-editor">
-        <textarea [(ngModel)]="diaryContent" 
-                  placeholder="Escribe tus pensamientos aquí. Este es un espacio seguro para ti..."></textarea>
+    <!-- VISTA 3: LOGROS EMOCIONALES Y GAMIFICACIÓN -->
+    <div class="badges-container" *ngIf="activeTab === 'badges'">
+      <div class="badges-header">
+        <h2>Insignias de Autocuidado</h2>
+        <p>En Amati no hay fallas ni presiones. Cada paso que das hacia tu bienestar es digno de celebrarse.</p>
       </div>
       
-      <div class="editor-actions">
-        <p class="privacy-note">
-          <mat-icon>lock</mat-icon> Tu diario es analizado por IA y es privado. Solo en casos de alto riesgo clínico se alertará al psicólogo para cuidarte.
-        </p>
-        <button mat-flat-button color="primary" class="save-btn" (click)="saveDiary()">
-          Guardar Entrada
-        </button>
+      <div class="badges-grid">
+        <div class="badge-card" *ngFor="let b of badges" [class.unlocked]="b.unlocked">
+          <div class="badge-icon-wrapper">
+            <span class="badge-emoji">{{ b.icon }}</span>
+            <div class="lock-overlay" *ngIf="!b.unlocked"><mat-icon>lock</mat-icon></div>
+          </div>
+          <div class="badge-info">
+            <h3>{{ b.title }}</h3>
+            <p>{{ b.desc }}</p>
+            <span class="status-badge" [class.achieved]="b.unlocked">
+              {{ b.unlocked ? '✨ ¡Conseguido!' : '🔒 Por descubrir' }}
+            </span>
+          </div>
+        </div>
       </div>
     </div>
-  </section>
+
+  </div>
 </div>

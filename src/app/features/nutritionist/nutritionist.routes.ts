@@ -8,19 +8,23 @@ export const NUTRITIONIST_ROUTES: Routes = [
     children: [
       {
         path: 'dashboard',
-        loadComponent: () => import('./dashboard/dashboard.component').then(m => m.NutritionistDashboardComponent)
+        loadComponent: () => import('./dashboard/dashboard.component').then(m => m.NutritionistDashboardComponent),
+        data: { animation: 'DashboardPage' }
       },
       {
         path: 'pacientes',
-        loadComponent: () => import('./pacientes/pacientes.component').then(m => m.Pacientes)
+        loadComponent: () => import('./pacientes/pacientes.component').then(m => m.Pacientes),
+        data: { animation: 'PacientesPage' }
       },
       {
         path:'pacientes/:id',
-        loadComponent: () => import('./perfil-paciente/perfil-paciente.component').then(m => m.PerfilPaciente)
+        loadComponent: () => import('./perfil-paciente/perfil-paciente.component').then(m => m.PerfilPaciente),
+        data: { animation: 'PerfilPacientePage' }
       },
       {
         path: 'agenda',
-        loadComponent: () => import('./agenda/agenda.component').then(m => m.Agenda)
+        loadComponent: () => import('./agenda/agenda.component').then(m => m.Agenda),
+        data: { animation: 'AgendaPage' }
       },
       {
         path: 'settings',

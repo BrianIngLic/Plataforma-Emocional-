@@ -58,7 +58,8 @@ export class Pacientes implements OnInit{
         const conditions = recordObj?.known_conditions;
         const diagnosis = conditions && conditions.length > 0 ? conditions.join(', ') : "Evaluación Pendiente";
         const assignedId = recordObj?.primary_nutritionist_id || null;
-
+        console.log('¿Coinciden?:', assignedId === this.currentUserId);
+        
         return {
           id: u.id,
           matricula: u.matricula,
@@ -115,6 +116,7 @@ export class Pacientes implements OnInit{
 
   get filteredGlobalPatients() {
     const term = this.globalSearchTerm.toLowerCase();
+
     return this.allPatients.filter(p => 
       !p.isAssigned && (
         `${p.firstName} ${p.lastName}`.toLowerCase().includes(term) ||

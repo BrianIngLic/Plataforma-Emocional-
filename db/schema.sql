@@ -33,14 +33,23 @@ CREATE TABLE public.users (
 -- =========================================================================================
 -- PERFILES
 -- =========================================================================================
+
 CREATE TABLE public.profiles (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
     first_name TEXT NOT NULL,
     last_name TEXT NOT NULL,
+    faculty TEXT,
+    programa_educativo TEXT,
+    celular VARCHAR(15),
+    antecedentes_familiares TEXT,
+    sexo VARCHAR(20),
+    fecha_nacimiento DATE,
     avatar_url TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     UNIQUE(user_id)
 );
+
 
 -- =========================================================================================
 -- CAMPUS & FACULTADES

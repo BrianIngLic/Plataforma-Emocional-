@@ -20,9 +20,13 @@ interface ChatMessage {
   imports: [CommonModule, MatIconModule, MatProgressSpinnerModule],
   template: `
     <div class="dashboard-container" [ngClass]="{'chat-mode': !loading && !isUnlocked}">
-      <div *ngIf="loading" class="loading-state">
-        <mat-spinner diameter="40"></mat-spinner>
-        <p>Verificando expediente...</p>
+      <div *ngIf="loading" class="amati-loading-container">
+        <div class="amati-loader-wrapper">
+          <div class="spinner-ring"></div>
+          <img src="/amati-logo.svg" alt="Amati Logo" class="amati-logo-pulse" />
+        </div>
+        <h3 class="loading-title">Verificando expediente...</h3>
+        <p class="loading-subtitle">Analizando métricas nutricionales y correlación emocional</p>
       </div>
 
       <!-- ESTADO 1: DESBLOQUEADO (MÓDULO PRINCIPAL) -->

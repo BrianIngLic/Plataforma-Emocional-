@@ -126,8 +126,13 @@
   </div>
 
   <ng-template #spinner>
-    <div class="spinner-container">
-      <p>Consultando disponibilidad en tiempo real...</p>
+    <div class="amati-loading-container">
+      <div class="amati-loader-wrapper">
+        <div class="spinner-ring"></div>
+        <img src="/amati-logo.svg" alt="Amati Logo" class="amati-logo-pulse" />
+      </div>
+      <h3 class="loading-title">Consultando disponibilidad en tiempo real...</h3>
+      <p class="loading-subtitle">Sincronizando horarios con la Jefatura de Psicología</p>
     </div>
   </ng-template>
 

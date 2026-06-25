@@ -4,9 +4,13 @@
     <mat-icon>arrow_back</mat-icon> Volver al Directorio
   </button>
 
-  <div *ngIf="loading" class="loading-state" style="text-align: center; padding: 4rem; color: var(--text-secondary);">
-    <mat-icon style="animation: pulse 2s infinite; font-size: 40px; width: 40px; height: 40px; margin-bottom: 1rem;">hourglass_empty</mat-icon>
-    <p>Descifrando expediente clínico...</p>
+  <div *ngIf="loading" class="loading-state amati-loading-container">
+    <div class="amati-loader-wrapper">
+      <div class="spinner-ring"></div>
+      <img src="/amati-logo.svg" alt="Amati Logo" class="amati-logo-pulse" />
+    </div>
+    <h3 class="loading-title">Descifrando expediente clínico...</h3>
+    <p class="loading-subtitle">Desencriptando historial confidencial...</p>
   </div>
 
   <ng-container *ngIf="!loading && patient">

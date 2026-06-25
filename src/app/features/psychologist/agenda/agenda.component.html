@@ -82,9 +82,13 @@
         <p class="subtitle">{{ selectedDate | date:'longDate' }}</p>
       </div>
 
-      <div class="loading-state" *ngIf="isLoading">
-        <div class="spinner"></div>
-        <p>Sincronizando agenda...</p>
+      <div class="amati-loading-container" *ngIf="isLoading">
+        <div class="amati-loader-wrapper">
+          <div class="spinner-ring"></div>
+          <img src="/amati-logo.svg" alt="Amati Logo" class="amati-logo-pulse" />
+        </div>
+        <h3 class="loading-title">Sincronizando agenda...</h3>
+        <p class="loading-subtitle">Obteniendo citas y evaluaciones de triaje IA</p>
       </div>
 
       <div class="daily-content" *ngIf="!isLoading">

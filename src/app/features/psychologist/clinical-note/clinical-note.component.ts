@@ -42,8 +42,13 @@ import { SupabaseService } from '../../../core/services/supabase.service';
 
         <hr class="divider">
 
-        <div *ngIf="loading" class="loading-state">
-          <mat-icon class="spinner">autorenew</mat-icon> Cargando expediente...
+        <div *ngIf="loading" class="amati-loading-container">
+          <div class="amati-loader-wrapper">
+            <div class="spinner-ring"></div>
+            <img src="/amati-logo.svg" alt="Amati Logo" class="amati-logo-pulse" />
+          </div>
+          <h3 class="loading-title">Cargando expediente...</h3>
+          <p class="loading-subtitle">Accediendo a notas clínicas e historial confidencial</p>
         </div>
 
         <ng-container *ngIf="!loading && appointment && patient">

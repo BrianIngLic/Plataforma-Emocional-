@@ -8,6 +8,7 @@ export interface DiaryEntry {
   date: string;
   content: string;
   moods: string[];
+  sleepHours?: number | null;
   highRisk: boolean;
 }
 
@@ -42,13 +43,14 @@ export class DiaryService {
         date: row.created_at,
         content: this.cryptoService.decrypt(row.content), // Desciframos el contenido
         moods: row.moods || [],
+        sleepHours: row.sleep_hours || null,
         highRisk: row.high_risk
       }));
       this.entriesSignal.set(parsedEntries);
     }
   }
 
-  async saveEntry(content: string, moods: string[]) {
+  async saveEntry(content: string, moods: string[], sleepHours: number | null = null) {
     const user = this.authService.currentUser();
     if (!user) return;
 
@@ -66,6 +68,7 @@ export class DiaryService {
         student_id: user.id,
         content: encryptedContent,
         moods: moods,
+        sleep_hours: sleepHours,
         high_risk: isHighRisk
       })
       .select()
@@ -77,6 +80,7 @@ export class DiaryService {
         date: data.created_at,
         content: content, // Mantenemos el texto plano en la UI actual
         moods: data.moods,
+        sleepHours: data.sleep_hours || sleepHours,
         highRisk: data.high_risk
       };
       

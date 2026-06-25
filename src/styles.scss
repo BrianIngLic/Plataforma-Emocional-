@@ -148,3 +148,25 @@ body {
   100% { transform: scale(0.95); filter: drop-shadow(0 0 8px rgba(139, 92, 246, 0.3)); }
 }
 
+/* ==========================================================================
+   SMOOTH PANEL TRANSITIONS (PREMIUM MICRO-ANIMATION)
+   ========================================================================== */
+.main-content > *,
+.content-body > * {
+  animation: panelFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) both;
+  display: block;
+  width: 100%;
+}
+
+@keyframes panelFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.99);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+

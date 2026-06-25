@@ -247,6 +247,46 @@ AS $$
   SELECT role_id FROM public.users WHERE id = auth.uid();
 $$;
 
+-- Función RPC Segura para que el Admin (Jefatura) consulte psicólogos y correos de auth.users
+-- Elimina por completo la necesidad de guardar el correo en public.profiles
+CREATE OR REPLACE FUNCTION public.get_admin_psychologists()
+RETURNS TABLE (
+    id UUID,
+    role_id INTEGER,
+    matricula VARCHAR,
+    first_name TEXT,
+    last_name TEXT,
+    faculty TEXT,
+    email VARCHAR,
+    capacity INTEGER
+)
+LANGUAGE plpgsql
+SECURITY DEFINER -- Ejecuta con privilegios del creador (acceso a auth.users)
+AS $$
+BEGIN
+    -- Validar que el usuario que ejecuta sea Admin (role_id = 1)
+    IF public.get_auth_role() != 1 THEN
+        RAISE EXCEPTION 'Acceso denegado. Solo la Jefatura de Psicología (Admin) puede consultar esta información.';
+    END IF;
+
+    RETURN QUERY
+    SELECT 
+        u.id,
+        u.role_id,
+        u.matricula,
+        p.first_name,
+        p.last_name,
+        p.faculty,
+        a.email::VARCHAR,
+        s.capacity
+    FROM public.users u
+    JOIN auth.users a ON u.id = a.id
+    LEFT JOIN public.profiles p ON u.id = p.user_id
+    LEFT JOIN public.psychologist_settings s ON u.id = s.psychologist_id
+    WHERE u.role_id = 3;
+END;
+$$;
+
 -- Políticas para Psicólogos (Skill 5.3):
 -- 1. Los psicólogos pueden ver la tabla pública de usuarios si estos son estudiantes (role_id = 2)
 CREATE POLICY psychologist_read_users ON public.users FOR SELECT USING (

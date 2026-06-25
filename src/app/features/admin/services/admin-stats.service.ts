@@ -181,16 +181,8 @@ export class AdminStatsService {
   async getPsychologistsWithStats(): Promise<any[]> {
     const supabase = this.supabaseService.supabase;
     
-    // 1. Obtener usuarios con rol 3 (Psicólogos), sus perfiles y configuración
-    const { data: users, error } = await supabase
-      .from('users')
-      .select(`
-        id, 
-        role_id,
-        profiles(first_name, last_name, faculty, email),
-        psychologist_settings(capacity)
-      `)
-      .eq('role_id', 3);
+    // 1. Obtener usuarios psicólogos y sus correos de auth.users mediante RPC segura (Zero-Trust)
+    const { data: users, error } = await supabase.rpc('get_admin_psychologists');
 
     if (error || !users) return [];
 
@@ -230,11 +222,8 @@ export class AdminStatsService {
       });
     }
 
-    return users.map(u => {
-      const p = Array.isArray(u.profiles) ? u.profiles[0] : u.profiles;
-      const s = Array.isArray(u.psychologist_settings) ? u.psychologist_settings[0] : u.psychologist_settings;
-      
-      const capacity = s?.capacity || 40;
+    return users.map((u: any) => {
+      const capacity = u.capacity || 40;
       const patients = patientsMap[u.id] || 0;
       const pct = patients / capacity;
 
@@ -254,9 +243,9 @@ export class AdminStatsService {
 
       return {
         id: u.id,
-        name: `Dr. ${p?.first_name || ''} ${p?.last_name || ''}`.trim(),
-        email: p?.email || 'Sin correo registrado',
-        faculty: p?.faculty || 'Sin asignar',
+        name: `Dr. ${u.first_name || ''} ${u.last_name || ''}`.trim(),
+        email: u.email || 'Sin correo registrado',
+        faculty: u.faculty || 'Sin asignar',
         patients: patients,
         capacity: capacity,
         attendanceRate: attendanceRate,

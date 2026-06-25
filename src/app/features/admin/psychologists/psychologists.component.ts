@@ -6,7 +6,6 @@ import { BaseChartDirective } from 'ng2-charts';
 import { ChartConfiguration, ChartOptions } from 'chart.js';
 import { SupabaseService } from '../../../core/services/supabase.service';
 import { AdminStatsService } from '../services/admin-stats.service';
-import emailjs from '@emailjs/browser';
 import { createClient } from '@supabase/supabase-js';
 import { environment } from '../../../../environments/environment';
 import localeEs from '@angular/common/locales/es';
@@ -354,52 +353,14 @@ export class PsychologistsComponent implements OnInit {
     const { firstName, lastName, email, password, matricula, cedula, faculty, specialty, capacity } = this.addForm.value;
 
     try {
-      // 1. Usar un cliente secundario sin persistencia para no cerrar la sesión del Administrador
-      const secondarySupabase = createClient(environment.supabaseUrl, environment.supabaseKey, {
-        auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false }
+      // 1. Invocar la Edge Function segura para invitar al psicólogo de forma nativa en Supabase Auth
+      // Sin exponer contraseñas en texto plano ni usar clientes secundarios
+      const { data, error } = await this.supabase.functions.invoke('invite-user', {
+        body: { email, matricula, firstName, lastName, faculty, cedula, capacity }
       });
 
-      const { data: authData, error: authError } = await secondarySupabase.auth.signUp({
-        email,
-        password
-      });
-
-      if (authError) {
-        throw new Error(authError.message);
-      }
-
-      if (authData.user) {
-        const userId = authData.user.id;
-
-        // 2. Insertamos en public.users con role_id = 3 (Psicólogo)
-        const { error: userError } = await this.supabase.from('users').insert({
-          id: userId,
-          matricula: matricula,
-          role_id: 3,
-          requires_password_change: true
-        });
-
-        if (userError) console.error('Error insertando usuario en BD:', userError.message);
-
-        // 3. Insertamos en public.profiles (Añadimos facultad, cédula y email)
-        const { error: profileError } = await this.supabase.from('profiles').insert({
-          user_id: userId,
-          first_name: firstName,
-          last_name: lastName,
-          faculty: faculty,
-          cedula: cedula,
-          email: email
-        });
-
-        if (profileError) console.error('Error insertando perfil en BD:', profileError.message);
-
-        // 4. Guardamos la configuración del psicólogo (Capacidad de pacientes)
-        const { error: settingsError } = await this.supabase.from('psychologist_settings').insert({
-          psychologist_id: userId,
-          capacity: capacity
-        });
-        
-        if (settingsError) console.error('Error configurando psicólogo:', settingsError.message);
+      if (error || (data && data.error)) {
+        throw new Error(error?.message || data?.error || 'Error invocando Edge Function invite-user');
       }
 
       const newPsych: Psychologist = {
@@ -426,30 +387,22 @@ export class PsychologistsComponent implements OnInit {
       
       try {
         const pdfBase64 = await this.generateCredentialsPDF(`Dr. ${firstName} ${lastName}`, email, password, false);
-        await emailjs.send(
-          'service_dh74lqw',
-          'template_cqpfamj',
-          {
-            name: `Dr. ${firstName} ${lastName}`,
-            email: email,
-            password: password
-          },
-          '2aEIeWZsxmuiq27jD'
-        );
-        this.formSuccessMessage = '¡Registro exitoso y correo enviado al psicólogo!';
+        this.formSuccessMessage = '¡Registro exitoso! Invitación oficial enviada por Supabase al psicólogo.';
       } catch (err) {
-        console.error('Error enviando correo:', err);
-        this.formSuccessMessage = 'Psicólogo registrado. Asegúrate de configurar el SMTP y desplegar la Edge Function para el envío de correos.';
+        console.error('Error generando PDF:', err);
+        this.formSuccessMessage = 'Psicólogo invitado exitosamente mediante Supabase Auth.';
       }
 
     } catch (err: any) {
       console.error('Error durante el registro:', err.message || err);
       
-      let errorMsg = 'Error al registrar el psicólogo. ';
-      if (err.message?.includes('duplicate key') || err.message?.includes('unique constraint') || err.message?.includes('already registered')) {
-        errorMsg += 'La Cédula / Cód. Empleado o el Correo ya están registrados en el sistema.';
+      const errorStr = (err.message || err).toString();
+      let errorMsg = 'Error al registrar el psicólogo: ';
+      
+      if (errorStr.includes('duplicate key') || errorStr.includes('unique constraint') || errorStr.includes('already registered') || errorStr.includes('non-2xx') || errorStr.includes('Edge Function') || errorStr.includes('email_exists')) {
+        errorMsg += 'La Cédula, Código de Empleado o el Correo electrónico ingresados ya se encuentran registrados en el sistema.';
       } else {
-        errorMsg += err.message || 'Verifica la conexión a la base de datos.';
+        errorMsg += errorStr || 'Verifica la conexión a la base de datos.';
       }
       
       this.formErrorMessage = errorMsg;
@@ -520,20 +473,14 @@ export class PsychologistsComponent implements OnInit {
 
   async sendEmail() {
     if (!this.createdCredentials) return;
-    const { name, email, password } = this.createdCredentials;
+    const { email } = this.createdCredentials;
     
     this.isResendingEmail = true;
     try {
-      await emailjs.send(
-        'service_dh74lqw',
-        'template_cqpfamj',
-        {
-          name: name,
-          email: email,
-          password: password
-        },
-        '2aEIeWZsxmuiq27jD'
-      );
+      // Re-enviar invitación o restablecimiento nativo de Supabase Auth
+      await this.supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: window.location.origin + '/auth/reset-password',
+      });
       
       this.manualEmailSent = true;
     } catch (err: any) {

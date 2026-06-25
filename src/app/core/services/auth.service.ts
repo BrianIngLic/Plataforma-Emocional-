@@ -136,6 +136,7 @@ export class AuthService {
       if (error || !data.session) {
         if (error?.message?.includes('Failed to fetch') || error?.message?.includes('Network request failed')) {
            console.warn('⚠️ MODO OFFLINE ACTIVADO: Supabase no detectado. Login simulado.');
+           this.cryptoService.deriveKey(pass, email);
            this.activateMockSession(email);
            return true;
         }
@@ -143,10 +144,12 @@ export class AuthService {
         return false;
       }
 
+      this.cryptoService.deriveKey(pass, email);
       await this.loadUserProfile(data.user.id);
       return true;
     } catch (e) {
       console.warn('⚠️ MODO OFFLINE ACTIVADO: Login simulado por excepción de red.');
+      this.cryptoService.deriveKey(pass, email);
       this.activateMockSession(email);
       return true;
     }
@@ -164,6 +167,7 @@ export class AuthService {
       if (authError || !authData.user) {
         if (authError?.message?.includes('Failed to fetch') || authError?.message?.includes('Network request failed')) {
            console.warn('⚠️ MODO OFFLINE ACTIVADO: Supabase no detectado. Registro simulado.');
+           this.cryptoService.deriveKey(pass, email);
            this.activateMockSession(matricula, faculty);
            return 'mock-user-id-123';
         }
@@ -191,10 +195,12 @@ export class AuthService {
     });
     if (profileError) console.error('Error insertando profile:', profileError.message);
 
+      this.cryptoService.deriveKey(pass, email);
       await this.loadUserProfile(userId);
       return userId;
     } catch (e) {
       console.warn('⚠️ MODO OFFLINE ACTIVADO: Registro simulado por excepción de red.');
+      this.cryptoService.deriveKey(pass, email);
       this.activateMockSession(matricula, faculty);
       return 'mock-user-id-123';
     }
@@ -259,6 +265,7 @@ export class AuthService {
 
   async logout(): Promise<void> {
     await this.supabaseService.supabase.auth.signOut();
+    this.cryptoService.clearKey();
     this.currentUser.set(null);
     this.isLoggedIn.set(false);
     this.router.navigate(['/auth/login']);

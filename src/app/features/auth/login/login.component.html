@@ -1,0 +1,139 @@
+<div class="auth-layout">
+  
+  <!-- Lado Izquierdo: Sidebar Educativo -->
+  <aside class="auth-sidebar">
+    <div class="sidebar-content">
+      <div class="brand">
+        <div class="logo" style="display: flex; align-items: center; gap: 10px;">
+          <img src="/amati-logo.svg" alt="Amati Logo" style="width: 48px; height: 48px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));" />
+          <div class="brand-text" style="display: flex; flex-direction: column;">
+            <h1>Amati</h1>
+            <span>Bienestar emocional</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="graphic-dots">
+        <span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span>
+        <span class="dot d4"></span><span class="dot d5"></span><span class="dot d6"></span>
+      </div>
+
+      <div class="hero-text">
+        <h2>Un espacio seguro<br><em>para sanar.</em></h2>
+        <p>Acompañamiento emocional con inteligencia artificial, adaptado a tu ritmo y necesidades.</p>
+      </div>
+
+      <ul class="features-list">
+        <li>
+          <span class="feat-icon">💬</span> Chat emocional con texto y voz
+        </li>
+        <li>
+          <span class="feat-icon">✨</span> Diario personal con análisis IA
+        </li>
+        <li>
+          <span class="feat-icon">🥗</span> Seguimiento nutricional integrado
+        </li>
+      </ul>
+
+      <div class="testimonial-card">
+        <p>"Escribir en mi diario y conversar con Amati me ayudó a entender mis emociones de una manera que nunca había logrado antes."</p>
+        <div class="author">
+          <div class="avatar">S</div>
+          <div class="author-info">
+            <strong>Sofía R.</strong>
+            <span>Estudiante · 22 años</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Lado Derecho: Formulario de Login -->
+  <main class="auth-main">
+    
+    <div class="form-wrapper">
+      <div class="form-header">
+        <h2>Bienvenido de vuelta</h2>
+        <p>Continúa tu proceso de bienestar.</p>
+      </div>
+
+      <form (ngSubmit)="onLogin()" #loginForm="ngForm" class="login-form">
+        <div class="form-group">
+          <label for="email">CORREO ELECTRÓNICO</label>
+          <div class="input-icon-wrapper">
+            <span class="icon">✉️</span>
+            <input 
+              type="email" 
+              id="email" 
+              name="email" 
+              [(ngModel)]="email" 
+              placeholder="Ej. usuario@correo.com" 
+              required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="password">CONTRASEÑA</label>
+          <div class="input-icon-wrapper">
+            <span class="icon">🔒</span>
+            <input 
+              type="password" 
+              id="password" 
+              name="password" 
+              [(ngModel)]="pass" 
+              placeholder="••••••••" 
+              required>
+          </div>
+        </div>
+
+        <div class="forgot-password">
+          <a routerLink="/auth/forgot-password">¿Olvidaste tu contraseña?</a>
+        </div>
+
+        <div *ngIf="errorMessage" class="error-alert">
+          {{ errorMessage }}
+        </div>
+
+        <button type="submit" class="btn-primary" [disabled]="!loginForm.valid">
+          Entrar &rarr;
+        </button>
+
+        <div class="divider">
+          <span>o continúa con</span>
+        </div>
+
+        <div class="social-logins">
+          <button type="button" class="btn-social">Google</button>
+          <button type="button" class="btn-social">Microsoft</button>
+        </div>
+      </form>
+
+      <div class="auth-footer">
+        <p>¿No tienes cuenta? <a routerLink="/auth/register">Regístrate gratis</a></p>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Inactivity Timeout Modal -->
+<div class="privacy-modal-overlay" *ngIf="showInactivityModal" (click)="closeInactivityModal()">
+  <div class="privacy-modal-card inactivity-card" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <span style="font-size: 1.6rem;">🔒</span>
+        <h2>Cierre de Sesión por Seguridad</h2>
+      </div>
+      <button class="close-btn" (click)="closeInactivityModal()">✖</button>
+    </div>
+    <div class="modal-content" style="text-align: center; padding: 2.5rem 2rem;">
+      <div style="font-size: 3.5rem; margin-bottom: 1.5rem; animation: pulseLock 2s infinite;">🔒</div>
+      <h3 style="font-size: 1.4rem; color: var(--text-primary); margin-bottom: 1rem; font-weight: 600;">Sesión Finalizada por Inactividad</h3>
+      <p style="font-size: 1.05rem; color: var(--text-secondary); max-width: 450px; margin: 0 auto; line-height: 1.6;">
+        Por lineamientos de ciberseguridad y protección de datos clínicos (HIPAA / NOM-024), tu sesión se ha cerrado de forma automática tras 15 minutos de inactividad para resguardar la estricta confidencialidad de la información.
+      </p>
+    </div>
+    <div class="modal-footer" style="justify-content: center; padding: 1.5rem;">
+      <button class="btn-primary" style="padding: 0.8rem 3rem; border-radius: 9999px; font-size: 1rem;" (click)="closeInactivityModal()">Entendido</button>
+    </div>
+  </div>
+</div>

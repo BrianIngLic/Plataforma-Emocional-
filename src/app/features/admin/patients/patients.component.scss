@@ -1,0 +1,259 @@
+.patients-container {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  background-color: var(--bg-main, #0f172a);
+}
+
+.kpis-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+.kpi-card {
+  background-color: var(--bg-card, #1e293b);
+  border: 1px solid var(--border-color, rgba(255, 255, 255, 0.06));
+  border-radius: 16px;
+  padding: 1.5rem;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  transition: all 0.25s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .kpi-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    mat-icon {
+      font-size: 22px;
+      width: 22px;
+      height: 22px;
+    }
+  }
+
+  .kpi-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  .label {
+    font-size: 0.7rem;
+    font-family: monospace;
+    text-transform: uppercase;
+    color: var(--text-secondary, #94a3b8);
+    letter-spacing: 0.02em;
+  }
+
+  .value {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--text-primary, #f8fafc);
+    line-height: 1;
+  }
+
+  .sub {
+    font-size: 0.75rem;
+    color: var(--text-secondary, #94a3b8);
+  }
+
+  &.blue { .kpi-icon { background-color: rgba(59, 130, 246, 0.12); color: #3b82f6; } }
+  &.green { .kpi-icon { background-color: rgba(16, 185, 129, 0.12); color: #10b981; } }
+  &.red { .kpi-icon { background-color: rgba(239, 68, 68, 0.12); color: #ef4444; } }
+  &.purple { .kpi-icon { background-color: rgba(139, 92, 246, 0.12); color: #8b5cf6; } }
+}
+
+.panel {
+  background-color: var(--bg-card, #1e293b);
+  border: 1px solid var(--border-color, rgba(255, 255, 255, 0.06));
+  border-radius: 16px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+
+  .panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    border-bottom: 1px solid var(--border-color, rgba(255, 255, 255, 0.06));
+    padding-bottom: 1rem;
+  }
+
+  .panel-title-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+
+    .title-icon {
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+      
+      &.blue { color: #3b82f6; }
+      &.green { color: #10b981; }
+      &.purple { color: #8b5cf6; }
+    }
+
+    .panel-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-primary, #f8fafc);
+    }
+  }
+
+  .chart-legends, .chart-legends-line {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 0.75rem;
+    font-family: monospace;
+    color: var(--text-secondary, #94a3b8);
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    
+    &.green { background-color: #10b981; }
+    &.red { background-color: #ef4444; }
+    &.grey { background-color: #94a3b8; }
+    &.blue { background-color: #3b82f6; }
+    
+    &.dashed {
+      border: 1.5px dashed #3b82f6;
+      background-color: transparent;
+      border-radius: 0;
+      width: 8px; height: 8px;
+    }
+  }
+
+  .badge {
+    font-size: 10px;
+    font-family: monospace;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 9999px;
+    
+    &.green {
+      background-color: rgba(16, 185, 129, 0.1);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.2);
+    }
+  }
+
+  .chart-wrapper {
+    height: 200px;
+    position: relative;
+    width: 100%;
+  }
+}
+
+.charts-row {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1.5rem;
+
+  .col-3 {
+    grid-column: span 3;
+  }
+  .col-2 {
+    grid-column: span 2;
+  }
+
+  @media (max-width: 1024px) {
+    display: flex;
+    flex-direction: column;
+    .panel { grid-column: auto !important; }
+  }
+}
+
+.chart-legends-line {
+  margin-top: -0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.doughnut-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  align-items: center;
+}
+
+.doughnut-chart-wrapper {
+  height: 120px;
+  position: relative;
+  width: 100%;
+}
+
+.diagnosis-indicators {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.indicator-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  .indicator-name {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 90px;
+    font-size: 0.75rem;
+    color: var(--text-secondary, #94a3b8);
+    flex-shrink: 0;
+
+    .diag-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+    }
+  }
+
+  .indicator-bar-container {
+    flex: 1;
+    height: 4px;
+    background-color: rgba(255, 255, 255, 0.04);
+    border-radius: 9999px;
+    overflow: hidden;
+  }
+
+  .indicator-bar-fill {
+    height: 100%;
+    border-radius: 9999px;
+  }
+
+  .indicator-val {
+    width: 32px;
+    text-align: right;
+    font-size: 0.75rem;
+    font-family: monospace;
+    font-weight: 600;
+    color: var(--text-primary, #f8fafc);
+  }
+}

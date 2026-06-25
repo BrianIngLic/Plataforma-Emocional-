@@ -1,0 +1,172 @@
+/* You can add global styles to this file, and also import other style files */
+@import 'quill/dist/quill.snow.css';
+@import '@angular/material/prebuilt-themes/azure-blue.css';
+
+/* THEME VARIABLES - MODO CLARO (Default / Light) */
+:root {
+  --bg-main: #f8fafc;
+  --bg-card: #ffffff;
+  --bg-sidebar: linear-gradient(135deg, #1e1b4b, #0f172a);
+  
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-sidebar: #ffffff;
+  --text-sidebar-muted: #94a3b8;
+  
+  --border-color: #cbd5e1;
+  --input-bg: #f1f5f9;
+  
+  --btn-primary-bg: linear-gradient(to right, #6366f1, #8b5cf6);
+  --btn-primary-text: #ffffff;
+  --btn-secondary-bg: #ffffff;
+  --btn-secondary-border: #cbd5e1;
+  --btn-secondary-text: #334155;
+  
+  --accent-purple: #8b5cf6;
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(0, 0, 0, 0.1);
+}
+
+/* THEME VARIABLES - MODO OSCURO (Automático según el Sistema Operativo) */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-main: #0f172a; 
+    --bg-card: #141c2f; 
+    --bg-sidebar: linear-gradient(135deg, #16123a, #0b1121);
+    
+    --text-primary: #f8fafc;
+    --text-secondary: #cbd5e1;
+    --text-sidebar: #ffffff;
+    --text-sidebar-muted: #94a3b8;
+    
+    --border-color: rgba(255, 255, 255, 0.1);
+    --input-bg: #1e293b;
+    
+    --btn-primary-bg: linear-gradient(to right, #a78bfa, #818cf8, #5eead4);
+    --btn-primary-text: #0f172a;
+    --btn-secondary-bg: transparent;
+    --btn-secondary-border: rgba(255, 255, 255, 0.1);
+    --btn-secondary-text: #cbd5e1;
+    
+    --accent-purple: #c084fc;
+    --glass-bg: rgba(255, 255, 255, 0.03);
+    --glass-border: rgba(255, 255, 255, 0.05);
+  }
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', 'Roboto', 'Segoe UI', sans-serif;
+  background-color: var(--bg-main);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Scrollbar personalizado */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 4px;
+}
+
+/* ==========================================================================
+   AMATI SVG GLOBAL LOADING ANIMATION (PREMIUM UI/UX)
+   ========================================================================== */
+.amati-loading-container {
+  text-align: center;
+  padding: 5rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.amati-loader-wrapper {
+  position: relative;
+  width: 110px;
+  height: 110px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+/* Aro giratorio exterior luminoso */
+.spinner-ring {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 3px solid rgba(139, 92, 246, 0.15);
+  border-top: 3px solid #8b5cf6;
+  border-right: 3px solid #0ea5e9;
+  border-radius: 50%;
+  animation: spinRing 1.5s linear infinite;
+  box-shadow: 0 0 15px rgba(139, 92, 246, 0.3);
+}
+
+/* Latido y resplandor del logo SVG */
+.amati-logo-pulse {
+  width: 70px;
+  height: 70px;
+  z-index: 2;
+  animation: logoPulse 2s ease-in-out infinite;
+  filter: drop-shadow(0 0 10px rgba(139, 92, 246, 0.4));
+}
+
+.loading-title {
+  font-size: 1.35rem;
+  color: var(--text-primary);
+  margin: 0 0 0.5rem 0;
+  font-weight: 600;
+  letter-spacing: -0.3px;
+}
+
+.loading-subtitle {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  max-width: 360px;
+  margin: 0 auto;
+  line-height: 1.5;
+}
+
+@keyframes spinRing {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes logoPulse {
+  0% { transform: scale(0.95); filter: drop-shadow(0 0 8px rgba(139, 92, 246, 0.3)); }
+  50% { transform: scale(1.1); filter: drop-shadow(0 0 18px rgba(139, 92, 246, 0.7)); }
+  100% { transform: scale(0.95); filter: drop-shadow(0 0 8px rgba(139, 92, 246, 0.3)); }
+}
+
+/* ==========================================================================
+   SMOOTH PANEL TRANSITIONS (PREMIUM MICRO-ANIMATION)
+   ========================================================================== */
+.main-content > *,
+.content-body > * {
+  animation: panelFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) both;
+  display: block;
+  width: 100%;
+}
+
+@keyframes panelFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.99);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+

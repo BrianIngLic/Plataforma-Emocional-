@@ -1,0 +1,399 @@
+<div class="psych-container">
+
+  <!-- Roster Panel (Se oculta al seleccionar uno) -->
+  <ng-container *ngIf="!selectedPsychologist">
+  <!-- Overview Stats Filters -->
+  <div class="stats-pills">
+    <button 
+      class="pill red" 
+      (click)="selectedFilter = (selectedFilter === 'overload' ? 'all' : 'overload')"
+      [class.active]="selectedFilter === 'overload'"
+    >
+      <mat-icon>warning</mat-icon>
+      <div class="pill-info">
+        <span class="value">{{ alertCounts.overload }}</span>
+        <span class="label">Sobrecargados</span>
+      </div>
+    </button>
+    
+    <button 
+      class="pill amber" 
+      (click)="selectedFilter = (selectedFilter === 'low-perf' ? 'all' : 'low-perf')"
+      [class.active]="selectedFilter === 'low-perf'"
+    >
+      <mat-icon>trending_down</mat-icon>
+      <div class="pill-info">
+        <span class="value">{{ alertCounts['low-perf'] }}</span>
+        <span class="label">Bajo Rendimiento</span>
+      </div>
+    </button>
+    
+    <button 
+      class="pill blue" 
+      (click)="selectedFilter = (selectedFilter === 'few-patients' ? 'all' : 'few-patients')"
+      [class.active]="selectedFilter === 'few-patients'"
+    >
+      <mat-icon>people</mat-icon>
+      <div class="pill-info">
+        <span class="value">{{ alertCounts['few-patients'] }}</span>
+        <span class="label">Baja Carga</span>
+      </div>
+    </button>
+  </div>
+
+  <!-- Filter Selector Bar + Add Button -->
+  <div class="filter-action-bar">
+    <div class="filters">
+      <button 
+        *ngFor="let filter of ['all', 'overload', 'low-perf', 'few-patients', 'none']"
+        (click)="selectedFilter = filter"
+        [class.active]="selectedFilter === filter"
+        class="filter-tab"
+      >
+        <span>
+          {{ 
+            filter === 'all' ? 'Todos' : 
+            filter === 'none' ? 'Sin Alerta' : 
+            filter === 'overload' ? 'Sobrecarga' :
+            filter === 'low-perf' ? 'Bajo Rendimiento' : 'Baja Utilización'
+          }}
+        </span>
+      </button>
+    </div>
+    
+    <button class="add-psych-btn" (click)="openAddModal()">
+      <mat-icon>add</mat-icon>
+      <span>Alta de Psicólogo</span>
+    </button>
+  </div>
+
+  <!-- Roster Panel (Se oculta al seleccionar uno) -->
+  <div class="panel">
+    <div class="panel-header">
+      <div class="panel-title-wrapper">
+        <mat-icon class="title-icon purple">assignment_ind</mat-icon>
+        <span class="panel-title">Personal Clínico Registrado</span>
+      </div>
+      <span class="panel-sub">{{ filteredPsychologists.length }} psicólogos en lista</span>
+    </div>
+
+    <!-- Lista Table -->
+    <div class="psych-list">
+      <div class="psych-row" *ngFor="let p of filteredPsychologists">
+        <div class="psych-identity">
+          <div class="avatar">{{ p.name.split(' ')[1]?.substring(0, 2) || 'Dr' }}</div>
+          <div class="info">
+            <h4>{{ p.name }}</h4>
+            <span class="sub"><mat-icon>school</mat-icon> {{ p.faculty }}</span>
+            <span class="badge" style="margin-top: 4px; background:#e0e7ff; color:#4338ca;"><mat-icon style="font-size:12px;width:12px;height:12px;vertical-align:middle;">email</mat-icon> {{ p.email }}</span>
+          </div>
+        </div>
+
+        <div class="badge-col">
+          <span class="badge" [ngClass]="getAlertClass(p.alert)">
+            {{ getAlertText(p.alert) }}
+          </span>
+        </div>
+
+        <div class="caseload-info">
+          <div class="caseload-labels">
+            <span>Nivel de Carga</span>
+            <span>{{ p.patients }} / {{ p.capacity }}</span>
+          </div>
+          <div class="caseload-progress">
+            <div class="progress-fill" 
+                 [style.width]="getPct(p) + '%'" 
+                 [style.backgroundColor]="getChargeColor(getPct(p))"></div>
+          </div>
+        </div>
+
+        <div class="metric-col">
+          <span class="metric-val">{{ p.sessionsCompleted }}</span>
+          <span class="metric-lbl">Sesiones</span>
+        </div>
+
+        <div class="rating-col">
+          <span class="metric-lbl" style="margin-bottom: 2px;">Evaluación</span>
+          <div class="stars-row">
+            <mat-icon *ngFor="let star of getRatingStars(p.evaluation)" [ngClass]="star === 1 ? 'star-filled' : 'star-empty'">star</mat-icon>
+            <span class="rating-number">{{ p.evaluation | number:'1.1-1' }}</span>
+          </div>
+        </div>
+
+        <button class="details-btn" (click)="viewDetail(p)">
+          <span>Detalles</span>
+          <mat-icon>chevron_right</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+  </ng-container>
+
+  <!-- Vista Completa de Detalles del Psicólogo (Full Page Layout) -->
+  <div class="profile-container" *ngIf="selectedPsychologist" style="display: flex; flex-direction: column; gap: 1.5rem; animation: fade-in 0.3s ease;">
+    <!-- Back button -->
+    <button class="back-btn" (click)="closeDetail()" style="background: transparent; border: none; color: var(--text-secondary); display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.95rem; font-weight: 500; align-self: flex-start; padding: 0.5rem 1rem; border-radius: 8px; transition: background 0.2s;">
+      <mat-icon>arrow_back</mat-icon> Volver al Personal Clínico
+    </button>
+
+    <!-- Header Card -->
+    <div class="card header-card" style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.5rem; display: flex; align-items: center;">
+      <div class="patient-header" style="display: flex; align-items: center; width: 100%;">
+        <div class="profile-avatar large" style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #6366f1, #a855f7); color: white; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 700; margin-right: 1.5rem; flex-shrink: 0;">
+          {{ selectedPsychologist.name.split(' ')[1]?.substring(0, 2) || 'Dr' }}
+        </div>
+        <div class="info" style="flex: 1;">
+          <h1 style="margin: 0 0 0.5rem 0; font-size: 1.5rem; color: var(--text-primary);">{{ selectedPsychologist.name }}</h1>
+          <p style="margin: 0 0 0.75rem 0; color: var(--text-secondary);">{{ selectedPsychologist.faculty }} • {{ selectedPsychologist.specialty }}</p>
+          <div class="badges" style="display: flex; gap: 0.5rem;">
+            <span class="badge" style="background: rgba(99, 102, 241, 0.1); color: #6366f1; padding: 4px 10px; border-radius: 99px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;"><mat-icon style="font-size:14px;width:14px;height:14px;">email</mat-icon> {{ selectedPsychologist.email }}</span>
+            <span class="badge" [ngClass]="getAlertClass(selectedPsychologist.alert)" style="padding: 4px 10px; border-radius: 99px; font-weight: 600;">
+              {{ getAlertText(selectedPsychologist.alert) }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Content Grid -->
+    <div class="content-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+      
+      <!-- Left Column (Edit Profile Form) -->
+      <div class="col-main">
+        <div class="card" style="padding: 1.5rem; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; height: 100%;">
+          <h2 class="card-title" style="margin: 0 0 1.5rem 0; display: flex; align-items: center; gap: 8px; color: var(--text-primary); font-size: 1.25rem;"><mat-icon style="color: #3b82f6;">edit</mat-icon> Perfil y Configuración</h2>
+          
+          <form [formGroup]="editForm" (ngSubmit)="saveProfileChanges()" class="edit-profile-form">
+            <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+              <div class="form-group" style="display: flex; flex-direction: column;">
+                <label style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 6px; font-weight: 500;">Nombre(s)</label>
+                <input type="text" formControlName="firstName" class="form-input" style="padding: 10px 12px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-hover); color: var(--text-primary); outline: none;">
+              </div>
+              <div class="form-group" style="display: flex; flex-direction: column;">
+                <label style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 6px; font-weight: 500;">Apellidos</label>
+                <input type="text" formControlName="lastName" class="form-input" style="padding: 10px 12px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-hover); color: var(--text-primary); outline: none;">
+              </div>
+            </div>
+
+            <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+              <div class="form-group" style="display: flex; flex-direction: column;">
+                <label style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 6px; font-weight: 500;">Facultad Asignada</label>
+                <select formControlName="faculty" class="form-input" style="padding: 10px 12px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-hover); color: var(--text-primary); outline: none;">
+                  <option *ngFor="let f of faculties" [value]="f">{{ f }}</option>
+                </select>
+              </div>
+              <div class="form-group" style="display: flex; flex-direction: column;">
+                <label style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 6px; font-weight: 500;">Especialidad Principal</label>
+                <select formControlName="specialty" class="form-input" style="padding: 10px 12px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-hover); color: var(--text-primary); outline: none;">
+                  <option value="General">Psicología General</option>
+                  <option value="Clínica">Psicología Clínica</option>
+                  <option value="Educativa">Psicología Educativa</option>
+                  <option value="Organizacional">Psicología Organizacional</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group" style="display: flex; flex-direction: column; margin-bottom: 1.5rem;">
+              <label style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 6px; font-weight: 500;">Capacidad Máxima (Pacientes simultáneos)</label>
+              <input type="number" formControlName="capacity" class="form-input" style="padding: 10px 12px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-hover); color: var(--text-primary); outline: none;">
+            </div>
+
+            <button type="submit" style="width: 100%; background: #6366f1; color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px; font-weight: 600; transition: background 0.2s;" onmouseover="this.style.background='#4f46e5'" onmouseout="this.style.background='#6366f1'" [disabled]="editForm.invalid || isSavingProfile">
+              <mat-icon style="width: 20px; height: 20px; font-size: 20px;">save</mat-icon>
+              <span>{{ isSavingProfile ? 'Guardando...' : 'Guardar Cambios' }}</span>
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Right Column (Stats) -->
+      <div class="col-side">
+        <div class="card" style="padding: 1.5rem; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; height: 100%;">
+          <h2 class="card-title" style="margin: 0 0 1.5rem 0; display: flex; align-items: center; gap: 8px; color: var(--text-primary); font-size: 1.25rem;"><mat-icon style="color: #a855f7;">analytics</mat-icon> Rendimiento Operativo</h2>
+          
+          <div class="modal-caseload">
+            <div class="caseload-labels" style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.9rem;">
+              <span style="color: var(--text-secondary); font-weight: 500;">Nivel de Carga</span>
+              <span [style.color]="getChargeColor(getPct(selectedPsychologist))" style="font-weight: 700;">
+                {{ getPct(selectedPsychologist) }}% ({{ selectedPsychologist.patients }} / {{ selectedPsychologist.capacity }})
+              </span>
+            </div>
+            <div class="progress-bar-bg large" style="height: 12px; background: var(--bg-hover); border-radius: 6px; overflow: hidden;">
+              <div class="progress-bar-fill" [style.width]="getPct(selectedPsychologist) + '%'" [style.backgroundColor]="getChargeColor(getPct(selectedPsychologist))" style="height: 100%; transition: width 0.5s ease;"></div>
+            </div>
+          </div>
+
+          <!-- Bar Chart wrapper -->
+          <div class="chart-wrapper" style="margin: 2rem 0; background: var(--bg-hover); padding: 1rem; border-radius: 8px; border: 1px solid var(--border-color);">
+            <canvas baseChart [data]="barChartData" [options]="barChartOptions" type="bar"></canvas>
+          </div>
+
+          <div class="modal-stats-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div class="stat-grid-card" style="background: var(--bg-hover); padding: 1rem; border-radius: 8px; border: 1px solid var(--border-color); display: flex; flex-direction: column;">
+              <small style="color: var(--text-secondary); font-size: 0.75rem; font-weight: 500;">Sesiones Completadas</small>
+              <span style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary); margin-top: 4px;">{{ selectedPsychologist.sessionsCompleted }}</span>
+            </div>
+            <div class="stat-grid-card" style="background: var(--bg-hover); padding: 1rem; border-radius: 8px; border: 1px solid var(--border-color); display: flex; flex-direction: column;">
+              <small style="color: var(--text-secondary); font-size: 0.75rem; font-weight: 500;">Sesiones Programadas</small>
+              <span style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary); margin-top: 4px;">{{ selectedPsychologist.sessionsScheduled }}</span>
+            </div>
+            <div class="stat-grid-card" style="background: var(--bg-hover); padding: 1rem; border-radius: 8px; border: 1px solid var(--border-color); display: flex; flex-direction: column;">
+              <small style="color: var(--text-secondary); font-size: 0.75rem; font-weight: 500;">Tasa de Asistencia</small>
+              <span style="font-size: 1.5rem; font-weight: 700; color: #10b981; margin-top: 4px;">{{ selectedPsychologist.attendanceRate }}%</span>
+            </div>
+            <div class="stat-grid-card" style="background: var(--bg-hover); padding: 1rem; border-radius: 8px; border: 1px solid var(--border-color); display: flex; flex-direction: column;">
+              <small style="color: var(--text-secondary); font-size: 0.75rem; font-weight: 500;">Eficiencia Operativa</small>
+              <span style="font-size: 1.5rem; font-weight: 700; color: #3b82f6; margin-top: 4px;">{{ getEfficiency(selectedPsychologist) }}%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div> <!-- Cierre de Content Grid -->
+
+    <!-- Full Width Section (Calendar) -->
+    <div class="full-width-section">
+      <div class="card" style="padding: 1.5rem; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px;">
+        <div class="calendar-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+          <h2 class="card-title" style="margin: 0; display: flex; align-items: center; gap: 8px; color: var(--text-primary); font-size: 1.25rem;"><mat-icon style="color: #f59e0b;">calendar_month</mat-icon> Agenda de Sesiones</h2>
+          <div style="display: flex; align-items: center; gap: 1rem;">
+            <button class="icon-btn" (click)="prevMonth()" style="background: var(--bg-hover); border: 1px solid var(--border-color); color: var(--text-primary); border-radius: 8px; width: 36px; height: 36px; cursor: pointer; display: flex; align-items: center; justify-content: center;"><mat-icon>chevron_left</mat-icon></button>
+            <h4 class="month-title" style="margin: 0; font-size: 1.1rem; color: var(--text-primary); min-width: 150px; text-align: center;">{{ currentMonthDate | date:'MMMM yyyy':'':'es' | titlecase }}</h4>
+            <button class="icon-btn" (click)="nextMonth()" style="background: var(--bg-hover); border: 1px solid var(--border-color); color: var(--text-primary); border-radius: 8px; width: 36px; height: 36px; cursor: pointer; display: flex; align-items: center; justify-content: center;"><mat-icon>chevron_right</mat-icon></button>
+          </div>
+        </div>
+        
+        <div class="calendar-grid" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; max-width: 1000px; margin: 0 auto;">
+          <div class="cal-day-header" style="text-align: center; color: var(--text-secondary); font-weight: 600; padding-bottom: 8px; font-size: 0.9rem;">Dom</div><div class="cal-day-header" style="text-align: center; color: var(--text-secondary); font-weight: 600; padding-bottom: 8px; font-size: 0.9rem;">Lun</div><div class="cal-day-header" style="text-align: center; color: var(--text-secondary); font-weight: 600; padding-bottom: 8px; font-size: 0.9rem;">Mar</div><div class="cal-day-header" style="text-align: center; color: var(--text-secondary); font-weight: 600; padding-bottom: 8px; font-size: 0.9rem;">Mié</div><div class="cal-day-header" style="text-align: center; color: var(--text-secondary); font-weight: 600; padding-bottom: 8px; font-size: 0.9rem;">Jue</div><div class="cal-day-header" style="text-align: center; color: var(--text-secondary); font-weight: 600; padding-bottom: 8px; font-size: 0.9rem;">Vie</div><div class="cal-day-header" style="text-align: center; color: var(--text-secondary); font-weight: 600; padding-bottom: 8px; font-size: 0.9rem;">Sáb</div>
+          
+          <div class="cal-day-cell" *ngFor="let day of calendarDays" 
+               [style.opacity]="day.isCurrentMonth ? '1' : '0.4'"
+               style="min-height: 80px; background: var(--bg-hover); border: 1px solid var(--border-color); border-radius: 8px; padding: 6px; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; transition: all 0.2s ease;">
+            <span class="day-number" style="font-weight: 600; font-size: 0.95rem; color: var(--text-primary); margin-bottom: 4px;">{{ day.date.getDate() }}</span>
+            <div class="day-badges" *ngIf="day.blocked || day.appointments > 0" style="margin-top: auto; display: flex; gap: 4px; flex-wrap: wrap; justify-content: center; width: 100%;">
+              <span class="cal-badge blocked" *ngIf="day.blocked" title="Día bloqueado" style="background: rgba(239, 68, 68, 0.15); color: #ef4444; padding: 2px 6px; border-radius: 4px; display: flex; align-items: center;">
+                <mat-icon style="font-size: 14px; width:14px; height: 14px;">block</mat-icon>
+              </span>
+              <span class="cal-badge appts" *ngIf="day.appointments > 0" title="Sesiones dadas" style="background: rgba(16, 185, 129, 0.15); color: #10b981; font-weight: 700; font-size: 0.75rem; padding: 2px 6px; border-radius: 4px; display: flex; align-items: center;">
+                {{ day.appointments }}
+              </span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="calendar-legend" style="display: flex; gap: 2rem; justify-content: center; padding-top: 1.5rem; border-top: 1px solid var(--border-color); margin-top: 1.5rem;">
+          <div class="legend-item" style="display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-secondary); font-weight: 500;"><span class="legend-dot" style="width: 14px; height: 14px; border-radius: 50%; background: #ef4444;"></span> Día Inhábil / Bloqueado</div>
+          <div class="legend-item" style="display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-secondary); font-weight: 500;"><span class="legend-dot" style="width: 14px; height: 14px; border-radius: 50%; background: #10b981;"></span> Días con Citas Atendidas</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Secure Add Psychologist Modal (Formulario seguro de Alta de Personal Clínico) -->
+  <div class="modal-overlay" *ngIf="showAddModal" (click)="closeAddModal()">
+    <div class="modal-card form-modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <div class="modal-title-wrapper">
+          <mat-icon class="text-blue">person_add</mat-icon>
+          <h3>Alta Segura de Personal Clínico</h3>
+        </div>
+        <button class="modal-close-btn" (click)="closeAddModal()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Vista de Éxito -->
+        <div *ngIf="createdCredentials" class="success-state" style="text-align: center; padding: 2rem 1rem; display: flex; flex-direction: column; align-items: center;">
+          <mat-icon style="font-size: 56px; width: 56px; height: 56px; color: #10b981; margin-bottom: 1rem;">check_circle</mat-icon>
+          <h3 style="color: var(--text-primary, #1e293b); font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem; margin-top: 0;">¡Personal Registrado!</h3>
+          <p style="color: var(--text-secondary, #64748b); margin-bottom: 2rem; font-size: 0.95rem; max-width: 400px; line-height: 1.5;">Las credenciales de acceso se han generado. El PDF incluye el enlace, correo y la contraseña provisional obligatoria.</p>
+          
+          <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-bottom: 2rem; width: 100%;">
+            <button type="button" style="background: #3b82f6; color: white; border: none; border-radius: 8px; padding: 0.75rem 1.25rem; font-weight: 600; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; flex: 1; min-width: 150px; box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.3);" (click)="generateCredentialsPDF(createdCredentials.name, createdCredentials.email, createdCredentials.password)">
+              <mat-icon style="font-size: 18px; width: 18px; height: 18px;">picture_as_pdf</mat-icon> Descargar PDF
+            </button>
+            <button type="button" style="background: #10b981; color: white; border: none; border-radius: 8px; padding: 0.75rem 1.25rem; font-weight: 600; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; flex: 1; min-width: 150px; box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.3);" [disabled]="isResendingEmail || manualEmailSent" (click)="sendEmail()" [ngStyle]="{'opacity': (isResendingEmail || manualEmailSent) ? '0.6' : '1', 'cursor': (isResendingEmail || manualEmailSent) ? 'not-allowed' : 'pointer'}">
+              <mat-icon style="font-size: 18px; width: 18px; height: 18px;">{{ manualEmailSent ? 'mark_email_read' : 'email' }}</mat-icon> 
+              <span *ngIf="!isResendingEmail && !manualEmailSent">Reenviar Correo</span>
+              <span *ngIf="isResendingEmail">Enviando...</span>
+              <span *ngIf="manualEmailSent">¡Correo Enviado!</span>
+            </button>
+          </div>
+          
+          <button type="button" style="width: 100%; background: transparent; border: 1px solid var(--border-color, rgba(0,0,0,0.1)); color: var(--text-secondary, #64748b); border-radius: 8px; padding: 0.75rem; font-weight: 600; font-size: 0.85rem; cursor: pointer;" (click)="closeAddModal()">Cerrar y Volver al Panel</button>
+        </div>
+
+        <!-- Formulario -->
+        <form [formGroup]="addForm" (ngSubmit)="onSubmit()" class="add-form" *ngIf="!createdCredentials">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="firstName">Nombre *</label>
+              <input id="firstName" type="text" formControlName="firstName" placeholder="Nombre" />
+            </div>
+            <div class="form-group">
+              <label for="lastName">Apellidos *</label>
+              <input id="lastName" type="text" formControlName="lastName" placeholder="Apellidos" />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="email">Correo Electrónico *</label>
+              <input id="email" type="email" formControlName="email" placeholder="ejemplo@mindtrack.com" />
+            </div>
+            <div class="form-group">
+              <label for="cedula">Cédula Profesional *</label>
+              <input id="cedula" type="text" formControlName="cedula" placeholder="No. de Cédula" />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="matricula">Cédula / Cód. Empleado *</label>
+              <input id="matricula" type="text" formControlName="matricula" placeholder="M-1002" />
+            </div>
+            <div class="form-group" style="position: relative;">
+              <label for="password">Contraseña Provisional *</label>
+              <button type="button" (click)="generateRandomPassword()" style="position: absolute; right: 0; top: 0; background: none; border: none; color: #3b82f6; cursor: pointer; font-size: 0.8rem; display: flex; align-items: center; gap: 0.2rem; padding: 0;">
+                <mat-icon style="font-size: 14px; width: 14px; height: 14px;">autorenew</mat-icon> Generar
+              </button>
+              <input id="password" type="text" formControlName="password" placeholder="Contraseña de acceso" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="faculty">Facultad Principal *</label>
+            <select id="faculty" formControlName="faculty">
+              <option *ngFor="let fac of faculties" [value]="fac">{{ fac }}</option>
+            </select>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="specialty">Especialidad Clínica *</label>
+              <input id="specialty" type="text" formControlName="specialty" placeholder="e.g. Ansiedad, Terapia Familiar" />
+            </div>
+            <div class="form-group">
+              <label for="capacity">Capacidad de Pacientes *</label>
+              <input id="capacity" type="number" formControlName="capacity" />
+            </div>
+          </div>
+
+          <div class="form-group" style="grid-column: span 2;">
+            <div *ngIf="formErrorMessage" style="color: #ef4444; font-size: 0.85rem; padding-top: 0.5rem;">{{ formErrorMessage }}</div>
+            <div *ngIf="formSuccessMessage" style="color: #10b981; font-size: 0.85rem; padding-top: 0.5rem;">{{ formSuccessMessage }}</div>
+          </div>
+
+          <div class="form-actions" style="justify-content: flex-end; width: 100%; border-top: 1px solid var(--border-color, rgba(0,0,0,0.1)); padding-top: 1.25rem; margin-top: 0.5rem; display: flex; gap: 1rem;">
+            <button type="button" class="cancel-btn" (click)="closeAddModal()" [disabled]="isSubmitting">Cancelar</button>
+            <button type="submit" class="submit-btn" [disabled]="isSubmitting">
+              <span *ngIf="!isSubmitting">Registrar Psicólogo</span>
+              <span *ngIf="isSubmitting">Registrando...</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+</div>

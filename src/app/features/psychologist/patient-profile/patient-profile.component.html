@@ -1,0 +1,229 @@
+<div class="profile-container">
+  <!-- Back button -->
+  <button class="back-btn" (click)="goBack()">
+    <mat-icon>arrow_back</mat-icon> Volver al Directorio
+  </button>
+
+  <div *ngIf="loading" class="loading-state amati-loading-container">
+    <div class="amati-loader-wrapper">
+      <div class="spinner-ring"></div>
+      <img src="/amati-logo.svg" alt="Amati Logo" class="amati-logo-pulse" />
+    </div>
+    <h3 class="loading-title">Descifrando expediente clínico...</h3>
+    <p class="loading-subtitle">Desencriptando historial confidencial...</p>
+  </div>
+
+  <ng-container *ngIf="!loading && patient">
+    <!-- Header Card -->
+    <div class="card header-card">
+    <div class="patient-header">
+      <div class="avatar" [style.background-image]="patient.avatarUrl ? 'url(' + patient.avatarUrl + ')' : ''" [style.background-size]="'cover'" [style.background-position]="'center'">
+        <mat-icon *ngIf="!patient.avatarUrl">person</mat-icon>
+      </div>
+      <div class="info">
+        <h1>{{patient.firstName}} {{patient.lastName}}</h1>
+        <p>{{patient.age}} años • {{patient.gender}} • ID: {{patient.id}}</p>
+        <div class="badges">
+          <span *ngIf="patient.state === 'Critical'" class="badge critical"><mat-icon>warning</mat-icon> Crítico</span>
+          <span *ngIf="patient.state === 'Active'" class="badge active">Activo</span>
+          <span class="badge neutral">Riesgo: {{patient.riskLevel}}</span>
+        </div>
+      </div>
+      <div class="stats">
+        <div class="stat-box">
+          <div class="stat-title"><mat-icon>calendar_today</mat-icon> Sesiones</div>
+          <div class="stat-value">{{patient.sessionCount}}</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-title"><mat-icon class="text-green">schedule</mat-icon> Próxima</div>
+          <div class="stat-value">{{patient.nextSession}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="content-grid">
+    <!-- Left Column (General Info & Progress) -->
+    <div class="col-main">
+      <!-- Clinical Info -->
+      <div class="card">
+        <h2 class="card-title"><mat-icon class="text-primary">assignment</mat-icon> Información Clínica</h2>
+        <div class="info-grid">
+          <div>
+            <label>Diagnóstico</label>
+            <p>{{patient.diagnosis}}</p>
+          </div>
+          <div>
+            <label>Plan de Tratamiento</label>
+            <p>{{patient.treatmentPlan}}</p>
+          </div>
+          <div>
+            <label>Medicamentos</label>
+            <ul><li *ngFor="let med of patient.medications"><mat-icon class="text-primary">medication</mat-icon> {{med}}</li></ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Amati AI Insights -->
+      <div class="card ai-card">
+        <h2 class="card-title"><mat-icon class="text-purple">smart_toy</mat-icon> Análisis de Amati (IA)</h2>
+        <div class="ai-content">
+          <div class="sentiment-box">
+            <label>Sentimiento Dominante Semanal</label>
+            <div class="sentiment-value text-purple">Depresivo / Ansioso</div>
+          </div>
+          <p class="ai-text"><strong>Resumen de interacciones:</strong> El paciente ha reportado episodios de ideación de autolesión en conversaciones nocturnas. El sistema detectó palabras clave críticas el 16 de Junio. Se recomienda intervención en la próxima sesión.</p>
+        </div>
+      </div>
+
+      <!-- Evaluación Alimentaria EAT-26 -->
+      <div class="card" *ngIf="eat26Result">
+        <h2 class="card-title"><mat-icon [ngClass]="eat26Result.hasRisk ? 'text-red' : 'text-green'">restaurant</mat-icon> Evaluación Alimentaria (EAT-26)</h2>
+        <div style="display: flex; gap: 20px; align-items: center; margin-top: 15px;">
+          <div [style.background]="eat26Result.hasRisk ? 'rgba(239,68,68,0.1)' : 'rgba(16,185,129,0.1)'" 
+               [style.color]="eat26Result.hasRisk ? '#ef4444' : '#10b981'" 
+               style="width: 80px; height: 80px; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0; border: 2px solid currentColor;">
+            <span style="font-size: 28px; line-height: 1;">{{ eat26Result.score }}</span>
+            <span style="font-size: 12px; opacity: 0.8;">PTS</span>
+          </div>
+          <div>
+            <h3 style="margin: 0 0 5px; font-size: 16px; color: var(--text-primary);">
+              {{ eat26Result.hasRisk ? 'Posible Riesgo Detectado' : 'Riesgo Bajo' }}
+            </h3>
+            <p style="margin: 0 0 8px; color: var(--text-secondary); font-size: 14px; line-height: 1.5;">
+              {{ eat26Result.interpretation }}
+            </p>
+            <div *ngIf="eat26Result.behavioralRisk" style="display: inline-flex; align-items: center; font-size: 12px; padding: 4px 8px; border-radius: 6px; background: rgba(239,68,68,0.1); color: #ef4444; font-weight: 600;">
+              <mat-icon style="font-size: 16px; width: 16px; height: 16px; margin-right: 4px;">warning</mat-icon> Alerta por comportamiento de purga / atracón
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Progress Chart -->
+      <div class="card">
+        <h2 class="card-title"><mat-icon class="text-blue">trending_up</mat-icon> Evolución PHQ-9</h2>
+        <div class="chart-wrapper">
+           <canvas baseChart [data]="lineChartData" [options]="lineChartOptions" type="line"></canvas>
+        </div>
+      </div>
+      
+
+    </div>
+
+    <!-- Right Column (History) -->
+    <div class="col-side">
+
+      <!-- Session History -->
+      <div class="card">
+        <h2 class="card-title"><mat-icon class="text-primary">history</mat-icon> Historial de Sesiones</h2>
+        <div class="session-list">
+          <div class="session-item" *ngFor="let session of sessionHistory">
+            <div class="session-top">
+              <span class="date">{{session.date}} <span *ngIf="session.time">a las {{session.time}}</span></span>
+              <span class="mood-badge" [ngClass]="session.status.toLowerCase()">{{session.mood}}</span>
+            </div>
+            <span class="type">{{session.type}} • {{session.duration}}</span>
+            
+            <div style="display: flex; gap: 8px; margin-top: 10px;">
+              <button class="btn btn-primary btn-sm" style="display: inline-flex; align-items: center; gap: 4px; border: none; background: #0ea5e9; color: white; padding: 6px 12px; border-radius: 6px; cursor: pointer;" *ngIf="session.status === 'scheduled'" (click)="openPostSessionModal(session)">
+                 <mat-icon style="font-size: 18px; width: 18px; height: 18px;">edit_note</mat-icon> Finalizar Cita / Añadir Nota
+              </button>
+              
+              <button class="btn btn-outline btn-sm" style="display: inline-flex; align-items: center; gap: 4px; border: 1px solid #cbd5e1; background: white; color: #475569; padding: 6px 12px; border-radius: 6px; cursor: pointer;" *ngIf="session.status === 'completed' || session.status === 'no_show'" (click)="openPostSessionModal(session)">
+                 <mat-icon style="font-size: 18px; width: 18px; height: 18px;">visibility</mat-icon> Ver Detalles
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div> <!-- Cierre de col-side -->
+  </div> <!-- Cierre de content-grid -->
+
+  <!-- Full Width Section: Diario Emocional interactivo -->
+  <div class="full-width-section">
+    <div class="diary-dashboard-layout">
+      <!-- Calendario -->
+      <section class="calendar-section">
+        <div class="calendar-header">
+          <h2><mat-icon class="text-amber">book</mat-icon> Calendario Emocional</h2>
+          <div class="month-nav">
+            <button class="nav-btn" (click)="prev()"><mat-icon>chevron_left</mat-icon></button>
+            <p class="clickable-month" (click)="toggleMode()">
+              {{ calendarMode === 'days' ? monthName + ' ' + year : year }}
+              <mat-icon class="dropdown-icon">{{ calendarMode === 'days' ? 'arrow_drop_down' : 'arrow_drop_up' }}</mat-icon>
+            </p>
+            <button class="nav-btn" (click)="next()"><mat-icon>chevron_right</mat-icon></button>
+          </div>
+        </div>
+        
+        <!-- Vista de Días -->
+        <div class="calendar-grid" *ngIf="calendarMode === 'days'">
+          <div class="day-name">Lun</div><div class="day-name">Mar</div><div class="day-name">Mié</div>
+          <div class="day-name">Jue</div><div class="day-name">Vie</div><div class="day-name">Sáb</div>
+          <div class="day-name">Dom</div>
+          
+          <div class="calendar-day empty" *ngFor="let blank of blankDays"></div>
+          
+          <div class="calendar-day" *ngFor="let day of calendarDays" 
+               [ngClass]="{'has-entry': getMoodForDay(day) !== null, 'has-session': hasSessionForDay(day), 'selected': selectedDate === day}"
+               (click)="selectDate(day)"
+               style="cursor: pointer;">
+            <span class="date">{{ day }}</span>
+            <div class="indicators">
+              <span class="mood-indicator" *ngIf="getMoodForDay(day)">{{ getMoodForDay(day) }}</span>
+              <span class="session-indicator" *ngIf="hasSessionForDay(day)"><mat-icon>psychology</mat-icon></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Vista de Meses -->
+        <div class="months-grid" *ngIf="calendarMode === 'months'">
+          <div class="month-box" *ngFor="let m of monthsList; let i = index"
+               [ngClass]="{'current-month': i === currentDate.getMonth()}"
+               (click)="selectMonth(i)">
+            {{ m.substring(0, 3).toUpperCase() }}
+          </div>
+        </div>
+      </section>
+
+      <!-- Visor de Entradas -->
+      <section class="entries-section">
+        <div class="entries-header">
+          <h3>{{ selectedDate ? 'Actividad del ' + selectedDate + ' de ' + monthName : 'Última Actividad' }}</h3>
+          <button mat-button *ngIf="selectedDate !== null" (click)="selectDate(selectedDate)">Ver Todo</button>
+        </div>
+
+        <div class="empty-state" *ngIf="displayedDiaryEntries.length === 0 && displayedSessions.length === 0" style="padding: 2rem; text-align: center; color: var(--text-secondary);">
+          <mat-icon style="font-size: 48px; width: 48px; height: 48px; opacity: 0.5; margin-bottom: 1rem;">event_busy</mat-icon>
+          <p style="font-size: 1.1rem; font-weight: 500;">Ningún registro</p>
+          <p style="font-size: 0.9rem; opacity: 0.8;">El paciente no tiene entradas ni sesiones para esta fecha.</p>
+        </div>
+
+        <div class="diary-list" *ngIf="displayedSessions.length > 0" style="margin-bottom: 1rem;">
+           <div class="diary-item" *ngFor="let session of displayedSessions" style="border-left: 4px solid #0ea5e9;">
+             <div class="diary-header">
+               <span class="date">Sesión Programada <span *ngIf="session.time">• {{session.time}}</span></span>
+               <span class="mood" style="color: #0ea5e9;"><mat-icon>psychology</mat-icon> {{session.status === 'completed' ? 'Completada' : session.status === 'no_show' ? 'Ausente' : 'Pendiente'}}</span>
+             </div>
+             <p class="content" style="font-style: normal; font-weight: 500; color: #334155;">Terapia Individual</p>
+             <button class="btn btn-outline btn-sm" style="display: inline-flex; align-items: center; gap: 4px; border: 1px solid #cbd5e1; background: white; color: #475569; padding: 6px 12px; border-radius: 6px; cursor: pointer; margin-top: 10px;" *ngIf="session.status === 'completed' || session.status === 'no_show'" (click)="openPostSessionModal(session)">
+                 <mat-icon style="font-size: 18px; width: 18px; height: 18px;">visibility</mat-icon> Ver Detalles de la Sesión
+             </button>
+           </div>
+        </div>
+
+        <div class="diary-list" *ngIf="displayedDiaryEntries.length > 0">
+           <div class="diary-item" *ngFor="let entry of displayedDiaryEntries">
+             <div class="diary-header">
+               <span class="date">{{entry.date}}</span>
+               <span class="mood"><mat-icon [ngClass]="entry.moodColor">{{entry.moodIcon}}</mat-icon> {{entry.mood}}</span>
+             </div>
+             <p class="content">"{{entry.content}}"</p>
+           </div>
+        </div>
+      </section>
+    </div>
+  </div>
+  </ng-container>
+</div>

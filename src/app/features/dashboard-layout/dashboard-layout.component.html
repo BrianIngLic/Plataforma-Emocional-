@@ -1,0 +1,94 @@
+<div class="layout-container">
+  <!-- Columna Izquierda: Sidebar Global -->
+  <aside class="sidebar" [class.collapsed]="isSidebarCollapsed">
+    <div class="sidebar-header">
+      <div class="brand">
+        <a href="/" class="logo-link" style="display: flex; align-items: center; gap: 8px; text-decoration: none;">
+          <img src="/amati-logo.svg" alt="Amati Logo" style="width: 36px; height: 36px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));" />
+          <div class="brand-text">
+            <h2>Amati</h2>
+            <p>Estudiante</p>
+          </div>
+        </a>
+      </div>
+      <button class="btn-icon hamburger" (click)="toggleSidebar()">
+        <mat-icon>menu</mat-icon>
+      </button>
+    </div>
+
+    <div class="sidebar-content">
+      <button class="new-action-btn" (click)="onNewAction()">
+        <mat-icon>add</mat-icon> 
+        <span class="btn-text">Nuevo chat</span>
+      </button>
+
+      <nav class="nav-menu">
+        <a class="nav-item" routerLink="/dashboard/chat" routerLinkActive="active">
+          <mat-icon>chat_bubble_outline</mat-icon>
+          <div class="nav-text">
+            <span>Asistente</span>
+            <small>Texto & Voz</small>
+          </div>
+        </a>
+        <a class="nav-item" routerLink="/dashboard/diary" routerLinkActive="active">
+          <mat-icon>menu_book</mat-icon>
+          <div class="nav-text">
+            <span>Mi Diario</span>
+            <small>Personal</small>
+          </div>
+        </a>
+        <a class="nav-item" routerLink="/dashboard/book-appointment" routerLinkActive="active">
+          <mat-icon>calendar_month</mat-icon>
+          <div class="nav-text">
+            <span>Citas</span>
+            <small>Agenda Clínica</small>
+          </div>
+        </a>
+        <a class="nav-item" routerLink="/dashboard/alimentario" routerLinkActive="active">
+          <mat-icon>restaurant</mat-icon>
+          <div class="nav-text">
+            <span>Alimentario</span>
+            <small>Nutrición</small>
+          </div>
+        </a>
+      </nav>
+
+      <div class="recent-chats" *ngIf="showChatHistory">
+        <h3 class="section-title">RECIENTES</h3>
+        <div class="recent-item" *ngFor="let chat of chatHistory" (click)="loadChat(chat.id)" style="cursor: pointer;">
+          <span class="recent-text" title="{{chat.title}}">{{ chat.title.substring(0, 15) }}{{chat.title.length > 15 ? '...' : ''}}</span>
+          <small class="recent-time" style="margin-left: auto;">{{ chat.created_at | date:'dd/MM' }}</small>
+          <mat-icon class="recent-icon">history</mat-icon>
+        </div>
+      </div>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="footer-link">
+        <mat-icon>bar_chart</mat-icon> <span class="nav-text">Estadísticas</span>
+      </div>
+      <div class="footer-link" routerLink="/dashboard/settings" style="cursor: pointer;">
+        <mat-icon>settings</mat-icon> <span class="nav-text">Configuración</span>
+      </div>
+      
+      <div class="user-profile" *ngIf="currentUser">
+        <div class="avatar" [style.background-image]="currentUser.avatar_url ? 'url(' + currentUser.avatar_url + ')' : ''" [style.background-size]="'cover'" [style.background-position]="'center'">
+          <mat-icon *ngIf="!currentUser.avatar_url">person</mat-icon>
+        </div>
+        <div class="user-info">
+          <span class="name" style="text-transform: capitalize;">{{ currentUser.name || 'Estudiante' }}</span>
+          <small class="role"><mat-icon>school</mat-icon> {{ currentUser.role || 'Estudiante' }}</small>
+        </div>
+      </div>
+      
+      <div class="footer-link logout" (click)="logout()">
+        <mat-icon>logout</mat-icon> <span class="nav-text">Cerrar sesión</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Área de Contenido Dinámico (Chat, Diario, etc) -->
+  <main class="main-content" [class.expanded]="isSidebarCollapsed">
+    <router-outlet></router-outlet>
+  </main>
+</div>

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -15,7 +15,7 @@ import { AuthService } from '../../../core/services/auth.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   private authService = inject(AuthService);
   private router = inject(Router);
 
@@ -23,6 +23,18 @@ export class LoginComponent {
   pass: string = '';
   errorMessage: string = '';
   showPassword = false;
+  showInactivityModal = false;
+
+  ngOnInit() {
+    if (sessionStorage.getItem('inactivity_logout') === 'true') {
+      this.showInactivityModal = true;
+      sessionStorage.removeItem('inactivity_logout');
+    }
+  }
+
+  closeInactivityModal() {
+    this.showInactivityModal = false;
+  }
 
   async onLogin() {
     this.errorMessage = '';

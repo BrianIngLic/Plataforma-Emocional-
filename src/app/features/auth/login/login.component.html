@@ -114,3 +114,26 @@
     </div>
   </main>
 </div>
+
+<!-- Inactivity Timeout Modal -->
+<div class="privacy-modal-overlay" *ngIf="showInactivityModal" (click)="closeInactivityModal()">
+  <div class="privacy-modal-card inactivity-card" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <span style="font-size: 1.6rem;">🔒</span>
+        <h2>Cierre de Sesión por Seguridad</h2>
+      </div>
+      <button class="close-btn" (click)="closeInactivityModal()">✖</button>
+    </div>
+    <div class="modal-content" style="text-align: center; padding: 2.5rem 2rem;">
+      <div style="font-size: 3.5rem; margin-bottom: 1.5rem; animation: pulseLock 2s infinite;">🔒</div>
+      <h3 style="font-size: 1.4rem; color: var(--text-primary); margin-bottom: 1rem; font-weight: 600;">Sesión Finalizada por Inactividad</h3>
+      <p style="font-size: 1.05rem; color: var(--text-secondary); max-width: 450px; margin: 0 auto; line-height: 1.6;">
+        Por lineamientos de ciberseguridad y protección de datos clínicos (HIPAA / NOM-024), tu sesión se ha cerrado de forma automática tras 15 minutos de inactividad para resguardar la estricta confidencialidad de la información.
+      </p>
+    </div>
+    <div class="modal-footer" style="justify-content: center; padding: 1.5rem;">
+      <button class="btn-primary" style="padding: 0.8rem 3rem; border-radius: 9999px; font-size: 1rem;" (click)="closeInactivityModal()">Entendido</button>
+    </div>
+  </div>
+</div>

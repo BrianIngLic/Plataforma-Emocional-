@@ -50,6 +50,7 @@ export class AuthService {
       if (user) {
         await this.auditService.logEvent('SESSION_TIMEOUT', `Cierre de sesión automático por inactividad (15 mins) para el rol ${user.role}.`, user.id);
       }
+      sessionStorage.setItem('inactivity_logout', 'true');
       await this.logout();
     }, this.TIMEOUT_MS);
   }

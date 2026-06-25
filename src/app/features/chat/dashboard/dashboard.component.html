@@ -1,93 +1,114 @@
-<!-- Área de Chat Principal (Sin Sidebar, ahora inyectada por el RouterOutlet) -->
-<main class="chat-main">
-  <header class="chat-header">
-    <div class="ai-info">
-        <div class="ai-avatar">
-          <mat-icon>auto_awesome</mat-icon>
-        </div>
-        <div class="chat-header-info" style="display: flex; align-items: center; gap: 10px;">
-          <img src="/amati-logo.svg" alt="Amati Logo" style="width: 40px; height: 40px;" />
-          <h2>Amati — <span>Asistente Emocional</span></h2>
-        </div>
-        <div class="ai-status">
-          <p><span class="status-dot"></span> En línea · Modo texto</p>
-        </div>
-      </div>
-      <div class="header-actions">
-        <button class="mode-toggle">
-          <mat-icon>send</mat-icon> Texto
-        </button>
-        <button class="mode-toggle inactive">
-          <mat-icon>mic</mat-icon> Voz
-        </button>
-      </div>
-    </header>
-
-    <!-- Historial de Conversación -->
-    <div class="messages-container" #chatScroll>
-      <div class="message-wrapper" 
-           *ngFor="let msg of messages()" 
-           [ngClass]="msg.role === 'user' ? 'user-message' : 'ai-message'">
-        
-        <div class="ai-icon" *ngIf="msg.role === 'assistant'">
-          <mat-icon>auto_awesome</mat-icon>
-        </div>
-        
-        <div class="message-bubble">
-          <!-- Renderizado Markdown para la IA -->
-          <markdown *ngIf="msg.role === 'assistant'" [data]="msg.content"></markdown>
-          <!-- Texto simple para el usuario -->
-          <p *ngIf="msg.role === 'user'">{{ msg.content }}</p>
-          
-          <div class="timestamp">{{ msg.timestamp | date:'HH:mm' }}</div>
-        </div>
-
-      </div>
-
-      <!-- Indicador de Escribiendo -->
-      <div class="message-wrapper ai-message" *ngIf="isTyping()">
-        <div class="ai-icon">
-          <mat-icon>auto_awesome</mat-icon>
-        </div>
-        <div class="message-bubble typing-indicator">
-          <span></span><span></span><span></span>
+<!-- Área de Chat Minimalista y Serena -->
+<main class="chat-main" [ngClass]="{'relief-mode-active': activeReliefMode}">
+  <!-- Encabezado Limpio y Tranquilo -->
+  <header class="chat-header-minimal">
+    <div class="header-brand">
+      <img src="/amati-logo.svg" alt="Amati Logo" class="amati-logo-minimal" />
+      <div class="brand-titles">
+        <h2>Amati <span>— Asistente Emocional</span></h2>
+        <div class="status-minimal">
+          <span class="dot-online"></span>
+          <p>Confidencialidad garantizada</p>
         </div>
       </div>
     </div>
 
-    <!-- Sugerencias (Ocultar si hay muchos mensajes, por diseño lo dejamos visible) -->
-    <div class="suggestions-row" *ngIf="messages().length <= 2">
-      <button class="suggestion-chip" *ngFor="let sug of suggestions" (click)="sendSuggestion(sug)">
-        {{ sug }}
+    <!-- Gamificación Discreta y No Intrusiva -->
+    <div class="header-actions-minimal">
+      <div class="discreet-badge" title="Racha de cuidado personal">
+        <mat-icon class="icon-streak">local_fire_department</mat-icon>
+        <span>{{ streakDays }} días seguidos</span>
+      </div>
+
+      <button class="minimal-toggle-btn" [class.active]="activeReliefMode" (click)="toggleReliefMode()">
+        <mat-icon>self_improvement</mat-icon>
+        <span>{{ activeReliefMode ? 'Pausa Activa' : 'Pausa de Calma' }}</span>
       </button>
     </div>
+  </header>
 
-    <!-- Input Box -->
-    <div class="input-area">
-      <div class="input-container">
-        <div class="input-actions-left">
-          <mat-icon>attach_file</mat-icon>
-          <mat-icon>image</mat-icon>
-          <mat-icon>sentiment_satisfied_alt</mat-icon>
-        </div>
-        
-        <input type="text" 
-               [(ngModel)]="inputText" 
-               (keyup.enter)="sendMessage()" 
-               placeholder="Escribe un mensaje..."
-               [disabled]="isTyping()">
-               
-        <div class="input-actions-right">
-          <mat-icon class="mic-icon">mic</mat-icon>
-          <button class="send-btn" (click)="sendMessage()" [disabled]="!inputText.trim() || isTyping()">
-            <mat-icon>send</mat-icon>
-          </button>
-        </div>
-      </div>
-      <p class="disclaimer">Amati puede cometer errores. No reemplaza apoyo profesional.</p>
+  <!-- Panel Suave de Modo Calma -->
+  <div class="relief-banner-minimal" *ngIf="activeReliefMode">
+    <div class="relief-content">
+      <mat-icon class="icon-spa">spa</mat-icon>
+      <p><strong>Pausa de anclaje:</strong> Inhala suavemente por 4 segundos, mantén y exhala despacio. Este espacio está diseñado para ir a tu propio ritmo, sin presiones ni prisas.</p>
+    </div>
+    <button class="btn-close-minimal" (click)="toggleReliefMode()"><mat-icon>close</mat-icon></button>
+  </div>
+
+  <!-- Contenedor de Mensajes -->
+  <div class="messages-container" #chatScroll>
+    <!-- Bienvenida Minimalista -->
+    <div class="welcome-minimal" *ngIf="messages().length === 0">
+      <mat-icon class="welcome-icon">volunteer_activism</mat-icon>
+      <h3>Hola. Estoy aquí para escucharte sin prisas ni juicios.</h3>
+      <p>Tómate todo el tiempo que necesites. Lo que escribes aquí es completamente privado.</p>
     </div>
 
-    <button class="help-fab">
-      <mat-icon>question_mark</mat-icon>
-    </button>
-  </main>
+    <div class="message-wrapper" 
+         *ngFor="let msg of messages()" 
+         [ngClass]="msg.role === 'user' ? 'user-message' : 'ai-message'">
+      
+      <div class="ai-avatar-minimal" *ngIf="msg.role === 'assistant'">
+        <img src="/amati-logo.svg" alt="Amati" />
+      </div>
+      
+      <div class="message-bubble">
+        <!-- Renderizado Markdown para la IA -->
+        <markdown *ngIf="msg.role === 'assistant'" [data]="msg.content"></markdown>
+        <!-- Texto simple para el usuario -->
+        <p *ngIf="msg.role === 'user'">{{ msg.content }}</p>
+        
+        <div class="timestamp">{{ msg.timestamp | date:'HH:mm' }}</div>
+      </div>
+    </div>
+
+    <!-- Indicador de Escribiendo Minimalista -->
+    <div class="message-wrapper ai-message" *ngIf="isTyping()">
+      <div class="ai-avatar-minimal">
+        <img src="/amati-logo.svg" alt="Amati" />
+      </div>
+      <div class="message-bubble typing-minimal">
+        <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sugerencias Sutiles (Chispas de Valentía) -->
+  <div class="suggestions-minimal" *ngIf="messages().length <= 4">
+    <span class="suggestions-label">Ideas para comenzar:</span>
+    <div class="suggestions-list">
+      <button class="chip-minimal" *ngFor="let sug of suggestions" (click)="sendSuggestion(sug.label)">
+        {{ sug.label }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Caja de Input Limpia -->
+  <div class="input-area-minimal">
+    <div class="input-wrapper">
+      <div class="actions-left">
+        <mat-icon title="Adjuntar archivo">attach_file</mat-icon>
+        <mat-icon title="Enviar imagen">image</mat-icon>
+        <mat-icon title="Expresar estado de ánimo">sentiment_satisfied_alt</mat-icon>
+      </div>
+      
+      <input type="text" 
+             [(ngModel)]="inputText" 
+             (keyup.enter)="sendMessage()" 
+             placeholder="Escribe lo que sientes, a tu ritmo..."
+             [disabled]="isTyping()">
+             
+      <div class="actions-right">
+        <mat-icon class="icon-mic" title="Mensaje de voz">mic</mat-icon>
+        <button class="btn-send" (click)="sendMessage()" [disabled]="!inputText.trim() || isTyping()">
+          <mat-icon>send</mat-icon>
+        </button>
+      </div>
+    </div>
+    <div class="footer-note">
+      <span>🔒 Cifrado de conocimiento cero · Amati utiliza IA compasiva</span>
+    </div>
+  </div>
+</main>
+

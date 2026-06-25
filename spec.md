@@ -39,6 +39,10 @@ El sistema está compuesto por un Frontend Angular, un Backend PostgREST (Postgr
   - Gráfica de progreso (ej. PHQ-9).
   - **Superpoder Amati:** Interfaz donde el psicólogo puede leer el historial de chat de la IA con el estudiante.
 - **Agenda Clínica:** Pantalla dedicada con vista de calendario para organizar, agendar y cancelar citas de los pacientes basadas en recomendaciones del núcleo IA.
+- **Ajustes Clínicos y Modalidad Híbrida (Virtual / Presencial):**
+  - Switch interactivo para alternar entre atención `Virtual` (con enlace de reunión) y `Presencial`.
+  - Configuración presencial con selector de Facultad base predeterminada, Edificio y Número de Oficina/Aula.
+  - **Vinculación con Recorridos Virtuales BUAP:** Al confirmar o consultar una cita presencial, el estudiante visualiza un botón inmersivo para "📍 Abrir Recorrido Virtual" de su facultad, reduciendo la ansiedad espacial y facilitando la llegada al campus.
 
 ### Skill 6: Mi Diario (Personal)
 - Interfaz privada para que el estudiante registre sus pensamientos y estado de ánimo diario.

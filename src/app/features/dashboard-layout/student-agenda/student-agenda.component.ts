@@ -50,6 +50,11 @@ export class StudentAgendaComponent implements OnInit {
   psychologistEmail: string = '';
   psychologistAvatar: string = '';
   psychologistLocation: string = '';
+  psychologistModality: string = 'virtual';
+  psychologistBuilding: string = '';
+  psychologistOfficeRoom: string = '';
+  psychologistFacultyName: string = '';
+  psychologistVirtualTourUrl: string = '';
   loading = true;
   errorMsg: string | null = null;
 
@@ -118,8 +123,16 @@ export class StudentAgendaComponent implements OnInit {
         this.psychologistAvatar = prof.avatar_url || '';
       }
 
-      const { data: sett } = await this.supabase.from('psychologist_settings').select('location').eq('psychologist_id', psyId).maybeSingle();
-      if (sett) this.psychologistLocation = sett.location || 'Consultorio Virtual';
+      const { data: settRaw } = await this.supabase.from('psychologist_settings').select('location, modality, building, office_room, faculty:faculties(name, virtual_tour_url)').eq('psychologist_id', psyId).maybeSingle();
+      const sett: any = settRaw;
+      if (sett) {
+        this.psychologistLocation = sett.location || 'Consultorio Virtual';
+        this.psychologistModality = sett.modality || 'virtual';
+        this.psychologistBuilding = sett.building || '';
+        this.psychologistOfficeRoom = sett.office_room || '';
+        this.psychologistFacultyName = sett.faculty ? (Array.isArray(sett.faculty) ? sett.faculty[0]?.name : sett.faculty?.name) : '';
+        this.psychologistVirtualTourUrl = sett.faculty ? (Array.isArray(sett.faculty) ? sett.faculty[0]?.virtual_tour_url : sett.faculty?.virtual_tour_url) : '';
+      }
     } else {
       // No tiene psicólogo asignado, cargar directorio
       await this.loadPsychologistsByFaculty();
@@ -278,12 +291,17 @@ export class StudentAgendaComponent implements OnInit {
     const endStr = endD.toTimeString().substring(0, 5);
 
     const dialogRef = this.dialog.open(AppointmentModalComponent, {
-      width: '450px',
+      width: '500px',
       data: {
         psychologistName: this.psychologistName,
         psychologistEmail: this.psychologistEmail,
         psychologistAvatar: this.psychologistAvatar,
         location: this.psychologistLocation,
+        modality: this.psychologistModality,
+        building: this.psychologistBuilding,
+        officeRoom: this.psychologistOfficeRoom,
+        facultyName: this.psychologistFacultyName,
+        virtualTourUrl: this.psychologistVirtualTourUrl,
         dateStr: this.selectedDateStr()!,
         startTime: slot.time,
         endTime: endStr,

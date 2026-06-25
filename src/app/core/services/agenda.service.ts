@@ -26,24 +26,28 @@ export class AgendaService {
   async getSettings(psychologistId: string) {
     const { data, error } = await this.supabase
       .from('psychologist_settings')
-      .select('*')
+      .select('*, faculty:faculties(id, name, virtual_tour_url, campuses(name))')
       .eq('psychologist_id', psychologistId)
       .maybeSingle();
     
     if (error && error.code !== 'PGRST116') {
       console.error('Error fetching settings:', error);
     }
-    return data;
+    return data as any;
   }
 
-  async saveSettings(psychologistId: string, duration: number, workingDays: WorkingDaysMap, location: string) {
+  async saveSettings(psychologistId: string, duration: number, workingDays: WorkingDaysMap, location: string, modality: string = 'virtual', facultyId: number | null = null, building: string = '', officeRoom: string = '') {
     const { data, error } = await this.supabase
       .from('psychologist_settings')
       .upsert({ 
         psychologist_id: psychologistId, 
         session_duration: duration, 
         working_days: workingDays,
-        location: location || null
+        location: location || null,
+        modality: modality || 'virtual',
+        faculty_id: facultyId || null,
+        building: building || null,
+        office_room: officeRoom || null
       });
     
     if (error) throw error;
@@ -138,7 +142,13 @@ export class AgendaService {
     const hasActiveReservation = !!activeAppointment;
     const activeReservationDetails = activeAppointment ? {
       date: activeAppointment.scheduled_date,
-      time: activeAppointment.start_time
+      time: activeAppointment.start_time,
+      modality: settings.modality || 'virtual',
+      location: settings.location || 'Consultorio Virtual',
+      building: settings.building || '',
+      officeRoom: settings.office_room || '',
+      facultyName: settings.faculty ? (Array.isArray(settings.faculty) ? settings.faculty[0]?.name : settings.faculty?.name) : '',
+      virtualTourUrl: settings.faculty ? (Array.isArray(settings.faculty) ? settings.faculty[0]?.virtual_tour_url : settings.faculty?.virtual_tour_url) : ''
     } : null;
 
     const availableDays = new Map();

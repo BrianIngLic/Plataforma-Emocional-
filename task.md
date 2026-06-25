@@ -113,6 +113,12 @@
 - `[x]` Lógica de gestión de citas (ver detalles de la cita, marcar completada, agendar nueva cita).
 - `[x]` Integrar ruta `/psychologist/agenda` y enlazar con el botón en el layout.
 
+**5.6. Configuración Híbrida y Recorridos Virtuales (`settings.component` & `student-agenda.component`)**
+- `[x]` Base de Datos y Backend: Extender `psychologist_settings` en `agenda.service.ts` para persistir `modality`, `faculty_id`, `building` y `office_room`.
+- `[x]` Servicios: Actualizar `AgendaService.getSettings` y `getStudentAvailableSlots` para realizar un join con `faculties(id, name, virtual_tour_url)`.
+- `[x]` Interfaz del Psicólogo (`settings.component`): Añadir selector de modalidad (`Virtual` vs `Presencial`), con preselección de la facultad base del especialista, campo de edificio y número de oficina/aula.
+- `[x]` Interfaz del Estudiante (`student-agenda.component` y `appointment-modal.component`): Recuperar y mostrar el lugar de atención detallado y habilitar el botón "📍 Abrir Recorrido Virtual" apuntando a la URL inmersiva de la BUAP al agendar y en el banner de cita confirmada.
+
 *(Skill 4 continúa pausada en el backlog)*
 
 ---

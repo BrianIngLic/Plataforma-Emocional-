@@ -13,6 +13,11 @@ export interface AppointmentModalData {
   psychologistEmail?: string;
   psychologistAvatar?: string;
   location: string;
+  modality?: string;
+  building?: string;
+  officeRoom?: string;
+  facultyName?: string;
+  virtualTourUrl?: string;
   dateStr: string;
   startTime: string;
   endTime: string;
@@ -52,10 +57,28 @@ export interface AppointmentModalData {
           </div>
           
           <div class="info-row">
-            <mat-icon>location_on</mat-icon>
-            <div class="text-block">
-              <span class="label">Lugar de Atención</span>
-              <span class="value">{{ data.location || 'Consultorio Virtual' }}</span>
+            <mat-icon>{{ data.modality === 'presencial' ? 'business' : 'videocam' }}</mat-icon>
+            <div class="text-block" style="flex: 1;">
+              <span class="label">Modalidad y Lugar de Atención</span>
+              <div style="display: flex; align-items: center; gap: 8px; margin-top: 4px;">
+                <span class="modality-tag" [class.presential]="data.modality === 'presencial'">
+                  {{ data.modality === 'presencial' ? '🏢 Presencial' : '🌐 Virtual' }}
+                </span>
+                <span class="value" *ngIf="data.modality !== 'presencial'">{{ data.location || 'Enlace de Videollamada' }}</span>
+              </div>
+              
+              <div *ngIf="data.modality === 'presencial'" style="margin-top: 8px; background: #f8fafc; padding: 12px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                <div style="font-size: 0.95rem; color: #1e293b;">
+                  <strong>Edificio:</strong> {{ data.building || 'Edificio Principal' }} <br>
+                  <strong>Consultorio/Aula:</strong> {{ data.officeRoom || 'Privado' }}
+                </div>
+                <div *ngIf="data.facultyName" style="font-size: 0.85rem; color: #64748b; margin-top: 4px;">
+                  📌 {{ data.facultyName }}
+                </div>
+                <a *ngIf="data.virtualTourUrl" [href]="data.virtualTourUrl" target="_blank" style="display: flex; align-items: center; gap: 6px; background: #8b5cf6; color: white; padding: 8px 14px; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 0.85rem; margin-top: 10px; width: fit-content; box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);">
+                  <mat-icon style="font-size: 16px; width: 16px; height: 16px;">360</mat-icon> 📍 Explorar Recorrido Virtual BUAP
+                </a>
+              </div>
             </div>
           </div>
 
@@ -136,6 +159,10 @@ export interface AppointmentModalData {
     }
     .modal-body {
       padding: 24px;
+    }
+    .modality-tag {
+      background: #8b5cf6; color: white; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase;
+      &.presential { background: #6d28d9; }
     }
     .info-card {
       background: white;

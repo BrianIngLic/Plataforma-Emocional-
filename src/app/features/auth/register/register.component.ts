@@ -56,7 +56,13 @@ export class RegisterComponent implements OnInit {
 
   // Paso 1: Credenciales
   credentialsFormGroup = this.fb.group({
-    matricula: ['', Validators.required],
+    
+
+    matricula: ['', [
+      Validators.required,
+      Validators.pattern(/^[0-9]{9}$/)
+    ]],
+
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(6)]],
   });
@@ -140,31 +146,22 @@ export class RegisterComponent implements OnInit {
       ? new Date(fecha).toISOString().split('T')[0]
       : '';
 
-    
-    // Auth Service enviando faculty
-    const userId = await this.authService.register(matricula, email, password, firstName, lastName, faculty);
+    const edad = fecha ? this.calculateAge(fecha) : 0;
+
+    // Registrar usuario y guardar TODOS los campos del perfil directamente en public.profiles
+    const userId = await this.authService.register(matricula, email, password, firstName, lastName, faculty, {
+      programa_educativo: this.profileFormGroup.value.programaEducativo || '',
+      celular: this.profileFormGroup.value.celular || '',
+      antecedentes_familiares: this.profileFormGroup.value.antecedentesFamiliares || '',
+      sexo: this.profileFormGroup.value.sexo || '',
+      fecha_nacimiento: fechaFormateada,
+      edad
+    });
 
     if (userId) {
-      // Crear expediente clínico inicial con los datos generales del estudiante
-      const generalData = {
-        nombre: `${firstName} ${lastName}`,
-        unidad_academica: faculty,
-        programa_educativo: this.profileFormGroup.value.programaEducativo || '',
-        celular: this.profileFormGroup.value.celular || '',
-        correo: email,
-        antecedentes_familiares: this.profileFormGroup.value.antecedentesFamiliares || '',
-        sexo: this.profileFormGroup.value.sexo || '',
-        fecha_nacimiento: fechaFormateada,
-        edad: this.profileFormGroup.value.fechaNacimiento ? this.calculateAge(this.profileFormGroup.value.fechaNacimiento) : 0
-      };
-
-      const initialClinicalData = {
-        general_data: generalData
-      };
-      
-      const conditions = [JSON.stringify(initialClinicalData)]; 
-      
-      const success = await this.clinicalService.submitClinicalRecords(matricula, conditions, true);
+      // Los datos demográficos ya están guardados en public.profiles.
+      // Solo creamos el expediente clínico con el consentimiento del usuario.
+      const success = await this.clinicalService.submitClinicalRecords(matricula, ['{}'], true);
       this.isSubmitting = false;
       if (success) {
         this.router.navigate(['/']); 

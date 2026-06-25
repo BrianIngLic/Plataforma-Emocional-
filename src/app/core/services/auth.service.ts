@@ -114,7 +114,22 @@ export class AuthService {
     }
   }
 
-  async register(matricula: string, email: string, pass: string, firstName: string, lastName: string, faculty: string): Promise<string | null> {
+  async register(
+    matricula: string,
+    email: string,
+    pass: string,
+    firstName: string,
+    lastName: string,
+    faculty: string,
+    profileData?: {
+      programa_educativo?: string;
+      celular?: string;
+      antecedentes_familiares?: string;
+      sexo?: string;
+      fecha_nacimiento?: string;
+      edad?: number;
+    }
+  ): Promise<string | null> {
     
     try {
       // 1. Sign up en Supabase Auth
@@ -135,23 +150,29 @@ export class AuthService {
 
       const userId = authData.user.id;
 
-    // 2. Insertar en public.users
-    const { error: userError } = await this.supabaseService.supabase.from('users').insert({
-      id: userId,
-      matricula: matricula,
-      role_id: 2, // Asumiendo que 2 es 'Estudiante'
-      requires_password_change: false
-    });
-    if (userError) console.error('Error insertando user:', userError.message);
+      // 2. Insertar en public.users
+      const { error: userError } = await this.supabaseService.supabase.from('users').insert({
+        id: userId,
+        matricula: matricula,
+        role_id: 2, // 2 = Estudiante
+        requires_password_change: false
+      });
+      if (userError) console.error('Error insertando user:', userError.message);
 
-    // 3. Insertar en public.profiles
-    const { error: profileError } = await this.supabaseService.supabase.from('profiles').insert({
-      user_id: userId,
-      first_name: firstName,
-      last_name: lastName,
-      faculty: faculty
-    });
-    if (profileError) console.error('Error insertando profile:', profileError.message);
+      // 3. Insertar en public.profiles (todos los campos del formulario de registro)
+      const { error: profileError } = await this.supabaseService.supabase.from('profiles').insert({
+        user_id: userId,
+        first_name: firstName,
+        last_name: lastName,
+        faculty: faculty,
+        programa_educativo: profileData?.programa_educativo ?? null,
+        celular: profileData?.celular ?? null,
+        antecedentes_familiares: profileData?.antecedentes_familiares ?? null,
+        sexo: profileData?.sexo ?? null,
+        fecha_nacimiento: profileData?.fecha_nacimiento ?? null,
+        edad: profileData?.edad ?? null
+      });
+      if (profileError) console.error('Error insertando profile:', profileError.message);
 
       await this.loadUserProfile(userId);
       return userId;

@@ -119,6 +119,11 @@
 - `[x]` Interfaz del Psicólogo (`settings.component`): Añadir selector de modalidad (`Virtual` vs `Presencial`), con preselección de la facultad base del especialista, campo de edificio y número de oficina/aula.
 - `[x]` Interfaz del Estudiante (`student-agenda.component` y `appointment-modal.component`): Recuperar y mostrar el lugar de atención detallado y habilitar el botón "📍 Abrir Recorrido Virtual" apuntando a la URL inmersiva de la BUAP al agendar y en el banner de cita confirmada.
 
+**5.7. Refactorización Arquitectónica: Herencia de Personal de la Salud**
+- `[ ]` Base y Modelos (`core/models` o `core/base`): Crear clase/estructura base `HealthProfessionalBase` que encapsule la lógica común de dashboard, agenda, directorio de pacientes y ajustes.
+- `[ ]` Refactor de Componentes Compartidos: Unificar las vistas y lógica redundante entre `features/psychologist` y `features/nutritionist`.
+- `[ ]` Lógica de Factor de Diferenciación (Notas Médicas): Mantener e inyectar dinámicamente `ClinicalNoteComponent` (Quill SOAP) para Psicólogos y `PerfilPaciente` (Gestión Nutricional + PDF) para Nutriólogos.
+- `[ ]` Ruteo y Guards: Adaptar las rutas para consumir la base común de Personal de la Salud manteniendo las URLs limpias (`/psychologist/...` y `/nutritionist/...`).
 *(Skill 4 continúa pausada en el backlog)*
 
 ---

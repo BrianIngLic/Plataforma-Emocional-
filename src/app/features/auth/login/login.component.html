@@ -57,7 +57,7 @@
         <p>Continúa tu proceso de bienestar.</p>
       </div>
 
-      <form (ngSubmit)="onLogin()" #loginForm="ngForm" class="login-form">
+      <form (ngSubmit)="onLogin()" #loginForm="ngForm" class="login-form" autocomplete="off">
         <div class="form-group">
           <label for="email">CORREO ELECTRÓNICO</label>
           <div class="input-icon-wrapper">
@@ -68,6 +68,7 @@
               name="email" 
               [(ngModel)]="email" 
               placeholder="Ej. usuario@correo.com" 
+              autocomplete="username"
               required>
           </div>
         </div>
@@ -82,6 +83,7 @@
               name="password" 
               [(ngModel)]="pass" 
               placeholder="••••••••" 
+              autocomplete="current-password"
               required>
           </div>
         </div>

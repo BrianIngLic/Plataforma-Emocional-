@@ -11,6 +11,7 @@ import { AuthService } from '../../../core/services/auth.service';
   templateUrl: './admin-layout.component.html',
   styleUrls: ['./admin-layout.component.scss']
 })
+
 export class AdminLayoutComponent {
   authService = inject(AuthService);
   router = inject(Router);

@@ -1,5 +1,6 @@
 import { Component, OnInit, inject, ViewChild, ElementRef, AfterViewChecked } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { ClinicalService } from '../../../core/services/clinical.service';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -17,7 +18,7 @@ interface ChatMessage {
 @Component({
   selector: 'app-alimentary-dashboard',
   standalone: true,
-  imports: [CommonModule, MatIconModule, MatProgressSpinnerModule],
+  imports: [CommonModule, FormsModule, MatIconModule, MatProgressSpinnerModule],
   template: `
     <div class="dashboard-container" [ngClass]="{'chat-mode': !loading && !isUnlocked}">
       <div *ngIf="loading" class="amati-loading-container">
@@ -31,27 +32,94 @@ interface ChatMessage {
 
       <!-- ESTADO 1: DESBLOQUEADO (MÓDULO PRINCIPAL) -->
       <ng-container *ngIf="!loading && isUnlocked">
-        <div class="unlocked-content" style="padding: 1.5rem;">
-          <div class="unlocked-header">
+        <div class="unlocked-content" style="padding: 1.5rem; max-width: 1000px; margin: 0 auto;">
+          <div class="unlocked-header" style="margin-bottom: 2rem;">
             <div class="header-icon">
               <mat-icon>restaurant</mat-icon>
             </div>
             <div class="header-text">
               <h1>Módulo Alimentario</h1>
-              <p>Bienvenido a tu espacio de nutrición y bienestar.</p>
+              <p>Espacio personal de nutrición y bienestar.</p>
             </div>
           </div>
 
-          <div class="placeholder-cards">
-            <div class="glass-card">
-              <mat-icon>favorite</mat-icon>
-              <h3>Salud Nutricional</h3>
-              <p>Próximamente encontrarás aquí guías y seguimiento.</p>
+          <!-- Recordatorio de 24 Horas -->
+          <div class="glass-card recall-card" style="margin-bottom: 2rem; border: 1px solid var(--border-color); border-radius: 16px; padding: 1.75rem; background: var(--bg-card);">
+            <div class="card-header" style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem;">
+              <mat-icon style="color: #10b981; font-size: 28px; width: 28px; height: 28px;">restaurant_menu</mat-icon>
+              <div>
+                <h2 style="margin: 0; font-size: 1.35rem; color: var(--text-primary);">Recordatorio de 24 Horas</h2>
+                <p style="margin: 0.25rem 0 0; font-size: 0.85rem; color: var(--text-secondary);">Registra tus consumos diarios de alimentos y calorías estimadas.</p>
+              </div>
             </div>
-            <div class="glass-card">
-              <mat-icon>insights</mat-icon>
-              <h3>Tus Resultados</h3>
-              <p>Tu cuestionario inicial ha sido anexado a tu expediente clínico de manera segura.</p>
+
+            <!-- Selector de Días -->
+            <div class="days-selector-bar" style="display: flex; gap: 0.5rem; overflow-x: auto; padding-bottom: 1rem; margin-bottom: 1.5rem;">
+              <button *ngFor="let d of availableDates" 
+                      (click)="selectRecallDate(d.dateStr)" 
+                      [class.active]="selectedDateStr === d.dateStr"
+                      class="day-selector-btn"
+                      style="padding: 0.6rem 1rem; border-radius: 12px; border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-primary); cursor: pointer; transition: all 0.25s; font-weight: 500; font-size: 0.85rem; white-space: nowrap; display: flex; flex-direction: column; align-items: center;">
+                <span class="day-lbl" style="font-size: 0.85rem;">{{ d.label }}</span>
+                <span class="day-date" style="font-size: 0.7rem; opacity: 0.7; margin-top: 2px;">{{ d.dateStr.substring(8, 10) }}/{{ d.dateStr.substring(5, 7) }}</span>
+              </button>
+            </div>
+
+            <!-- Formulario de Comidas -->
+            <div class="recall-form" style="display: grid; grid-template-columns: 1fr; gap: 1.25rem;">
+              <div class="form-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem;">
+                <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                  <label style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary);">Desayuno</label>
+                  <textarea [(ngModel)]="currentRecall.desayuno" placeholder="¿Qué desayunaste hoy? (Ej. Huevo revuelto, avena, fruta)" rows="2" style="padding: 0.75rem; border-radius: 10px; border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-primary); font-size: 0.9rem; resize: none; outline: none;"></textarea>
+                </div>
+
+                <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                  <label style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary);">Colación 1 (Mañana)</label>
+                  <textarea [(ngModel)]="currentRecall.colacion1" placeholder="Ej. Almendras, manzana, yogurt" rows="2" style="padding: 0.75rem; border-radius: 10px; border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-primary); font-size: 0.9rem; resize: none; outline: none;"></textarea>
+                </div>
+
+                <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                  <label style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary);">Comida</label>
+                  <textarea [(ngModel)]="currentRecall.comida" placeholder="¿Qué comiste? (Ej. Pechuga de pollo, arroz, verduras)" rows="2" style="padding: 0.75rem; border-radius: 10px; border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-primary); font-size: 0.9rem; resize: none; outline: none;"></textarea>
+                </div>
+
+                <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                  <label style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary);">Colación 2 (Tarde)</label>
+                  <textarea [(ngModel)]="currentRecall.colacion2" placeholder="Ej. Barra de cereal, jícama picada" rows="2" style="padding: 0.75rem; border-radius: 10px; border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-primary); font-size: 0.9rem; resize: none; outline: none;"></textarea>
+                </div>
+
+                <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                  <label style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary);">Cena</label>
+                  <textarea [(ngModel)]="currentRecall.cena" placeholder="¿Qué cenaste? (Ej. Licuado, quesadillas, ensalada)" rows="2" style="padding: 0.75rem; border-radius: 10px; border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-primary); font-size: 0.9rem; resize: none; outline: none;"></textarea>
+                </div>
+
+                <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                  <label style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary);">Calorías Totales (Est.)</label>
+                  <input [(ngModel)]="currentRecall.calorias_totales" type="number" placeholder="Ej. 1800" style="padding: 0.75rem; border-radius: 10px; border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-primary); font-size: 0.9rem; outline: none;" />
+                </div>
+              </div>
+
+              <div class="form-actions" style="display: flex; justify-content: flex-end; margin-top: 1rem;">
+                <button (click)="saveRecall()" 
+                        [disabled]="isSavingRecall"
+                        style="display: inline-flex; align-items: center; gap: 0.5rem; background: #10b981; color: white; border: none; padding: 0.75rem 1.75rem; border-radius: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s;">
+                  <mat-icon style="font-size: 20px; width: 20px; height: 20px;">save</mat-icon>
+                  {{ isSavingRecall ? 'Guardando...' : 'Guardar Recordatorio' }}
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="placeholder-cards" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+            <div class="glass-card" style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.5rem; text-align: center;">
+              <mat-icon style="font-size: 40px; width: 40px; height: 40px; color: #10b981; margin-bottom: 0.75rem;">insights</mat-icon>
+              <h3 style="margin: 0 0 0.5rem; color: var(--text-primary);">Tus Resultados EAT-26</h3>
+              <p style="margin: 0; color: var(--text-secondary); line-height: 1.5; font-size: 0.9rem;">Tu cuestionario inicial ha sido anexado de manera encriptada y segura a tu expediente clínico.</p>
+            </div>
+            <div class="glass-card" style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.5rem; text-align: center;">
+              <mat-icon style="font-size: 40px; width: 40px; height: 40px; color: #3b82f6; margin-bottom: 0.75rem;">spa</mat-icon>
+              <h3 style="margin: 0 0 0.5rem; color: var(--text-primary);">Salud Nutricional</h3>
+              <p style="margin: 0; color: var(--text-secondary); line-height: 1.5; font-size: 0.9rem;">Mantén el contacto con tu nutricionista asignado para ajustar tus metas corporales y menús.</p>
             </div>
           </div>
         </div>
@@ -142,26 +210,27 @@ interface ChatMessage {
 
     /* Módulo Desbloqueado */
     .unlocked-header {
-      display: flex; align-items: center; gap: 1.5rem; margin-bottom: 3rem;
+      display: flex; align-items: center; gap: 1.5rem;
       .header-icon {
-        width: 64px; height: 64px; border-radius: 16px; background: rgba(16, 185, 129, 0.1); color: #10b981;
+        width: 56px; height: 56px; border-radius: 14px; background: rgba(16, 185, 129, 0.1); color: #10b981;
         display: flex; align-items: center; justify-content: center;
-        mat-icon { font-size: 32px; width: 32px; height: 32px; }
+        mat-icon { font-size: 28px; width: 28px; height: 28px; }
       }
       .header-text {
-        h1 { margin: 0; font-size: 2rem; color: var(--text-primary); }
-        p { margin: 0.5rem 0 0; color: var(--text-secondary); font-size: 1.1rem; }
+        h1 { margin: 0; font-size: 1.75rem; color: var(--text-primary); }
+        p { margin: 0.25rem 0 0; color: var(--text-secondary); font-size: 0.95rem; }
       }
     }
 
-    .placeholder-cards {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;
-      .glass-card {
-        background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 2rem; text-align: center;
-        mat-icon { font-size: 40px; width: 40px; height: 40px; color: #0ea5e9; margin-bottom: 1rem; }
-        h3 { margin: 0 0 1rem; color: var(--text-primary); }
-        p { margin: 0; color: var(--text-secondary); line-height: 1.6; }
-      }
+    .day-selector-btn.active {
+      background: #10b981 !important;
+      color: white !important;
+      border-color: #10b981 !important;
+      box-shadow: 0 4px 6px rgba(16, 185, 129, 0.2);
+    }
+    
+    .day-selector-btn:hover {
+      border-color: #10b981 !important;
     }
 
     /* Chat Interactivo */
@@ -241,24 +310,24 @@ interface ChatMessage {
       .message-bubble {
         padding: 1rem 1.25rem; border-radius: 18px; font-size: 0.95rem; line-height: 1.5;
         box-shadow: 0 2px 5px rgba(0,0,0,0.02); animation: popIn 0.3s ease-out;
+      }
+    }
 
-        .edit-options {
-          display: flex; flex-direction: column; gap: 0.5rem;
-          .edit-hint { font-size: 0.75rem; opacity: 0.8; font-weight: bold; text-transform: uppercase; }
-          .mini-options {
-            display: flex; flex-wrap: wrap; gap: 0.25rem;
-            button {
-              background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4); color: white;
-              padding: 0.25rem 0.5rem; border-radius: 12px; font-size: 0.8rem; cursor: pointer; transition: all 0.2s;
-              &:hover { background: rgba(255,255,255,0.3); }
-              &.active { background: white; color: #0ea5e9; font-weight: bold; border-color: white; }
-            }
-          }
-          .cancel-edit {
-            background: transparent; border: none; color: white; opacity: 0.8; font-size: 0.75rem; text-decoration: underline; cursor: pointer; text-align: right; margin-top: 4px;
-            &:hover { opacity: 1; }
-          }
+    .edit-options {
+      display: flex; flex-direction: column; gap: 0.5rem;
+      .edit-hint { font-size: 0.75rem; opacity: 0.8; font-weight: bold; text-transform: uppercase; }
+      .mini-options {
+        display: flex; flex-wrap: wrap; gap: 0.25rem;
+        button {
+          background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4); color: white;
+          padding: 0.25rem 0.5rem; border-radius: 12px; font-size: 0.8rem; cursor: pointer; transition: all 0.2s;
+          &:hover { background: rgba(255,255,255,0.3); }
+          &.active { background: white; color: #0ea5e9; font-weight: bold; border-color: white; }
         }
+      }
+      .cancel-edit {
+        background: transparent; border: none; color: white; opacity: 0.8; font-size: 0.75rem; text-decoration: underline; cursor: pointer; text-align: right; margin-top: 4px;
+        &:hover { opacity: 1; }
       }
     }
 
@@ -368,6 +437,22 @@ export class AlimentaryDashboardComponent implements OnInit, AfterViewChecked {
   
   messages: ChatMessage[] = [];
 
+  // Recordatorio de 24 Horas
+  clinicalNotesObj: any = {};
+  recallEntries: any[] = [];
+  availableDates: { dateStr: string, label: string }[] = [];
+  selectedDateStr: string = '';
+  isSavingRecall = false;
+
+  currentRecall = {
+    desayuno: '',
+    colacion1: '',
+    comida: '',
+    colacion2: '',
+    cena: '',
+    calorias_totales: 0
+  };
+
   get currentQuestion() {
     return this.questions[this.currentQuestionIndex];
   }
@@ -377,6 +462,7 @@ export class AlimentaryDashboardComponent implements OnInit, AfterViewChecked {
   }
 
   async ngOnInit() {
+    this.generateLast7Days();
     await this.checkStatus();
   }
 
@@ -392,15 +478,39 @@ export class AlimentaryDashboardComponent implements OnInit, AfterViewChecked {
     } catch(err) { }
   }
 
+  generateLast7Days() {
+    const dates = [];
+    const daysOfWeek = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+    for (let i = 0; i < 7; i++) {
+      const d = new Date();
+      d.setDate(d.getDate() - i);
+      
+      const year = d.getFullYear();
+      const month = (d.getMonth() + 1).toString().padStart(2, '0');
+      const day = d.getDate().toString().padStart(2, '0');
+      const dateStr = `${year}-${month}-${day}`;
+      
+      let label = '';
+      if (i === 0) label = 'Hoy';
+      else if (i === 1) label = 'Ayer';
+      else label = `${daysOfWeek[d.getDay()]} ${d.getDate()}`;
+      
+      dates.push({ dateStr, label });
+    }
+    this.availableDates = dates;
+  }
+
   async checkStatus() {
     this.loading = true;
     const record = await this.clinicalService.getClinicalRecord();
     
     if (record && record.decrypted_notes) {
       try {
-        const parsed = JSON.parse(record.decrypted_notes);
-        if (parsed.q1) {
+        this.clinicalNotesObj = JSON.parse(record.decrypted_notes);
+        // Si tiene la pregunta 1 del EAT-26, consideramos desbloqueado
+        if (this.clinicalNotesObj.q1) {
           this.isUnlocked = true;
+          this.loadRecallEntries();
         }
       } catch (e) {}
     }
@@ -410,6 +520,65 @@ export class AlimentaryDashboardComponent implements OnInit, AfterViewChecked {
     }
     
     this.loading = false;
+  }
+
+  loadRecallEntries() {
+    this.recallEntries = this.clinicalNotesObj.recall_24h || [];
+    this.selectRecallDate(this.availableDates[0].dateStr); // Seleccionar hoy por defecto
+  }
+
+  selectRecallDate(dateStr: string) {
+    this.selectedDateStr = dateStr;
+    const existing = this.recallEntries.find(r => r.date === dateStr);
+    if (existing) {
+      this.currentRecall = {
+        desayuno: existing.desayuno || '',
+        colacion1: existing.colacion1 || '',
+        comida: existing.comida || '',
+        colacion2: existing.colacion2 || '',
+        cena: existing.cena || '',
+        calorias_totales: existing.calorias_totales || 0
+      };
+    } else {
+      this.currentRecall = {
+        desayuno: '',
+        colacion1: '',
+        comida: '',
+        colacion2: '',
+        cena: '',
+        calorias_totales: 0
+      };
+    }
+  }
+
+  async saveRecall() {
+    this.isSavingRecall = true;
+    
+    // Buscar si ya existe la entrada para esta fecha
+    const index = this.recallEntries.findIndex(r => r.date === this.selectedDateStr);
+    const newEntry = {
+      date: this.selectedDateStr,
+      ...this.currentRecall
+    };
+    
+    if (index > -1) {
+      this.recallEntries[index] = newEntry;
+    } else {
+      this.recallEntries.push(newEntry);
+    }
+    
+    // Guardar en el objeto principal
+    this.clinicalNotesObj.recall_24h = this.recallEntries;
+    
+    // Cifrar y guardar en Supabase
+    const success = await this.clinicalService.updateClinicalRecords([JSON.stringify(this.clinicalNotesObj)]);
+    this.isSavingRecall = false;
+    
+    if (success) {
+      alert('Recordatorio de 24 horas guardado correctamente.');
+    } else {
+      alert('Error al guardar el recordatorio.');
+    }
   }
 
   startChat() {
@@ -516,11 +685,12 @@ export class AlimentaryDashboardComponent implements OnInit, AfterViewChecked {
       try { existing = JSON.parse(record.decrypted_notes); } catch(e) {}
     }
 
-    const mergedData = { ...existing, ...this.answers };
-    await this.clinicalService.updateClinicalRecords([JSON.stringify(mergedData)]);
+    this.clinicalNotesObj = { ...existing, ...this.answers };
+    await this.clinicalService.updateClinicalRecords([JSON.stringify(this.clinicalNotesObj)]);
     
     setTimeout(() => {
       this.isUnlocked = true;
+      this.loadRecallEntries();
     }, 2000);
   }
 }

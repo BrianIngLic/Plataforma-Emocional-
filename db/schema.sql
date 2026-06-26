@@ -1,31 +1,28 @@
 -- =========================================================================================
--- PROYECTO: Plataforma Emocional BUAP (Refactorización V2 - Supabase & Cifrado)
--- ARCHIVO: db/schema.sql
--- DESCRIPCIÓN: Script de inicialización de la base de datos PostgreSQL adaptado
---              para Supabase Auth nativo y preparado para recibir datos cifrados
---              desde Angular (E2EE).
--- =========================================================================================
-
--- =========================================================================================
--- 1. EXTENSIONES Y SEGURIDAD
+-- EXTENSIONES
 -- =========================================================================================
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- =========================================================================================
--- 2. TABLAS CORE (USUARIOS Y ROLES)
+-- ROLES
 -- =========================================================================================
-
--- Tabla de Roles
 CREATE TABLE public.roles (
     id SERIAL PRIMARY KEY,
     name VARCHAR(50) UNIQUE NOT NULL
 );
 
--- Insertar roles por defecto
-INSERT INTO public.roles (name) VALUES ('Admin'), ('Estudiante'), ('Psicologo') ON CONFLICT DO NOTHING;
+INSERT INTO public.roles (id, name) VALUES 
+  (1, 'Admin'),
+  (2, 'Estudiante'),
+  (3, 'Psicologo'),
+  (4, 'Nutricionista')
+ON CONFLICT (id) DO UPDATE SET name = EXCLUDED.name;
 
--- En la V2 con Supabase, los usuarios reales se manejan en `auth.users`.
--- Esta tabla pública actúa como extensión del perfil, enlazada mediante auth.uid()
+SELECT setval('public.roles_id_seq', 4, true);
+
+-- =========================================================================================
+-- USUARIOS
+-- =========================================================================================
 CREATE TABLE public.users (
     id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
     matricula VARCHAR(50) UNIQUE NOT NULL,
@@ -33,20 +30,28 @@ CREATE TABLE public.users (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
--- Perfiles públicos (nombres, avatares)
--- NOTA DE CIFRADO: Si el usuario exige cifrado total, los nombres aquí almacenados
--- llegarán como cadenas AES Base64 desde Angular.
+-- =========================================================================================
+-- PERFILES
+-- =========================================================================================
+
 CREATE TABLE public.profiles (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    user_id UUID REFERENCES public.users(id) ON DELETE CASCADE,
-    first_name TEXT NOT NULL, -- TEXT en lugar de VARCHAR para soportar hashes largos
+    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+    first_name TEXT NOT NULL,
     last_name TEXT NOT NULL,
-    avatar_url VARCHAR(255),
+    faculty TEXT,
+    programa_educativo TEXT,
+    celular VARCHAR(15),
+    antecedentes_familiares TEXT,
+    sexo VARCHAR(20),
+    fecha_nacimiento DATE,
+    avatar_url TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     UNIQUE(user_id)
 );
 
 -- =========================================================================================
--- 2.1. CAMPUS Y FACULTADES (RECORRIDOS VIRTUALES Y UBICACIÓN)
+-- CAMPUS Y FACULTADES (RECORRIDOS VIRTUALES Y UBICACIÓN)
 -- =========================================================================================
 
 CREATE TABLE public.campuses (
@@ -64,63 +69,66 @@ CREATE TABLE public.faculties (
 );
 
 -- =========================================================================================
--- 3. EXPEDIENTES CLÍNICOS
+-- EXPEDIENTES CLÍNICOS Y CONFIGURACIONES
 -- =========================================================================================
 
 CREATE TABLE public.student_clinical_records (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     student_id UUID REFERENCES public.users(id) ON DELETE CASCADE,
     primary_psychologist_id UUID REFERENCES public.users(id) ON DELETE SET NULL,
+    primary_nutritionist_id UUID REFERENCES public.users(id) ON DELETE SET NULL,
     known_conditions TEXT[] DEFAULT '{}',
     consent_given BOOLEAN DEFAULT FALSE,
-    additional_notes TEXT, -- Texto cifrado E2EE
+    additional_notes TEXT,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     UNIQUE(student_id)
 );
 
+CREATE TABLE public.patient_settings (
+    student_id UUID PRIMARY KEY REFERENCES public.users(id) ON DELETE CASCADE,
+    status VARCHAR(20) DEFAULT 'active',
+    self_diagnosis VARCHAR(100),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 -- =========================================================================================
--- 4. CHAT AMATI (ASISTENTE IA) - ALTA SEGURIDAD
+-- CHAT AMATI (ASISTENTE IA) - ALTA SEGURIDAD
 -- =========================================================================================
 
 CREATE TABLE public.chats (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     student_id UUID REFERENCES public.users(id) ON DELETE CASCADE,
-    title TEXT, -- Título del chat (Cifrado E2EE)
+    title TEXT,
     status VARCHAR(20) DEFAULT 'active',
     highest_urgency_score DECIMAL(3,2) DEFAULT 0.00,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Los mensajes llegarán ya cifrados a la base de datos gracias al CryptoService de Angular.
--- Supabase nunca conocerá el texto real.
 CREATE TABLE public.messages (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     chat_id UUID REFERENCES public.chats(id) ON DELETE CASCADE,
-    sender_type VARCHAR(20) NOT NULL, -- 'user' o 'ai'
-    content TEXT NOT NULL, -- Hashes AES en Base64
-    urgency_score DECIMAL(3,2),   
-    timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+    sender_type VARCHAR(20) NOT NULL,
+    content TEXT NOT NULL,
+    urgency_score DECIMAL(3,2),
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- =========================================================================================
--- 5. AGENDA (COMMAND CENTER PSICÓLOGO)
+-- AGENDA Y AJUSTES CLÍNICOS
 -- =========================================================================================
 
 CREATE TABLE public.appointments (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     student_id UUID REFERENCES public.users(id) ON DELETE CASCADE,
     psychologist_id UUID REFERENCES public.users(id) ON DELETE CASCADE,
-    scheduled_date TIMESTAMP WITH TIME ZONE NOT NULL,
+    scheduled_date TIMESTAMP NOT NULL,
     priority_level VARCHAR(20) DEFAULT 'Routine',
     status VARCHAR(20) DEFAULT 'Scheduled',
-    notes TEXT, -- Cifrado E2EE
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+    notes TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-
--- =========================================================================================
--- 5.1. CONFIGURACIÓN DE AGENDA Y HORARIOS (SKILL 7)
--- =========================================================================================
 
 CREATE TABLE public.psychologist_settings (
     psychologist_id UUID PRIMARY KEY REFERENCES public.users(id) ON DELETE CASCADE,
@@ -134,59 +142,56 @@ CREATE TABLE public.psychologist_settings (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
--- Nota: psychologist_id es NULL si es una excepción global creada por un Admin para todos
 CREATE TABLE public.psychologist_exceptions (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    psychologist_id UUID REFERENCES public.users(id) ON DELETE CASCADE,
+    psychologist_id UUID REFERENCES public.users(id),
     exception_date DATE NOT NULL,
-    start_time TIME WITHOUT TIME ZONE,
-    end_time TIME WITHOUT TIME ZONE,
+    start_time TIME,
+    end_time TIME,
     description TEXT,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- =========================================================================================
--- 6. NUTRIMIND (SEGUIMIENTO ALIMENTARIO)
+-- NUTRICIÓN
 -- =========================================================================================
-
 CREATE TABLE public.nutrition_logs (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     student_id UUID REFERENCES public.users(id) ON DELETE CASCADE,
-    log_date DATE NOT NULL DEFAULT CURRENT_DATE,
+    log_date DATE DEFAULT CURRENT_DATE,
     total_calories INTEGER DEFAULT 0,
-    total_protein DECIMAL(5,2) DEFAULT 0.00,
-    total_carbs DECIMAL(5,2) DEFAULT 0.00,
-    total_fats DECIMAL(5,2) DEFAULT 0.00,
+    total_protein DECIMAL(5,2) DEFAULT 0,
+    total_carbs DECIMAL(5,2) DEFAULT 0,
+    total_fats DECIMAL(5,2) DEFAULT 0,
     UNIQUE(student_id, log_date)
 );
 
 CREATE TABLE public.food_items (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     nutrition_log_id UUID REFERENCES public.nutrition_logs(id) ON DELETE CASCADE,
-    meal_type VARCHAR(50) NOT NULL,
-    name TEXT NOT NULL, -- Cifrado E2EE opcional
-    calories INTEGER NOT NULL,
-    protein DECIMAL(5,2) DEFAULT 0.00,
-    carbs DECIMAL(5,2) DEFAULT 0.00,
-    fats DECIMAL(5,2) DEFAULT 0.00,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+    meal_type VARCHAR(50),
+    name TEXT,
+    calories INTEGER,
+    protein DECIMAL(5,2),
+    carbs DECIMAL(5,2),
+    fats DECIMAL(5,2),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- =========================================================================================
--- 7. MI DIARIO (SKILL 6)
+-- DIARIO
 -- =========================================================================================
-
 CREATE TABLE public.diary_entries (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     student_id UUID REFERENCES public.users(id) ON DELETE CASCADE,
-    content TEXT NOT NULL, -- Cifrado E2EE
-    moods TEXT[], -- Array de strings con emociones
+    content TEXT,
+    moods TEXT[],
     high_risk BOOLEAN DEFAULT FALSE,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- =========================================================================================
--- 7.1. BITÁCORA DE AUDITORÍA (AUDIT LOGS - NOM-024 / HIPAA)
+-- BITÁCORA DE AUDITORÍA (AUDIT LOGS - NOM-024 / HIPAA)
 -- =========================================================================================
 
 CREATE TABLE public.audit_logs (
@@ -199,52 +204,17 @@ CREATE TABLE public.audit_logs (
 );
 
 -- =========================================================================================
--- 8. RLS (ROW LEVEL SECURITY)
--- =========================================================================================
-
-ALTER TABLE public.users ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.student_clinical_records ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.chats ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.messages ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.appointments ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.diary_entries ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.psychologist_settings ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.psychologist_exceptions ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.audit_logs ENABLE ROW LEVEL SECURITY;
-
--- Política de Usuarios: Un usuario solo puede ver y editar su propia data pública
-CREATE POLICY user_own_data ON public.users FOR ALL USING (id = auth.uid());
-CREATE POLICY profile_own_data ON public.profiles FOR ALL USING (user_id = auth.uid());
-
--- Política de Auditoría: Solo inserción pública autenticada, solo lectura para Admin (Jefatura)
-CREATE POLICY audit_insert ON public.audit_logs FOR INSERT TO authenticated WITH CHECK (true);
-CREATE POLICY audit_select ON public.audit_logs FOR SELECT TO authenticated USING (
-    public.get_auth_role() = 1
-);
-
--- Política de Chats: El estudiante solo ve sus chats (Los psicólogos leerán mediante backend seguro)
-CREATE POLICY chat_own_data ON public.chats FOR ALL USING (student_id = auth.uid());
-CREATE POLICY message_own_data ON public.messages FOR ALL USING (
-    EXISTS (SELECT 1 FROM public.chats c WHERE c.id = chat_id AND c.student_id = auth.uid())
-);
-
--- Política de Diario:
-CREATE POLICY diary_own_data ON public.diary_entries FOR ALL USING (student_id = auth.uid());
-
--- Políticas adicionales faltantes
-CREATE POLICY clinical_own_data ON public.student_clinical_records FOR ALL USING (student_id = auth.uid());
-CREATE POLICY appointments_own_data ON public.appointments FOR ALL USING (student_id = auth.uid() OR psychologist_id = auth.uid());
-
--- =========================================================================================
--- 9. FUNCIONES DE SEGURIDAD (Evitar recursión infinita en RLS)
+-- FUNCIÓN DE ROL (SEGURA)
 -- =========================================================================================
 CREATE OR REPLACE FUNCTION public.get_auth_role()
 RETURNS integer
 LANGUAGE sql
 SECURITY DEFINER
 AS $$
-  SELECT role_id FROM public.users WHERE id = auth.uid();
+  SELECT COALESCE(
+    (SELECT role_id FROM public.users WHERE id = auth.uid()),
+    0
+  );
 $$;
 
 -- Función RPC Segura para que el Admin (Jefatura) consulte psicólogos y correos de auth.users
@@ -287,75 +257,53 @@ BEGIN
 END;
 $$;
 
+-- =========================================================================================
+-- RLS (ROW LEVEL SECURITY)
+-- =========================================================================================
+
+ALTER TABLE public.users ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.student_clinical_records ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.chats ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.messages ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.appointments ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.diary_entries ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.psychologist_settings ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.psychologist_exceptions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.audit_logs ENABLE ROW LEVEL SECURITY;
+
+-- Política de Usuarios: Un usuario solo puede ver y editar su propia data pública
+CREATE POLICY user_own_data ON public.users FOR ALL USING (id = auth.uid());
+CREATE POLICY profile_own_data ON public.profiles FOR ALL USING (user_id = auth.uid());
+
+-- Política de Auditoría: Solo inserción pública autenticada, solo lectura para Admin (Jefatura)
+CREATE POLICY audit_insert ON public.audit_logs FOR INSERT TO authenticated WITH CHECK (true);
+CREATE POLICY audit_select ON public.audit_logs FOR SELECT TO authenticated USING (
+    public.get_auth_role() = 1
+);
+
+-- Política de Chats: El estudiante solo ve sus chats (Los psicólogos leerán mediante backend seguro)
+CREATE POLICY chat_own_data ON public.chats FOR ALL USING (student_id = auth.uid());
+CREATE POLICY message_own_data ON public.messages FOR ALL USING (
+    EXISTS (SELECT 1 FROM public.chats c WHERE c.id = chat_id AND c.student_id = auth.uid())
+);
+
+-- Diario
+CREATE POLICY diary_own ON public.diary_entries
+FOR ALL USING (student_id = auth.uid())
+WITH CHECK (student_id = auth.uid());
+
 -- Políticas para Psicólogos (Skill 5.3):
 -- 1. Los psicólogos pueden ver la tabla pública de usuarios si estos son estudiantes (role_id = 2)
 CREATE POLICY psychologist_read_users ON public.users FOR SELECT USING (
     public.get_auth_role() = 3 AND role_id = 2
 );
 
--- 2. Los psicólogos pueden ver el perfil público de cualquier estudiante
-CREATE POLICY psychologist_read_profiles ON public.profiles FOR SELECT USING (
-    public.get_auth_role() = 3
-);
-
--- 3. Los psicólogos pueden ver todos los expedientes clínicos de estudiantes
-CREATE POLICY psychologist_read_clinical ON public.student_clinical_records FOR SELECT USING (
-    public.get_auth_role() = 3
-);
-
--- 4. Los psicólogos pueden actualizar los expedientes (asignarse como tratante)
-CREATE POLICY psychologist_update_clinical ON public.student_clinical_records FOR UPDATE USING (
-    public.get_auth_role() = 3
-);
-
--- 5. Los psicólogos pueden ver las entradas del diario de los pacientes (Skill 5.5)
-CREATE POLICY psychologist_read_diary ON public.diary_entries FOR SELECT USING (
-    public.get_auth_role() = 3
-);
-
--- 6. Los psicólogos pueden ver y editar sus propios ajustes
-CREATE POLICY psychologist_own_settings ON public.psychologist_settings FOR ALL USING (
-    psychologist_id = auth.uid()
-);
-
--- 7. Los psicólogos pueden ver y editar sus propias excepciones
-CREATE POLICY psychologist_own_exceptions ON public.psychologist_exceptions FOR ALL USING (
-    psychologist_id = auth.uid()
-);
-
--- 8. Los estudiantes pueden leer los ajustes y excepciones para el auto-registro
-CREATE POLICY student_read_settings ON public.psychologist_settings FOR SELECT USING (
-    public.get_auth_role() = 2
-);
-CREATE POLICY student_read_exceptions ON public.psychologist_exceptions FOR SELECT USING (
-    public.get_auth_role() = 2 OR psychologist_id IS NULL
-);
-
--- 9. Los admins pueden ver y crear excepciones globales
-CREATE POLICY admin_global_exceptions ON public.psychologist_exceptions FOR ALL USING (
-    public.get_auth_role() = 1
-);
-
 -- =========================================================================================
--- 10. SUPABASE STORAGE (BUCKETS)
+-- ÍNDICES
 -- =========================================================================================
-
--- Crear el bucket de avatares (público)
-INSERT INTO storage.buckets (id, name, public) VALUES ('avatars', 'avatars', true) ON CONFLICT DO NOTHING;
-
--- Política: Lectura pública de avatares
-CREATE POLICY avatar_public_read ON storage.objects FOR SELECT USING (bucket_id = 'avatars');
-
--- Política: Los usuarios solo pueden insertar y actualizar sus propios avatares
-CREATE POLICY avatar_insert ON storage.objects FOR INSERT WITH CHECK (
-    bucket_id = 'avatars' AND auth.uid() = owner
-);
-
-CREATE POLICY avatar_update ON storage.objects FOR UPDATE USING (
-    bucket_id = 'avatars' AND auth.uid() = owner
-);
-
-CREATE POLICY avatar_delete ON storage.objects FOR DELETE USING (
-    bucket_id = 'avatars' AND auth.uid() = owner
-);
-
+CREATE INDEX idx_chats_student ON public.chats(student_id);
+CREATE INDEX idx_messages_chat ON public.messages(chat_id);
+CREATE INDEX idx_appointments_psy ON public.appointments(psychologist_id);
+CREATE INDEX idx_diary_student ON public.diary_entries(student_id);
+CREATE INDEX idx_nutrition_logs ON public.nutrition_logs(student_id, log_date);

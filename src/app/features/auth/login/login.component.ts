@@ -48,6 +48,8 @@ export class LoginComponent implements OnInit {
     
     if (success) {
       const user = this.authService.currentUser();
+      this.email = '';
+      this.pass = '';
       
       if (user?.requires_password_change) {
         this.router.navigate(['/auth/force-change']);
@@ -55,10 +57,14 @@ export class LoginComponent implements OnInit {
         this.router.navigate(['/admin']);
       } else if (user?.role === 'Psicologo') {
         this.router.navigate(['/psychologist']);
+      } else if (user?.role === 'Nutricionista') {
+        this.router.navigate(['/nutritionist']);
       } else {
         this.router.navigate(['/']);
       }
     } else {
+      this.email = '';
+      this.pass = '';
       this.errorMessage = 'Correo o contraseña incorrectos.';
     }
   }

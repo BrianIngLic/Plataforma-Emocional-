@@ -11,6 +11,11 @@ export class AuthService {
   public currentUser = signal<{ matricula: string, role: string, id: string, name: string, faculty?: string, requires_password_change?: boolean, avatar_url?: string } | null>(null);
   public isLoggedIn = signal<boolean>(false);
 
+  public get isHealthProfessional(): boolean {
+    const role = this.currentUser()?.role;
+    return role === 'Psicologo' || role === 'Nutricionista';
+  }
+
   private auditService = inject(AuditService);
   private inactivityTimeout: any;
   private readonly TIMEOUT_MS = 15 * 60 * 1000; // 15 minutos (NOM-024 / HIPAA)

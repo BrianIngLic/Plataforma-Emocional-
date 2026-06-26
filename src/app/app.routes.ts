@@ -22,7 +22,8 @@ export const routes: Routes = [
   {
     path: 'nutritionist',
     loadChildren: () => import('./features/nutritionist/nutritionist.routes').then(m => m.NUTRITIONIST_ROUTES),
-    canActivate: [authGuard]
+    canActivate: [authGuard, roleGuard],
+    data: { expectedRole: 'Nutricionista' }
   },
   {
     path: 'admin',

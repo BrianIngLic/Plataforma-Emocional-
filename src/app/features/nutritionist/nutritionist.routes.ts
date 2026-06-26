@@ -8,12 +8,12 @@ export const NUTRITIONIST_ROUTES: Routes = [
     children: [
       {
         path: 'dashboard',
-        loadComponent: () => import('./dashboard/dashboard.component').then(m => m.NutritionistDashboardComponent),
+        loadComponent: () => import('../health-professional/dashboard/dashboard.component').then(m => m.HealthProfessionalDashboardComponent),
         data: { animation: 'DashboardPage' }
       },
       {
         path: 'pacientes',
-        loadComponent: () => import('./pacientes/pacientes.component').then(m => m.Pacientes),
+        loadComponent: () => import('../health-professional/patients/patients.component').then(m => m.HealthProfessionalPatientsComponent),
         data: { animation: 'PacientesPage' }
       },
       {
@@ -23,12 +23,12 @@ export const NUTRITIONIST_ROUTES: Routes = [
       },
       {
         path: 'agenda',
-        loadComponent: () => import('./agenda/agenda.component').then(m => m.Agenda),
+        loadComponent: () => import('../health-professional/agenda/agenda.component').then(m => m.HealthProfessionalAgendaComponent),
         data: { animation: 'AgendaPage' }
       },
       {
         path: 'settings',
-        loadComponent: () => import('./settings/settings.component').then(m => m.SettingsComponent)
+        loadComponent: () => import('../health-professional/settings/settings.component').then(m => m.HealthProfessionalSettingsComponent)
       },
       {
         path: '',

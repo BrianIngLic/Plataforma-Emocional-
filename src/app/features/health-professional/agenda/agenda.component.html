@@ -1,0 +1,129 @@
+<div class="agenda-layout">
+  
+  <!-- Columna Izquierda: Mini-Calendario -->
+  <div class="calendar-sidebar">
+    <div class="calendar-card">
+      <div class="calendar-header">
+        <button class="btn-icon" (click)="previousMonth()"><mat-icon>chevron_left</mat-icon></button>
+        <div class="month-title" (click)="toggleViewMode()">{{ monthYearString | titlecase }} <span class="arrow">▼</span></div>
+        <button class="btn-icon" (click)="nextMonth()"><mat-icon>chevron_right</mat-icon></button>
+      </div>
+
+      <!-- Vista de Días -->
+      <div class="calendar-grid" *ngIf="viewMode === 'days'">
+        <div class="weekday-header">L</div>
+        <div class="weekday-header">M</div>
+        <div class="weekday-header">X</div>
+        <div class="weekday-header">J</div>
+        <div class="weekday-header">V</div>
+        <div class="weekday-header">S</div>
+        <div class="weekday-header">D</div>
+
+        <div *ngFor="let day of calendarDays" 
+             class="day-cell"
+             [class.other-month]="!day.isCurrentMonth"
+             [class.selected]="selectedDate && day.date.getTime() === selectedDate.getTime()"
+             (click)="selectDate(day)">
+          <span class="date-number">{{ day.date.getDate() }}</span>
+          <span class="appointment-dot" *ngIf="day.hasAppointments"></span>
+        </div>
+      </div>
+
+      <!-- Vista de Meses -->
+      <div class="months-grid" *ngIf="viewMode === 'months'">
+        <div class="month-box" *ngFor="let month of monthsList; let i = index" (click)="selectMonth(i)">
+          {{ month }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Columna Derecha: Búsqueda y Agenda Diaria / Resultados -->
+  <div class="agenda-main">
+    
+    <!-- Barra superior de Búsqueda -->
+    <div class="top-bar">
+      <div class="search-box">
+        <mat-icon>search</mat-icon>
+        <input type="text" placeholder="Búsqueda avanzada por nombre de paciente..." [(ngModel)]="searchQuery" (keyup.enter)="performSearch()">
+        <button class="btn btn-primary btn-sm" (click)="performSearch()" [disabled]="!searchQuery">Buscar</button>
+      </div>
+    </div>
+
+    <!-- Resultados de Búsqueda -->
+    <div class="daily-agenda-card" *ngIf="searchResults">
+      <div class="daily-header">
+        <h3>Resultados de Búsqueda</h3>
+        <p class="subtitle">{{searchResults.length}} citas encontradas para "{{searchQuery}}"</p>
+      </div>
+      <div class="daily-content">
+        <div class="appointments-list">
+          <div class="appointment-card" *ngFor="let appt of searchResults">
+            <div class="appt-date">
+              <div class="day">{{ appt.scheduled_date | date:'dd MMM' }}</div>
+              <div class="year">{{ appt.scheduled_date | date:'yyyy' }}</div>
+            </div>
+            <div class="appt-time">
+              {{ appt.scheduled_date | date:'shortTime' }}
+            </div>
+            <div class="appt-details">
+              <div class="patient-name">{{ appt.student.profiles.first_name }} {{ appt.student.profiles.last_name }}</div>
+              <div class="appt-type">{{ appt.priority_level }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Agenda Diaria (Línea de tiempo) -->
+    <div class="daily-agenda-card" *ngIf="selectedDate && !searchResults">
+      <div class="daily-header">
+        <h3>Línea de Tiempo ({{ professionalTitle }})</h3>
+        <p class="subtitle">{{ selectedDate | date:'longDate' }}</p>
+      </div>
+
+      <div class="amati-loading-container" *ngIf="isLoading">
+        <div class="amati-loader-wrapper">
+          <div class="spinner-ring"></div>
+          <img src="/amati-logo.svg" alt="Amati Logo" class="amati-logo-pulse" />
+        </div>
+        <h3 class="loading-title">Sincronizando agenda...</h3>
+        <p class="loading-subtitle">Obteniendo citas y evaluaciones de triaje IA</p>
+      </div>
+
+      <div class="daily-content" *ngIf="!isLoading">
+        
+        <div class="empty-timeline" *ngIf="timelineItems.length === 0">
+          <mat-icon>free_breakfast</mat-icon>
+          <p>No hay eventos registrados para este día.</p>
+        </div>
+
+        <div class="timeline" *ngIf="timelineItems.length > 0">
+          <div class="timeline-item" *ngFor="let item of timelineItems" [ngClass]="item.type">
+            <div class="time-col">{{ item.time }}</div>
+            <div class="marker-col"><div class="dot"></div><div class="line"></div></div>
+            <div class="content-col">
+              <div class="card-content">
+                <div class="header">
+                  <div class="title-area">
+                    <mat-icon *ngIf="item.type === 'block'">access_time</mat-icon>
+                    <mat-icon *ngIf="item.type === 'exception'">event_busy</mat-icon>
+                    <mat-icon *ngIf="item.type === 'appointment'">person</mat-icon>
+                    <strong>{{ item.title }}</strong>
+                  </div>
+                  <button *ngIf="item.type === 'appointment'" class="btn-icon view-profile-btn" [routerLink]="[profileRoutePrefix, item.data.student_id]" title="Ver Perfil del Paciente">
+                    <mat-icon>visibility</mat-icon>
+                  </button>
+                </div>
+                <p>{{ item.desc }}</p>
+                <span class="extra" *ngIf="item.extra">{{ item.extra }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>

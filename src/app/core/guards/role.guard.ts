@@ -44,6 +44,8 @@ export const roleGuard: CanActivateFn = async (route, state) => {
     router.navigate(['/admin']);
   } else if (user.role === 'Psicologo') {
     router.navigate(['/psychologist']);
+  } else if (user.role === 'Nutricionista') {
+    router.navigate(['/nutritionist']);
   } else {
     // Estudiante o cualquier otro
     router.navigate(['/dashboard']);

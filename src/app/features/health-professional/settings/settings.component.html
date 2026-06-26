@@ -1,0 +1,204 @@
+<div class="settings-container">
+  <div class="header-row">
+    <h2><mat-icon>settings</mat-icon> Ajustes Clínicos ({{ professionalTitle }})</h2>
+    <p>Configura tu perfil público y tu horario de atención.</p>
+  </div>
+
+  <div class="tabs-nav">
+    <button class="tab-btn" [class.active]="activeTab === 'perfil'" (click)="setTab('perfil')">
+      <mat-icon>person</mat-icon> Aspectos de Perfil
+    </button>
+    <button class="tab-btn" [class.active]="activeTab === 'agenda'" (click)="setTab('agenda')">
+      <mat-icon>event</mat-icon> Citas y Horarios
+    </button>
+  </div>
+
+  <!-- Pestaña de Perfil -->
+  <div class="tab-content" *ngIf="activeTab === 'perfil'">
+    <div style="margin-bottom: 2rem;">
+      <app-profile-avatar></app-profile-avatar>
+    </div>
+    
+    <div class="card schedule-card" style="max-width: 600px;">
+      <div class="card-header">
+        <h3><mat-icon>badge</mat-icon> Datos Profesionales</h3>
+        <p>Define la información que los pacientes verán al agendar contigo.</p>
+      </div>
+      <div class="card-body">
+        <div class="duration-control" style="margin-bottom: 25px;">
+          <label>Facultad Asignada</label>
+          <select [(ngModel)]="selectedFaculty" style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ccc; margin-top: 5px;">
+            <option value="" disabled>Selecciona tu facultad</option>
+            <option *ngFor="let f of faculties" [value]="f.name">{{ f.name }}</option>
+          </select>
+        </div>
+        <div class="actions">
+          <span class="success-text" *ngIf="successMessage">{{successMessage}}</span>
+          <button class="btn btn-primary" (click)="saveSettings()" [disabled]="isSaving">
+            <mat-icon>save</mat-icon> Guardar Cambios
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pestaña de Citas y Horarios -->
+  <div class="tab-content" *ngIf="activeTab === 'agenda'">
+    <div class="settings-grid">
+      
+      <!-- Columna Izquierda: Horario Ordinario -->
+      <div class="card schedule-card">
+        <div class="card-header">
+          <h3><mat-icon>access_time</mat-icon> Horario Ordinario</h3>
+          <p>Selecciona los días que atiendes normalmente y el rango de horas.</p>
+        </div>
+        
+        <div class="card-body">
+          <div class="duration-control">
+            <label>Duración promedio por sesión (minutos)</label>
+            <input type="number" [(ngModel)]="sessionDuration" min="15" max="120" step="5">
+          </div>
+          
+          <!-- LUGAR Y MODALIDAD DE ATENCIÓN HÍBRIDA -->
+          <div class="modality-container" style="margin-top: 25px; margin-bottom: 25px; background: #f8fafc; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0;">
+            <label style="font-weight: 600; color: #1e293b; display: block; margin-bottom: 15px;">Modalidad y Lugar de Atención</label>
+            
+            <div class="modality-switch" style="display: flex; gap: 10px; margin-bottom: 20px;">
+              <button class="tab-btn" [class.active]="modality === 'virtual'" (click)="modality = 'virtual'" style="flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 10px; border-radius: 8px; font-weight: 500;">
+                <mat-icon>videocam</mat-icon> Virtual
+              </button>
+              <button class="tab-btn" [class.active]="modality === 'presencial'" (click)="modality = 'presencial'" style="flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 10px; border-radius: 8px; font-weight: 500;">
+                <mat-icon>business</mat-icon> Presencial
+              </button>
+            </div>
+
+            <!-- VIRTUAL -->
+            <div *ngIf="modality === 'virtual'" class="virtual-fields">
+              <label style="font-size: 0.85rem; color: #64748b; font-weight: 500;">Enlace de Reunión Virtual (Google Meet, Teams, Zoom, etc.)</label>
+              <input type="text" [(ngModel)]="location" placeholder="https://meet.google.com/abc-defg-hij" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #cbd5e1; margin-top: 6px; font-size: 0.95rem;">
+              <p style="font-size: 0.75rem; color: #94a3b8; margin-top: 6px; margin-bottom: 0;">El estudiante podrá conectarse directamente con un solo clic al llegar la fecha de su cita.</p>
+            </div>
+
+            <!-- PRESENCIAL -->
+            <div *ngIf="modality === 'presencial'" class="presential-fields" style="display: flex; flex-direction: column; gap: 15px;">
+              <div>
+                <label style="font-size: 0.85rem; color: #64748b; font-weight: 500;">Facultad / Sede de Atención</label>
+                <select [(ngModel)]="selectedFacultyId" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #cbd5e1; margin-top: 6px; font-size: 0.95rem; background: white;">
+                  <option [ngValue]="null" disabled>Selecciona la facultad destino</option>
+                  <option *ngFor="let f of faculties" [ngValue]="f.id">{{ f.name }}</option>
+                </select>
+                <p style="font-size: 0.75rem; color: #8b5cf6; margin-top: 6px; margin-bottom: 0;"><strong>¡Sincronizado con Recorridos Virtuales BUAP!</strong> El estudiante podrá ver un mapa 3D inmersivo de la facultad.</p>
+              </div>
+
+              <div>
+                <label style="font-size: 0.85rem; color: #64748b; font-weight: 500;">Edificio</label>
+                <input type="text" [(ngModel)]="building" placeholder="Ej. Edificio DIA / Torre de Gestión Académica" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #cbd5e1; margin-top: 6px; font-size: 0.95rem;">
+              </div>
+
+              <div>
+                <label style="font-size: 0.85rem; color: #64748b; font-weight: 500;">Número de Oficina / Aula / Consultorio</label>
+                <input type="text" [(ngModel)]="officeRoom" placeholder="Ej. Consultorio 104-B" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #cbd5e1; margin-top: 6px; font-size: 0.95rem;">
+              </div>
+            </div>
+          </div>
+
+          <div class="days-list">
+            <div class="day-item" *ngFor="let day of weekDays">
+              <div class="day-toggle">
+                <label class="switch">
+                  <input type="checkbox" [(ngModel)]="day.active">
+                  <span class="slider round"></span>
+                </label>
+                <span class="day-name" [class.inactive]="!day.active">{{ day.label }}</span>
+              </div>
+              <div class="day-blocks" *ngIf="day.active">
+                <div class="time-inputs" *ngFor="let block of day.blocks; let i = index">
+                  <input type="time" [(ngModel)]="block.start">
+                  <span>a</span>
+                  <input type="time" [(ngModel)]="block.end">
+                  <button class="btn-icon mini" *ngIf="day.blocks.length > 1" (click)="removeTimeBlock(day, i)"><mat-icon>remove</mat-icon></button>
+                </div>
+                <button class="btn-text mini-add" (click)="addTimeBlock(day)"><mat-icon>add</mat-icon> Añadir bloque</button>
+              </div>
+              <div class="time-inputs inactive-text" *ngIf="!day.active">
+                No atiende
+              </div>
+            </div>
+          </div>
+
+          <div class="actions">
+            <span class="success-text" *ngIf="successMessage">{{successMessage}}</span>
+            <button class="btn btn-primary" (click)="saveSettings()" [disabled]="isSaving">
+              <mat-icon>save</mat-icon> Guardar Horario Base
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Columna Derecha: Excepciones (Bloqueos) -->
+      <div class="card exceptions-card">
+        <div class="card-header">
+          <h3><mat-icon>event_busy</mat-icon> Días Bloqueados (Excepciones)</h3>
+          <p>Añade días específicos en los que NO recibirás citas (vacaciones, festivos).</p>
+        </div>
+        
+        <div class="card-body">
+          <div class="add-exception-form">
+            <div class="form-group">
+              <label>Fecha a bloquear</label>
+              <input type="date" [(ngModel)]="newExceptionDate" [min]="today">
+            </div>
+            
+            <div class="form-group checkbox-group">
+              <label class="switch">
+                <input type="checkbox" [(ngModel)]="newExceptionIsFullDay">
+                <span class="slider round"></span>
+              </label>
+              <span>Bloquear todo el día</span>
+            </div>
+
+            <div class="form-group time-range" *ngIf="!newExceptionIsFullDay">
+              <div class="time-col">
+                <label>Desde</label>
+                <input type="time" [(ngModel)]="newExceptionStartTime">
+              </div>
+              <div class="time-col">
+                <label>Hasta</label>
+                <input type="time" [(ngModel)]="newExceptionEndTime">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Motivo (opcional)</label>
+              <input type="text" placeholder="Ej. Junta médica" [(ngModel)]="newExceptionDesc">
+            </div>
+            
+            <button class="btn btn-primary" (click)="addException()" [disabled]="!newExceptionDate">Añadir Bloqueo</button>
+          </div>
+
+          <div class="exceptions-list">
+            <h4>Próximos bloqueos configurados</h4>
+            <div class="exception-item" *ngFor="let exc of upcomingExceptions">
+              <div class="exc-info">
+                <span class="date">{{ exc.exception_date | date:'longDate' }}</span>
+                <span class="time" *ngIf="exc.start_time && exc.end_time">De {{exc.start_time.substring(0,5)}} a {{exc.end_time.substring(0,5)}}</span>
+                <span class="time" *ngIf="!exc.start_time || !exc.end_time">Todo el día</span>
+                <span class="desc">{{ exc.description }}</span>
+                <span class="badge" *ngIf="!exc.psychologist_id">Global</span>
+              </div>
+              <button class="btn-icon" *ngIf="exc.psychologist_id" (click)="deleteException(exc.id)" title="Eliminar bloqueo">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+            
+            <div class="empty-state" *ngIf="upcomingExceptions.length === 0">
+              <mat-icon>calendar_today</mat-icon>
+              <p>No tienes días bloqueados configurados.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

@@ -111,7 +111,7 @@ export class AgendaService {
     const [settings, exceptionsRes, appointmentsRes] = await Promise.all([
       this.getSettings(psychologistId),
       this.getExceptions(psychologistId),
-      this.supabase.from('appointments').select('*').eq('professional_id', psychologistId).gte('scheduled_date', startDate).lte('scheduled_date', endDate)
+      this.supabase.from('appointments').select('*').eq('professional_id', psychologistId).gte('scheduled_date', startDate).lte('scheduled_date', endDate).eq('status', 'scheduled')
     ]);
 
     // DEBUG EXTREMO:
@@ -141,6 +141,7 @@ export class AgendaService {
     );
     const hasActiveReservation = !!activeAppointment;
     const activeReservationDetails = activeAppointment ? {
+      id: activeAppointment.id,
       date: activeAppointment.scheduled_date,
       time: activeAppointment.start_time,
       modality: settings.modality || 'virtual',
@@ -203,8 +204,11 @@ export class AgendaService {
         });
       }
       
+      const hasMyRes = availableTimes.some(t => t.status === 'my_reservation');
       let status = 'off';
-      if (currentDate < minAllowedDate) {
+      if (hasMyRes) {
+        status = 'available';
+      } else if (currentDate < minAllowedDate) {
         status = 'blind';
       } else if (availableTimes.length > 0) {
         status = 'available';
@@ -213,7 +217,7 @@ export class AgendaService {
       }
 
       const hasSlots = availableTimes.some(t => t.status !== 'taken');
-      availableDays.set(dateStr, { status, hasSlots, slots: availableTimes });
+      availableDays.set(dateStr, { status, hasSlots: hasMyRes || hasSlots, slots: availableTimes });
     }
     
     return { daysMap: availableDays, hasActiveReservation, activeReservationDetails };

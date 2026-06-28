@@ -342,7 +342,38 @@ export class StudentAgendaComponent implements OnInit {
         if (result.action === 'book') {
           this.executeBooking(slot.time, endStr);
         } else if (result.action === 'cancel' && result.id) {
-          this.executeCancellation(result.id);
+          this.executeCancellation(result.id, result.reason);
+        }
+      }
+    });
+  }
+
+  openCancelModalDirect(details: any) {
+    const dialogRef = this.dialog.open(AppointmentModalComponent, {
+      width: '500px',
+      data: {
+        psychologistName: this.professionalName,
+        psychologistEmail: this.professionalEmail,
+        psychologistAvatar: this.professionalAvatar,
+        location: this.professionalLocation,
+        modality: this.professionalModality,
+        building: this.professionalBuilding,
+        officeRoom: this.professionalOfficeRoom,
+        facultyName: this.professionalFacultyName,
+        virtualTourUrl: this.professionalVirtualTourUrl,
+        dateStr: details.date,
+        startTime: details.time,
+        endTime: details.time,
+        status: 'my_reservation',
+        id: details.id,
+        professionalRoleTitle: this.professionalRoleTitle
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        if (result.action === 'cancel' && result.id) {
+          this.executeCancellation(result.id, result.reason);
         }
       }
     });
@@ -375,9 +406,9 @@ export class StudentAgendaComponent implements OnInit {
     }
   }
 
-  async executeCancellation(appointmentId: string) {
+  async executeCancellation(appointmentId: string, reason: string = 'Sin motivo especificado') {
     this.loading = true;
-    const { error } = await this.supabase.from('appointments').delete().eq('id', appointmentId);
+    const { error } = await this.supabase.from('appointments').update({ status: 'cancelled', cancellation_reason: reason }).eq('id', appointmentId);
     if (error) {
       console.error(error);
       this.showFeedback('error', 'Error al Cancelar', 'Ocurrió un error: ' + error.message);

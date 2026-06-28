@@ -93,39 +93,112 @@
       </div>
     </div>
 
-    <!-- CALENDARIO PREMIUM UNIFICADO -->
-    <div class="calendar-card" *ngIf="assignedProfessionalId && !loading && !errorMsg">
-      <div *ngIf="hasActiveReservation && activeReservationDetails" class="active-reservation-banner" style="display: flex; flex-direction: column; gap: 12px; background: linear-gradient(135deg, #ede9fe, #f5f3ff); border: 1px solid #c4b5fd; padding: 18px; border-radius: 12px; margin-bottom: 20px;">
-        <div style="display: flex; align-items: center; gap: 15px;">
-          <div class="banner-icon" style="background: #8b5cf6; color: white; padding: 10px; border-radius: 50%; display: flex; align-items: center; justify-content: center;"><mat-icon>event_available</mat-icon></div>
-          <div class="banner-text" style="flex: 1;">
-            <strong style="color: #4c1d95; font-size: 1.1rem; display: block;">¡Tu espacio con el {{ professionalRoleTitle.toLowerCase() }} está reservado y protegido!</strong>
-            <span style="color: #581c87; font-size: 0.95rem;">Tienes una cita el <strong>{{ formatSpanishDate(activeReservationDetails.date) }}</strong> a las <strong>{{ activeReservationDetails.time.substring(0,5) }}</strong>.</span>
-          </div>
-          <span style="background: #6d28d9; color: white; padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase;">
-            {{ activeReservationDetails.modality === 'presencial' ? '🏢 Presencial' : '🌐 Virtual' }}
-          </span>
+    <!-- BANNER UNIFICADO PREMIUM: ESPECIALISTA TRATANTE + ESTADO DE CITA -->
+    <div class="master-unified-banner" *ngIf="assignedProfessionalId && !loading && !errorMsg" style="grid-column: 1 / -1; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 24px; padding: 2rem; box-shadow: 0 8px 30px rgba(0,0,0,0.04); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 2.5rem; position: relative; overflow: hidden;">
+      <div class="card-bg-glow" style="position: absolute; top: 0; right: 0; width: 450px; height: 100%; background: linear-gradient(135deg, rgba(139, 92, 246, 0.12), rgba(16, 185, 129, 0.12)); pointer-events: none;"></div>
+      
+      <!-- LADO IZQUIERDO: PERFIL DEL ESPECIALISTA -->
+      <div class="prof-main-info" style="display: flex; align-items: center; gap: 1.8rem; flex-wrap: wrap; flex: 1; min-width: 320px;">
+        <div class="avatar-container" style="width: 96px; height: 96px; border-radius: 50%; border: 3px solid #8b5cf6; padding: 4px; background: var(--input-bg); box-shadow: 0 6px 20px rgba(139, 92, 246, 0.2); display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0;">
+          <img *ngIf="professionalAvatar" [src]="professionalAvatar" alt="Avatar Especialista" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+          <mat-icon *ngIf="!professionalAvatar" style="font-size: 54px; width: 54px; height: 54px; color: #8b5cf6;">health_and_safety</mat-icon>
         </div>
 
-        <div *ngIf="activeReservationDetails.modality === 'presencial'" style="border-top: 1px dashed #c4b5fd; padding-top: 12px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
-          <div style="font-size: 0.9rem; color: #4c1d95;">
-            <strong>Lugar:</strong> {{ activeReservationDetails.building || 'Edificio Principal' }} — <strong>Aula/Consultorio:</strong> {{ activeReservationDetails.officeRoom || 'Privado' }}
-            <span *ngIf="activeReservationDetails.facultyName" style="display: block; font-size: 0.8rem; color: #6b21a8;">📌 {{ activeReservationDetails.facultyName }}</span>
+        <div class="prof-details" style="display: flex; flex-direction: column; gap: 4px;">
+          <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+            <span style="background: rgba(139, 92, 246, 0.15); color: #8b5cf6; border: 1px solid rgba(139, 92, 246, 0.3); padding: 4px 14px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">
+              {{ professionalRoleTitle }} Tratante Asignado
+            </span>
+            <span style="background: #10b981; color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; display: flex; align-items: center; gap: 4px; box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);">
+              <mat-icon style="font-size: 14px; width: 14px; height: 14px;">verified</mat-icon> Enlace Activo
+            </span>
           </div>
-          <a *ngIf="activeReservationDetails.virtualTourUrl" [href]="activeReservationDetails.virtualTourUrl" target="_blank" class="btn-virtual-tour" style="background: #8b5cf6; color: white; padding: 8px 16px; border-radius: 8px; font-weight: 600; text-decoration: none; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3); transition: all 0.2s;">
-            <mat-icon style="font-size: 18px; width: 18px; height: 18px;">360</mat-icon> 📍 Abrir Recorrido Virtual
-          </a>
-        </div>
-
-        <div *ngIf="activeReservationDetails.modality === 'virtual'" style="border-top: 1px dashed #c4b5fd; padding-top: 12px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
-          <div style="font-size: 0.9rem; color: #4c1d95;">
-            <strong>Enlace de Videollamada:</strong> {{ activeReservationDetails.location || 'Se generará pronto...' }}
-          </div>
-          <a *ngIf="activeReservationDetails.location && activeReservationDetails.location.startsWith('http')" [href]="activeReservationDetails.location" target="_blank" style="background: #8b5cf6; color: white; padding: 8px 16px; border-radius: 8px; font-weight: 600; text-decoration: none; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);">
-            <mat-icon style="font-size: 18px; width: 18px; height: 18px;">videocam</mat-icon> 🌐 Entrar a videollamada
-          </a>
+          <h2 style="margin: 0.3rem 0 0.1rem 0; color: var(--text-primary); font-size: 1.8rem; font-weight: 700; letter-spacing: -0.02em;">{{ professionalName }}</h2>
+          <p style="margin: 0; color: var(--text-secondary); font-size: 0.95rem; display: flex; align-items: center; gap: 6px;">
+            <mat-icon style="font-size: 16px; width: 16px; height: 16px; color: #8b5cf6;">email</mat-icon> {{ professionalEmail }}
+          </p>
         </div>
       </div>
+
+      <!-- LADO DERECHO: ESTADO DINÁMICO DE CITA Y MODALIDAD -->
+      <div class="appointment-status-container" style="display: flex; flex-direction: column; gap: 12px; flex: 1; min-width: 380px; z-index: 1;">
+        
+        <!-- ESTADO 1: CON CITA ACTIVA -->
+        <div *ngIf="hasActiveReservation && activeReservationDetails" style="background: linear-gradient(135deg, #ede9fe, #f5f3ff); border: 1px solid #c4b5fd; padding: 1.5rem; border-radius: 20px; box-shadow: 0 6px 20px rgba(139, 92, 246, 0.15); display: flex; flex-direction: column; gap: 14px;">
+          <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="background: #8b5cf6; color: white; padding: 10px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);">
+                <mat-icon>event_available</mat-icon>
+              </div>
+              <div>
+                <strong style="color: #4c1d95; font-size: 1.15rem; font-weight: 700; display: block;">¡Cita Confirmada y Protegida!</strong>
+                <span style="color: #581c87; font-size: 0.95rem; display: block; margin-top: 2px;">Para el <strong>{{ formatSpanishDate(activeReservationDetails.date) }}</strong> a las <strong>{{ activeReservationDetails.time.substring(0,5) }}</strong></span>
+              </div>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="background: #6d28d9; color: white; padding: 6px 14px; border-radius: 14px; font-size: 0.8rem; font-weight: 700; text-transform: uppercase;">
+                {{ activeReservationDetails.modality === 'presencial' ? '🏢 Presencial' : '🌐 Virtual' }}
+              </span>
+              <button class="btn-cancel-direct" (click)="openCancelModalDirect(activeReservationDetails)" style="background: #ef4444; color: white; padding: 6px 14px; border-radius: 14px; font-size: 0.85rem; font-weight: 600; border: none; cursor: pointer; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3); transition: all 0.2s;">
+                <mat-icon style="font-size: 16px; width: 16px; height: 16px;">cancel</mat-icon> Cancelar
+              </button>
+            </div>
+          </div>
+
+          <div *ngIf="activeReservationDetails.modality === 'presencial'" style="border-top: 1px dashed #c4b5fd; padding-top: 14px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div style="font-size: 0.95rem; color: #4c1d95;">
+              <strong>Edificio:</strong> {{ activeReservationDetails.building || 'Principal' }} — <strong>Consultorio:</strong> {{ activeReservationDetails.officeRoom || 'Privado' }}
+              <span *ngIf="professionalFacultyName" style="display: block; font-size: 0.85rem; color: #6b21a8; margin-top: 2px;">📌 {{ professionalFacultyName }}</span>
+            </div>
+            <a *ngIf="activeReservationDetails.virtualTourUrl" [href]="activeReservationDetails.virtualTourUrl" target="_blank" style="display: flex; align-items: center; gap: 6px; background: #8b5cf6; color: white; padding: 8px 14px; border-radius: 10px; text-decoration: none; font-weight: 600; font-size: 0.85rem; box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);">
+              <mat-icon style="font-size: 16px; width: 16px; height: 16px;">360</mat-icon> Ver Recorrido Virtual BUAP
+            </a>
+          </div>
+
+          <div *ngIf="activeReservationDetails.modality !== 'presencial'" style="border-top: 1px dashed #c4b5fd; padding-top: 14px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div style="font-size: 0.95rem; color: #4c1d95;">
+              <strong>Enlace de Videollamada:</strong> {{ activeReservationDetails.location || 'Consultorio Virtual' }}
+              <span style="display: block; font-size: 0.82rem; color: #10b981; margin-top: 2px;">📌 Enlace fijo establecido por tu especialista tratante</span>
+            </div>
+            <a *ngIf="activeReservationDetails.location && (activeReservationDetails.location.includes('http') || activeReservationDetails.location.includes('meet') || activeReservationDetails.location.includes('zoom') || activeReservationDetails.location.includes('teams'))" [href]="activeReservationDetails.location.startsWith('http') ? activeReservationDetails.location : 'https://' + activeReservationDetails.location" target="_blank" style="display: flex; align-items: center; gap: 6px; background: #10b981; color: white; padding: 8px 16px; border-radius: 12px; text-decoration: none; font-weight: 700; font-size: 0.85rem; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3); transition: all 0.2s;">
+              <mat-icon style="font-size: 18px; width: 18px; height: 18px;">videocam</mat-icon> 🟢 Ingresar a Videollamada
+            </a>
+          </div>
+        </div>
+
+        <!-- ESTADO 2: SIN CITA ACTIVA (MOSTRAR MODALIDAD Y ANIMAR A RESERVAR) -->
+        <div *ngIf="!hasActiveReservation" style="background: var(--input-bg); border: 1px solid var(--border-color); padding: 1.4rem 1.6rem; border-radius: 20px; display: flex; flex-direction: column; gap: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.02);">
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px;">
+            <span style="font-size: 0.85rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em;">Modalidad de Atención</span>
+            <span style="background: #8b5cf6; color: white; padding: 4px 12px; border-radius: 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase;">
+              {{ professionalModality === 'presencial' ? '🏢 Presencial' : '🌐 Virtual' }}
+            </span>
+          </div>
+          
+          <div *ngIf="professionalModality === 'presencial'" style="color: var(--text-primary); font-size: 1rem;">
+            <strong>Edificio:</strong> {{ professionalBuilding || 'Principal' }} — <strong>Consultorio:</strong> {{ professionalOfficeRoom || 'Privado' }}
+            <span *ngIf="professionalFacultyName" style="display: block; font-size: 0.85rem; color: #8b5cf6; margin-top: 2px;">📌 {{ professionalFacultyName }}</span>
+          </div>
+          
+          <div *ngIf="professionalModality === 'virtual'" style="color: var(--text-primary); font-size: 1rem;">
+            <strong>Enlace de Videollamada:</strong> {{ professionalLocation || 'Consultorio Virtual' }}
+            <span style="display: block; font-size: 0.85rem; color: #8b5cf6; margin-top: 2px;">📌 Enlace permanente establecido en la configuración del especialista</span>
+          </div>
+
+          <div style="border-top: 1px solid var(--border-color); padding-top: 10px; display: flex; align-items: center; gap: 8px; color: #10b981; font-size: 0.9rem; font-weight: 600;">
+            <mat-icon style="font-size: 18px; width: 18px; height: 18px;">event_available</mat-icon> ¡Calendario abierto! Selecciona un día verde abajo para agendar.
+          </div>
+        </div>
+        
+        <a *ngIf="!hasActiveReservation && professionalModality === 'presencial' && professionalVirtualTourUrl" [href]="professionalVirtualTourUrl" target="_blank" style="background: linear-gradient(135deg, #8b5cf6, #a78bfa); color: white; padding: 10px 18px; border-radius: 14px; font-weight: 600; font-size: 0.9rem; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3); transition: all 0.2s;">
+          <mat-icon style="font-size: 20px; width: 20px; height: 20px;">360</mat-icon> Abrir Recorrido Virtual BUAP 360°
+        </a>
+      </div>
+    </div>
+
+    <!-- CALENDARIO PREMIUM UNIFICADO -->
+    <div class="calendar-card" *ngIf="assignedProfessionalId && !loading && !errorMsg">
 
       <div class="cal-header">
         <button (click)="prevMonth()" class="nav-btn"><mat-icon>chevron_left</mat-icon></button>

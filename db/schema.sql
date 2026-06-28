@@ -124,8 +124,11 @@ CREATE TABLE public.appointments (
     student_id UUID REFERENCES public.users(id) ON DELETE CASCADE,
     professional_id UUID REFERENCES public.users(id) ON DELETE CASCADE,
     scheduled_date TIMESTAMP NOT NULL,
+    start_time TIME,
+    end_time TIME,
     priority_level VARCHAR(20) DEFAULT 'Routine',
-    status VARCHAR(20) DEFAULT 'Scheduled',
+    status VARCHAR(20) DEFAULT 'scheduled',
+    cancellation_reason TEXT,
     notes TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

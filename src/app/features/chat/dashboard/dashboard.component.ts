@@ -24,6 +24,7 @@ export class DashboardComponent {
   
   inputText = '';
   suggestions = ['¿Cómo manejo el estrés?', 'Necesito hablar de algo', 'Ejercicio de respiración', 'Me siento solo/a'];
+  showMobileActions = false;
 
   @ViewChild('chatScroll') private chatScrollContainer!: ElementRef;
 
@@ -35,15 +36,21 @@ export class DashboardComponent {
     });
   }
 
+  toggleMobileActions() {
+    this.showMobileActions = !this.showMobileActions;
+  }
+
   sendMessage() {
     if (this.inputText.trim()) {
       this.chatService.sendMessage(this.inputText);
       this.inputText = '';
+      this.showMobileActions = false;
     }
   }
 
   sendSuggestion(suggestion: string) {
     this.chatService.sendMessage(suggestion);
+    this.showMobileActions = false;
   }
 
   logout() {

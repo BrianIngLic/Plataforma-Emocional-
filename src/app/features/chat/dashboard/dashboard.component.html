@@ -64,7 +64,19 @@
 
     <!-- Input Box -->
     <div class="input-area">
+      <!-- Menú móvil de acciones -->
+      <div class="mobile-actions-menu" *ngIf="showMobileActions">
+        <button class="action-menu-item" (click)="showMobileActions = false"><mat-icon>attach_file</mat-icon> Adjuntar archivo</button>
+        <button class="action-menu-item" (click)="showMobileActions = false"><mat-icon>image</mat-icon> Imagen</button>
+        <button class="action-menu-item" (click)="showMobileActions = false"><mat-icon>sentiment_satisfied_alt</mat-icon> Emojis</button>
+      </div>
+
       <div class="input-container">
+        <!-- Botón móvil unificado '+' -->
+        <button class="mobile-add-btn" (click)="toggleMobileActions()">
+          <mat-icon>add</mat-icon>
+        </button>
+
         <div class="input-actions-left">
           <mat-icon>attach_file</mat-icon>
           <mat-icon>image</mat-icon>

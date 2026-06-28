@@ -1,12 +1,18 @@
-# Graph Report - .  (2026-06-25)
+# Graph Report - Ecosistema-de-Asistencia-Emocional-con-IA-Generativa  (2026-06-25)
 
 ## Corpus Check
-- Corpus is ~40,174 words - fits in a single context window. You may not need a graph.
+- 93 files · ~50,368 words
+- Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 544 nodes · 767 edges · 51 communities (13 shown, 38 thin omitted)
-- Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 17 edges (avg confidence: 0.92)
+- 768 nodes · 1154 edges · 84 communities (35 shown, 49 thin omitted)
+- Extraction: 94% EXTRACTED · 6% INFERRED · 0% AMBIGUOUS · INFERRED: 72 edges (avg confidence: 0.6)
 - Token cost: 0 input · 0 output
+
+## Graph Freshness
+- Built from commit: `7a2d5370`
+- Run `git rev-parse HEAD` and compare to check if the graph is stale.
+- Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
 - [[_COMMUNITY_Core Services and Auth|Core Services and Auth]]
@@ -60,30 +66,62 @@
 - [[_COMMUNITY_Diary Spec|Diary Spec]]
 - [[_COMMUNITY_Profile Avatar Spec|Profile Avatar Spec]]
 - [[_COMMUNITY_AI Triage Simulator Banner|AI Triage Simulator Banner]]
+- [[_COMMUNITY_Community 51|Community 51]]
+- [[_COMMUNITY_Community 52|Community 52]]
+- [[_COMMUNITY_Community 53|Community 53]]
+- [[_COMMUNITY_Community 54|Community 54]]
+- [[_COMMUNITY_Community 55|Community 55]]
+- [[_COMMUNITY_Community 56|Community 56]]
+- [[_COMMUNITY_Community 57|Community 57]]
+- [[_COMMUNITY_Community 58|Community 58]]
+- [[_COMMUNITY_Community 59|Community 59]]
+- [[_COMMUNITY_Community 60|Community 60]]
+- [[_COMMUNITY_Community 61|Community 61]]
+- [[_COMMUNITY_Community 62|Community 62]]
+- [[_COMMUNITY_Community 63|Community 63]]
+- [[_COMMUNITY_Community 64|Community 64]]
+- [[_COMMUNITY_Community 65|Community 65]]
+- [[_COMMUNITY_Community 66|Community 66]]
+- [[_COMMUNITY_Community 67|Community 67]]
+- [[_COMMUNITY_Community 68|Community 68]]
+- [[_COMMUNITY_Community 69|Community 69]]
+- [[_COMMUNITY_Community 70|Community 70]]
+- [[_COMMUNITY_Community 71|Community 71]]
+- [[_COMMUNITY_Community 72|Community 72]]
+- [[_COMMUNITY_Community 73|Community 73]]
+- [[_COMMUNITY_Community 74|Community 74]]
+- [[_COMMUNITY_Community 75|Community 75]]
+- [[_COMMUNITY_Community 76|Community 76]]
+- [[_COMMUNITY_Community 77|Community 77]]
+- [[_COMMUNITY_Community 78|Community 78]]
+- [[_COMMUNITY_Community 79|Community 79]]
+- [[_COMMUNITY_Community 81|Community 81]]
+- [[_COMMUNITY_Community 82|Community 82]]
+- [[_COMMUNITY_Community 83|Community 83]]
 
 ## God Nodes (most connected - your core abstractions)
-1. `AuthService` - 30 edges
-2. `FacultiesComponent` - 25 edges
-3. `PsychologistsComponent` - 25 edges
-4. `SupabaseService` - 22 edges
-5. `StudentAgendaComponent` - 19 edges
-6. `PatientProfileComponent` - 17 edges
-7. `AgendaComponent` - 16 edges
-8. `SettingsComponent` - 14 edges
-9. `ChatService` - 13 edges
-10. `AgendaComponent` - 13 edges
+1. `RiskLevel` - 33 edges
+2. `TriageEngine` - 30 edges
+3. `AuthService` - 30 edges
+4. `UserMessage` - 28 edges
+5. `FacultiesComponent` - 25 edges
+6. `PsychologistsComponent` - 25 edges
+7. `SupabaseService` - 22 edges
+8. `StudentAgendaComponent` - 19 edges
+9. `classify()` - 18 edges
+10. `PatientProfileComponent` - 17 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `Skill 9: RoleGuard Security` --semantically_similar_to--> `Ciberseguridad y Privacidad`  [INFERRED] [semantically similar]
   spec.md → .constitution.md
-- `LoginComponent Template` --implements--> `Ciberseguridad y Privacidad`  [INFERRED]
-  src/app/features/auth/login/login.component.html → .constitution.md
-- `ux-specialist` --conceptually_related_to--> `Diseño y UX`  [INFERRED]
-  .diana/agents.yaml → .constitution.md
-- `LoginComponent Template` --implements--> `Diseño y UX`  [INFERRED]
-  src/app/features/auth/login/login.component.html → .constitution.md
-- `LoginComponent Template` --implements--> `Skill 2: Autenticación y Onboarding Clínico`  [INFERRED]
-  src/app/features/auth/login/login.component.html → spec.md
+- `TriageEngine` --uses--> `RiskLevel`  [INFERRED]
+  engine.py → constant.py
+- `SessionState` --uses--> `RiskLevel`  [INFERRED]
+  models.py → constant.py
+- `TriageResult` --uses--> `RiskLevel`  [INFERRED]
+  models.py → constant.py
+- `UserMessage` --uses--> `RiskLevel`  [INFERRED]
+  models.py → constant.py
 
 ## Import Cycles
 - None detected.
@@ -94,27 +132,27 @@
 - **Student Emotional Assistance and Care Flow** — dashboard_layout_dashboard_layout_component_student_sidebar, dashboard_dashboard_component_chat_view, dashboard_diary_dashboard_component_therapeutic_refuge, student_agenda_student_agenda_component_appointment_scheduler [INFERRED 0.85]
 - **Psychologist Clinical Command Center and Triage Flow** — psychologist_layout_psychologist_layout_component_psychologist_sidebar, dashboard_dashboard_component_psychologist_triage_view, patients_patients_component_patient_directory, agenda_agenda_component_clinical_timeline, patient_profile_patient_profile_component_clinical_expedient_view [INFERRED 0.85]
 
-## Communities (51 total, 38 thin omitted)
+## Communities (84 total, 49 thin omitted)
 
 ### Community 0 - "Core Services and Auth"
-Cohesion: 0.08
-Nodes (13): CalendarDay, environment, LoginComponent, Psychologist, Holiday, TimeBlock, WorkingDay, AuditService (+5 more)
+Cohesion: 0.16
+Nodes (3): CalendarDay, AuthService, ChatMessage
 
 ### Community 1 - "Modals Diary and Exceptions"
-Cohesion: 0.08
-Nodes (12): Appointment, AdminFaculty, FeedbackModalComponent, FeedbackModalData, RegisterComponent, AdminExceptionsService, WorkingDaysMap, DiaryService (+4 more)
+Cohesion: 0.17
+Nodes (6): FeedbackModalComponent, FeedbackModalData, TimeBlock, WorkingDay, WorkingDaysMap, DiaryService
 
 ### Community 2 - "Package Config and Dependencies"
 Cohesion: 0.05
-Nodes (37): dependencies, @angular/animations, @angular/cdk, @angular/common, @angular/compiler, @angular/core, @angular/forms, @angular/material (+29 more)
+Nodes (44): build, extract-i18n, serve, test, builder, configurations, defaultConfiguration, options (+36 more)
 
 ### Community 3 - "Angular Architect Configurations"
-Cohesion: 0.08
-Nodes (30): build, extract-i18n, serve, test, builder, configurations, defaultConfiguration, options (+22 more)
+Cohesion: 0.15
+Nodes (28): classifier.py — Clasificador determinista de riesgo pre-LLM.  Este módulo es l, OverrideSource, Nivel de riesgo del usuario según el triaje.      Sigue un esquema semáforo de, Origen que puede activar un override de nivel de riesgo.      - PHQ9_ITEM9:, RiskLevel, Motor principal de triage determinista para clasificación de riesgo.  Orquesta, Enum, Motor determinista de triage para clasificación de riesgo en salud mental. Todas (+20 more)
 
 ### Community 4 - "Angular Build Schemas"
-Cohesion: 0.07
-Nodes (28): cli, analytics, newProjectRoot, prefix, projectType, root, schematics, sourceRoot (+20 more)
+Cohesion: 0.11
+Nodes (22): MessageRequest, post_triage(), BaseModel, quick_triage(), Devuelve un resumen del estado de la sesión para depuración/auditoría., Evaluación rápida de un mensaje individual.      Crea un motor de triage efíme, Motor de triage que procesa mensajes a través de capas de seguridad.      El f, Obtiene una sesión existente o crea una nueva.          Args:             ses (+14 more)
 
 ### Community 7 - "AI Triage and Student Agenda"
 Cohesion: 0.14
@@ -122,7 +160,7 @@ Nodes (3): AiTriageMockService, UrgencyLevel, StudentAgendaComponent
 
 ### Community 8 - "Admin Patient Statistics Overview"
 Cohesion: 0.12
-Nodes (5): OverviewComponent, AdminStatsService, ChartDataPoint, OverviewMetrics, PatientsComponent
+Nodes (4): OverviewComponent, AdminStatsService, OverviewMetrics, PatientsComponent
 
 ### Community 9 - "Alimentary Assessment Dashboard"
 Cohesion: 0.13
@@ -137,8 +175,8 @@ Cohesion: 0.23
 Nodes (6): App, appConfig, routes, authGuard(), roleGuard(), authInterceptor()
 
 ### Community 20 - "Security and Design Principles"
-Cohesion: 0.22
-Nodes (10): angular-architect, cybersec-guardian, postgrest-dev, ux-specialist, Ciberseguridad y Privacidad, Diseño y UX, LoginComponent Template, Skill 1: Capa de Datos (+2 more)
+Cohesion: 0.09
+Nodes (22): angular-architect, cybersec-guardian, postgrest-dev, ux-specialist, Ciberseguridad y Privacidad, Diseño y UX, LoginComponent Template, Arquitectura General (+14 more)
 
 ### Community 28 - "AI Command Center Integration"
 Cohesion: 0.40
@@ -148,25 +186,109 @@ Nodes (5): ai-integrator, AgendaComponent Template, OverviewComponent Template, 
 Cohesion: 0.40
 Nodes (5): AdminLayoutComponent Template, FacultiesComponent Template, PsychologistsComponent Template, ReportsComponent Template, Skill 8: Módulo de Administración
 
+### Community 43 - "Project README Overview"
+Cohesion: 0.25
+Nodes (7): Additional Resources, Building, Code scaffolding, Development server, PlataformaEmocional, Running end-to-end tests, Running unit tests
+
+### Community 45 - "General Architecture Spec"
+Cohesion: 0.08
+Nodes (24): dependencies, @angular/animations, @angular/cdk, @angular/common, @angular/compiler, @angular/core, @angular/forms, @angular/material (+16 more)
+
+### Community 51 - "Community 51"
+Cohesion: 0.10
+Nodes (16): check_literal_terms(), classify(), Clasifica el riesgo de un mensaje de texto del usuario.      Ejecuta la cadena, Busca términos de riesgo alto y medio en el texto normalizado.      Primero re, Detección de patrones metafóricos con temática de autosacrificio., Fragmento con 'abismo', 'matarlos', 'desaparecía', 'sacrificio'         debe se, Verifica que el override se active cuando la clasificación es ROJO., Una clasificación ROJO debe producir un override activo. (+8 more)
+
+### Community 52 - "Community 52"
+Cohesion: 0.12
+Nodes (14): normalize_text(), Normaliza el texto del usuario para la clasificación.      Pasos:     1. Conv, get_crisis_message(), Devuelve el mensaje de crisis fijo en español.      Este mensaje se muestra al, Tests completos para el motor de triage determinista.  Cubre: normalización de, Verifica que el mensaje de crisis incluya recursos verificados., El mensaje de crisis debe incluir números de teléfono         de los recursos v, Verifica la normalización de texto: acentos, minúsculas, variantes. (+6 more)
+
+### Community 53 - "Community 53"
+Cohesion: 0.27
+Nodes (5): environment, Psychologist, ChartDataPoint, DiaryEntry, SupabaseService
+
+### Community 54 - "Community 54"
+Cohesion: 0.13
+Nodes (14): Categoría 1: Recursos de Crisis (CERO TOLERANCIA a error), Categoría 2: Información Clínica General, Categoría 3: Protocolos de Derivación México, Categoría 4: Técnicas de Soporte Emocional, Categoría 5: Preguntas Trampa (para detectar confabulación), Configuración del Modelo, Criterio de Aceptación, Cómo Ejecutar (+6 more)
+
+### Community 55 - "Community 55"
+Cohesion: 0.14
+Nodes (14): devDependencies, @angular/build, @angular/cli, @angular/compiler-cli, jasmine-core, karma, karma-chrome-launcher, karma-coverage (+6 more)
+
+### Community 56 - "Community 56"
+Cohesion: 0.27
+Nodes (4): AdminFaculty, Campus, Faculty, FacultyService
+
+### Community 57 - "Community 57"
+Cohesion: 0.18
+Nodes (10): 1. Planificación de Infraestructura, 2. Rutas de Despliegue, 3. Seguridad Clínica y Auditoría de Logs, 4. Respaldos y Recuperación ante Desastres, Auditoría de Crisis (Overrides), Manual de Despliegue en Producción y Políticas de Seguridad, Reglas Clínicas Invariables (en `contract.json`), Requisitos de Hardware para Producción (+2 more)
+
+### Community 58 - "Community 58"
+Cohesion: 0.20
+Nodes (9): Backlog Pendiente, Fase de Integración (Backend: PostgreSQL / PostgREST), Skill 1: Capa de Datos (PostgreSQL + PostgREST), Skill 2: Autenticación y Onboarding Clínico (Fase actual: Ejecutada), Skill 3: Amati Chat Estudiantil (Fase actual: Ejecución), Skill 5: Command Center Clínico (Fase actual: Ejecución), Skill 6: Mi Diario Personal (Fase actual: Ejecución), Skill 7: Gestión de Perfil y Avatares (Fase actual: Planeación SDD) (+1 more)
+
+### Community 59 - "Community 59"
+Cohesion: 0.22
+Nodes (8): 1. Requisitos del Sistema, 2. Automatización con Makefile, 3. Estructura de Scripts (`scripts/`), 4. Estructura del Repositorio, Comandos de Configuración e Instalación, Comandos de Contenedores (Docker), Comandos de Ejecución y Diagnóstico, Guía de Operación y Desarrollo
+
+### Community 60 - "Community 60"
+Cohesion: 0.32
+Nodes (3): Appointment, AdminExceptionsService, Holiday
+
+### Community 61 - "Community 61"
+Cohesion: 0.25
+Nodes (7): name, prettier, overrides, printWidth, singleQuote, private, version
+
+### Community 62 - "Community 62"
+Cohesion: 0.25
+Nodes (5): Estado mutable de una sesión de conversación.      Mantiene el historial de me, Agrega un mensaje al historial de la sesión.          Args:             msg:, Actualiza el nivel de riesgo actual de la sesión.          El nivel solo puede, Activa un override y lo registra en el historial.          Establece ``is_over, SessionState
+
+### Community 63 - "Community 63"
+Cohesion: 0.25
+Nodes (7): 1. Justificación Clínica y del Proyecto, 2. Arquitectura de Seguridad Híbrida, 3. Niveles de Riesgo y Acciones, Contexto del Proyecto: Ecosistema de Asistencia Emocional con IA Generativa, El Desafío del Lenguaje Metafórico (Caso "Oprobios"), Funcionamiento del Override (Nivel ROJO), Selección de Modelos: Qwen 2.5 14B vs Llama 3.1 8B
+
+### Community 64 - "Community 64"
+Cohesion: 0.29
+Nodes (6): 1. Ciberseguridad y Privacidad como Pilar Absoluto, 2. La Especificación es la Ley, 3. Prioridad Clínica y Responsabilidad, 4. Diseño y UX (User Experience), 5. Prácticas de Desarrollo y Documentación, Constitución del Ecosistema de Asistencia Emocional
+
+### Community 65 - "Community 65"
+Cohesion: 0.33
+Nodes (6): check_metaphoric_patterns(), _has_cooccurrence(), _pattern_found_in_sentences(), Detecta patrones metafóricos de riesgo en el texto.      Para cada patrón en `, Comprueba co-ocurrencia en ventanas de 2 oraciones consecutivas.      Si solo, Verifica si la ventana contiene al menos un término primario y uno contextual.
+
+### Community 66 - "Community 66"
+Cohesion: 0.33
+Nodes (6): scripts, build, ng, start, test, watch
+
+### Community 73 - "Community 73"
+Cohesion: 0.50
+Nodes (3): Verifica que el override NO se active en nivel VERDE., Una clasificación VERDE no debe producir override., TestOverrideInactiveOnVerde
+
+### Community 74 - "Community 74"
+Cohesion: 0.50
+Nodes (3): Verifica detección literal de alto riesgo → ROJO., Expresión literal de ideación suicida debe ser ROJO., TestClassifyRojoLiteral
+
+### Community 75 - "Community 75"
+Cohesion: 0.50
+Nodes (3): Verifica detección de variantes informales → ROJO., kiero morir' (variante informal) debe ser ROJO., TestClassifyRojoInformal
+
 ## Knowledge Gaps
-- **119 isolated node(s):** `$schema`, `version`, `newProjectRoot`, `projectType`, `style` (+114 more)
+- **179 isolated node(s):** `$schema`, `version`, `newProjectRoot`, `projectType`, `style` (+174 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **38 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **49 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `SupabaseService` connect `Core Services and Auth` to `Admin Patient Statistics Overview`, `Modals Diary and Exceptions`, `Main App Security Interceptors`, `Profile Avatar Manager`?**
-  _High betweenness centrality (0.103) - this node is a cross-community bridge._
-- **Why does `AuthService` connect `Core Services and Auth` to `Modals Diary and Exceptions`, `Main App Security Interceptors`, `Profile Avatar Manager`, `Admin Routing and Layout`, `Psychologist Layout Navigation`?**
-  _High betweenness centrality (0.076) - this node is a cross-community bridge._
-- **Why does `PsychologistsComponent` connect `Psychologist Profile and Utilities` to `Core Services and Auth`?**
-  _High betweenness centrality (0.060) - this node is a cross-community bridge._
-- **What connects `$schema`, `version`, `newProjectRoot` to the rest of the system?**
-  _123 weakly-connected nodes found - possible documentation gaps or missing edges._
-- **Should `Core Services and Auth` be split into smaller, more focused modules?**
-  _Cohesion score 0.08080808080808081 - nodes in this community are weakly interconnected._
-- **Should `Modals Diary and Exceptions` be split into smaller, more focused modules?**
-  _Cohesion score 0.07560975609756097 - nodes in this community are weakly interconnected._
-- **Should `Package Config and Dependencies` be split into smaller, more focused modules?**
-  _Cohesion score 0.05263157894736842 - nodes in this community are weakly interconnected._
+- **Why does `SupabaseService` connect `Community 53` to `Core Services and Auth`, `Modals Diary and Exceptions`, `Community 67`, `Community 70`, `Main App Security Interceptors`, `Community 56`, `Community 60`?**
+  _High betweenness centrality (0.051) - this node is a cross-community bridge._
+- **Why does `AuthService` connect `Core Services and Auth` to `Modals Diary and Exceptions`, `Community 67`, `Community 70`, `Main App Security Interceptors`, `Community 53`, `Community 56`?**
+  _High betweenness centrality (0.038) - this node is a cross-community bridge._
+- **Why does `PsychologistsComponent` connect `Psychologist Profile and Utilities` to `Community 53`?**
+  _High betweenness centrality (0.030) - this node is a cross-community bridge._
+- **Are the 19 inferred relationships involving `RiskLevel` (e.g. with `TriageEngine` and `OverrideSignal`) actually correct?**
+  _`RiskLevel` has 19 INFERRED edges - model-reasoned connections that need verification._
+- **Are the 18 inferred relationships involving `TriageEngine` (e.g. with `MessageRequest` and `RiskLevel`) actually correct?**
+  _`TriageEngine` has 18 INFERRED edges - model-reasoned connections that need verification._
+- **Are the 16 inferred relationships involving `UserMessage` (e.g. with `MessageRequest` and `TriageEngine`) actually correct?**
+  _`UserMessage` has 16 INFERRED edges - model-reasoned connections that need verification._
+- **What connects `Motor determinista de triage para clasificación de riesgo en salud mental. Todas`, `$schema`, `version` to the rest of the system?**
+  _244 weakly-connected nodes found - possible documentation gaps or missing edges._

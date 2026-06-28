@@ -1,3 +1,14 @@
+:host {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+*, *:before, *:after {
+  box-sizing: border-box;
+}
+
 .agenda-layout {
   display: flex; gap: 1.5rem; padding: 2rem; max-width: 1400px; margin: 0 auto; align-items: flex-start;
 }
@@ -111,4 +122,72 @@
   .appt-date { display: flex; flex-direction: column; align-items: center; padding-right: 1rem; border-right: 1px solid var(--border-color); .day { font-weight: 700; color: #0ea5e9; font-size: 1.1rem; text-transform: capitalize; } .year { font-size: 0.8rem; color: var(--text-secondary); } }
   .appt-time { font-weight: 600; color: var(--text-primary); min-width: 70px; padding: 0 1rem; border-right: 1px solid var(--border-color); display: flex; align-items: center; }
   .appt-details { padding-left: 1rem; display: flex; flex-direction: column; gap: 0.25rem; .patient-name { font-weight: 600; color: var(--text-primary); } .appt-type { font-size: 0.8rem; color: var(--text-secondary); background: rgba(0,0,0,0.05); padding: 0.1rem 0.4rem; border-radius: 4px; align-self: flex-start; } }
+}
+
+@media (max-width: 1024px) {
+  .agenda-layout {
+    flex-direction: column;
+    padding: 4rem 1rem 1rem 1rem !important;
+    gap: 1rem !important;
+  }
+
+  .calendar-sidebar {
+    width: 100% !important;
+  }
+
+  .agenda-main {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+  }
+
+  .timeline .timeline-item {
+    .time-col {
+      width: 50px !important;
+      font-size: 0.8rem !important;
+      padding-right: 0.5rem !important;
+    }
+    
+    .marker-col {
+      margin-right: 0.75rem !important;
+    }
+    
+    .content-col .card-content {
+      padding: 0.75rem !important;
+      
+      .header {
+        flex-direction: column;
+        align-items: flex-start !important;
+        gap: 0.5rem;
+        
+        .view-profile-btn {
+          align-self: flex-end;
+        }
+      }
+    }
+  }
+
+  .appointment-card {
+    flex-direction: column;
+    align-items: stretch !important;
+    gap: 0.75rem;
+    
+    .appt-date {
+      border-right: none !important;
+      border-bottom: 1px solid var(--border-color);
+      padding-right: 0 !important;
+      padding-bottom: 0.5rem;
+      align-items: flex-start !important;
+    }
+    
+    .appt-time {
+      border-right: none !important;
+      padding: 0 !important;
+      align-items: flex-start !important;
+    }
+    
+    .appt-details {
+      padding-left: 0 !important;
+    }
+  }
 }

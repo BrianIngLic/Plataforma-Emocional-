@@ -216,16 +216,9 @@
 .message-wrapper {
   display: flex;
   gap: 1rem;
-<<<<<<< HEAD
-  max-width: 85%;
-=======
   max-width: 80%;
   animation: messageFadeIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
   opacity: 0;
-<<<<<<< HEAD
->>>>>>> a6d3afb (Paciente Responsive)
-=======
->>>>>>> a6d3afb3e3f7365ed16634c428700027378ea2c9
 
   &.user-message {
     align-self: flex-end;
@@ -296,7 +289,6 @@
   flex-direction: column;
   gap: 0.5rem;
 
-<<<<<<< HEAD
   @media (max-width: 768px) { padding: 0 1.5rem 0.8rem 1.5rem; }
 
   .suggestions-label {
@@ -313,43 +305,23 @@
       padding: 0.5rem 1rem;
       background: var(--bg-card);
       border: 1px solid var(--border-color);
-      border-radius: 18px;
+      border-radius: 20px;
       color: var(--text-secondary);
       font-size: 0.85rem;
       font-weight: 500;
       white-space: nowrap;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 
       &:hover {
         border-color: #8b5cf6;
-        color: var(--text-primary);
-        background: rgba(139, 92, 246, 0.04);
+        color: #8b5cf6;
+        background: rgba(139, 92, 246, 0.05);
+        transform: translateY(-2px) scale(1.03);
       }
-=======
-  .suggestion-chip {
-    padding: 0.5rem 1rem;
-    background: var(--bg-card);
-    border: 1px solid var(--border-color);
-    border-radius: 20px;
-    color: var(--text-secondary);
-    font-size: 0.85rem;
-    white-space: nowrap;
-    cursor: pointer;
-    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-
-    &:hover {
-      border-color: #8b5cf6;
-      color: #8b5cf6;
-      background: rgba(139, 92, 246, 0.05);
-      transform: translateY(-2px) scale(1.03);
-    }
-    &:active {
-      transform: translateY(0) scale(0.97);
-<<<<<<< HEAD
->>>>>>> a6d3afb (Paciente Responsive)
-=======
->>>>>>> a6d3afb3e3f7365ed16634c428700027378ea2c9
+      &:active {
+        transform: translateY(0) scale(0.97);
+      }
     }
   }
 }
@@ -398,28 +370,24 @@
       background: #8b5cf6; border: none; width: 32px; height: 32px; border-radius: 50%;
       color: white; cursor: pointer;
       display: flex; align-items: center; justify-content: center;
-<<<<<<< HEAD
-<<<<<<< HEAD
-      transition: all 0.2s;
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s;
 
       mat-icon { font-size: 16px; width: 16px; height: 16px; color: white; margin: 0; }
 
-      &:hover:not(:disabled) { opacity: 0.95; transform: scale(1.05); }
-      &:disabled { background: var(--border-color); color: var(--text-secondary); opacity: 0.4; cursor: not-allowed; mat-icon { color: var(--text-secondary); } }
-=======
-=======
->>>>>>> a6d3afb3e3f7365ed16634c428700027378ea2c9
-      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), color 0.2s;
-      
       &:hover:not(:disabled) {
-        transform: scale(1.15) rotate(-15deg);
-        color: #7c3aed;
+        transform: scale(1.12) rotate(-15deg);
+        background: #7c3aed;
       }
       &:active:not(:disabled) {
         transform: scale(0.9) rotate(0deg);
       }
-      &:disabled { color: var(--text-secondary); opacity: 0.5; cursor: not-allowed; }
->>>>>>> a6d3afb (Paciente Responsive)
+      &:disabled {
+        background: var(--border-color);
+        color: var(--text-secondary);
+        opacity: 0.5;
+        cursor: not-allowed;
+        mat-icon { color: var(--text-secondary); }
+      }
     }
   }
 
@@ -448,11 +416,6 @@
   100% { transform: translateY(-4px); opacity: 0.9; }
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
->>>>>>> a6d3afb3e3f7365ed16634c428700027378ea2c9
 /* RESPONSIVIDAD MÓVIL CHATBOT */
 .mobile-add-btn {
   display: none;
@@ -462,7 +425,7 @@
 }
 
 @media (max-width: 767px) {
-  .chat-header {
+  .chat-header-minimal {
     display: none !important; /* Elimina los encabezados en móvil */
   }
 
@@ -470,7 +433,7 @@
     padding: 5rem 1rem 1.5rem 1rem !important; /* Espacio para el botón de menú flotante */
   }
 
-  .suggestions-row {
+  .suggestions-list {
     padding: 0.5rem 1rem !important;
     scrollbar-width: none; /* Ocultar scrollbar en Firefox */
     &::-webkit-scrollbar {
@@ -478,14 +441,14 @@
     }
   }
 
-  .input-area {
+  .input-area-minimal {
     padding: 0 1rem 1.5rem 1rem !important; /* Más pegado al borde inferior */
     position: relative;
 
-    .input-container {
+    .input-wrapper {
       padding: 0 !important; /* Sin padding interno para pegar el botón y el input */
       gap: 0 !important;
-      border-radius: 20px;
+      border-radius: 22px;
       overflow: hidden;
 
       .mobile-add-btn {
@@ -513,7 +476,7 @@
         }
       }
 
-      .input-actions-left {
+      .actions-left {
         display: none !important; /* Esconde los botones individuales */
       }
 
@@ -521,20 +484,19 @@
         padding-left: 1rem !important;
       }
 
-      .input-actions-right {
+      .actions-right {
         padding-right: 0.75rem;
         gap: 0.75rem;
         
-        .mic-icon {
+        .icon-mic {
           font-size: 20px;
-          width: 200px; /* reset width if needed, or keep normal */
           width: auto;
           height: auto;
         }
       }
     }
 
-    .disclaimer {
+    .footer-note {
       margin-top: 0.5rem;
       font-size: 0.7rem;
     }
@@ -593,7 +555,3 @@
   from { transform: translateY(10px); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
 }
-<<<<<<< HEAD
->>>>>>> a6d3afb (Paciente Responsive)
-=======
->>>>>>> a6d3afb3e3f7365ed16634c428700027378ea2c9

@@ -233,4 +233,26 @@
 - `[x]` Diseñar e implementar animación de escala y deslizamiento ascendente (`messageFadeIn`) para las burbujas de conversación (`.message-wrapper`).
 - `[x]` Aplicar transiciones y micro-escalado al botón de enviar y sugerencias chips.
 
+## Corrección de Regresiones de Responsividad y Conflictos (Rama Nutricionista)
+- `[x]` Limpieza y resolución de marcadores de conflicto en el Chatbot (`dashboard.component.ts` y `dashboard.component.scss`).
+- `[x]` Corrección de selectores rotos (`-minimal`) en el media query del chatbot para asegurar la responsividad en móviles.
+- `[x]` Adición del botón flotante móvil "+" (`mobile-add-btn`) y el menú de acciones secundario (`mobile-actions-menu`) en `dashboard.component.html`.
+- `[x]` Eliminación de bloques `@media (max-width: 767px)` duplicados en `student-agenda.component.scss` y `diary-dashboard.component.scss`.
+- `[x]` Resolución de marcadores de conflicto y unificación de transiciones en botones de ánimo/sueño y celdas de calendario en `diary-dashboard.component.scss`.
+- `[x]` Rediseño responsivo de la agenda del estudiante (desbloqueo de ancho del banner unificado, apilamiento de columnas, y adaptación del combo box selector de especialidad).
+- `[x]` Adaptación del modal de confirmación y cancelación de citas (`cdk-overlay-pane`) para que no exceda las dimensiones de la pantalla móvil (`max-width: 95vw`).
+- `[x]` Rediseño responsivo del diario emocional (enlace correcto a `.diary-therapeutic-layout` en lugar de `.diary-layout`, pestañas deslizables horizontalmente y ajuste de paddings en móviles).
+- `[x]` Rediseño responsivo de la configuración del estudiante (apilamiento vertical de botones de avatar en `profile-avatar.component.scss` y centrado/ancho completo para el botón de guardar cambios en `student-settings.component.scss`).
+- `[x]` Verificación de compilación exitosa (`npm run build`) post-merge.
+
+## Responsividad de la Interfaz del Psicólogo
+- `[x]` Agenda (`agenda.component.scss`): apilar verticalmente, ancho del 100% para sidebar, y padding superior seguro en móviles.
+- `[x]` Notas Clínicas (`clinical-note.component.scss`): padding superior en contenedor, reducción de padding en hoja clínica, apilado de cabecera/pie de página, y conversión de `.info-table` a bloques verticales.
+- `[x]` Expediente del Paciente (`patient-profile.component.scss`): padding superior seguro, alineación centrada del avatar y estadísticas rápidas, colapso de `.info-grid` a una sola columna, y ajuste proporcional de celdas del calendario.
+- `[x]` Configuración y Horarios (`settings.component.scss`): padding superior seguro, colapso de `.settings-grid` a una sola columna, pestañas principales deslizables horizontalmente, apilamiento de `.day-item` y rango de horas verticalmente, y apilamiento de `.exception-item`.
+- `[x]` Directorio de Pacientes (`patients.component.scss`): padding superior seguro y límite de `90vw` en el ancho de `.modal-content`.
+- `[x]` Verificación de compilación exitosa (`npm run build`).
+
+
+
 

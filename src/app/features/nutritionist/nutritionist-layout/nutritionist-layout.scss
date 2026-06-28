@@ -218,9 +218,91 @@
   margin-left: 280px;
   height: 100vh;
   overflow-y: auto;
+  overflow-x: hidden;
   transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
   &.expanded {
     margin-left: 80px;
   }
+}
+
+/* RESPONSIVIDAD MÓVIL */
+.mobile-menu-trigger {
+  display: none;
+}
+.sidebar-overlay {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .mobile-menu-trigger {
+    display: flex;
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    align-items: center;
+    justify-content: center;
+    z-index: 98;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    backdrop-filter: blur(8px);
+    transition: background-color 0.2s;
+
+    &:hover {
+      background: var(--hover-color, rgba(0, 0, 0, 0.05));
+    }
+  }
+
+  .sidebar-overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 99;
+    backdrop-filter: blur(2px);
+    animation: fadeIn 0.2s ease-out;
+  }
+
+  .sidebar {
+    width: 280px !important;
+    transform: translateX(0);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 100;
+    
+    &.collapsed {
+      transform: translateX(-100%);
+      width: 280px !important;
+      
+      .brand-text, .nav-text, .btn-text, .user-info {
+        opacity: 1 !important;
+        width: auto !important;
+        visibility: visible !important;
+        display: flex !important;
+      }
+      .brand { justify-content: flex-start !important; }
+      .new-plan-btn { width: 100% !important; border-radius: 12px !important; height: auto !important; margin-bottom: 2rem !important; }
+      .nav-item, .logout-btn, .footer-link { justify-content: flex-start !important; padding: 0.75rem 1rem !important; }
+    }
+  }
+
+  .main-content {
+    margin-left: 0 !important;
+    height: 100vh;
+    width: 100%;
+    
+    &.expanded {
+      margin-left: 0 !important;
+    }
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }

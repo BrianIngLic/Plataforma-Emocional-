@@ -424,53 +424,84 @@
     }
   }
 
-  .header {
-    h1 {
-      font-size: 1.5rem !important;
+  .therapeutic-banner {
+    padding: 1rem !important;
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+    
+    .banner-content {
+      flex-direction: column;
+      text-align: center;
+      gap: 0.8rem;
+    }
+    
+    .gamification-header {
+      .support-badge-box {
+        justify-content: center;
+      }
     }
   }
 
-  .layout {
-    grid-template-columns: 1fr !important;
-    gap: 1rem !important;
-  }
-
-  .calendar-card, .slots-card {
-    height: auto !important;
-    min-height: 380px;
-    padding: 1rem !important;
-  }
-
-  .slots-grid {
-    grid-template-columns: 1fr !important;
-    gap: 0.75rem !important;
-  }
-
-  .cal-grid .day-cell {
-    border-radius: 8px !important;
-  }
-}
-
-@media (max-width: 767px) {
-  .agenda-container {
-    padding: 4rem 1rem 1rem 1rem !important; /* Espacio para el botón de menú flotante */
-    gap: 1rem !important;
-  }
-
-  .debug-banner {
-    flex-direction: column;
-    align-items: flex-start !important;
-    gap: 1rem;
+  .specialty-selector-container {
+    padding: 0 1rem !important;
+    margin-bottom: 1rem !important;
     
-    .urgency-toggles {
-      width: 100%;
-      display: flex;
-      gap: 0.5rem;
-      .urg-btn {
-        flex: 1;
+    .selector-card {
+      padding: 1rem !important;
+      flex-direction: column;
+      justify-content: center;
+      text-align: center;
+      
+      .selector-info {
+        flex-direction: column;
         text-align: center;
-        padding: 0.5rem 0.25rem !important;
-        font-size: 0.8rem !important;
+        align-items: center;
+      }
+      
+      .combo-box-wrapper {
+        min-width: 100% !important;
+        width: 100% !important;
+      }
+    }
+  }
+
+  .master-unified-banner {
+    padding: 1.25rem !important;
+    gap: 1.5rem !important;
+    flex-direction: column;
+    align-items: stretch;
+    
+    .prof-main-info {
+      min-width: 100% !important;
+      gap: 1rem !important;
+      justify-content: center;
+      text-align: center;
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .appointment-status-container {
+      min-width: 100% !important;
+      
+      // Target the inline styled divs inside
+      & > div {
+        flex-direction: column;
+        align-items: stretch !important;
+        text-align: center;
+        padding: 1rem !important;
+        
+        & > div {
+          flex-direction: column;
+          align-items: center !important;
+          text-align: center;
+        }
+        
+        button, a {
+          width: 100%;
+          justify-content: center;
+          margin-top: 0.5rem;
+        }
       }
     }
   }

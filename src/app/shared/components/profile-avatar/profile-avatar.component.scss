@@ -1,3 +1,14 @@
+:host {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+*, *:before, *:after {
+  box-sizing: border-box;
+}
+
 .avatar-manager {
   display: flex;
   align-items: center;
@@ -7,6 +18,8 @@
   border: 1px solid var(--glass-border);
   border-radius: 16px;
   backdrop-filter: blur(12px);
+  box-sizing: border-box;
+  max-width: 100%;
 
   @media (max-width: 767px) {
     flex-direction: column;
@@ -86,10 +99,11 @@
   flex-wrap: wrap;
 
   @media (max-width: 767px) {
-    justify-content: center;
+    flex-direction: column;
     width: 100%;
+    gap: 0.75rem;
     button {
-      flex: 1;
+      width: 100%;
       justify-content: center;
     }
   }

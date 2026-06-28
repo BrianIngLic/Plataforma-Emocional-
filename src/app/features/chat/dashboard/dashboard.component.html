@@ -86,7 +86,28 @@
 
   <!-- Caja de Input Limpia -->
   <div class="input-area-minimal">
+    <!-- Menú Desplegable de Acciones en Móvil -->
+    <div class="mobile-actions-menu" *ngIf="showMobileActions">
+      <button class="action-menu-item" (click)="showMobileActions = false">
+        <mat-icon>attach_file</mat-icon>
+        <span>Adjuntar archivo</span>
+      </button>
+      <button class="action-menu-item" (click)="showMobileActions = false">
+        <mat-icon>image</mat-icon>
+        <span>Enviar imagen</span>
+      </button>
+      <button class="action-menu-item" (click)="showMobileActions = false">
+        <mat-icon>sentiment_satisfied_alt</mat-icon>
+        <span>Expresar estado de ánimo</span>
+      </button>
+    </div>
+
     <div class="input-wrapper">
+      <!-- Botón "+" Móvil para desplegar acciones -->
+      <button class="mobile-add-btn" (click)="toggleMobileActions()">
+        <mat-icon>{{ showMobileActions ? 'close' : 'add' }}</mat-icon>
+      </button>
+
       <div class="actions-left">
         <mat-icon title="Adjuntar archivo">attach_file</mat-icon>
         <mat-icon title="Enviar imagen">image</mat-icon>

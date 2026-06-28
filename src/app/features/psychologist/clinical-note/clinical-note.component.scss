@@ -1,3 +1,14 @@
+:host {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+*, *:before, *:after {
+  box-sizing: border-box;
+}
+
 .page-container {
   min-height: 100vh;
   background-color: var(--bg-default, #f1f5f9);
@@ -213,4 +224,90 @@
   .top-nav, .sheet-footer, .ql-toolbar { display: none !important; }
   .clinical-sheet { box-shadow: none; max-width: 100%; padding: 0; }
   ::ng-deep .ql-container.ql-snow { border: none !important; }
+}
+
+@media (max-width: 767px) {
+  .page-container {
+    padding: 4rem 1rem 1rem 1rem !important;
+  }
+
+  .clinical-sheet {
+    padding: 1.5rem 1rem !important;
+    max-width: 100% !important;
+  }
+
+  .sheet-header {
+    flex-direction: column;
+    align-items: stretch !important;
+    gap: 1rem;
+    
+    .logo-area {
+      .logo {
+        font-size: 1.5rem !important;
+        .logo-icon { font-size: 1.8rem !important; }
+      }
+      .doc-title {
+        font-size: 1rem !important;
+      }
+    }
+    
+    .date-area {
+      text-align: left !important;
+      p {
+        font-size: 0.85rem !important;
+      }
+    }
+  }
+
+  .info-section {
+    margin-bottom: 2rem !important;
+
+    .info-table {
+      th, td {
+        display: block !important;
+        width: 100% !important;
+        box-sizing: border-box;
+      }
+      
+      th {
+        background: #f8fafc;
+        border-bottom: none !important;
+      }
+      
+      td {
+        border-top: none !important;
+        margin-bottom: 0.5rem;
+      }
+    }
+  }
+
+  .editor-section {
+    margin-bottom: 2rem !important;
+    
+    ::ng-deep .ql-container.ql-snow {
+      min-height: 250px !important;
+    }
+    
+    ::ng-deep .ql-editor {
+      min-height: 250px !important;
+    }
+  }
+
+  .sheet-footer {
+    flex-direction: column;
+    align-items: stretch !important;
+    gap: 1.25rem !important;
+    margin-top: 2rem !important;
+    padding-top: 1.5rem !important;
+    
+    .right-actions {
+      flex-direction: column;
+      gap: 0.75rem !important;
+    }
+    
+    .btn {
+      width: 100% !important;
+      justify-content: center !important;
+    }
+  }
 }

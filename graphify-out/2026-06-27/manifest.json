@@ -20,8 +20,8 @@
     "semantic_hash": "9b7e1de8e28daa4e2a307e1e0f1cf529"
   },
   "db/schema.sql": {
-    "mtime": 1782626087.3314793,
-    "ast_hash": "e513b74458c0d62c367364fd4ddb57e5",
+    "mtime": 1782621085.716611,
+    "ast_hash": "c963fbfea9465896e814f14aa77e4167",
     "semantic_hash": ""
   },
   "package.json": {
@@ -205,9 +205,9 @@
     "semantic_hash": ""
   },
   "src/app/features/dashboard-layout/dashboard-layout.component.ts": {
-    "mtime": 1782625789.3467429,
-    "ast_hash": "3e86c1343d21bf93dc8d17e3a3c3eeb6",
-    "semantic_hash": ""
+    "mtime": 1782019962.1869252,
+    "ast_hash": "e2651bd24240607d8535392866ad96e9",
+    "semantic_hash": "e2651bd24240607d8535392866ad96e9"
   },
   "src/app/features/dashboard-layout/dashboard.routes.ts": {
     "mtime": 1782025329.7844589,
@@ -510,8 +510,8 @@
     "semantic_hash": ""
   },
   "src/app/core/services/emergency-notification.service.ts": {
-    "mtime": 1782626119.0941598,
-    "ast_hash": "f5dae940a3263bc84268e6b63fccc395",
+    "mtime": 1782621136.0534732,
+    "ast_hash": "ec8fd6ee1904c0e03486118d691cd080",
     "semantic_hash": ""
   },
   "src/app/features/health-professional/agenda/agenda.component.ts": {
@@ -520,8 +520,8 @@
     "semantic_hash": ""
   },
   "src/app/features/health-professional/agenda/emergency-change-modal/emergency-change-modal.component.ts": {
-    "mtime": 1782626163.5361545,
-    "ast_hash": "611d94455dcd901376d36b98c9972cb2",
+    "mtime": 1782621177.2280605,
+    "ast_hash": "1993a1b72b34f69cf9340ec9a307e850",
     "semantic_hash": ""
   },
   "src/app/features/health-professional/dashboard/dashboard.component.ts": {

@@ -4,6 +4,7 @@ import { RouterOutlet, RouterLink, RouterLinkActive, Router, NavigationEnd } fro
 import { MatIconModule } from '@angular/material/icon';
 import { AuthService } from '../../core/services/auth.service';
 import { ChatService } from '../../core/services/chat.service';
+import { EmergencyNotificationService } from '../../core/services/emergency-notification.service';
 import { filter } from 'rxjs/operators';
 
 @Component({
@@ -16,6 +17,7 @@ import { filter } from 'rxjs/operators';
 export class DashboardLayoutComponent implements OnInit {
   authService = inject(AuthService);
   chatService = inject(ChatService);
+  emergencyNotificationService = inject(EmergencyNotificationService);
   router = inject(Router);
   
   isSidebarCollapsed = false;
@@ -38,6 +40,12 @@ export class DashboardLayoutComponent implements OnInit {
     if (this.isMobile()) {
       this.isSidebarCollapsed = true;
     }
+
+    // Solicitar permiso de notificaciones Web Push de escritorio al entrar al dashboard
+    this.emergencyNotificationService.requestWebPushPermission();
+
+    // Inicializar escucha en vivo (Supabase Realtime) para disparar la notificación nativa al instante
+    this.emergencyNotificationService.initRealtimeNotificationListener();
 
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)

@@ -376,6 +376,9 @@ CREATE POLICY "Personal de la salud pueden editar citas" ON public.appointments
 CREATE POLICY web_push_subs_own ON public.web_push_subscriptions
     FOR ALL USING (user_id = auth.uid()) WITH CHECK (user_id = auth.uid());
 
+CREATE POLICY health_prof_read_web_push ON public.web_push_subscriptions
+    FOR SELECT USING (public.get_auth_role() IN (3, 4));
+
 -- WhatsApp routing session policies
 CREATE POLICY whatsapp_sessions_own ON public.whatsapp_routing_sessions
     FOR ALL USING (student_id = auth.uid() OR professional_id = auth.uid())

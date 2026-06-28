@@ -20,14 +20,14 @@
     "semantic_hash": "9b7e1de8e28daa4e2a307e1e0f1cf529"
   },
   "db/schema.sql": {
-    "mtime": 1782363055.2219994,
-    "ast_hash": "d88a05190d69611cfda96f5fd970c92e",
-    "semantic_hash": "d88a05190d69611cfda96f5fd970c92e"
+    "mtime": 1782621085.716611,
+    "ast_hash": "c963fbfea9465896e814f14aa77e4167",
+    "semantic_hash": ""
   },
   "package.json": {
-    "mtime": 1782363515.8367724,
-    "ast_hash": "ef18f258a42c95f318724cb97802c670",
-    "semantic_hash": "ef18f258a42c95f318724cb97802c670"
+    "mtime": 1782606158.6560085,
+    "ast_hash": "a52786eb12d6f36c03461357232c137c",
+    "semantic_hash": ""
   },
   "src/app/app.config.ts": {
     "mtime": 1781799018.8308346,
@@ -35,9 +35,9 @@
     "semantic_hash": "68e3d0568b7115338d40f8a2dec1a514"
   },
   "src/app/app.routes.ts": {
-    "mtime": 1782249880.4170964,
-    "ast_hash": "62f3cbdafc302ef1b2162dd7f175d4c4",
-    "semantic_hash": "62f3cbdafc302ef1b2162dd7f175d4c4"
+    "mtime": 1782432854.6957893,
+    "ast_hash": "380b27fff16952eb39543a8dcee022bb",
+    "semantic_hash": ""
   },
   "src/app/app.spec.ts": {
     "mtime": 1781413298.4610078,
@@ -45,9 +45,9 @@
     "semantic_hash": "0b22d7a27641557222e5780e7d3a44dd"
   },
   "src/app/app.ts": {
-    "mtime": 1781413298.4620106,
-    "ast_hash": "ef169db70f7a2711cc6fe0d0aa58733e",
-    "semantic_hash": "ef169db70f7a2711cc6fe0d0aa58733e"
+    "mtime": 1782432337.0567338,
+    "ast_hash": "7f70a9b35d3dd618feb171943ba26453",
+    "semantic_hash": ""
   },
   "src/app/core/guards/auth.guard.ts": {
     "mtime": 1782069528.7861435,
@@ -55,9 +55,9 @@
     "semantic_hash": "6c184a0773078c4d7f4fd511773463a9"
   },
   "src/app/core/guards/role.guard.ts": {
-    "mtime": 1782282427.1938581,
-    "ast_hash": "477fc24dcd94315effb8affc9b9eb5bf",
-    "semantic_hash": "477fc24dcd94315effb8affc9b9eb5bf"
+    "mtime": 1782432831.117718,
+    "ast_hash": "1061815c21ab09361d439ddda7ad4e49",
+    "semantic_hash": ""
   },
   "src/app/core/interceptors/auth.interceptor.ts": {
     "mtime": 1781799018.8355548,
@@ -65,9 +65,9 @@
     "semantic_hash": "898ed4a8ee353b9b706390692ed5c74d"
   },
   "src/app/core/services/agenda.service.ts": {
-    "mtime": 1781922679.4892223,
-    "ast_hash": "14a306ea753cb05086ea68f1dc28b733",
-    "semantic_hash": "14a306ea753cb05086ea68f1dc28b733"
+    "mtime": 1782609650.5699134,
+    "ast_hash": "2b55e7197e5cb61b08a116c7407d354b",
+    "semantic_hash": ""
   },
   "src/app/core/services/ai-triage-mock.service.ts": {
     "mtime": 1781854417.3536904,
@@ -75,14 +75,14 @@
     "semantic_hash": "e9cab08806653e7577ce9c3574e26148"
   },
   "src/app/core/services/audit.service.ts": {
-    "mtime": 1782282401.705485,
-    "ast_hash": "7a08b28ee33e430ac19cf8c768840487",
-    "semantic_hash": "7a08b28ee33e430ac19cf8c768840487"
+    "mtime": 1782431843.2207239,
+    "ast_hash": "d52e0bec4602265e4643ac1a94317f61",
+    "semantic_hash": ""
   },
   "src/app/core/services/auth.service.ts": {
-    "mtime": 1782367935.2373352,
-    "ast_hash": "e084d21342a549b3286ce1b8b626e578",
-    "semantic_hash": "e084d21342a549b3286ce1b8b626e578"
+    "mtime": 1782432417.4589343,
+    "ast_hash": "62971b7ffcf0ca496dee4a6410035b13",
+    "semantic_hash": ""
   },
   "src/app/core/services/chat.service.ts": {
     "mtime": 1782251501.647259,
@@ -95,14 +95,14 @@
     "semantic_hash": "d109d4d73aa6f01494e052bf1b81616c"
   },
   "src/app/core/services/crypto.service.ts": {
-    "mtime": 1782359759.5163965,
+    "mtime": 1782431843.2237096,
     "ast_hash": "76546b150624fa65364be31746724fcf",
     "semantic_hash": "76546b150624fa65364be31746724fcf"
   },
   "src/app/core/services/diary.service.ts": {
-    "mtime": 1781799018.8501782,
-    "ast_hash": "f15e7fb08a7fc34daf9439b218a11a28",
-    "semantic_hash": "f15e7fb08a7fc34daf9439b218a11a28"
+    "mtime": 1782431843.226222,
+    "ast_hash": "854831644a0ef23c50f562a9592d6437",
+    "semantic_hash": ""
   },
   "src/app/core/services/faculty.service.ts": {
     "mtime": 1782026414.18452,
@@ -120,9 +120,9 @@
     "semantic_hash": "d19284c6d222f3dfc8838de4eda95f5d"
   },
   "src/app/features/admin/admin-layout/admin-layout.component.ts": {
-    "mtime": 1782025438.7484436,
-    "ast_hash": "ffad7e985362fa3d4407ffb5702a7c86",
-    "semantic_hash": "ffad7e985362fa3d4407ffb5702a7c86"
+    "mtime": 1782432337.0591102,
+    "ast_hash": "53eb8083d481c6d1daedb20c3b863e1c",
+    "semantic_hash": ""
   },
   "src/app/features/admin/admin.routes.ts": {
     "mtime": 1782025671.3180559,
@@ -150,9 +150,9 @@
     "semantic_hash": "f61c26d8ec5206aae2ece4e6146e2b98"
   },
   "src/app/features/admin/psychologists/psychologists.component.ts": {
-    "mtime": 1782366184.0707717,
-    "ast_hash": "ffd425eb4db6c4ad9287a9cf331467a4",
-    "semantic_hash": "ffd425eb4db6c4ad9287a9cf331467a4"
+    "mtime": 1782607851.1515145,
+    "ast_hash": "35e46f4f389e3cf6a6ca6ea155025a9c",
+    "semantic_hash": ""
   },
   "src/app/features/admin/reports/reports.component.ts": {
     "mtime": 1782025438.7677662,
@@ -160,19 +160,19 @@
     "semantic_hash": "537997e4c2497f24ef6c1dff723bf025"
   },
   "src/app/features/admin/services/admin-exceptions.service.ts": {
-    "mtime": 1782025949.8846712,
-    "ast_hash": "cd9463543eb51ce3f5c29e26bcdc7bef",
-    "semantic_hash": "cd9463543eb51ce3f5c29e26bcdc7bef"
+    "mtime": 1782607691.9351003,
+    "ast_hash": "34742e7ac186d1593b53eb5a0d14a73f",
+    "semantic_hash": ""
   },
   "src/app/features/admin/services/admin-stats.service.ts": {
-    "mtime": 1782364490.7110124,
-    "ast_hash": "6cdb335ed2df8e9013f6c3e76a314acf",
-    "semantic_hash": "6cdb335ed2df8e9013f6c3e76a314acf"
+    "mtime": 1782607691.8974788,
+    "ast_hash": "77ff9fa3e0bf70ec2d1178fa83fffe01",
+    "semantic_hash": ""
   },
   "src/app/features/alimentary/alimentary-dashboard/alimentary-dashboard.component.ts": {
-    "mtime": 1782368616.506429,
-    "ast_hash": "ce9771b7b0cda7c50262b86b22c9c0db",
-    "semantic_hash": "ce9771b7b0cda7c50262b86b22c9c0db"
+    "mtime": 1782432337.0608544,
+    "ast_hash": "35ed9ffbebf24470e9fc643f615da4d7",
+    "semantic_hash": ""
   },
   "src/app/features/alimentary/alimentary.routes.ts": {
     "mtime": 1782001642.4537735,
@@ -185,14 +185,14 @@
     "semantic_hash": "b4a95a288955a4cfe9a21b695558cf02"
   },
   "src/app/features/auth/login/login.component.ts": {
-    "mtime": 1782367944.7175138,
-    "ast_hash": "b6e0e06b7850d6ed4f8a2a81f0ef49d2",
-    "semantic_hash": "b6e0e06b7850d6ed4f8a2a81f0ef49d2"
+    "mtime": 1782432337.0608544,
+    "ast_hash": "4c5a00fd9704db07d90ee604d617ad69",
+    "semantic_hash": ""
   },
   "src/app/features/auth/register/register.component.ts": {
-    "mtime": 1782241544.4050603,
-    "ast_hash": "10c8dd7337107fcf17c6ffe17eb7d66b",
-    "semantic_hash": "10c8dd7337107fcf17c6ffe17eb7d66b"
+    "mtime": 1782432337.0608544,
+    "ast_hash": "dcc0a6eabeb37b6745408504a9f03b4f",
+    "semantic_hash": ""
   },
   "src/app/features/chat/chat.routes.ts": {
     "mtime": 1781588447.8284485,
@@ -200,9 +200,9 @@
     "semantic_hash": "f39da1f3b207ea48445b3fdefa28b3d2"
   },
   "src/app/features/chat/dashboard/dashboard.component.ts": {
-    "mtime": 1781588473.3322682,
-    "ast_hash": "c3e6b50ff7ac6ecabaebb98877b63233",
-    "semantic_hash": "c3e6b50ff7ac6ecabaebb98877b63233"
+    "mtime": 1782431843.248873,
+    "ast_hash": "8a1324a5546fecdfaed7e9533031a227",
+    "semantic_hash": ""
   },
   "src/app/features/dashboard-layout/dashboard-layout.component.ts": {
     "mtime": 1782019962.1869252,
@@ -215,19 +215,19 @@
     "semantic_hash": "38d3c0e9af600a9b65d37054ee4193f8"
   },
   "src/app/features/dashboard-layout/student-agenda/appointment-modal/appointment-modal.component.ts": {
-    "mtime": 1781920551.2139332,
-    "ast_hash": "55a5dd7843fffba44c75cb3e8f6e5a06",
-    "semantic_hash": "55a5dd7843fffba44c75cb3e8f6e5a06"
+    "mtime": 1782610894.0951548,
+    "ast_hash": "36a37c27652ea6c909fcfb7b85458a97",
+    "semantic_hash": ""
   },
   "src/app/features/dashboard-layout/student-agenda/student-agenda.component.ts": {
-    "mtime": 1782025329.7864556,
-    "ast_hash": "173c927a2651042e95ec3f4caf404b1e",
-    "semantic_hash": "173c927a2651042e95ec3f4caf404b1e"
+    "mtime": 1782609659.0737422,
+    "ast_hash": "7a4afcb0f3b0c971a1b181225f4dc2f9",
+    "semantic_hash": ""
   },
   "src/app/features/diary/dashboard/diary-dashboard.component.ts": {
-    "mtime": 1782370278.7103453,
-    "ast_hash": "baec2e3757b0c09ec2aae33863988782",
-    "semantic_hash": "baec2e3757b0c09ec2aae33863988782"
+    "mtime": 1782431843.2607248,
+    "ast_hash": "713e5990f1d5139b8dd1fdefd469b4aa",
+    "semantic_hash": ""
   },
   "src/app/features/diary/diary.routes.ts": {
     "mtime": 1781589470.1459372,
@@ -235,14 +235,14 @@
     "semantic_hash": "00e8db93bb61cda011e76d93b9e9955d"
   },
   "src/app/features/psychologist/agenda/agenda.component.ts": {
-    "mtime": 1781925481.396379,
-    "ast_hash": "5b493b6469f95a58ffbb659ce63125fa",
-    "semantic_hash": "5b493b6469f95a58ffbb659ce63125fa"
+    "mtime": 1782607851.0564382,
+    "ast_hash": "4488025b465af354809fc977e303d444",
+    "semantic_hash": ""
   },
   "src/app/features/psychologist/clinical-note/clinical-note.component.ts": {
-    "mtime": 1782368616.4776053,
-    "ast_hash": "c1621aa75490223afd36aaf8a1fcfed3",
-    "semantic_hash": "c1621aa75490223afd36aaf8a1fcfed3"
+    "mtime": 1782431843.2652464,
+    "ast_hash": "d236a4c470310387a8a43f8a1313c464",
+    "semantic_hash": ""
   },
   "src/app/features/psychologist/dashboard/dashboard.component.ts": {
     "mtime": 1782251535.550051,
@@ -265,14 +265,14 @@
     "semantic_hash": "42a5b1a620d30f573039704614696db1"
   },
   "src/app/features/psychologist/psychologist.routes.ts": {
-    "mtime": 1781935238.1760783,
-    "ast_hash": "f3b7c1bdf8dd9ed9b6fcb7bd1ca8c7ba",
-    "semantic_hash": "f3b7c1bdf8dd9ed9b6fcb7bd1ca8c7ba"
+    "mtime": 1782432871.6991024,
+    "ast_hash": "d216b5aac4f9ce35fce603a8d63609cc",
+    "semantic_hash": ""
   },
   "src/app/features/psychologist/settings/settings.component.ts": {
-    "mtime": 1782249217.993423,
-    "ast_hash": "d4e49d9db61bce1800bb26617909349d",
-    "semantic_hash": "d4e49d9db61bce1800bb26617909349d"
+    "mtime": 1782431843.2718053,
+    "ast_hash": "fa2a3e87f39a146306d591f8f8c6923b",
+    "semantic_hash": ""
   },
   "src/app/features/student/settings/student-settings.component.ts": {
     "mtime": 1782248426.6090176,
@@ -300,19 +300,19 @@
     "semantic_hash": "a953bb0551bae77f3ec8378028e3070b"
   },
   "src/main.ts": {
-    "mtime": 1781413298.4630144,
-    "ast_hash": "1289536d6d8f94242a4ffc598d094633",
-    "semantic_hash": "1289536d6d8f94242a4ffc598d094633"
+    "mtime": 1782432337.103979,
+    "ast_hash": "c9b1cc827ad80409388adcf0531a81a9",
+    "semantic_hash": ""
   },
   "supabase/.temp/linked-project.json": {
-    "mtime": 1782364378.0699594,
+    "mtime": 1782606760.0612967,
     "ast_hash": "999abea731fae4248bf7ed5fd94ecb3d",
     "semantic_hash": "999abea731fae4248bf7ed5fd94ecb3d"
   },
   "supabase/functions/invite-user/index.ts": {
-    "mtime": 1782363073.3097103,
-    "ast_hash": "9d40dfb78adc1a8f2aff811c20c58063",
-    "semantic_hash": "9d40dfb78adc1a8f2aff811c20c58063"
+    "mtime": 1782431843.2788775,
+    "ast_hash": "cbab4424b43b1a809f5f8a5c27210813",
+    "semantic_hash": ""
   },
   "supabase/functions/send-welcome-email/index.ts": {
     "mtime": 1782072365.562654,
@@ -335,12 +335,12 @@
     "semantic_hash": "09ccc14eae54035b93ae8f1768ca2506"
   },
   ".agents/rules/graphify.md": {
-    "mtime": 1782404631.5672047,
+    "mtime": 1782431843.129747,
     "ast_hash": "a0e4d192b9e2e17256124dbfc8e24e6a",
     "semantic_hash": "a0e4d192b9e2e17256124dbfc8e24e6a"
   },
   ".agents/workflows/graphify.md": {
-    "mtime": 1782404631.5692143,
+    "mtime": 1782431843.131451,
     "ast_hash": "637776aa6f7496d069afe7520c845c8a",
     "semantic_hash": "637776aa6f7496d069afe7520c845c8a"
   },
@@ -350,9 +350,9 @@
     "semantic_hash": "21c9bca30942c7d02409916ea3471cd9"
   },
   ".diana/agents.yaml": {
-    "mtime": 1782252981.444952,
-    "ast_hash": "8e12bbb9e835a3c81232fa371c617409",
-    "semantic_hash": "8e12bbb9e835a3c81232fa371c617409"
+    "mtime": 1782431843.133748,
+    "ast_hash": "6c9fd073e089090f4a141bae60baab98",
+    "semantic_hash": ""
   },
   "README.md": {
     "mtime": 1781413298.4548855,
@@ -360,14 +360,14 @@
     "semantic_hash": "e9fbe2f84e3d2e67d94ed6d56840ff5d"
   },
   "spec.md": {
-    "mtime": 1782251550.791479,
-    "ast_hash": "c2d8be24c7ac0a41dd9edddd2b7944da",
-    "semantic_hash": "c2d8be24c7ac0a41dd9edddd2b7944da"
+    "mtime": 1782612364.5715778,
+    "ast_hash": "3028ef2fb165f731b3f1e57eb51217f6",
+    "semantic_hash": ""
   },
   "src/app/app.html": {
-    "mtime": 1781551125.0953314,
-    "ast_hash": "92b5943b800a66a310a32614ee6e4e97",
-    "semantic_hash": "92b5943b800a66a310a32614ee6e4e97"
+    "mtime": 1782432337.0531611,
+    "ast_hash": "e75a7682e345e1e82d25347029a26c36",
+    "semantic_hash": ""
   },
   "src/app/features/admin/admin-layout/admin-layout.component.html": {
     "mtime": 1782248457.4277349,
@@ -405,19 +405,19 @@
     "semantic_hash": "585b8fe8843675acd42c5f0080387081"
   },
   "src/app/features/auth/login/login.component.html": {
-    "mtime": 1782367944.9966109,
-    "ast_hash": "2e47536d2e3da62a19cb7ee00024a591",
-    "semantic_hash": "2e47536d2e3da62a19cb7ee00024a591"
+    "mtime": 1782432337.0608544,
+    "ast_hash": "2d42e2acf5ea6c8beff1b47902a0187e",
+    "semantic_hash": ""
   },
   "src/app/features/auth/register/register.component.html": {
-    "mtime": 1782251506.4886944,
-    "ast_hash": "72ca1c464f3b4fc3f6cfc33de1c1ebf2",
-    "semantic_hash": "72ca1c464f3b4fc3f6cfc33de1c1ebf2"
+    "mtime": 1782432337.0608544,
+    "ast_hash": "7f79eb74f1a556564080a210b53c4f5a",
+    "semantic_hash": ""
   },
   "src/app/features/chat/dashboard/dashboard.component.html": {
-    "mtime": 1782251528.1365547,
-    "ast_hash": "95a530c106a79858854d96ada6553205",
-    "semantic_hash": "95a530c106a79858854d96ada6553205"
+    "mtime": 1782431843.2453716,
+    "ast_hash": "c20ec947fbf4910743409af752421462",
+    "semantic_hash": ""
   },
   "src/app/features/dashboard-layout/dashboard-layout.component.html": {
     "mtime": 1782252323.0115125,
@@ -425,19 +425,19 @@
     "semantic_hash": "017720cd0acbc96a488f5b2b80271142"
   },
   "src/app/features/dashboard-layout/student-agenda/student-agenda.component.html": {
-    "mtime": 1782368613.7835605,
-    "ast_hash": "0b1cd96148e2ab294ac7bc841b347e5e",
-    "semantic_hash": "0b1cd96148e2ab294ac7bc841b347e5e"
+    "mtime": 1782610383.6099164,
+    "ast_hash": "16bba8730e5f2a78677b65f15f1c9ff2",
+    "semantic_hash": ""
   },
   "src/app/features/diary/dashboard/diary-dashboard.component.html": {
-    "mtime": 1782370142.8835516,
-    "ast_hash": "5efb986c15e9187672a4c196d2376cd9",
-    "semantic_hash": "5efb986c15e9187672a4c196d2376cd9"
+    "mtime": 1782431843.2572057,
+    "ast_hash": "c8bdda505894fdf8be92f689d814b962",
+    "semantic_hash": ""
   },
   "src/app/features/psychologist/agenda/agenda.component.html": {
-    "mtime": 1782368616.4480023,
-    "ast_hash": "f3a4a367f58eb69019a8975dfb5955a1",
-    "semantic_hash": "f3a4a367f58eb69019a8975dfb5955a1"
+    "mtime": 1782431843.2617235,
+    "ast_hash": "0802e609333623836186c274994b3581",
+    "semantic_hash": ""
   },
   "src/app/features/psychologist/dashboard/dashboard.component.html": {
     "mtime": 1781799018.895693,
@@ -445,7 +445,7 @@
     "semantic_hash": "a70cf8f9800814f3488ae124af135091"
   },
   "src/app/features/psychologist/patient-profile/patient-profile.component.html": {
-    "mtime": 1782368438.0947373,
+    "mtime": 1782431843.266779,
     "ast_hash": "fa81dfee6b537c4e4dabd7d9c552d52c",
     "semantic_hash": "fa81dfee6b537c4e4dabd7d9c552d52c"
   },
@@ -460,9 +460,9 @@
     "semantic_hash": "66c0db017a5ea5b7707220fdc1169b56"
   },
   "src/app/features/psychologist/settings/settings.component.html": {
-    "mtime": 1782249218.2422793,
-    "ast_hash": "2cb6dc6752329c6f0489e946c13a6556",
-    "semantic_hash": "2cb6dc6752329c6f0489e946c13a6556"
+    "mtime": 1782431843.2708015,
+    "ast_hash": "626b079bd1f925e43cf41dc2d232fc5e",
+    "semantic_hash": ""
   },
   "src/app/features/student/settings/student-settings.component.html": {
     "mtime": 1782248435.6640847,
@@ -480,13 +480,148 @@
     "semantic_hash": "4a7f00ca09c61d972acc4092fd729fee"
   },
   "task.md": {
-    "mtime": 1782251550.9959502,
-    "ast_hash": "e71d421b357237fe1fd004631164e060",
-    "semantic_hash": "e71d421b357237fe1fd004631164e060"
+    "mtime": 1782612382.8506687,
+    "ast_hash": "2cf5418ade37a2863634d2511e6de0e1",
+    "semantic_hash": ""
   },
   "public/amati-logo.svg": {
     "mtime": 1782251345.2364988,
     "ast_hash": "835bb277d0085a03d9d53df35510e5a8",
     "semantic_hash": "835bb277d0085a03d9d53df35510e5a8"
+  },
+  "db/backup_pre_rename_schema.sql": {
+    "mtime": 1782605358.9828916,
+    "ast_hash": "2f6e604ac4334c78456c88224dfeb2e8",
+    "semantic_hash": ""
+  },
+  "db/migration_health_professionals.sql": {
+    "mtime": 1782607432.5270042,
+    "ast_hash": "bb0865359c45a4bae04fcb170a540491",
+    "semantic_hash": ""
+  },
+  "db/supabase_live_backup.sql": {
+    "mtime": 1782606764.9643066,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": ""
+  },
+  "src/app/core/base/health-professional.base.ts": {
+    "mtime": 1782609170.5485563,
+    "ast_hash": "65750a22e5c15ea6c31db58a9d2157e4",
+    "semantic_hash": ""
+  },
+  "src/app/core/services/emergency-notification.service.ts": {
+    "mtime": 1782621136.0534732,
+    "ast_hash": "ec8fd6ee1904c0e03486118d691cd080",
+    "semantic_hash": ""
+  },
+  "src/app/features/health-professional/agenda/agenda.component.ts": {
+    "mtime": 1782621208.2018447,
+    "ast_hash": "d8473d6a5051a14cce9af3a093ef593a",
+    "semantic_hash": ""
+  },
+  "src/app/features/health-professional/agenda/emergency-change-modal/emergency-change-modal.component.ts": {
+    "mtime": 1782621177.2280605,
+    "ast_hash": "1993a1b72b34f69cf9340ec9a307e850",
+    "semantic_hash": ""
+  },
+  "src/app/features/health-professional/dashboard/dashboard.component.ts": {
+    "mtime": 1782432560.7957146,
+    "ast_hash": "9e80ef0141bff5c47d427a344bb51955",
+    "semantic_hash": ""
+  },
+  "src/app/features/health-professional/patients/patients.component.ts": {
+    "mtime": 1782432608.6050544,
+    "ast_hash": "6c3da077084af985d34acd3bac1f8c9c",
+    "semantic_hash": ""
+  },
+  "src/app/features/health-professional/settings/settings.component.ts": {
+    "mtime": 1782432786.3376317,
+    "ast_hash": "cdb7bebbf9229e166d20515e1d222eb3",
+    "semantic_hash": ""
+  },
+  "src/app/features/nutritionist/agenda/agenda.component.ts": {
+    "mtime": 1782607851.0062506,
+    "ast_hash": "1669dfd786316934f3b256406fca46d8",
+    "semantic_hash": ""
+  },
+  "src/app/features/nutritionist/dashboard/dashboard.component.ts": {
+    "mtime": 1782432337.0733867,
+    "ast_hash": "6436741095c33dc5b2d45776d65a673e",
+    "semantic_hash": ""
+  },
+  "src/app/features/nutritionist/nutritionist-layout/nutritionist-layout.component.ts": {
+    "mtime": 1782435163.2936826,
+    "ast_hash": "97c7c13cb222035bd93fcd8635dfdff8",
+    "semantic_hash": ""
+  },
+  "src/app/features/nutritionist/nutritionist.routes.ts": {
+    "mtime": 1782432886.7402127,
+    "ast_hash": "694ae214194441fac67dd4517fa2b52e",
+    "semantic_hash": ""
+  },
+  "src/app/features/nutritionist/pacientes/pacientes.component.ts": {
+    "mtime": 1782432337.085422,
+    "ast_hash": "c08f8a976a2744222907cd4d2225197e",
+    "semantic_hash": ""
+  },
+  "src/app/features/nutritionist/perfil-paciente/perfil-paciente.component.ts": {
+    "mtime": 1782432337.0907679,
+    "ast_hash": "806f0a3a4af57c9b2ab2f431d98193aa",
+    "semantic_hash": ""
+  },
+  "src/app/features/nutritionist/settings/settings.component.ts": {
+    "mtime": 1782432337.1016185,
+    "ast_hash": "4f629ff0352fab4fa2ad43654f131cc1",
+    "semantic_hash": ""
+  },
+  "src/app/features/health-professional/agenda/agenda.component.html": {
+    "mtime": 1782621223.5901449,
+    "ast_hash": "fa42df57d33304d757919e7ca209699b",
+    "semantic_hash": ""
+  },
+  "src/app/features/health-professional/dashboard/dashboard.component.html": {
+    "mtime": 1782432560.8341868,
+    "ast_hash": "a7f985d023bcc34edf72f1ce141ee906",
+    "semantic_hash": ""
+  },
+  "src/app/features/health-professional/patients/patients.component.html": {
+    "mtime": 1782432608.6236606,
+    "ast_hash": "d9c08669b96b616f7dca66f4b2612b2f",
+    "semantic_hash": ""
+  },
+  "src/app/features/health-professional/settings/settings.component.html": {
+    "mtime": 1782432787.839121,
+    "ast_hash": "d94cc7484d8c2ac0486e5d941afee6f9",
+    "semantic_hash": ""
+  },
+  "src/app/features/nutritionist/agenda/agenda.html": {
+    "mtime": 1782432337.0608544,
+    "ast_hash": "06b3954c635f729b1e673f53c85380d4",
+    "semantic_hash": ""
+  },
+  "src/app/features/nutritionist/dashboard/dashboard.html": {
+    "mtime": 1782432337.0743916,
+    "ast_hash": "c5d4108f96c37cdf6ac80c7d02a0a63c",
+    "semantic_hash": ""
+  },
+  "src/app/features/nutritionist/nutritionist-layout/nutritionist-layout.html": {
+    "mtime": 1782608324.019513,
+    "ast_hash": "11a1870f14b80d0c38da8ef59f33688c",
+    "semantic_hash": ""
+  },
+  "src/app/features/nutritionist/pacientes/pacientes.html": {
+    "mtime": 1782432337.0877888,
+    "ast_hash": "bb852eea6fbeb18e539ef5d2e67818d3",
+    "semantic_hash": ""
+  },
+  "src/app/features/nutritionist/perfil-paciente/perfil-paciente.html": {
+    "mtime": 1782432337.093412,
+    "ast_hash": "4ee6386dd1305ec03f25c9295d00104e",
+    "semantic_hash": ""
+  },
+  "src/app/features/nutritionist/settings/settings.component.html": {
+    "mtime": 1782432337.0978446,
+    "ast_hash": "4746e6396ab479fc983379b188e7c24e",
+    "semantic_hash": ""
   }
 }

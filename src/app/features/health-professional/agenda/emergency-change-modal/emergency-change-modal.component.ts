@@ -109,6 +109,11 @@ export interface EmergencyModalData {
           </div>
           <p class="broadcast-description">Selecciona los canales oficiales de alta prioridad para notificar al paciente en tiempo real.</p>
           
+          <div class="alert-box compliance-alert">
+            <mat-icon>health_and_safety</mat-icon>
+            <span><strong>Privacidad NOM-024 y HIPAA:</strong> Por seguridad, no incluyas diagnósticos clínicos ni información médica sensible (PHI) en los campos de texto anteriores. Los avisos por WhatsApp son de carácter estrictamente operativo.</span>
+          </div>
+          
           <div class="checkbox-list">
             <label class="glass-checkbox">
               <input type="checkbox" [(ngModel)]="notifyWebPush" />
@@ -355,6 +360,7 @@ export interface EmergencyModalData {
     .danger-alert { background: rgba(254, 242, 242, 0.8); border: 1px solid #fca5a5; color: #991b1b; mat-icon { color: #ef4444; } }
     .info-alert { background: rgba(239, 246, 255, 0.8); border: 1px solid #93c5fd; color: #1e40af; mat-icon { color: #3b82f6; } }
     .warning-alert { background: rgba(255, 251, 235, 0.8); border: 1px solid #fcd34d; color: #b45309; mat-icon { color: #f59e0b; } }
+    .compliance-alert { background: rgba(240, 253, 244, 0.8); border: 1px solid #86efac; color: #15803d; mat-icon { color: #16a34a; } }
 
     .form-group {
       display: flex;
@@ -593,20 +599,32 @@ export class EmergencyChangeModalComponent implements OnInit {
     this.dialogRef.close();
   }
 
+  sanitizeInput(input: string): string {
+    if (!input) return '';
+    // Elimina etiquetas HTML/XML y caracteres potencialmente peligrosos para prevenir XSS
+    return input
+      .replace(/<[^>]*>?/gm, '')
+      .replace(/[<>]/g, '')
+      .trim();
+  }
+
   confirm() {
-    if (this.actionType === 'cancel' && !this.reason.trim()) {
+    const sanitizedReason = this.sanitizeInput(this.reason);
+    const sanitizedDetails = this.sanitizeInput(this.details);
+
+    if (this.actionType === 'cancel' && !sanitizedReason) {
       alert('Por favor, especifica el motivo de la cancelación de emergencia.');
       return;
     }
-    if ((this.actionType === 'virtual' || this.actionType === 'relocate') && !this.details.trim()) {
+    if ((this.actionType === 'virtual' || this.actionType === 'relocate') && !sanitizedDetails) {
       alert('Por favor, ingresa los detalles del cambio (enlace o nueva ubicación).');
       return;
     }
 
     this.dialogRef.close({
       actionType: this.actionType,
-      reason: this.reason.trim() || 'Cambio de emergencia',
-      details: this.details.trim(),
+      reason: sanitizedReason || 'Cambio de emergencia',
+      details: sanitizedDetails,
       notifyWebPush: this.notifyWebPush,
       notifyWhatsApp: this.notifyWhatsApp
     });

@@ -35,49 +35,71 @@
     </div>
   </div>
 
+  <!-- COMBO BOX DE SELECCIÓN DE SERVICIO UNIFICADO -->
+  <div class="specialty-selector-container" style="max-width: 1200px; margin: 0 auto 2rem auto; padding: 0 2rem;">
+    <div class="selector-card" style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.5rem; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); flex-wrap: wrap; gap: 1rem;">
+      <div class="selector-info" style="display: flex; align-items: center; gap: 1rem;">
+        <mat-icon [style.color]="selectedSpecialty === 'psychologist' ? '#0ea5e9' : '#10b981'" style="font-size: 32px; width: 32px; height: 32px;">
+          {{ selectedSpecialty === 'psychologist' ? 'psychology' : 'restaurant_menu' }}
+        </mat-icon>
+        <div>
+          <h3 style="margin: 0; color: var(--text-primary); font-size: 1.2rem;">Tipo de Atención Requerida</h3>
+          <p style="margin: 0.25rem 0 0 0; color: var(--text-secondary); font-size: 0.9rem;">Elige la especialidad para consultar disponibilidad y agendar en tu calendario unificado.</p>
+        </div>
+      </div>
+      
+      <div class="combo-box-wrapper" style="min-width: 280px;">
+        <select [(ngModel)]="selectedSpecialty" (change)="onSpecialtyChange()" style="width: 100%; padding: 0.8rem 1.2rem; font-size: 1rem; font-weight: 600; color: var(--text-primary); background: var(--input-bg); border: 2px solid var(--border-color); border-radius: 8px; outline: none; cursor: pointer;">
+          <option value="psychologist">🧠 Psicología (Salud Emocional)</option>
+          <option value="nutritionist">🍏 Nutrición (Salud Alimentaria)</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
   <div class="layout" *ngIf="!loading; else spinner">
     
     <!-- Error State -->
-    <div class="empty-state error-card" *ngIf="errorMsg && !loading && !psychologistId && availablePsychologists.length === 0">
+    <div class="empty-state error-card" *ngIf="errorMsg && !loading && !assignedProfessionalId && availableProfessionals.length === 0">
       <mat-icon>error_outline</mat-icon>
       <p>{{ errorMsg }}</p>
     </div>
 
-    <!-- Directorio de Psicólogos (Premium Card) -->
-    <div class="directory-card sidebar-card" *ngIf="!psychologistId && availablePsychologists.length > 0 && !loading">
+    <!-- Directorio de Profesionales (Premium Card) -->
+    <div class="directory-card sidebar-card" *ngIf="!assignedProfessionalId && availableProfessionals.length > 0 && !loading">
       <div class="card-header-main">
         <mat-icon class="header-icon">group</mat-icon>
-        <h2>Directorio de Especialistas</h2>
-        <p class="subtitle">Selecciona un psicólogo de tu facultad (<strong>{{studentFaculty}}</strong>) para comenzar tu acompañamiento.</p>
-        <button class="btn-auto-assign" (click)="autoAssignPsychologist()">
+        <h2>Directorio de Especialistas ({{ professionalRoleTitle }})</h2>
+        <p class="subtitle">Selecciona un {{ professionalRoleTitle.toLowerCase() }} de tu facultad (<strong>{{studentFaculty}}</strong>) para comenzar tu acompañamiento.</p>
+        <button class="btn-auto-assign" (click)="autoAssignProfessional()">
           <mat-icon>auto_awesome</mat-icon> Asignación Automática Inteligente
         </button>
       </div>
       
       <div class="psy-grid">
-        <div class="psy-card card" *ngFor="let psy of availablePsychologists">
+        <div class="psy-card card" *ngFor="let prof of availableProfessionals">
           <div class="avatar-wrapper">
-            <img [src]="psy.avatar || 'assets/avatars/default.svg'" alt="Avatar" (error)="psy.avatar = ''">
-            <mat-icon *ngIf="!psy.avatar">account_circle</mat-icon>
+            <img [src]="prof.avatar || 'assets/avatars/default.svg'" alt="Avatar" (error)="prof.avatar = ''">
+            <mat-icon *ngIf="!prof.avatar">account_circle</mat-icon>
           </div>
-          <h3>{{ psy.name }}</h3>
+          <h3>{{ prof.name }}</h3>
           <p class="faculty-tag">
-            <mat-icon>school</mat-icon> {{ psy.faculty }}
+            <mat-icon>school</mat-icon> {{ prof.faculty }}
           </p>
-          <button class="btn-request" (click)="requestPsychologist(psy.id)">
+          <button class="btn-request" (click)="requestProfessional(prof.id)">
             Solicitar Acompañamiento
           </button>
         </div>
       </div>
     </div>
 
-    <!-- CALENDARIO PREMIUM -->
-    <div class="calendar-card" *ngIf="psychologistId && !loading && !errorMsg">
+    <!-- CALENDARIO PREMIUM UNIFICADO -->
+    <div class="calendar-card" *ngIf="assignedProfessionalId && !loading && !errorMsg">
       <div *ngIf="hasActiveReservation && activeReservationDetails" class="active-reservation-banner" style="display: flex; flex-direction: column; gap: 12px; background: linear-gradient(135deg, #ede9fe, #f5f3ff); border: 1px solid #c4b5fd; padding: 18px; border-radius: 12px; margin-bottom: 20px;">
         <div style="display: flex; align-items: center; gap: 15px;">
           <div class="banner-icon" style="background: #8b5cf6; color: white; padding: 10px; border-radius: 50%; display: flex; align-items: center; justify-content: center;"><mat-icon>event_available</mat-icon></div>
           <div class="banner-text" style="flex: 1;">
-            <strong style="color: #4c1d95; font-size: 1.1rem; display: block;">¡Tu espacio está reservado y protegido!</strong>
+            <strong style="color: #4c1d95; font-size: 1.1rem; display: block;">¡Tu espacio con el {{ professionalRoleTitle.toLowerCase() }} está reservado y protegido!</strong>
             <span style="color: #581c87; font-size: 0.95rem;">Tienes una cita el <strong>{{ formatSpanishDate(activeReservationDetails.date) }}</strong> a las <strong>{{ activeReservationDetails.time.substring(0,5) }}</strong>.</span>
           </div>
           <span style="background: #6d28d9; color: white; padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase;">
@@ -139,9 +161,9 @@
     </div>
 
     <!-- HUECOS DISPONIBLES PREMIUM -->
-    <div class="slots-card" *ngIf="psychologistId && !loading && !errorMsg">
+    <div class="slots-card" *ngIf="assignedProfessionalId && !loading && !errorMsg">
       <div *ngIf="selectedDateStr(); else noDay" class="slots-content">
-        <h3>Horarios Disponibles</h3>
+        <h3>Horarios Disponibles ({{ professionalRoleTitle }})</h3>
         <p class="subtitle">{{ selectedDateStr() | date:'mediumDate' }}</p>
         
         <div class="slots-grid">
@@ -177,7 +199,7 @@
         <img src="/amati-logo.svg" alt="Amati Logo" class="amati-logo-pulse" />
       </div>
       <h3 class="loading-title">Consultando disponibilidad en tiempo real...</h3>
-      <p class="loading-subtitle">Sincronizando horarios con la Jefatura de Psicología</p>
+      <p class="loading-subtitle">Sincronizando horarios con el personal de la salud</p>
     </div>
   </ng-template>
 

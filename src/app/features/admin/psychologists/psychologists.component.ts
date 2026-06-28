@@ -230,9 +230,9 @@ export class PsychologistsComponent implements OnInit {
       if (pError) throw pError;
 
       const { error: sError } = await this.supabase
-        .from('psychologist_settings')
+        .from('health_professional_settings')
         .update({ capacity: capacity })
-        .eq('psychologist_id', userId);
+        .eq('professional_id', userId);
 
       if (sError) throw sError;
 
@@ -270,7 +270,7 @@ export class PsychologistsComponent implements OnInit {
     const { data: appts } = await this.supabase
       .from('appointments')
       .select('scheduled_date, status')
-      .eq('psychologist_id', this.selectedPsychologist.id)
+      .eq('professional_id', this.selectedPsychologist.id)
       .eq('status', 'completed')
       .gte('scheduled_date', startDate.toISOString())
       .lte('scheduled_date', endDate.toISOString());
@@ -278,7 +278,7 @@ export class PsychologistsComponent implements OnInit {
     const { data: excps } = await this.supabase
       .from('exceptions')
       .select('date')
-      .or(`psychologist_id.eq.${this.selectedPsychologist.id},psychologist_id.is.null`)
+      .or(`professional_id.eq.${this.selectedPsychologist.id},professional_id.is.null`)
       .gte('date', startDate.toISOString())
       .lte('date', endDate.toISOString());
 

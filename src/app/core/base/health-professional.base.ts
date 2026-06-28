@@ -14,6 +14,7 @@ export abstract class HealthProfessionalBase {
   public showGlobalModal: boolean = false;
   public patientsData: any[] = [];
   public allPatients: any[] = [];
+  public professionalFaculty: string | null = null;
 
   get currentUserId() {
     return this.authService.currentUser()?.id;
@@ -49,7 +50,10 @@ export abstract class HealthProfessionalBase {
 
   get filteredGlobalPatients() {
     const term = this.globalSearchTerm.toLowerCase();
-    const global = this.allPatients.filter(p => !p.isAssigned);
+    let global = this.allPatients.filter(p => !p.isAssigned);
+    if (this.professionalFaculty) {
+      global = global.filter(p => p.faculty && p.faculty.toLowerCase().trim() === this.professionalFaculty!.toLowerCase().trim());
+    }
     return global.filter(p => 
       `${p.firstName} ${p.lastName}`.toLowerCase().includes(term) ||
       (p.matricula && p.matricula.toLowerCase().includes(term))
@@ -57,9 +61,32 @@ export abstract class HealthProfessionalBase {
   }
 
   async loadPatientsBase() {
+    if (this.currentUserId) {
+      const { data: sett } = await this.supabase
+        .from('health_professional_settings')
+        .select('*, faculties(name)')
+        .eq('professional_id', this.currentUserId)
+        .maybeSingle();
+
+      if (sett && sett.faculties) {
+        this.professionalFaculty = Array.isArray(sett.faculties) ? sett.faculties[0]?.name : sett.faculties?.name;
+      }
+
+      if (!this.professionalFaculty) {
+        const { data: prof } = await this.supabase
+          .from('profiles')
+          .select('faculty')
+          .eq('user_id', this.currentUserId)
+          .maybeSingle();
+        if (prof && prof.faculty) {
+          this.professionalFaculty = prof.faculty;
+        }
+      }
+    }
+
     const { data, error } = await this.supabase
       .from('users')
-      .select('id, matricula, profiles(first_name, last_name, avatar_url), student_clinical_records!student_clinical_records_student_id_fkey(known_conditions, primary_psychologist_id, primary_nutritionist_id)')
+      .select('id, matricula, profiles(first_name, last_name, avatar_url, faculty), student_clinical_records!student_clinical_records_student_id_fkey(known_conditions, primary_psychologist_id, primary_nutritionist_id)')
       .eq('role_id', 2);
 
     if (error) {
@@ -84,6 +111,7 @@ export abstract class HealthProfessionalBase {
           firstName: Array.isArray(u.profiles) ? u.profiles[0]?.first_name : u.profiles?.first_name,
           lastName: Array.isArray(u.profiles) ? u.profiles[0]?.last_name : u.profiles?.last_name,
           avatarUrl: Array.isArray(u.profiles) ? u.profiles[0]?.avatar_url : u.profiles?.avatar_url,
+          faculty: Array.isArray(u.profiles) ? u.profiles[0]?.faculty : u.profiles?.faculty,
           diagnosis: diagnosis, 
           lastSession: new Date().toISOString().split('T')[0],
           nextSession: "Por agendar",
@@ -108,7 +136,7 @@ export abstract class HealthProfessionalBase {
       .from('student_clinical_records')
       .select('id')
       .eq('student_id', patientId)
-      .single();
+      .maybeSingle();
 
     const updatePayload: any = this.isNutritionist 
       ? { primary_nutritionist_id: this.currentUserId }

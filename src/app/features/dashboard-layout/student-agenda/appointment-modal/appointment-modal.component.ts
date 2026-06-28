@@ -23,6 +23,7 @@ export interface AppointmentModalData {
   endTime: string;
   status: 'available' | 'my_reservation';
   id?: string; // appointment id if modifying/canceling
+  professionalRoleTitle?: string;
 }
 
 @Component({
@@ -50,9 +51,9 @@ export interface AppointmentModalData {
               <mat-icon *ngIf="!data.psychologistAvatar">person</mat-icon>
             </div>
             <div class="details">
-              <span class="role">Especialista Asignado</span>
-              <span class="name">{{ data.psychologistName || 'Psicólogo Asignado' }}</span>
-              <span class="email">{{ data.psychologistEmail || 'contacto@psicologia.buap.mx' }}</span>
+              <span class="role">{{ data.professionalRoleTitle || 'Especialista Asignado' }}</span>
+              <span class="name">{{ data.psychologistName || 'Especialista Asignado' }}</span>
+              <span class="email">{{ data.psychologistEmail || 'contacto@buap.mx' }}</span>
             </div>
           </div>
           

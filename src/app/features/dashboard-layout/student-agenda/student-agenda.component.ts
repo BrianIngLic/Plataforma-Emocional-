@@ -26,6 +26,9 @@ export class StudentAgendaComponent implements OnInit {
 
   urgencyLevel = this.aiMock.currentUrgency;
 
+  // Combo box de selección de servicio unificado en el mismo calendario
+  selectedSpecialty: 'psychologist' | 'nutritionist' = 'psychologist';
+
   // Calendar State
   currentDate = new Date();
   viewDate = new Date();
@@ -41,35 +44,50 @@ export class StudentAgendaComponent implements OnInit {
     const dateStr = this.selectedDateStr();
     if (!dateStr) return [];
     const info = this.availableDaysMap.get(dateStr);
-    // Mostrar solo los disponibles o los que son del paciente
     return info ? info.slots.filter((s: any) => s.status !== 'taken') : [];
   });
 
-  psychologistId: string | null = null;
-  psychologistName: string = '';
-  psychologistEmail: string = '';
-  psychologistAvatar: string = '';
-  psychologistLocation: string = '';
-  psychologistModality: string = 'virtual';
-  psychologistBuilding: string = '';
-  psychologistOfficeRoom: string = '';
-  psychologistFacultyName: string = '';
-  psychologistVirtualTourUrl: string = '';
+  assignedProfessionalId: string | null = null;
+  professionalName: string = '';
+  professionalEmail: string = '';
+  professionalAvatar: string = '';
+  professionalLocation: string = '';
+  professionalModality: string = 'virtual';
+  professionalBuilding: string = '';
+  professionalOfficeRoom: string = '';
+  professionalFacultyName: string = '';
+  professionalVirtualTourUrl: string = '';
+  professionalRoleTitle: string = 'Psicólogo';
+  
   loading = true;
   errorMsg: string | null = null;
 
-  availablePsychologists: any[] = [];
+  availableProfessionals: any[] = [];
   studentFaculty: string = '';
 
   async ngOnInit() {
     this.generateCalendar(); 
+    await this.initAgenda(true);
+  }
+
+  async onSpecialtyChange() {
+    this.professionalRoleTitle = this.selectedSpecialty === 'psychologist' ? 'Psicólogo' : 'Nutriólogo';
+    this.selectedDateStr.set(null);
+    this.assignedProfessionalId = null;
+    this.availableProfessionals = [];
+    this.errorMsg = null;
+    this.loading = true;
+    await this.initAgenda(true);
+  }
+
+  async initAgenda(showAlert: boolean = true) {
     try {
-      await this.fetchAssignedPsychologist();
-      if (this.psychologistId) {
+      await this.fetchAssignedProfessional(showAlert);
+      if (this.assignedProfessionalId) {
         await this.loadAvailability();
-      } else if (this.availablePsychologists.length === 0) {
+      } else if (this.availableProfessionals.length === 0) {
         if (!this.errorMsg) {
-          this.errorMsg = 'No se encontró ningún psicólogo disponible en tu facultad.';
+          this.errorMsg = `No se encontró ningún ${this.professionalRoleTitle.toLowerCase()} disponible en tu facultad.`;
         }
         this.loading = false;
       } else {
@@ -82,76 +100,83 @@ export class StudentAgendaComponent implements OnInit {
     }
   }
 
-  async fetchAssignedPsychologist() {
+  async fetchAssignedProfessional(showAlert: boolean) {
     const user = this.authService.currentUser();
     if (!user) return;
     this.studentFaculty = user.faculty || '';
+    this.professionalRoleTitle = this.selectedSpecialty === 'psychologist' ? 'Psicólogo' : 'Nutriólogo';
 
-    // 1. Buscar psicólogo tratante del estudiante
+    const selectField = this.selectedSpecialty === 'psychologist' ? 'primary_psychologist_id' : 'primary_nutritionist_id';
+
     const { data: record, error } = await this.supabase
       .from('student_clinical_records')
-      .select('primary_psychologist_id')
+      .select(selectField)
       .eq('student_id', user.id)
       .maybeSingle();
 
     if (error) {
-      console.error('Error buscando psicólogo tratante:', error);
+      console.error('Error buscando profesional tratante:', error);
     }
 
-    let psyId = null;
+    let profId = null;
 
-    if (record && record.primary_psychologist_id) {
-      psyId = record.primary_psychologist_id;
-    } else if (this.urgencyLevel() === 'alto_riesgo') {
-      // 2. Si es Alto Riesgo y NO tiene psicólogo, le asignamos uno de guardia con horarios
+    if (record) {
+      profId = this.selectedSpecialty === 'psychologist' ? (record as any).primary_psychologist_id : (record as any).primary_nutritionist_id;
+    }
+
+    if (!profId && this.selectedSpecialty === 'psychologist' && this.urgencyLevel() === 'alto_riesgo') {
       const { data: fallback } = await this.supabase
-        .from('psychologist_settings')
-        .select('psychologist_id')
+        .from('health_professional_settings')
+        .select('professional_id')
         .limit(1)
         .maybeSingle();
       
-      if (fallback) psyId = fallback.psychologist_id;
+      if (fallback) profId = fallback.professional_id;
     }
 
-    if (psyId) {
-      this.psychologistId = psyId;
-      // Traer detalles del psicólogo para el Modal
-      const { data: prof } = await this.supabase.from('profiles').select('first_name, last_name, avatar_url').eq('user_id', psyId).maybeSingle();
+    if (profId) {
+      this.assignedProfessionalId = profId;
+      const { data: prof } = await this.supabase.from('profiles').select('first_name, last_name, avatar_url').eq('user_id', profId).maybeSingle();
       if (prof) {
-        this.psychologistName = `${prof.first_name || ''} ${prof.last_name || ''}`.trim() || 'Psicólogo Asignado';
-        this.psychologistEmail = 'contacto@psicologia.buap.mx';
-        this.psychologistAvatar = prof.avatar_url || '';
+        this.professionalName = `${prof.first_name || ''} ${prof.last_name || ''}`.trim() || `${this.professionalRoleTitle} Asignado`;
+        this.professionalEmail = this.selectedSpecialty === 'psychologist' ? 'contacto@psicologia.buap.mx' : 'contacto@nutricion.buap.mx';
+        this.professionalAvatar = prof.avatar_url || '';
       }
 
-      const { data: settRaw } = await this.supabase.from('psychologist_settings').select('location, modality, building, office_room, faculty:faculties(name, virtual_tour_url)').eq('psychologist_id', psyId).maybeSingle();
+      const { data: settRaw } = await this.supabase.from('health_professional_settings').select('location, modality, building, office_room, faculties(name, virtual_tour_url)').eq('professional_id', profId).maybeSingle();
       const sett: any = settRaw;
       if (sett) {
-        this.psychologistLocation = sett.location || 'Consultorio Virtual';
-        this.psychologistModality = sett.modality || 'virtual';
-        this.psychologistBuilding = sett.building || '';
-        this.psychologistOfficeRoom = sett.office_room || '';
-        this.psychologistFacultyName = sett.faculty ? (Array.isArray(sett.faculty) ? sett.faculty[0]?.name : sett.faculty?.name) : '';
-        this.psychologistVirtualTourUrl = sett.faculty ? (Array.isArray(sett.faculty) ? sett.faculty[0]?.virtual_tour_url : sett.faculty?.virtual_tour_url) : '';
+        this.professionalLocation = sett.location || 'Consultorio Virtual';
+        this.professionalModality = sett.modality || 'virtual';
+        this.professionalBuilding = sett.building || '';
+        this.professionalOfficeRoom = sett.office_room || '';
+        const fac = sett.faculties || sett.faculty;
+        this.professionalFacultyName = fac ? (Array.isArray(fac) ? fac[0]?.name : fac?.name) : '';
+        this.professionalVirtualTourUrl = fac ? (Array.isArray(fac) ? fac[0]?.virtual_tour_url : fac?.virtual_tour_url) : '';
       }
     } else {
-      // No tiene psicólogo asignado, cargar directorio
-      await this.loadPsychologistsByFaculty();
+      if (showAlert) {
+        this.showFeedback('error', `¡${this.professionalRoleTitle} No Asignado!`, `No tienes un ${this.professionalRoleTitle.toLowerCase()} asignado en tu expediente. Por favor, selecciona uno del directorio de tu facultad a continuación.`);
+      }
+      await this.loadProfessionalsByFaculty();
     }
   }
 
-  async loadPsychologistsByFaculty() {
+  async loadProfessionalsByFaculty() {
     if (!this.studentFaculty) {
       this.errorMsg = "No tienes una facultad asignada. Ve a configuración para asignarte una.";
       return;
     }
 
+    const targetRoleId = this.selectedSpecialty === 'psychologist' ? 3 : 4;
+
     const { data, error } = await this.supabase
       .from('users')
       .select('id, role_id, profiles(first_name, last_name, avatar_url, faculty)')
-      .eq('role_id', 3);
+      .eq('role_id', targetRoleId);
 
     if (data) {
-      this.availablePsychologists = data.map(u => {
+      this.availableProfessionals = data.map(u => {
         const p = Array.isArray(u.profiles) ? u.profiles[0] : u.profiles;
         return {
           id: u.id,
@@ -161,42 +186,43 @@ export class StudentAgendaComponent implements OnInit {
         };
       }).filter(p => p.faculty === this.studentFaculty);
       
-      if (this.availablePsychologists.length === 0) {
-        this.errorMsg = `No hay psicólogos disponibles en tu facultad (${this.studentFaculty}) actualmente.`;
+      if (this.availableProfessionals.length === 0) {
+        this.errorMsg = `No hay ${this.professionalRoleTitle.toLowerCase()}s disponibles en tu facultad (${this.studentFaculty}) actualmente.`;
       }
     }
   }
 
-  async requestPsychologist(psyId: string) {
+  async requestProfessional(profId: string) {
     const user = this.authService.currentUser();
     if (!user) return;
     this.loading = true;
     
+    const updateField = this.selectedSpecialty === 'psychologist' ? { primary_psychologist_id: profId } : { primary_nutritionist_id: profId };
+
     const { error } = await this.supabase
       .from('student_clinical_records')
-      .update({ primary_psychologist_id: psyId })
+      .update(updateField)
       .eq('student_id', user.id);
       
     if (!error) {
-       this.showFeedback('success', 'Psicólogo Asignado', 'Se te ha asignado al especialista correctamente. Ya puedes agendar citas.');
-       this.availablePsychologists = [];
-       await this.fetchAssignedPsychologist();
-       if (this.psychologistId) await this.loadAvailability();
+       this.showFeedback('success', `${this.professionalRoleTitle} Asignado`, 'Se te ha asignado al especialista correctamente. Ya puedes agendar citas en el calendario unificado.');
+       this.availableProfessionals = [];
+       await this.fetchAssignedProfessional(false);
+       if (this.assignedProfessionalId) await this.loadAvailability();
     } else {
-       this.showFeedback('error', 'Error', 'No se pudo asignar el psicólogo. Asegúrate de tener tu expediente inicializado.');
+       this.showFeedback('error', 'Error', `No se pudo asignar el ${this.professionalRoleTitle.toLowerCase()}. Asegúrate de tener tu expediente inicializado.`);
        this.loading = false;
     }
   }
 
-  async autoAssignPsychologist() {
-    if (this.availablePsychologists.length > 0) {
-       // Asignar al primero de la lista (simulación de menor cantidad de pacientes)
-       await this.requestPsychologist(this.availablePsychologists[0].id);
+  async autoAssignProfessional() {
+    if (this.availableProfessionals.length > 0) {
+       await this.requestProfessional(this.availableProfessionals[0].id);
     }
   }
 
   async loadAvailability() {
-    if (!this.psychologistId) return;
+    if (!this.assignedProfessionalId) return;
     this.loading = true;
     
     try {
@@ -206,7 +232,7 @@ export class StudentAgendaComponent implements OnInit {
       const endStr = endObj.toISOString().split('T')[0];
 
       const slotsData = await this.agendaService.getStudentAvailableSlots(
-        this.psychologistId,
+        this.assignedProfessionalId,
         startStr,
         endStr,
         this.urgencyLevel()
@@ -282,31 +308,32 @@ export class StudentAgendaComponent implements OnInit {
 
   openModal(slot: any) {
     if (this.hasActiveReservation && slot.status === 'available') {
-      this.showFeedback('error', 'Cita Activa', 'Ya tienes una cita programada. No puedes agendar otra hasta que asistas o canceles.');
+      this.showFeedback('error', 'Cita Activa', `Ya tienes una cita programada con tu ${this.professionalRoleTitle.toLowerCase()}. No puedes agendar otra hasta que asistas o canceles.`);
       return;
     }
 
     const [h, m] = slot.time.split(':').map(Number);
-    const endD = new Date(2000, 1, 1, h, m + 60); // Asumiendo duraciones de 60 por fallback visual, idealmente vendría de settings
+    const endD = new Date(2000, 1, 1, h, m + 60); 
     const endStr = endD.toTimeString().substring(0, 5);
 
     const dialogRef = this.dialog.open(AppointmentModalComponent, {
       width: '500px',
       data: {
-        psychologistName: this.psychologistName,
-        psychologistEmail: this.psychologistEmail,
-        psychologistAvatar: this.psychologistAvatar,
-        location: this.psychologistLocation,
-        modality: this.psychologistModality,
-        building: this.psychologistBuilding,
-        officeRoom: this.psychologistOfficeRoom,
-        facultyName: this.psychologistFacultyName,
-        virtualTourUrl: this.psychologistVirtualTourUrl,
+        psychologistName: this.professionalName,
+        psychologistEmail: this.professionalEmail,
+        psychologistAvatar: this.professionalAvatar,
+        location: this.professionalLocation,
+        modality: this.professionalModality,
+        building: this.professionalBuilding,
+        officeRoom: this.professionalOfficeRoom,
+        facultyName: this.professionalFacultyName,
+        virtualTourUrl: this.professionalVirtualTourUrl,
         dateStr: this.selectedDateStr()!,
         startTime: slot.time,
         endTime: endStr,
         status: slot.status,
-        id: slot.id
+        id: slot.id,
+        professionalRoleTitle: this.professionalRoleTitle
       }
     });
 
@@ -322,7 +349,7 @@ export class StudentAgendaComponent implements OnInit {
   }
 
   async executeBooking(slotTime: string, endStr: string) {
-    if (!this.psychologistId || !this.selectedDateStr()) return;
+    if (!this.assignedProfessionalId || !this.selectedDateStr()) return;
     const dateStr = this.selectedDateStr()!;
     const user = this.authService.currentUser();
     if (!user) return;
@@ -330,7 +357,7 @@ export class StudentAgendaComponent implements OnInit {
     this.loading = true;
     const { error } = await this.supabase.from('appointments').insert({
       student_id: user.id,
-      psychologist_id: this.psychologistId,
+      professional_id: this.assignedProfessionalId,
       scheduled_date: dateStr,
       start_time: slotTime.length === 5 ? slotTime + ':00' : slotTime,
       end_time: endStr,
@@ -342,7 +369,7 @@ export class StudentAgendaComponent implements OnInit {
       this.showFeedback('error', 'Error de Conexión', 'Ocurrió un error: ' + error.message);
       this.loading = false;
     } else {
-      this.showFeedback('success', '¡Cita Confirmada!', 'Tu reserva ha sido guardada exitosamente.');
+      this.showFeedback('success', '¡Cita Confirmada!', `Tu reserva con el ${this.professionalRoleTitle.toLowerCase()} ha sido guardada exitosamente.`);
       this.selectedDateStr.set(null);
       this.loadAvailability();
     }
@@ -356,7 +383,7 @@ export class StudentAgendaComponent implements OnInit {
       this.showFeedback('error', 'Error al Cancelar', 'Ocurrió un error: ' + error.message);
       this.loading = false;
     } else {
-      this.showFeedback('success', 'Cita Cancelada', 'Tu cita ha sido cancelada correctamente y el espacio fue liberado.');
+      this.showFeedback('success', 'Cita Cancelada', `Tu cita con el ${this.professionalRoleTitle.toLowerCase()} ha sido cancelada correctamente y el espacio fue liberado.`);
       this.selectedDateStr.set(null);
       this.loadAvailability();
     }

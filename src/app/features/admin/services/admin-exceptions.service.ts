@@ -39,13 +39,13 @@ export class AdminExceptionsService {
 
     // Filtramos para asegurar que no se dupliquen (Supabase puede rechazar duplicados si tuvieramos un constraint, pero por si acaso lo hacemos masivo)
     const records = holidays.map(h => ({
-      psychologist_id: null, // null significa global
+      professional_id: null, // null significa global
       exception_date: h.date,
       reason: h.localName
     }));
 
     const { data, error } = await this.supabaseService.supabase
-      .from('psychologist_exceptions')
+      .from('health_professional_exceptions')
       .insert(records);
 
     if (error) {
@@ -58,9 +58,9 @@ export class AdminExceptionsService {
   // Registra una excepción manualmente
   async addException(date: string, reason: string, psychologistId: string | null = null) {
     const { data, error } = await this.supabaseService.supabase
-      .from('psychologist_exceptions')
+      .from('health_professional_exceptions')
       .insert({
-        psychologist_id: psychologistId,
+        professional_id: psychologistId,
         exception_date: date,
         reason: reason
       });

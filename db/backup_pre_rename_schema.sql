@@ -122,7 +122,7 @@ CREATE TABLE public.messages (
 CREATE TABLE public.appointments (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     student_id UUID REFERENCES public.users(id) ON DELETE CASCADE,
-    professional_id UUID REFERENCES public.users(id) ON DELETE CASCADE,
+    psychologist_id UUID REFERENCES public.users(id) ON DELETE CASCADE,
     scheduled_date TIMESTAMP NOT NULL,
     priority_level VARCHAR(20) DEFAULT 'Routine',
     status VARCHAR(20) DEFAULT 'Scheduled',
@@ -130,8 +130,8 @@ CREATE TABLE public.appointments (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE public.health_professional_settings (
-    professional_id UUID PRIMARY KEY REFERENCES public.users(id) ON DELETE CASCADE,
+CREATE TABLE public.psychologist_settings (
+    psychologist_id UUID PRIMARY KEY REFERENCES public.users(id) ON DELETE CASCADE,
     session_duration INTEGER DEFAULT 50,
     capacity INTEGER DEFAULT 35,
     location TEXT DEFAULT 'Consultorio Virtual',
@@ -144,9 +144,9 @@ CREATE TABLE public.health_professional_settings (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE public.health_professional_exceptions (
+CREATE TABLE public.psychologist_exceptions (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    professional_id UUID REFERENCES public.users(id),
+    psychologist_id UUID REFERENCES public.users(id),
     exception_date DATE NOT NULL,
     start_time TIME,
     end_time TIME,
@@ -254,7 +254,7 @@ BEGIN
     FROM public.users u
     JOIN auth.users a ON u.id = a.id
     LEFT JOIN public.profiles p ON u.id = p.user_id
-    LEFT JOIN public.health_professional_settings s ON u.id = s.professional_id
+    LEFT JOIN public.psychologist_settings s ON u.id = s.psychologist_id
     WHERE u.role_id = 3;
 END;
 $$;
@@ -270,8 +270,8 @@ ALTER TABLE public.chats ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.messages ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.appointments ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.diary_entries ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.health_professional_settings ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.health_professional_exceptions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.psychologist_settings ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.psychologist_exceptions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.audit_logs ENABLE ROW LEVEL SECURITY;
 
 -- Política de Usuarios: Un usuario solo puede ver y editar su propia data pública
@@ -307,32 +307,24 @@ CREATE POLICY health_prof_read_profiles ON public.profiles FOR SELECT USING (
 
 CREATE POLICY health_prof_access_records ON public.student_clinical_records FOR ALL USING (
     public.get_auth_role() IN (3, 4)
-) WITH CHECK (
-    public.get_auth_role() IN (3, 4)
 );
 
 -- Políticas para Configuración y Citas del Personal de la Salud (Psicólogos y Nutricionistas)
-CREATE POLICY health_prof_settings_own ON public.health_professional_settings
-    FOR ALL USING (professional_id = auth.uid()) WITH CHECK (professional_id = auth.uid());
+CREATE POLICY health_prof_settings_own ON public.psychologist_settings
+    FOR ALL USING (psychologist_id = auth.uid()) WITH CHECK (psychologist_id = auth.uid());
 
-CREATE POLICY health_prof_settings_read ON public.health_professional_settings
+CREATE POLICY health_prof_settings_read ON public.psychologist_settings
     FOR SELECT USING (true);
 
-CREATE POLICY health_prof_exceptions_own ON public.health_professional_exceptions
-    FOR ALL USING (professional_id = auth.uid()) WITH CHECK (professional_id = auth.uid());
+CREATE POLICY health_prof_exceptions_own ON public.psychologist_exceptions
+    FOR ALL USING (psychologist_id = auth.uid()) WITH CHECK (psychologist_id = auth.uid());
 
-CREATE POLICY health_prof_exceptions_read ON public.health_professional_exceptions
+CREATE POLICY health_prof_exceptions_read ON public.psychologist_exceptions
     FOR SELECT USING (true);
 
-CREATE POLICY admin_global_exceptions ON public.health_professional_exceptions
-    FOR ALL USING (public.get_auth_role() = 1);
-
-CREATE POLICY appointments_own_data ON public.appointments
-    FOR ALL USING (student_id = auth.uid() OR professional_id = auth.uid())
-    WITH CHECK (student_id = auth.uid() OR professional_id = auth.uid());
-
-CREATE POLICY "Personal de la salud pueden editar citas" ON public.appointments
-    FOR UPDATE TO public USING (auth.role() = 'authenticated'::text);
+CREATE POLICY appointments_access ON public.appointments
+    FOR ALL USING (student_id = auth.uid() OR psychologist_id = auth.uid())
+    WITH CHECK (student_id = auth.uid() OR psychologist_id = auth.uid());
 
 
 -- =========================================================================================
@@ -340,6 +332,6 @@ CREATE POLICY "Personal de la salud pueden editar citas" ON public.appointments
 -- =========================================================================================
 CREATE INDEX idx_chats_student ON public.chats(student_id);
 CREATE INDEX idx_messages_chat ON public.messages(chat_id);
-CREATE INDEX idx_appointments_professional ON public.appointments(professional_id);
+CREATE INDEX idx_appointments_psy ON public.appointments(psychologist_id);
 CREATE INDEX idx_diary_student ON public.diary_entries(student_id);
 CREATE INDEX idx_nutrition_logs ON public.nutrition_logs(student_id, log_date);

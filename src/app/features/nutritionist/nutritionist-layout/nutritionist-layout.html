@@ -45,7 +45,7 @@
             <small>Planificación de Citas</small>
           </div>
         </a>
-        <a routerLink="./appoin" routerLinkActive="active" class="nav-item">
+        <a routerLink="./agenda" routerLinkActive="active" class="nav-item">
           <mat-icon>calendar_today</mat-icon>
           <div class="nav-text">
             <span>Citas</span>
@@ -80,8 +80,8 @@
 
   <!-- Main Content -->
   <main class="main-content" [class.expanded]="isSidebarCollapsed">
-    <div class="router-container" [@routeAnimations]="prepareRoute(outlet)">
-      <router-outlet #outlet="outlet"></router-outlet>
+    <div class="router-container" [@routeAnimations]="currentAnimation">
+      <router-outlet (activate)="onActivate($event, outlet)" #outlet="outlet"></router-outlet>
     </div>
   </main>
 </div>

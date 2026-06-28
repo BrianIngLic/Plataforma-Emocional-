@@ -118,6 +118,7 @@
 - `[x]` Servicios: Actualizar `AgendaService.getSettings` y `getStudentAvailableSlots` para realizar un join con `faculties(id, name, virtual_tour_url)`.
 - `[x]` Interfaz del Psicólogo (`settings.component`): Añadir selector de modalidad (`Virtual` vs `Presencial`), con preselección de la facultad base del especialista, campo de edificio y número de oficina/aula.
 - `[x]` Interfaz del Estudiante (`student-agenda.component` y `appointment-modal.component`): Recuperar y mostrar el lugar de atención detallado y habilitar el botón "📍 Abrir Recorrido Virtual" apuntando a la URL inmersiva de la BUAP al agendar y en el banner de cita confirmada.
+- `[x]` Reserva Unificada Estudiantil: Modificar `student-agenda.component` y `appointment-modal.component` con un Combo Box de selección en el mismo calendario unificado y alertas emergentes si no se cuenta con especialista asignado.
 
 **5.7. Refactorización Arquitectónica: Herencia de Personal de la Salud**
 - `[x]` Base y Modelos (`core/models` o `core/base`): Crear clase/estructura base `HealthProfessionalBase` que encapsule la lógica común de dashboard, agenda, directorio de pacientes y ajustes.

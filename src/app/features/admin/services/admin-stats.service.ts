@@ -124,7 +124,7 @@ export class AdminStatsService {
       .select(`
         id, role_id, 
         profiles(faculty),
-        psychologist_settings(capacity)
+        health_professional_settings(capacity)
       `);
 
     const result = faculties.map(f => {
@@ -139,7 +139,7 @@ export class AdminStatsService {
           if (profileFac === f.name) {
             if (u.role_id === 3) {
               psychs++;
-              const sett = Array.isArray(u.psychologist_settings) ? u.psychologist_settings[0] : u.psychologist_settings;
+              const sett = Array.isArray(u.health_professional_settings) ? u.health_professional_settings[0] : u.health_professional_settings;
               if (sett) {
                 cap += sett.capacity || 0;
               }
@@ -204,20 +204,20 @@ export class AdminStatsService {
     // 3. Obtener citas para calcular sesiones y asistencia
     const { data: appointments } = await supabase
       .from('appointments')
-      .select('psychologist_id, status')
-      .not('psychologist_id', 'is', null);
+      .select('professional_id, status')
+      .not('professional_id', 'is', null);
 
     const apptMap: Record<string, { scheduled: number; completed: number; canceled: number; total: number }> = {};
     if (appointments) {
       appointments.forEach(a => {
-        if (a.psychologist_id) {
-          if (!apptMap[a.psychologist_id]) {
-            apptMap[a.psychologist_id] = { scheduled: 0, completed: 0, canceled: 0, total: 0 };
+        if (a.professional_id) {
+          if (!apptMap[a.professional_id]) {
+            apptMap[a.professional_id] = { scheduled: 0, completed: 0, canceled: 0, total: 0 };
           }
-          apptMap[a.psychologist_id].total += 1;
-          if (a.status === 'scheduled') apptMap[a.psychologist_id].scheduled += 1;
-          if (a.status === 'completed') apptMap[a.psychologist_id].completed += 1;
-          if (a.status === 'canceled') apptMap[a.psychologist_id].canceled += 1;
+          apptMap[a.professional_id].total += 1;
+          if (a.status === 'scheduled') apptMap[a.professional_id].scheduled += 1;
+          if (a.status === 'completed') apptMap[a.professional_id].completed += 1;
+          if (a.status === 'canceled') apptMap[a.professional_id].canceled += 1;
         }
       });
     }
@@ -361,7 +361,7 @@ export class AdminStatsService {
         status,
         type,
         patient:users!patient_id (profiles(first_name, last_name, faculty)),
-        psychologist:users!psychologist_id (profiles(first_name, last_name))
+        psychologist:users!professional_id (profiles(first_name, last_name))
       `)
       .gte('start_time', startDate.toISOString())
       .lt('start_time', endDate.toISOString());

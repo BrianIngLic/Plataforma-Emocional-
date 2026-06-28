@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { inject } from '@angular/core';
-import { Router,RouterOutlet,RouterLink, RouterLinkActive } from '@angular/router';
+import { Router, RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
@@ -10,8 +10,7 @@ import {
   style,
   animate,
   query
-} from '@angular/animations'
-
+} from '@angular/animations';
 
 @Component({
   selector: 'app-nutritionist-layout',
@@ -45,13 +44,13 @@ import {
       ])
     ])
   ]
-
 })
 export class NutritionistLayout {
   authService = inject(AuthService);
   router = inject(Router);
 
   isSidebarCollapsed = false;
+  currentAnimation: any;
 
   get currentUser() {
     return this.authService.currentUser();
@@ -65,7 +64,9 @@ export class NutritionistLayout {
     this.authService.logout();
   }
 
-  prepareRoute(outlet: any) {
-  return outlet?.activatedRouteData?.['animation'];
-}
+  onActivate(event: any, outlet: any) {
+    setTimeout(() => {
+      this.currentAnimation = outlet?.activatedRouteData?.['animation'];
+    });
+  }
 }

@@ -39,7 +39,10 @@ export class DashboardComponent {
 =======
   suggestions = ['¿Cómo manejo el estrés?', 'Necesito hablar de algo', 'Ejercicio de respiración', 'Me siento solo/a'];
   showMobileActions = false;
+<<<<<<< HEAD
 >>>>>>> a6d3afb (Paciente Responsive)
+=======
+>>>>>>> a6d3afb3e3f7365ed16634c428700027378ea2c9
 
   @ViewChild('chatScroll') private chatScrollContainer!: ElementRef;
 
@@ -60,6 +63,7 @@ export class DashboardComponent {
       this.chatService.sendMessage(this.inputText);
       this.inputText = '';
 <<<<<<< HEAD
+<<<<<<< HEAD
       // Incrementar sutilmente el nivel de calma de forma gamificada
       if (this.calmLevel < 98) {
         this.calmLevel += 2;
@@ -67,11 +71,15 @@ export class DashboardComponent {
 =======
       this.showMobileActions = false;
 >>>>>>> a6d3afb (Paciente Responsive)
+=======
+      this.showMobileActions = false;
+>>>>>>> a6d3afb3e3f7365ed16634c428700027378ea2c9
     }
   }
 
   sendSuggestion(suggestion: string) {
     this.chatService.sendMessage(suggestion);
+<<<<<<< HEAD
 <<<<<<< HEAD
     if (this.calmLevel < 98) {
       this.calmLevel += 2;
@@ -83,6 +91,9 @@ export class DashboardComponent {
 =======
     this.showMobileActions = false;
 >>>>>>> a6d3afb (Paciente Responsive)
+=======
+    this.showMobileActions = false;
+>>>>>>> a6d3afb3e3f7365ed16634c428700027378ea2c9
   }
 
   logout() {

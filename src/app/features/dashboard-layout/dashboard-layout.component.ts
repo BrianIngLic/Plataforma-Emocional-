@@ -26,17 +26,28 @@ export class DashboardLayoutComponent implements OnInit {
     return this.authService.currentUser();
   }
 
+  isMobile() {
+    return typeof window !== 'undefined' && window.innerWidth < 768;
+  }
+
   isPsychologist() {
     return this.currentUser?.role === 'psychologist';
   }
 
   ngOnInit() {
+    if (this.isMobile()) {
+      this.isSidebarCollapsed = true;
+    }
+
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe((event: any) => {
       this.showChatHistory = event.urlAfterRedirects.includes('/dashboard/chat');
       if (this.showChatHistory) {
         this.loadHistory();
+      }
+      if (this.isMobile()) {
+        this.isSidebarCollapsed = true;
       }
     });
     
@@ -62,10 +73,16 @@ export class DashboardLayoutComponent implements OnInit {
         this.router.navigate(['/dashboard/chat']);
       }
     }
+    if (this.isMobile()) {
+      this.isSidebarCollapsed = true;
+    }
   }
 
   async loadChat(chatId: string) {
     await this.chatService.loadSpecificChat(chatId);
+    if (this.isMobile()) {
+      this.isSidebarCollapsed = true;
+    }
   }
 
   toggleSidebar() {

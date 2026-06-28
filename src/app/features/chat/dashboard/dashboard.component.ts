@@ -29,12 +29,17 @@ export class DashboardComponent {
   activeReliefMode = false;
 
   inputText = '';
+<<<<<<< HEAD
   suggestions = [
     { label: '¿Cómo manejo la ansiedad ahora?', icon: 'self_improvement' },
     { label: 'Siento mucha presión, necesito hablar', icon: 'volunteer_activism' },
     { label: 'Dime palabras de calma y compasión', icon: 'spa' },
     { label: 'Ayúdame con un ejercicio rápido', icon: 'bubble_chart' }
   ];
+=======
+  suggestions = ['¿Cómo manejo el estrés?', 'Necesito hablar de algo', 'Ejercicio de respiración', 'Me siento solo/a'];
+  showMobileActions = false;
+>>>>>>> a6d3afb (Paciente Responsive)
 
   @ViewChild('chatScroll') private chatScrollContainer!: ElementRef;
 
@@ -46,19 +51,28 @@ export class DashboardComponent {
     });
   }
 
+  toggleMobileActions() {
+    this.showMobileActions = !this.showMobileActions;
+  }
+
   sendMessage() {
     if (this.inputText.trim()) {
       this.chatService.sendMessage(this.inputText);
       this.inputText = '';
+<<<<<<< HEAD
       // Incrementar sutilmente el nivel de calma de forma gamificada
       if (this.calmLevel < 98) {
         this.calmLevel += 2;
       }
+=======
+      this.showMobileActions = false;
+>>>>>>> a6d3afb (Paciente Responsive)
     }
   }
 
   sendSuggestion(suggestion: string) {
     this.chatService.sendMessage(suggestion);
+<<<<<<< HEAD
     if (this.calmLevel < 98) {
       this.calmLevel += 2;
     }
@@ -66,6 +80,9 @@ export class DashboardComponent {
 
   toggleReliefMode() {
     this.activeReliefMode = !this.activeReliefMode;
+=======
+    this.showMobileActions = false;
+>>>>>>> a6d3afb (Paciente Responsive)
   }
 
   logout() {

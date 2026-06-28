@@ -399,3 +399,54 @@
   mat-icon { font-size: 48px; width: 48px; height: 48px; color: var(--accent-purple); opacity: 0.6; }
   p { font-size: 1rem; margin: 0; max-width: 350px; line-height: 1.4; }
 }
+
+@media (max-width: 767px) {
+  .agenda-container {
+    padding: 4rem 1rem 1rem 1rem !important; /* Espacio para el botón de menú flotante */
+    gap: 1rem !important;
+  }
+
+  .debug-banner {
+    flex-direction: column;
+    align-items: flex-start !important;
+    gap: 1rem;
+    
+    .urgency-toggles {
+      width: 100%;
+      display: flex;
+      gap: 0.5rem;
+      .urg-btn {
+        flex: 1;
+        text-align: center;
+        padding: 0.5rem 0.25rem !important;
+        font-size: 0.8rem !important;
+      }
+    }
+  }
+
+  .header {
+    h1 {
+      font-size: 1.5rem !important;
+    }
+  }
+
+  .layout {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+  }
+
+  .calendar-card, .slots-card {
+    height: auto !important;
+    min-height: 380px;
+    padding: 1rem !important;
+  }
+
+  .slots-grid {
+    grid-template-columns: 1fr !important;
+    gap: 0.75rem !important;
+  }
+
+  .cal-grid .day-cell {
+    border-radius: 8px !important;
+  }
+}

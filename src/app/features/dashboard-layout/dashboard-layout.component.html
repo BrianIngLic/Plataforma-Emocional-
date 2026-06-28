@@ -1,4 +1,12 @@
 <div class="layout-container">
+  <!-- Mobile Sidebar Backdrop Overlay -->
+  <div class="sidebar-overlay" *ngIf="!isSidebarCollapsed" (click)="toggleSidebar()"></div>
+
+  <!-- Floating Mobile Menu Button -->
+  <button class="mobile-menu-trigger" (click)="toggleSidebar()">
+    <mat-icon>menu</mat-icon>
+  </button>
+
   <!-- Columna Izquierda: Sidebar Global -->
   <aside class="sidebar" [class.collapsed]="isSidebarCollapsed">
     <div class="sidebar-header">

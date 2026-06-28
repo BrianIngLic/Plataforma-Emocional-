@@ -1,3 +1,10 @@
+:host {
+  display: block;
+  height: 100%;
+  width: 100%;
+  overflow-y: auto;
+}
+
 .profile-container {
   padding: 1.5rem;
   display: flex;

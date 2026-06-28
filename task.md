@@ -183,3 +183,54 @@
 - `[x]` Conectar `chat.service.ts` con la tabla `messages`.
 - `[x]` Conectar `diary.service.ts` (si existe la tabla, pendiente de crear en schema) o simular.
 - `[x]` Conectar listado de pacientes del psicólogo con las tablas reales.
+
+---
+
+## Skill 10: Responsividad Móvil (Fase actual: Ejecutada)
+
+**10.1. Ajuste General y Viewport**
+- `[x]` Configurar meta tag viewport en `index.html` con `maximum-scale=1.0, user-scalable=no, viewport-fit=cover`.
+
+**10.2. Drawer/Sidebar tipo Overlay**
+- `[x]` Implementar Drawer/Sidebar tipo overlay en `DashboardLayoutComponent` (Estudiante).
+- `[x]` Implementar Drawer/Sidebar tipo overlay en `PsychologistLayoutComponent` (Psicólogo).
+- `[x]` Agregar fondo semi-transparente (backdrop overlay) al abrir el sidebar en móviles.
+- `[x]` Crear gatillo flotante (hamburger menu) visible solo en móviles para abrir el sidebar.
+- `[x]` Configurar cierre automático del sidebar al cambiar de ruta.
+
+**10.3. Interfaz del Chat Optimizado**
+- `[x]` Ocultar el encabezado (`.chat-header`) en móviles para dar prioridad al historial de mensajes.
+- `[x]` Unificar botones de entrada en un solo botón `+` pegado directamente al input.
+- `[x]` Desarrollar menú flotante móvil para desplegar el resto de acciones (adjuntos, imágenes, emojis) al presionar `+`.
+
+**10.4. Prevención de Rupturas por Teclado y Spacing**
+- `[x]` Ajustar contenedores `:host` con `position: fixed; inset: 0` y `100dvh` para evitar deformaciones por el teclado virtual.
+- `[x]` Optimizar el Diario Emocional y vistas del Psicólogo apilándolos de forma vertical y ajustando márgenes.
+- `[x]` Adaptar el Módulo Alimentario (`AlimentaryDashboardComponent`) para dispositivos móviles.
+- `[x]` Adaptar el Registro de Expediente con Stepper (`RegisterComponent`) para pantallas móviles.
+- `[x]` Adaptar la Agenda Estudiantil (`StudentAgendaComponent`) para pantallas móviles.
+- `[x]` Adaptar las Configuraciones del Estudiante (`StudentSettingsComponent`) para pantallas móviles.
+- `[x]` Corregir bloqueos de desplazamiento vertical en Ajustes del Estudiante y Módulo Alimentario.
+
+
+
+---
+
+## Skill 11: Animaciones Premium (Fase actual: Ejecutada)
+
+**11.1. Configuración de Animaciones Globales**
+- `[x]` Definir variables y animaciones de keyframes (`fadeIn`, `fadeInUp`, `slideIn`) en `styles.scss`.
+- `[x]` Crear clases de animación reutilizables (`.animate-fade-in-up`, etc.).
+- `[x]` Aplicar animaciones de entrada suave a los contenedores principales de las páginas en `styles.scss` (diario, chat, triage, pacientes, etc.).
+
+**11.2. Micro-interacciones de Botones y Tarjetas**
+- `[x]` Añadir transiciones fluidas de escala y rotación a los botones de estado de ánimo en `diary-dashboard`.
+- `[x]` Aplicar efectos de flotación y sombras en hover a las tarjetas estadísticas del psicólogo (`.stat-card`).
+- `[x]` Aplicar efectos de desplazamiento lateral en hover a los ítems del sidebar (`.nav-item`).
+- `[x]` Aplicar micro-animación en hover para los días del calendario emocional.
+
+**11.3. Animación de Entrada del Chat**
+- `[x]` Diseñar e implementar animación de escala y deslizamiento ascendente (`messageFadeIn`) para las burbujas de conversación (`.message-wrapper`).
+- `[x]` Aplicar transiciones y micro-escalado al botón de enviar y sugerencias chips.
+
+

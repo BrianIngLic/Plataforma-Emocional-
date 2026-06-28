@@ -1,3 +1,11 @@
+:host {
+  display: block;
+  flex: 1 1 0%;
+  min-height: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
 .settings-container {
   padding: 2rem;
   max-width: 1000px;
@@ -70,7 +78,7 @@
       border: 1px solid var(--border-color);
       border-radius: 6px;
       font-size: 1rem;
-      background: var(--bg-primary);
+      background: var(--input-bg);
       color: var(--text-primary);
       outline: none;
 
@@ -104,6 +112,25 @@
         opacity: 0.6;
         cursor: not-allowed;
       }
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  .settings-container {
+    padding: 4rem 1rem 3rem 1rem !important; /* Espacio para el botón de menú flotante y safe zone */
+  }
+
+  .settings-container .header-row {
+    h2 {
+      font-size: 1.4rem !important;
+      flex-wrap: wrap;
+    }
+  }
+
+  .settings-container .card {
+    .card-header, .card-body {
+      padding: 1rem !important;
     }
   }
 }

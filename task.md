@@ -125,6 +125,12 @@
 - `[x]` Refactor de Componentes Compartidos: Unificar las vistas y lógica redundante entre `features/psychologist` y `features/nutritionist`.
 - `[x]` Lógica de Factor de Diferenciación (Notas Médicas): Mantener e inyectar dinámicamente `ClinicalNoteComponent` (Quill SOAP) para Psicólogos y `PerfilPaciente` (Gestión Nutricional + PDF) para Nutriólogos.
 - `[x]` Ruteo y Guards: Adaptar las rutas para consumir la base común de Personal de la Salud manteniendo las URLs limpias (`/psychologist/...` y `/nutritionist/...`).
+
+**5.8. Sistema Híbrido de Difusión Simultánea (Web Push + WhatsApp API)**
+- `[x]` Arquitectura y Spec: Diseñar el modelo de Emisión Simultánea (*Dual Broadcast*) en `spect.md` local y global para mitigar restricciones de planes móviles prepago con redes sociales ilimitadas.
+- `[ ]` Base de Datos: Crear tabla `web_push_subscriptions` y añadir `mobile_phone`, `whatsapp_opt_in` y `dual_notification_status` a `users` y `appointments`.
+- `[ ]` Backend Webhook: Programar Orquestador Híbrido Simultáneo en Supabase Edge Functions (`Promise.allSettled` para Web Push y WhatsApp API).
+- `[ ]` Interfaz del Especialista: Refactorizar modal de cancelación de emergencia en `agenda.component.ts` de especialistas para incorporar motivo explícito y selección de emisión dual.
 *(Skill 4 continúa pausada en el backlog)*
 
 ---

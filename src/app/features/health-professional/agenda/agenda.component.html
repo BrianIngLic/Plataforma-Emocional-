@@ -70,6 +70,11 @@
               <div class="patient-name">{{ appt.student.profiles.first_name }} {{ appt.student.profiles.last_name }}</div>
               <div class="appt-type">{{ appt.priority_level }}</div>
             </div>
+            <div class="appt-actions" style="display: flex; gap: 4px;">
+              <button class="btn-icon emergency-action-btn" (click)="openEmergencyChangeModal(appt)" title="Gestión de Emergencia / Dual Broadcast">
+                <mat-icon style="color: #ef4444;">warning</mat-icon>
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -111,9 +116,14 @@
                     <mat-icon *ngIf="item.type === 'appointment'">person</mat-icon>
                     <strong>{{ item.title }}</strong>
                   </div>
-                  <button *ngIf="item.type === 'appointment'" class="btn-icon view-profile-btn" [routerLink]="[profileRoutePrefix, item.data.student_id]" title="Ver Perfil del Paciente">
-                    <mat-icon>visibility</mat-icon>
-                  </button>
+                  <div class="header-actions" style="display: flex; gap: 4px;">
+                    <button *ngIf="item.type === 'appointment'" class="btn-icon emergency-action-btn" (click)="openEmergencyChangeModal(item.data)" title="Gestión de Emergencia / Dual Broadcast">
+                      <mat-icon style="color: #ef4444;">warning</mat-icon>
+                    </button>
+                    <button *ngIf="item.type === 'appointment'" class="btn-icon view-profile-btn" [routerLink]="[profileRoutePrefix, item.data.student_id]" title="Ver Perfil del Paciente">
+                      <mat-icon>visibility</mat-icon>
+                    </button>
+                  </div>
                 </div>
                 <p>{{ item.desc }}</p>
                 <span class="extra" *ngIf="item.extra">{{ item.extra }}</span>

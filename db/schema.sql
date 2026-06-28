@@ -27,6 +27,8 @@ CREATE TABLE public.users (
     id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
     matricula VARCHAR(50) UNIQUE NOT NULL,
     role_id INTEGER REFERENCES public.roles(id) ON DELETE SET NULL,
+    mobile_phone VARCHAR(20),
+    whatsapp_opt_in BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -130,6 +132,10 @@ CREATE TABLE public.appointments (
     status VARCHAR(20) DEFAULT 'scheduled',
     cancellation_reason TEXT,
     notes TEXT,
+    dual_notification_status VARCHAR(50) DEFAULT 'pending',
+    emergency_change_type VARCHAR(50),
+    emergency_change_details TEXT,
+    cancellation_notified_at TIMESTAMP WITH TIME ZONE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -193,6 +199,33 @@ CREATE TABLE public.diary_entries (
     moods TEXT[],
     high_risk BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- =========================================================================================
+-- COMUNICACIÓN DUAL Y ENRUTAMIENTO BIDIRECCIONAL (WEB PUSH & WHATSAPP)
+-- =========================================================================================
+
+CREATE TABLE public.web_push_subscriptions (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+    endpoint TEXT NOT NULL UNIQUE,
+    p256dh TEXT NOT NULL,
+    auth TEXT NOT NULL,
+    user_agent TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE public.whatsapp_routing_sessions (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    appointment_id UUID REFERENCES public.appointments(id) ON DELETE CASCADE,
+    student_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+    professional_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+    session_status VARCHAR(50) DEFAULT 'active', -- 'active', 'closed', 'expired'
+    whatsapp_thread_id TEXT,
+    last_message_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
 -- =========================================================================================
@@ -276,6 +309,8 @@ ALTER TABLE public.diary_entries ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.health_professional_settings ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.health_professional_exceptions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.audit_logs ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.web_push_subscriptions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.whatsapp_routing_sessions ENABLE ROW LEVEL SECURITY;
 
 -- Política de Usuarios: Un usuario solo puede ver y editar su propia data pública
 CREATE POLICY user_own_data ON public.users FOR ALL USING (id = auth.uid());
@@ -337,6 +372,15 @@ CREATE POLICY appointments_own_data ON public.appointments
 CREATE POLICY "Personal de la salud pueden editar citas" ON public.appointments
     FOR UPDATE TO public USING (auth.role() = 'authenticated'::text);
 
+-- Web push subscription policies
+CREATE POLICY web_push_subs_own ON public.web_push_subscriptions
+    FOR ALL USING (user_id = auth.uid()) WITH CHECK (user_id = auth.uid());
+
+-- WhatsApp routing session policies
+CREATE POLICY whatsapp_sessions_own ON public.whatsapp_routing_sessions
+    FOR ALL USING (student_id = auth.uid() OR professional_id = auth.uid())
+    WITH CHECK (student_id = auth.uid() OR professional_id = auth.uid());
+
 
 -- =========================================================================================
 -- ÍNDICES
@@ -346,3 +390,7 @@ CREATE INDEX idx_messages_chat ON public.messages(chat_id);
 CREATE INDEX idx_appointments_professional ON public.appointments(professional_id);
 CREATE INDEX idx_diary_student ON public.diary_entries(student_id);
 CREATE INDEX idx_nutrition_logs ON public.nutrition_logs(student_id, log_date);
+CREATE INDEX idx_web_push_user ON public.web_push_subscriptions(user_id);
+CREATE INDEX idx_whatsapp_sessions_student ON public.whatsapp_routing_sessions(student_id);
+CREATE INDEX idx_whatsapp_sessions_professional ON public.whatsapp_routing_sessions(professional_id);
+CREATE INDEX idx_whatsapp_sessions_appointment ON public.whatsapp_routing_sessions(appointment_id);

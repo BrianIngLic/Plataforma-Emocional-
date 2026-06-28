@@ -3,9 +3,12 @@ import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { AgendaService } from '../../../core/services/agenda.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { SupabaseService } from '../../../core/services/supabase.service';
+import { EmergencyChangeModalComponent } from './emergency-change-modal/emergency-change-modal.component';
+import { EmergencyNotificationService } from '../../../core/services/emergency-notification.service';
 
 interface CalendarDay {
   date: Date;
@@ -17,7 +20,7 @@ interface CalendarDay {
 @Component({
   selector: 'app-health-professional-agenda',
   standalone: true,
-  imports: [CommonModule, MatIconModule, FormsModule, RouterModule],
+  imports: [CommonModule, MatIconModule, FormsModule, RouterModule, MatDialogModule],
   templateUrl: './agenda.component.html',
   styleUrls: ['./agenda.component.scss']
 })
@@ -25,6 +28,8 @@ export class HealthProfessionalAgendaComponent implements OnInit {
   authService = inject(AuthService);
   agendaService = inject(AgendaService);
   supabase = inject(SupabaseService).supabase;
+  dialog = inject(MatDialog);
+  emergencyNotificationService = inject(EmergencyNotificationService);
 
   currentDate = new Date();
   calendarDays: CalendarDay[] = [];
@@ -261,6 +266,27 @@ export class HealthProfessionalAgendaComponent implements OnInit {
       if (a.time < b.time) return -1;
       if (a.time > b.time) return 1;
       return 0;
+    });
+  }
+
+  openEmergencyChangeModal(appointment: any) {
+    const dialogRef = this.dialog.open(EmergencyChangeModalComponent, {
+      width: '640px',
+      panelClass: 'emergency-dialog-container',
+      data: { appointment }
+    });
+
+    dialogRef.afterClosed().subscribe(async (result) => {
+      if (result) {
+        this.isLoading = true;
+        const success = await this.emergencyNotificationService.sendEmergencyNotification(appointment, result);
+        if (success && this.selectedDate) {
+          await this.loadDayDetails(this.selectedDate);
+        } else if (success && this.searchResults) {
+          await this.performSearch();
+        }
+        this.isLoading = false;
+      }
     });
   }
 }

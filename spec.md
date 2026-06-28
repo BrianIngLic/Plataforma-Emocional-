@@ -43,6 +43,9 @@ El sistema está compuesto por un Frontend Angular, un Backend PostgREST (Postgr
     - Configuración presencial con selector de Facultad base predeterminada, Edificio y Número de Oficina/Aula.
     - **Vinculación con Recorridos Virtuales BUAP:** Al confirmar o consultar una cita presencial, el estudiante visualiza un botón inmersivo para "📍 Abrir Recorrido Virtual" de su facultad, reduciendo la ansiedad espacial y facilitando la llegada al campus.
     - **Reserva Unificada (Psicólogo y Nutriólogo):** El estudiante puede consultar y reservar en un mismo calendario unificado utilizando un Combo Box selector para elegir qué atención necesita (Psicología o Nutrición). En caso de no tener un especialista asignado en la rama seleccionada, el sistema lanza una alerta modal emergente y despliega el directorio de su facultad.
+    - **Notificaciones Híbridas de Emergencia (Web Push + WhatsApp API):**
+      - Modal de cancelación de emergencia con despliegue de motivo de cancelación explícito.
+      - **Difusión Simultánea Dual (*Dual Broadcast*):** El sistema dispara concurrentemente notificaciones vía Web Push (PWA) y WhatsApp Business Cloud API. Esto sortea la restricción estructural de planes de telefonía prepago en México que carecen de saldo para navegación web general pero conservan **Redes Sociales / WhatsApp Ilimitado**, asegurando una tasa de entrega del 100%.
 - **Factor de Diferenciación (Nota Médica / Expediente):**
   - **Psicólogo:** Emite **Nota de Evolución Clínica (SOAP)** utilizando un editor enriquecido (Quill) para registrar aspectos Subjetivos, Objetivos, Análisis y Plan de psicoterapia.
   - **Nutriólogo:** Emite **Expediente Nutricional y Frecuencia Alimentaria**, gestionando métricas de sueño, agua, recordatorio de 24h y generando un reporte clínico formal en PDF.

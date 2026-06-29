@@ -1,24 +1,32 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
+import { FormsModule } from '@angular/forms';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartConfiguration, ChartOptions } from 'chart.js';
 import { AdminStatsService } from '../services/admin-stats.service';
+import { AdminSkill8Service, HealthProfessionalItem } from '../services/admin-skill8.service';
 
 @Component({
   selector: 'app-patients',
   standalone: true,
-  imports: [CommonModule, MatIconModule, BaseChartDirective],
+  imports: [CommonModule, MatIconModule, BaseChartDirective, FormsModule],
   templateUrl: './patients.component.html',
   styleUrls: ['./patients.component.scss']
 })
 export class PatientsComponent implements OnInit {
 
   private adminStats = inject(AdminStatsService);
+  private adminSkill8 = inject(AdminSkill8Service);
 
   byFaculty: any[] = [];
   diagnosisDistribution: any[] = [];
   growthTrend: any[] = [];
+
+  orphanedStudents: any[] = [];
+  healthProfessionals: HealthProfessionalItem[] = [];
+  selectedProfessionalId: { [studentId: string]: string } = {};
+  assignMessage: string = '';
 
   // Calculations for KPIs
   totalActive = 0;
@@ -111,6 +119,49 @@ export class PatientsComponent implements OnInit {
     this.netGrowth = this.growthTrend.reduce((s, m) => s + m.net, 0);
 
     this.updateCharts();
+    this.healthProfessionals = await this.adminSkill8.getHealthProfessionals();
+    await this.loadOrphanedStudents();
+  }
+
+  async loadOrphanedStudents() {
+    this.orphanedStudents = await this.adminSkill8.getOrphanedStudents();
+    this.orphanedStudents.forEach(st => {
+      // Auto-preseleccionar el primer profesional disponible de la misma facultad si existe
+      const match = this.healthProfessionals.find(p => p.faculty === st.faculty && ((!st.hasPsychologist && p.role_id === 3) || (!st.hasNutritionist && p.role_id === 4)));
+      if (match) {
+        this.selectedProfessionalId[st.id] = match.id;
+      }
+    });
+  }
+
+  async assignProfessional(studentId: string, primaryPsychologistId: string | null, primaryNutritionistId: string | null) {
+    const profId = this.selectedProfessionalId[studentId];
+    if (!profId) {
+      alert('Por favor selecciona un profesional de la salud.');
+      return;
+    }
+
+    const selectedProf = this.healthProfessionals.find(p => p.id === profId);
+    if (!selectedProf) return;
+
+    try {
+      const payload = {
+        studentId,
+        primaryPsychologistId: selectedProf.role_id === 3 ? profId : primaryPsychologistId,
+        primaryNutritionistId: selectedProf.role_id === 4 ? profId : primaryNutritionistId
+      };
+      await this.adminSkill8.assignPatientToProfessionals(payload);
+      this.assignMessage = `¡Asignación exitosa con ${selectedProf.role_name} (${selectedProf.first_name} ${selectedProf.last_name})!`;
+      await this.loadOrphanedStudents();
+      setTimeout(() => this.assignMessage = '', 5000);
+    } catch (err: any) {
+      alert('Error al asignar: ' + (err.message || err));
+    }
+  }
+
+  getAvailableProfessionals(st: any) {
+    // Retorna profesionales de la misma facultad para asignación rápida
+    return this.healthProfessionals.filter(p => p.faculty === st.faculty && ((!st.hasPsychologist && p.role_id === 3) || (!st.hasNutritionist && p.role_id === 4)));
   }
 
   updateCharts() {

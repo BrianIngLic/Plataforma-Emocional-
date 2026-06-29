@@ -316,6 +316,25 @@ ALTER TABLE public.whatsapp_routing_sessions ENABLE ROW LEVEL SECURITY;
 CREATE POLICY user_own_data ON public.users FOR ALL USING (id = auth.uid());
 CREATE POLICY profile_own_data ON public.profiles FOR ALL USING (user_id = auth.uid());
 
+-- Políticas para Administrador (Jefatura / Skill 8 - HIPAA Minimum Necessary & NOM-024):
+-- 1. El Admin puede ver el directorio de pacientes (estudiantes, role_id = 2) y ver/gestionar personal médico (role_id IN (3, 4))
+CREATE POLICY admin_manage_users ON public.users FOR ALL USING (
+    public.get_auth_role() = 1
+) WITH CHECK (
+    public.get_auth_role() = 1
+);
+
+CREATE POLICY admin_manage_profiles ON public.profiles FOR ALL USING (
+    public.get_auth_role() = 1
+) WITH CHECK (
+    public.get_auth_role() = 1
+);
+
+-- Nota Normativa HIPAA Minimum Necessary & NOM-024:
+-- Para garantizar el estricto confinamiento de RLS, la Jefatura/Admin (role_id = 1) NO tiene ninguna política
+-- asignada en las tablas student_clinical_records, chats, messages, diary_entries, ni nutrition_logs.
+-- Por diseño arquitectónico de PostgreSQL RLS, cualquier intento de acceso a notas SOAP o PHI será rechazado.
+
 -- Política de Auditoría: Solo inserción pública autenticada, solo lectura para Admin (Jefatura)
 CREATE POLICY audit_insert ON public.audit_logs FOR INSERT TO authenticated WITH CHECK (true);
 CREATE POLICY audit_select ON public.audit_logs FOR SELECT TO authenticated USING (
@@ -369,8 +388,8 @@ CREATE POLICY appointments_own_data ON public.appointments
     FOR ALL USING (student_id = auth.uid() OR professional_id = auth.uid())
     WITH CHECK (student_id = auth.uid() OR professional_id = auth.uid());
 
-CREATE POLICY "Personal de la salud pueden editar citas" ON public.appointments
-    FOR UPDATE TO public USING (auth.role() = 'authenticated'::text);
+CREATE POLICY "Personal de la salud y admin pueden editar citas" ON public.appointments
+    FOR UPDATE TO public USING (public.get_auth_role() IN (1, 3, 4));
 
 -- Web push subscription policies
 CREATE POLICY web_push_subs_own ON public.web_push_subscriptions
@@ -428,4 +447,250 @@ CREATE TRIGGER trigger_emergency_push_notification
   FOR EACH ROW
   WHEN (NEW.emergency_change_type IS NOT NULL AND OLD.emergency_change_type IS DISTINCT FROM NEW.emergency_change_type)
   EXECUTE FUNCTION public.trg_emergency_push_notification();
+
+
+-- =========================================================================================
+-- MÓDULO DE ADMINISTRACIÓN: FUNCIONES SEGURAS Y ALTA CENTRALIZADA (SKILL 8.1)
+-- =========================================================================================
+
+CREATE OR REPLACE FUNCTION public.admin_register_health_professional(
+    p_user_id UUID,
+    p_matricula TEXT,
+    p_role_id INTEGER,
+    p_first_name TEXT,
+    p_last_name TEXT,
+    p_faculty TEXT,
+    p_programa_educativo TEXT,
+    p_celular TEXT,
+    p_capacity INTEGER,
+    p_location TEXT,
+    p_modality TEXT,
+    p_faculty_id BIGINT DEFAULT NULL
+)
+RETURNS JSONB
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+DECLARE
+    v_role_name TEXT;
+    v_result JSONB;
+BEGIN
+    IF public.get_auth_role() != 1 THEN
+        RAISE EXCEPTION 'CRITICAL_SECURITY_ERR: Acceso denegado. Solo la Jefatura (Admin) está autorizada para registrar personal de la salud.';
+    END IF;
+
+    IF p_role_id NOT IN (3, 4) THEN
+        RAISE EXCEPTION 'VALIDATION_ERR: El rol especificado (%) no es válido para personal de la salud. Use 3 (Psicólogo) o 4 (Nutriólogo).', p_role_id;
+    END IF;
+
+    SELECT name INTO v_role_name FROM public.roles WHERE id = p_role_id;
+
+    INSERT INTO public.users (id, matricula, role_id, mobile_phone, whatsapp_opt_in, created_at)
+    VALUES (p_user_id, p_matricula, p_role_id, p_celular, TRUE, NOW())
+    ON CONFLICT (id) DO UPDATE 
+    SET matricula = EXCLUDED.matricula,
+        role_id = EXCLUDED.role_id,
+        mobile_phone = EXCLUDED.mobile_phone;
+
+    INSERT INTO public.profiles (user_id, first_name, last_name, faculty, programa_educativo, celular, created_at)
+    VALUES (p_user_id, p_first_name, p_last_name, p_faculty, p_programa_educativo, p_celular, NOW())
+    ON CONFLICT (user_id) DO UPDATE
+    SET first_name = EXCLUDED.first_name,
+        last_name = EXCLUDED.last_name,
+        faculty = EXCLUDED.faculty,
+        programa_educativo = EXCLUDED.programa_educativo,
+        celular = EXCLUDED.celular;
+
+    INSERT INTO public.health_professional_settings (professional_id, capacity, location, modality, faculty_id, updated_at)
+    VALUES (p_user_id, p_capacity, p_location, p_modality, p_faculty_id, NOW())
+    ON CONFLICT (professional_id) DO UPDATE
+    SET capacity = EXCLUDED.capacity,
+        location = EXCLUDED.location,
+        modality = EXCLUDED.modality,
+        faculty_id = EXCLUDED.faculty_id,
+        updated_at = NOW();
+
+    INSERT INTO public.audit_logs (user_id, event_type, description, ip_address, created_at)
+    VALUES (
+        auth.uid(), 
+        'ADMIN_REGISTER_PROFESSIONAL', 
+        FORMAT('Registro centralizado exitoso de %s: %s %s (Matrícula: %s, ID: %s)', v_role_name, p_first_name, p_last_name, p_matricula, p_user_id),
+        coalesce(current_setting('request.headers', true)::jsonb->>'x-forwarded-for', 'local'),
+        NOW()
+    );
+
+    v_result := jsonb_build_object(
+        'success', true,
+        'user_id', p_user_id,
+        'matricula', p_matricula,
+        'role_id', p_role_id,
+        'role_name', v_role_name,
+        'message', FORMAT('El %s ha sido registrado exitosamente en el sistema.', v_role_name)
+    );
+
+    RETURN v_result;
+END;
+$$;
+
+CREATE OR REPLACE FUNCTION public.get_admin_health_professionals()
+RETURNS TABLE (
+    id UUID,
+    role_id INTEGER,
+    role_name VARCHAR,
+    matricula VARCHAR,
+    first_name TEXT,
+    last_name TEXT,
+    faculty TEXT,
+    email VARCHAR,
+    capacity INTEGER,
+    location TEXT,
+    modality TEXT
+)
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+BEGIN
+    IF public.get_auth_role() != 1 THEN
+        RAISE EXCEPTION 'Acceso denegado. Solo la Jefatura (Admin) puede consultar el directorio completo de profesionales de la salud.';
+    END IF;
+
+    RETURN QUERY
+    SELECT 
+        u.id,
+        u.role_id,
+        r.name::VARCHAR AS role_name,
+        u.matricula,
+        p.first_name,
+        p.last_name,
+        p.faculty,
+        a.email::VARCHAR,
+        s.capacity,
+        s.location,
+        s.modality
+    FROM public.users u
+    JOIN auth.users a ON u.id = a.id
+    JOIN public.roles r ON u.role_id = r.id
+    LEFT JOIN public.profiles p ON u.id = p.user_id
+    LEFT JOIN public.health_professional_settings s ON u.id = s.professional_id
+    WHERE u.role_id IN (3, 4)
+    ORDER BY u.role_id ASC, p.last_name ASC;
+END;
+$$;
+
+
+-- =========================================================================================
+-- LÓGICA DE ASIGNACIÓN DE PACIENTES (SKILL 8.2)
+-- =========================================================================================
+
+CREATE OR REPLACE FUNCTION public.admin_assign_patient_to_professionals(
+    p_student_id UUID,
+    p_primary_psychologist_id UUID DEFAULT NULL,
+    p_primary_nutritionist_id UUID DEFAULT NULL
+)
+RETURNS JSONB
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+DECLARE
+    v_student_exists BOOLEAN;
+    v_psy_valid BOOLEAN := TRUE;
+    v_nut_valid BOOLEAN := TRUE;
+    v_result JSONB;
+BEGIN
+    IF public.get_auth_role() != 1 THEN
+        RAISE EXCEPTION 'CRITICAL_SECURITY_ERR: Acceso denegado. Solo la Jefatura (Admin) puede asignar o reasignar pacientes.';
+    END IF;
+
+    SELECT EXISTS(SELECT 1 FROM public.users WHERE id = p_student_id AND role_id = 2) INTO v_student_exists;
+    IF NOT v_student_exists THEN
+        RAISE EXCEPTION 'VALIDATION_ERR: El estudiante especificado no existe o no tiene el rol de Estudiante (role_id = 2).';
+    END IF;
+
+    IF p_primary_psychologist_id IS NOT NULL THEN
+        SELECT EXISTS(SELECT 1 FROM public.users WHERE id = p_primary_psychologist_id AND role_id = 3) INTO v_psy_valid;
+        IF NOT v_psy_valid THEN
+            RAISE EXCEPTION 'VALIDATION_ERR: El usuario asignado como psicólogo primario no existe o no tiene el rol de Psicólogo (role_id = 3).';
+        END IF;
+    END IF;
+
+    IF p_primary_nutritionist_id IS NOT NULL THEN
+        SELECT EXISTS(SELECT 1 FROM public.users WHERE id = p_primary_nutritionist_id AND role_id = 4) INTO v_nut_valid;
+        IF NOT v_nut_valid THEN
+            RAISE EXCEPTION 'VALIDATION_ERR: El usuario asignado como nutriólogo primario no existe o no tiene el rol de Nutriólogo (role_id = 4).';
+        END IF;
+    END IF;
+
+    INSERT INTO public.student_clinical_records (student_id, primary_psychologist_id, primary_nutritionist_id, updated_at)
+    VALUES (p_student_id, p_primary_psychologist_id, p_primary_nutritionist_id, NOW())
+    ON CONFLICT (student_id) DO UPDATE
+    SET primary_psychologist_id = coalesce(p_primary_psychologist_id, public.student_clinical_records.primary_psychologist_id),
+        primary_nutritionist_id = coalesce(p_primary_nutritionist_id, public.student_clinical_records.primary_nutritionist_id),
+        updated_at = NOW();
+
+    INSERT INTO public.audit_logs (user_id, event_type, description, ip_address, created_at)
+    VALUES (
+        auth.uid(), 
+        'ADMIN_ASSIGN_PATIENT', 
+        FORMAT('Asignación de paciente %s. Psicólogo: %s, Nutriólogo: %s', p_student_id, coalesce(p_primary_psychologist_id::text, 'Sin cambio'), coalesce(p_primary_nutritionist_id::text, 'Sin cambio')),
+        coalesce(current_setting('request.headers', true)::jsonb->>'x-forwarded-for', 'local'),
+        NOW()
+    );
+
+    v_result := jsonb_build_object(
+        'success', true,
+        'student_id', p_student_id,
+        'primary_psychologist_id', p_primary_psychologist_id,
+        'primary_nutritionist_id', p_primary_nutritionist_id,
+        'message', 'El paciente ha sido asignado exitosamente a sus especialistas tratantes.'
+    );
+
+    RETURN v_result;
+END;
+$$;
+
+
+-- =========================================================================================
+-- RUTEO DEL ALMACENAMIENTO: MARCA DE AGUA INSTITUCIONAL (SKILL 8.3)
+-- =========================================================================================
+
+INSERT INTO storage.buckets (id, name, public) 
+VALUES ('institutional_assets', 'institutional_assets', true) 
+ON CONFLICT (id) DO UPDATE SET public = true;
+
+CREATE POLICY institutional_assets_public_read ON storage.objects 
+FOR SELECT USING (bucket_id = 'institutional_assets');
+
+CREATE POLICY institutional_assets_admin_insert ON storage.objects 
+FOR INSERT WITH CHECK (
+    bucket_id = 'institutional_assets' AND public.get_auth_role() = 1
+);
+
+CREATE POLICY institutional_assets_admin_update ON storage.objects 
+FOR UPDATE USING (
+    bucket_id = 'institutional_assets' AND public.get_auth_role() = 1
+);
+
+CREATE POLICY institutional_assets_admin_delete ON storage.objects 
+FOR DELETE USING (
+    bucket_id = 'institutional_assets' AND public.get_auth_role() = 1
+);
+
+-- =========================================================================================
+-- CONFIGURACIÓN INSTITUCIONAL (SKILL 8.4)
+-- =========================================================================================
+
+CREATE TABLE IF NOT EXISTS public.institutional_settings (
+    id SERIAL PRIMARY KEY,
+    institution_name TEXT NOT NULL DEFAULT 'BENEMÉRITA UNIVERSIDAD AUTÓNOMA DE PUEBLA',
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+INSERT INTO public.institutional_settings (id, institution_name) 
+VALUES (1, 'BENEMÉRITA UNIVERSIDAD AUTÓNOMA DE PUEBLA') 
+ON CONFLICT (id) DO UPDATE SET institution_name = EXCLUDED.institution_name;
+
+ALTER TABLE public.institutional_settings ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY inst_settings_read ON public.institutional_settings FOR SELECT USING (true);
+CREATE POLICY inst_settings_update ON public.institutional_settings FOR UPDATE USING (public.get_auth_role() = 1);
 

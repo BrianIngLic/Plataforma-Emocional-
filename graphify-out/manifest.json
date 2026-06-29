@@ -20,8 +20,8 @@
     "semantic_hash": "9b7e1de8e28daa4e2a307e1e0f1cf529"
   },
   "db/schema.sql": {
-    "mtime": 1782631680.2792702,
-    "ast_hash": "adf3f3e0241fbad95e4e3ad437c514f9",
+    "mtime": 1782760547.837289,
+    "ast_hash": "cc7823787bcd66c9bf23895730d0dc08",
     "semantic_hash": ""
   },
   "package.json": {
@@ -150,8 +150,8 @@
     "semantic_hash": "f61c26d8ec5206aae2ece4e6146e2b98"
   },
   "src/app/features/admin/psychologists/psychologists.component.ts": {
-    "mtime": 1782607851.1515145,
-    "ast_hash": "35e46f4f389e3cf6a6ca6ea155025a9c",
+    "mtime": 1782760403.1175804,
+    "ast_hash": "554dbce029f48932b783d4b07d790f0e",
     "semantic_hash": ""
   },
   "src/app/features/admin/reports/reports.component.ts": {
@@ -165,8 +165,8 @@
     "semantic_hash": ""
   },
   "src/app/features/admin/services/admin-stats.service.ts": {
-    "mtime": 1782607691.8974788,
-    "ast_hash": "77ff9fa3e0bf70ec2d1178fa83fffe01",
+    "mtime": 1782760659.5902178,
+    "ast_hash": "608a6821470fc770b43550ea344cad76",
     "semantic_hash": ""
   },
   "src/app/features/alimentary/alimentary-dashboard/alimentary-dashboard.component.ts": {
@@ -647,6 +647,16 @@
   "SPEC_UX_UI_SDD.md": {
     "mtime": 1782758657.0754526,
     "ast_hash": "584611eb2841bab96cc774bac937e2f7",
+    "semantic_hash": ""
+  },
+  "db/migration_admin_skill8.sql": {
+    "mtime": 1782760412.4503505,
+    "ast_hash": "23d6ee83ac19169655800ed03dc6ec2b",
+    "semantic_hash": ""
+  },
+  "src/app/features/admin/services/admin-skill8.service.ts": {
+    "mtime": 1782760491.6113937,
+    "ast_hash": "2edad8d5fccc0a78e1ae05ec2efa8998",
     "semantic_hash": ""
   }
 }

@@ -31,6 +31,10 @@ export const ADMIN_ROUTES: Routes = [
         loadComponent: () => import('./agenda/agenda.component').then(m => m.AgendaComponent)
       },
       {
+        path: 'settings',
+        loadComponent: () => import('./institutional-settings/institutional-settings.component').then(m => m.InstitutionalSettingsComponent)
+      },
+      {
         path: '',
         redirectTo: 'overview',
         pathMatch: 'full'

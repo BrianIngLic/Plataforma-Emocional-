@@ -39,6 +39,60 @@
     </div>
   </div>
 
+  <!-- Orphaned Students Quick Assign Panel -->
+  <div class="panel orphaned-panel" *ngIf="orphanedStudents.length > 0" style="margin-bottom: 2rem;">
+    <div class="panel-header">
+      <div class="panel-title-wrapper">
+        <mat-icon class="title-icon amber">person_add_disabled</mat-icon>
+        <span class="panel-title">Alumnos Sin Especialista Asignado (Orphaned Students)</span>
+      </div>
+      <span class="badge amber">{{ orphanedStudents.length }} pendientes de asignación</span>
+    </div>
+
+    <div *ngIf="assignMessage" class="assign-message success" style="margin: 1rem; padding: 1rem; background: rgba(16, 185, 129, 0.1); border: 1px solid #10b981; color: #10b981; border-radius: 8px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
+      <mat-icon>check_circle</mat-icon> {{ assignMessage }}
+    </div>
+
+    <div class="table-container" style="overflow-x: auto; padding: 1rem;">
+      <table style="width: 100%; border-collapse: collapse; text-align: left;">
+        <thead>
+          <tr style="border-bottom: 1px solid var(--border-color, rgba(255,255,255,0.1)); color: var(--text-secondary, #94a3b8); font-size: 0.85rem;">
+            <th style="padding: 12px 16px;">Matrícula</th>
+            <th style="padding: 12px 16px;">Nombre</th>
+            <th style="padding: 12px 16px;">Facultad</th>
+            <th style="padding: 12px 16px;">Estado Especialistas</th>
+            <th style="padding: 12px 16px;">Especialista Disponible (Misma Facultad)</th>
+            <th style="padding: 12px 16px; text-align: right;">Acción</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let st of orphanedStudents" style="border-bottom: 1px solid var(--border-color, rgba(255,255,255,0.05)); font-size: 0.9rem;">
+            <td style="padding: 12px 16px; font-weight: 600; font-family: monospace; color: #3b82f6;">{{ st.matricula }}</td>
+            <td style="padding: 12px 16px; color: var(--text-primary, #f8fafc);">{{ st.name }}</td>
+            <td style="padding: 12px 16px; color: var(--text-secondary, #94a3b8);">{{ st.faculty }}</td>
+            <td style="padding: 12px 16px;">
+              <span *ngIf="!st.hasPsychologist" style="background: rgba(239,68,68,0.15); color: #ef4444; font-size: 0.75rem; padding: 2px 6px; border-radius: 4px; margin-right: 4px;">Sin Psicólogo</span>
+              <span *ngIf="!st.hasNutritionist" style="background: rgba(245,158,11,0.15); color: #f59e0b; font-size: 0.75rem; padding: 2px 6px; border-radius: 4px;">Sin Nutriólogo</span>
+            </td>
+            <td style="padding: 12px 16px;">
+              <select [(ngModel)]="selectedProfessionalId[st.id]" style="width: 100%; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border-color, rgba(255,255,255,0.1)); background: var(--bg-hover, rgba(15,23,42,0.4)); color: var(--text-primary, #f8fafc); outline: none;">
+                <option *ngFor="let p of getAvailableProfessionals(st)" [value]="p.id">
+                  {{ p.role_name }}: {{ p.first_name }} {{ p.last_name }} (Capacidad: {{ p.capacity }})
+                </option>
+                <option *ngIf="getAvailableProfessionals(st).length === 0" value="">Sin especialistas libres en esta facultad</option>
+              </select>
+            </td>
+            <td style="padding: 12px 16px; text-align: right;">
+              <button (click)="assignProfessional(st.id, st.primaryPsychologistId, st.primaryNutritionistId)" [disabled]="getAvailableProfessionals(st).length === 0" [ngStyle]="{'opacity': getAvailableProfessionals(st).length === 0 ? '0.5' : '1', 'cursor': getAvailableProfessionals(st).length === 0 ? 'not-allowed' : 'pointer'}" style="background: #3b82f6; color: white; border: none; padding: 8px 16px; border-radius: 8px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+                <mat-icon style="font-size: 16px; width: 16px; height: 16px;">assignment_ind</mat-icon> Asignar
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
   <!-- Status by Faculty Stacked Bar Chart -->
   <div class="panel">
     <div class="panel-header">

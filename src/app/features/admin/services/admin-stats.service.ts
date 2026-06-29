@@ -181,22 +181,24 @@ export class AdminStatsService {
   async getPsychologistsWithStats(): Promise<any[]> {
     const supabase = this.supabaseService.supabase;
     
-    // 1. Obtener usuarios psicólogos y sus correos de auth.users mediante RPC segura (Zero-Trust)
-    const { data: users, error } = await supabase.rpc('get_admin_psychologists');
+    // 1. Obtener usuarios psicólogos y nutriólogos y sus correos de auth.users mediante RPC segura (Zero-Trust)
+    const { data: users, error } = await supabase.rpc('get_admin_health_professionals');
 
     if (error || !users) return [];
 
-    // 2. Obtener la cantidad de pacientes asignados a cada psicólogo
+    // 2. Obtener la cantidad de pacientes asignados a cada profesional
     const { data: records } = await supabase
       .from('student_clinical_records')
-      .select('primary_psychologist_id')
-      .not('primary_psychologist_id', 'is', null);
+      .select('primary_psychologist_id, primary_nutritionist_id');
 
     const patientsMap: Record<string, number> = {};
     if (records) {
       records.forEach(r => {
         if (r.primary_psychologist_id) {
           patientsMap[r.primary_psychologist_id] = (patientsMap[r.primary_psychologist_id] || 0) + 1;
+        }
+        if (r.primary_nutritionist_id) {
+          patientsMap[r.primary_nutritionist_id] = (patientsMap[r.primary_nutritionist_id] || 0) + 1;
         }
       });
     }
@@ -243,6 +245,8 @@ export class AdminStatsService {
 
       return {
         id: u.id,
+        role_id: u.role_id,
+        role_name: u.role_id === 4 ? 'Nutriólogo' : 'Psicólogo',
         name: `Dr. ${u.first_name || ''} ${u.last_name || ''}`.trim(),
         email: u.email || 'Sin correo registrado',
         faculty: u.faculty || 'Sin asignar',
@@ -253,7 +257,7 @@ export class AdminStatsService {
         sessionsScheduled: sessionsScheduled,
         evaluation: 4.0 + Number(Math.random().toFixed(1)), // MOCK: Pendiente de implementar calificaciones
         alert: alert,
-        specialty: 'General',
+        specialty: u.role_id === 4 ? 'Nutrición Clínica' : 'Psicología General',
         avgSessionDuration: 50,
         dropouts: 0
       };

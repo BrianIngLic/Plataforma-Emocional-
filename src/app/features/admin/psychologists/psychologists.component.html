@@ -63,7 +63,7 @@
     
     <button class="add-psych-btn" (click)="openAddModal()">
       <mat-icon>add</mat-icon>
-      <span>Alta de Psicólogo</span>
+      <span>Alta de Personal</span>
     </button>
   </div>
 
@@ -74,16 +74,16 @@
         <mat-icon class="title-icon purple">assignment_ind</mat-icon>
         <span class="panel-title">Personal Clínico Registrado</span>
       </div>
-      <span class="panel-sub">{{ filteredPsychologists.length }} psicólogos en lista</span>
+      <span class="panel-sub">{{ filteredPsychologists.length }} profesionales en lista</span>
     </div>
 
     <!-- Lista Table -->
     <div class="psych-list">
       <div class="psych-row" *ngFor="let p of filteredPsychologists">
         <div class="psych-identity">
-          <div class="avatar">{{ p.name.split(' ')[1]?.substring(0, 2) || 'Dr' }}</div>
+          <div class="avatar" [style.background]="p.role_id === 4 ? 'linear-gradient(135deg, #10b981, #059669)' : 'linear-gradient(135deg, #6366f1, #a855f7)'">{{ p.name.split(' ')[1]?.substring(0, 2) || 'Dr' }}</div>
           <div class="info">
-            <h4>{{ p.name }}</h4>
+            <h4>{{ p.name }} <span class="role-badge" [style.background]="p.role_id === 4 ? '#d1fae5' : '#e0e7ff'" [style.color]="p.role_id === 4 ? '#065f46' : '#4338ca'" style="font-size: 0.75rem; padding: 2px 6px; border-radius: 4px; margin-left: 6px; font-weight: 600;">{{ p.role_name || 'Psicólogo' }}</span></h4>
             <span class="sub"><mat-icon>school</mat-icon> {{ p.faculty }}</span>
             <span class="badge" style="margin-top: 4px; background:#e0e7ff; color:#4338ca;"><mat-icon style="font-size:12px;width:12px;height:12px;vertical-align:middle;">email</mat-icon> {{ p.email }}</span>
           </div>
@@ -325,6 +325,15 @@
 
         <!-- Formulario -->
         <form [formGroup]="addForm" (ngSubmit)="onSubmit()" class="add-form" *ngIf="!createdCredentials">
+          <div class="role-toggle-group" style="display: flex; gap: 1rem; margin-bottom: 1.5rem; background: var(--bg-hover, #f1f5f9); padding: 0.5rem; border-radius: 12px;">
+            <button type="button" (click)="addForm.patchValue({role: 3}); selectedRoleToggle = 3" [ngStyle]="{'background': selectedRoleToggle === 3 ? '#6366f1' : 'transparent', 'color': selectedRoleToggle === 3 ? 'white' : 'var(--text-secondary, #64748b)'}" style="flex: 1; padding: 0.75rem; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s;">
+              <mat-icon>psychology</mat-icon> Psicólogo Clínico
+            </button>
+            <button type="button" (click)="addForm.patchValue({role: 4}); selectedRoleToggle = 4" [ngStyle]="{'background': selectedRoleToggle === 4 ? '#10b981' : 'transparent', 'color': selectedRoleToggle === 4 ? 'white' : 'var(--text-secondary, #64748b)'}" style="flex: 1; padding: 0.75rem; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s;">
+              <mat-icon>eco</mat-icon> Nutriólogo
+            </button>
+          </div>
+
           <div class="form-row">
             <div class="form-group">
               <label for="firstName">Nombre *</label>

@@ -1274,7 +1274,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "guards_role_guard",
-      "community": 14,
+      "community": 0,
       "norm_label": "role.guard.ts"
     },
     {
@@ -1344,7 +1344,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "services_agenda_service_workingdaysmap",
-      "community": 0,
+      "community": 1,
       "norm_label": "workingdaysmap"
     },
     {
@@ -1484,7 +1484,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "services_audit_service_auditservice",
-      "community": 14,
+      "community": 0,
       "norm_label": "auditservice"
     },
     {
@@ -1494,7 +1494,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "services_audit_service_auditservice_logevent",
-      "community": 14,
+      "community": 0,
       "norm_label": ".logevent()"
     },
     {
@@ -1504,7 +1504,7 @@
       "source_location": "L40",
       "_origin": "ast",
       "id": "services_audit_service_auditservice_logunauthorizedaccess",
-      "community": 14,
+      "community": 0,
       "norm_label": ".logunauthorizedaccess()"
     },
     {
@@ -1924,7 +1924,7 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "services_diary_service_diaryservice",
-      "community": 70,
+      "community": 1,
       "norm_label": "diaryservice"
     },
     {
@@ -1934,7 +1934,7 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "services_diary_service_diaryservice_constructor",
-      "community": 70,
+      "community": 1,
       "norm_label": ".constructor()"
     },
     {
@@ -1944,7 +1944,7 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "services_diary_service_diaryservice_loadentries",
-      "community": 70,
+      "community": 1,
       "norm_label": ".loadentries()"
     },
     {
@@ -1954,7 +1954,7 @@
       "source_location": "L53",
       "_origin": "ast",
       "id": "services_diary_service_diaryservice_saveentry",
-      "community": 70,
+      "community": 1,
       "norm_label": ".saveentry()"
     },
     {
@@ -2094,7 +2094,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_faculty_service",
-      "community": 0,
+      "community": 1,
       "norm_label": "faculty.service.ts"
     },
     {
@@ -2104,7 +2104,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "services_faculty_service_faculty",
-      "community": 0,
+      "community": 1,
       "norm_label": "faculty"
     },
     {
@@ -2114,7 +2114,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "services_faculty_service_campus",
-      "community": 0,
+      "community": 1,
       "norm_label": "campus"
     },
     {
@@ -2124,7 +2124,7 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "services_faculty_service_facultyservice",
-      "community": 0,
+      "community": 1,
       "norm_label": "facultyservice"
     },
     {
@@ -2134,7 +2134,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "services_faculty_service_facultyservice_getfaculties",
-      "community": 0,
+      "community": 1,
       "norm_label": ".getfaculties()"
     },
     {
@@ -2144,7 +2144,7 @@
       "source_location": "L40",
       "_origin": "ast",
       "id": "services_faculty_service_facultyservice_getcampuses",
-      "community": 0,
+      "community": 1,
       "norm_label": ".getcampuses()"
     },
     {
@@ -2154,7 +2154,7 @@
       "source_location": "L50",
       "_origin": "ast",
       "id": "services_faculty_service_facultyservice_createfaculty",
-      "community": 0,
+      "community": 1,
       "norm_label": ".createfaculty()"
     },
     {
@@ -2174,7 +2174,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "services_profile_service_profileservice",
-      "community": 72,
+      "community": 1,
       "norm_label": "profileservice"
     },
     {
@@ -2184,7 +2184,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "services_profile_service_profileservice_uploadavatar",
-      "community": 72,
+      "community": 1,
       "norm_label": ".uploadavatar()"
     },
     {
@@ -2194,7 +2194,7 @@
       "source_location": "L39",
       "_origin": "ast",
       "id": "services_profile_service_profileservice_updateavatarurl",
-      "community": 72,
+      "community": 1,
       "norm_label": ".updateavatarurl()"
     },
     {
@@ -2204,7 +2204,7 @@
       "source_location": "L55",
       "_origin": "ast",
       "id": "services_profile_service_profileservice_generatedicebearavatar",
-      "community": 72,
+      "community": 1,
       "norm_label": ".generatedicebearavatar()"
     },
     {
@@ -2324,7 +2324,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_features_admin_agenda_agenda_component_ts_agenda_agenda_component",
-      "community": 0,
+      "community": 1,
       "norm_label": "agenda.component.ts"
     },
     {
@@ -2334,7 +2334,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "agenda_agenda_component_appointment",
-      "community": 0,
+      "community": 1,
       "norm_label": "appointment"
     },
     {
@@ -2504,7 +2504,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "faculties_faculties_component",
-      "community": 0,
+      "community": 1,
       "norm_label": "faculties.component.ts"
     },
     {
@@ -2514,7 +2514,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "faculties_faculties_component_adminfaculty",
-      "community": 0,
+      "community": 1,
       "norm_label": "adminfaculty"
     },
     {
@@ -2534,7 +2534,7 @@
       "source_location": "L93",
       "_origin": "ast",
       "id": "faculties_faculties_component_facultiescomponent_constructor",
-      "community": 0,
+      "community": 6,
       "norm_label": ".constructor()"
     },
     {
@@ -3111,7 +3111,7 @@
       "label": ".generateRandomPassword()",
       "file_type": "code",
       "source_file": "src/app/features/admin/psychologists/psychologists.component.ts",
-      "source_location": "L417",
+      "source_location": "L421",
       "_origin": "ast",
       "id": "psychologists_psychologists_component_psychologistscomponent_generaterandompassword",
       "community": 5,
@@ -3121,7 +3121,7 @@
       "label": ".generateCredentialsPDF()",
       "file_type": "code",
       "source_file": "src/app/features/admin/psychologists/psychologists.component.ts",
-      "source_location": "L426",
+      "source_location": "L430",
       "_origin": "ast",
       "id": "psychologists_psychologists_component_psychologistscomponent_generatecredentialspdf",
       "community": 5,
@@ -3131,7 +3131,7 @@
       "label": ".sendEmail()",
       "file_type": "code",
       "source_file": "src/app/features/admin/psychologists/psychologists.component.ts",
-      "source_location": "L474",
+      "source_location": "L478",
       "_origin": "ast",
       "id": "psychologists_psychologists_component_psychologistscomponent_sendemail",
       "community": 5,
@@ -3204,7 +3204,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "services_admin_exceptions_service_adminexceptionsservice",
-      "community": 69,
+      "community": 1,
       "norm_label": "adminexceptionsservice"
     },
     {
@@ -3214,7 +3214,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "services_admin_exceptions_service_adminexceptionsservice_getmexicoholidays",
-      "community": 69,
+      "community": 1,
       "norm_label": ".getmexicoholidays()"
     },
     {
@@ -3224,7 +3224,7 @@
       "source_location": "L36",
       "_origin": "ast",
       "id": "services_admin_exceptions_service_adminexceptionsservice_importholidaystosupabase",
-      "community": 69,
+      "community": 1,
       "norm_label": ".importholidaystosupabase()"
     },
     {
@@ -3234,7 +3234,7 @@
       "source_location": "L59",
       "_origin": "ast",
       "id": "services_admin_exceptions_service_adminexceptionsservice_addexception",
-      "community": 69,
+      "community": 1,
       "norm_label": ".addexception()"
     },
     {
@@ -3614,7 +3614,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "register_register_component",
-      "community": 0,
+      "community": 1,
       "norm_label": "register.component.ts"
     },
     {
@@ -3624,7 +3624,7 @@
       "source_location": "L47",
       "_origin": "ast",
       "id": "register_register_component_registercomponent",
-      "community": 67,
+      "community": 1,
       "norm_label": "registercomponent"
     },
     {
@@ -3634,7 +3634,7 @@
       "source_location": "L91",
       "_origin": "ast",
       "id": "register_register_component_registercomponent_openprivacymodal",
-      "community": 67,
+      "community": 1,
       "norm_label": ".openprivacymodal()"
     },
     {
@@ -3644,7 +3644,7 @@
       "source_location": "L97",
       "_origin": "ast",
       "id": "register_register_component_registercomponent_closeprivacymodal",
-      "community": 67,
+      "community": 1,
       "norm_label": ".closeprivacymodal()"
     },
     {
@@ -3654,7 +3654,7 @@
       "source_location": "L101",
       "_origin": "ast",
       "id": "register_register_component_registercomponent_ngoninit",
-      "community": 67,
+      "community": 1,
       "norm_label": ".ngoninit()"
     },
     {
@@ -3664,7 +3664,7 @@
       "source_location": "L111",
       "_origin": "ast",
       "id": "register_register_component_registercomponent_filterfaculties",
-      "community": 67,
+      "community": 1,
       "norm_label": ".filterfaculties()"
     },
     {
@@ -3674,7 +3674,7 @@
       "source_location": "L116",
       "_origin": "ast",
       "id": "register_register_component_registercomponent_calculateage",
-      "community": 67,
+      "community": 1,
       "norm_label": ".calculateage()"
     },
     {
@@ -3684,7 +3684,7 @@
       "source_location": "L128",
       "_origin": "ast",
       "id": "register_register_component_registercomponent_submitregistration",
-      "community": 67,
+      "community": 1,
       "norm_label": ".submitregistration()"
     },
     {
@@ -4234,7 +4234,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "dashboard_diary_dashboard_component",
-      "community": 0,
+      "community": 1,
       "norm_label": "diary-dashboard.component.ts"
     },
     {
@@ -4794,7 +4794,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_features_health_professional_settings_settings_component_ts_settings_settings_component",
-      "community": 0,
+      "community": 1,
       "norm_label": "settings.component.ts"
     },
     {
@@ -5534,7 +5534,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_features_nutritionist_settings_settings_component_ts_settings_settings_component",
-      "community": 0,
+      "community": 1,
       "norm_label": "settings.component.ts"
     },
     {
@@ -6274,7 +6274,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_features_psychologist_settings_settings_component_ts_settings_settings_component",
-      "community": 0,
+      "community": 1,
       "norm_label": "settings.component.ts"
     },
     {
@@ -6414,7 +6414,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "settings_student_settings_component",
-      "community": 0,
+      "community": 1,
       "norm_label": "student-settings.component.ts"
     },
     {
@@ -6424,7 +6424,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "settings_student_settings_component_studentsettingscomponent",
-      "community": 68,
+      "community": 1,
       "norm_label": "studentsettingscomponent"
     },
     {
@@ -6434,7 +6434,7 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "settings_student_settings_component_studentsettingscomponent_currentuser",
-      "community": 68,
+      "community": 1,
       "norm_label": ".currentuser()"
     },
     {
@@ -6444,7 +6444,7 @@
       "source_location": "L34",
       "_origin": "ast",
       "id": "settings_student_settings_component_studentsettingscomponent_ngoninit",
-      "community": 68,
+      "community": 1,
       "norm_label": ".ngoninit()"
     },
     {
@@ -6454,7 +6454,7 @@
       "source_location": "L42",
       "_origin": "ast",
       "id": "settings_student_settings_component_studentsettingscomponent_confirmsave",
-      "community": 68,
+      "community": 1,
       "norm_label": ".confirmsave()"
     },
     {
@@ -6464,7 +6464,7 @@
       "source_location": "L63",
       "_origin": "ast",
       "id": "settings_student_settings_component_studentsettingscomponent_performsave",
-      "community": 68,
+      "community": 1,
       "norm_label": ".performsave()"
     },
     {
@@ -6474,7 +6474,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "feedback_modal_feedback_modal_component",
-      "community": 0,
+      "community": 1,
       "norm_label": "feedback-modal.component.ts"
     },
     {
@@ -6484,7 +6484,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "feedback_modal_feedback_modal_component_feedbackmodaldata",
-      "community": 0,
+      "community": 1,
       "norm_label": "feedbackmodaldata"
     },
     {
@@ -6494,7 +6494,7 @@
       "source_location": "L277",
       "_origin": "ast",
       "id": "feedback_modal_feedback_modal_component_feedbackmodalcomponent",
-      "community": 0,
+      "community": 1,
       "norm_label": "feedbackmodalcomponent"
     },
     {
@@ -6504,7 +6504,7 @@
       "source_location": "L278",
       "_origin": "ast",
       "id": "feedback_modal_feedback_modal_component_feedbackmodalcomponent_constructor",
-      "community": 0,
+      "community": 1,
       "norm_label": ".constructor()"
     },
     {
@@ -6514,7 +6514,7 @@
       "source_location": "L283",
       "_origin": "ast",
       "id": "feedback_modal_feedback_modal_component_feedbackmodalcomponent_close",
-      "community": 0,
+      "community": 1,
       "norm_label": ".close()"
     },
     {
@@ -6524,7 +6524,7 @@
       "source_location": "L287",
       "_origin": "ast",
       "id": "feedback_modal_feedback_modal_component_feedbackmodalcomponent_cancel",
-      "community": 0,
+      "community": 1,
       "norm_label": ".cancel()"
     },
     {
@@ -6534,7 +6534,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "profile_avatar_profile_avatar_component",
-      "community": 0,
+      "community": 1,
       "norm_label": "profile-avatar.component.ts"
     },
     {
@@ -7211,7 +7211,7 @@
       "label": "2. Especificaci\u00f3n Arquitect\u00f3nica por \u00c9pica",
       "file_type": "document",
       "source_file": "sdd.md",
-      "source_location": "L49",
+      "source_location": "L53",
       "_origin": "ast",
       "id": "sdd_2_especificaci\u00f3n_arquitect\u00f3nica_por_\u00e9pica",
       "community": 63,
@@ -7221,7 +7221,7 @@
       "label": "2.1. Skill 10: Sistema de Logros y Gamificaci\u00f3n (Duolingo Style)",
       "file_type": "document",
       "source_file": "sdd.md",
-      "source_location": "L51",
+      "source_location": "L55",
       "_origin": "ast",
       "id": "sdd_2_1_skill_10_sistema_de_logros_y_gamificaci\u00f3n_duolingo_style",
       "community": 63,
@@ -7231,7 +7231,7 @@
       "label": "2.1.1. Modelo de Datos Relacional (PostgreSQL)",
       "file_type": "document",
       "source_file": "sdd.md",
-      "source_location": "L53",
+      "source_location": "L57",
       "_origin": "ast",
       "id": "sdd_2_1_1_modelo_de_datos_relacional_postgresql",
       "community": 63,
@@ -7241,7 +7241,7 @@
       "label": "2.1.2. Pol\u00edticas de Seguridad (RLS)",
       "file_type": "document",
       "source_file": "sdd.md",
-      "source_location": "L93",
+      "source_location": "L97",
       "_origin": "ast",
       "id": "sdd_2_1_2_pol\u00edticas_de_seguridad_rls",
       "community": 63,
@@ -7251,7 +7251,7 @@
       "label": "2.1.3. Motor de Rachas (*Streak Engine*)",
       "file_type": "document",
       "source_file": "sdd.md",
-      "source_location": "L97",
+      "source_location": "L101",
       "_origin": "ast",
       "id": "sdd_2_1_3_motor_de_rachas_streak_engine",
       "community": 63,
@@ -7261,7 +7261,7 @@
       "label": "2.2. Skill 11: Chat Interno Conectado con Meta Cloud API (WhatsApp)",
       "file_type": "document",
       "source_file": "sdd.md",
-      "source_location": "L104",
+      "source_location": "L108",
       "_origin": "ast",
       "id": "sdd_2_2_skill_11_chat_interno_conectado_con_meta_cloud_api_whatsapp",
       "community": 63,
@@ -7271,7 +7271,7 @@
       "label": "2.2.1. Flujo Bidireccional",
       "file_type": "document",
       "source_file": "sdd.md",
-      "source_location": "L106",
+      "source_location": "L110",
       "_origin": "ast",
       "id": "sdd_2_2_1_flujo_bidireccional",
       "community": 63,
@@ -7281,47 +7281,57 @@
       "label": "2.2.2. Tabla de Seguimiento",
       "file_type": "document",
       "source_file": "sdd.md",
-      "source_location": "L131",
+      "source_location": "L135",
       "_origin": "ast",
       "id": "sdd_2_2_2_tabla_de_seguimiento",
       "community": 63,
       "norm_label": "2.2.2. tabla de seguimiento"
     },
     {
-      "label": "2.3. Skill 12: Dossier Cl\u00ednico Unificado (Exportaci\u00f3n Masiva PDF)",
+      "label": "2.3. Skill 12: Dossier Cl\u00ednico Unificado, Marca de Agua y Meta Seal (Exportaci\u00f3n Masiva PDF)",
       "file_type": "document",
       "source_file": "sdd.md",
-      "source_location": "L146",
+      "source_location": "L150",
       "_origin": "ast",
-      "id": "sdd_2_3_skill_12_dossier_cl\u00ednico_unificado_exportaci\u00f3n_masiva_pdf",
+      "id": "sdd_2_3_skill_12_dossier_cl\u00ednico_unificado_marca_de_agua_y_meta_seal_exportaci\u00f3n_masiva_pdf",
       "community": 63,
-      "norm_label": "2.3. skill 12: dossier clinico unificado (exportacion masiva pdf)"
+      "norm_label": "2.3. skill 12: dossier clinico unificado, marca de agua y meta seal (exportacion masiva pdf)"
     },
     {
-      "label": "2.3.1. Estructura del Orquestador de Datos",
+      "label": "2.3.1. Arquitectura Estricta de C\u00f3digo Abierto (Strict Open Source Requirement)",
       "file_type": "document",
       "source_file": "sdd.md",
-      "source_location": "L148",
+      "source_location": "L152",
       "_origin": "ast",
-      "id": "sdd_2_3_1_estructura_del_orquestador_de_datos",
+      "id": "sdd_2_3_1_arquitectura_estricta_de_c\u00f3digo_abierto_strict_open_source_requirement",
       "community": 63,
-      "norm_label": "2.3.1. estructura del orquestador de datos"
+      "norm_label": "2.3.1. arquitectura estricta de codigo abierto (strict open source requirement)"
     },
     {
-      "label": "2.3.2. Criterios de Dise\u00f1o Editorial y Seguridad Normativa",
+      "label": "2.3.2. Carga de Marca de Agua Institucional por el Administrador",
       "file_type": "document",
       "source_file": "sdd.md",
-      "source_location": "L169",
+      "source_location": "L158",
       "_origin": "ast",
-      "id": "sdd_2_3_2_criterios_de_dise\u00f1o_editorial_y_seguridad_normativa",
+      "id": "sdd_2_3_2_carga_de_marca_de_agua_institucional_por_el_administrador",
       "community": 63,
-      "norm_label": "2.3.2. criterios de diseno editorial y seguridad normativa"
+      "norm_label": "2.3.2. carga de marca de agua institucional por el administrador"
+    },
+    {
+      "label": "2.3.3. Meta Seal (Sello Criptogr\u00e1fico de Metadatos y No Repudio)",
+      "file_type": "document",
+      "source_file": "sdd.md",
+      "source_location": "L165",
+      "_origin": "ast",
+      "id": "sdd_2_3_3_meta_seal_sello_criptogr\u00e1fico_de_metadatos_y_no_repudio",
+      "community": 63,
+      "norm_label": "2.3.3. meta seal (sello criptografico de metadatos y no repudio)"
     },
     {
       "label": "3. Sincronizaci\u00f3n del Ecosistema",
       "file_type": "document",
       "source_file": "sdd.md",
-      "source_location": "L179",
+      "source_location": "L205",
       "_origin": "ast",
       "id": "sdd_3_sincronizaci\u00f3n_del_ecosistema",
       "community": 63,
@@ -7368,14 +7378,14 @@
       "norm_label": "comunicacion front <-> ia"
     },
     {
-      "label": "Skills a Desarrollar",
+      "label": "Skills a Desarrollar (Orden Num\u00e9rico Estricto)",
       "file_type": "document",
       "source_file": "spec.md",
       "source_location": "L14",
       "_origin": "ast",
-      "id": "spec_skills_a_desarrollar",
+      "id": "spec_skills_a_desarrollar_orden_num\u00e9rico_estricto",
       "community": 20,
-      "norm_label": "skills a desarrollar"
+      "norm_label": "skills a desarrollar (orden numerico estricto)"
     },
     {
       "label": "Skill 1: Capa de Datos (PostgreSQL + PostgREST)",
@@ -7408,14 +7418,14 @@
       "norm_label": "skill 3: amati chat (estudiante)"
     },
     {
-      "label": "Skill 4: NutriMind (  M\u00f3dulo Alimentario)",
+      "label": "Skill 4: NutriMind (M\u00f3dulo Alimentario)",
       "file_type": "document",
       "source_file": "spec.md",
       "source_location": "L30",
       "_origin": "ast",
       "id": "spec_skill_4_nutrimind_m\u00f3dulo_alimentario",
       "community": 20,
-      "norm_label": "skill 4: nutrimind (  modulo alimentario)"
+      "norm_label": "skill 4: nutrimind (modulo alimentario)"
     },
     {
       "label": "Skill 5: Command Center Cl\u00ednico (Personal de la Salud: Psic\u00f3logos y Nutri\u00f3logos)",
@@ -7461,27 +7471,17 @@
       "label": "Skill 9: RoleGuard Security (Barrera de Roles)",
       "file_type": "document",
       "source_file": "spec.md",
-      "source_location": "L69",
+      "source_location": "L70",
       "_origin": "ast",
       "id": "spec_skill_9_roleguard_security_barrera_de_roles",
       "community": 20,
       "norm_label": "skill 9: roleguard security (barrera de roles)"
     },
     {
-      "label": "Nuevas Skills (Metodolog\u00eda Spect / SDD)",
-      "file_type": "document",
-      "source_file": "spec.md",
-      "source_location": "L76",
-      "_origin": "ast",
-      "id": "spec_nuevas_skills_metodolog\u00eda_spect_sdd",
-      "community": 20,
-      "norm_label": "nuevas skills (metodologia spect / sdd)"
-    },
-    {
       "label": "Skill 10: Sistema de Logros y Gamificaci\u00f3n (Estilo Duolingo)",
       "file_type": "document",
       "source_file": "spec.md",
-      "source_location": "L78",
+      "source_location": "L75",
       "_origin": "ast",
       "id": "spec_skill_10_sistema_de_logros_y_gamificaci\u00f3n_estilo_duolingo",
       "community": 20,
@@ -7491,21 +7491,21 @@
       "label": "Skill 11: Chat Interno Conectado con Meta Cloud API (WhatsApp Bidireccional)",
       "file_type": "document",
       "source_file": "spec.md",
-      "source_location": "L90",
+      "source_location": "L87",
       "_origin": "ast",
       "id": "spec_skill_11_chat_interno_conectado_con_meta_cloud_api_whatsapp_bidireccional",
       "community": 20,
       "norm_label": "skill 11: chat interno conectado con meta cloud api (whatsapp bidireccional)"
     },
     {
-      "label": "Skill 12: Exportaci\u00f3n Masiva del Expediente (Dossier Cl\u00ednico Unificado en PDF)",
+      "label": "Skill 12: Dossier Cl\u00ednico Unificado, Marca de Agua y Meta Seal (Exportaci\u00f3n Masiva PDF)",
       "file_type": "document",
       "source_file": "spec.md",
-      "source_location": "L100",
+      "source_location": "L97",
       "_origin": "ast",
-      "id": "spec_skill_12_exportaci\u00f3n_masiva_del_expediente_dossier_cl\u00ednico_unificado_en_pdf",
+      "id": "spec_skill_12_dossier_cl\u00ednico_unificado_marca_de_agua_y_meta_seal_exportaci\u00f3n_masiva_pdf",
       "community": 20,
-      "norm_label": "skill 12: exportacion masiva del expediente (dossier clinico unificado en pdf)"
+      "norm_label": "skill 12: dossier clinico unificado, marca de agua y meta seal (exportacion masiva pdf)"
     },
     {
       "label": "task.md",
@@ -7558,64 +7558,104 @@
       "norm_label": "skill 3: amati chat estudiantil (fase actual: ejecucion)"
     },
     {
-      "label": "Skill 6: Mi Diario Personal (Fase actual: Ejecuci\u00f3n)",
+      "label": "Skill 4: NutriMind (M\u00f3dulo Alimentario)",
       "file_type": "document",
       "source_file": "task.md",
       "source_location": "L71",
       "_origin": "ast",
-      "id": "task_skill_6_mi_diario_personal_fase_actual_ejecuci\u00f3n",
+      "id": "task_skill_4_nutrimind_m\u00f3dulo_alimentario",
       "community": 55,
-      "norm_label": "skill 6: mi diario personal (fase actual: ejecucion)"
+      "norm_label": "skill 4: nutrimind (modulo alimentario)"
     },
     {
       "label": "Skill 5: Command Center Cl\u00ednico (Fase actual: Ejecuci\u00f3n)",
       "file_type": "document",
       "source_file": "task.md",
-      "source_location": "L91",
+      "source_location": "L79",
       "_origin": "ast",
       "id": "task_skill_5_command_center_cl\u00ednico_fase_actual_ejecuci\u00f3n",
       "community": 55,
       "norm_label": "skill 5: command center clinico (fase actual: ejecucion)"
     },
     {
+      "label": "Skill 6: Mi Diario Personal (Fase actual: Ejecuci\u00f3n)",
+      "file_type": "document",
+      "source_file": "task.md",
+      "source_location": "L125",
+      "_origin": "ast",
+      "id": "task_skill_6_mi_diario_personal_fase_actual_ejecuci\u00f3n",
+      "community": 55,
+      "norm_label": "skill 6: mi diario personal (fase actual: ejecucion)"
+    },
+    {
       "label": "Skill 7: Gesti\u00f3n de Perfil y Avatares (Fase actual: Planeaci\u00f3n SDD)",
       "file_type": "document",
       "source_file": "task.md",
-      "source_location": "L138",
+      "source_location": "L145",
       "_origin": "ast",
       "id": "task_skill_7_gesti\u00f3n_de_perfil_y_avatares_fase_actual_planeaci\u00f3n_sdd",
       "community": 55,
       "norm_label": "skill 7: gestion de perfil y avatares (fase actual: planeacion sdd)"
     },
     {
-      "label": "Backlog Pendiente",
+      "label": "Skill 8: M\u00f3dulo de Administraci\u00f3n (Core System)",
       "file_type": "document",
       "source_file": "task.md",
-      "source_location": "L164",
+      "source_location": "L171",
       "_origin": "ast",
-      "id": "task_backlog_pendiente",
+      "id": "task_skill_8_m\u00f3dulo_de_administraci\u00f3n_core_system",
       "community": 55,
-      "norm_label": "backlog pendiente"
+      "norm_label": "skill 8: modulo de administracion (core system)"
     },
     {
-      "label": "Nuevas Epicas y Tareas (Fase actual: Planeaci\u00f3n y Arquitectura SDD)",
+      "label": "Skill 9: RoleGuard Security (Fase actual: Ejecutada)",
       "file_type": "document",
       "source_file": "task.md",
-      "source_location": "L177",
+      "source_location": "L179",
       "_origin": "ast",
-      "id": "task_nuevas_epicas_y_tareas_fase_actual_planeaci\u00f3n_y_arquitectura_sdd",
+      "id": "task_skill_9_roleguard_security_fase_actual_ejecutada",
       "community": 55,
-      "norm_label": "nuevas epicas y tareas (fase actual: planeacion y arquitectura sdd)"
+      "norm_label": "skill 9: roleguard security (fase actual: ejecutada)"
     },
     {
-      "label": "Fase de Integraci\u00f3n (Backend: PostgreSQL / PostgREST)",
+      "label": "Skill 10: Sistema de Logros y Gamificaci\u00f3n (Estilo Duolingo)",
       "file_type": "document",
       "source_file": "task.md",
-      "source_location": "L202",
+      "source_location": "L186",
       "_origin": "ast",
-      "id": "task_fase_de_integraci\u00f3n_backend_postgresql_postgrest",
+      "id": "task_skill_10_sistema_de_logros_y_gamificaci\u00f3n_estilo_duolingo",
       "community": 55,
-      "norm_label": "fase de integracion (backend: postgresql / postgrest)"
+      "norm_label": "skill 10: sistema de logros y gamificacion (estilo duolingo)"
+    },
+    {
+      "label": "Skill 11: Chat Interno Conectado con Meta Cloud API (WhatsApp Bidireccional)",
+      "file_type": "document",
+      "source_file": "task.md",
+      "source_location": "L195",
+      "_origin": "ast",
+      "id": "task_skill_11_chat_interno_conectado_con_meta_cloud_api_whatsapp_bidireccional",
+      "community": 55,
+      "norm_label": "skill 11: chat interno conectado con meta cloud api (whatsapp bidireccional)"
+    },
+    {
+      "label": "Skill 12: Dossier Cl\u00ednico Unificado, Marca de Agua y Meta Seal (Exportaci\u00f3n Masiva PDF)",
+      "file_type": "document",
+      "source_file": "task.md",
+      "source_location": "L204",
+      "_origin": "ast",
+      "id": "task_skill_12_dossier_cl\u00ednico_unificado_marca_de_agua_y_meta_seal_exportaci\u00f3n_masiva_pdf",
+      "community": 55,
+      "norm_label": "skill 12: dossier clinico unificado, marca de agua y meta seal (exportacion masiva pdf)"
+    },
+    {
+      "label": "Fase 13: Fase de Integraci\u00f3n Backend (PostgreSQL / PostgREST)",
+      "file_type": "document",
+      "source_file": "task.md",
+      "source_location": "L213",
+      "_origin": "ast",
+      "id": "task_fase_13_fase_de_integraci\u00f3n_backend_postgresql_postgrest",
+      "community": 55,
+      "norm_label": "fase 13: fase de integracion backend (postgresql / postgrest)"
     },
     {
       "label": "graphify_rule",
@@ -18906,9 +18946,9 @@
       "source_file": "SPEC_UX_UI_SDD.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "spec_ux_ui_sdd",
-      "target": "spec_ux_ui_sdd_especificaci\u00f3n_de_experiencia_de_usuario_ux_ui_e_interfaces_en_angular_18",
-      "confidence_score": 1.0
+      "target": "spec_ux_ui_sdd_especificaci\u00f3n_de_experiencia_de_usuario_ux_ui_e_interfaces_en_angular_18"
     },
     {
       "relation": "contains",
@@ -18916,9 +18956,9 @@
       "source_file": "SPEC_UX_UI_SDD.md",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "spec_ux_ui_sdd_especificaci\u00f3n_de_experiencia_de_usuario_ux_ui_e_interfaces_en_angular_18",
-      "target": "spec_ux_ui_sdd_1_filosof\u00eda_de_dise\u00f1o_y_sistema_visual_design_system_aesthetics",
-      "confidence_score": 1.0
+      "target": "spec_ux_ui_sdd_1_filosof\u00eda_de_dise\u00f1o_y_sistema_visual_design_system_aesthetics"
     },
     {
       "relation": "contains",
@@ -18926,9 +18966,9 @@
       "source_file": "SPEC_UX_UI_SDD.md",
       "source_location": "L21",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "spec_ux_ui_sdd_especificaci\u00f3n_de_experiencia_de_usuario_ux_ui_e_interfaces_en_angular_18",
-      "target": "spec_ux_ui_sdd_2_especificaci\u00f3n_ux_ui_1_sistema_de_logros_y_gamificaci\u00f3n_estilo_duolingo",
-      "confidence_score": 1.0
+      "target": "spec_ux_ui_sdd_2_especificaci\u00f3n_ux_ui_1_sistema_de_logros_y_gamificaci\u00f3n_estilo_duolingo"
     },
     {
       "relation": "contains",
@@ -18936,9 +18976,9 @@
       "source_file": "SPEC_UX_UI_SDD.md",
       "source_location": "L401",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "spec_ux_ui_sdd_especificaci\u00f3n_de_experiencia_de_usuario_ux_ui_e_interfaces_en_angular_18",
-      "target": "spec_ux_ui_sdd_3_especificaci\u00f3n_ux_ui_2_interfaz_de_chat_interno_bidireccional_meta_cloud_api_whatsapp",
-      "confidence_score": 1.0
+      "target": "spec_ux_ui_sdd_3_especificaci\u00f3n_ux_ui_2_interfaz_de_chat_interno_bidireccional_meta_cloud_api_whatsapp"
     },
     {
       "relation": "contains",
@@ -18946,9 +18986,9 @@
       "source_file": "SPEC_UX_UI_SDD.md",
       "source_location": "L1104",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "spec_ux_ui_sdd_especificaci\u00f3n_de_experiencia_de_usuario_ux_ui_e_interfaces_en_angular_18",
-      "target": "spec_ux_ui_sdd_4_especificaci\u00f3n_ux_ui_3_interfaz_y_vista_previa_del_dossier_cl\u00ednico_unificado_pdf",
-      "confidence_score": 1.0
+      "target": "spec_ux_ui_sdd_4_especificaci\u00f3n_ux_ui_3_interfaz_y_vista_previa_del_dossier_cl\u00ednico_unificado_pdf"
     },
     {
       "relation": "contains",
@@ -18956,9 +18996,9 @@
       "source_file": "SPEC_UX_UI_SDD.md",
       "source_location": "L1854",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "spec_ux_ui_sdd_especificaci\u00f3n_de_experiencia_de_usuario_ux_ui_e_interfaces_en_angular_18",
-      "target": "spec_ux_ui_sdd_5_verificaci\u00f3n_de_alineaci\u00f3n_con_la_metodolog\u00eda_spect_sdd",
-      "confidence_score": 1.0
+      "target": "spec_ux_ui_sdd_5_verificaci\u00f3n_de_alineaci\u00f3n_con_la_metodolog\u00eda_spect_sdd"
     },
     {
       "relation": "contains",
@@ -18966,9 +19006,9 @@
       "source_file": "SPEC_UX_UI_SDD.md",
       "source_location": "L10",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "spec_ux_ui_sdd_1_filosof\u00eda_de_dise\u00f1o_y_sistema_visual_design_system_aesthetics",
-      "target": "spec_ux_ui_sdd_1_1_principios_visuales_y_tokens_de_dise\u00f1o",
-      "confidence_score": 1.0
+      "target": "spec_ux_ui_sdd_1_1_principios_visuales_y_tokens_de_dise\u00f1o"
     },
     {
       "relation": "contains",
@@ -18976,9 +19016,9 @@
       "source_file": "SPEC_UX_UI_SDD.md",
       "source_location": "L24",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "spec_ux_ui_sdd_2_especificaci\u00f3n_ux_ui_1_sistema_de_logros_y_gamificaci\u00f3n_estilo_duolingo",
-      "target": "spec_ux_ui_sdd_2_1_objetivo_ux_y_mec\u00e1nicas_estilo_duolingo",
-      "confidence_score": 1.0
+      "target": "spec_ux_ui_sdd_2_1_objetivo_ux_y_mec\u00e1nicas_estilo_duolingo"
     },
     {
       "relation": "contains",
@@ -18986,9 +19026,9 @@
       "source_file": "SPEC_UX_UI_SDD.md",
       "source_location": "L37",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "spec_ux_ui_sdd_2_especificaci\u00f3n_ux_ui_1_sistema_de_logros_y_gamificaci\u00f3n_estilo_duolingo",
-      "target": "spec_ux_ui_sdd_2_2_arquitectura_de_interfaces_y_maquetaci\u00f3n",
-      "confidence_score": 1.0
+      "target": "spec_ux_ui_sdd_2_2_arquitectura_de_interfaces_y_maquetaci\u00f3n"
     },
     {
       "relation": "contains",
@@ -18996,9 +19036,9 @@
       "source_file": "SPEC_UX_UI_SDD.md",
       "source_location": "L73",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "spec_ux_ui_sdd_2_especificaci\u00f3n_ux_ui_1_sistema_de_logros_y_gamificaci\u00f3n_estilo_duolingo",
-      "target": "spec_ux_ui_sdd_2_3_especificaci\u00f3n_de_estructura_angular_c\u00f3digo_base_standalone",
-      "confidence_score": 1.0
+      "target": "spec_ux_ui_sdd_2_3_especificaci\u00f3n_de_estructura_angular_c\u00f3digo_base_standalone"
     },
     {
       "relation": "contains",
@@ -19006,9 +19046,9 @@
       "source_file": "SPEC_UX_UI_SDD.md",
       "source_location": "L39",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "spec_ux_ui_sdd_2_2_arquitectura_de_interfaces_y_maquetaci\u00f3n",
-      "target": "spec_ux_ui_sdd_a_motor_de_rachas_streak_engine_top_navbar_widget",
-      "confidence_score": 1.0
+      "target": "spec_ux_ui_sdd_a_motor_de_rachas_streak_engine_top_navbar_widget"
     },
     {
       "relation": "contains",
@@ -19016,9 +19056,9 @@
       "source_file": "SPEC_UX_UI_SDD.md",
       "source_location": "L43",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "spec_ux_ui_sdd_2_2_arquitectura_de_interfaces_y_maquetaci\u00f3n",
-      "target": "spec_ux_ui_sdd_b_xp_progress_bar_nivel",
-      "confidence_score": 1.0
+      "target": "spec_ux_ui_sdd_b_xp_progress_bar_nivel"
     },
     {
       "relation": "contains",
@@ -19026,9 +19066,9 @@
       "source_file": "SPEC_UX_UI_SDD.md",
       "source_location": "L47",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "spec_ux_ui_sdd_2_2_arquitectura_de_interfaces_y_maquetaci\u00f3n",
-      "target": "spec_ux_ui_sdd_c_centro_de_logros_achievements_dashboard",
-      "confidence_score": 1.0
+      "target": "spec_ux_ui_sdd_c_centro_de_logros_achievements_dashboard"
     },
     {
       "relation": "contains",
@@ -19036,9 +19076,9 @@
       "source_file": "SPEC_UX_UI_SDD.md",
       "source_location": "L69",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "spec_ux_ui_sdd_2_2_arquitectura_de_interfaces_y_maquetaci\u00f3n",
-      "target": "spec_ux_ui_sdd_d_interfaz_de_inyecci\u00f3n_de_logros_cl\u00ednicos_command_center",
-      "confidence_score": 1.0
+      "target": "spec_ux_ui_sdd_d_interfaz_de_inyecci\u00f3n_de_logros_cl\u00ednicos_command_center"
     },
     {
       "relation": "contains",
@@ -19046,9 +19086,9 @@
       "source_file": "SPEC_UX_UI_SDD.md",
       "source_location": "L404",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "spec_ux_ui_sdd_3_especificaci\u00f3n_ux_ui_2_interfaz_de_chat_interno_bidireccional_meta_cloud_api_whatsapp",
-      "target": "spec_ux_ui_sdd_3_1_objetivo_ux_y_dise\u00f1o_arquitect\u00f3nico_bidireccional",
-      "confidence_score": 1.0
+      "target": "spec_ux_ui_sdd_3_1_objetivo_ux_y_dise\u00f1o_arquitect\u00f3nico_bidireccional"
     },
     {
       "relation": "contains",
@@ -19056,9 +19096,9 @@
       "source_file": "SPEC_UX_UI_SDD.md",
       "source_location": "L422",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "spec_ux_ui_sdd_3_especificaci\u00f3n_ux_ui_2_interfaz_de_chat_interno_bidireccional_meta_cloud_api_whatsapp",
-      "target": "spec_ux_ui_sdd_3_2_estructura_de_interfaz_split_view_de_2_columnas",
-      "confidence_score": 1.0
+      "target": "spec_ux_ui_sdd_3_2_estructura_de_interfaz_split_view_de_2_columnas"
     },
     {
       "relation": "contains",
@@ -19066,9 +19106,9 @@
       "source_file": "SPEC_UX_UI_SDD.md",
       "source_location": "L452",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "spec_ux_ui_sdd_3_especificaci\u00f3n_ux_ui_2_interfaz_de_chat_interno_bidireccional_meta_cloud_api_whatsapp",
-      "target": "spec_ux_ui_sdd_3_3_especificaci\u00f3n_de_estructura_angular_c\u00f3digo_base_standalone",
-      "confidence_score": 1.0
+      "target": "spec_ux_ui_sdd_3_3_especificaci\u00f3n_de_estructura_angular_c\u00f3digo_base_standalone"
     },
     {
       "relation": "contains",
@@ -19076,9 +19116,9 @@
       "source_file": "SPEC_UX_UI_SDD.md",
       "source_location": "L436",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "spec_ux_ui_sdd_3_2_estructura_de_interfaz_split_view_de_2_columnas",
-      "target": "spec_ux_ui_sdd_a_panel_lateral_izquierdo_lista_de_conversaciones_activas",
-      "confidence_score": 1.0
+      "target": "spec_ux_ui_sdd_a_panel_lateral_izquierdo_lista_de_conversaciones_activas"
     },
     {
       "relation": "contains",
@@ -19086,9 +19126,9 @@
       "source_file": "SPEC_UX_UI_SDD.md",
       "source_location": "L444",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "spec_ux_ui_sdd_3_2_estructura_de_interfaz_split_view_de_2_columnas",
-      "target": "spec_ux_ui_sdd_b_panel_principal_derecho_ventana_de_mensajer\u00eda_y_auditor\u00eda",
-      "confidence_score": 1.0
+      "target": "spec_ux_ui_sdd_b_panel_principal_derecho_ventana_de_mensajer\u00eda_y_auditor\u00eda"
     },
     {
       "relation": "contains",
@@ -19096,9 +19136,9 @@
       "source_file": "SPEC_UX_UI_SDD.md",
       "source_location": "L1107",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "spec_ux_ui_sdd_4_especificaci\u00f3n_ux_ui_3_interfaz_y_vista_previa_del_dossier_cl\u00ednico_unificado_pdf",
-      "target": "spec_ux_ui_sdd_4_1_objetivo_ux_y_dise\u00f1o_editorial_premium_buap",
-      "confidence_score": 1.0
+      "target": "spec_ux_ui_sdd_4_1_objetivo_ux_y_dise\u00f1o_editorial_premium_buap"
     },
     {
       "relation": "contains",
@@ -19106,9 +19146,9 @@
       "source_file": "SPEC_UX_UI_SDD.md",
       "source_location": "L1126",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "spec_ux_ui_sdd_4_especificaci\u00f3n_ux_ui_3_interfaz_y_vista_previa_del_dossier_cl\u00ednico_unificado_pdf",
-      "target": "spec_ux_ui_sdd_4_2_arquitectura_del_visor_y_configurador_preview_builder",
-      "confidence_score": 1.0
+      "target": "spec_ux_ui_sdd_4_2_arquitectura_del_visor_y_configurador_preview_builder"
     },
     {
       "relation": "contains",
@@ -19116,9 +19156,9 @@
       "source_file": "SPEC_UX_UI_SDD.md",
       "source_location": "L1144",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "spec_ux_ui_sdd_4_especificaci\u00f3n_ux_ui_3_interfaz_y_vista_previa_del_dossier_cl\u00ednico_unificado_pdf",
-      "target": "spec_ux_ui_sdd_4_3_especificaci\u00f3n_de_estructura_angular_c\u00f3digo_base_standalone",
-      "confidence_score": 1.0
+      "target": "spec_ux_ui_sdd_4_3_especificaci\u00f3n_de_estructura_angular_c\u00f3digo_base_standalone"
     },
     {
       "relation": "contains",
@@ -19126,9 +19166,9 @@
       "source_file": "SPEC_UX_UI_SDD.md",
       "source_location": "L1128",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "spec_ux_ui_sdd_4_2_arquitectura_del_visor_y_configurador_preview_builder",
-      "target": "spec_ux_ui_sdd_a_columna_izquierda_panel_de_selecci\u00f3n_de_m\u00f3dulos_y_firma",
-      "confidence_score": 1.0
+      "target": "spec_ux_ui_sdd_a_columna_izquierda_panel_de_selecci\u00f3n_de_m\u00f3dulos_y_firma"
     },
     {
       "relation": "contains",
@@ -19136,9 +19176,9 @@
       "source_file": "SPEC_UX_UI_SDD.md",
       "source_location": "L1137",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "spec_ux_ui_sdd_4_2_arquitectura_del_visor_y_configurador_preview_builder",
-      "target": "spec_ux_ui_sdd_b_columna_derecha_vista_previa_en_vivo_wysiwyg_live_canvas",
-      "confidence_score": 1.0
+      "target": "spec_ux_ui_sdd_b_columna_derecha_vista_previa_en_vivo_wysiwyg_live_canvas"
     },
     {
       "relation": "contains",
@@ -19146,9 +19186,9 @@
       "source_file": "SPEC_UX_UI_SDD.md",
       "source_location": "L1858",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "spec_ux_ui_sdd_5_verificaci\u00f3n_de_alineaci\u00f3n_con_la_metodolog\u00eda_spect_sdd",
-      "target": "spec_ux_ui_sdd_5_1_matriz_de_trazabilidad_sdd",
-      "confidence_score": 1.0
+      "target": "spec_ux_ui_sdd_5_1_matriz_de_trazabilidad_sdd"
     },
     {
       "relation": "contains",
@@ -19214,11 +19254,11 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "sdd.md",
-      "source_location": "L146",
+      "source_location": "L150",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "sdd_2_especificaci\u00f3n_arquitect\u00f3nica_por_\u00e9pica",
-      "target": "sdd_2_3_skill_12_dossier_cl\u00ednico_unificado_exportaci\u00f3n_masiva_pdf"
+      "target": "sdd_2_3_skill_12_dossier_cl\u00ednico_unificado_marca_de_agua_y_meta_seal_exportaci\u00f3n_masiva_pdf"
     },
     {
       "relation": "contains",
@@ -19274,21 +19314,31 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "sdd.md",
-      "source_location": "L148",
+      "source_location": "L152",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "sdd_2_3_skill_12_dossier_cl\u00ednico_unificado_exportaci\u00f3n_masiva_pdf",
-      "target": "sdd_2_3_1_estructura_del_orquestador_de_datos"
+      "source": "sdd_2_3_skill_12_dossier_cl\u00ednico_unificado_marca_de_agua_y_meta_seal_exportaci\u00f3n_masiva_pdf",
+      "target": "sdd_2_3_1_arquitectura_estricta_de_c\u00f3digo_abierto_strict_open_source_requirement"
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "sdd.md",
-      "source_location": "L169",
+      "source_location": "L158",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "sdd_2_3_skill_12_dossier_cl\u00ednico_unificado_exportaci\u00f3n_masiva_pdf",
-      "target": "sdd_2_3_2_criterios_de_dise\u00f1o_editorial_y_seguridad_normativa"
+      "source": "sdd_2_3_skill_12_dossier_cl\u00ednico_unificado_marca_de_agua_y_meta_seal_exportaci\u00f3n_masiva_pdf",
+      "target": "sdd_2_3_2_carga_de_marca_de_agua_institucional_por_el_administrador"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "sdd.md",
+      "source_location": "L165",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "sdd_2_3_skill_12_dossier_cl\u00ednico_unificado_marca_de_agua_y_meta_seal_exportaci\u00f3n_masiva_pdf",
+      "target": "sdd_2_3_3_meta_seal_sello_criptogr\u00e1fico_de_metadatos_y_no_repudio"
     },
     {
       "relation": "contains",
@@ -19314,21 +19364,11 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "spec.md",
-      "source_location": "L76",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "spec_especificaci\u00f3n_maestra_spec_md_plataforma_emocional",
-      "target": "spec_nuevas_skills_metodolog\u00eda_spect_sdd"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "spec.md",
       "source_location": "L14",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "spec_especificaci\u00f3n_maestra_spec_md_plataforma_emocional",
-      "target": "spec_skills_a_desarrollar"
+      "target": "spec_skills_a_desarrollar_orden_num\u00e9rico_estricto"
     },
     {
       "relation": "contains",
@@ -19344,10 +19384,40 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "spec.md",
+      "source_location": "L75",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "spec_skills_a_desarrollar_orden_num\u00e9rico_estricto",
+      "target": "spec_skill_10_sistema_de_logros_y_gamificaci\u00f3n_estilo_duolingo"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "spec.md",
+      "source_location": "L87",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "spec_skills_a_desarrollar_orden_num\u00e9rico_estricto",
+      "target": "spec_skill_11_chat_interno_conectado_con_meta_cloud_api_whatsapp_bidireccional"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "spec.md",
+      "source_location": "L97",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "spec_skills_a_desarrollar_orden_num\u00e9rico_estricto",
+      "target": "spec_skill_12_dossier_cl\u00ednico_unificado_marca_de_agua_y_meta_seal_exportaci\u00f3n_masiva_pdf"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "spec.md",
       "source_location": "L16",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "spec_skills_a_desarrollar",
+      "source": "spec_skills_a_desarrollar_orden_num\u00e9rico_estricto",
       "target": "spec_skill_1_capa_de_datos_postgresql_postgrest"
     },
     {
@@ -19357,7 +19427,7 @@
       "source_location": "L20",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "spec_skills_a_desarrollar",
+      "source": "spec_skills_a_desarrollar_orden_num\u00e9rico_estricto",
       "target": "spec_skill_2_autenticaci\u00f3n_y_onboarding_cl\u00ednico"
     },
     {
@@ -19367,7 +19437,7 @@
       "source_location": "L25",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "spec_skills_a_desarrollar",
+      "source": "spec_skills_a_desarrollar_orden_num\u00e9rico_estricto",
       "target": "spec_skill_3_amati_chat_estudiante"
     },
     {
@@ -19377,7 +19447,7 @@
       "source_location": "L30",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "spec_skills_a_desarrollar",
+      "source": "spec_skills_a_desarrollar_orden_num\u00e9rico_estricto",
       "target": "spec_skill_4_nutrimind_m\u00f3dulo_alimentario"
     },
     {
@@ -19387,7 +19457,7 @@
       "source_location": "L34",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "spec_skills_a_desarrollar",
+      "source": "spec_skills_a_desarrollar_orden_num\u00e9rico_estricto",
       "target": "spec_skill_5_command_center_cl\u00ednico_personal_de_la_salud_psic\u00f3logos_y_nutri\u00f3logos"
     },
     {
@@ -19397,7 +19467,7 @@
       "source_location": "L53",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "spec_skills_a_desarrollar",
+      "source": "spec_skills_a_desarrollar_orden_num\u00e9rico_estricto",
       "target": "spec_skill_6_mi_diario_personal"
     },
     {
@@ -19407,7 +19477,7 @@
       "source_location": "L58",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "spec_skills_a_desarrollar",
+      "source": "spec_skills_a_desarrollar_orden_num\u00e9rico_estricto",
       "target": "spec_skill_7_gesti\u00f3n_de_perfil_y_avatares_cross_role"
     },
     {
@@ -19417,17 +19487,17 @@
       "source_location": "L64",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "spec_skills_a_desarrollar",
+      "source": "spec_skills_a_desarrollar_orden_num\u00e9rico_estricto",
       "target": "spec_skill_8_m\u00f3dulo_de_administraci\u00f3n_core_system"
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "spec.md",
-      "source_location": "L69",
+      "source_location": "L70",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "spec_skills_a_desarrollar",
+      "source": "spec_skills_a_desarrollar_orden_num\u00e9rico_estricto",
       "target": "spec_skill_9_roleguard_security_barrera_de_roles"
     },
     {
@@ -19453,36 +19523,6 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "spec.md",
-      "source_location": "L78",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "spec_nuevas_skills_metodolog\u00eda_spect_sdd",
-      "target": "spec_skill_10_sistema_de_logros_y_gamificaci\u00f3n_estilo_duolingo"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "spec.md",
-      "source_location": "L90",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "spec_nuevas_skills_metodolog\u00eda_spect_sdd",
-      "target": "spec_skill_11_chat_interno_conectado_con_meta_cloud_api_whatsapp_bidireccional"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "spec.md",
-      "source_location": "L100",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "spec_nuevas_skills_metodolog\u00eda_spect_sdd",
-      "target": "spec_skill_12_exportaci\u00f3n_masiva_del_expediente_dossier_cl\u00ednico_unificado_en_pdf"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
       "source_file": "task.md",
       "source_location": "L1",
       "weight": 1.0,
@@ -19494,31 +19534,41 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "task.md",
-      "source_location": "L164",
+      "source_location": "L213",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "task_tareas_de_implementaci\u00f3n_spec_driven_development",
-      "target": "task_backlog_pendiente"
+      "target": "task_fase_13_fase_de_integraci\u00f3n_backend_postgresql_postgrest"
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "task.md",
-      "source_location": "L177",
+      "source_location": "L186",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "task_tareas_de_implementaci\u00f3n_spec_driven_development",
-      "target": "task_fase_de_integraci\u00f3n_backend_postgresql_postgrest"
+      "target": "task_skill_10_sistema_de_logros_y_gamificaci\u00f3n_estilo_duolingo"
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "task.md",
-      "source_location": "L177",
+      "source_location": "L195",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "task_tareas_de_implementaci\u00f3n_spec_driven_development",
-      "target": "task_nuevas_epicas_y_tareas_fase_actual_planeaci\u00f3n_y_arquitectura_sdd"
+      "target": "task_skill_11_chat_interno_conectado_con_meta_cloud_api_whatsapp_bidireccional"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "task.md",
+      "source_location": "L204",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "task_tareas_de_implementaci\u00f3n_spec_driven_development",
+      "target": "task_skill_12_dossier_cl\u00ednico_unificado_marca_de_agua_y_meta_seal_exportaci\u00f3n_masiva_pdf"
     },
     {
       "relation": "contains",
@@ -19554,6 +19604,16 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "task.md",
+      "source_location": "L71",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "task_tareas_de_implementaci\u00f3n_spec_driven_development",
+      "target": "task_skill_4_nutrimind_m\u00f3dulo_alimentario"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "task.md",
       "source_location": "L91",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -19579,6 +19639,26 @@
       "confidence_score": 1.0,
       "source": "task_tareas_de_implementaci\u00f3n_spec_driven_development",
       "target": "task_skill_7_gesti\u00f3n_de_perfil_y_avatares_fase_actual_planeaci\u00f3n_sdd"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "task.md",
+      "source_location": "L171",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "task_tareas_de_implementaci\u00f3n_spec_driven_development",
+      "target": "task_skill_8_m\u00f3dulo_de_administraci\u00f3n_core_system"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "task.md",
+      "source_location": "L179",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "task_tareas_de_implementaci\u00f3n_spec_driven_development",
+      "target": "task_skill_9_roleguard_security_fase_actual_ejecutada"
     },
     {
       "relation": "references",
@@ -20024,5 +20104,5 @@
       "source_file": "src/app/features/psychologist/psychologist-layout/psychologist-layout.component.html"
     }
   ],
-  "built_at_commit": "a848ee527c7506615c9b180996a82159051085eb"
+  "built_at_commit": "6407fb496cb9ab77800a0dbf3622a89b16514c3d"
 }

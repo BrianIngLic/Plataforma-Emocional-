@@ -1,0 +1,172 @@
+<div class="settings-container">
+  <!-- Header Card -->
+  <div class="card header-card">
+    <div class="title-wrapper">
+      <div class="icon-box">
+        <mat-icon>verified</mat-icon>
+      </div>
+      <div class="header-info">
+        <h1>Identidad y Marca de Agua Institucional</h1>
+        <p>Configuración del sello oficial y marca de agua inyectable en oficios, credenciales y reportes PDF de la BUAP.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="content-grid">
+    <!-- Drag & Drop Upload Zone -->
+    <!-- Drag & Drop Upload Zone -->
+    <div class="upload-col">
+      <div class="card upload-card">
+        <!-- Configuración del Nombre de la Institución -->
+        <div class="section-block">
+          <h2 class="card-title">
+            <mat-icon class="text-blue">account_balance</mat-icon>
+            <span>Nombre Oficial de la Institución</span>
+          </h2>
+          <p class="subtitle">Configura el nombre oficial que aparecerá en el encabezado de todos los oficios y reportes generados en la plataforma.</p>
+          
+          <div class="input-group" style="display: flex; gap: 1rem; align-items: center;">
+            <input 
+              type="text" 
+              [(ngModel)]="institutionName" 
+              placeholder="Ej: BENEMÉRITA UNIVERSIDAD AUTÓNOMA DE PUEBLA" 
+              style="flex: 1; padding: 12px 16px; border-radius: 12px; border: 1px solid var(--border-color, #cbd5e1); background: var(--input-bg, #f1f5f9); color: var(--text-primary, #0f172a); font-size: 1rem; outline: none; font-weight: 500;" 
+            />
+            <button 
+              (click)="saveInstitutionName()" 
+              [disabled]="isSavingName"
+              style="background: #3b82f6; color: white; border: none; padding: 12px 24px; border-radius: 12px; font-weight: 600; font-size: 1rem; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.2s;"
+            >
+              <mat-icon *ngIf="!isSavingName">save</mat-icon>
+              <mat-icon *ngIf="isSavingName" class="spinner" style="animation: spin 1s linear infinite;">autorenew</mat-icon>
+              <span>{{ isSavingName ? 'Guardando...' : 'Guardar' }}</span>
+            </button>
+          </div>
+        </div>
+
+        <hr style="border: none; border-top: 1px solid var(--border-color, #cbd5e1); margin: 2.5rem 0 2rem 0; opacity: 0.6;" />
+
+        <!-- Cargar Escudo / Logotipo Institucional -->
+        <div class="section-block">
+          <h2 class="card-title">
+            <mat-icon class="text-blue">cloud_upload</mat-icon>
+            <span>Cargar Escudo / Logotipo Institucional</span>
+          </h2>
+          <p class="subtitle">Arrastra tu imagen (idealmente PNG con fondo transparente) para usarla como marca de agua en los documentos generados.</p>
+
+          <div 
+            class="dropzone" 
+            [class.dragover]="isDragging"
+            (dragover)="onDragOver($event)" 
+            (dragleave)="onDragLeave($event)" 
+            (drop)="onDrop($event)"
+            (click)="fileInput.click()"
+          >
+            <input #fileInput type="file" hidden accept="image/*" (change)="onFileSelected($event)" />
+            
+            <div class="dropzone-content" *ngIf="!isUploading">
+              <div class="upload-icon-wrapper">
+                <mat-icon>add_photo_alternate</mat-icon>
+              </div>
+              <h3>Haz clic para explorar o arrastra aquí el archivo</h3>
+              <p>Archivos PNG, JPG o SVG hasta 10MB</p>
+            </div>
+
+            <div class="uploading-content" *ngIf="isUploading">
+              <mat-icon class="spinner">autorenew</mat-icon>
+              <h3>Procesando y encriptando activo en Supabase Storage...</h3>
+            </div>
+          </div>
+
+          <div *ngIf="errorMessage" class="message-box error">
+            <mat-icon>error_outline</mat-icon>
+            <span>{{ errorMessage }}</span>
+          </div>
+
+          <div *ngIf="successMessage" class="message-box success">
+            <mat-icon>check_circle_outline</mat-icon>
+            <span>{{ successMessage }}</span>
+          </div>
+
+          <div class="asset-info" *ngIf="currentWatermarkUrl">
+            <div class="status-indicator">
+              <span class="dot active"></span>
+              <span>Activo en Supabase (Bucket: <strong>institutional_assets</strong>)</span>
+            </div>
+            <button class="btn-danger" (click)="removeWatermark()">
+              <mat-icon>delete</mat-icon>
+              <span>Eliminar Marca de Agua</span>
+            </button>
+          </div>
+
+          <!-- Powered by Amati (Panel Footer) -->
+          <div style="display: flex; align-items: center; justify-content: flex-end; gap: 8px; margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color, #cbd5e1); opacity: 0.8;">
+            <span style="font-size: 0.8rem; font-weight: 600; color: var(--text-secondary, #475569);">Powered by Amati</span>
+            <img src="/amati-logo.svg" alt="Amati Logo" style="width: 20px; height: 20px; filter: drop-shadow(0 1px 2px rgba(139, 92, 246, 0.4));" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Live Preview Zone -->
+    <div class="preview-col">
+      <div class="card preview-card">
+        <h2 class="card-title">
+          <mat-icon class="text-purple">preview</mat-icon>
+          <span>Simulador de Vista en Documento Oficial</span>
+        </h2>
+
+        <div class="controls-row">
+          <div class="slider-group">
+            <label>Opacidad del Sello ({{ watermarkOpacity }}%)</label>
+            <input type="range" min="5" max="100" [(ngModel)]="watermarkOpacity" />
+          </div>
+          <div class="slider-group">
+            <label>Escala ({{ watermarkScale }}%)</label>
+            <input type="range" min="30" max="150" [(ngModel)]="watermarkScale" />
+          </div>
+        </div>
+
+        <!-- Document Mockup -->
+        <div class="document-mockup">
+          <!-- Sello de Agua Incrustado -->
+          <div class="watermark-overlay" *ngIf="currentWatermarkUrl" [style.opacity]="watermarkOpacity / 100">
+            <img [src]="currentWatermarkUrl" alt="Marca de Agua" [style.width]="watermarkScale + '%'" />
+          </div>
+
+          <div class="doc-header">
+            <div class="doc-inst">{{ institutionName || 'BENEMÉRITA UNIVERSIDAD AUTÓNOMA DE PUEBLA' }}</div>
+            <div class="doc-dep">DIRECCIÓN GENERAL DE DESARROLLO ESTUDIANTIL</div>
+          </div>
+
+          <div class="doc-body">
+            <h4 class="doc-title">ACREDITACIÓN DE PERSONAL MÉDICO Y CLÍNICO</h4>
+            <div class="doc-text">
+              <p><strong>FOLIO:</strong> BUAP-DGDE-2026-0891</p>
+              <p><strong>ASUNTO:</strong> Asignación y Entrega de Credenciales Oficiales</p>
+              <p>Por medio de la presente se emite el nombramiento y las credenciales de acceso para el Sistema de Gestión Clínica y Seguimiento Emocional a favor del especialista en salud asignado a esta dependencia.</p>
+              <div class="doc-table-mock">
+                <div class="t-row"><span>Especialista:</span><strong>Dr. Carlos Mendoza</strong></div>
+                <div class="t-row"><span>Función:</span><strong>Nutrición Clínica / Psicología</strong></div>
+                <div class="t-row"><span>Adscripción:</span><strong>Facultad de Medicina</strong></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="doc-footer" style="display: flex; flex-direction: column; align-items: center; gap: 3rem;">
+            <div class="sig-line">
+              <div class="line"></div>
+              <span>Jefatura de Bienestar y Gestión Clínica</span>
+            </div>
+            
+            <!-- Powered by Amati (Document Footer) -->
+            <div style="display: flex; align-items: center; gap: 6px; opacity: 0.6;">
+              <span style="font-family: 'Inter', sans-serif; font-size: 0.75rem; font-weight: 600; color: #475569;">Powered by Amati</span>
+              <img src="/amati-logo.svg" alt="Amati Logo" style="width: 16px; height: 16px;" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

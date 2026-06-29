@@ -397,3 +397,35 @@ CREATE INDEX idx_web_push_user ON public.web_push_subscriptions(user_id);
 CREATE INDEX idx_whatsapp_sessions_student ON public.whatsapp_routing_sessions(student_id);
 CREATE INDEX idx_whatsapp_sessions_professional ON public.whatsapp_routing_sessions(professional_id);
 CREATE INDEX idx_whatsapp_sessions_appointment ON public.whatsapp_routing_sessions(appointment_id);
+
+-- =========================================================================================
+-- SUPABASE DATABASE WEBHOOKS (EDGE FUNCTIONS TRIGGER)
+-- =========================================================================================
+
+-- Definición conceptual e instruccional del Webhook en Supabase
+-- (En Supabase, los Webhooks se configuran nativamente en Dashboard -> Database -> Webhooks)
+-- Configuración a habilitar en consola:
+-- 1. Tabla: appointments
+-- 2. Evento: UPDATE
+-- 3. Condición de filtro: emergency_change_type IS NOT NULL
+-- 4. Método HTTP: POST
+-- 5. URL de destino: https://<project_ref>.supabase.co/functions/v1/emergency-web-push
+-- 6. Cabecera HTTP: Authorization: Bearer <SUPABASE_ANON_KEY>
+
+-- Disparador nativo de PostgreSQL (respaldo para invocación vía pg_net / http si está disponible)
+CREATE OR REPLACE FUNCTION public.trg_emergency_push_notification()
+RETURNS TRIGGER AS $$
+BEGIN
+  -- Si el estado de emergencia fue actualizado, el motor de webhooks capturará este cambio
+  -- para disparar el paquete VAPID a través de la Edge Function en Deno.
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+DROP TRIGGER IF EXISTS trigger_emergency_push_notification ON public.appointments;
+CREATE TRIGGER trigger_emergency_push_notification
+  AFTER UPDATE OF emergency_change_type ON public.appointments
+  FOR EACH ROW
+  WHEN (NEW.emergency_change_type IS NOT NULL AND OLD.emergency_change_type IS DISTINCT FROM NEW.emergency_change_type)
+  EXECUTE FUNCTION public.trg_emergency_push_notification();
+

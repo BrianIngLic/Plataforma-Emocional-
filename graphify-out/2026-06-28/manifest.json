@@ -20,8 +20,8 @@
     "semantic_hash": "9b7e1de8e28daa4e2a307e1e0f1cf529"
   },
   "db/schema.sql": {
-    "mtime": 1782631680.2792702,
-    "ast_hash": "adf3f3e0241fbad95e4e3ad437c514f9",
+    "mtime": 1782626087.3314793,
+    "ast_hash": "e513b74458c0d62c367364fd4ddb57e5",
     "semantic_hash": ""
   },
   "package.json": {
@@ -205,8 +205,8 @@
     "semantic_hash": ""
   },
   "src/app/features/dashboard-layout/dashboard-layout.component.ts": {
-    "mtime": 1782626680.2920556,
-    "ast_hash": "e3d603b90d8984d1585c1ca346d98c40",
+    "mtime": 1782625789.3467429,
+    "ast_hash": "3e86c1343d21bf93dc8d17e3a3c3eeb6",
     "semantic_hash": ""
   },
   "src/app/features/dashboard-layout/dashboard.routes.ts": {
@@ -510,8 +510,8 @@
     "semantic_hash": ""
   },
   "src/app/core/services/emergency-notification.service.ts": {
-    "mtime": 1782631769.053941,
-    "ast_hash": "cee7ab74f33ce8d2deb4295d5cd092b3",
+    "mtime": 1782626119.0941598,
+    "ast_hash": "f5dae940a3263bc84268e6b63fccc395",
     "semantic_hash": ""
   },
   "src/app/features/health-professional/agenda/agenda.component.ts": {
@@ -622,16 +622,6 @@
   "src/app/features/nutritionist/settings/settings.component.html": {
     "mtime": 1782432337.0978446,
     "ast_hash": "4746e6396ab479fc983379b188e7c24e",
-    "semantic_hash": ""
-  },
-  "src/custom-service-worker.js": {
-    "mtime": 1782631655.2022004,
-    "ast_hash": "0eac8b249eb24842ce24694461c8907d",
-    "semantic_hash": ""
-  },
-  "supabase/functions/emergency-web-push/index.ts": {
-    "mtime": 1782631640.161064,
-    "ast_hash": "20c30382734776582b7677175df29ec9",
     "semantic_hash": ""
   }
 }

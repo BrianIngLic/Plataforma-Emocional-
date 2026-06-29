@@ -1,16 +1,16 @@
-# Graph Report - Plataforma-Emocional-  (2026-06-28)
+# Graph Report - Plataforma-Emocional-  (2026-06-27)
 
 ## Corpus Check
-- 92 files · ~66,478 words
+- 90 files · ~64,827 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 757 nodes · 1086 edges · 66 communities (17 shown, 49 thin omitted)
+- 753 nodes · 1084 edges · 66 communities (16 shown, 50 thin omitted)
 - Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 18 edges (avg confidence: 0.91)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `b090c929`
+- Built from commit: `360efee5`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -77,6 +77,7 @@
 - [[_COMMUNITY_Community 59|Community 59]]
 - [[_COMMUNITY_Community 60|Community 60]]
 - [[_COMMUNITY_Community 61|Community 61]]
+- [[_COMMUNITY_Community 62|Community 62]]
 - [[_COMMUNITY_Community 64|Community 64]]
 - [[_COMMUNITY_Community 65|Community 65]]
 - [[_COMMUNITY_Community 66|Community 66]]
@@ -114,15 +115,11 @@
 - **Student Emotional Assistance and Care Flow** — dashboard_layout_dashboard_layout_component_student_sidebar, dashboard_dashboard_component_chat_view, dashboard_diary_dashboard_component_therapeutic_refuge, student_agenda_student_agenda_component_appointment_scheduler [INFERRED 0.85]
 - **Psychologist Clinical Command Center and Triage Flow** — psychologist_layout_psychologist_layout_component_psychologist_sidebar, dashboard_dashboard_component_psychologist_triage_view, patients_patients_component_patient_directory, agenda_agenda_component_clinical_timeline, patient_profile_patient_profile_component_clinical_expedient_view [INFERRED 0.85]
 
-## Communities (66 total, 49 thin omitted)
+## Communities (66 total, 50 thin omitted)
 
 ### Community 0 - "Core Services and Auth"
-Cohesion: 0.06
-Nodes (19): EmergencyModalData, environment, Psychologist, Holiday, AgendaService, TimeBlock, WorkingDay, AuditService (+11 more)
-
-### Community 1 - "Modals Diary and Exceptions"
-Cohesion: 0.06
-Nodes (14): Appointment, AdminFaculty, FeedbackModalComponent, FeedbackModalData, ProfileAvatarComponent, RegisterComponent, AdminExceptionsService, WorkingDaysMap (+6 more)
+Cohesion: 0.05
+Nodes (25): Appointment, EmergencyModalData, AdminFaculty, FeedbackModalComponent, FeedbackModalData, Holiday, AgendaService, TimeBlock (+17 more)
 
 ### Community 2 - "Package Config and Dependencies"
 Cohesion: 0.05
@@ -141,8 +138,8 @@ Cohesion: 0.13
 Nodes (3): AiTriageMockService, UrgencyLevel, StudentAgendaComponent
 
 ### Community 8 - "Admin Patient Statistics Overview"
-Cohesion: 0.12
-Nodes (5): OverviewComponent, AdminStatsService, ChartDataPoint, OverviewMetrics, PatientsComponent
+Cohesion: 0.11
+Nodes (7): environment, OverviewComponent, Psychologist, AdminStatsService, ChartDataPoint, OverviewMetrics, PatientsComponent
 
 ### Community 9 - "Alimentary Assessment Dashboard"
 Cohesion: 0.12
@@ -153,8 +150,12 @@ Cohesion: 0.17
 Nodes (16): Psychologist Daily Agenda Timeline, Amati AI Chat Dashboard, Psychologist Triage Dashboard, Amati Therapeutic Refuge and Diary, Student Dashboard Sidebar, Clinical Expedient and AI Insights View, Psychologist Assigned Patients Directory, Profile Avatar Manager Component (+8 more)
 
 ### Community 14 - "Main App Security Interceptors"
-Cohesion: 0.21
-Nodes (6): App, appConfig, routes, authGuard(), roleGuard(), authInterceptor()
+Cohesion: 0.16
+Nodes (7): App, appConfig, routes, authGuard(), roleGuard(), authInterceptor(), AuditService
+
+### Community 18 - "Dashboard Main Navigation Layout"
+Cohesion: 0.09
+Nodes (4): DashboardLayoutComponent, DASHBOARD_ROUTES, ChatService, EmergencyNotificationService
 
 ### Community 20 - "Security and Design Principles"
 Cohesion: 0.09
@@ -181,24 +182,24 @@ Cohesion: 0.29
 Nodes (6): 1. Ciberseguridad y Privacidad como Pilar Absoluto, 2. La Especificación es la Ley, 3. Prioridad Clínica y Responsabilidad, 4. Diseño y UX (User Experience), 5. Prácticas de Desarrollo y Documentación, Constitución del Ecosistema de Asistencia Emocional
 
 ## Knowledge Gaps
-- **155 isolated node(s):** `$schema`, `version`, `newProjectRoot`, `projectType`, `style` (+150 more)
+- **154 isolated node(s):** `$schema`, `version`, `newProjectRoot`, `projectType`, `style` (+149 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **49 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **50 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `SupabaseService` connect `Core Services and Auth` to `Admin Patient Statistics Overview`, `Modals Diary and Exceptions`, `Main App Security Interceptors`?**
+- **Why does `SupabaseService` connect `Core Services and Auth` to `Admin Patient Statistics Overview`, `Main App Security Interceptors`?**
   _High betweenness centrality (0.108) - this node is a cross-community bridge._
-- **Why does `AuthService` connect `Core Services and Auth` to `Modals Diary and Exceptions`, `Main App Security Interceptors`?**
+- **Why does `AuthService` connect `Core Services and Auth` to `Dashboard Main Navigation Layout`, `Main App Security Interceptors`?**
   _High betweenness centrality (0.099) - this node is a cross-community bridge._
-- **Why does `PsychologistsComponent` connect `Psychologist Profile and Utilities` to `Core Services and Auth`?**
+- **Why does `PsychologistsComponent` connect `Psychologist Profile and Utilities` to `Admin Patient Statistics Overview`?**
   _High betweenness centrality (0.045) - this node is a cross-community bridge._
 - **What connects `$schema`, `version`, `newProjectRoot` to the rest of the system?**
-  _159 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _158 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Core Services and Auth` be split into smaller, more focused modules?**
-  _Cohesion score 0.06185919343814081 - nodes in this community are weakly interconnected._
-- **Should `Modals Diary and Exceptions` be split into smaller, more focused modules?**
-  _Cohesion score 0.06168831168831169 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.053019145802650956 - nodes in this community are weakly interconnected._
 - **Should `Package Config and Dependencies` be split into smaller, more focused modules?**
   _Cohesion score 0.05263157894736842 - nodes in this community are weakly interconnected._
+- **Should `Angular Architect Configurations` be split into smaller, more focused modules?**
+  _Cohesion score 0.08275862068965517 - nodes in this community are weakly interconnected._

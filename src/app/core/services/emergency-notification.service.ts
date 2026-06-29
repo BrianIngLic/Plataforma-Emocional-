@@ -412,7 +412,10 @@ export class EmergencyNotificationService {
         new Notification(titulo, { body: mensaje, icon: '/amati-logo.svg' });
       }
 
-      alert(`${titulo}\n\nDetalles del especialista:\n${mensaje}`);
+      // Desacoplar el alert del event loop principal para evitar advertencias de Zone.js y bloqueos del hilo
+      setTimeout(() => {
+        alert(`${titulo}\n\nDetalles del especialista:\n${mensaje}`);
+      }, 100);
     };
 
     // --- CAPA 1 & 2: REPLICACIÓN WAL DE POSTGRESQL (appointments & whatsapp_routing_sessions) ---

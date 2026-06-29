@@ -225,3 +225,55 @@
 - `[x]` Conectar `chat.service.ts` con la tabla `messages`.
 - `[x]` Conectar `diary.service.ts` (si existe la tabla, pendiente de crear en schema) o simular.
 - `[x]` Conectar listado de pacientes del psicólogo con las tablas reales.
+
+---
+
+## Skill 13: Sistema de Evaluación Post-Sesión — FIT Gamificado (Fase actual: Planeación)
+
+> **Base clínica:** Session Rating Scale (SRS, Duncan et al.), Working Alliance Inventory (WAI, Horvath & Greenberg), Session Impacts Scale (Elliott & Wexler), Hope Theory (Snyder).
+> **Metodología:** Feedback-Informed Treatment (FIT) + Routine Outcome Monitoring (ROM).
+> **Enfoque UX:** Gamificación con caritas emocionales (emoji-scale), tarjetas secuenciales y micro-animaciones.
+
+---
+
+**13.1. Base de Datos (`db/schema.sql` / migración)**
+- `[ ]` Crear tabla `session_evaluations` con columnas: `id`, `appointment_id` (FK), `patient_id` (FK), `professional_id` (FK), `q1_global`, `q2_bond`, `q3_goals`, `q4_impact` (DECIMAL 2,1 cada una), `q5_comment` (TEXT nullable), `score_global` (DECIMAL 2,1 calculado), `rupture_flag` (TEXT: `critical`/`decline`/`healthy`/`pending`), `is_visible_to_professional` (BOOLEAN), `created_at`.
+- `[ ]` Restricción UNIQUE en `appointment_id` (una sola evaluación por cita).
+- `[ ]` Aplicar RLS: paciente solo puede INSERT en su propia fila; especialista solo SELECT sobre sus citas; admin SELECT sobre `score_global` y `rupture_flag` agregados por profesional.
+
+**13.2. Capa de Servicios (`core/services/session-evaluation.service.ts`)**
+- `[ ]` Método `submitEvaluation(payload)`: INSERT de las 5 respuestas, calcula `score_global` (Modelo Ponderado: `q1*0.20 + q2*0.30 + q3*0.25 + q4*0.25`) y determina `rupture_flag` antes de guardar.
+- `[ ]` Método `getEvaluationByAppointment(appointmentId)`: recupera evaluación ya enviada (para bloquear doble envío).
+- `[ ]` Método `getEvaluationsByProfessional(professionalId)`: agrega puntajes y flags para el panel del especialista y admin.
+- `[ ]` Integrar con `appointments`: detectar citas recién marcadas como `completed` para habilitar el trigger de cuestionario en el panel del estudiante.
+
+**13.3. Componente Emoji-Scale (Reutilizable) (`features/student/session-feedback/emoji-scale/`)**
+- `[ ]` Crear `emoji-scale.component.ts/html/scss` con Input `@Input() question: string` y Output `@Output() scored: EventEmitter<number>`.
+- `[ ]` 5 emojis pulsables (😞😐🙂😊🤩) con código de color progresivo (rojo → índigo).
+- `[ ]` Micro-animación *bounce* al seleccionar 4–5; reacción empática suave al seleccionar 1–2.
+- `[ ]` Auto-avance a siguiente tarjeta con *smooth slide* al pulsar un emoji.
+
+**13.4. Cuestionario Gamificado del Paciente (`features/student/session-feedback/`)**
+- `[ ]` Crear `session-feedback.component.ts/html/scss`.
+- `[ ]` Flujo de tarjetas secuenciales: Q1 → Q2 → Q3 → Q4 → Q5 (textarea libre) → Pantalla de cierre.
+- `[ ]` Pantalla de cierre con mensaje motivacional y animación de confeti o partículas.
+- `[ ]` Lógica: bloquear el cuestionario si ya fue respondido para esa `appointment_id`.
+- `[ ]` Otorgar +10 XP al paciente al completar (integración con Skill 10 - `AchievementsService`).
+- `[ ]` Integrar con la racha (*streak*) del día del paciente.
+
+**13.5. Trigger y Notificación en Panel del Estudiante**
+- `[ ]` Consultar al cargar el dashboard del estudiante si existe alguna cita con `status = 'completed'` sin evaluación enviada → mostrar banner/card destacada: *"¡Evalúa tu sesión de hoy!"*.
+- `[ ]` Ruteo: `/dashboard/session-feedback/:appointmentId` protegido por `AuthGuard`.
+- `[ ]` Añadir ruta lazy-loaded en `dashboard.routes.ts`.
+
+**13.6. Panel del Especialista — Evaluaciones y Alertas**
+- `[ ]` En el perfil de cada paciente del especialista: mostrar historial de evaluaciones post-sesión (`score_global` por fecha) en mini gráfica de línea.
+- `[ ]` Badge de `rupture_flag` visible en la agenda junto a cada cita: `⚠️` `📉` `✅` `💬`.
+- `[ ]` Mostrar el comentario cualitativo (`q5_comment`) en la vista de detalle de la cita cuando exista.
+- `[ ]` Alerta longitudinal: detectar caída ≥ 0.7 puntos respecto a la sesión anterior del mismo paciente.
+
+**13.7. Panel Administrativo — Evaluación del Especialista**
+- `[ ]` Conectar la columna "Evaluación" del panel de Personal Clínico (`admin/psychologists`) a datos reales: promedio de `score_global` de todas las evaluaciones del profesional.
+- `[ ]` Reemplazar el valor MOCK (`4.0 + Math.random()`) en `admin-stats.service.ts` por consulta real a `session_evaluations`.
+- `[ ]` Mostrar el `rupture_flag` agregado (ej. porcentaje de sesiones con alerta crítica) en la vista de detalle del especialista.
+

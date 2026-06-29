@@ -51,11 +51,41 @@ export class AdminSkill8Service {
   async getHealthProfessionals(): Promise<HealthProfessionalItem[]> {
     try {
       console.log('🛡️ [Admin Skill 8]: Consultando directorio unificado de profesionales de la salud...');
-      const { data, error } = await this.supabase.rpc('get_admin_health_professionals');
+      let { data, error } = await this.supabase.rpc('get_admin_health_professionals');
 
-      if (error) {
-        console.error('❌ Error al consultar profesionales de la salud:', error);
-        throw error;
+      if (error || !data) {
+        console.warn('⚠️ RPC get_admin_health_professionals no disponible (404/Error). Activando fallback transparente...');
+        const { data: fallbackUsers, error: fbErr } = await this.supabase
+          .from('users')
+          .select(`
+            id, role_id, matricula,
+            profiles (first_name, last_name, faculty, celular),
+            health_professional_settings (capacity, location, modality)
+          `)
+          .in('role_id', [3, 4]);
+
+        if (fbErr || !fallbackUsers) {
+          console.error('❌ Error en fallback de getHealthProfessionals:', fbErr);
+          throw fbErr || new Error('No se pudo obtener profesionales de la salud');
+        }
+
+        data = fallbackUsers.map((u: any) => {
+          const p = Array.isArray(u.profiles) ? u.profiles[0] : u.profiles;
+          const h = Array.isArray(u.health_professional_settings) ? u.health_professional_settings[0] : u.health_professional_settings;
+          return {
+            id: u.id,
+            role_id: u.role_id,
+            matricula: u.matricula || '',
+            first_name: p?.first_name || '',
+            last_name: p?.last_name || '',
+            email: `${u.matricula || u.id.slice(0, 8)}@ep.buap.mx`,
+            faculty: p?.faculty || '',
+            celular: p?.celular || '',
+            capacity: h?.capacity || 40,
+            location: h?.location || 'Consultorio Virtual',
+            modality: h?.modality || 'virtual'
+          };
+        });
       }
 
       return (data as HealthProfessionalItem[]) || [];

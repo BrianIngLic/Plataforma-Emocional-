@@ -22,7 +22,7 @@ export class AdminLayoutComponent {
     { label: 'Panorama General', sub: 'Métricas de ocupación', icon: 'dashboard', path: './overview' },
     { label: 'Facultades', sub: 'Gestión por divisiones', icon: 'business', path: './faculties' },
     { label: 'Personal Médico', sub: 'Psicólogos y Nutriólogos', icon: 'assignment_ind', path: './psychologists' },
-    { label: 'Alumnos y Pacientes', sub: 'Asignaciones y seguimiento', icon: 'people', path: './patients' },
+    { label: 'Alumnos', sub: 'Asignaciones y seguimiento', icon: 'people', path: './patients' },
     { label: 'Reportes y Estadísticas', sub: 'Analítica institucional', icon: 'insert_chart', path: './reports' },
     { label: 'Agenda Global', sub: 'Calendario clínico', icon: 'calendar_today', path: './agenda' },
     { label: 'Configuración', sub: 'Mi perfil y foto', icon: 'settings', path: './settings' },

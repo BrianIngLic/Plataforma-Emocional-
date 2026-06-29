@@ -29,6 +29,7 @@ interface Psychologist {
   dropouts: number;
   role_id?: number;
   role_name?: string;
+  avatar_url?: string;
 }
 
 @Component({

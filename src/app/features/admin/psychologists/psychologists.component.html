@@ -77,11 +77,24 @@
       <span class="panel-sub">{{ filteredPsychologists.length }} profesionales en lista</span>
     </div>
 
+    <!-- Tabla Encabezados -->
+    <div class="psych-table-header" style="display: flex; align-items: center; gap: 1.5rem; padding: 0.75rem 1.25rem; border-bottom: 1px solid var(--border-color, rgba(255, 255, 255, 0.06)); color: var(--text-secondary, #94a3b8); font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">
+      <div style="width: 280px; flex-shrink: 0;">Especialista</div>
+      <div style="width: 120px; flex-shrink: 0;">Estado / Alerta</div>
+      <div style="width: 140px; flex-shrink: 0;">Nivel de Carga</div>
+      <div style="width: 80px; flex-shrink: 0;">Sesiones</div>
+      <div style="width: 130px; flex-shrink: 0;">Evaluación</div>
+      <div style="margin-left: auto; padding-right: 0.5rem;">Acciones</div>
+    </div>
+
     <!-- Lista Table -->
     <div class="psych-list">
       <div class="psych-row" *ngFor="let p of filteredPsychologists">
         <div class="psych-identity">
-          <div class="avatar" [style.background]="p.role_id === 4 ? 'linear-gradient(135deg, #10b981, #059669)' : 'linear-gradient(135deg, #6366f1, #a855f7)'">{{ p.name.split(' ')[1]?.substring(0, 2) || 'Dr' }}</div>
+          <div class="psych-avatar" [style.background]="p.role_id === 4 ? 'linear-gradient(135deg, #10b981, #059669)' : 'linear-gradient(135deg, #6366f1, #a855f7)'" style="width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 1.1rem; flex-shrink: 0; box-shadow: 0 2px 8px rgba(0,0,0,0.15); overflow: hidden;">
+            <img *ngIf="p.avatar_url" [src]="p.avatar_url" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover;" />
+            <span *ngIf="!p.avatar_url">{{ p.name.split(' ')[1]?.substring(0, 2) || 'Dr' }}</span>
+          </div>
           <div class="info">
             <h4>{{ p.name }} <span class="role-badge" [style.background]="p.role_id === 4 ? '#d1fae5' : '#e0e7ff'" [style.color]="p.role_id === 4 ? '#065f46' : '#4338ca'" style="font-size: 0.75rem; padding: 2px 6px; border-radius: 4px; margin-left: 6px; font-weight: 600;">{{ p.role_name || 'Psicólogo' }}</span></h4>
             <span class="sub"><mat-icon>school</mat-icon> {{ p.faculty }}</span>
@@ -95,26 +108,24 @@
           </span>
         </div>
 
-        <div class="caseload-info">
-          <div class="caseload-labels">
-            <span>Nivel de Carga</span>
-            <span>{{ p.patients }} / {{ p.capacity }}</span>
+        <div class="caseload-info" style="width: 140px;">
+          <div class="caseload-labels" style="display: flex; justify-content: space-between; font-size: 0.75rem; font-weight: 600; margin-bottom: 4px;">
+            <span>{{ getPct(p) }}%</span>
+            <span style="color: var(--text-secondary, #94a3b8);">{{ p.patients }} / {{ p.capacity }} pac.</span>
           </div>
-          <div class="caseload-progress">
+          <div class="progress-bar-bg" style="height: 6px; background: var(--bg-hover, rgba(255,255,255,0.05)); border-radius: 99px; overflow: hidden; width: 100%;">
             <div class="progress-fill" 
                  [style.width]="getPct(p) + '%'" 
-                 [style.backgroundColor]="getChargeColor(getPct(p))"></div>
+                 [style.backgroundColor]="getChargeColor(getPct(p))" style="height: 100%; border-radius: 99px;"></div>
           </div>
         </div>
 
         <div class="metric-col">
-          <span class="metric-val">{{ p.sessionsCompleted }}</span>
-          <span class="metric-lbl">Sesiones</span>
+          <span class="metric-val" style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary, #f8fafc);">{{ p.sessionsCompleted }}</span>
         </div>
 
         <div class="rating-col">
-          <span class="metric-lbl" style="margin-bottom: 2px;">Evaluación</span>
-          <div class="stars-row">
+          <div class="stars-row" style="margin: 0;">
             <mat-icon *ngFor="let star of getRatingStars(p.evaluation)" [ngClass]="star === 1 ? 'star-filled' : 'star-empty'">star</mat-icon>
             <span class="rating-number">{{ p.evaluation | number:'1.1-1' }}</span>
           </div>
@@ -139,8 +150,9 @@
     <!-- Header Card -->
     <div class="card header-card" style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.5rem; display: flex; align-items: center;">
       <div class="patient-header" style="display: flex; align-items: center; width: 100%;">
-        <div class="profile-avatar large" style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #6366f1, #a855f7); color: white; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 700; margin-right: 1.5rem; flex-shrink: 0;">
-          {{ selectedPsychologist.name.split(' ')[1]?.substring(0, 2) || 'Dr' }}
+        <div class="profile-avatar large" style="width: 84px; height: 84px; border-radius: 50%; background: linear-gradient(135deg, #6366f1, #a855f7); color: white; display: flex; align-items: center; justify-content: center; font-size: 2.2rem; font-weight: 700; margin-right: 1.5rem; flex-shrink: 0; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4); overflow: hidden;">
+          <img *ngIf="selectedPsychologist.avatar_url" [src]="selectedPsychologist.avatar_url" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover;" />
+          <span *ngIf="!selectedPsychologist.avatar_url">{{ selectedPsychologist.name.split(' ')[1]?.substring(0, 2) || 'Dr' }}</span>
         </div>
         <div class="info" style="flex: 1;">
           <h1 style="margin: 0 0 0.5rem 0; font-size: 1.5rem; color: var(--text-primary);">{{ selectedPsychologist.name }}</h1>

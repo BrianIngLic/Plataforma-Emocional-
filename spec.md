@@ -110,3 +110,99 @@ El sistema está compuesto por un Frontend Angular, un Backend PostgREST (Postgr
 - **Meta Seal (Sello Criptográfico de Metadatos y No Repudio):**
   - **Incrustación Criptográfica:** Generación de un hash HMAC-SHA256 utilizando `Web Crypto API` que combina la matrícula del profesional tratante, el ID del paciente, el nivel de riesgo y la marca de tiempo UTC.
   - **Sello Visible e Invisible:** El hash se inyecta en los metadatos binarios del PDF (Document Info) y se despliega como un sello de verificación formal en el resumen ejecutivo, garantizando el principio de **No Repudio, Autenticidad e Integridad** bajo cumplimiento estricto de la **NOM-024** y **HIPAA**.
+
+---
+
+### Skill 13: Sistema de Evaluación Post-Sesión — FIT Gamificado (Spect Kit + Diana)
+
+**Objetivo:** Construir un sistema de retroalimentación clínica post-sesión fundamentado en el marco de **Feedback-Informed Treatment (FIT)** y la **Session Rating Scale (SRS)** de Duncan et al., que permita al alumno/paciente evaluar cada sesión de manera lúdica e interactiva mediante gamificación, y proporcione al especialista (psicólogo/nutriólogo) y al administrador métricas accionables de alianza terapéutica con alertas tempranas de ruptura.
+
+---
+
+#### 13.1. Fundamentación Clínica (Instrumentos Base)
+
+- **Session Rating Scale (SRS) — Duncan, Miller et al.:** Escala ultracorta (4 ítems) diseñada para uso clínico diario en el marco del Routine Outcome Monitoring (ROM). Detecta tempranamente rupturas de alianza y reduce el abandono terapéutico (*dropout*).
+- **Working Alliance Inventory (WAI) — Horvath & Greenberg:** Estándar de oro para medir las tres dimensiones de la alianza terapéutica (Bordin, 1979): Vínculo Relacional, Acuerdo en Objetivos y Acuerdo en Tareas.
+- **Session Impacts Scale (Elliott & Wexler) / Hope Theory (Snyder):** Mide el impacto inmediato percibido y la esperanza o empoderamiento al concluir la sesión, predictor de autoeficacia inter-sesión.
+
+#### 13.2. Las 5 Preguntas del Cuestionario Post-Sesión
+
+| N° | Pregunta (fraseo al paciente) | Dimensión Clínica | Instrumento Base |
+|:---|:---|:---|:---|
+| **Q1** | ¿Cómo calificas la sesión de hoy en general? | Evaluación Global | SRS (Overall) |
+| **Q2** | ¿Cómo sentiste el apoyo, la escucha y la empatía de tu psicólogo hoy? | Vínculo Relacional | WAI/SRS (Bond) |
+| **Q3** | ¿Hablamos y trabajamos en lo que tú querías y necesitabas tratar hoy? | Acuerdo en Objetivos y Tareas | WAI/SRS (Goals & Tasks) |
+| **Q4** | Al terminar hoy, ¿te sientes con mayor claridad, esperanza o con herramientas para afrontar tus retos? | Impacto Inmediato y Autoeficacia | Session Impacts Scale / Hope Theory |
+| **Q5** | ¿Hay algo más que te gustaría agregar, cambiar o comentar sobre la sesión de hoy? | Ajuste Cualitativo y Colaborativo | FIT/ROM (Abierta - texto libre) |
+
+#### 13.3. Diseño Gamificado del Cuestionario (Lado del Paciente)
+
+- **Formato de Tarjetas Secuenciales (Card-by-Card):** El paciente ve una sola pregunta a la vez. No hay formulario largo ni "survey fatigue".
+- **Selector de Caritas Emocionales / Emojis:**
+  - 😞 `1.0` — Rojo — *"Nada satisfecho"* (Alerta de ruptura)
+  - 😐 `2.0` — Naranja — *"Poco satisfecho"*
+  - 🙂 `3.0` — Amarillo — *"Neutral"*
+  - 😊 `4.0` — Verde claro — *"Satisfecho"*
+  - 🤩 `5.0` — Verde/Índigo — *"¡Muy satisfecho!"*
+- **Micro-interacciones:**
+  - Al seleccionar 4 o 5: el emoji anima con *bounce* y emite micro-confeti de partículas.
+  - Al seleccionar 1 o 2: reacción empática y suave (sin alarmar al paciente).
+  - Transición automática a la siguiente tarjeta con *smooth slide* (≤ 30 segundos en total).
+- **Pantalla de Cierre Motivacional:** *"¡Gracias por ayudar a construir tu camino! Tu voz es fundamental para tu psicólogo."*
+- **Integración con Gamificación (Skill 10):** Completar el cuestionario otorga +10 XP al paciente y contribuye a la racha (*streak*) activa del día.
+- **Trigger de Activación:** El cuestionario se habilita automáticamente cuando el psicólogo marca la cita como `completed` en su agenda. Aparece en el panel del estudiante como una notificación/banner destacado.
+
+#### 13.4. Modelo Matemático de Agregación (Panel del Especialista)
+
+**Modelo Ponderado Clínico (Recomendado — basado en meta-análisis FIT):**
+
+```
+S_global = round(q1*0.20 + q2*0.30 + q3*0.25 + q4*0.25, 1)
+```
+
+Pesos clínicos (suma = 1.0):
+- `w1` (Global) = **0.20** — Apreciación sumaria general.
+- `w2` (Vínculo/Empatía) = **0.30** — Predictor aislado más robusto de la alianza terapéutica.
+- `w3` (Objetivos/Tareas) = **0.25** — Asegura que la sesión respondió a la necesidad del paciente.
+- `w4` (Impacto/Esperanza) = **0.25** — Motor del cambio inter-sesión.
+
+**Manejo de omisiones:** Si el paciente omite un ítem `q_k`, los pesos restantes se redistribuyen proporcionalmente: `S_global = sum(w_i * q_i) / sum(w_i)` para `i ≠ k`.
+
+**El `S_global` es el valor mostrado en la columna "Evaluación" (1.0–5.0) del panel de Personal Clínico del Administrador.**
+
+#### 13.5. Sistema de Alertas de Ruptura de Alianza (Dashboard Especialista)
+
+| Estado | Condición Lógica | Indicador Visual en Dashboard |
+|:---|:---|:---|
+| 🚨 **Ruptura Crítica** | `(∃ q_i ≤ 2.0) OR (S_global < 3.5)` | Tag rojo `⚠️ Atención Requerida / Riesgo de Ruptura` |
+| 📉 **Caída en Alianza** | `S_global_actual < S_global_anterior - 0.7` | Tag ámbar `📉 Caída en la Alianza` |
+| ✅ **Alianza Saludable** | `(S_global ≥ 4.0) AND (∀ q_i ≥ 3.0)` | Tag verde `✅ Alianza Sólida` |
+| 💬 **Comentario Pendiente** | `q5 no está vacía` | Ícono de mensaje destacado junto al puntaje numérico |
+
+#### 13.6. Modelo de Datos (PostgreSQL)
+
+**Nueva tabla:** `session_evaluations`
+- `id` UUID PK
+- `appointment_id` UUID FK → `appointments.id`
+- `patient_id` UUID FK → `users.id`
+- `professional_id` UUID FK → `users.id`
+- `q1_global` DECIMAL(2,1) — Evaluación general de la sesión
+- `q2_bond` DECIMAL(2,1) — Vínculo/Empatía
+- `q3_goals` DECIMAL(2,1) — Acuerdo en objetivos/temas
+- `q4_impact` DECIMAL(2,1) — Impacto/Esperanza post-sesión
+- `q5_comment` TEXT — Comentario cualitativo abierto (nullable)
+- `score_global` DECIMAL(2,1) — Puntaje ponderado calculado (Model B)
+- `rupture_flag` TEXT — `'critical'`, `'decline'`, `'healthy'`, `'pending'`
+- `created_at` TIMESTAMPTZ DEFAULT NOW()
+- `is_visible_to_professional` BOOLEAN DEFAULT TRUE — Control de privacidad
+
+**RLS:** Solo el paciente puede INSERTAR su propia evaluación (una por `appointment_id`). El especialista solo puede LEER las evaluaciones de sus citas. El administrador puede leer el `score_global` y `rupture_flag` agregados por especialista.
+
+#### 13.7. Arquitectura de Componentes Angular
+
+- `features/student/session-feedback/` — Cuestionario gamificado (solo paciente)
+  - `session-feedback.component.ts/html/scss`
+  - `emoji-scale/emoji-scale.component.ts` — Selector de caritas reutilizable
+- `core/services/session-evaluation.service.ts` — CRUD de evaluaciones
+- `features/psychologist/` y `features/nutritionist/` — Nuevo badge de evaluación y alertas en perfil de paciente y agenda
+- `features/admin/psychologists/` — Columna "Evaluación" ya existente conectada a datos reales

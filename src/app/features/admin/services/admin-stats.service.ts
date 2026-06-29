@@ -182,9 +182,45 @@ export class AdminStatsService {
     const supabase = this.supabaseService.supabase;
     
     // 1. Obtener usuarios psicólogos y nutriólogos y sus correos de auth.users mediante RPC segura (Zero-Trust)
-    const { data: users, error } = await supabase.rpc('get_admin_health_professionals');
+    let { data: users, error } = await supabase.rpc('get_admin_health_professionals');
 
-    if (error || !users) return [];
+    if (error || !users) {
+      console.warn('⚠️ RPC get_admin_health_professionals no disponible (404/Error). Activando fallback transparente a tablas users, profiles y health_professional_settings...');
+      const { data: fallbackUsers, error: fbErr } = await supabase
+        .from('users')
+        .select(`
+          id, role_id, matricula,
+          profiles (first_name, last_name, faculty, celular, avatar_url),
+          health_professional_settings (capacity, location, modality)
+        `)
+        .in('role_id', [3, 4]);
+
+      if (fbErr || !fallbackUsers) {
+        console.error('❌ Error en fallback de getPsychologistsWithStats:', fbErr);
+        return [];
+      }
+
+      users = fallbackUsers.map((u: any) => {
+        const p = Array.isArray(u.profiles) ? u.profiles[0] : u.profiles;
+        const h = Array.isArray(u.health_professional_settings) ? u.health_professional_settings[0] : u.health_professional_settings;
+        return {
+          id: u.id,
+          role_id: u.role_id,
+          matricula: u.matricula || '',
+          first_name: p?.first_name || '',
+          last_name: p?.last_name || '',
+          email: `${u.matricula || u.id.slice(0, 8)}@ep.buap.mx`, // fallback email
+          faculty: p?.faculty || '',
+          celular: p?.celular || '',
+          capacity: h?.capacity || 40,
+          location: h?.location || 'Consultorio Virtual',
+          modality: h?.modality || 'virtual',
+          avatar_url: p?.avatar_url || ''
+        };
+      });
+    }
+
+    if (!users) return [];
 
     // 2. Obtener la cantidad de pacientes asignados a cada profesional
     const { data: records } = await supabase
@@ -259,7 +295,8 @@ export class AdminStatsService {
         alert: alert,
         specialty: u.role_id === 4 ? 'Nutrición Clínica' : 'Psicología General',
         avgSessionDuration: 50,
-        dropouts: 0
+        dropouts: 0,
+        avatar_url: u.avatar_url || ''
       };
     });
   }

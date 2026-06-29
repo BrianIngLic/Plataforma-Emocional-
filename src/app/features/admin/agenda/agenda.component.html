@@ -1,22 +1,73 @@
 <div class="agenda-container">
 
   <!-- Action Bar -->
-  <div class="action-bar" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-    <div class="week-selector">
-      <button class="nav-btn" (click)="prevWeek()"><mat-icon>chevron_left</mat-icon></button>
-      <div class="current-week">
-        <span class="bold">Semana Actual</span>
-        <span class="date-range" *ngIf="weekOffset === 0">08 Abr - 12 Abr</span>
-        <span class="date-range" *ngIf="weekOffset !== 0">Offset: {{ weekOffset }} semanas</span>
+  <div class="action-bar" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; position: relative;">
+    <div class="week-selector" style="display: flex; align-items: center; gap: 12px;">
+      <button class="today-btn" (click)="resetWeek()" style="background: white; border: 1px solid var(--border-color, #cbd5e1); padding: 8px 16px; border-radius: 8px; font-weight: 600; color: var(--text-primary, #0f172a); cursor: pointer; transition: all 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">Hoy</button>
+      <div style="display: flex; align-items: center; gap: 4px;">
+        <button class="nav-btn" (click)="prevWeek()" style="background: transparent; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 6px; border-radius: 50%; color: var(--text-secondary, #64748b);"><mat-icon>chevron_left</mat-icon></button>
+        <button class="nav-btn" (click)="nextWeek()" style="background: transparent; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 6px; border-radius: 50%; color: var(--text-secondary, #64748b);"><mat-icon>chevron_right</mat-icon></button>
       </div>
-      <button class="nav-btn" (click)="nextWeek()"><mat-icon>chevron_right</mat-icon></button>
-      <button class="today-btn" *ngIf="weekOffset !== 0" (click)="resetWeek()">Hoy</button>
+      <div class="current-week" (click)="toggleCalendarPopover()" style="font-size: 1.35rem; font-weight: 600; color: var(--text-primary, #0f172a); margin-left: 8px; cursor: pointer; display: flex; align-items: center; gap: 8px; padding: 4px 8px; border-radius: 8px; transition: background 0.2s;" [style.background]="showCalendarPopover ? 'rgba(59, 130, 246, 0.1)' : 'transparent'">
+        <span>{{ currentDateRangeString }}</span>
+        <mat-icon style="color: #3b82f6; font-size: 22px; width: 22px; height: 22px;">calendar_today</mat-icon>
+      </div>
     </div>
 
-    <button class="import-holidays-btn" (click)="loadHolidays()" [disabled]="isImportingHolidays" style="display: flex; align-items: center; gap: 8px; background: #8b5cf6; color: white; border: none; padding: 8px 16px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: background 0.2s;">
-      <mat-icon>event_busy</mat-icon>
-      <span>{{ isImportingHolidays ? 'Importando...' : 'Importar Festivos Oficiales' }}</span>
-    </button>
+    <!-- Calendar Popover Overlay -->
+    <div class="calendar-popover" *ngIf="showCalendarPopover">
+      <div class="calendar-header">
+        <button class="btn-icon" (click)="popoverPrevMonth()"><mat-icon>chevron_left</mat-icon></button>
+        <div class="month-title" (click)="togglePopoverViewMode()">{{ popoverMonthYearString | titlecase }} <span class="arrow">▼</span></div>
+        <button class="btn-icon" (click)="popoverNextMonth()"><mat-icon>chevron_right</mat-icon></button>
+      </div>
+
+      <!-- Vista de Días -->
+      <div class="calendar-grid" *ngIf="popoverViewMode === 'days'">
+        <div class="weekday-header">L</div>
+        <div class="weekday-header">M</div>
+        <div class="weekday-header">X</div>
+        <div class="weekday-header">J</div>
+        <div class="weekday-header">V</div>
+        <div class="weekday-header">S</div>
+        <div class="weekday-header">D</div>
+
+        <div *ngFor="let day of popoverCalendarDays" 
+             class="day-cell"
+             [class.other-month]="!day.isCurrentMonth"
+             [class.selected]="day.date.getTime() === popoverDate.getTime()"
+             (click)="selectSpecificDate(day.date)">
+          <span class="date-number">{{ day.date.getDate() }}</span>
+        </div>
+      </div>
+
+      <!-- Vista de Meses -->
+      <div class="months-grid" *ngIf="popoverViewMode === 'months'">
+        <div class="month-box" *ngFor="let month of monthsList; let i = index" (click)="selectPopoverMonth(i)">
+          {{ month }}
+        </div>
+      </div>
+
+      <!-- Vista de Años -->
+      <div class="years-grid" *ngIf="popoverViewMode === 'years'">
+        <div class="year-box" *ngFor="let year of yearsList" (click)="selectPopoverYear(year)">
+          {{ year }}
+        </div>
+      </div>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 16px;">
+      <!-- Toggle Group (Semana / Día) -->
+      <div class="view-toggle-group">
+        <button class="toggle-btn" [class.active]="calendarViewMode === 'week'" (click)="switchCalendarViewMode('week')">Semana</button>
+        <button class="toggle-btn" [class.active]="calendarViewMode === 'day'" (click)="switchCalendarViewMode('day')">Día</button>
+      </div>
+
+      <button class="import-holidays-btn" (click)="loadHolidays()" [disabled]="isImportingHolidays" style="display: flex; align-items: center; gap: 8px; background: #8b5cf6; color: white; border: none; padding: 8px 16px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: background 0.2s;">
+        <mat-icon>event_busy</mat-icon>
+        <span>{{ isImportingHolidays ? 'Importando...' : 'Importar Festivos Oficiales' }}</span>
+      </button>
+    </div>
   </div>
 
   <!-- KPI Metrics Strip -->
@@ -78,8 +129,8 @@
       <div class="panel-header border-b">
         <div class="panel-title-wrapper">
           <mat-icon class="title-icon blue">date_range</mat-icon>
-          <span class="panel-title">
-            Semana {{ weekOffset === 0 ? 'Actual' : weekOffset > 0 ? '+' + weekOffset : weekOffset }}
+          <span class="panel-title" style="font-size: 1.15rem; font-weight: 600; color: var(--text-primary, #0f172a);">
+            {{ currentDateRangeString }}
           </span>
         </div>
         
@@ -91,11 +142,24 @@
       </div>
 
       <div class="grid-table-container">
-        <table class="grid-table">
+        <!-- VISTA SEMANAL -->
+        <table class="grid-table" *ngIf="calendarViewMode === 'week'">
           <thead>
             <tr>
-              <th class="time-header-cell">Hora</th>
-              <th *ngFor="let d of days">{{ d }}</th>
+              <th class="time-header-cell" style="width: 80px; text-align: center; font-weight: 600; color: var(--text-secondary, #64748b); padding: 16px 8px; vertical-align: middle;">Hora</th>
+              <th *ngFor="let wd of weekDays; let wdi = index" style="text-align: center; padding: 16px 8px; cursor: pointer;" (click)="selectHeaderDay(wdi)" title="Ver agenda de este día">
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 6px;">
+                  <span style="font-size: 0.85rem; font-weight: 600; text-transform: uppercase; color: var(--text-secondary, #64748b);">{{ wd.shortName }}</span>
+                  <div 
+                    style="width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.35rem; font-weight: 600; transition: all 0.2s;"
+                    [style.background]="wd.isToday ? '#3b82f6' : 'transparent'"
+                    [style.color]="wd.isToday ? 'white' : 'var(--text-primary, #0f172a)'"
+                    [style.boxShadow]="wd.isToday ? '0 4px 12px rgba(59, 130, 246, 0.4)' : 'none'"
+                  >
+                    {{ wd.dateNumber }}
+                  </div>
+                </div>
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -115,6 +179,49 @@
                 
                 <!-- Blank cell -->
                 <div *ngIf="!getApptAt(di, hi)" class="empty-cell"></div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- VISTA DE DÍA INDIVIDUAL (HOY / DÍA SELECCIONADO) -->
+        <table class="grid-table" *ngIf="calendarViewMode === 'day' && weekDays[activeDayIndex]">
+          <thead>
+            <tr>
+              <th class="time-header-cell" style="width: 80px; text-align: center; font-weight: 600; color: var(--text-secondary, #64748b); padding: 16px 8px; vertical-align: middle;">Hora</th>
+              <th style="text-align: center; padding: 16px 8px; width: 90%;">
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 6px;">
+                  <span style="font-size: 0.85rem; font-weight: 600; text-transform: uppercase; color: var(--text-secondary, #64748b);">{{ weekDays[activeDayIndex].name }}</span>
+                  <div 
+                    style="width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.35rem; font-weight: 600; transition: all 0.2s;"
+                    [style.background]="weekDays[activeDayIndex].isToday ? '#3b82f6' : 'transparent'"
+                    [style.color]="weekDays[activeDayIndex].isToday ? 'white' : 'var(--text-primary, #0f172a)'"
+                    [style.boxShadow]="weekDays[activeDayIndex].isToday ? '0 4px 12px rgba(59, 130, 246, 0.4)' : 'none'"
+                  >
+                    {{ weekDays[activeDayIndex].dateNumber }}
+                  </div>
+                </div>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let hour of hours; let hi = index">
+              <td class="time-cell">{{ hour }}</td>
+              <td class="appt-cell" style="width: 90%;">
+                <!-- If appointment exists -->
+                <button 
+                  *ngIf="getApptAt(activeDayIndex, hi) as appt" 
+                  (click)="selectAppt(appt)"
+                  class="appt-block"
+                  [ngClass]="getStatusClass(appt.status)"
+                  style="max-width: 400px; margin: 0 auto;"
+                >
+                  <p class="patient-name">{{ appt.patient }}</p>
+                  <p class="psychologist-name">{{ appt.psychologist }} — {{ appt.faculty }}</p>
+                </button>
+                
+                <!-- Blank cell -->
+                <div *ngIf="!getApptAt(activeDayIndex, hi)" class="empty-cell"></div>
               </td>
             </tr>
           </tbody>

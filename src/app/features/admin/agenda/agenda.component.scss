@@ -437,10 +437,167 @@
     border-color: rgba(239, 68, 68, 0.2);
     color: #f87171;
   }
-
   &.status-pending {
     background-color: rgba(255, 255, 255, 0.03);
     border-color: rgba(255, 255, 255, 0.08);
     color: var(--text-secondary, #94a3b8);
   }
+}
+
+/* Toggle View Group (Semana / Día) */
+.view-toggle-group {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-color, #cbd5e1);
+  border-radius: 10px;
+  padding: 4px;
+  gap: 4px;
+
+  .toggle-btn {
+    background: transparent;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-secondary, #64748b);
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &.active {
+      background: #3b82f6;
+      color: white;
+      box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+    }
+
+    &:hover:not(.active) {
+      color: var(--text-primary, #0f172a);
+      background: rgba(255, 255, 255, 0.1);
+    }
+  }
+}
+
+/* Calendar Popover */
+.calendar-popover {
+  position: absolute;
+  top: 65px;
+  left: 0;
+  width: 320px;
+  background: var(--bg-card, #1e293b);
+  border: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  animation: popoverEnter 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+
+  .calendar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+
+    .btn-icon {
+      background: transparent;
+      border: none;
+      color: var(--text-secondary, #94a3b8);
+      cursor: pointer;
+      padding: 6px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      &:hover { background: rgba(255, 255, 255, 0.05); color: var(--text-primary, #f8fafc); }
+    }
+
+    .month-title {
+      font-weight: 600;
+      font-size: 1rem;
+      color: var(--text-primary, #f8fafc);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 8px;
+      &:hover { background: rgba(255, 255, 255, 0.05); }
+      .arrow { font-size: 0.7rem; color: #3b82f6; }
+    }
+  }
+
+  .calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+    text-align: center;
+
+    .weekday-header {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-secondary, #64748b);
+      margin-bottom: 8px;
+    }
+
+    .day-cell {
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text-primary, #f8fafc);
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+
+      &.other-month {
+        color: var(--text-secondary, #475569);
+        opacity: 0.5;
+      }
+
+      &.selected {
+        background: #3b82f6;
+        color: white;
+        font-weight: 700;
+        box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);
+      }
+
+      &:hover:not(.selected) {
+        background: rgba(255, 255, 255, 0.08);
+      }
+    }
+  }
+
+  .months-grid, .years-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+
+    .month-box, .year-box {
+      padding: 12px 8px;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-color, rgba(255, 255, 255, 0.05));
+      border-radius: 10px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-primary, #f8fafc);
+      cursor: pointer;
+      transition: all 0.2s;
+
+      &:hover {
+        background: #3b82f6;
+        color: white;
+        border-color: #3b82f6;
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+      }
+    }
+  }
+}
+
+@keyframes popoverEnter {
+  from { opacity: 0; transform: scale(0.95) translateY(-5px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
 }

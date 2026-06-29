@@ -360,8 +360,8 @@
     "semantic_hash": "e9fbe2f84e3d2e67d94ed6d56840ff5d"
   },
   "spec.md": {
-    "mtime": 1782759728.715348,
-    "ast_hash": "cd3cf98b2a0c51e2459f8b1868d8c241",
+    "mtime": 1782758142.8319552,
+    "ast_hash": "3149b55e848073102db7caca49b015b4",
     "semantic_hash": ""
   },
   "src/app/app.html": {
@@ -480,8 +480,8 @@
     "semantic_hash": "4a7f00ca09c61d972acc4092fd729fee"
   },
   "task.md": {
-    "mtime": 1782759778.3716524,
-    "ast_hash": "83fa31ec4fd8b2ab1e60333c1ba96dd2",
+    "mtime": 1782758167.9451475,
+    "ast_hash": "18355b7850fe6c683f2f664567b37c03",
     "semantic_hash": ""
   },
   "public/amati-logo.svg": {
@@ -635,8 +635,8 @@
     "semantic_hash": ""
   },
   "sdd.md": {
-    "mtime": 1782759814.5674734,
-    "ast_hash": "df5eddfa3c0200af80473e1770e9629a",
+    "mtime": 1782758208.899722,
+    "ast_hash": "471ff7f06d378e6db6238f45774bb678",
     "semantic_hash": ""
   },
   "db/migration_achievements_whatsapp_internal.sql": {

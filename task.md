@@ -1,7 +1,7 @@
 # Tareas de Implementación (Spec-Driven Development)
 
 - [x] Crear el archivo `.constitution.md` en el repositorio base.
-- [x] Redactar la especificación formal en `spec.md` dividida por Skills.
+- [x] Redactar la especificación formal en `spec.md` dividida por Skills en orden numérico estricto.
 - [x] Configurar los perfiles de agentes en `.diana/agents.yaml`.
 
 ## Skill 1: Capa de Datos (PostgreSQL + PostgREST)
@@ -68,23 +68,11 @@
 
 ---
 
-## Skill 6: Mi Diario Personal (Fase actual: Ejecución)
-
-**6.0. Refactorización de Layout Central (`features/dashboard`)**
-- `[x]` Extraer el Sidebar de Chat hacia un componente global `DashboardLayoutComponent`.
-- `[x]` Configurar `<router-outlet>` y redirigir `/dashboard` a `/dashboard/chat`.
-
-**6.1. Servicio de Datos (`core/services/diary.service.ts`)**
-- `[x]` Desarrollar `DiaryService` para manejar el estado reactivo de las entradas del diario (CRUD simulado).
-
-**6.2. Interfaz de Usuario (`features/diary`)**
-- `[x]` Componente Principal: Vista dividida (Calendario interactivo a la izquierda, editor a la derecha).
-- `[x]` Editor: Campo de texto libre y selector Múltiple de Estado de Ánimo (Mood Tracker con iconos).
-- `[x]` Historial: Lógica del calendario para mostrar iconos en días con entradas guardadas.
-
-**6.3. Integración en el Dashboard**
-- `[x]` Crear `diary.routes.ts` y conectarlo como ruta hija bajo `/dashboard/diary`.
-- `[x]` Hacer que el botón "Mi Diario" del menú de navegación navegue dinámicamente a la ruta.
+## Skill 4: NutriMind (Módulo Alimentario)
+**4.1. Dashboard y Progresos**
+- `[ ]` Desarrollar el panel con barras de progreso para proteínas, grasas y carbohidratos.
+- `[ ]` Listado de comidas agrupadas por tiempo (desayuno, comida, cena, colaciones).
+*(Skill 4 se mantendrá sincronizada en el backlog)*
 
 ---
 
@@ -131,7 +119,26 @@
 - `[ ]` Base de Datos: Crear tabla `web_push_subscriptions` y añadir `mobile_phone`, `whatsapp_opt_in` y `dual_notification_status` a `users` y `appointments`.
 - `[ ]` Backend Webhook: Programar Orquestador Híbrido Simultáneo en Supabase Edge Functions (`Promise.allSettled` para Web Push y WhatsApp API).
 - `[ ]` Interfaz del Especialista: Refactorizar modal de cancelación de emergencia en `agenda.component.ts` de especialistas para incorporar motivo explícito y selección de emisión dual.
-*(Skill 4 continúa pausada en el backlog)*
+
+---
+
+## Skill 6: Mi Diario Personal (Fase actual: Ejecución)
+
+**6.0. Refactorización de Layout Central (`features/dashboard`)**
+- `[x]` Extraer el Sidebar de Chat hacia un componente global `DashboardLayoutComponent`.
+- `[x]` Configurar `<router-outlet>` y redirigir `/dashboard` a `/dashboard/chat`.
+
+**6.1. Servicio de Datos (`core/services/diary.service.ts`)**
+- `[x]` Desarrollar `DiaryService` para manejar el estado reactivo de las entradas del diario (CRUD simulado).
+
+**6.2. Interfaz de Usuario (`features/diary`)**
+- `[x]` Componente Principal: Vista dividida (Calendario interactivo a la izquierda, editor a la derecha).
+- `[x]` Editor: Campo de texto libre y selector Múltiple de Estado de Ánimo (Mood Tracker con iconos).
+- `[x]` Historial: Lógica del calendario para mostrar iconos en días con entradas guardadas.
+
+**6.3. Integración en el Dashboard**
+- `[x]` Crear `diary.routes.ts` y conectarlo como ruta hija bajo `/dashboard/diary`.
+- `[x]` Hacer que el botón "Mi Diario" del menú de navegación navegue dinámicamente a la ruta.
 
 ---
 
@@ -161,31 +168,60 @@
 
 ---
 
-## Backlog Pendiente
-**Skill 8: Módulo de Administración (Core System)**
+## Skill 8: Módulo de Administración (Core System)
 - `[ ]` Dashboard de Administrador (`admin-layout.component`).
-- `[ ]` Formulario seguro de Alta de Personal Clínico (Psicólogos).
+- `[ ]` Formulario seguro de Alta de Personal Clínico (Psicólogos y Nutriólogos).
 - `[ ]` Panel de gestión de usuarios (suspensión, reactivación).
+- `[ ]` **Configuración de Marca de Agua Institucional:** Crear módulo en `features/admin/settings` para subir el logotipo/marca de agua oficial al bucket de Supabase Storage `institutional_assets`.
 
-**Skill 9: RoleGuard Security (Fase actual: Ejecutada)**
+---
+
+## Skill 9: RoleGuard Security (Fase actual: Ejecutada)
 - `[x]` Crear funcional `roleGuard` (`core/guards/role.guard.ts`) que evalúe `expectedRole`.
 - `[x]` Lógica de redirección inteligente al panel base correspondiente (`/dashboard`, `/psychologist`, `/admin`).
 - `[x]` Inyectar `roleGuard` y metadatos `data: { expectedRole }` en `app.routes.ts`.
 
 ---
 
-## Fase de Integración (Backend: PostgreSQL / PostgREST)
+## Skill 10: Sistema de Logros y Gamificación (Estilo Duolingo)
+- `[ ]` Base de Datos: Crear tablas `achievements`, `user_achievements`, `achievement_categories` con RLS en `db/schema.sql`.
+- `[ ]` Capa de Servicios (`core/services/achievements.service.ts`): Desarrollar lógica reactiva (Signals) para calcular rachas (*streaks*), acumular XP y verificar desbloqueos.
+- `[ ]` Interfaz de Gestión (Admin y Clínicos): Crear formulario en Angular para dar de alta logros globales (Admin) y logros de terapia personalizados (Psicólogos/Nutriólogos).
+- `[ ]` Interfaz Estudiantil (`features/achievements`): Diseñar la galería de logros con medallas Glassmorphism, barra de XP y contador de racha en el navbar.
+- `[ ]` Animaciones y Alertas: Implementar notificaciones PWA y SweetAlerts al completar un hito de gamificación.
 
-**9.1. Configuración del Entorno**
+---
+
+## Skill 11: Chat Interno Conectado con Meta Cloud API (WhatsApp Bidireccional)
+- `[ ]` Base de Datos: Crear tablas `internal_meta_chats` y `webhook_logs` en `schema.sql` con indexación para búsquedas rápidas.
+- `[ ]` Backend y Webhooks (`supabase/functions/meta-whatsapp-webhook`): Programar la Edge Function en Deno para enviar mensajes a la API de Meta y recibir respuestas entrantes de WhatsApp.
+- `[ ]` Capa de Servicios (`core/services/internal-chat.service.ts`): Conectar con Supabase Realtime para transmitir y recibir los mensajes en vivo sin recargar la página.
+- `[ ]` Interfaz de Command Center (`features/internal-chat`): Desarrollar el módulo de mensajería interna para Administradores y Médicos (lista de chats, panel central, burbujas de estado de entrega).
+- `[ ]` Ciberseguridad: Auditar el enmascaramiento de números y desinfección de Información Personal de Salud (PHI).
+
+---
+
+## Skill 12: Dossier Clínico Unificado, Marca de Agua y Meta Seal (Exportación Masiva PDF)
+- `[ ]` Arquitectura Estricta de Código Abierto: Instalar y configurar `pdfmake` y `pdf-lib` (sin dependencias comerciales o cerradas).
+- `[ ]` Capa de Servicios (`core/services/dossier-export.service.ts`): Desarrollar orquestador de datos que unifique consultas de perfil, notas SOAP, registros nutricionales, diario personal y test de Amati IA.
+- `[ ]` Marca de Agua Institucional: Enlazar el servicio para recuperar la imagen oficial desde `institutional_assets` (cargada por Admin en Skill 8) y aplicarla como membrete y marca de agua diagonal transparente (12% opacidad).
+- `[ ]` Implementación de Meta Seal: Generar hash HMAC-SHA256 mediante `Web Crypto API` (`SubtleCrypto`), integrándolo como sello visible en el resumen ejecutivo y en los metadatos XMP del PDF para garantizar el principio legal de No Repudio (NOM-024 / HIPAA).
+- `[ ]` Interfaz de Usuario: Insertar botones de "📥 Exportar Dossier Completo" en el perfil del paciente dentro del Command Center clínico y administrativo.
+
+---
+
+## Fase 13: Fase de Integración Backend (PostgreSQL / PostgREST)
+
+**13.1. Configuración del Entorno**
 - `[x]` Configurar `environments/environment.ts` con credenciales de la API y llave de cifrado E2EE.
 - `[x]` Instalar cliente (Supabase JS o HttpClient) y librería criptográfica (`crypto-js`).
 - `[x]` Crear servicio base de conexión (`supabase.service.ts` y `crypto.service.ts`).
 
-**9.2. Refactorización de Autenticación**
+**13.2. Refactorización de Autenticación**
 - `[x]` Conectar `auth.service.ts` con la base de datos para login real y manejo de sesión JWT.
 - `[x]` Conectar el stepper de registro (`register.component.ts`) para guardar datos en las tablas `users`, `profiles` y `student_clinical_records`.
 
-**9.3. Refactorización de Skills**
+**13.3. Refactorización de Skills**
 - `[x]` Conectar `chat.service.ts` con la tabla `messages`.
 - `[x]` Conectar `diary.service.ts` (si existe la tabla, pendiente de crear en schema) o simular.
 - `[x]` Conectar listado de pacientes del psicólogo con las tablas reales.

@@ -60,7 +60,7 @@
           </button>
         </div>
 
-        <div class="content-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+        <div class="content-grid" style="display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
           
           <!-- Columna Izquierda: Datos Generales (Estudiante) -->
           <div class="col-main" style="display: flex; flex-direction: column; gap: 1.5rem;">
@@ -69,7 +69,7 @@
                 <mat-icon style="color: #10b981;">account_circle</mat-icon> Datos Generales (Estudiante)
               </h2>
               
-              <div class="general-data-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; font-size: 0.9rem;">
+              <div class="general-data-grid" style="display: grid; grid-template-columns: 1fr; gap: 1rem; font-size: 0.9rem;">
                 <div>
                   <label style="display: block; font-size: 0.75rem; color: var(--text-secondary); text-transform: uppercase; margin-bottom: 0.25rem; font-weight: 600;">Nombre Completo</label>
                   <p style="margin: 0; color: var(--text-primary); font-weight: 500;">{{ generalData?.nombre || patient.firstName + ' ' + patient.lastName }}</p>
@@ -102,7 +102,7 @@
                   <label style="display: block; font-size: 0.75rem; color: var(--text-secondary); text-transform: uppercase; margin-bottom: 0.25rem; font-weight: 600;">Edad</label>
                   <p style="margin: 0; color: var(--text-primary); font-weight: 500;">{{ generalData?.edad || 'N/A' }} años</p>
                 </div>
-                <div style="grid-column: span 2;">
+                <div style="grid-column: span 1;">
                   <label style="display: block; font-size: 0.75rem; color: var(--text-secondary); text-transform: uppercase; margin-bottom: 0.25rem; font-weight: 600;">Antecedentes Familiares</label>
                   <p style="margin: 0; color: var(--text-primary); font-weight: 500; white-space: pre-wrap;">{{ generalData?.antecedentes_familiares || 'Sin registrar' }}</p>
                 </div>
@@ -158,7 +158,7 @@
               </h2>
               
               <form class="nutritionist-form" style="display: flex; flex-direction: column; gap: 1rem;">
-                <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="form-row" style="display: grid; grid-template-columns: 1fr; gap: 1rem;">
                   <div class="form-group" style="display: flex; flex-direction: column; gap: 0.35rem;">
                     <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-primary);">Problemas Gastrointestinales</label>
                     <input [(ngModel)]="specificData.problemas_gastrointestinales" name="prob_gastro" type="text" placeholder="Ej. Gastritis, colitis, reflujo" style="padding: 0.5rem; border-radius: 8px; border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-primary); font-size: 0.85rem; outline: none;" />
@@ -170,7 +170,7 @@
                   </div>
                 </div>
 
-                <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="form-row" style="display: grid; grid-template-columns: 1fr; gap: 1rem;">
                   <div class="form-group" style="display: flex; flex-direction: column; gap: 0.35rem;">
                     <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-primary);">Enfermedad o Padecimiento</label>
                     <input [(ngModel)]="specificData.enfermedad_padecimiento" name="enfermedad" type="text" placeholder="Ej. Hipotiroidismo, Diabetes" style="padding: 0.5rem; border-radius: 8px; border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-primary); font-size: 0.85rem; outline: none;" />
@@ -182,7 +182,7 @@
                   </div>
                 </div>
 
-                <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="form-row" style="display: grid; grid-template-columns: 1fr; gap: 1rem;">
                   <div class="form-group" style="display: flex; flex-direction: column; gap: 0.35rem;">
                     <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-primary);">Alimentos que no le gustan</label>
                     <input [(ngModel)]="specificData.alimentos_desagrado" name="disliked" type="text" placeholder="Ej. Hígado, cebolla" style="padding: 0.5rem; border-radius: 8px; border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-primary); font-size: 0.85rem; outline: none;" />
@@ -194,7 +194,7 @@
                   </div>
                 </div>
 
-                <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="form-row" style="display: grid; grid-template-columns: 1fr; gap: 1rem;">
                   <div class="form-group" style="display: flex; flex-direction: column; gap: 0.35rem;">
                     <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-primary);">Días a la semana de actividad</label>
                     <input [(ngModel)]="specificData.dias_actividad" name="dias_act" type="number" placeholder="Ej. 3" style="padding: 0.5rem; border-radius: 8px; border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-primary); font-size: 0.85rem; outline: none;" />
@@ -206,7 +206,7 @@
                   </div>
                 </div>
 
-                <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="form-row" style="display: grid; grid-template-columns: 1fr; gap: 1rem;">
                   <div class="form-group" style="display: flex; flex-direction: column; gap: 0.35rem;">
                     <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-primary);">Comidas principales al día</label>
                     <input [(ngModel)]="specificData.comidas_al_dia" name="comidas" type="number" placeholder="Ej. 3" style="padding: 0.5rem; border-radius: 8px; border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-primary); font-size: 0.85rem; outline: none;" />
@@ -218,7 +218,7 @@
                   </div>
                 </div>
 
-                <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="form-row" style="display: grid; grid-template-columns: 1fr; gap: 1rem;">
                   <div class="form-group" style="display: flex; flex-direction: column; gap: 0.35rem;">
                     <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-primary);">Consumo de agua (Litros)</label>
                     <input [(ngModel)]="specificData.consumo_agua" name="agua" type="number" placeholder="Ej. 2" style="padding: 0.5rem; border-radius: 8px; border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-primary); font-size: 0.85rem; outline: none;" />

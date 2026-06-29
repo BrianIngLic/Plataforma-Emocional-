@@ -4,13 +4,13 @@
     
     <div class="sidebar-header">
       <div class="brand">
-        <div class="logo">
-          <mat-icon>restaurant</mat-icon>
-        </div>
-        <div class="brand-text">
-          <h2>Nutrición Plus</h2>
-          <p>Portal Nutricional</p>
-        </div>
+        <a routerLink="./dashboard" class="logo-link" style="display: flex; align-items: center; gap: 8px; text-decoration: none;">
+          <img src="/amati-logo.svg" alt="Amati Logo" style="width: 36px; height: 36px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));" />
+          <div class="brand-text">
+            <h2>Amati</h2>
+            <p>Nutriólogo</p>
+          </div>
+        </a>
       </div>
       <button class="btn-icon hamburger" (click)="toggleSidebar()">
         <mat-icon>menu</mat-icon>
@@ -45,13 +45,6 @@
             <small>Planificación de Citas</small>
           </div>
         </a>
-        <a routerLink="./agenda" routerLinkActive="active" class="nav-item">
-          <mat-icon>calendar_today</mat-icon>
-          <div class="nav-text">
-            <span>Citas</span>
-            <small>Seguimiento</small>
-          </div>
-        </a>
       </nav>
     </div>
 
@@ -62,12 +55,12 @@
       </a>
 
       <div class="user-profile" *ngIf="currentUser">
-        <div class="avatar">
-          <mat-icon>person</mat-icon>
+        <div class="avatar" [style.background-image]="currentUser.avatar_url ? 'url(' + currentUser.avatar_url + ')' : ''" [style.background-size]="'cover'" [style.background-position]="'center'">
+          <mat-icon *ngIf="!currentUser.avatar_url">person</mat-icon>
         </div>
         <div class="user-info">
           <span class="name">{{ currentUser.name | titlecase }}</span>
-          <span class="role">Nutricionista</span>
+          <span class="role">Nutriólogo</span>
         </div>
       </div>
 

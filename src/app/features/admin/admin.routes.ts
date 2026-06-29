@@ -32,6 +32,10 @@ export const ADMIN_ROUTES: Routes = [
       },
       {
         path: 'settings',
+        loadComponent: () => import('./admin-settings/admin-settings.component').then(m => m.AdminSettingsComponent)
+      },
+      {
+        path: 'institutional-branding',
         loadComponent: () => import('./institutional-settings/institutional-settings.component').then(m => m.InstitutionalSettingsComponent)
       },
       {

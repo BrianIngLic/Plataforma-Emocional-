@@ -19,14 +19,15 @@ export class AdminLayoutComponent {
   isSidebarCollapsed = false;
 
   navItems = [
-    { label: 'Overview', sub: 'Panorama General', icon: 'dashboard', path: './overview' },
-    { label: 'Faculties', sub: 'Facultades', icon: 'business', path: './faculties' },
+    { label: 'Panorama General', sub: 'Métricas de ocupación', icon: 'dashboard', path: './overview' },
+    { label: 'Facultades', sub: 'Gestión por divisiones', icon: 'business', path: './faculties' },
     { label: 'Personal Médico', sub: 'Psicólogos y Nutriólogos', icon: 'assignment_ind', path: './psychologists' },
-    { label: 'Patients', sub: 'Alumnos y Asignaciones', icon: 'people', path: './patients' },
-    { label: 'Reports', sub: 'Reportes y Estadísticas', icon: 'insert_chart', path: './reports' },
-    { label: 'Global Agenda', sub: 'Agenda Global', icon: 'calendar_today', path: './agenda' },
-    { label: 'Configuración', sub: 'Marca de Agua Institucional', icon: 'settings', path: './settings' },
-    { label: 'Alerts', sub: 'Alertas del Sistema', icon: 'notifications', path: './alerts', badge: 5 }
+    { label: 'Alumnos y Pacientes', sub: 'Asignaciones y seguimiento', icon: 'people', path: './patients' },
+    { label: 'Reportes y Estadísticas', sub: 'Analítica institucional', icon: 'insert_chart', path: './reports' },
+    { label: 'Agenda Global', sub: 'Calendario clínico', icon: 'calendar_today', path: './agenda' },
+    { label: 'Configuración', sub: 'Mi perfil y foto', icon: 'settings', path: './settings' },
+    { label: 'Imagen Institucional', sub: 'Sello y marca de agua', icon: 'branding_watermark', path: './institutional-branding' },
+    { label: 'Alertas', sub: 'Notificaciones del sistema', icon: 'notifications', path: './alerts', badge: 5 }
   ];
 
   get currentUser() {

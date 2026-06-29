@@ -692,5 +692,6 @@ ON CONFLICT (id) DO UPDATE SET institution_name = EXCLUDED.institution_name;
 ALTER TABLE public.institutional_settings ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY inst_settings_read ON public.institutional_settings FOR SELECT USING (true);
+CREATE POLICY inst_settings_insert ON public.institutional_settings FOR INSERT WITH CHECK (public.get_auth_role() = 1);
 CREATE POLICY inst_settings_update ON public.institutional_settings FOR UPDATE USING (public.get_auth_role() = 1);
 

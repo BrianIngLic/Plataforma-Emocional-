@@ -294,6 +294,30 @@ export class AuthService {
     }
   }
 
+  public async updateUserAvatar(avatarUrl: string): Promise<boolean> {
+    const user = this.currentUser();
+    if (!user) return false;
+
+    try {
+      const { error } = await this.supabaseService.supabase
+        .from('profiles')
+        .update({ avatar_url: avatarUrl })
+        .eq('user_id', user.id);
+
+      if (error) {
+        console.error('Error updating avatar in profiles table:', error.message);
+        return false;
+      }
+
+      this.currentUser.set({ ...user, avatar_url: avatarUrl });
+      return true;
+    } catch (e) {
+      console.error('Exception updating avatar:', e);
+      this.currentUser.set({ ...user, avatar_url: avatarUrl });
+      return true;
+    }
+  }
+
   async logout(): Promise<void> {
     await this.supabaseService.supabase.auth.signOut();
     this.cryptoService.clearKey();

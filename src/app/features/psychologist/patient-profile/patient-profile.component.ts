@@ -5,6 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { SupabaseService } from '../../../core/services/supabase.service';
 import { CryptoService } from '../../../core/services/crypto.service';
+import { DossierExportService } from '../../../core/services/dossier-export.service';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartConfiguration, ChartOptions } from 'chart.js';
 
@@ -19,10 +20,12 @@ export class PatientProfileComponent implements OnInit {
   supabase = inject(SupabaseService).supabase;
   crypto = inject(CryptoService);
   dialog = inject(MatDialog);
+  dossierExport = inject(DossierExportService);
 
   patient: any = null;
   diaryEntries: any[] = [];
   loading = true;
+  isExporting = false;
 
   sessionHistory: any[] = [];
 
@@ -47,6 +50,34 @@ export class PatientProfileComponent implements OnInit {
     scales: {
       x: { grid: { display: false } },
       y: { grid: { color: 'rgba(255, 255, 255, 0.05)' }, min: 0, max: 27 }
+    }
+  };
+
+  allianceStatus: 'critical' | 'decline' | 'healthy' | null = null;
+  allianceDeclineAlert = false;
+  allianceDeclineValue = 0;
+
+  public allianceChartData: ChartConfiguration<'line'>['data'] = {
+    labels: [],
+    datasets: [
+      {
+        data: [],
+        label: 'Alianza (FIT/SRS)',
+        borderColor: '#8b5cf6',
+        backgroundColor: 'rgba(139, 92, 246, 0.1)',
+        tension: 0.4,
+        fill: true
+      }
+    ]
+  };
+
+  public allianceChartOptions: ChartOptions<'line'> = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { grid: { display: false } },
+      y: { grid: { color: 'rgba(255, 255, 255, 0.05)' }, min: 1.0, max: 5.0 }
     }
   };
 
@@ -243,12 +274,66 @@ export class PatientProfileComponent implements OnInit {
         this.patient.nextSession = nextSessionText;
       }
 
+      // 4. Obtener evaluaciones de alianza terapéutica (FIT/SRS) para historial de gráfica
+      const { data: evals, error: evalsError } = await this.supabase
+        .from('session_evaluations')
+        .select('created_at, score_global, rupture_flag')
+        .eq('patient_id', id)
+        .order('created_at', { ascending: true });
+
+      if (evalsError) {
+        console.error('Error fetching evaluations:', evalsError);
+      }
+
+      if (evals && evals.length > 0) {
+        this.allianceStatus = evals[evals.length - 1].rupture_flag as any;
+
+        if (evals.length >= 2) {
+          const lastScore = Number(evals[evals.length - 1].score_global);
+          const prevScore = Number(evals[evals.length - 2].score_global);
+          const diff = prevScore - lastScore;
+          if (diff >= 0.7) {
+            this.allianceDeclineAlert = true;
+            this.allianceDeclineValue = diff;
+          }
+        }
+
+        const labels = evals.map(e => new Date(e.created_at).toLocaleDateString([], { day: '2-digit', month: 'short' }));
+        const dataPoints = evals.map(e => Number(e.score_global));
+
+        this.allianceChartData = {
+          labels: labels,
+          datasets: [
+            {
+              data: dataPoints,
+              label: 'Alianza (FIT/SRS)',
+              borderColor: '#8b5cf6',
+              backgroundColor: 'rgba(139, 92, 246, 0.1)',
+              tension: 0.4,
+              fill: true
+            }
+          ]
+        };
+      }
+
     } catch (err) {
       console.error('Unexpected error loading patient data:', err);
     }
 
     this.generateCalendar();
     this.loading = false;
+  }
+
+  getAlertClass(flag: string): string {
+    if (flag === 'critical') return 'badge-danger';
+    if (flag === 'decline') return 'badge-warning';
+    return 'badge-success';
+  }
+
+  getAlertText(flag: string): string {
+    if (flag === 'critical') return '⚠️ Ruptura';
+    if (flag === 'decline') return '📉 Caída';
+    return '✅ Sólida';
   }
 
   openPostSessionModal(session: any) {
@@ -353,5 +438,24 @@ export class PatientProfileComponent implements OnInit {
 
   goBack() {
     this.router.navigate(['/psychologist/patients']);
+  }
+
+  async exportPatientDossier() {
+    if (!this.patient?.id) return;
+    this.isExporting = true;
+    try {
+      const blob = await this.dossierExport.exportDossier(this.patient.id);
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `dossier_clinico_${this.patient.firstName}_${this.patient.lastName}.pdf`;
+      a.click();
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error('Error al exportar dossier:', err);
+      alert('Error al generar el dossier clínico.');
+    } finally {
+      this.isExporting = false;
+    }
   }
 }

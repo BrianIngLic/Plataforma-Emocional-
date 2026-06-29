@@ -68,7 +68,12 @@
             </div>
             <div class="appt-details">
               <div class="patient-name">{{ appt.student.profiles.first_name }} {{ appt.student.profiles.last_name }}</div>
-              <div class="appt-type">{{ appt.priority_level }}</div>
+              <div class="appt-type-row" style="display: flex; align-items: center; gap: 8px;">
+                <span class="appt-type">{{ appt.priority_level }}</span>
+                <span *ngIf="getEvaluation(appt)" class="badge" [ngClass]="getAlertClass(getEvaluation(appt).rupture_flag)" style="font-size: 0.7rem; padding: 2px 6px; border-radius: 4px; color: white;">
+                  {{ getAlertText(getEvaluation(appt).rupture_flag) }} ({{ getEvaluation(appt).score_global }})
+                </span>
+              </div>
             </div>
             <div class="appt-actions" style="display: flex; gap: 4px;">
               <button class="btn-icon emergency-action-btn" (click)="openEmergencyChangeModal(appt)" title="Gestión de Emergencia / Dual Broadcast">
@@ -116,7 +121,13 @@
                     <mat-icon *ngIf="item.type === 'appointment'">person</mat-icon>
                     <strong>{{ item.title }}</strong>
                   </div>
-                  <div class="header-actions" style="display: flex; gap: 4px;">
+                  <div class="header-actions" style="display: flex; align-items: center; gap: 8px;">
+                    <div *ngIf="item.evaluation" class="eval-badge-group" style="display: flex; align-items: center; gap: 6px;">
+                      <span class="badge" [ngClass]="getAlertClass(item.evaluation.rupture_flag)" style="font-size: 0.75rem; padding: 2px 6px; border-radius: 4px; font-weight: 600; color: white;">
+                        {{ getAlertText(item.evaluation.rupture_flag) }} ({{ item.evaluation.score_global }})
+                      </span>
+                      <mat-icon *ngIf="item.evaluation.q5_comment" style="color: #a855f7; font-size: 16px; width: 16px; height: 16px;" [title]="item.evaluation.q5_comment">sms</mat-icon>
+                    </div>
                     <button *ngIf="item.type === 'appointment'" class="btn-icon emergency-action-btn" (click)="openEmergencyChangeModal(item.data)" title="Gestión de Emergencia / Dual Broadcast">
                       <mat-icon style="color: #ef4444;">warning</mat-icon>
                     </button>
@@ -126,6 +137,9 @@
                   </div>
                 </div>
                 <p>{{ item.desc }}</p>
+                <div *ngIf="item.evaluation?.q5_comment" class="comment-box-timeline" style="margin-top: 8px; padding: 8px 12px; background: rgba(168, 85, 247, 0.08); border-left: 2px solid #a855f7; border-radius: 4px; font-size: 0.85rem; color: var(--text-primary);">
+                  <strong>Comentario de sesión:</strong> "{{ item.evaluation.q5_comment }}"
+                </div>
                 <span class="extra" *ngIf="item.extra">{{ item.extra }}</span>
               </div>
             </div>

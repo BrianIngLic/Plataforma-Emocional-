@@ -29,6 +29,12 @@
           <span class="badge neutral">Riesgo: {{patient.riskLevel}}</span>
         </div>
       </div>
+      <div class="actions" style="margin-left: auto; display: flex; align-items: center; padding-right: 1rem;">
+        <button class="btn btn-primary" (click)="exportPatientDossier()" [disabled]="isExporting" style="display: inline-flex; align-items: center; gap: 0.5rem; background: #1e3a8a; border: none; padding: 10px 18px; border-radius: 8px; color: white; cursor: pointer; font-weight: 600; transition: background 0.2s;">
+          <mat-icon>{{ isExporting ? 'hourglass_empty' : 'picture_as_pdf' }}</mat-icon>
+          {{ isExporting ? 'Generando...' : '📥 Exportar Dossier Completo' }}
+        </button>
+      </div>
       <div class="stats">
         <div class="stat-box">
           <div class="stat-title"><mat-icon>calendar_today</mat-icon> Sesiones</div>
@@ -105,6 +111,26 @@
         <h2 class="card-title"><mat-icon class="text-blue">trending_up</mat-icon> Evolución PHQ-9</h2>
         <div class="chart-wrapper">
            <canvas baseChart [data]="lineChartData" [options]="lineChartOptions" type="line"></canvas>
+        </div>
+      </div>
+
+      <!-- Alianza Terapéutica Chart & Rupture Flag Alert -->
+      <div class="card" *ngIf="allianceChartData.labels && allianceChartData.labels.length > 0">
+        <h2 class="card-title" style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+          <span style="display: inline-flex; align-items: center; gap: 0.5rem;"><mat-icon class="text-purple">analytics</mat-icon> Alianza Terapéutica (FIT/SRS)</span>
+          <span *ngIf="allianceStatus" class="badge" [ngClass]="getAlertClass(allianceStatus)" style="font-size: 0.75rem; padding: 4px 8px; border-radius: 6px; color: white;">
+            {{ getAlertText(allianceStatus) }}
+          </span>
+        </h2>
+        
+        <!-- Alerta Longitudinal -->
+        <div *ngIf="allianceDeclineAlert" style="display: flex; align-items: center; gap: 8px; padding: 12px; background: rgba(245, 158, 11, 0.12); border-left: 4px solid #f59e0b; border-radius: 8px; margin: 10px 0; font-size: 0.85rem; color: var(--text-primary);">
+          <mat-icon style="color: #f59e0b; font-size: 20px; width: 20px; height: 20px;">trending_down</mat-icon>
+          <span><strong>Alerta Longitudinal:</strong> Se detectó una caída de {{ allianceDeclineValue | number:'1.1-1' }} puntos en la última sesión.</span>
+        </div>
+
+        <div class="chart-wrapper" style="height: 250px; margin-top: 15px;">
+           <canvas baseChart [data]="allianceChartData" [options]="allianceChartOptions" type="line"></canvas>
         </div>
       </div>
       

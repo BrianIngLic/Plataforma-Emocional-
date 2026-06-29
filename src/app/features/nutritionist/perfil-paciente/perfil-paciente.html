@@ -53,10 +53,15 @@
     <div class="tab-content-area">
       <!-- PESTAÑA 1: EXPEDIENTE CLÍNICO -->
       <div *ngIf="activeTab === 'expediente'" class="tab-pane">
-        <!-- PDF Download Button -->
-        <div style="display: flex; justify-content: flex-end; margin-bottom: 1.25rem;">
+        <!-- PDF Download Buttons -->
+        <div style="display: flex; justify-content: flex-end; gap: 1rem; margin-bottom: 1.25rem;">
           <button (click)="downloadPDF()" class="pdf-btn" style="display: inline-flex; align-items: center; gap: 0.5rem; background: #0ea5e9; color: white; border: none; padding: 0.65rem 1.25rem; border-radius: 10px; font-weight: bold; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 6px rgba(14, 165, 233, 0.15);">
-            <mat-icon>picture_as_pdf</mat-icon> Descargar Expediente PDF
+            <mat-icon>picture_as_pdf</mat-icon> Descargar Expediente Nutricional
+          </button>
+          
+          <button (click)="exportPatientDossier()" [disabled]="isExporting" style="display: inline-flex; align-items: center; gap: 0.5rem; background: #1e3a8a; color: white; border: none; padding: 0.65rem 1.25rem; border-radius: 10px; font-weight: bold; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 6px rgba(30, 58, 138, 0.15);">
+            <mat-icon>{{ isExporting ? 'hourglass_empty' : 'analytics' }}</mat-icon> 
+            {{ isExporting ? 'Generando...' : '📥 Exportar Dossier Completo' }}
           </button>
         </div>
 

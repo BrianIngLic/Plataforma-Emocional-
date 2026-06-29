@@ -6,6 +6,7 @@ import { BaseChartDirective } from 'ng2-charts';
 import { ChartConfiguration, ChartOptions } from 'chart.js';
 import { AdminStatsService } from '../services/admin-stats.service';
 import { AdminSkill8Service, HealthProfessionalItem } from '../services/admin-skill8.service';
+import { DossierExportService } from '../../../core/services/dossier-export.service';
 
 @Component({
   selector: 'app-patients',
@@ -18,6 +19,9 @@ export class PatientsComponent implements OnInit {
 
   private adminStats = inject(AdminStatsService);
   private adminSkill8 = inject(AdminSkill8Service);
+  private dossierExport = inject(DossierExportService);
+
+  isExporting: { [studentId: string]: boolean } = {};
 
   byFaculty: any[] = [];
   diagnosisDistribution: any[] = [];
@@ -196,5 +200,23 @@ export class PatientsComponent implements OnInit {
         }
       ]
     };
+  }
+
+  async exportPatientDossier(studentId: string, studentName: string) {
+    this.isExporting[studentId] = true;
+    try {
+      const blob = await this.dossierExport.exportDossier(studentId);
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `dossier_clinico_${studentName.replace(/\s+/g, '_')}.pdf`;
+      a.click();
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error('Error al exportar dossier:', err);
+      alert('Error al generar el dossier clínico.');
+    } finally {
+      this.isExporting[studentId] = false;
+    }
   }
 }

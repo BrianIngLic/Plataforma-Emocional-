@@ -153,7 +153,7 @@ export class HealthProfessionalAgendaComponent implements OnInit {
     
     const { data, error } = await this.supabase
       .from('appointments')
-      .select('*, student:users!appointments_student_id_fkey(profiles(first_name, last_name, avatar_url))')
+      .select('*, student:users!appointments_student_id_fkey(profiles(first_name, last_name, avatar_url)), session_evaluations(q1_global, q2_bond, q3_goals, q4_impact, q5_comment, score_global, rupture_flag)')
       .eq('professional_id', this.currentUserId)
       .order('scheduled_date', { ascending: false });
 
@@ -205,10 +205,10 @@ export class HealthProfessionalAgendaComponent implements OnInit {
       
     this.dayExceptions = excs || [];
 
-    // 3. Obtener Citas de este día exacto
+    // 3. Obtener Citas de este día exacto con evaluaciones asociadas
     const { data: appts, error } = await this.supabase
       .from('appointments')
-      .select('*, student:users!appointments_student_id_fkey(profiles(first_name, last_name, avatar_url))')
+      .select('*, student:users!appointments_student_id_fkey(profiles(first_name, last_name, avatar_url)), session_evaluations(q1_global, q2_bond, q3_goals, q4_impact, q5_comment, score_global, rupture_flag)')
       .eq('professional_id', this.currentUserId)
       .eq('scheduled_date', dateString)
       .order('start_time', { ascending: true });
@@ -251,12 +251,14 @@ export class HealthProfessionalAgendaComponent implements OnInit {
     // 3. Citas
     this.dayAppointments.forEach(a => {
       const time = a.start_time ? a.start_time.substring(0,5) : '00:00';
+      const ev = this.getEvaluation(a);
       
       this.timelineItems.push({
         time: time,
         type: 'appointment',
         title: `Cita: ${a.student?.profiles?.first_name || 'Paciente'} ${a.student?.profiles?.last_name || ''}`,
-        desc: `Estado: ${a.status === 'scheduled' ? 'Confirmada' : a.status}`,
+        desc: `Estado: ${a.status === 'scheduled' ? 'Confirmada' : a.status === 'completed' ? 'Completada' : a.status}`,
+        evaluation: ev,
         data: a
       });
     });
@@ -267,6 +269,23 @@ export class HealthProfessionalAgendaComponent implements OnInit {
       if (a.time > b.time) return 1;
       return 0;
     });
+  }
+
+  getEvaluation(appt: any): any {
+    if (!appt || !appt.session_evaluations) return null;
+    return Array.isArray(appt.session_evaluations) ? appt.session_evaluations[0] : appt.session_evaluations;
+  }
+
+  getAlertClass(flag: string): string {
+    if (flag === 'critical') return 'badge-danger';
+    if (flag === 'decline') return 'badge-warning';
+    return 'badge-success';
+  }
+
+  getAlertText(flag: string): string {
+    if (flag === 'critical') return '⚠️ Ruptura';
+    if (flag === 'decline') return '📉 Caída';
+    return '✅ Sólida';
   }
 
   openEmergencyChangeModal(appointment: any) {

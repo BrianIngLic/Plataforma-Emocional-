@@ -112,3 +112,35 @@
   .appt-time { font-weight: 600; color: var(--text-primary); min-width: 70px; padding: 0 1rem; border-right: 1px solid var(--border-color); display: flex; align-items: center; }
   .appt-details { padding-left: 1rem; display: flex; flex-direction: column; gap: 0.25rem; .patient-name { font-weight: 600; color: var(--text-primary); } .appt-type { font-size: 0.8rem; color: var(--text-secondary); background: rgba(0,0,0,0.05); padding: 0.1rem 0.4rem; border-radius: 4px; align-self: flex-start; } }
 }
+
+/* Badges de Evaluación (Alianza Terapéutica FIT) */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+
+  &.badge-success {
+    background-color: rgba(16, 185, 129, 0.12) !important;
+    border: 1px solid rgba(16, 185, 129, 0.25) !important;
+    color: #10b981 !important;
+  }
+
+  &.badge-warning {
+    background-color: rgba(245, 158, 11, 0.12) !important;
+    border: 1px solid rgba(245, 158, 11, 0.25) !important;
+    color: #f59e0b !important;
+  }
+
+  &.badge-danger {
+    background-color: rgba(239, 68, 68, 0.12) !important;
+    border: 1px solid rgba(239, 68, 68, 0.25) !important;
+    color: #ef4444 !important;
+  }
+}

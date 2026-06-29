@@ -260,6 +260,24 @@ export class AdminStatsService {
       });
     }
 
+    // 4. Obtener calificaciones promedio reales
+    const { data: evals } = await supabase
+      .from('session_evaluations')
+      .select('professional_id, score_global');
+
+    const evalsMap: Record<string, { sum: number; count: number }> = {};
+    if (evals) {
+      evals.forEach(e => {
+        if (e.professional_id) {
+          if (!evalsMap[e.professional_id]) {
+            evalsMap[e.professional_id] = { sum: 0, count: 0 };
+          }
+          evalsMap[e.professional_id].sum += Number(e.score_global);
+          evalsMap[e.professional_id].count += 1;
+        }
+      });
+    }
+
     return users.map((u: any) => {
       const capacity = u.capacity || 40;
       const patients = patientsMap[u.id] || 0;
@@ -279,6 +297,10 @@ export class AdminStatsService {
       const sessionsScheduled = pastSessions > 0 ? pastSessions : 1;
       const sessionsCompleted = pastSessions > 0 ? stats.completed : 1;
 
+      // Calcular promedio real o usar 5.0 por defecto
+      const evalInfo = evalsMap[u.id];
+      const avgEval = evalInfo ? Math.round((evalInfo.sum / evalInfo.count) * 10) / 10 : 5.0;
+
       return {
         id: u.id,
         role_id: u.role_id,
@@ -291,7 +313,7 @@ export class AdminStatsService {
         attendanceRate: attendanceRate,
         sessionsCompleted: sessionsCompleted,
         sessionsScheduled: sessionsScheduled,
-        evaluation: 4.0 + Number(Math.random().toFixed(1)), // MOCK: Pendiente de implementar calificaciones
+        evaluation: avgEval,
         alert: alert,
         specialty: u.role_id === 4 ? 'Nutrición Clínica' : 'Psicología General',
         avgSessionDuration: 50,

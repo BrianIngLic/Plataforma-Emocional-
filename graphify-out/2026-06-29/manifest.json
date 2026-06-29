@@ -20,8 +20,8 @@
     "semantic_hash": "9b7e1de8e28daa4e2a307e1e0f1cf529"
   },
   "db/schema.sql": {
-    "mtime": 1782760349.347425,
-    "ast_hash": "ce3ed24010ea8541f41872bc9e2cf97b",
+    "mtime": 1782762428.6688766,
+    "ast_hash": "3a0f80e94d88f13ffe03f95a2ac5e378",
     "semantic_hash": ""
   },
   "package.json": {
@@ -80,8 +80,8 @@
     "semantic_hash": ""
   },
   "src/app/core/services/auth.service.ts": {
-    "mtime": 1782432417.4589343,
-    "ast_hash": "62971b7ffcf0ca496dee4a6410035b13",
+    "mtime": 1782762604.8373208,
+    "ast_hash": "c40ba8605ad54d351289744101599b1a",
     "semantic_hash": ""
   },
   "src/app/core/services/chat.service.ts": {
@@ -120,19 +120,19 @@
     "semantic_hash": "d19284c6d222f3dfc8838de4eda95f5d"
   },
   "src/app/features/admin/admin-layout/admin-layout.component.ts": {
-    "mtime": 1782432337.0591102,
-    "ast_hash": "53eb8083d481c6d1daedb20c3b863e1c",
+    "mtime": 1782769256.4152155,
+    "ast_hash": "1451ffec7d2dfd90fa919a1e0707334b",
     "semantic_hash": ""
   },
   "src/app/features/admin/admin.routes.ts": {
-    "mtime": 1782025671.3180559,
-    "ast_hash": "014fe705251fc2b52756b7ba1ac37c89",
-    "semantic_hash": "014fe705251fc2b52756b7ba1ac37c89"
+    "mtime": 1782762990.93888,
+    "ast_hash": "9a85812f193234ba647ce8398ca5f985",
+    "semantic_hash": ""
   },
   "src/app/features/admin/agenda/agenda.component.ts": {
-    "mtime": 1782029288.4296658,
-    "ast_hash": "5abfb1fdd1db7b3c1e07dde4339db318",
-    "semantic_hash": "5abfb1fdd1db7b3c1e07dde4339db318"
+    "mtime": 1782770258.7829058,
+    "ast_hash": "e997a6bbae676ad7081752d5ae80c1d3",
+    "semantic_hash": ""
   },
   "src/app/features/admin/faculties/faculties.component.ts": {
     "mtime": 1782029145.647253,
@@ -145,13 +145,13 @@
     "semantic_hash": "e7aa3604b66e3bd46ec2d71151ab48cb"
   },
   "src/app/features/admin/patients/patients.component.ts": {
-    "mtime": 1782029228.650559,
-    "ast_hash": "f61c26d8ec5206aae2ece4e6146e2b98",
-    "semantic_hash": "f61c26d8ec5206aae2ece4e6146e2b98"
+    "mtime": 1782760989.7808836,
+    "ast_hash": "cd6a69a6c9c02a42d57f35e56cd88411",
+    "semantic_hash": ""
   },
   "src/app/features/admin/psychologists/psychologists.component.ts": {
-    "mtime": 1782760403.1175804,
-    "ast_hash": "554dbce029f48932b783d4b07d790f0e",
+    "mtime": 1782770809.439557,
+    "ast_hash": "a5c45c4ada3b01f8f93a446a9453eef8",
     "semantic_hash": ""
   },
   "src/app/features/admin/reports/reports.component.ts": {
@@ -165,8 +165,8 @@
     "semantic_hash": ""
   },
   "src/app/features/admin/services/admin-stats.service.ts": {
-    "mtime": 1782607691.8974788,
-    "ast_hash": "77ff9fa3e0bf70ec2d1178fa83fffe01",
+    "mtime": 1782770858.3083477,
+    "ast_hash": "e6d3b4498ed31ae1f86960f7bb7461e6",
     "semantic_hash": ""
   },
   "src/app/features/alimentary/alimentary-dashboard/alimentary-dashboard.component.ts": {
@@ -360,8 +360,8 @@
     "semantic_hash": "e9fbe2f84e3d2e67d94ed6d56840ff5d"
   },
   "spec.md": {
-    "mtime": 1782759728.715348,
-    "ast_hash": "cd3cf98b2a0c51e2459f8b1868d8c241",
+    "mtime": 1782771878.5991256,
+    "ast_hash": "1715daedf55220674dceef306d79c77f",
     "semantic_hash": ""
   },
   "src/app/app.html": {
@@ -370,14 +370,14 @@
     "semantic_hash": ""
   },
   "src/app/features/admin/admin-layout/admin-layout.component.html": {
-    "mtime": 1782248457.4277349,
-    "ast_hash": "28002924ca89c32b2c5be259bf2ba112",
-    "semantic_hash": "28002924ca89c32b2c5be259bf2ba112"
+    "mtime": 1782762634.7882428,
+    "ast_hash": "1b73b091e9680752b54832511687f385",
+    "semantic_hash": ""
   },
   "src/app/features/admin/agenda/agenda.component.html": {
-    "mtime": 1782025976.7490745,
-    "ast_hash": "833ef1ded856c570e8aeb5d8f729aec9",
-    "semantic_hash": "833ef1ded856c570e8aeb5d8f729aec9"
+    "mtime": 1782770127.802835,
+    "ast_hash": "d206ada3f15efc1de26eeb82feadc41f",
+    "semantic_hash": ""
   },
   "src/app/features/admin/faculties/faculties.component.html": {
     "mtime": 1782028717.983173,
@@ -390,14 +390,14 @@
     "semantic_hash": "d621f0051976f74bb261c962e1fbd363"
   },
   "src/app/features/admin/patients/patients.component.html": {
-    "mtime": 1782025674.7913382,
-    "ast_hash": "df6d6d94751c0929fb04e4a94845c9fa",
-    "semantic_hash": "df6d6d94751c0929fb04e4a94845c9fa"
+    "mtime": 1782761028.6551378,
+    "ast_hash": "1879ff0b5332818ed3596e1755ec81bd",
+    "semantic_hash": ""
   },
   "src/app/features/admin/psychologists/psychologists.component.html": {
-    "mtime": 1782109538.6132984,
-    "ast_hash": "87c6f19721e744bde678209dc7e24363",
-    "semantic_hash": "87c6f19721e744bde678209dc7e24363"
+    "mtime": 1782771107.2971878,
+    "ast_hash": "3889eeb0478c79214174fde4baee36e0",
+    "semantic_hash": ""
   },
   "src/app/features/admin/reports/reports.component.html": {
     "mtime": 1782025438.7662516,
@@ -480,8 +480,8 @@
     "semantic_hash": "4a7f00ca09c61d972acc4092fd729fee"
   },
   "task.md": {
-    "mtime": 1782759778.3716524,
-    "ast_hash": "83fa31ec4fd8b2ab1e60333c1ba96dd2",
+    "mtime": 1782771743.395303,
+    "ast_hash": "2ad746400ffaec59b968eda8b2ae84d3",
     "semantic_hash": ""
   },
   "public/amati-logo.svg": {
@@ -647,6 +647,41 @@
   "SPEC_UX_UI_SDD.md": {
     "mtime": 1782758657.0754526,
     "ast_hash": "584611eb2841bab96cc774bac937e2f7",
+    "semantic_hash": ""
+  },
+  "db/migration_admin_skill8.sql": {
+    "mtime": 1782760412.4503505,
+    "ast_hash": "23d6ee83ac19169655800ed03dc6ec2b",
+    "semantic_hash": ""
+  },
+  "src/app/features/admin/services/admin-skill8.service.ts": {
+    "mtime": 1782770666.6677687,
+    "ast_hash": "c5fd696f00763796f5357678204fec1e",
+    "semantic_hash": ""
+  },
+  "src/app/core/services/session-evaluation.service.ts": {
+    "mtime": 1782772327.6083863,
+    "ast_hash": "630cb33c7d6b1ecf96e13d2614a75c19",
+    "semantic_hash": ""
+  },
+  "src/app/features/admin/admin-settings/admin-settings.component.ts": {
+    "mtime": 1782762958.4524374,
+    "ast_hash": "83fb2700557a2b326310c24fe351dcd0",
+    "semantic_hash": ""
+  },
+  "src/app/features/admin/institutional-settings/institutional-settings.component.ts": {
+    "mtime": 1782763058.893735,
+    "ast_hash": "7e486bdf230f1cbb164dc963ab86c87f",
+    "semantic_hash": ""
+  },
+  "src/app/features/admin/admin-settings/admin-settings.component.html": {
+    "mtime": 1782762969.580367,
+    "ast_hash": "9d40a9cd389c980f1111757d66304c6f",
+    "semantic_hash": ""
+  },
+  "src/app/features/admin/institutional-settings/institutional-settings.component.html": {
+    "mtime": 1782763033.4071126,
+    "ast_hash": "83a6636059098efb35abcdcd2616b016",
     "semantic_hash": ""
   }
 }

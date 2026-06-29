@@ -7,6 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { SupabaseService } from '../../../core/services/supabase.service';
 import { CryptoService } from '../../../core/services/crypto.service';
 import { AuthService } from '../../../core/services/auth.service';
+import { DossierExportService } from '../../../core/services/dossier-export.service';
 import { jsPDF } from 'jspdf';
 
 @Component({
@@ -20,10 +21,12 @@ export class PerfilPaciente implements OnInit {
   supabase = inject(SupabaseService).supabase;
   crypto = inject(CryptoService);
   authService = inject(AuthService);
+  dossierExport = inject(DossierExportService);
 
   patient: any = null;
   diaryEntries: any[] = [];
   loading = true;
+  isExporting = false;
   sessionHistory: any[] = [];
   eat26Result: any = null;
 
@@ -634,5 +637,24 @@ export class PerfilPaciente implements OnInit {
 
     // Guardar el archivo PDF
     doc.save(`expediente_${this.patient?.firstName}_${this.patient?.lastName}.pdf`);
+  }
+
+  async exportPatientDossier() {
+    if (!this.patient?.id) return;
+    this.isExporting = true;
+    try {
+      const blob = await this.dossierExport.exportDossier(this.patient.id);
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `dossier_clinico_${this.patient.firstName}_${this.patient.lastName}.pdf`;
+      a.click();
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error('Error al exportar dossier:', err);
+      alert('Error al generar el dossier clínico.');
+    } finally {
+      this.isExporting = false;
+    }
   }
 }

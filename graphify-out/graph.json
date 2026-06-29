@@ -2051,7 +2051,7 @@
       "label": ".exportDossier()",
       "file_type": "code",
       "source_file": "src/app/core/services/dossier-export.service.ts",
-      "source_location": "L152",
+      "source_location": "L187",
       "_origin": "ast",
       "id": "services_dossier_export_service_dossierexportservice_exportdossier",
       "community": 8,
@@ -6691,7 +6691,7 @@
       "label": ".getAlertClass()",
       "file_type": "code",
       "source_file": "src/app/features/psychologist/patient-profile/patient-profile.component.ts",
-      "source_location": "L327",
+      "source_location": "L336",
       "_origin": "ast",
       "id": "patient_profile_patient_profile_component_patientprofilecomponent_getalertclass",
       "community": 10,
@@ -6701,7 +6701,7 @@
       "label": ".getAlertText()",
       "file_type": "code",
       "source_file": "src/app/features/psychologist/patient-profile/patient-profile.component.ts",
-      "source_location": "L333",
+      "source_location": "L342",
       "_origin": "ast",
       "id": "patient_profile_patient_profile_component_patientprofilecomponent_getalerttext",
       "community": 10,
@@ -6711,7 +6711,7 @@
       "label": ".openPostSessionModal()",
       "file_type": "code",
       "source_file": "src/app/features/psychologist/patient-profile/patient-profile.component.ts",
-      "source_location": "L339",
+      "source_location": "L348",
       "_origin": "ast",
       "id": "patient_profile_patient_profile_component_patientprofilecomponent_openpostsessionmodal",
       "community": 10,
@@ -6721,7 +6721,7 @@
       "label": ".generateCalendar()",
       "file_type": "code",
       "source_file": "src/app/features/psychologist/patient-profile/patient-profile.component.ts",
-      "source_location": "L343",
+      "source_location": "L352",
       "_origin": "ast",
       "id": "patient_profile_patient_profile_component_patientprofilecomponent_generatecalendar",
       "community": 10,
@@ -6731,7 +6731,7 @@
       "label": ".prev()",
       "file_type": "code",
       "source_file": "src/app/features/psychologist/patient-profile/patient-profile.component.ts",
-      "source_location": "L360",
+      "source_location": "L369",
       "_origin": "ast",
       "id": "patient_profile_patient_profile_component_patientprofilecomponent_prev",
       "community": 10,
@@ -6741,7 +6741,7 @@
       "label": ".next()",
       "file_type": "code",
       "source_file": "src/app/features/psychologist/patient-profile/patient-profile.component.ts",
-      "source_location": "L369",
+      "source_location": "L378",
       "_origin": "ast",
       "id": "patient_profile_patient_profile_component_patientprofilecomponent_next",
       "community": 10,
@@ -6751,7 +6751,7 @@
       "label": ".toggleMode()",
       "file_type": "code",
       "source_file": "src/app/features/psychologist/patient-profile/patient-profile.component.ts",
-      "source_location": "L378",
+      "source_location": "L387",
       "_origin": "ast",
       "id": "patient_profile_patient_profile_component_patientprofilecomponent_togglemode",
       "community": 10,
@@ -6761,7 +6761,7 @@
       "label": ".selectMonth()",
       "file_type": "code",
       "source_file": "src/app/features/psychologist/patient-profile/patient-profile.component.ts",
-      "source_location": "L382",
+      "source_location": "L391",
       "_origin": "ast",
       "id": "patient_profile_patient_profile_component_patientprofilecomponent_selectmonth",
       "community": 10,
@@ -6771,7 +6771,7 @@
       "label": ".getMoodForDay()",
       "file_type": "code",
       "source_file": "src/app/features/psychologist/patient-profile/patient-profile.component.ts",
-      "source_location": "L388",
+      "source_location": "L397",
       "_origin": "ast",
       "id": "patient_profile_patient_profile_component_patientprofilecomponent_getmoodforday",
       "community": 10,
@@ -6781,7 +6781,7 @@
       "label": ".hasSessionForDay()",
       "file_type": "code",
       "source_file": "src/app/features/psychologist/patient-profile/patient-profile.component.ts",
-      "source_location": "L403",
+      "source_location": "L412",
       "_origin": "ast",
       "id": "patient_profile_patient_profile_component_patientprofilecomponent_hassessionforday",
       "community": 10,
@@ -6791,7 +6791,7 @@
       "label": ".selectDate()",
       "file_type": "code",
       "source_file": "src/app/features/psychologist/patient-profile/patient-profile.component.ts",
-      "source_location": "L410",
+      "source_location": "L419",
       "_origin": "ast",
       "id": "patient_profile_patient_profile_component_patientprofilecomponent_selectdate",
       "community": 10,
@@ -6801,7 +6801,7 @@
       "label": ".displayedDiaryEntries()",
       "file_type": "code",
       "source_file": "src/app/features/psychologist/patient-profile/patient-profile.component.ts",
-      "source_location": "L418",
+      "source_location": "L427",
       "_origin": "ast",
       "id": "patient_profile_patient_profile_component_patientprofilecomponent_displayeddiaryentries",
       "community": 10,
@@ -6811,7 +6811,7 @@
       "label": ".displayedSessions()",
       "file_type": "code",
       "source_file": "src/app/features/psychologist/patient-profile/patient-profile.component.ts",
-      "source_location": "L429",
+      "source_location": "L438",
       "_origin": "ast",
       "id": "patient_profile_patient_profile_component_patientprofilecomponent_displayedsessions",
       "community": 10,
@@ -6821,7 +6821,7 @@
       "label": ".goBack()",
       "file_type": "code",
       "source_file": "src/app/features/psychologist/patient-profile/patient-profile.component.ts",
-      "source_location": "L439",
+      "source_location": "L448",
       "_origin": "ast",
       "id": "patient_profile_patient_profile_component_patientprofilecomponent_goback",
       "community": 10,
@@ -6831,7 +6831,7 @@
       "label": ".exportPatientDossier()",
       "file_type": "code",
       "source_file": "src/app/features/psychologist/patient-profile/patient-profile.component.ts",
-      "source_location": "L443",
+      "source_location": "L452",
       "_origin": "ast",
       "id": "patient_profile_patient_profile_component_patientprofilecomponent_exportpatientdossier",
       "community": 10,
@@ -10086,9 +10086,9 @@
       "source_file": "package.json",
       "source_location": "L45",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "package_dependencies",
-      "target": "package_dependencies_pdf_lib",
-      "confidence_score": 1.0
+      "target": "package_dependencies_pdf_lib"
     },
     {
       "relation": "contains",
@@ -10096,9 +10096,9 @@
       "source_file": "package.json",
       "source_location": "L46",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "package_dependencies",
-      "target": "package_dependencies_pdfmake",
-      "confidence_score": 1.0
+      "target": "package_dependencies_pdfmake"
     },
     {
       "relation": "contains",
@@ -10156,9 +10156,9 @@
       "source_file": "package.json",
       "source_location": "L37",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "package_dependencies",
-      "target": "package_dependencies_types_pdfmake",
-      "confidence_score": 1.0
+      "target": "package_dependencies_types_pdfmake"
     },
     {
       "relation": "contains",
@@ -11590,9 +11590,9 @@
       "source_file": "src/app/features/student/session-feedback/session-feedback.component.ts",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "session_feedback_session_feedback_component",
-      "target": "services_auth_service",
-      "confidence_score": 1.0
+      "target": "services_auth_service"
     },
     {
       "relation": "imports_from",
@@ -12017,9 +12017,9 @@
       "source_file": "src/app/features/student/session-feedback/session-feedback.component.ts",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "session_feedback_session_feedback_component",
-      "target": "services_auth_service_authservice",
-      "confidence_score": 1.0
+      "target": "services_auth_service_authservice"
     },
     {
       "relation": "imports",
@@ -12726,9 +12726,9 @@
       "source_file": "src/app/core/services/dossier-export.service.ts",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "services_dossier_export_service",
-      "target": "services_crypto_service",
-      "confidence_score": 1.0
+      "target": "services_crypto_service"
     },
     {
       "relation": "imports",
@@ -12820,9 +12820,9 @@
       "source_file": "src/app/core/services/dossier-export.service.ts",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "services_dossier_export_service",
-      "target": "services_crypto_service_cryptoservice",
-      "confidence_score": 1.0
+      "target": "services_crypto_service_cryptoservice"
     },
     {
       "relation": "calls",
@@ -12958,9 +12958,9 @@
       "source_file": "src/app/features/psychologist/patient-profile/patient-profile.component.ts",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "patient_profile_patient_profile_component",
-      "target": "services_dossier_export_service",
-      "confidence_score": 1.0
+      "target": "services_dossier_export_service"
     },
     {
       "relation": "imports_from",
@@ -12969,9 +12969,9 @@
       "source_file": "src/app/features/nutritionist/perfil-paciente/perfil-paciente.component.ts",
       "source_location": "L10",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "perfil_paciente_perfil_paciente_component",
-      "target": "services_dossier_export_service",
-      "confidence_score": 1.0
+      "target": "services_dossier_export_service"
     },
     {
       "relation": "contains",
@@ -12979,9 +12979,9 @@
       "source_file": "src/app/core/services/dossier-export.service.ts",
       "source_location": "L9",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "services_dossier_export_service",
-      "target": "services_dossier_export_service_dossierexportservice",
-      "confidence_score": 1.0
+      "target": "services_dossier_export_service_dossierexportservice"
     },
     {
       "relation": "imports_from",
@@ -12990,9 +12990,9 @@
       "source_file": "src/app/core/services/dossier-export.service.ts",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "services_dossier_export_service",
-      "target": "services_supabase_service",
-      "confidence_score": 1.0
+      "target": "services_supabase_service"
     },
     {
       "relation": "imports",
@@ -13001,9 +13001,9 @@
       "source_file": "src/app/core/services/dossier-export.service.ts",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "services_dossier_export_service",
-      "target": "services_supabase_service_supabaseservice",
-      "confidence_score": 1.0
+      "target": "services_supabase_service_supabaseservice"
     },
     {
       "relation": "imports_from",
@@ -13012,9 +13012,9 @@
       "source_file": "src/app/features/admin/patients/patients.component.ts",
       "source_location": "L9",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_app_features_admin_patients_patients_component_ts_patients_patients_component",
-      "target": "services_dossier_export_service",
-      "confidence_score": 1.0
+      "target": "services_dossier_export_service"
     },
     {
       "relation": "imports",
@@ -13023,9 +13023,9 @@
       "source_file": "src/app/features/psychologist/patient-profile/patient-profile.component.ts",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "patient_profile_patient_profile_component",
-      "target": "services_dossier_export_service_dossierexportservice",
-      "confidence_score": 1.0
+      "target": "services_dossier_export_service_dossierexportservice"
     },
     {
       "relation": "imports",
@@ -13034,9 +13034,9 @@
       "source_file": "src/app/features/nutritionist/perfil-paciente/perfil-paciente.component.ts",
       "source_location": "L10",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "perfil_paciente_perfil_paciente_component",
-      "target": "services_dossier_export_service_dossierexportservice",
-      "confidence_score": 1.0
+      "target": "services_dossier_export_service_dossierexportservice"
     },
     {
       "relation": "method",
@@ -13044,9 +13044,9 @@
       "source_file": "src/app/core/services/dossier-export.service.ts",
       "source_location": "L152",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "services_dossier_export_service_dossierexportservice",
-      "target": "services_dossier_export_service_dossierexportservice_exportdossier",
-      "confidence_score": 1.0
+      "target": "services_dossier_export_service_dossierexportservice_exportdossier"
     },
     {
       "relation": "method",
@@ -13054,9 +13054,9 @@
       "source_file": "src/app/core/services/dossier-export.service.ts",
       "source_location": "L39",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "services_dossier_export_service_dossierexportservice",
-      "target": "services_dossier_export_service_dossierexportservice_generatehmac",
-      "confidence_score": 1.0
+      "target": "services_dossier_export_service_dossierexportservice_generatehmac"
     },
     {
       "relation": "method",
@@ -13064,9 +13064,9 @@
       "source_file": "src/app/core/services/dossier-export.service.ts",
       "source_location": "L14",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "services_dossier_export_service_dossierexportservice",
-      "target": "services_dossier_export_service_dossierexportservice_getbase64imagefromurl",
-      "confidence_score": 1.0
+      "target": "services_dossier_export_service_dossierexportservice_getbase64imagefromurl"
     },
     {
       "relation": "method",
@@ -13074,9 +13074,9 @@
       "source_file": "src/app/core/services/dossier-export.service.ts",
       "source_location": "L59",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "services_dossier_export_service_dossierexportservice",
-      "target": "services_dossier_export_service_dossierexportservice_getdossierdata",
-      "confidence_score": 1.0
+      "target": "services_dossier_export_service_dossierexportservice_getdossierdata"
     },
     {
       "relation": "imports",
@@ -13085,9 +13085,9 @@
       "source_file": "src/app/features/admin/patients/patients.component.ts",
       "source_location": "L9",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_app_features_admin_patients_patients_component_ts_patients_patients_component",
-      "target": "services_dossier_export_service_dossierexportservice",
-      "confidence_score": 1.0
+      "target": "services_dossier_export_service_dossierexportservice"
     },
     {
       "relation": "calls",
@@ -13096,9 +13096,9 @@
       "source_file": "src/app/core/services/dossier-export.service.ts",
       "source_location": "L165",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "services_dossier_export_service_dossierexportservice_exportdossier",
-      "target": "services_dossier_export_service_dossierexportservice_generatehmac",
-      "confidence_score": 1.0
+      "target": "services_dossier_export_service_dossierexportservice_generatehmac"
     },
     {
       "relation": "calls",
@@ -13107,9 +13107,9 @@
       "source_file": "src/app/core/services/dossier-export.service.ts",
       "source_location": "L153",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "services_dossier_export_service_dossierexportservice_exportdossier",
-      "target": "services_dossier_export_service_dossierexportservice_getdossierdata",
-      "confidence_score": 1.0
+      "target": "services_dossier_export_service_dossierexportservice_getdossierdata"
     },
     {
       "relation": "imports_from",
@@ -13767,9 +13767,9 @@
       "source_file": "src/app/features/dashboard-layout/dashboard-layout.component.ts",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "dashboard_layout_dashboard_layout_component",
-      "target": "services_session_evaluation_service",
-      "confidence_score": 1.0
+      "target": "services_session_evaluation_service"
     },
     {
       "relation": "contains",
@@ -13850,9 +13850,9 @@
       "source_file": "src/app/features/student/session-feedback/session-feedback.component.ts",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "session_feedback_session_feedback_component",
-      "target": "services_session_evaluation_service",
-      "confidence_score": 1.0
+      "target": "services_session_evaluation_service"
     },
     {
       "relation": "imports",
@@ -13861,9 +13861,9 @@
       "source_file": "src/app/features/dashboard-layout/dashboard-layout.component.ts",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "dashboard_layout_dashboard_layout_component",
-      "target": "services_session_evaluation_service_pendingevaluationitem",
-      "confidence_score": 1.0
+      "target": "services_session_evaluation_service_pendingevaluationitem"
     },
     {
       "relation": "imports",
@@ -13872,9 +13872,9 @@
       "source_file": "src/app/features/dashboard-layout/dashboard-layout.component.ts",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "dashboard_layout_dashboard_layout_component",
-      "target": "services_session_evaluation_service_sessionevaluationservice",
-      "confidence_score": 1.0
+      "target": "services_session_evaluation_service_sessionevaluationservice"
     },
     {
       "relation": "method",
@@ -13963,9 +13963,9 @@
       "source_file": "src/app/features/student/session-feedback/session-feedback.component.ts",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "session_feedback_session_feedback_component",
-      "target": "services_session_evaluation_service_sessionevaluationservice",
-      "confidence_score": 1.0
+      "target": "services_session_evaluation_service_sessionevaluationservice"
     },
     {
       "relation": "calls",
@@ -14149,9 +14149,9 @@
       "source_file": "src/app/features/student/session-feedback/session-feedback.component.ts",
       "source_location": "L9",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "session_feedback_session_feedback_component",
-      "target": "services_supabase_service",
-      "confidence_score": 1.0
+      "target": "services_supabase_service"
     },
     {
       "relation": "imports_from",
@@ -14368,9 +14368,9 @@
       "source_file": "src/app/features/student/session-feedback/session-feedback.component.ts",
       "source_location": "L9",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "session_feedback_session_feedback_component",
-      "target": "services_supabase_service_supabaseservice",
-      "confidence_score": 1.0
+      "target": "services_supabase_service_supabaseservice"
     },
     {
       "relation": "imports",
@@ -15871,9 +15871,9 @@
       "source_file": "src/app/features/admin/patients/patients.component.ts",
       "source_location": "L205",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_app_features_admin_patients_patients_component_ts_patients_patients_component_patientscomponent",
-      "target": "patients_patients_component_patientscomponent_exportpatientdossier",
-      "confidence_score": 1.0
+      "target": "patients_patients_component_patientscomponent_exportpatientdossier"
     },
     {
       "relation": "method",
@@ -17158,9 +17158,9 @@
       "source_file": "src/app/features/dashboard-layout/dashboard-layout.component.ts",
       "source_location": "L64",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "dashboard_layout_dashboard_layout_component_dashboardlayoutcomponent",
-      "target": "dashboard_layout_dashboard_layout_component_dashboardlayoutcomponent_checkpendingevaluations",
-      "confidence_score": 1.0
+      "target": "dashboard_layout_dashboard_layout_component_dashboardlayoutcomponent_checkpendingevaluations"
     },
     {
       "relation": "method",
@@ -17271,9 +17271,9 @@
       "source_file": "src/app/features/dashboard-layout/dashboard-layout.component.ts",
       "source_location": "L45",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "dashboard_layout_dashboard_layout_component_dashboardlayoutcomponent_ngoninit",
-      "target": "dashboard_layout_dashboard_layout_component_dashboardlayoutcomponent_checkpendingevaluations",
-      "confidence_score": 1.0
+      "target": "dashboard_layout_dashboard_layout_component_dashboardlayoutcomponent_checkpendingevaluations"
     },
     {
       "relation": "calls",
@@ -18168,9 +18168,9 @@
       "source_file": "src/app/features/health-professional/agenda/agenda.component.ts",
       "source_location": "L279",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agenda_agenda_component_healthprofessionalagendacomponent",
-      "target": "agenda_agenda_component_healthprofessionalagendacomponent_getalertclass",
-      "confidence_score": 1.0
+      "target": "agenda_agenda_component_healthprofessionalagendacomponent_getalertclass"
     },
     {
       "relation": "method",
@@ -18178,9 +18178,9 @@
       "source_file": "src/app/features/health-professional/agenda/agenda.component.ts",
       "source_location": "L285",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agenda_agenda_component_healthprofessionalagendacomponent",
-      "target": "agenda_agenda_component_healthprofessionalagendacomponent_getalerttext",
-      "confidence_score": 1.0
+      "target": "agenda_agenda_component_healthprofessionalagendacomponent_getalerttext"
     },
     {
       "relation": "method",
@@ -18188,9 +18188,9 @@
       "source_file": "src/app/features/health-professional/agenda/agenda.component.ts",
       "source_location": "L274",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agenda_agenda_component_healthprofessionalagendacomponent",
-      "target": "agenda_agenda_component_healthprofessionalagendacomponent_getevaluation",
-      "confidence_score": 1.0
+      "target": "agenda_agenda_component_healthprofessionalagendacomponent_getevaluation"
     },
     {
       "relation": "method",
@@ -19430,9 +19430,9 @@
       "source_file": "src/app/features/nutritionist/perfil-paciente/perfil-paciente.component.ts",
       "source_location": "L642",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "perfil_paciente_perfil_paciente_component_perfilpaciente",
-      "target": "perfil_paciente_perfil_paciente_component_perfilpaciente_exportpatientdossier",
-      "confidence_score": 1.0
+      "target": "perfil_paciente_perfil_paciente_component_perfilpaciente_exportpatientdossier"
     },
     {
       "relation": "method",
@@ -20214,9 +20214,9 @@
       "source_file": "src/app/features/psychologist/patient-profile/patient-profile.component.ts",
       "source_location": "L443",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "patient_profile_patient_profile_component_patientprofilecomponent",
-      "target": "patient_profile_patient_profile_component_patientprofilecomponent_exportpatientdossier",
-      "confidence_score": 1.0
+      "target": "patient_profile_patient_profile_component_patientprofilecomponent_exportpatientdossier"
     },
     {
       "relation": "method",
@@ -20234,9 +20234,9 @@
       "source_file": "src/app/features/psychologist/patient-profile/patient-profile.component.ts",
       "source_location": "L327",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "patient_profile_patient_profile_component_patientprofilecomponent",
-      "target": "patient_profile_patient_profile_component_patientprofilecomponent_getalertclass",
-      "confidence_score": 1.0
+      "target": "patient_profile_patient_profile_component_patientprofilecomponent_getalertclass"
     },
     {
       "relation": "method",
@@ -20244,9 +20244,9 @@
       "source_file": "src/app/features/psychologist/patient-profile/patient-profile.component.ts",
       "source_location": "L333",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "patient_profile_patient_profile_component_patientprofilecomponent",
-      "target": "patient_profile_patient_profile_component_patientprofilecomponent_getalerttext",
-      "confidence_score": 1.0
+      "target": "patient_profile_patient_profile_component_patientprofilecomponent_getalerttext"
     },
     {
       "relation": "method",
@@ -20864,9 +20864,9 @@
       "source_file": "src/app/features/student/session-feedback/emoji-scale/emoji-scale.component.ts",
       "source_location": "L12",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "emoji_scale_emoji_scale_component",
-      "target": "emoji_scale_emoji_scale_component_emojiscalecomponent",
-      "confidence_score": 1.0
+      "target": "emoji_scale_emoji_scale_component_emojiscalecomponent"
     },
     {
       "relation": "imports_from",
@@ -20875,9 +20875,9 @@
       "source_file": "src/app/features/student/session-feedback/session-feedback.component.ts",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "session_feedback_session_feedback_component",
-      "target": "emoji_scale_emoji_scale_component",
-      "confidence_score": 1.0
+      "target": "emoji_scale_emoji_scale_component"
     },
     {
       "relation": "method",
@@ -20885,9 +20885,9 @@
       "source_file": "src/app/features/student/session-feedback/emoji-scale/emoji-scale.component.ts",
       "source_location": "L36",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "emoji_scale_emoji_scale_component_emojiscalecomponent",
-      "target": "emoji_scale_emoji_scale_component_emojiscalecomponent_getprogresswidth",
-      "confidence_score": 1.0
+      "target": "emoji_scale_emoji_scale_component_emojiscalecomponent_getprogresswidth"
     },
     {
       "relation": "method",
@@ -20895,9 +20895,9 @@
       "source_file": "src/app/features/student/session-feedback/emoji-scale/emoji-scale.component.ts",
       "source_location": "L28",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "emoji_scale_emoji_scale_component_emojiscalecomponent",
-      "target": "emoji_scale_emoji_scale_component_emojiscalecomponent_selectemoji",
-      "confidence_score": 1.0
+      "target": "emoji_scale_emoji_scale_component_emojiscalecomponent_selectemoji"
     },
     {
       "relation": "imports",
@@ -20906,9 +20906,9 @@
       "source_file": "src/app/features/student/session-feedback/session-feedback.component.ts",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "session_feedback_session_feedback_component",
-      "target": "emoji_scale_emoji_scale_component_emojiscalecomponent",
-      "confidence_score": 1.0
+      "target": "emoji_scale_emoji_scale_component_emojiscalecomponent"
     },
     {
       "relation": "contains",
@@ -20916,9 +20916,9 @@
       "source_file": "src/app/features/student/session-feedback/session-feedback.component.ts",
       "source_location": "L18",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "session_feedback_session_feedback_component",
-      "target": "session_feedback_session_feedback_component_sessionfeedbackcomponent",
-      "confidence_score": 1.0
+      "target": "session_feedback_session_feedback_component_sessionfeedbackcomponent"
     },
     {
       "relation": "method",
@@ -20926,9 +20926,9 @@
       "source_file": "src/app/features/student/session-feedback/session-feedback.component.ts",
       "source_location": "L135",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "session_feedback_session_feedback_component_sessionfeedbackcomponent",
-      "target": "session_feedback_session_feedback_component_sessionfeedbackcomponent_finish",
-      "confidence_score": 1.0
+      "target": "session_feedback_session_feedback_component_sessionfeedbackcomponent_finish"
     },
     {
       "relation": "method",
@@ -20936,9 +20936,9 @@
       "source_file": "src/app/features/student/session-feedback/session-feedback.component.ts",
       "source_location": "L128",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "session_feedback_session_feedback_component_sessionfeedbackcomponent",
-      "target": "session_feedback_session_feedback_component_sessionfeedbackcomponent_goback",
-      "confidence_score": 1.0
+      "target": "session_feedback_session_feedback_component_sessionfeedbackcomponent_goback"
     },
     {
       "relation": "method",
@@ -20946,9 +20946,9 @@
       "source_file": "src/app/features/student/session-feedback/session-feedback.component.ts",
       "source_location": "L87",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "session_feedback_session_feedback_component_sessionfeedbackcomponent",
-      "target": "session_feedback_session_feedback_component_sessionfeedbackcomponent_handlescore",
-      "confidence_score": 1.0
+      "target": "session_feedback_session_feedback_component_sessionfeedbackcomponent_handlescore"
     },
     {
       "relation": "method",
@@ -20956,9 +20956,9 @@
       "source_file": "src/app/features/student/session-feedback/session-feedback.component.ts",
       "source_location": "L49",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "session_feedback_session_feedback_component_sessionfeedbackcomponent",
-      "target": "session_feedback_session_feedback_component_sessionfeedbackcomponent_ngoninit",
-      "confidence_score": 1.0
+      "target": "session_feedback_session_feedback_component_sessionfeedbackcomponent_ngoninit"
     },
     {
       "relation": "method",
@@ -20966,9 +20966,9 @@
       "source_file": "src/app/features/student/session-feedback/session-feedback.component.ts",
       "source_location": "L97",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "session_feedback_session_feedback_component_sessionfeedbackcomponent",
-      "target": "session_feedback_session_feedback_component_sessionfeedbackcomponent_submitfeedback",
-      "confidence_score": 1.0
+      "target": "session_feedback_session_feedback_component_sessionfeedbackcomponent_submitfeedback"
     },
     {
       "relation": "imports_from",
@@ -22682,5 +22682,5 @@
       "source_file": "src/app/features/psychologist/psychologist-layout/psychologist-layout.component.html"
     }
   ],
-  "built_at_commit": "2d29920fb873e8b97f652baf66ab38d262ca14c6"
+  "built_at_commit": "0ba53ef683d72bf5c601ff850074e4915078b85a"
 }

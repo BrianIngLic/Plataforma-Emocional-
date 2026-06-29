@@ -58,18 +58,34 @@ export class DossierExportService {
   // Recupera todos los datos consolidados del expediente del paciente
   async getDossierData(patientId: string): Promise<any> {
     // 1. Perfil del estudiante e historial clínico
-    const { data: student, error: studentError } = await this.supabase
+    const { data: studentData, error: studentError } = await this.supabase
       .from('users')
-      .select('id, email, first_name, last_name, role_id, student_clinical_records(known_conditions, additional_notes)')
+      .select('id, role_id, profiles(first_name, last_name), student_clinical_records!student_clinical_records_student_id_fkey(known_conditions, additional_notes)')
       .eq('id', patientId)
       .single();
 
     if (studentError) throw studentError;
 
+    const studentAny = studentData as any;
+    const profile = Array.isArray(studentAny.profiles) ? studentAny.profiles[0] : studentAny.profiles;
+
+    // Aplanar student para mantener compatibilidad con exportDossier
+    const student = {
+      id: studentAny.id,
+      role_id: studentAny.role_id,
+      first_name: profile?.first_name || 'Paciente',
+      last_name: profile?.last_name || '',
+      email: '', // No disponible en tablas públicas por HIPAA/Zero-Trust
+      student_clinical_records: studentAny.student_clinical_records
+    };
+
     // Desencriptar notas confidenciales si existen
-    const clinicalRecord: any = Array.isArray(student.student_clinical_records)
-      ? student.student_clinical_records[0]
-      : student.student_clinical_records;
+    const rawClinicalRecord = studentAny
+      ? (studentAny.student_clinical_records || studentAny['student_clinical_records!student_clinical_records_student_id_fkey'])
+      : null;
+    const clinicalRecord: any = Array.isArray(rawClinicalRecord)
+      ? rawClinicalRecord[0]
+      : rawClinicalRecord;
 
     let decryptedNotes = '';
     if (clinicalRecord?.additional_notes) {
@@ -81,11 +97,24 @@ export class DossierExportService {
     }
 
     // 2. Citas completadas (Notas SOAP)
-    const { data: appointments, error: apptError } = await this.supabase
+    const { data: appointmentsRaw, error: apptError } = await this.supabase
       .from('appointments')
-      .select('scheduled_date, start_time, end_time, status, notes, professional_id, profiles:professional_id(full_name)')
+      .select('scheduled_date, start_time, end_time, status, notes, professional_id, profiles:professional_id(first_name, last_name)')
       .eq('student_id', patientId)
       .order('scheduled_date', { ascending: false });
+
+    if (apptError) throw apptError;
+
+    const appointments = (appointmentsRaw ?? []).map((appt: any) => {
+      const profProfile = Array.isArray(appt.profiles) ? appt.profiles[0] : appt.profiles;
+      const fullName = profProfile ? `${profProfile.first_name || ''} ${profProfile.last_name || ''}`.trim() : 'Especialista';
+      return {
+        ...appt,
+        profiles: {
+          full_name: fullName
+        }
+      };
+    });
 
     if (apptError) throw apptError;
 
@@ -122,19 +151,38 @@ export class DossierExportService {
     });
 
     // 5. Evaluaciones de alianza terapéutica (FIT)
-    const { data: sessionEvaluations, error: evalError } = await this.supabase
-      .from('session_evaluations')
-      .select('score_global, rupture_flag, created_at')
-      .eq('patient_id', patientId)
-      .order('created_at', { ascending: false });
-
-    if (evalError) throw evalError;
+    let sessionEvaluations: any[] = [];
+    try {
+      const { data, error } = await this.supabase
+        .from('session_evaluations')
+        .select('score_global, rupture_flag, created_at')
+        .eq('patient_id', patientId)
+        .order('created_at', { ascending: false });
+      if (!error && data) {
+        sessionEvaluations = data;
+      } else if (error) {
+        console.warn('Advertencia obteniendo evaluaciones post-sesión (posiblemente la tabla no esté migrada):', error);
+      }
+    } catch (e) {
+      console.warn('Excepción obteniendo evaluaciones post-sesión:', e);
+    }
 
     // 6. Imagen de Marca de Agua Institucional (Skill 8)
-    const { data: instSettings } = await this.supabase
-      .from('institutional_settings')
-      .select('watermark_url')
-      .maybeSingle();
+    let watermarkUrl: string | null = null;
+    try {
+      const { data: listData, error: listError } = await this.supabase.storage.from('institutional_assets').list();
+      if (!listError) {
+        const hasWatermark = listData?.some((file: any) => file.name === 'watermark_logo.png');
+        if (hasWatermark) {
+          const { data } = await this.supabase.storage.from('institutional_assets').getPublicUrl('watermark_logo.png');
+          if (data && data.publicUrl) {
+            watermarkUrl = data.publicUrl;
+          }
+        }
+      }
+    } catch (e) {
+      console.warn('No se pudo verificar el bucket institutional_assets:', e);
+    }
 
     return {
       student,
@@ -143,8 +191,8 @@ export class DossierExportService {
       appointments: appointments ?? [],
       nutritionLogs: nutritionLogs ?? [],
       diaryEntries: decryptedDiary,
-      sessionEvaluations: sessionEvaluations ?? [],
-      watermarkUrl: instSettings?.watermark_url || null
+      sessionEvaluations: sessionEvaluations,
+      watermarkUrl: watermarkUrl
     };
   }
 
@@ -213,18 +261,17 @@ export class DossierExportService {
     y += 5;
 
     doc.setFillColor(248, 250, 252);
-    doc.rect(15, y, pageWidth - 30, 28, 'F');
-    doc.rect(15, y, pageWidth - 30, 28, 'S');
+    doc.rect(15, y, pageWidth - 30, 22, 'F');
+    doc.rect(15, y, pageWidth - 30, 22, 'S');
 
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(8.5);
     doc.text(`Paciente: ${patientName}`, 18, y + 5);
     doc.text(`Matrícula/ID: ${data.student.id}`, 18, y + 10);
-    doc.text(`Correo: ${data.student.email || 'N/A'}`, 18, y + 15);
-    doc.text(`Condiciones: ${data.student.student_clinical_records?.known_conditions?.join(', ') || 'Ninguna registrada'}`, 18, y + 20);
-    doc.text(`Sello HMAC: ${metaSealHash.substring(0, 32)}...`, 18, y + 25);
+    doc.text(`Condiciones: ${data.student.student_clinical_records?.known_conditions?.join(', ') || 'Ninguna registrada'}`, 18, y + 15);
+    doc.text(`Sello HMAC: ${metaSealHash.substring(0, 32)}...`, 18, y + 20);
 
-    y += 38;
+    y += 32;
 
     // Validador de cambio de página
     const checkPageBreak = (neededHeight: number) => {

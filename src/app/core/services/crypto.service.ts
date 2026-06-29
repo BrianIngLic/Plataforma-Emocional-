@@ -60,12 +60,29 @@ export class CryptoService {
    */
   decrypt(ciphertext: string): string {
     if (!ciphertext) return '';
-    try {
-      const bytes = CryptoJS.AES.decrypt(ciphertext, this.getKey());
-      return bytes.toString(CryptoJS.enc.Utf8);
-    } catch (e) {
-      console.error('Error al descifrar el mensaje', e);
-      return 'Mensaje corrupto o llave incorrecta';
+
+    const keysToTry: string[] = [];
+    const activeKey = this.getKey();
+    keysToTry.push(activeKey);
+
+    const systemKey = environment.encryptionKey;
+    if (systemKey && systemKey !== activeKey) {
+      keysToTry.push(systemKey);
     }
+
+    for (const key of keysToTry) {
+      try {
+        const bytes = CryptoJS.AES.decrypt(ciphertext, key);
+        const decrypted = bytes.toString(CryptoJS.enc.Utf8);
+        if (decrypted) {
+          return decrypted;
+        }
+      } catch (e) {
+        // Ignorar y probar con la siguiente llave
+      }
+    }
+
+    // Si todas las llaves fallan, devolver el ciphertext original
+    return ciphertext;
   }
 }

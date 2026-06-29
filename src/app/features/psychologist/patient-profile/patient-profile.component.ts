@@ -173,13 +173,16 @@ export class PatientProfileComponent implements OnInit {
         let notes = recordObj?.additional_notes;
 
         if (notes) {
-          notes = this.crypto.decrypt(notes);
           try {
-            const parsedNotes = JSON.parse(notes);
+            const decrypted = this.crypto.decrypt(notes);
+            const parsedNotes = JSON.parse(decrypted);
             if (parsedNotes.q1) {
                 this.eat26Result = this.calculateEat26Score(parsedNotes);
             }
-          } catch(e) {}
+            notes = decrypted;
+          } catch(e) {
+            console.warn('Error al descifrar o parsear notas, se asume texto plano:', e);
+          }
         } else {
           notes = "Sin notas clínicas adicionales guardadas en el expediente.";
         }
@@ -215,13 +218,19 @@ export class PatientProfileComponent implements OnInit {
 
       if (diaryData) {
         this.diaryEntries = diaryData.map((entry: any) => {
+          let decryptedContent = '';
+          try {
+            decryptedContent = this.crypto.decrypt(entry.content);
+          } catch(e) {
+            decryptedContent = entry.content; // fallback si no está cifrado
+          }
           return {
             rawDate: new Date(entry.created_at),
             date: new Date(entry.created_at).toLocaleDateString() + ' ' + new Date(entry.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
             mood: entry.moods && entry.moods.length > 0 ? entry.moods.join(', ') : 'Neutro',
             moodColor: entry.high_risk ? 'text-red' : 'text-primary',
             moodIcon: entry.high_risk ? 'warning' : 'sentiment_satisfied',
-            content: this.crypto.decrypt(entry.content)
+            content: decryptedContent
           };
         });
       }
@@ -282,7 +291,7 @@ export class PatientProfileComponent implements OnInit {
         .order('created_at', { ascending: true });
 
       if (evalsError) {
-        console.error('Error fetching evaluations:', evalsError);
+        console.warn('Advertencia obteniendo evaluaciones (posible tabla no migrada):', evalsError);
       }
 
       if (evals && evals.length > 0) {

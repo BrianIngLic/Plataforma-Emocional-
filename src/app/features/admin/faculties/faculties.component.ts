@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
-import { BaseChartDirective } from 'ng2-charts';
+
 import { ChartConfiguration, ChartOptions } from 'chart.js';
 import { FacultyService, Faculty as DBFaculty, Campus } from '../../../core/services/faculty.service';
 import { AdminStatsService } from '../services/admin-stats.service';
@@ -28,7 +28,7 @@ interface AdminFaculty {
 @Component({
   selector: 'app-faculties',
   standalone: true,
-  imports: [CommonModule, MatIconModule, FormsModule, BaseChartDirective, MatDialogModule],
+  imports: [CommonModule, MatIconModule, FormsModule, MatDialogModule],
   templateUrl: './faculties.component.html',
   styleUrls: ['./faculties.component.scss']
 })
@@ -152,6 +152,11 @@ export class FacultiesComponent implements OnInit, OnDestroy {
       if (this.sortBy === 'demand') {
         const order = { Critical: 0, High: 1, Moderate: 2, Low: 3 };
         return order[a.demand] - order[b.demand];
+      }
+      if (this.sortBy === 'campus_name') {
+        const aCampus = a.campus_name || '';
+        const bCampus = b.campus_name || '';
+        return aCampus.localeCompare(bCampus);
       }
       return a.name.localeCompare(b.name);
     });

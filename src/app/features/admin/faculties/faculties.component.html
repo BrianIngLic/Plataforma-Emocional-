@@ -6,13 +6,13 @@
       <div class="sort-selector">
         <span class="sort-label">Ordenar por:</span>
         <button 
-          *ngFor="let option of ['demand', 'patients', 'name']" 
+          *ngFor="let option of ['demand', 'patients', 'name', 'campus_name']" 
           (click)="sortBy = option"
           [class.active]="sortBy === option"
           class="sort-btn"
         >
           <mat-icon>swap_vert</mat-icon>
-          <span class="capitalize">{{ option === 'demand' ? 'Demanda' : option === 'patients' ? 'Pacientes' : 'Nombre' }}</span>
+          <span class="capitalize">{{ option === 'demand' ? 'Demanda' : option === 'patients' ? 'Pacientes' : option === 'campus_name' ? 'Campus' : 'Nombre' }}</span>
         </button>
       </div>
 

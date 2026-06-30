@@ -1,7 +1,7 @@
 # Graph Report - Plataforma-Emocional-  (2026-06-30)
 
 ## Corpus Check
-- 112 files · ~103,473 words
+- 112 files · ~103,500 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `4d87789f`
+- Built from commit: `f184c760`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 

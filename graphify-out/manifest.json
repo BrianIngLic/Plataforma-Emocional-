@@ -135,8 +135,8 @@
     "semantic_hash": ""
   },
   "src/app/features/admin/faculties/faculties.component.ts": {
-    "mtime": 1782854082.9974327,
-    "ast_hash": "54de5d4d9b8d6c1a8067c3684adcff31",
+    "mtime": 1782856216.3985693,
+    "ast_hash": "b16ed5dd0f55970c5513f3d5fbc7a14d",
     "semantic_hash": ""
   },
   "src/app/features/admin/overview/overview.component.ts": {
@@ -380,8 +380,8 @@
     "semantic_hash": ""
   },
   "src/app/features/admin/faculties/faculties.component.html": {
-    "mtime": 1782854087.4457183,
-    "ast_hash": "9d93fc3f1e0d523e2b2fa3240fd9f324",
+    "mtime": 1782856212.5800147,
+    "ast_hash": "8412f999057dd39b44bdd4b349f3c88a",
     "semantic_hash": ""
   },
   "src/app/features/admin/overview/overview.component.html": {

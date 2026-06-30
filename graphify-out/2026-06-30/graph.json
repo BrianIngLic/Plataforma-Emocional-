@@ -1304,7 +1304,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "guards_role_guard",
-      "community": 0,
+      "community": 18,
       "norm_label": "role.guard.ts"
     },
     {
@@ -1344,7 +1344,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_agenda_service",
-      "community": 59,
+      "community": 67,
       "norm_label": "agenda.service.ts"
     },
     {
@@ -1354,7 +1354,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "services_agenda_service_timeblock",
-      "community": 59,
+      "community": 67,
       "norm_label": "timeblock"
     },
     {
@@ -1364,7 +1364,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "services_agenda_service_workingday",
-      "community": 59,
+      "community": 67,
       "norm_label": "workingday"
     },
     {
@@ -1504,7 +1504,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_audit_service",
-      "community": 0,
+      "community": 18,
       "norm_label": "audit.service.ts"
     },
     {
@@ -1514,7 +1514,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "services_audit_service_auditservice",
-      "community": 0,
+      "community": 18,
       "norm_label": "auditservice"
     },
     {
@@ -1524,7 +1524,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "services_audit_service_auditservice_logevent",
-      "community": 0,
+      "community": 18,
       "norm_label": ".logevent()"
     },
     {
@@ -1534,7 +1534,7 @@
       "source_location": "L40",
       "_origin": "ast",
       "id": "services_audit_service_auditservice_logunauthorizedaccess",
-      "community": 0,
+      "community": 18,
       "norm_label": ".logunauthorizedaccess()"
     },
     {
@@ -1544,7 +1544,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_auth_service",
-      "community": 0,
+      "community": 18,
       "norm_label": "auth.service.ts"
     },
     {
@@ -1694,7 +1694,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_chat_service",
-      "community": 0,
+      "community": 87,
       "norm_label": "chat.service.ts"
     },
     {
@@ -1704,7 +1704,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "services_chat_service_chatmessage",
-      "community": 0,
+      "community": 87,
       "norm_label": "chatmessage"
     },
     {
@@ -1714,7 +1714,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "services_chat_service_chatservice",
-      "community": 79,
+      "community": 1,
       "norm_label": "chatservice"
     },
     {
@@ -1724,7 +1724,7 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "services_chat_service_chatservice_constructor",
-      "community": 79,
+      "community": 1,
       "norm_label": ".constructor()"
     },
     {
@@ -1734,7 +1734,7 @@
       "source_location": "L35",
       "_origin": "ast",
       "id": "services_chat_service_chatservice_initchat",
-      "community": 79,
+      "community": 1,
       "norm_label": ".initchat()"
     },
     {
@@ -1744,7 +1744,7 @@
       "source_location": "L75",
       "_origin": "ast",
       "id": "services_chat_service_chatservice_loadmessages",
-      "community": 79,
+      "community": 1,
       "norm_label": ".loadmessages()"
     },
     {
@@ -1754,7 +1754,7 @@
       "source_location": "L104",
       "_origin": "ast",
       "id": "services_chat_service_chatservice_startnewchat",
-      "community": 79,
+      "community": 1,
       "norm_label": ".startnewchat()"
     },
     {
@@ -1764,7 +1764,7 @@
       "source_location": "L133",
       "_origin": "ast",
       "id": "services_chat_service_chatservice_getchathistory",
-      "community": 79,
+      "community": 1,
       "norm_label": ".getchathistory()"
     },
     {
@@ -1774,7 +1774,7 @@
       "source_location": "L154",
       "_origin": "ast",
       "id": "services_chat_service_chatservice_loadspecificchat",
-      "community": 79,
+      "community": 1,
       "norm_label": ".loadspecificchat()"
     },
     {
@@ -1784,7 +1784,7 @@
       "source_location": "L159",
       "_origin": "ast",
       "id": "services_chat_service_chatservice_sendmessage",
-      "community": 79,
+      "community": 1,
       "norm_label": ".sendmessage()"
     },
     {
@@ -1794,7 +1794,7 @@
       "source_location": "L209",
       "_origin": "ast",
       "id": "services_chat_service_chatservice_streammockresponse",
-      "community": 79,
+      "community": 1,
       "norm_label": ".streammockresponse()"
     },
     {
@@ -1804,7 +1804,7 @@
       "source_location": "L226",
       "_origin": "ast",
       "id": "services_chat_service_chatservice_getmockresponse",
-      "community": 79,
+      "community": 1,
       "norm_label": ".getmockresponse()"
     },
     {
@@ -1814,7 +1814,7 @@
       "source_location": "L234",
       "_origin": "ast",
       "id": "services_chat_service_chatservice_delay",
-      "community": 79,
+      "community": 1,
       "norm_label": ".delay()"
     },
     {
@@ -1824,7 +1824,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_clinical_service",
-      "community": 87,
+      "community": 18,
       "norm_label": "clinical.service.ts"
     },
     {
@@ -1834,7 +1834,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "services_clinical_service_clinicalservice",
-      "community": 87,
+      "community": 9,
       "norm_label": "clinicalservice"
     },
     {
@@ -1844,7 +1844,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "services_clinical_service_clinicalservice_submitclinicalrecords",
-      "community": 87,
+      "community": 9,
       "norm_label": ".submitclinicalrecords()"
     },
     {
@@ -1854,7 +1854,7 @@
       "source_location": "L51",
       "_origin": "ast",
       "id": "services_clinical_service_clinicalservice_getclinicalrecord",
-      "community": 87,
+      "community": 9,
       "norm_label": ".getclinicalrecord()"
     },
     {
@@ -1864,7 +1864,7 @@
       "source_location": "L76",
       "_origin": "ast",
       "id": "services_clinical_service_clinicalservice_updateclinicalrecords",
-      "community": 87,
+      "community": 9,
       "norm_label": ".updateclinicalrecords()"
     },
     {
@@ -1874,7 +1874,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_crypto_service",
-      "community": 0,
+      "community": 87,
       "norm_label": "crypto.service.ts"
     },
     {
@@ -1944,7 +1944,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_diary_service",
-      "community": 0,
+      "community": 87,
       "norm_label": "diary.service.ts"
     },
     {
@@ -1954,7 +1954,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "services_diary_service_diaryentry",
-      "community": 0,
+      "community": 87,
       "norm_label": "diaryentry"
     },
     {
@@ -1964,7 +1964,7 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "services_diary_service_diaryservice",
-      "community": 77,
+      "community": 17,
       "norm_label": "diaryservice"
     },
     {
@@ -1974,7 +1974,7 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "services_diary_service_diaryservice_constructor",
-      "community": 77,
+      "community": 17,
       "norm_label": ".constructor()"
     },
     {
@@ -1984,7 +1984,7 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "services_diary_service_diaryservice_loadentries",
-      "community": 77,
+      "community": 17,
       "norm_label": ".loadentries()"
     },
     {
@@ -1994,7 +1994,7 @@
       "source_location": "L55",
       "_origin": "ast",
       "id": "services_diary_service_diaryservice_saveentry",
-      "community": 77,
+      "community": 17,
       "norm_label": ".saveentry()"
     },
     {
@@ -2004,7 +2004,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_dossier_export_service",
-      "community": 0,
+      "community": 87,
       "norm_label": "dossier-export.service.ts"
     },
     {
@@ -2084,7 +2084,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_emergency_notification_service",
-      "community": 18,
+      "community": 0,
       "norm_label": "emergency-notification.service.ts"
     },
     {
@@ -2094,7 +2094,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "services_emergency_notification_service_emergencychangerequest",
-      "community": 18,
+      "community": 0,
       "norm_label": "emergencychangerequest"
     },
     {
@@ -2104,7 +2104,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "services_emergency_notification_service_webpushsubscriptionpayload",
-      "community": 18,
+      "community": 0,
       "norm_label": "webpushsubscriptionpayload"
     },
     {
@@ -2114,7 +2114,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "services_emergency_notification_service_whatsapproutingsession",
-      "community": 18,
+      "community": 0,
       "norm_label": "whatsapproutingsession"
     },
     {
@@ -2124,7 +2124,7 @@
       "source_location": "L38",
       "_origin": "ast",
       "id": "services_emergency_notification_service_emergencynotificationservice",
-      "community": 1,
+      "community": 15,
       "norm_label": "emergencynotificationservice"
     },
     {
@@ -2134,7 +2134,7 @@
       "source_location": "L45",
       "_origin": "ast",
       "id": "services_emergency_notification_service_emergencynotificationservice_sendemergencynotification",
-      "community": 1,
+      "community": 15,
       "norm_label": ".sendemergencynotification()"
     },
     {
@@ -2144,7 +2144,7 @@
       "source_location": "L80",
       "_origin": "ast",
       "id": "services_emergency_notification_service_emergencynotificationservice_sendemergencychange",
-      "community": 1,
+      "community": 15,
       "norm_label": ".sendemergencychange()"
     },
     {
@@ -2154,7 +2154,7 @@
       "source_location": "L256",
       "_origin": "ast",
       "id": "services_emergency_notification_service_emergencynotificationservice_requestwebpushpermission",
-      "community": 1,
+      "community": 15,
       "norm_label": ".requestwebpushpermission()"
     },
     {
@@ -2164,7 +2164,7 @@
       "source_location": "L294",
       "_origin": "ast",
       "id": "services_emergency_notification_service_emergencynotificationservice_savewebpushsubscription",
-      "community": 1,
+      "community": 15,
       "norm_label": ".savewebpushsubscription()"
     },
     {
@@ -2174,7 +2174,7 @@
       "source_location": "L322",
       "_origin": "ast",
       "id": "services_emergency_notification_service_emergencynotificationservice_updatewhatsappoptin",
-      "community": 1,
+      "community": 15,
       "norm_label": ".updatewhatsappoptin()"
     },
     {
@@ -2184,7 +2184,7 @@
       "source_location": "L347",
       "_origin": "ast",
       "id": "services_emergency_notification_service_emergencynotificationservice_getactiveroutingsessions",
-      "community": 1,
+      "community": 15,
       "norm_label": ".getactiveroutingsessions()"
     },
     {
@@ -2194,7 +2194,7 @@
       "source_location": "L370",
       "_origin": "ast",
       "id": "services_emergency_notification_service_emergencynotificationservice_closeroutingsession",
-      "community": 1,
+      "community": 15,
       "norm_label": ".closeroutingsession()"
     },
     {
@@ -2204,7 +2204,7 @@
       "source_location": "L392",
       "_origin": "ast",
       "id": "services_emergency_notification_service_emergencynotificationservice_initrealtimenotificationlistener",
-      "community": 1,
+      "community": 15,
       "norm_label": ".initrealtimenotificationlistener()"
     },
     {
@@ -2324,7 +2324,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_gamification_service",
-      "community": 0,
+      "community": 1,
       "norm_label": "gamification.service.ts"
     },
     {
@@ -2334,7 +2334,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "services_gamification_service_userstreak",
-      "community": 0,
+      "community": 1,
       "norm_label": "userstreak"
     },
     {
@@ -2344,7 +2344,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "services_gamification_service_achievement",
-      "community": 69,
+      "community": 1,
       "norm_label": "achievement"
     },
     {
@@ -2354,7 +2354,7 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "services_gamification_service_gamificationservice",
-      "community": 69,
+      "community": 1,
       "norm_label": "gamificationservice"
     },
     {
@@ -2364,7 +2364,7 @@
       "source_location": "L42",
       "_origin": "ast",
       "id": "services_gamification_service_gamificationservice_constructor",
-      "community": 69,
+      "community": 1,
       "norm_label": ".constructor()"
     },
     {
@@ -2374,7 +2374,7 @@
       "source_location": "L50",
       "_origin": "ast",
       "id": "services_gamification_service_gamificationservice_loadgamificationdata",
-      "community": 69,
+      "community": 1,
       "norm_label": ".loadgamificationdata()"
     },
     {
@@ -2384,7 +2384,7 @@
       "source_location": "L120",
       "_origin": "ast",
       "id": "services_gamification_service_gamificationservice_registeractivity",
-      "community": 69,
+      "community": 1,
       "norm_label": ".registeractivity()"
     },
     {
@@ -2394,7 +2394,7 @@
       "source_location": "L149",
       "_origin": "ast",
       "id": "services_gamification_service_gamificationservice_awardclinicalachievement",
-      "community": 69,
+      "community": 1,
       "norm_label": ".awardclinicalachievement()"
     },
     {
@@ -2404,7 +2404,7 @@
       "source_location": "L242",
       "_origin": "ast",
       "id": "services_gamification_service_gamificationservice_getglobalcatalogachievements",
-      "community": 69,
+      "community": 1,
       "norm_label": ".getglobalcatalogachievements()"
     },
     {
@@ -2724,7 +2724,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "admin_layout_admin_layout_component",
-      "community": 22,
+      "community": 18,
       "norm_label": "admin-layout.component.ts"
     },
     {
@@ -3368,10 +3368,30 @@
       "norm_label": ".translaterisk()"
     },
     {
-      "label": ".viewDetail()",
+      "label": ".getCampusIcon()",
       "file_type": "code",
       "source_file": "src/app/features/admin/faculties/faculties.component.ts",
       "source_location": "L246",
+      "_origin": "ast",
+      "id": "faculties_faculties_component_facultiescomponent_getcampusicon",
+      "community": 6,
+      "norm_label": ".getcampusicon()"
+    },
+    {
+      "label": ".getCampusClass()",
+      "file_type": "code",
+      "source_file": "src/app/features/admin/faculties/faculties.component.ts",
+      "source_location": "L257",
+      "_origin": "ast",
+      "id": "faculties_faculties_component_facultiescomponent_getcampusclass",
+      "community": 6,
+      "norm_label": ".getcampusclass()"
+    },
+    {
+      "label": ".viewDetail()",
+      "file_type": "code",
+      "source_file": "src/app/features/admin/faculties/faculties.component.ts",
+      "source_location": "L268",
       "_origin": "ast",
       "id": "faculties_faculties_component_facultiescomponent_viewdetail",
       "community": 6,
@@ -3381,7 +3401,7 @@
       "label": ".openCompare()",
       "file_type": "code",
       "source_file": "src/app/features/admin/faculties/faculties.component.ts",
-      "source_location": "L250",
+      "source_location": "L272",
       "_origin": "ast",
       "id": "faculties_faculties_component_facultiescomponent_opencompare",
       "community": 6,
@@ -3391,7 +3411,7 @@
       "label": ".closeCompare()",
       "file_type": "code",
       "source_file": "src/app/features/admin/faculties/faculties.component.ts",
-      "source_location": "L257",
+      "source_location": "L279",
       "_origin": "ast",
       "id": "faculties_faculties_component_facultiescomponent_closecompare",
       "community": 6,
@@ -3401,7 +3421,7 @@
       "label": ".openAddModal()",
       "file_type": "code",
       "source_file": "src/app/features/admin/faculties/faculties.component.ts",
-      "source_location": "L262",
+      "source_location": "L284",
       "_origin": "ast",
       "id": "faculties_faculties_component_facultiescomponent_openaddmodal",
       "community": 6,
@@ -3411,7 +3431,7 @@
       "label": ".closeAddModal()",
       "file_type": "code",
       "source_file": "src/app/features/admin/faculties/faculties.component.ts",
-      "source_location": "L270",
+      "source_location": "L292",
       "_origin": "ast",
       "id": "faculties_faculties_component_facultiescomponent_closeaddmodal",
       "community": 6,
@@ -3421,7 +3441,7 @@
       "label": ".addFaculty()",
       "file_type": "code",
       "source_file": "src/app/features/admin/faculties/faculties.component.ts",
-      "source_location": "L275",
+      "source_location": "L297",
       "_origin": "ast",
       "id": "faculties_faculties_component_facultiescomponent_addfaculty",
       "community": 6,
@@ -4244,7 +4264,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_admin_skill8_service",
-      "community": 8,
+      "community": 0,
       "norm_label": "admin-skill8.service.ts"
     },
     {
@@ -4254,7 +4274,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "services_admin_skill8_service_healthprofessionalregistrationpayload",
-      "community": 8,
+      "community": 0,
       "norm_label": "healthprofessionalregistrationpayload"
     },
     {
@@ -4264,7 +4284,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "services_admin_skill8_service_patientassignmentpayload",
-      "community": 8,
+      "community": 0,
       "norm_label": "patientassignmentpayload"
     },
     {
@@ -4364,7 +4384,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_admin_stats_service",
-      "community": 0,
+      "community": 59,
       "norm_label": "admin-stats.service.ts"
     },
     {
@@ -4384,7 +4404,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "services_admin_stats_service_chartdatapoint",
-      "community": 0,
+      "community": 59,
       "norm_label": "chartdatapoint"
     },
     {
@@ -4464,7 +4484,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "alimentary_dashboard_alimentary_dashboard_component",
-      "community": 87,
+      "community": 9,
       "norm_label": "alimentary-dashboard.component.ts"
     },
     {
@@ -4474,7 +4494,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "alimentary_dashboard_alimentary_dashboard_component_chatmessage",
-      "community": 87,
+      "community": 9,
       "norm_label": "chatmessage"
     },
     {
@@ -4684,7 +4704,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "login_login_component",
-      "community": 56,
+      "community": 18,
       "norm_label": "login.component.ts"
     },
     {
@@ -4694,7 +4714,7 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "login_login_component_logincomponent",
-      "community": 56,
+      "community": 69,
       "norm_label": "logincomponent"
     },
     {
@@ -4704,7 +4724,7 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "login_login_component_logincomponent_ngoninit",
-      "community": 56,
+      "community": 69,
       "norm_label": ".ngoninit()"
     },
     {
@@ -4714,7 +4734,7 @@
       "source_location": "L35",
       "_origin": "ast",
       "id": "login_login_component_logincomponent_closeinactivitymodal",
-      "community": 56,
+      "community": 69,
       "norm_label": ".closeinactivitymodal()"
     },
     {
@@ -4724,7 +4744,7 @@
       "source_location": "L39",
       "_origin": "ast",
       "id": "login_login_component_logincomponent_onlogin",
-      "community": 56,
+      "community": 69,
       "norm_label": ".onlogin()"
     },
     {
@@ -4734,7 +4754,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "register_register_component",
-      "community": 87,
+      "community": 18,
       "norm_label": "register.component.ts"
     },
     {
@@ -4834,7 +4854,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_features_chat_dashboard_dashboard_component_ts_dashboard_dashboard_component",
-      "community": 0,
+      "community": 1,
       "norm_label": "dashboard.component.ts"
     },
     {
@@ -5154,7 +5174,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "student_agenda_student_agenda_component",
-      "community": 59,
+      "community": 67,
       "norm_label": "student-agenda.component.ts"
     },
     {
@@ -5384,7 +5404,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "dashboard_diary_dashboard_component",
-      "community": 59,
+      "community": 17,
       "norm_label": "diary-dashboard.component.ts"
     },
     {
@@ -5524,7 +5544,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "achievements_dashboard_achievements_dashboard_component",
-      "community": 69,
+      "community": 1,
       "norm_label": "achievements-dashboard.component.ts"
     },
     {
@@ -5534,7 +5554,7 @@
       "source_location": "L104",
       "_origin": "ast",
       "id": "achievements_dashboard_achievements_dashboard_component_achievementsdashboardcomponent",
-      "community": 69,
+      "community": 1,
       "norm_label": "achievementsdashboardcomponent"
     },
     {
@@ -5544,7 +5564,7 @@
       "source_location": "L128",
       "_origin": "ast",
       "id": "achievements_dashboard_achievements_dashboard_component_achievementsdashboardcomponent_ngoninit",
-      "community": 69,
+      "community": 1,
       "norm_label": ".ngoninit()"
     },
     {
@@ -5554,7 +5574,7 @@
       "source_location": "L132",
       "_origin": "ast",
       "id": "achievements_dashboard_achievements_dashboard_component_achievementsdashboardcomponent_selectcategory",
-      "community": 69,
+      "community": 1,
       "norm_label": ".selectcategory()"
     },
     {
@@ -5564,7 +5584,7 @@
       "source_location": "L136",
       "_origin": "ast",
       "id": "achievements_dashboard_achievements_dashboard_component_achievementsdashboardcomponent_getleveltitle",
-      "community": 69,
+      "community": 1,
       "norm_label": ".getleveltitle()"
     },
     {
@@ -5574,7 +5594,7 @@
       "source_location": "L145",
       "_origin": "ast",
       "id": "achievements_dashboard_achievements_dashboard_component_achievementsdashboardcomponent_getbadgeicon",
-      "community": 69,
+      "community": 1,
       "norm_label": ".getbadgeicon()"
     },
     {
@@ -5584,7 +5604,7 @@
       "source_location": "L157",
       "_origin": "ast",
       "id": "achievements_dashboard_achievements_dashboard_component_achievementsdashboardcomponent_getbadgecolor",
-      "community": 69,
+      "community": 1,
       "norm_label": ".getbadgecolor()"
     },
     {
@@ -5594,7 +5614,7 @@
       "source_location": "L170",
       "_origin": "ast",
       "id": "achievements_dashboard_achievements_dashboard_component_achievementsdashboardcomponent_getbadgebg",
-      "community": 69,
+      "community": 1,
       "norm_label": ".getbadgebg()"
     },
     {
@@ -5624,7 +5644,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_features_health_professional_agenda_agenda_component_ts_agenda_agenda_component",
-      "community": 18,
+      "community": 67,
       "norm_label": "agenda.component.ts"
     },
     {
@@ -5634,7 +5654,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "src_app_features_health_professional_agenda_agenda_component_ts_agenda_agenda_component_calendarday",
-      "community": 18,
+      "community": 67,
       "norm_label": "calendarday"
     },
     {
@@ -5844,7 +5864,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "emergency_change_modal_emergency_change_modal_component",
-      "community": 18,
+      "community": 67,
       "norm_label": "emergency-change-modal.component.ts"
     },
     {
@@ -5854,7 +5874,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "emergency_change_modal_emergency_change_modal_component_emergencymodaldata",
-      "community": 18,
+      "community": 67,
       "norm_label": "emergencymodaldata"
     },
     {
@@ -6054,7 +6074,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_features_health_professional_dashboard_dashboard_component_ts_dashboard_dashboard_component",
-      "community": 56,
+      "community": 18,
       "norm_label": "dashboard.component.ts"
     },
     {
@@ -6534,7 +6554,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "nutritionist_layout_nutritionist_layout_component",
-      "community": 58,
+      "community": 18,
       "norm_label": "nutritionist-layout.component.ts"
     },
     {
@@ -6734,7 +6754,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "perfil_paciente_perfil_paciente_component",
-      "community": 0,
+      "community": 87,
       "norm_label": "perfil-paciente.component.ts"
     },
     {
@@ -7324,7 +7344,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "patient_profile_patient_profile_component",
-      "community": 0,
+      "community": 87,
       "norm_label": "patient-profile.component.ts"
     },
     {
@@ -7654,7 +7674,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "psychologist_layout_psychologist_layout_component",
-      "community": 56,
+      "community": 18,
       "norm_label": "psychologist-layout.component.ts"
     },
     {
@@ -7664,7 +7684,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "psychologist_layout_psychologist_layout_component_psychologistlayoutcomponent",
-      "community": 56,
+      "community": 24,
       "norm_label": "psychologistlayoutcomponent"
     },
     {
@@ -7674,7 +7694,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "psychologist_layout_psychologist_layout_component_psychologistlayoutcomponent_currentuser",
-      "community": 56,
+      "community": 24,
       "norm_label": ".currentuser()"
     },
     {
@@ -7684,7 +7704,7 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "psychologist_layout_psychologist_layout_component_psychologistlayoutcomponent_togglesidebar",
-      "community": 56,
+      "community": 24,
       "norm_label": ".togglesidebar()"
     },
     {
@@ -7694,7 +7714,7 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "psychologist_layout_psychologist_layout_component_psychologistlayoutcomponent_logout",
-      "community": 56,
+      "community": 24,
       "norm_label": ".logout()"
     },
     {
@@ -7704,7 +7724,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "psychologist_psychologist_routes",
-      "community": 56,
+      "community": 24,
       "norm_label": "psychologist.routes.ts"
     },
     {
@@ -7714,7 +7734,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "psychologist_psychologist_routes_psychologist_routes",
-      "community": 56,
+      "community": 24,
       "norm_label": "psychologist_routes"
     },
     {
@@ -7864,7 +7884,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "emoji_scale_emoji_scale_component",
-      "community": 1,
+      "community": 68,
       "norm_label": "emoji-scale.component.ts"
     },
     {
@@ -7874,7 +7894,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "emoji_scale_emoji_scale_component_emojiscalecomponent",
-      "community": 1,
+      "community": 68,
       "norm_label": "emojiscalecomponent"
     },
     {
@@ -7884,7 +7904,7 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "emoji_scale_emoji_scale_component_emojiscalecomponent_selectemoji",
-      "community": 1,
+      "community": 68,
       "norm_label": ".selectemoji()"
     },
     {
@@ -7894,7 +7914,7 @@
       "source_location": "L36",
       "_origin": "ast",
       "id": "emoji_scale_emoji_scale_component_emojiscalecomponent_getprogresswidth",
-      "community": 1,
+      "community": 68,
       "norm_label": ".getprogresswidth()"
     },
     {
@@ -7904,7 +7924,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "session_feedback_session_feedback_component",
-      "community": 1,
+      "community": 68,
       "norm_label": "session-feedback.component.ts"
     },
     {
@@ -7914,7 +7934,7 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "session_feedback_session_feedback_component_sessionfeedbackcomponent",
-      "community": 1,
+      "community": 60,
       "norm_label": "sessionfeedbackcomponent"
     },
     {
@@ -7924,7 +7944,7 @@
       "source_location": "L49",
       "_origin": "ast",
       "id": "session_feedback_session_feedback_component_sessionfeedbackcomponent_ngoninit",
-      "community": 1,
+      "community": 60,
       "norm_label": ".ngoninit()"
     },
     {
@@ -7934,7 +7954,7 @@
       "source_location": "L89",
       "_origin": "ast",
       "id": "session_feedback_session_feedback_component_sessionfeedbackcomponent_handlescore",
-      "community": 1,
+      "community": 60,
       "norm_label": ".handlescore()"
     },
     {
@@ -7944,7 +7964,7 @@
       "source_location": "L99",
       "_origin": "ast",
       "id": "session_feedback_session_feedback_component_sessionfeedbackcomponent_submitfeedback",
-      "community": 1,
+      "community": 60,
       "norm_label": ".submitfeedback()"
     },
     {
@@ -7954,7 +7974,7 @@
       "source_location": "L130",
       "_origin": "ast",
       "id": "session_feedback_session_feedback_component_sessionfeedbackcomponent_goback",
-      "community": 1,
+      "community": 60,
       "norm_label": ".goback()"
     },
     {
@@ -7964,7 +7984,7 @@
       "source_location": "L137",
       "_origin": "ast",
       "id": "session_feedback_session_feedback_component_sessionfeedbackcomponent_finish",
-      "community": 1,
+      "community": 60,
       "norm_label": ".finish()"
     },
     {
@@ -16667,6 +16687,26 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/app/features/admin/faculties/faculties.component.ts",
+      "source_location": "L257",
+      "weight": 1.0,
+      "source": "faculties_faculties_component_facultiescomponent",
+      "target": "faculties_faculties_component_facultiescomponent_getcampusclass",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/features/admin/faculties/faculties.component.ts",
+      "source_location": "L246",
+      "weight": 1.0,
+      "source": "faculties_faculties_component_facultiescomponent",
+      "target": "faculties_faculties_component_facultiescomponent_getcampusicon",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/features/admin/faculties/faculties.component.ts",
       "source_location": "L142",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -16849,9 +16889,9 @@
       "source_file": "src/app/features/admin/faculties/faculties.component.ts",
       "source_location": "L227",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "faculties_faculties_component_facultiescomponent",
-      "target": "faculties_faculties_component_facultiescomponent_translatedemand",
-      "confidence_score": 1.0
+      "target": "faculties_faculties_component_facultiescomponent_translatedemand"
     },
     {
       "relation": "method",
@@ -16859,9 +16899,9 @@
       "source_file": "src/app/features/admin/faculties/faculties.component.ts",
       "source_location": "L237",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "faculties_faculties_component_facultiescomponent",
-      "target": "faculties_faculties_component_facultiescomponent_translaterisk",
-      "confidence_score": 1.0
+      "target": "faculties_faculties_component_facultiescomponent_translaterisk"
     },
     {
       "relation": "method",

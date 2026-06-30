@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy, inject } from '@angular/core';
+import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
@@ -40,7 +41,6 @@ export class FacultiesComponent implements OnInit, OnDestroy {
   sortBy: string = 'demand';
   compareIds: string[] = [];
   showCompareModal = false;
-  selectedFacultyForDetail: AdminFaculty | null = null;
   
   // Add Faculty Form State
   showAddModal = false;
@@ -49,13 +49,18 @@ export class FacultiesComponent implements OnInit, OnDestroy {
   newFacultyVirtualTourUrl = '';
   isSubmitting = false;
 
+  // Filter states
+  filterSearch = '';
+  filterCampusId: number | '' = '';
+  filterDemand = '';
+
   // Radar Chart Configuration for detail modal
   public radarChartData: ChartConfiguration<'radar'>['data'] = {
-    labels: ['Occupancy %', 'Demand %', 'Risk %', 'Dropout %', 'Growth %'],
+    labels: ['Ocupación %', 'Demanda %', 'Riesgo %', 'Deserción %', 'Crecimiento %'],
     datasets: [
       {
         data: [0, 0, 0, 0, 0],
-        label: 'Metric Value',
+        label: 'Valor de Métrica',
         borderColor: '#3b82f6',
         backgroundColor: 'rgba(59, 130, 246, 0.15)',
         borderWidth: 2,
@@ -90,6 +95,7 @@ export class FacultiesComponent implements OnInit, OnDestroy {
 
   // Agregamos la inyección
   private adminStats = inject(AdminStatsService);
+  private router = inject(Router);
 
   constructor(
     private facultyService: FacultyService,
@@ -105,7 +111,7 @@ export class FacultiesComponent implements OnInit, OnDestroy {
   }
 
   toggleScrollLock() {
-    const isOpen = this.showAddModal || this.showCompareModal || !!this.selectedFacultyForDetail;
+    const isOpen = this.showAddModal || this.showCompareModal;
     if (isOpen) {
       document.body.classList.add('modal-open');
     } else {
@@ -125,8 +131,21 @@ export class FacultiesComponent implements OnInit, OnDestroy {
     this.loading = false;
   }
 
+  get filteredFaculties() {
+    return this.faculties.filter(f => {
+      const matchesSearch = f.name.toLowerCase().includes(this.filterSearch.toLowerCase());
+      
+      const campusObj = this.campuses.find(c => c.name === f.campus_name);
+      const matchesCampus = this.filterCampusId === '' || (campusObj && campusObj.id === Number(this.filterCampusId));
+      
+      const matchesDemand = this.filterDemand === '' || f.demand === this.filterDemand;
+      
+      return matchesSearch && matchesCampus && matchesDemand;
+    });
+  }
+
   get sortedFaculties() {
-    return [...this.faculties].sort((a, b) => {
+    return [...this.filteredFaculties].sort((a, b) => {
       if (this.sortBy === 'patients') {
         return b.patients - a.patients;
       }
@@ -171,7 +190,7 @@ export class FacultiesComponent implements OnInit, OnDestroy {
   }
 
   getPct(f: AdminFaculty): number {
-    return Math.round((f.patients / f.capacity) * 100);
+    return f.capacity > 0 ? Math.round((f.patients / f.capacity) * 100) : 0;
   }
 
   getOccupancyColor(pct: number): string {
@@ -205,21 +224,49 @@ export class FacultiesComponent implements OnInit, OnDestroy {
     return map[risk as keyof typeof map] || '';
   }
 
-  viewDetail(f: AdminFaculty) {
-    this.selectedFacultyForDetail = f;
-    const pct = this.getPct(f);
-    const demandVal = { Critical: 100, High: 75, Moderate: 50, Low: 25 }[f.demand];
-    const riskVal = { High: 100, Moderate: 60, Low: 25 }[f.risk];
-    const dropoutVal = Math.min(f.dropoutRate * 7, 100);
-    const growthVal = Math.min(f.newThisMonth * 10, 100);
-
-    this.radarChartData.datasets[0].data = [pct, demandVal, riskVal, dropoutVal, growthVal];
-    this.toggleScrollLock();
+  translateDemand(demand: string): string {
+    const map = {
+      Critical: 'Crítica',
+      High: 'Alta',
+      Moderate: 'Moderada',
+      Low: 'Baja'
+    };
+    return map[demand as keyof typeof map] || demand;
   }
 
-  closeDetail() {
-    this.selectedFacultyForDetail = null;
-    this.toggleScrollLock();
+  translateRisk(risk: string): string {
+    const map = {
+      High: 'Alto',
+      Moderate: 'Moderado',
+      Low: 'Bajo'
+    };
+    return map[risk as keyof typeof map] || risk;
+  }
+
+  getCampusIcon(campusName: string): string {
+    if (!campusName) return 'school';
+    const name = campusName.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+    if (name.includes('cu2')) return 'forest';
+    if (name.includes('cu') || name.includes('ciudad universitaria')) return 'account_balance';
+    if (name.includes('salud') || name.includes('medicina')) return 'local_hospital';
+    if (name.includes('complejo') || name.includes('ccu') || name.includes('cultural')) return 'theater_comedy';
+    if (name.includes('centro')) return 'location_city';
+    return 'domain';
+  }
+
+  getCampusClass(campusName: string): string {
+    if (!campusName) return '';
+    const name = campusName.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+    if (name.includes('cu2')) return 'campus-cu2';
+    if (name.includes('cu') || name.includes('ciudad universitaria')) return 'campus-cu';
+    if (name.includes('salud') || name.includes('medicina')) return 'campus-salud';
+    if (name.includes('complejo') || name.includes('ccu') || name.includes('cultural')) return 'campus-ccu';
+    if (name.includes('centro')) return 'campus-centro';
+    return 'campus-generic';
+  }
+
+  viewDetail(f: AdminFaculty) {
+    this.router.navigate(['/admin/faculties', f.id]);
   }
 
   openCompare() {

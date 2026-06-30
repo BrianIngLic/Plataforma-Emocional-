@@ -20,8 +20,8 @@
     "semantic_hash": "9b7e1de8e28daa4e2a307e1e0f1cf529"
   },
   "db/schema.sql": {
-    "mtime": 1782844941.7167368,
-    "ast_hash": "d4ff9cfc41a399e7568bb4fc068897e8",
+    "mtime": 1782847511.2820103,
+    "ast_hash": "98dcfa2a62dd952bebbc8358a7ea100e",
     "semantic_hash": ""
   },
   "package.json": {
@@ -105,8 +105,8 @@
     "semantic_hash": ""
   },
   "src/app/core/services/faculty.service.ts": {
-    "mtime": 1782846107.524779,
-    "ast_hash": "cb0fea76ae1949e756aee2e9643ce156",
+    "mtime": 1782852393.4332685,
+    "ast_hash": "18e8adcc43229f2d3f439125a7c16d0d",
     "semantic_hash": ""
   },
   "src/app/core/services/profile.service.ts": {
@@ -125,8 +125,8 @@
     "semantic_hash": ""
   },
   "src/app/features/admin/admin.routes.ts": {
-    "mtime": 1782844976.0605302,
-    "ast_hash": "5b24814d611968824830cfacf35d10a8",
+    "mtime": 1782847187.4946527,
+    "ast_hash": "cdaf70e13135954af2a0461a9cb9a8d6",
     "semantic_hash": ""
   },
   "src/app/features/admin/agenda/agenda.component.ts": {
@@ -135,8 +135,8 @@
     "semantic_hash": ""
   },
   "src/app/features/admin/faculties/faculties.component.ts": {
-    "mtime": 1782846111.2761714,
-    "ast_hash": "b8123bddaa532e465fefa42121844817",
+    "mtime": 1782853830.7352576,
+    "ast_hash": "6c195ce8153fa2ecb0422e6c76d63ac8",
     "semantic_hash": ""
   },
   "src/app/features/admin/overview/overview.component.ts": {
@@ -370,8 +370,8 @@
     "semantic_hash": ""
   },
   "src/app/features/admin/admin-layout/admin-layout.component.html": {
-    "mtime": 1782762634.7882428,
-    "ast_hash": "1b73b091e9680752b54832511687f385",
+    "mtime": 1782846852.8564796,
+    "ast_hash": "8c7109a440b8fd5e57200885ec24f248",
     "semantic_hash": ""
   },
   "src/app/features/admin/agenda/agenda.component.html": {
@@ -380,8 +380,8 @@
     "semantic_hash": ""
   },
   "src/app/features/admin/faculties/faculties.component.html": {
-    "mtime": 1782846138.253648,
-    "ast_hash": "20c0f9582f14ce3f71ab3681a36fc620",
+    "mtime": 1782853838.8644783,
+    "ast_hash": "dbdba3025ad3e83ab7f7d82bd6fec9e2",
     "semantic_hash": ""
   },
   "src/app/features/admin/overview/overview.component.html": {
@@ -752,6 +752,16 @@
   "src/app/features/health-professional/command-center-chat/command-center-chat.component.html": {
     "mtime": 1782844961.445472,
     "ast_hash": "2940dd292ada909d82426e1cf2a28b38",
+    "semantic_hash": ""
+  },
+  "src/app/features/admin/faculties/faculty-detail/faculty-detail.component.ts": {
+    "mtime": 1782847721.636579,
+    "ast_hash": "b4e521dad4f833951b2d2e93102177be",
+    "semantic_hash": ""
+  },
+  "src/app/features/admin/faculties/faculty-detail/faculty-detail.component.html": {
+    "mtime": 1782852503.0329745,
+    "ast_hash": "9b54e5646b452244da07478b53dc3382",
     "semantic_hash": ""
   }
 }

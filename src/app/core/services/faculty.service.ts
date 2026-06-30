@@ -59,4 +59,59 @@ export class FacultyService {
       .select()
       .single();
   }
+
+  async updateFaculty(id: number | string, name: string, virtual_tour_url?: string): Promise<{ data: any, error: any }> {
+    return await this.supabaseService.supabase
+      .from('faculties')
+      .update({ name, virtual_tour_url })
+      .eq('id', id)
+      .select()
+      .single();
+  }
+
+  async getFacultyById(id: number | string): Promise<Faculty | null> {
+    const { data, error } = await this.supabaseService.supabase
+      .from('faculties')
+      .select('*, campuses(name)')
+      .eq('id', id)
+      .single();
+    if (!error && data) return data;
+    return null;
+  }
+
+  async assignSpecialist(professionalId: string, facultyId: number | string, facultyName: string): Promise<{ error: any }> {
+    console.log(`[FacultyService] Intentando asignar especialista ${professionalId} a facultad ${facultyName} (${facultyId})`);
+    
+    // 1. Actualizar el campo de agrupación en profiles
+    const { error: profileError } = await this.supabaseService.supabase
+      .from('profiles')
+      .update({ faculty: facultyName })
+      .eq('user_id', professionalId);
+
+    // 2. Actualizar la relación de clave foránea en settings
+    const { error: settingsError } = await this.supabaseService.supabase
+      .from('health_professional_settings')
+      .update({ faculty_id: facultyId })
+      .eq('professional_id', professionalId);
+
+    return { error: settingsError || profileError };
+  }
+
+  async removeSpecialist(professionalId: string): Promise<{ error: any }> {
+    console.log(`[FacultyService] Intentando retirar especialista ${professionalId}`);
+
+    // 1. Limpiar el campo de agrupación en profiles
+    const { error: profileError } = await this.supabaseService.supabase
+      .from('profiles')
+      .update({ faculty: null })
+      .eq('user_id', professionalId);
+
+    // 2. Limpiar la relación de clave foránea en settings
+    const { error: settingsError } = await this.supabaseService.supabase
+      .from('health_professional_settings')
+      .update({ faculty_id: null })
+      .eq('professional_id', professionalId);
+
+    return { error: settingsError || profileError };
+  }
 }

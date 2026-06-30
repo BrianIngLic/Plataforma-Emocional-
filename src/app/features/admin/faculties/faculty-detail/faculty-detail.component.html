@@ -1,0 +1,308 @@
+<div class="detail-page-container">
+
+  <!-- Spinner de Carga -->
+  <div *ngIf="loading" class="loading-state">
+    <div class="logo-loader-container">
+      <img src="/amati-logo.svg" alt="Amati Logo" class="pulse-logo" />
+      <div class="spinner-ring"></div>
+    </div>
+    <p>Compilando radiografía clínica de la facultad...</p>
+  </div>
+
+  <ng-container *ngIf="!loading && faculty">
+    
+    <!-- Barra de Navegación e Identidad -->
+    <div class="breadcrumb-header">
+      <a [routerLink]="['/admin/faculties']" class="back-link">
+        <mat-icon>arrow_back</mat-icon>
+        <span>Volver a Facultades</span>
+      </a>
+      
+      <div class="header-actions">
+        <!-- Botones de Edición CRUD -->
+        <button *ngIf="!isEditing" (click)="toggleEdit()" class="btn-edit">
+          <mat-icon>edit</mat-icon>
+          <span>Editar Datos</span>
+        </button>
+        <button *ngIf="isEditing" (click)="saveFacultyDetails()" [disabled]="isSaving || !editName.trim()" class="btn-save">
+          <mat-icon>save</mat-icon>
+          <span>{{ isSaving ? 'Guardando...' : 'Guardar' }}</span>
+        </button>
+        <button *ngIf="isEditing" (click)="toggleEdit()" [disabled]="isSaving" class="btn-cancel">
+          <span>Cancelar</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Panel de Información Principal (Modo Edición Inline) -->
+    <div class="faculty-brand-card">
+      <div class="identity-wrapper" *ngIf="!isEditing">
+        <div class="icon-avatar">
+          <mat-icon>business</mat-icon>
+        </div>
+        <div class="info">
+          <h2>{{ faculty.name }}</h2>
+          <span class="location">
+            <mat-icon>place</mat-icon>
+            {{ faculty.campuses?.name || 'Campus no registrado' }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Formulario de Edición Minimalista -->
+      <div class="edit-form-inline" *ngIf="isEditing">
+        <div class="form-group">
+          <label>Nombre de la Facultad *</label>
+          <input type="text" [(ngModel)]="editName" placeholder="Ej. Facultad de Ciencias de la Computación" />
+        </div>
+        <div class="form-group">
+          <label>Enlace del Recorrido Virtual 360°</label>
+          <input type="text" [(ngModel)]="editVirtualTourUrl" placeholder="Ej. https://tour360.buap.mx/fcc" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Alertas y Recomendaciones del Sistema -->
+    <div class="alert-banner critical" *ngIf="occupancyPct >= 85">
+      <mat-icon class="alert-icon">warning</mat-icon>
+      <div class="alert-content">
+        <h4>Saturación Crítica Detectada ({{ occupancyPct }}%)</h4>
+        <p>Esta facultad está superando su capacidad de atención clínica recomendada. Es altamente prioritario sumar nuevos especialistas (psicólogos y/o nutriólogos) a este plantel.</p>
+      </div>
+    </div>
+
+    <div class="alert-banner warning" *ngIf="assignedSpecialists.length === 0">
+      <mat-icon class="alert-icon">error_outline</mat-icon>
+      <div class="alert-content">
+        <h4>Facultad Desatendida</h4>
+        <p>No hay personal médico asignado a esta facultad en este momento. Los alumnos no pueden agendar consultas de salud mental o nutrición. Utiliza el botón <strong>"Sumar Especialista"</strong> de abajo para asignar personal.</p>
+      </div>
+    </div>
+
+    <!-- Dashboard Grid -->
+    <div class="dashboard-grid">
+      
+      <!-- Lado Izquierdo: Métricas y Gráfico -->
+      <div class="metrics-section">
+        <div class="section-title">
+          <mat-icon>assessment</mat-icon>
+          <h3>Indicadores de Demanda y Ocupación</h3>
+        </div>
+
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <span class="kpi-label">Pacientes Activos</span>
+            <span class="kpi-value">{{ stats?.patients || 0 }}</span>
+            <span class="kpi-trend green">+{{ stats?.newThisMonth || 0 }} este mes</span>
+          </div>
+
+          <div class="kpi-card">
+            <span class="kpi-label">Capacidad Máxima</span>
+            <span class="kpi-value">{{ stats?.capacity || 0 }}</span>
+            <span class="kpi-trend">Cupo configurado</span>
+          </div>
+
+          <div class="kpi-card">
+            <span class="kpi-label">Ocupación Relativa</span>
+            <span class="kpi-value" [ngClass]="getOccupancyColor(occupancyPct)">{{ occupancyPct }}%</span>
+            <div class="progress-bar-bg compact">
+              <div class="progress-bar-fill" [style.width]="occupancyPct + '%'" [ngClass]="getOccupancyBarColor(occupancyPct)"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="chart-container-card">
+          <h4>Perfil Clínico y Operativo de la Facultad</h4>
+          <div class="chart-wrapper">
+            <canvas baseChart [data]="radarChartData" [options]="radarChartOptions" type="radar"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Lado Derecho: Recorrido Virtual y Datos Adicionales -->
+      <div class="extra-section">
+        <div class="section-title">
+          <mat-icon>streetview</mat-icon>
+          <h3>Planta Física y Planta BUAP</h3>
+        </div>
+
+        <!-- Recorrido Virtual 360 Card -->
+        <div class="virtual-tour-card">
+          <div class="tour-header">
+            <mat-icon>360</mat-icon>
+            <h4>Recorrido Virtual 360°</h4>
+          </div>
+          
+          <div class="tour-body" *ngIf="faculty.virtual_tour_url">
+            <p>Accede de forma remota al plano físico del consultorio y las instalaciones de la facultad.</p>
+            <a [href]="faculty.virtual_tour_url" target="_blank" class="btn-tour-launch">
+              <mat-icon>open_in_new</mat-icon>
+              <span>Abrir Recorrido Virtual</span>
+            </a>
+          </div>
+
+          <div class="tour-empty" *ngIf="!faculty.virtual_tour_url">
+            <p>No se ha registrado ningún enlace para el recorrido virtual 360°.</p>
+            <button *ngIf="!isEditing" (click)="toggleEdit()" class="btn-tour-setup">
+              <mat-icon>add_link</mat-icon>
+              <span>Configurar Enlace</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Más Datos Clínicos de la Facultad -->
+        <div class="clinical-details-card">
+          <div class="tour-header">
+            <mat-icon>analytics</mat-icon>
+            <h4>Diagnóstico Detallado</h4>
+          </div>
+          <div class="detail-row">
+            <span>Diagnóstico Predominante:</span>
+            <strong>{{ stats?.topDiagnosis || 'Por determinar' }}</strong>
+          </div>
+          <div class="detail-row">
+            <span>Tasa de Deserción:</span>
+            <strong class="red-text">{{ stats?.dropoutRate || 0 }}%</strong>
+          </div>
+          <div class="detail-row">
+            <span>Sesiones Semanales Estimadas:</span>
+            <strong>{{ stats?.avgSessionsWeek || 0 }}</strong>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Sección de Especialistas (CRUD Relacional) -->
+    <div class="specialists-section-container">
+      <div class="specialists-section-header">
+        <div class="title-with-icon">
+          <mat-icon>psychology</mat-icon>
+          <h3>Especialistas Clínicos Asignados</h3>
+          <span class="count-badge">{{ assignedSpecialists.length }}</span>
+        </div>
+
+        <!-- Botón para Sumar Especialista -->
+        <button (click)="openAssignDrawer()" class="btn-add-spec">
+          <mat-icon>person_add</mat-icon>
+          <span>Sumar Especialista</span>
+        </button>
+      </div>
+
+      <!-- Lista de Especialistas Asignados -->
+      <div class="specialists-grid" *ngIf="assignedSpecialists.length > 0">
+        <div class="specialist-card" *ngFor="let s of assignedSpecialists">
+          
+          <!-- Encabezado de Tarjeta -->
+          <div class="spec-card-header">
+            <div class="avatar" [style.background-image]="s.avatar_url ? 'url(' + s.avatar_url + ')' : ''">
+              <span *ngIf="!s.avatar_url">{{ s.name.charAt(4) }}</span>
+            </div>
+            <div class="spec-meta">
+              <h4>{{ s.name }}</h4>
+              <span class="role-badge" [class.nutri]="s.role_id === 4">{{ s.role_name }}</span>
+            </div>
+          </div>
+
+          <!-- Cuerpo: Datos y Carga -->
+          <div class="spec-card-body">
+            <div class="body-info-row">
+              <mat-icon>mail</mat-icon>
+              <span>{{ s.email }}</span>
+            </div>
+
+            <div class="load-section">
+              <div class="load-labels">
+                <span>Carga de Pacientes</span>
+                <strong>{{ s.patients }} / {{ s.capacity }}</strong>
+              </div>
+              <div class="progress-bar-bg compact">
+                <div class="progress-bar-fill" [style.width]="(s.patients / s.capacity * 100) + '%'" [ngClass]="getOccupancyBarColor(s.patients / s.capacity * 100)"></div>
+              </div>
+            </div>
+
+            <div class="eval-section">
+              <span>Evaluación global:</span>
+              <div class="stars">
+                <mat-icon class="star-icon">star</mat-icon>
+                <strong>{{ s.evaluation }}</strong>
+              </div>
+            </div>
+          </div>
+
+          <!-- Footer: Retirar de esta facultad -->
+          <div class="spec-card-footer">
+            <button (click)="removeSpecialist(s.id)" class="btn-remove-spec">
+              <mat-icon>person_remove</mat-icon>
+              <span>Retirar de Facultad</span>
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Estado Vacío -->
+      <div class="empty-specialists-state" *ngIf="assignedSpecialists.length === 0">
+        <mat-icon>supervised_user_circle</mat-icon>
+        <p>No hay personal médico (psicólogos o nutriólogos) dando servicio en esta facultad.</p>
+        <button (click)="openAssignDrawer()" class="btn-empty-action">
+          <mat-icon>add</mat-icon>
+          <span>Asignar Primer Especialista</span>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Drawer Lateral para Sumar Especialistas (Slide Over Overlay) -->
+    <div class="drawer-overlay" *ngIf="showAssignDrawer" (click)="closeAssignDrawer()">
+      <div class="drawer-card" (click)="$event.stopPropagation()">
+        
+        <div class="drawer-header">
+          <div class="title">
+            <mat-icon>person_add</mat-icon>
+            <h3>Sumar Especialista a la Facultad</h3>
+          </div>
+          <button (click)="closeAssignDrawer()" class="btn-close-drawer">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+
+        <div class="drawer-body">
+          <p class="drawer-description">Selecciona uno de los profesionales clínicos registrados en el sistema para asociarlo a esta facultad:</p>
+
+          <div class="available-specs-list" *ngIf="availableSpecialists.length > 0">
+            <div class="available-spec-row" *ngFor="let spec of availableSpecialists">
+              
+              <div class="spec-row-info">
+                <div class="row-avatar" [style.background-image]="spec.avatar_url ? 'url(' + spec.avatar_url + ')' : ''">
+                  <span *ngIf="!spec.avatar_url">{{ spec.name.charAt(4) }}</span>
+                </div>
+                <div class="row-meta">
+                  <h5>{{ spec.name }}</h5>
+                  <span class="row-role" [class.nutri]="spec.role_id === 4">{{ spec.role_name }}</span>
+                  <small class="current-fac">Asignado a: {{ spec.faculty || 'Sin asignar' }}</small>
+                </div>
+              </div>
+
+              <button (click)="assignSpecialist(spec.id)" class="btn-row-assign">
+                <mat-icon>add</mat-icon>
+                <span>Asignar</span>
+              </button>
+
+            </div>
+          </div>
+
+          <!-- Si no hay especialistas disponibles -->
+          <div class="drawer-empty-state" *ngIf="availableSpecialists.length === 0">
+            <mat-icon>people_outline</mat-icon>
+            <p>No hay más especialistas registrados en el sistema disponibles para reasignar.</p>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+  </ng-container>
+
+</div>

@@ -37,6 +37,36 @@
     </button>
   </div>
 
+  <!-- Filters Bar -->
+  <div class="filters-bar" style="display: flex; gap: 16px; align-items: center; background: var(--bg-card, #1e293b); padding: 12px 20px; border-radius: 12px; border: 1px solid var(--border-color, rgba(255, 255, 255, 0.06)); margin-bottom: 0.25rem; flex-wrap: wrap;">
+    <!-- Search Input -->
+    <div style="display: flex; align-items: center; gap: 8px; flex: 1; min-width: 200px; background: var(--bg-hover, rgba(255, 255, 255, 0.03)); border: 1px solid var(--border-color, rgba(255, 255, 255, 0.1)); padding: 6px 12px; border-radius: 8px;">
+      <mat-icon style="color: var(--text-secondary, #94a3b8); font-size: 18px; width: 18px; height: 18px; line-height: 18px; display: inline-flex; align-items: center; justify-content: center;">search</mat-icon>
+      <input type="text" [(ngModel)]="filterSearch" placeholder="Buscar por facultad..." style="background: transparent; border: none; outline: none; color: var(--text-primary, #f8fafc); font-size: 0.85rem; width: 100%;" />
+    </div>
+
+    <!-- Campus Dropdown -->
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <span style="font-size: 0.75rem; color: var(--text-secondary, #94a3b8); font-family: monospace;">Campus:</span>
+      <select [(ngModel)]="filterCampusId" style="padding: 6px 12px; border-radius: 8px; border: 1px solid var(--border-color, rgba(255, 255, 255, 0.1)); background: var(--bg-hover, rgba(255, 255, 255, 0.05)); color: var(--text-primary, #f8fafc); font-size: 0.8rem; outline: none; height: 34px;">
+        <option value="" style="background: #1e293b; color: #f8fafc;">Todos los campus</option>
+        <option *ngFor="let c of campuses" [value]="c.id" style="background: #1e293b; color: #f8fafc;">{{ c.name }}</option>
+      </select>
+    </div>
+
+    <!-- Demand Dropdown -->
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <span style="font-size: 0.75rem; color: var(--text-secondary, #94a3b8); font-family: monospace;">Demanda:</span>
+      <select [(ngModel)]="filterDemand" style="padding: 6px 12px; border-radius: 8px; border: 1px solid var(--border-color, rgba(255, 255, 255, 0.1)); background: var(--bg-hover, rgba(255, 255, 255, 0.05)); color: var(--text-primary, #f8fafc); font-size: 0.8rem; outline: none; height: 34px;">
+        <option value="" style="background: #1e293b; color: #f8fafc;">Todos los niveles</option>
+        <option value="Critical" style="background: #1e293b; color: #f87171;">Critical (Crítica)</option>
+        <option value="High" style="background: #1e293b; color: #fbbf24;">High (Alta)</option>
+        <option value="Moderate" style="background: #1e293b; color: #60a5fa;">Moderate (Moderada)</option>
+        <option value="Low" style="background: #1e293b; color: #34d399;">Low (Baja)</option>
+      </select>
+    </div>
+  </div>
+
   <!-- Saturation Warning Banner -->
   <div class="warning-banner" *ngIf="hasCriticalFaculties">
     <div class="warning-icon">
@@ -64,6 +94,36 @@
       </span>
     </div>
 
+    <!-- Encabezado de Columnas para Evitar Textos Repetitivos -->
+    <div class="faculties-list-header">
+      <div class="header-col select-col">
+        <span>Comparar</span>
+      </div>
+      <div class="header-col identity-col">
+        <mat-icon>apartment</mat-icon>
+        <span>Facultad / Unidad Académica</span>
+      </div>
+      <div class="header-col patients-col">
+        <mat-icon>people</mat-icon>
+        <span>Pacientes / Capacidad</span>
+      </div>
+      <div class="header-col specialists-col">
+        <mat-icon>psychology</mat-icon>
+        <span>Especialistas</span>
+      </div>
+      <div class="header-col occupancy-col">
+        <mat-icon>trending_up</mat-icon>
+        <span>Ocupación</span>
+      </div>
+      <div class="header-col alert-col">
+        <mat-icon>warning</mat-icon>
+        <span>Semáforo / Alertas</span>
+      </div>
+      <div class="header-col action-col">
+        <span>Acciones</span>
+      </div>
+    </div>
+
     <div class="faculties-list">
       <div 
         class="faculty-row" 
@@ -71,18 +131,25 @@
         [class.selected]="isCompared(f.id)"
       >
         <!-- Compare Selector Checkbox -->
-        <button 
-          class="checkbox-btn" 
-          (click)="toggleCompare(f.id)"
-          [class.checked]="isCompared(f.id)"
-        >
-          <mat-icon *ngIf="isCompared(f.id)">check</mat-icon>
-        </button>
+        <div class="select-cell">
+          <button 
+            class="checkbox-btn" 
+            (click)="toggleCompare(f.id)"
+            [class.checked]="isCompared(f.id)"
+          >
+            <mat-icon *ngIf="isCompared(f.id)">check</mat-icon>
+          </button>
+        </div>
 
-        <!-- Faculty Name & Icon -->
-        <div class="faculty-identity">
-          <mat-icon class="faculty-icon">school</mat-icon>
-          <span class="faculty-name">{{ f.name }}</span>
+        <!-- Faculty Name, Campus Subtitle & Dynamic Icon -->
+        <div class="faculty-identity" [title]="'Campus: ' + (f.campus_name || 'No definido')">
+          <mat-icon class="faculty-icon" [ngClass]="getCampusClass(f.campus_name)">
+            {{ getCampusIcon(f.campus_name) }}
+          </mat-icon>
+          <div class="name-container">
+            <span class="faculty-name">{{ f.name }}</span>
+            <span class="campus-sub">{{ f.campus_name || 'Sin Campus' }}</span>
+          </div>
         </div>
 
         <!-- Patients Ratio -->
@@ -96,7 +163,7 @@
         <!-- Psychologists Count -->
         <div class="metric-block psychologists-count">
           <mat-icon>psychology</mat-icon>
-          <span>{{ f.psychologists }} {{ f.psychologists === 1 ? 'psicólogo' : 'psicólogos' }}</span>
+          <span class="bold">{{ f.psychologists }}</span>
         </div>
 
         <!-- Capacity Bar -->
@@ -109,8 +176,8 @@
 
         <!-- Chips -->
         <div class="badge-group">
-          <span class="badge" [ngClass]="getDemandClass(f.demand)">{{ f.demand }}</span>
-          <span class="badge" [ngClass]="getRiskClass(f.risk)">Riesgo {{ f.risk }}</span>
+          <span class="badge" [ngClass]="getDemandClass(f.demand)">{{ translateDemand(f.demand) }}</span>
+          <span class="badge" [ngClass]="getRiskClass(f.risk)">Riesgo {{ translateRisk(f.risk) }}</span>
         </div>
 
         <!-- View Detail Button -->
@@ -122,73 +189,7 @@
     </div>
   </div>
 
-  <!-- Detail Modal -->
-  <div class="modal-overlay" *ngIf="selectedFacultyForDetail" (click)="closeDetail()">
-    <div class="modal-card detail-modal" (click)="$event.stopPropagation()">
-      <div class="modal-header">
-        <div class="modal-title-wrapper">
-          <mat-icon>business</mat-icon>
-          <h3>{{ selectedFacultyForDetail.name }} — Detalles Clínicos</h3>
-        </div>
-        <button class="modal-close-btn" (click)="closeDetail()">
-          <mat-icon>close</mat-icon>
-        </button>
-      </div>
 
-      <div class="modal-body">
-        <!-- Progress bar in details -->
-        <div class="detail-occupancy">
-          <div class="occupancy-labels">
-            <span>Ocupación de Capacidad</span>
-            <span [style.color]="getOccupancyColorText(getPct(selectedFacultyForDetail))">
-              {{ getPct(selectedFacultyForDetail) }}% ({{ selectedFacultyForDetail.patients }} / {{ selectedFacultyForDetail.capacity }})
-            </span>
-          </div>
-          <div class="bar-bg large">
-            <div class="bar-fill" [style.width]="getPct(selectedFacultyForDetail) + '%'" [ngClass]="getOccupancyColor(getPct(selectedFacultyForDetail))"></div>
-          </div>
-        </div>
-
-        <!-- Radar Chart wrapper -->
-        <div class="chart-wrapper">
-          <canvas baseChart [data]="radarChartData" [options]="radarChartOptions" type="radar"></canvas>
-        </div>
-
-        <!-- Stats details grid -->
-        <div class="detail-grid">
-          <div class="grid-card">
-            <small>Psicólogos Asignados</small>
-            <span>{{ selectedFacultyForDetail.psychologists }}</span>
-          </div>
-          <div class="grid-card">
-            <small>Sesiones Semanales Promedio</small>
-            <span>{{ selectedFacultyForDetail.avgSessionsWeek }} sesiones</span>
-          </div>
-          <div class="grid-card">
-            <small>Tasa de Deserción</small>
-            <span class="red-text">{{ selectedFacultyForDetail.dropoutRate }}%</span>
-          </div>
-          <div class="grid-card">
-            <small>Nuevos Ingresos (Mes)</small>
-            <span class="green-text">+{{ selectedFacultyForDetail.newThisMonth }}</span>
-          </div>
-          <div class="grid-card col-span-2">
-            <small>Diagnóstico Predominante</small>
-            <span class="diagnosis-text">{{ selectedFacultyForDetail.topDiagnosis }}</span>
-          </div>
-        </div>
-
-        <!-- Danger warning -->
-        <div class="danger-box" *ngIf="getPct(selectedFacultyForDetail) >= 90">
-          <mat-icon>warning</mat-icon>
-          <p>
-            Esta facultad está casi al límite de su capacidad. Considere la reasignación de personal
-            para evitar retrasos en el triage clínico.
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <!-- Compare Modal -->
   <div class="modal-overlay" *ngIf="showCompareModal" (click)="closeCompare()">
@@ -233,13 +234,13 @@
             <tr>
               <td class="row-label">Demanda</td>
               <td *ngFor="let comp of getComparedFaculties()">
-                <span class="badge inline" [ngClass]="getDemandClass(comp.demand)">{{ comp.demand }}</span>
+                <span class="badge inline" [ngClass]="getDemandClass(comp.demand)">{{ translateDemand(comp.demand) }}</span>
               </td>
             </tr>
             <tr>
               <td class="row-label">Riesgo Promedio</td>
               <td *ngFor="let comp of getComparedFaculties()">
-                <span class="badge inline" [ngClass]="getRiskClass(comp.risk)">{{ comp.risk }}</span>
+                <span class="badge inline" [ngClass]="getRiskClass(comp.risk)">{{ translateRisk(comp.risk) }}</span>
               </td>
             </tr>
             <tr>

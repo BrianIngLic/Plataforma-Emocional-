@@ -177,10 +177,17 @@ body.modal-open {
 
   .content-body {
     overflow: hidden !important;
+    transform: none !important;
+    animation: none !important;
   }
 
   /* Reset layout constraints and containing block transform so position: fixed covers full screen */
   .content-body > * {
+    transform: none !important;
+    animation: none !important;
+  }
+
+  .main-content > * {
     transform: none !important;
     animation: none !important;
   }

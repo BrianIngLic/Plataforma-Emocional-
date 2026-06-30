@@ -785,4 +785,7 @@ CREATE POLICY campuses_select ON public.campuses
 CREATE POLICY campuses_admin_all ON public.campuses
     FOR ALL TO authenticated USING (public.get_auth_role() = 1);
 
+CREATE POLICY health_prof_settings_admin_all ON public.health_professional_settings
+    FOR ALL TO authenticated USING (public.get_auth_role() = 1);
+
 

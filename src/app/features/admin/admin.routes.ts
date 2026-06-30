@@ -39,6 +39,10 @@ export const ADMIN_ROUTES: Routes = [
         loadComponent: () => import('./institutional-settings/institutional-settings.component').then(m => m.InstitutionalSettingsComponent)
       },
       {
+        path: 'faculties/:id',
+        loadComponent: () => import('./faculties/faculty-detail/faculty-detail.component').then(m => m.FacultyDetailComponent)
+      },
+      {
         path: 'whatsapp-chat',
         loadComponent: () => import('../health-professional/command-center-chat/command-center-chat.component').then(m => m.CommandCenterChatComponent)
       },

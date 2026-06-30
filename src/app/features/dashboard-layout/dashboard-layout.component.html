@@ -51,6 +51,16 @@
             <small>Nutrición</small>
           </div>
         </a>
+        <a class="nav-item" routerLink="/dashboard/achievements" routerLinkActive="active">
+          <mat-icon>emoji_events</mat-icon>
+          <div class="nav-text" style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+            <div>
+              <span>Mis Logros</span>
+              <small>Racha & Desafíos</small>
+            </div>
+            <app-streak-badge style="margin-left: 8px;"></app-streak-badge>
+          </div>
+        </a>
       </nav>
 
       <div class="recent-chats" *ngIf="showChatHistory">

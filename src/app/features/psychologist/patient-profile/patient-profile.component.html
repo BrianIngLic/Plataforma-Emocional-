@@ -133,7 +133,121 @@
            <canvas baseChart [data]="allianceChartData" [options]="allianceChartOptions" type="line"></canvas>
         </div>
       </div>
-      
+
+      <!-- Panel de Gamificación y Metas Clínicas -->
+      <div class="card gamification-card">
+        <h2 class="card-title" style="display: flex; align-items: center; gap: 0.5rem; color: #003b5c;">
+          <mat-icon class="text-purple">emoji_events</mat-icon> Logros y Gamificación de Actividad
+        </h2>
+        
+        <!-- Estadísticas de Gamificación -->
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 15px 0; text-align: center;">
+          <div style="background: rgba(239, 68, 68, 0.05); padding: 12px; border-radius: 12px; border: 1px solid rgba(239, 68, 68, 0.1);">
+            <div style="font-size: 12px; font-weight: 600; color: #475569; display: flex; align-items: center; justify-content: center; gap: 4px;">
+              <mat-icon style="color: #ef4444; font-size: 18px; width: 18px; height: 18px;">local_fire_department</mat-icon> Racha
+            </div>
+            <div style="font-size: 20px; font-weight: 800; color: #ef4444; margin-top: 5px;">{{ patientStreak.current_streak }} días</div>
+          </div>
+          <div style="background: rgba(245, 158, 11, 0.05); padding: 12px; border-radius: 12px; border: 1px solid rgba(245, 158, 11, 0.1);">
+            <div style="font-size: 12px; font-weight: 600; color: #475569; display: flex; align-items: center; justify-content: center; gap: 4px;">
+              <mat-icon style="color: #f59e0b; font-size: 18px; width: 18px; height: 18px;">military_tech</mat-icon> Mejor Racha
+            </div>
+            <div style="font-size: 20px; font-weight: 800; color: #b45309; margin-top: 5px;">{{ patientStreak.best_streak }} días</div>
+          </div>
+          <div style="background: rgba(139, 92, 246, 0.05); padding: 12px; border-radius: 12px; border: 1px solid rgba(139, 92, 246, 0.1);">
+            <div style="font-size: 12px; font-weight: 600; color: #475569; display: flex; align-items: center; justify-content: center; gap: 4px;">
+              <mat-icon style="color: #8b5cf6; font-size: 18px; width: 18px; height: 18px;">stars</mat-icon> XP Totales
+            </div>
+            <div style="font-size: 20px; font-weight: 800; color: #8b5cf6; margin-top: 5px;">{{ patientStreak.total_xp }} XP</div>
+          </div>
+        </div>
+
+        <!-- Lista de Medallas Desbloqueadas -->
+        <div style="margin-top: 20px;">
+          <h4 style="font-size: 13px; font-weight: 700; color: #1e293b; margin: 0 0 10px 0;">Medallas Obtendidas</h4>
+          <div *ngIf="patientAchievements.length === 0" style="font-size: 12px; color: #64748b; font-style: italic;">
+            El paciente no ha desbloqueado logros todavía en su diario o citas.
+          </div>
+          <div *ngIf="patientAchievements.length > 0" style="display: flex; flex-wrap: wrap; gap: 10px;">
+            <div *ngFor="let ach of patientAchievements" 
+                 style="display: flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 10px; background: rgba(139, 92, 246, 0.05); border: 1px solid rgba(139, 92, 246, 0.1); font-size: 11px; font-weight: 600; color: #475569;">
+              <mat-icon style="font-size: 16px; width: 16px; height: 16px; color: #8b5cf6;">verified</mat-icon>
+              <span>{{ ach.title }} (+{{ ach.points }} XP)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Formulario para Otorgar Meta Clínica / Logro Personalizado -->
+        <div style="margin-top: 25px; padding-top: 20px; border-top: 1px dashed rgba(226, 232, 240, 0.8);">
+          <h4 style="font-size: 13px; font-weight: 700; color: #1e293b; margin: 0 0 15px 0; display: flex; align-items: center; gap: 6px;">
+            <mat-icon style="font-size: 18px; width: 18px; height: 18px; color: #003b5c;">add_task</mat-icon> Asignar Desafío / Meta Clínica Personalizada
+          </h4>
+          
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <!-- Fila Título y Puntos -->
+            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 12px;">
+              <div>
+                <label style="font-size: 11px; font-weight: 600; color: #64748b; display: block; margin-bottom: 4px;">Título de la Meta</label>
+                <input type="text" [(ngModel)]="newAchTitle" placeholder="Ej. Caminar 30 min diarios" 
+                       style="width: 100%; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 13px; font-family: inherit; box-sizing: border-box;" />
+              </div>
+              <div>
+                <label style="font-size: 11px; font-weight: 600; color: #64748b; display: block; margin-bottom: 4px;">Puntos (XP)</label>
+                <select [(ngModel)]="newAchPoints" style="width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 13px; font-family: inherit; background: white; box-sizing: border-box; height: 35px;">
+                  <option [value]="50">50 XP</option>
+                  <option [value]="100">100 XP</option>
+                  <option [value]="200">200 XP</option>
+                  <option [value]="500">500 XP</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Fila Icono e Instrucción -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+              <div>
+                <label style="font-size: 11px; font-weight: 600; color: #64748b; display: block; margin-bottom: 4px;">Icono Visual</label>
+                <select [(ngModel)]="newAchIcon" style="width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 13px; font-family: inherit; background: white; box-sizing: border-box; height: 35px;">
+                  <option value="directions_walk">🚶 Ejercicio / Paseo</option>
+                  <option value="local_drink">💧 Hidratación / Agua</option>
+                  <option value="self_improvement">🧘 Meditación / Calma</option>
+                  <option value="restaurant">🍎 Alimentación / Comida</option>
+                  <option value="favorite">❤️ Bienestar / Cuidado</option>
+                  <option value="verified">🏆 Certificación / Medalla</option>
+                </select>
+              </div>
+              <div>
+                <label style="font-size: 11px; font-weight: 600; color: #64748b; display: block; margin-bottom: 4px;">Periodicidad</label>
+                <select style="width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 13px; font-family: inherit; background: white; box-sizing: border-box; height: 35px;">
+                  <option>Diario</option>
+                  <option>Semanal</option>
+                  <option>Única ocasión</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Descripción -->
+            <div>
+              <label style="font-size: 11px; font-weight: 600; color: #64748b; display: block; margin-bottom: 4px;">Descripción de la Meta</label>
+              <textarea [(ngModel)]="newAchDesc" placeholder="Describe brevemente el comportamiento acordado en terapia..." 
+                        rows="2" style="width: 100%; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 13px; font-family: inherit; resize: none; box-sizing: border-box;"></textarea>
+            </div>
+
+            <!-- Notas motivacionales -->
+            <div>
+              <label style="font-size: 11px; font-weight: 600; color: #64748b; display: block; margin-bottom: 4px;">Mensaje / Felicitación (Aparece en la medalla)</label>
+              <input type="text" [(ngModel)]="newAchNotes" placeholder="Ej. ¡Gran esfuerzo en consulta!" 
+                     style="width: 100%; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 13px; font-family: inherit; box-sizing: border-box;" />
+            </div>
+
+            <!-- Botón de asignación -->
+            <button class="btn btn-primary" (click)="assignClinicalAchievement()" [disabled]="isAssigningAchievement"
+                    style="width: 100%; background: #003b5c; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 13px; transition: background 0.2s; box-sizing: border-box;">
+              <mat-icon style="font-size: 18px; width: 18px; height: 18px;">stars</mat-icon>
+              {{ isAssigningAchievement ? 'Asignando meta...' : '🏆 Otorgar Recompensa y Medalla' }}
+            </button>
+          </div>
+        </div>
+      </div>
 
     </div>
 

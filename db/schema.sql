@@ -695,3 +695,94 @@ CREATE POLICY inst_settings_read ON public.institutional_settings FOR SELECT USI
 CREATE POLICY inst_settings_insert ON public.institutional_settings FOR INSERT WITH CHECK (public.get_auth_role() = 1);
 CREATE POLICY inst_settings_update ON public.institutional_settings FOR UPDATE USING (public.get_auth_role() = 1);
 
+-- =========================================================================================
+-- CHAT INTERNO META WHATSAPP (SKILL 11)
+-- =========================================================================================
+
+-- Tabla de Conversaciones de Chat Interno conectada a WhatsApp (Consolidación)
+CREATE TABLE public.internal_meta_conversations (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    student_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE UNIQUE,
+    urgency_score DECIMAL(3,2) DEFAULT 0.00,
+    last_message TEXT,
+    last_message_date TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()),
+    unread_count INTEGER DEFAULT 0,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- Tabla de Historial de Mensajes de WhatsApp (Bidireccional)
+CREATE TABLE public.internal_meta_chats (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    conversation_id UUID NOT NULL REFERENCES public.internal_meta_conversations(id) ON DELETE CASCADE,
+    sender_type VARCHAR(50) NOT NULL, -- 'professional' o 'student'
+    sender_name TEXT NOT NULL, -- Nombre del emisor
+    message_content TEXT NOT NULL, -- Contenido del mensaje
+    whatsapp_message_id TEXT UNIQUE, -- ID del mensaje en Meta WhatsApp API (wamid.HBg...)
+    status VARCHAR(50) DEFAULT 'sent', -- 'pending', 'sent', 'delivered', 'read', 'failed'
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- Tabla de Auditoría y Depuración de Webhooks (Meta WhatsApp Webhooks)
+CREATE TABLE public.webhook_logs (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    provider VARCHAR(50) DEFAULT 'whatsapp_meta',
+    event_type VARCHAR(100),
+    payload JSONB NOT NULL,
+    headers JSONB,
+    status VARCHAR(50) DEFAULT 'received', -- 'received', 'processed', 'error'
+    error_details TEXT,
+    processed_at TIMESTAMP WITH TIME ZONE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- Índices para Chat Interno Meta
+CREATE INDEX idx_internal_meta_conversations_student ON public.internal_meta_conversations(student_id);
+CREATE INDEX idx_internal_meta_chats_conversation ON public.internal_meta_chats(conversation_id);
+CREATE INDEX idx_internal_meta_chats_wamid ON public.internal_meta_chats(whatsapp_message_id);
+CREATE INDEX idx_webhook_logs_created ON public.webhook_logs(created_at);
+
+-- RLS
+ALTER TABLE public.internal_meta_conversations ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.internal_meta_chats ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.webhook_logs ENABLE ROW LEVEL SECURITY;
+
+-- Políticas de Seguridad
+-- Lectura y gestión de conversaciones: Solo Admins (1) y Clínicos (3, 4)
+CREATE POLICY internal_meta_conv_select ON public.internal_meta_conversations
+    FOR SELECT TO authenticated USING (public.get_auth_role() IN (1, 3, 4));
+
+CREATE POLICY internal_meta_conv_all ON public.internal_meta_conversations
+    FOR ALL TO authenticated USING (public.get_auth_role() IN (1, 3, 4));
+
+-- Lectura y gestión de chats: Solo Admins (1) y Clínicos (3, 4)
+CREATE POLICY internal_meta_chats_select ON public.internal_meta_chats
+    FOR SELECT TO authenticated USING (public.get_auth_role() IN (1, 3, 4));
+
+CREATE POLICY internal_meta_chats_all ON public.internal_meta_chats
+    FOR ALL TO authenticated USING (public.get_auth_role() IN (1, 3, 4));
+
+-- Webhooks: Inserción para servicio, consulta para Admin
+CREATE POLICY webhook_logs_insert ON public.webhook_logs
+    FOR INSERT TO public WITH CHECK (true);
+
+CREATE POLICY webhook_logs_select ON public.webhook_logs
+    FOR SELECT TO authenticated USING (public.get_auth_role() = 1);
+
+-- RLS y Políticas para Facultades y Campus
+ALTER TABLE public.faculties ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.campuses ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY faculties_select ON public.faculties
+    FOR SELECT USING (true);
+
+CREATE POLICY faculties_admin_all ON public.faculties
+    FOR ALL TO authenticated USING (public.get_auth_role() = 1);
+
+CREATE POLICY campuses_select ON public.campuses
+    FOR SELECT USING (true);
+
+CREATE POLICY campuses_admin_all ON public.campuses
+    FOR ALL TO authenticated USING (public.get_auth_role() = 1);
+
+

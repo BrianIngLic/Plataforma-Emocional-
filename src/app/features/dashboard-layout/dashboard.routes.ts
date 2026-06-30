@@ -31,6 +31,10 @@ export const DASHBOARD_ROUTES: Routes = [
         loadComponent: () => import('../student/session-feedback/session-feedback.component').then(m => m.SessionFeedbackComponent)
       },
       {
+        path: 'achievements',
+        loadComponent: () => import('../gamification/achievements-dashboard/achievements-dashboard.component').then(m => m.AchievementsDashboardComponent)
+      },
+      {
         path: '',
         redirectTo: 'chat',
         pathMatch: 'full'

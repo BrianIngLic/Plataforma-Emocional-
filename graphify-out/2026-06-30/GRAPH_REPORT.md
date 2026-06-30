@@ -1,16 +1,16 @@
 # Graph Report - Plataforma-Emocional-  (2026-06-30)
 
 ## Corpus Check
-- 104 files · ~93,667 words
+- 111 files · ~101,050 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 904 nodes · 1295 edges · 77 communities (24 shown, 53 thin omitted)
+- 950 nodes · 1375 edges · 83 communities (25 shown, 58 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 19 edges (avg confidence: 0.91)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `89d46dcb`
+- Built from commit: `5fc5c621`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -83,6 +83,7 @@
 - [[_COMMUNITY_Community 66|Community 66]]
 - [[_COMMUNITY_Community 67|Community 67]]
 - [[_COMMUNITY_Community 68|Community 68]]
+- [[_COMMUNITY_Community 69|Community 69]]
 - [[_COMMUNITY_Community 70|Community 70]]
 - [[_COMMUNITY_Community 71|Community 71]]
 - [[_COMMUNITY_Community 72|Community 72]]
@@ -91,17 +92,22 @@
 - [[_COMMUNITY_Community 75|Community 75]]
 - [[_COMMUNITY_Community 76|Community 76]]
 - [[_COMMUNITY_Community 77|Community 77]]
+- [[_COMMUNITY_Community 78|Community 78]]
+- [[_COMMUNITY_Community 79|Community 79]]
+- [[_COMMUNITY_Community 80|Community 80]]
+- [[_COMMUNITY_Community 81|Community 81]]
+- [[_COMMUNITY_Community 82|Community 82]]
 
 ## God Nodes (most connected - your core abstractions)
-1. `AuthService` - 45 edges
-2. `SupabaseService` - 35 edges
+1. `AuthService` - 48 edges
+2. `SupabaseService` - 37 edges
 3. `AgendaComponent` - 29 edges
 4. `FacultiesComponent` - 25 edges
 5. `PsychologistsComponent` - 25 edges
 6. `StudentAgendaComponent` - 22 edges
-7. `HealthProfessionalAgendaComponent` - 20 edges
-8. `PerfilPaciente` - 20 edges
-9. `PatientProfileComponent` - 20 edges
+7. `PatientProfileComponent` - 21 edges
+8. `HealthProfessionalAgendaComponent` - 20 edges
+9. `PerfilPaciente` - 20 edges
 10. `AlimentaryDashboardComponent` - 16 edges
 
 ## Surprising Connections (you probably didn't know these)
@@ -125,15 +131,15 @@
 - **Student Emotional Assistance and Care Flow** — dashboard_layout_dashboard_layout_component_student_sidebar, dashboard_dashboard_component_chat_view, dashboard_diary_dashboard_component_therapeutic_refuge, student_agenda_student_agenda_component_appointment_scheduler [INFERRED 0.85]
 - **Psychologist Clinical Command Center and Triage Flow** — psychologist_layout_psychologist_layout_component_psychologist_sidebar, dashboard_dashboard_component_psychologist_triage_view, patients_patients_component_patient_directory, agenda_agenda_component_clinical_timeline, patient_profile_patient_profile_component_clinical_expedient_view [INFERRED 0.85]
 
-## Communities (77 total, 53 thin omitted)
+## Communities (83 total, 58 thin omitted)
 
 ### Community 0 - "Core Services and Auth"
-Cohesion: 0.19
-Nodes (5): environment, Psychologist, Holiday, DiaryEntry, SupabaseService
+Cohesion: 0.18
+Nodes (6): environment, Psychologist, Holiday, DiaryEntry, UserStreak, SupabaseService
 
 ### Community 1 - "Modals Diary and Exceptions"
-Cohesion: 0.06
-Nodes (10): DashboardLayoutComponent, DASHBOARD_ROUTES, EmojiScaleComponent, EmergencyNotificationService, PendingEvaluationItem, ProfessionalEvaluationSummary, SessionEvaluation, SessionEvaluationPayload (+2 more)
+Cohesion: 0.07
+Nodes (10): DashboardLayoutComponent, DASHBOARD_ROUTES, EmojiScaleComponent, PendingEvaluationItem, ProfessionalEvaluationSummary, SessionEvaluation, SessionEvaluationPayload, SessionEvaluationService (+2 more)
 
 ### Community 2 - "Package Config and Dependencies"
 Cohesion: 0.05
@@ -208,35 +214,39 @@ Cohesion: 0.12
 Nodes (15): 1. Visión General de la Arquitectura, 2.1.1. Modelo de Datos Relacional (PostgreSQL), 2.1.2. Políticas de Seguridad (RLS), 2.1.3. Motor de Rachas (*Streak Engine*), 2.1. Skill 10: Sistema de Logros y Gamificación (Duolingo Style), 2.2.1. Flujo Bidireccional, 2.2.2. Tabla de Seguimiento, 2.2. Skill 11: Chat Interno Conectado con Meta Cloud API (WhatsApp) (+7 more)
 
 ### Community 67 - "Community 67"
-Cohesion: 0.16
+Cohesion: 0.15
 Nodes (7): EmergencyModalData, AgendaService, TimeBlock, WorkingDay, CalendarDay, CalendarDay, CalendarDay
 
 ### Community 68 - "Community 68"
 Cohesion: 0.50
 Nodes (3): EmergencyChangeRequest, WebPushSubscriptionPayload, WhatsAppRoutingSession
 
+### Community 69 - "Community 69"
+Cohesion: 0.17
+Nodes (3): AchievementsDashboardComponent, Achievement, GamificationService
+
 ### Community 71 - "Community 71"
 Cohesion: 0.08
 Nodes (25): 1.1. Principios Visuales y Tokens de Diseño, 1. Filosofía de Diseño y Sistema Visual (Design System & Aesthetics), 2.1. Objetivo UX y Mecánicas Estilo Duolingo, 2.2. Arquitectura de Interfaces y Maquetación, 2.3. Especificación de Estructura Angular (Código Base Standalone), 2. Especificación UX/UI 1: Sistema de Logros y Gamificación (Estilo Duolingo), 3.1. Objetivo UX y Diseño Arquitectónico Bidireccional, 3.2. Estructura de Interfaz (Split View de 2 Columnas) (+17 more)
 
 ## Knowledge Gaps
-- **206 isolated node(s):** `$schema`, `version`, `newProjectRoot`, `projectType`, `style` (+201 more)
+- **209 isolated node(s):** `$schema`, `version`, `newProjectRoot`, `projectType`, `style` (+204 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **53 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **58 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `SupabaseService` connect `Core Services and Auth` to `Modals Diary and Exceptions`, `Community 67`, `Community 68`, `Admin Patient Statistics Overview`, `Community 74`, `Main App Security Interceptors`, `Dashboard Main Navigation Layout`, `Community 59`?**
-  _High betweenness centrality (0.107) - this node is a cross-community bridge._
-- **Why does `AuthService` connect `Dashboard Main Navigation Layout` to `Core Services and Auth`, `Modals Diary and Exceptions`, `Community 67`, `Community 68`, `Community 74`, `Main App Security Interceptors`, `Community 59`?**
-  _High betweenness centrality (0.089) - this node is a cross-community bridge._
+- **Why does `SupabaseService` connect `Core Services and Auth` to `Modals Diary and Exceptions`, `Community 67`, `Community 68`, `Admin Patient Statistics Overview`, `Community 74`, `Main App Security Interceptors`, `Community 81`, `Dashboard Main Navigation Layout`, `Community 59`?**
+  _High betweenness centrality (0.106) - this node is a cross-community bridge._
+- **Why does `AuthService` connect `Dashboard Main Navigation Layout` to `Core Services and Auth`, `Modals Diary and Exceptions`, `Community 67`, `Community 68`, `Community 69`, `Community 74`, `Main App Security Interceptors`, `Community 81`, `Community 59`?**
+  _High betweenness centrality (0.098) - this node is a cross-community bridge._
 - **Why does `AgendaComponent` connect `Admin Agenda Metrics` to `Community 59`?**
-  _High betweenness centrality (0.042) - this node is a cross-community bridge._
+  _High betweenness centrality (0.041) - this node is a cross-community bridge._
 - **What connects `$schema`, `version`, `newProjectRoot` to the rest of the system?**
-  _210 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _213 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Modals Diary and Exceptions` be split into smaller, more focused modules?**
-  _Cohesion score 0.056429232192414434 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.06794871794871794 - nodes in this community are weakly interconnected._
 - **Should `Package Config and Dependencies` be split into smaller, more focused modules?**
   _Cohesion score 0.04878048780487805 - nodes in this community are weakly interconnected._
 - **Should `Angular Architect Configurations` be split into smaller, more focused modules?**

@@ -2,6 +2,7 @@ import { Injectable, inject, signal } from '@angular/core';
 import { SupabaseService } from './supabase.service';
 import { CryptoService } from './crypto.service';
 import { AuthService } from './auth.service';
+import { GamificationService } from './gamification.service';
 
 export interface DiaryEntry {
   id: string;
@@ -19,6 +20,7 @@ export class DiaryService {
   private supabaseService = inject(SupabaseService);
   private cryptoService = inject(CryptoService);
   private authService = inject(AuthService);
+  private gamificationService = inject(GamificationService);
 
   private entriesSignal = signal<DiaryEntry[]>([]);
   public entries = this.entriesSignal.asReadonly();
@@ -75,6 +77,13 @@ export class DiaryService {
       .single();
 
     if (data && !error) {
+      // Registrar actividad de gamificación
+      this.gamificationService.registerActivity('diary').then(res => {
+        if (res && res.unlocked_achievements && res.unlocked_achievements.length > 0) {
+          console.log('🏆 ¡Logros desbloqueados!', res.unlocked_achievements);
+        }
+      });
+
       const newEntry: DiaryEntry = {
         id: data.id,
         date: data.created_at,

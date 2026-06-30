@@ -169,4 +169,21 @@ body {
   }
 }
 
+/* ==========================================================================
+   MODAL SCROLL LOCK & STACKING CONTEXT RESETS
+   ========================================================================== */
+body.modal-open {
+  overflow: hidden !important;
+
+  .content-body {
+    overflow: hidden !important;
+  }
+
+  /* Reset layout constraints and containing block transform so position: fixed covers full screen */
+  .content-body > * {
+    transform: none !important;
+    animation: none !important;
+  }
+}
+
 

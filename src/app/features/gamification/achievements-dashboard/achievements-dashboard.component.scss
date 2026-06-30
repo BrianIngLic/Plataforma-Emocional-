@@ -1,0 +1,362 @@
+.achievements-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+  font-family: 'Inter', system-ui, sans-serif;
+  color: #1e293b;
+  box-sizing: border-box;
+}
+
+// Glassmorphism Base
+.glass-card {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 24px;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
+}
+
+// Banner de Cabecera
+.header-banner {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  padding: 28px 36px;
+  gap: 28px;
+  border-left: 6px solid #8b5cf6; // Borde izquierdo violeta
+
+  .streak-section {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+
+    .streak-icon-wrapper {
+      font-size: 2.2rem;
+      width: 60px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f1f5f9; // gris si está inactiva
+      color: #94a3b8;
+      border-radius: 18px;
+      border: 1px solid #cbd5e1;
+      transition: all 0.5s ease;
+
+      .flame-icon {
+        font-size: 32px;
+        width: 32px;
+        height: 32px;
+      }
+
+      &.active {
+        background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+        color: #ef4444; // Rojo fuego
+        border-color: #fde68a;
+        box-shadow: 0 8px 20px rgba(245, 158, 11, 0.25);
+      }
+      
+      &.pulse-flame.active {
+        animation: flamePulse 2.2s infinite;
+      }
+    }
+
+    .streak-info {
+      h2 {
+        margin: 0;
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: #0f172a;
+      }
+      .subtitle {
+        font-size: 0.85rem;
+        color: #64748b;
+        font-weight: 500;
+        display: block;
+        margin-top: 2px;
+      }
+    }
+  }
+
+  .xp-section {
+    flex: 1;
+    min-width: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    .xp-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 700;
+      font-size: 0.9rem;
+
+      .level-title {
+        color: #1e293b;
+        font-weight: 800;
+      }
+      .xp-count {
+        color: #8b5cf6;
+      }
+    }
+
+    mat-progress-bar {
+      height: 10px;
+      border-radius: 5px;
+      overflow: hidden;
+      --mdc-linear-progress-active-indicator-color: linear-gradient(90deg, #8b5cf6 0%, #a78bfa 100%);
+      --mdc-linear-progress-track-color: #e2e8f0;
+    }
+  }
+}
+
+// Botones de filtro rápido
+.category-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+
+  button {
+    border-radius: 14px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    padding: 6px 16px;
+    border-color: rgba(226, 232, 240, 0.8);
+    background: rgba(255, 255, 255, 0.4);
+    color: #475569;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.8);
+      color: #0f172a;
+    }
+
+    &.active {
+      background: #003b5c; // Azul institucional
+      color: #ffffff;
+      border-color: #003b5c;
+      box-shadow: 0 4px 12px rgba(0, 59, 92, 0.2);
+    }
+  }
+}
+
+// Títulos de sección
+.section-title {
+  border-bottom: 2px solid rgba(226, 232, 240, 0.6);
+  padding-bottom: 8px;
+  margin-top: 10px;
+  
+  h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #0f172a;
+  }
+}
+
+// Grid de logros
+.achievements-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
+}
+
+// Tarjetas de Logros
+.achievement-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  padding: 24px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  
+  // Estado bloqueado (opacidad y filtro gris)
+  opacity: 0.6;
+  filter: grayscale(40%);
+
+  &.unlocked {
+    opacity: 1;
+    filter: none;
+    border-color: rgba(139, 92, 246, 0.25);
+    box-shadow: 0 8px 25px rgba(139, 92, 246, 0.04);
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 16px 40px rgba(139, 92, 246, 0.12);
+      border-color: rgba(139, 92, 246, 0.4);
+    }
+  }
+
+  .card-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    position: relative;
+    overflow: hidden;
+
+    mat-icon {
+      font-size: 30px;
+      width: 30px;
+      height: 30px;
+    }
+
+    .lock-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .lock-icon {
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+        color: #64748b;
+      }
+    }
+  }
+
+  .card-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+
+    .title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+
+      .title {
+        margin: 0;
+        font-size: 1.05rem;
+        font-weight: 800;
+        color: #0f172a;
+        line-height: 1.25;
+      }
+
+      .xp-badge {
+        font-size: 0.75rem;
+        font-weight: 800;
+        background: #f1f5f9;
+        color: #64748b;
+        padding: 4px 8px;
+        border-radius: 8px;
+        white-space: nowrap;
+        border: 1px solid #cbd5e1;
+
+        &.unlocked {
+          background: rgba(139, 92, 246, 0.1);
+          color: #8b5cf6;
+          border-color: rgba(139, 92, 246, 0.2);
+        }
+      }
+    }
+
+    .description {
+      margin: 8px 0 16px 0;
+      font-size: 0.82rem;
+      color: #475569;
+      line-height: 1.45;
+      font-weight: 500;
+    }
+
+    .progress-area {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: auto;
+
+      .progress-bar-bg {
+        flex: 1;
+        height: 6px;
+        background: #e2e8f0;
+        border-radius: 3px;
+        overflow: hidden;
+
+        .progress-bar-fill {
+          height: 100%;
+          background: #64748b;
+          transition: width 0.4s ease;
+        }
+      }
+      .progress-text {
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: #475569;
+      }
+    }
+
+    .unlock-stamp {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #10b981;
+      font-size: 0.78rem;
+      font-weight: 800;
+      background: rgba(16, 185, 129, 0.08);
+      border: 1px solid rgba(16, 185, 129, 0.15);
+      padding: 4px 10px;
+      border-radius: 10px;
+      width: fit-content;
+      margin-top: auto;
+
+      .check-icon {
+        font-size: 16px;
+        width: 16px;
+        height: 16px;
+      }
+    }
+
+    // Notas de los logros clínicos
+    .clinical-notes {
+      margin-top: 10px;
+      font-size: 0.78rem;
+      font-style: italic;
+      color: #b45309; // Café oscuro / ámbar
+      background: rgba(245, 158, 11, 0.08);
+      border-left: 3px solid #f59e0b;
+      padding: 6px 10px;
+      border-radius: 0 8px 8px 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      .notes-icon {
+        font-size: 15px;
+        width: 15px;
+        height: 15px;
+        flex-shrink: 0;
+      }
+    }
+  }
+}
+
+// Animación de pulso del fuego
+@keyframes flamePulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 8px 20px rgba(239, 68, 68, 0.2);
+  }
+  50% {
+    transform: scale(1.1);
+    box-shadow: 0 12px 28px rgba(239, 68, 68, 0.45);
+    filter: drop-shadow(0 0 4px rgba(239, 68, 68, 0.4));
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 8px 20px rgba(239, 68, 68, 0.2);
+  }
+}

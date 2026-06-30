@@ -31,6 +31,11 @@ export const NUTRITIONIST_ROUTES: Routes = [
         loadComponent: () => import('../health-professional/settings/settings.component').then(m => m.HealthProfessionalSettingsComponent)
       },
       {
+        path: 'whatsapp-chat',
+        loadComponent: () => import('../health-professional/command-center-chat/command-center-chat.component').then(m => m.CommandCenterChatComponent),
+        data: { animation: 'WhatsAppChatPage' }
+      },
+      {
         path: '',
         redirectTo: 'dashboard',
         pathMatch: 'full'

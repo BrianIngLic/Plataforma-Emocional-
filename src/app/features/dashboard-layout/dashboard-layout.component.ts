@@ -6,12 +6,14 @@ import { AuthService } from '../../core/services/auth.service';
 import { ChatService } from '../../core/services/chat.service';
 import { EmergencyNotificationService } from '../../core/services/emergency-notification.service';
 import { SessionEvaluationService, PendingEvaluationItem } from '../../core/services/session-evaluation.service';
+import { GamificationService } from '../../core/services/gamification.service';
+import { StreakBadgeComponent } from '../gamification/streak-badge/streak-badge.component';
 import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-dashboard-layout',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive, MatIconModule],
+  imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive, MatIconModule, StreakBadgeComponent],
   templateUrl: './dashboard-layout.component.html',
   styleUrls: ['./dashboard-layout.component.scss']
 })
@@ -20,6 +22,7 @@ export class DashboardLayoutComponent implements OnInit {
   chatService = inject(ChatService);
   emergencyNotificationService = inject(EmergencyNotificationService);
   evaluationService = inject(SessionEvaluationService);
+  gamificationService = inject(GamificationService);
   router = inject(Router);
   
   isSidebarCollapsed = false;
@@ -41,6 +44,9 @@ export class DashboardLayoutComponent implements OnInit {
 
     // Inicializar escucha en vivo (Supabase Realtime) para disparar la notificación nativa al instante
     this.emergencyNotificationService.initRealtimeNotificationListener();
+
+    // Cargar información de gamificación (racha, XP)
+    this.gamificationService.loadGamificationData();
 
     this.checkPendingEvaluations();
 

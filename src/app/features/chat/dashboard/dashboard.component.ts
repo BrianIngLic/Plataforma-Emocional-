@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild, effect, inject } from '@angular/core';
+import { Component, ElementRef, ViewChild, effect, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MarkdownModule } from 'ngx-markdown';
 import { ChatService } from '../../../core/services/chat.service';
 import { AuthService } from '../../../core/services/auth.service';
+import { GamificationService } from '../../../core/services/gamification.service';
 
 @Component({
   selector: 'app-chat-dashboard',
@@ -14,19 +15,23 @@ import { AuthService } from '../../../core/services/auth.service';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
   chatService = inject(ChatService);
   authService = inject(AuthService);
+  gamificationService = inject(GamificationService);
   
   // Consumimos las signals directamente del servicio
   messages = this.chatService.messages;
   isTyping = this.chatService.isTyping;
   
-  // Propiedades de Gamificación Terapéutica
+  // Propiedades de Gamificación Terapéutica reactivas
   calmLevel = 85;
-  streakDays = 5;
   currentBadge = 'Vínculo de Confianza 🌟';
   activeReliefMode = false;
+
+  get streakDays(): number {
+    return this.gamificationService.currentStreak();
+  }
 
   inputText = '';
   suggestions = [
@@ -46,9 +51,15 @@ export class DashboardComponent {
     });
   }
 
+  async ngOnInit() {
+    // Cargar datos de racha y logros para mantener sincronizada la UI
+    await this.gamificationService.loadGamificationData();
+  }
+
   sendMessage() {
     if (this.inputText.trim()) {
       this.chatService.sendMessage(this.inputText);
+      this.gamificationService.registerActivity('amati');
       this.inputText = '';
       // Incrementar sutilmente el nivel de calma de forma gamificada
       if (this.calmLevel < 98) {
@@ -59,6 +70,7 @@ export class DashboardComponent {
 
   sendSuggestion(suggestion: string) {
     this.chatService.sendMessage(suggestion);
+    this.gamificationService.registerActivity('amati');
     if (this.calmLevel < 98) {
       this.calmLevel += 2;
     }

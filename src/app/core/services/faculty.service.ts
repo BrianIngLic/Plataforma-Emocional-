@@ -5,6 +5,7 @@ export interface Faculty {
   id: number | string;
   name: string;
   campus_id?: number;
+  virtual_tour_url?: string;
   campuses?: { name: string }; // Join relation
 }
 
@@ -47,10 +48,14 @@ export class FacultyService {
     return [];
   }
 
-  async createFaculty(name: string, campus_id: number): Promise<{ data: any, error: any }> {
+  async createFaculty(name: string, campus_id: number, virtual_tour_url?: string): Promise<{ data: any, error: any }> {
+    const payload: any = { name, campus_id };
+    if (virtual_tour_url) {
+      payload.virtual_tour_url = virtual_tour_url;
+    }
     return await this.supabaseService.supabase
       .from('faculties')
-      .insert({ name, campus_id })
+      .insert(payload)
       .select()
       .single();
   }

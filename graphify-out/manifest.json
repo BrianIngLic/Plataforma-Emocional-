@@ -20,8 +20,8 @@
     "semantic_hash": "9b7e1de8e28daa4e2a307e1e0f1cf529"
   },
   "db/schema.sql": {
-    "mtime": 1782762428.6688766,
-    "ast_hash": "3a0f80e94d88f13ffe03f95a2ac5e378",
+    "mtime": 1782846385.6596794,
+    "ast_hash": "ccebda2c5c693f27698c0e0cf3cd24cb",
     "semantic_hash": ""
   },
   "package.json": {
@@ -100,14 +100,14 @@
     "semantic_hash": ""
   },
   "src/app/core/services/diary.service.ts": {
-    "mtime": 1782431843.226222,
-    "ast_hash": "854831644a0ef23c50f562a9592d6437",
+    "mtime": 1782804568.5744224,
+    "ast_hash": "1e0c5403002845bef5d7a7b1633ec26d",
     "semantic_hash": ""
   },
   "src/app/core/services/faculty.service.ts": {
-    "mtime": 1782026414.18452,
-    "ast_hash": "ea3744c7bd50bec31a7afcaf29e2eab3",
-    "semantic_hash": "ea3744c7bd50bec31a7afcaf29e2eab3"
+    "mtime": 1782846107.524779,
+    "ast_hash": "cb0fea76ae1949e756aee2e9643ce156",
+    "semantic_hash": ""
   },
   "src/app/core/services/profile.service.ts": {
     "mtime": 1782248352.619214,
@@ -120,13 +120,13 @@
     "semantic_hash": "d19284c6d222f3dfc8838de4eda95f5d"
   },
   "src/app/features/admin/admin-layout/admin-layout.component.ts": {
-    "mtime": 1782769256.4152155,
-    "ast_hash": "1451ffec7d2dfd90fa919a1e0707334b",
+    "mtime": 1782844982.7605417,
+    "ast_hash": "c4286146596797d0af9c221e4858ade4",
     "semantic_hash": ""
   },
   "src/app/features/admin/admin.routes.ts": {
-    "mtime": 1782762990.93888,
-    "ast_hash": "9a85812f193234ba647ce8398ca5f985",
+    "mtime": 1782844976.0605302,
+    "ast_hash": "5b24814d611968824830cfacf35d10a8",
     "semantic_hash": ""
   },
   "src/app/features/admin/agenda/agenda.component.ts": {
@@ -135,9 +135,9 @@
     "semantic_hash": ""
   },
   "src/app/features/admin/faculties/faculties.component.ts": {
-    "mtime": 1782029145.647253,
-    "ast_hash": "eb3ef4bf974b7b6745391d467b184212",
-    "semantic_hash": "eb3ef4bf974b7b6745391d467b184212"
+    "mtime": 1782846288.8031907,
+    "ast_hash": "342257155acd9d5a5011b867d36f9ac7",
+    "semantic_hash": ""
   },
   "src/app/features/admin/overview/overview.component.ts": {
     "mtime": 1782029087.9542127,
@@ -200,18 +200,18 @@
     "semantic_hash": "f39da1f3b207ea48445b3fdefa28b3d2"
   },
   "src/app/features/chat/dashboard/dashboard.component.ts": {
-    "mtime": 1782431843.248873,
-    "ast_hash": "8a1324a5546fecdfaed7e9533031a227",
+    "mtime": 1782804598.3953214,
+    "ast_hash": "19491268b021d1ac3534f80658c6f137",
     "semantic_hash": ""
   },
   "src/app/features/dashboard-layout/dashboard-layout.component.ts": {
-    "mtime": 1782772796.0996792,
-    "ast_hash": "68bbd398d8a221a48f06a398fbe3febd",
+    "mtime": 1782834546.4552884,
+    "ast_hash": "abbaab39e255813ea9464277f3e47ab6",
     "semantic_hash": ""
   },
   "src/app/features/dashboard-layout/dashboard.routes.ts": {
-    "mtime": 1782772685.9027135,
-    "ast_hash": "bfd355cb435389752c58ec537e9890af",
+    "mtime": 1782804636.20908,
+    "ast_hash": "5bfa6a1801f57a57d23c2871d2a62a4e",
     "semantic_hash": ""
   },
   "src/app/features/dashboard-layout/student-agenda/appointment-modal/appointment-modal.component.ts": {
@@ -250,8 +250,8 @@
     "semantic_hash": "b29381fde22297a402e92bd8ee8e620a"
   },
   "src/app/features/psychologist/patient-profile/patient-profile.component.ts": {
-    "mtime": 1782776321.9714963,
-    "ast_hash": "d2ccceac678efd288bdefd635df8a7b2",
+    "mtime": 1782834582.89297,
+    "ast_hash": "2ad74a7cb2d155e311276bd3a1f54e9d",
     "semantic_hash": ""
   },
   "src/app/features/psychologist/patients/patients.component.ts": {
@@ -265,8 +265,8 @@
     "semantic_hash": "42a5b1a620d30f573039704614696db1"
   },
   "src/app/features/psychologist/psychologist.routes.ts": {
-    "mtime": 1782432871.6991024,
-    "ast_hash": "d216b5aac4f9ce35fce603a8d63609cc",
+    "mtime": 1782844971.9765987,
+    "ast_hash": "c9c0adc9a50f5e72e2b8d11b8f28818f",
     "semantic_hash": ""
   },
   "src/app/features/psychologist/settings/settings.component.ts": {
@@ -380,9 +380,9 @@
     "semantic_hash": ""
   },
   "src/app/features/admin/faculties/faculties.component.html": {
-    "mtime": 1782028717.983173,
-    "ast_hash": "799cc30c3750f69dbe2d1ff326cbc161",
-    "semantic_hash": "799cc30c3750f69dbe2d1ff326cbc161"
+    "mtime": 1782846138.253648,
+    "ast_hash": "20c0f9582f14ce3f71ab3681a36fc620",
+    "semantic_hash": ""
   },
   "src/app/features/admin/overview/overview.component.html": {
     "mtime": 1782025438.757483,
@@ -420,8 +420,8 @@
     "semantic_hash": ""
   },
   "src/app/features/dashboard-layout/dashboard-layout.component.html": {
-    "mtime": 1782772708.0386944,
-    "ast_hash": "ed39cba243f07089dbeeea4d94149176",
+    "mtime": 1782834549.99879,
+    "ast_hash": "2e4f8d08aeaf47727f00f877c356accb",
     "semantic_hash": ""
   },
   "src/app/features/dashboard-layout/student-agenda/student-agenda.component.html": {
@@ -445,8 +445,8 @@
     "semantic_hash": "a70cf8f9800814f3488ae124af135091"
   },
   "src/app/features/psychologist/patient-profile/patient-profile.component.html": {
-    "mtime": 1782775733.8285527,
-    "ast_hash": "d81df05037ea2b7a238144616812f9cb",
+    "mtime": 1782834601.702822,
+    "ast_hash": "8481d5869c4b281fd5277578d91de3ad",
     "semantic_hash": ""
   },
   "src/app/features/psychologist/patients/patients.component.html": {
@@ -455,9 +455,9 @@
     "semantic_hash": "3c751696251457eb159bb6d8020e3358"
   },
   "src/app/features/psychologist/psychologist-layout/psychologist-layout.component.html": {
-    "mtime": 1782252322.6760104,
-    "ast_hash": "66c0db017a5ea5b7707220fdc1169b56",
-    "semantic_hash": "66c0db017a5ea5b7707220fdc1169b56"
+    "mtime": 1782844978.459151,
+    "ast_hash": "b11fc73bc8197ef4c839b6da1cac0363",
+    "semantic_hash": ""
   },
   "src/app/features/psychologist/settings/settings.component.html": {
     "mtime": 1782431843.2708015,
@@ -480,8 +480,8 @@
     "semantic_hash": "4a7f00ca09c61d972acc4092fd729fee"
   },
   "task.md": {
-    "mtime": 1782775846.889527,
-    "ast_hash": "2539a57f234722b1c20dc7210a408564",
+    "mtime": 1782844991.8356352,
+    "ast_hash": "52946630bea6f0a2ca66feb3cb8bba1c",
     "semantic_hash": ""
   },
   "public/amati-logo.svg": {
@@ -555,8 +555,8 @@
     "semantic_hash": ""
   },
   "src/app/features/nutritionist/nutritionist.routes.ts": {
-    "mtime": 1782432886.7402127,
-    "ast_hash": "694ae214194441fac67dd4517fa2b52e",
+    "mtime": 1782844974.0079515,
+    "ast_hash": "74f0daf11e541a35a5ca897bc3d9a7cd",
     "semantic_hash": ""
   },
   "src/app/features/nutritionist/pacientes/pacientes.component.ts": {
@@ -605,8 +605,8 @@
     "semantic_hash": ""
   },
   "src/app/features/nutritionist/nutritionist-layout/nutritionist-layout.html": {
-    "mtime": 1782757575.599182,
-    "ast_hash": "09827e8b3766cf7a31aa21b7e76da24d",
+    "mtime": 1782844980.5197325,
+    "ast_hash": "f263faea46b0fe2606762724dcbc0739",
     "semantic_hash": ""
   },
   "src/app/features/nutritionist/pacientes/pacientes.html": {
@@ -712,6 +712,46 @@
   "src/app/features/student/session-feedback/session-feedback.component.html": {
     "mtime": 1782772674.1775794,
     "ast_hash": "531c36476ff3e2b1b617e920de2086e3",
+    "semantic_hash": ""
+  },
+  "db/migration_skill10_gamification.sql": {
+    "mtime": 1782804530.312817,
+    "ast_hash": "914cce0527097354bfa837d55030c9a5",
+    "semantic_hash": ""
+  },
+  "src/app/core/services/gamification.service.ts": {
+    "mtime": 1782804548.2686162,
+    "ast_hash": "3a931a0095e58b196cf791321c0e823c",
+    "semantic_hash": ""
+  },
+  "src/app/features/gamification/achievements-dashboard/achievements-dashboard.component.ts": {
+    "mtime": 1782804610.55892,
+    "ast_hash": "63bea9cc3e9cad3e2f84305edad536f7",
+    "semantic_hash": ""
+  },
+  "src/app/features/gamification/streak-badge/streak-badge.component.ts": {
+    "mtime": 1782804625.0724657,
+    "ast_hash": "1abc64cf47e0da5dabbb7aefa5ccf995",
+    "semantic_hash": ""
+  },
+  "src/app/core/services/internal-chat.service.ts": {
+    "mtime": 1782844952.2515152,
+    "ast_hash": "063698b45a97c72ab6b8acad05328a2e",
+    "semantic_hash": ""
+  },
+  "src/app/features/health-professional/command-center-chat/command-center-chat.component.ts": {
+    "mtime": 1782844957.280084,
+    "ast_hash": "9099c97ca47a6c5abdae0e8775f4f2d2",
+    "semantic_hash": ""
+  },
+  "supabase/functions/meta-whatsapp/index.ts": {
+    "mtime": 1782844948.4993324,
+    "ast_hash": "1e8f1e5fc14b273912bf1d9bfa087c83",
+    "semantic_hash": ""
+  },
+  "src/app/features/health-professional/command-center-chat/command-center-chat.component.html": {
+    "mtime": 1782844961.445472,
+    "ast_hash": "2940dd292ada909d82426e1cf2a28b38",
     "semantic_hash": ""
   }
 }

@@ -27,6 +27,10 @@ export const PSYCHOLOGIST_ROUTES: Routes = [
         loadComponent: () => import('../health-professional/settings/settings.component').then(m => m.HealthProfessionalSettingsComponent)
       },
       {
+        path: 'whatsapp-chat',
+        loadComponent: () => import('../health-professional/command-center-chat/command-center-chat.component').then(m => m.CommandCenterChatComponent)
+      },
+      {
         path: 'clinical-note/:id',
         loadComponent: () => import('./clinical-note/clinical-note.component').then(m => m.ClinicalNoteComponent)
       },

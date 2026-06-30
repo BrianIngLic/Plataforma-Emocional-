@@ -184,20 +184,20 @@
 ---
 
 ## Skill 10: Sistema de Logros y Gamificación (Estilo Duolingo)
-- `[ ]` Base de Datos: Crear tablas `achievements`, `user_achievements`, `achievement_categories` con RLS en `db/schema.sql`.
-- `[ ]` Capa de Servicios (`core/services/achievements.service.ts`): Desarrollar lógica reactiva (Signals) para calcular rachas (*streaks*), acumular XP y verificar desbloqueos.
-- `[ ]` Interfaz de Gestión (Admin y Clínicos): Crear formulario en Angular para dar de alta logros globales (Admin) y logros de terapia personalizados (Psicólogos/Nutriólogos).
-- `[ ]` Interfaz Estudiantil (`features/achievements`): Diseñar la galería de logros con medallas Glassmorphism, barra de XP y contador de racha en el navbar.
-- `[ ]` Animaciones y Alertas: Implementar notificaciones PWA y SweetAlerts al completar un hito de gamificación.
+- `[x]` Base de Datos: Crear tablas `achievements`, `user_achievements`, `achievement_categories` y `user_streaks` con RLS y políticas de seguridad.
+- `[x]` Capa de Servicios (`core/services/gamification.service.ts`): Desarrollar lógica reactiva (Signals) para calcular rachas (*streaks*), acumular XP, y ruteo a RPC del Streak Engine en Supabase.
+- `[x]` Interfaz de Gestión (Admin y Clínicos): Crear panel e inyección en `patient-profile.component.ts` para que especialistas (psicólogos y nutriólogos) puedan asignar metas y logros personalizados en vivo.
+- `[x]` Interfaz Estudiantil (`features/gamification`): Diseñar la galería de logros con medallas Glassmorphic, barra de XP reactiva y widget de racha (`app-streak-badge`) en el menú lateral.
+- `[x]` Animaciones y Alertas: Implementar animaciones CSS de pulso de llama y rebotes al completar metas, integrando con diario emocional y Amati IA.
 
 ---
 
 ## Skill 11: Chat Interno Conectado con Meta Cloud API (WhatsApp Bidireccional)
-- `[ ]` Base de Datos: Crear tablas `internal_meta_chats` y `webhook_logs` en `schema.sql` con indexación para búsquedas rápidas.
-- `[ ]` Backend y Webhooks (`supabase/functions/meta-whatsapp-webhook`): Programar la Edge Function en Deno para enviar mensajes a la API de Meta y recibir respuestas entrantes de WhatsApp.
-- `[ ]` Capa de Servicios (`core/services/internal-chat.service.ts`): Conectar con Supabase Realtime para transmitir y recibir los mensajes en vivo sin recargar la página.
-- `[ ]` Interfaz de Command Center (`features/internal-chat`): Desarrollar el módulo de mensajería interna para Administradores y Médicos (lista de chats, panel central, burbujas de estado de entrega).
-- `[ ]` Ciberseguridad: Auditar el enmascaramiento de números y desinfección de Información Personal de Salud (PHI).
+- `[x]` Base de Datos: Crear tablas `internal_meta_chats` y `webhook_logs` en `schema.sql` con indexación para búsquedas rápidas.
+- `[x]` Backend y Webhooks (`supabase/functions/meta-whatsapp`): Programar la Edge Function en Deno para enviar mensajes a la API de Meta y recibir respuestas entrantes de WhatsApp.
+- `[x]` Capa de Servicios (`core/services/internal-chat.service.ts`): Conectar con Supabase Realtime para transmitir y recibir los mensajes en vivo sin recargar la página.
+- `[x]` Interfaz de Command Center (`features/health-professional/command-center-chat`): Desarrollar el módulo de mensajería interna para Administradores y Médicos (lista de chats, panel central, burbujas de estado de entrega).
+- `[x]` Ciberseguridad: Auditar el enmascaramiento de números y desinfección de Información Personal de Salud (PHI).
 
 ---
 

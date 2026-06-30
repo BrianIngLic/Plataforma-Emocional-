@@ -1,0 +1,149 @@
+<div class="whatsapp-chat-container">
+  <!-- PANEL IZQUIERDO: CONVERSACIONES -->
+  <div class="sidebar-conversations glass-panel">
+    <div class="sidebar-header">
+      <h2>Mensajería Meta Cloud API</h2>
+      <span class="subtitle">WhatsApp Bidireccional Oficial</span>
+      
+      <div class="search-box">
+        <mat-icon>search</mat-icon>
+        <input type="text" placeholder="Buscar paciente o matrícula..." (input)="onSearch($event)" />
+      </div>
+
+      <div class="filter-tabs">
+        <button [class.active]="activeFilter() === 'all'" (click)="setFilter('all')">Todos</button>
+        <button [class.active]="activeFilter() === 'urgent'" (click)="setFilter('urgent')">⚠️ Urgencia Alta</button>
+      </div>
+    </div>
+
+    <div class="conversations-list">
+      <div *ngFor="let chat of filteredConversations()" 
+           class="conversation-item"
+           [class.active]="selectedChat()?.id === chat.id"
+           (click)="selectConversation(chat)">
+        <div class="avatar-container">
+          <img *ngIf="chat.avatar_url" [src]="chat.avatar_url" alt="Avatar">
+          <mat-icon *ngIf="!chat.avatar_url">person</mat-icon>
+          <div *ngIf="chat.urgency_score >= 0.7" class="urgency-badge" title="Triage: Riesgo Alto">!</div>
+        </div>
+        
+        <div class="chat-summary">
+          <div class="top-line">
+            <span class="student-name">{{ chat.student_name }}</span>
+            <span class="time" *ngIf="chat.last_message_date">{{ chat.last_message_date | date:'HH:mm' }}</span>
+          </div>
+          <div class="bottom-line">
+            <span class="last-msg">{{ chat.last_message }}</span>
+            <span *ngIf="chat.unread_count > 0" class="unread-count">{{ chat.unread_count }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="filteredConversations().length === 0" class="empty-list">
+        <p>No se encontraron conversaciones.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL DERECHO: MENSAJERÍA ACTIVA -->
+  <div class="main-chat-area glass-panel">
+    <ng-container *ngIf="selectedChat(); else noSelection">
+      <!-- Header de Conversación -->
+      <div class="chat-header">
+        <div class="patient-info">
+          <img *ngIf="selectedChat()?.avatar_url" [src]="selectedChat()?.avatar_url" alt="Avatar" class="header-avatar">
+          <mat-icon *ngIf="!selectedChat()?.avatar_url" class="header-avatar-fallback">person</mat-icon>
+          <div class="details">
+            <h3>{{ selectedChat()?.student_name }}</h3>
+            <span class="status-indicator">
+              <span class="dot green"></span> WhatsApp API Activo
+            </span>
+          </div>
+        </div>
+
+        <div class="header-actions">
+          <a [routerLink]="['../../patients', selectedChat()?.student_id]" class="visor-btn">
+            <mat-icon>person_search</mat-icon>
+            <span>Visor Clínico Integral</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Ventana de Mensajes -->
+      <div class="messages-viewport" #messagesViewport>
+        <div *ngFor="let msg of activeMessages()" 
+             class="message-bubble-wrapper"
+             [class.outgoing]="msg.sender_type === 'professional'"
+             [class.incoming]="msg.sender_type === 'student'">
+          
+          <div class="message-bubble">
+            <div class="msg-header" *ngIf="msg.sender_type === 'professional'">
+              <span class="sender-name">{{ msg.sender_name }} (Clínico)</span>
+            </div>
+            <div class="msg-header" *ngIf="msg.sender_type === 'student'">
+              <span class="sender-name">📱 {{ msg.sender_name }} (WhatsApp)</span>
+            </div>
+            
+            <div class="msg-content">{{ msg.message_content }}</div>
+            
+            <div class="msg-footer">
+              <span class="timestamp">{{ msg.created_at | date:'shortTime' }}</span>
+              <mat-icon *ngIf="msg.sender_type === 'professional' && msg.status === 'pending'" class="status-icon">schedule</mat-icon>
+              <mat-icon *ngIf="msg.sender_type === 'professional' && msg.status === 'sent'" class="status-icon">check</mat-icon>
+              <mat-icon *ngIf="msg.sender_type === 'professional' && msg.status === 'delivered'" class="status-icon">done_all</mat-icon>
+              <mat-icon *ngIf="msg.sender_type === 'professional' && msg.status === 'read'" class="status-icon read">done_all</mat-icon>
+              <mat-icon *ngIf="msg.sender_type === 'professional' && msg.status === 'failed'" class="status-icon error" [title]="msg.error_message || 'Fallo de entrega'">error</mat-icon>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Alerta de Cumplimiento NOM-024 / HIPAA -->
+      <div class="compliance-banner">
+        <mat-icon>privacy_tip</mat-icon>
+        <span><strong>Aviso NOM-024 e HIPAA:</strong> Por la seguridad del paciente, mantenga esta comunicación estrictamente en el ámbito operativo (citas, seguimiento). No incluya Información Personal de Salud (PHI) ni diagnósticos clínicos detallados.</span>
+      </div>
+
+      <!-- Selector de Plantillas Oficiales -->
+      <div class="templates-drawer" *ngIf="showTemplateSelector()">
+        <div class="drawer-header">
+          <h4>Seleccionar Plantilla Oficial de Meta</h4>
+          <button (click)="showTemplateSelector.set(false)" class="close-btn">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+        <div class="templates-list">
+          <div *ngFor="let t of templates" class="template-item" (click)="selectTemplate(t.text)">
+            <strong>{{ t.label }}</strong>
+            <code>{{ t.text }}</code>
+          </div>
+        </div>
+      </div>
+
+      <!-- Barra de Entrada -->
+      <div class="input-toolbar">
+        <button mat-icon-button class="template-btn" (click)="showTemplateSelector.set(!showTemplateSelector())" title="Insertar Plantilla Oficial">
+          <mat-icon>chat_bubble_outline</mat-icon>
+        </button>
+        <div class="input-wrapper">
+          <textarea [(ngModel)]="newMessageText" 
+                    (keyup.enter)="sendMessage()" 
+                    placeholder="Escribe un mensaje oficial para enviar por WhatsApp..." 
+                    rows="1" 
+                    class="glass-textarea"></textarea>
+          <button mat-flat-button class="send-btn" (click)="sendMessage()" [disabled]="!newMessageText.trim()">
+            <mat-icon>send</mat-icon>
+          </button>
+        </div>
+      </div>
+    </ng-container>
+
+    <ng-template #noSelection>
+      <div class="empty-state">
+        <mat-icon class="empty-icon">chat</mat-icon>
+        <h3>Centro de Mensajería WhatsApp</h3>
+        <p>Selecciona una conversación del panel izquierdo para iniciar la comunicación bidireccional oficial con el paciente.</p>
+      </div>
+    </ng-template>
+  </div>
+</div>

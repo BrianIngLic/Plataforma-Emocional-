@@ -39,6 +39,10 @@ export const ADMIN_ROUTES: Routes = [
         loadComponent: () => import('./institutional-settings/institutional-settings.component').then(m => m.InstitutionalSettingsComponent)
       },
       {
+        path: 'whatsapp-chat',
+        loadComponent: () => import('../health-professional/command-center-chat/command-center-chat.component').then(m => m.CommandCenterChatComponent)
+      },
+      {
         path: '',
         redirectTo: 'overview',
         pathMatch: 'full'

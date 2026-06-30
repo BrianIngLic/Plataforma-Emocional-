@@ -6,13 +6,15 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { SupabaseService } from '../../../core/services/supabase.service';
 import { CryptoService } from '../../../core/services/crypto.service';
 import { DossierExportService } from '../../../core/services/dossier-export.service';
+import { GamificationService } from '../../../core/services/gamification.service';
+import { FormsModule } from '@angular/forms';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartConfiguration, ChartOptions } from 'chart.js';
 
 @Component({
   selector: 'app-patient-profile',
   standalone: true,
-  imports: [CommonModule, MatIconModule, BaseChartDirective],
+  imports: [CommonModule, MatIconModule, BaseChartDirective, FormsModule],
   templateUrl: './patient-profile.component.html',
   styleUrls: ['./patient-profile.component.scss']
 })
@@ -21,11 +23,24 @@ export class PatientProfileComponent implements OnInit {
   crypto = inject(CryptoService);
   dialog = inject(MatDialog);
   dossierExport = inject(DossierExportService);
+  gamificationService = inject(GamificationService);
 
   patient: any = null;
   diaryEntries: any[] = [];
   loading = true;
   isExporting = false;
+
+  // Datos de Gamificación del Paciente
+  patientStreak: any = { current_streak: 0, best_streak: 0, total_xp: 0 };
+  patientAchievements: any[] = [];
+
+  // Formulario de Logro Clínico Manual
+  newAchTitle = '';
+  newAchDesc = '';
+  newAchPoints = 100;
+  newAchIcon = 'verified';
+  newAchNotes = '';
+  isAssigningAchievement = false;
 
   sessionHistory: any[] = [];
 
@@ -325,6 +340,39 @@ export class PatientProfileComponent implements OnInit {
         };
       }
 
+      // 5. Obtener datos de gamificación (racha, XP y logros) del paciente
+      const { data: streakData } = await this.supabase
+        .from('user_streaks')
+        .select('*')
+        .eq('user_id', id)
+        .maybeSingle();
+
+      if (streakData) {
+        this.patientStreak = streakData;
+      } else {
+        this.patientStreak = { current_streak: 0, best_streak: 0, total_xp: 0 };
+      }
+
+      const { data: userAchs } = await this.supabase
+        .from('user_achievements')
+        .select('*, achievement:achievements(*)')
+        .eq('user_id', id);
+
+      if (userAchs) {
+        this.patientAchievements = userAchs.map((ua: any) => ({
+          id: ua.achievement.id,
+          title: ua.achievement.title,
+          description: ua.achievement.description,
+          points: ua.achievement.points,
+          badge_url: ua.achievement.badge_url || 'verified',
+          is_completed: ua.is_completed,
+          earned_at: ua.earned_at,
+          notes: ua.notes
+        }));
+      } else {
+        this.patientAchievements = [];
+      }
+
     } catch (err) {
       console.error('Unexpected error loading patient data:', err);
     }
@@ -465,6 +513,45 @@ export class PatientProfileComponent implements OnInit {
       alert('Error al generar el dossier clínico.');
     } finally {
       this.isExporting = false;
+    }
+  }
+
+  async assignClinicalAchievement() {
+    if (!this.patient?.id || !this.newAchTitle.trim() || !this.newAchDesc.trim()) {
+      alert('Por favor completa el título y la descripción de la meta.');
+      return;
+    }
+
+    this.isAssigningAchievement = true;
+    try {
+      const success = await this.gamificationService.awardClinicalAchievement(
+        this.patient.id,
+        this.newAchTitle.trim(),
+        this.newAchDesc.trim(),
+        this.newAchPoints,
+        this.newAchIcon,
+        this.newAchNotes.trim()
+      );
+
+      if (success) {
+        alert(`¡Meta clínica "${this.newAchTitle}" asignada con éxito!`);
+        // Limpiar formulario
+        this.newAchTitle = '';
+        this.newAchDesc = '';
+        this.newAchNotes = '';
+        this.newAchPoints = 100;
+        this.newAchIcon = 'verified';
+        
+        // Recargar datos
+        await this.loadPatientData(this.patient.id);
+      } else {
+        alert('Error al asignar la meta clínica.');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Ocurrió un error inesperado al guardar.');
+    } finally {
+      this.isAssigningAchievement = false;
     }
   }
 }

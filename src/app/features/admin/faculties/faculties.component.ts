@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
@@ -31,7 +31,7 @@ interface AdminFaculty {
   templateUrl: './faculties.component.html',
   styleUrls: ['./faculties.component.scss']
 })
-export class FacultiesComponent implements OnInit {
+export class FacultiesComponent implements OnInit, OnDestroy {
 
   faculties: AdminFaculty[] = [];
   loading = true;
@@ -46,6 +46,7 @@ export class FacultiesComponent implements OnInit {
   showAddModal = false;
   newFacultyName = '';
   newFacultyCampusId: number | '' = '';
+  newFacultyVirtualTourUrl = '';
   isSubmitting = false;
 
   // Radar Chart Configuration for detail modal
@@ -97,6 +98,19 @@ export class FacultiesComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadData();
+  }
+
+  ngOnDestroy(): void {
+    document.body.classList.remove('modal-open');
+  }
+
+  toggleScrollLock() {
+    const isOpen = this.showAddModal || this.showCompareModal || !!this.selectedFacultyForDetail;
+    if (isOpen) {
+      document.body.classList.add('modal-open');
+    } else {
+      document.body.classList.remove('modal-open');
+    }
   }
 
   async loadData() {
@@ -200,37 +214,48 @@ export class FacultiesComponent implements OnInit {
     const growthVal = Math.min(f.newThisMonth * 10, 100);
 
     this.radarChartData.datasets[0].data = [pct, demandVal, riskVal, dropoutVal, growthVal];
+    this.toggleScrollLock();
   }
 
   closeDetail() {
     this.selectedFacultyForDetail = null;
+    this.toggleScrollLock();
   }
 
   openCompare() {
     if (this.compareIds.length >= 2) {
       this.showCompareModal = true;
+      this.toggleScrollLock();
     }
   }
 
   closeCompare() {
     this.showCompareModal = false;
+    this.toggleScrollLock();
   }
 
   openAddModal() {
     this.showAddModal = true;
     this.newFacultyName = '';
     this.newFacultyCampusId = '';
+    this.newFacultyVirtualTourUrl = '';
+    this.toggleScrollLock();
   }
 
   closeAddModal() {
     this.showAddModal = false;
+    this.toggleScrollLock();
   }
 
   async addFaculty() {
     if (!this.newFacultyName.trim() || this.newFacultyCampusId === '') return;
 
     this.isSubmitting = true;
-    const { data, error } = await this.facultyService.createFaculty(this.newFacultyName, Number(this.newFacultyCampusId));
+    const { data, error } = await this.facultyService.createFaculty(
+      this.newFacultyName, 
+      Number(this.newFacultyCampusId),
+      this.newFacultyVirtualTourUrl.trim() || undefined
+    );
     this.isSubmitting = false;
 
     if (!error) {

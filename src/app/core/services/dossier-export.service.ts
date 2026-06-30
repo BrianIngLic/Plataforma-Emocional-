@@ -35,6 +35,85 @@ export class DossierExportService {
     });
   }
 
+  // Convierte una imagen (logo original) a color blanco para mostrar en la franja azul, haciendo transparente el fondo blanco o transparente
+  private async convertImageToWhite(base64Str: string): Promise<string> {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext('2d');
+        if (ctx) {
+          ctx.drawImage(img, 0, 0);
+          const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+          const data = imgData.data;
+          for (let i = 0; i < data.length; i += 4) {
+            const r = data[i];
+            const g = data[i + 1];
+            const b = data[i + 2];
+            const a = data[i + 3];
+
+            // Si el píxel es transparente o es de fondo (blanco o muy claro)
+            if (a <= 10 || (r >= 235 && g >= 235 && b >= 235)) {
+              data[i + 3] = 0; // Hacer totalmente transparente
+            } else {
+              // Convertir el trazo / contenido de color en blanco puro
+              data[i] = 255;     // R
+              data[i + 1] = 255; // G
+              data[i + 2] = 255; // B
+              data[i + 3] = 255; // Hacer opaco
+            }
+          }
+          ctx.putImageData(imgData, 0, 0);
+          resolve(canvas.toDataURL('image/png'));
+        } else {
+          resolve(base64Str);
+        }
+      };
+      img.onerror = () => resolve(base64Str);
+      img.src = base64Str;
+    });
+  }
+
+  // Convierte una imagen a una versión semitransparente para marca de agua sutil, quitando el fondo blanco/claro
+  private async convertImageToWatermark(base64Str: string, opacity: number = 0.04): Promise<string> {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext('2d');
+        if (ctx) {
+          ctx.drawImage(img, 0, 0);
+          const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+          const data = imgData.data;
+          for (let i = 0; i < data.length; i += 4) {
+            const r = data[i];
+            const g = data[i + 1];
+            const b = data[i + 2];
+            const a = data[i + 3];
+
+            // Si es blanco o muy claro, hacerlo totalmente transparente
+            if (a <= 10 || (r >= 235 && g >= 235 && b >= 235)) {
+              data[i + 3] = 0;
+            } else {
+              // De lo contrario, aplicar la opacidad deseada al trazo original
+              data[i + 3] = Math.round(a * opacity);
+            }
+          }
+          ctx.putImageData(imgData, 0, 0);
+          resolve(canvas.toDataURL('image/png'));
+        } else {
+          resolve(base64Str);
+        }
+      };
+      img.onerror = () => resolve(base64Str);
+      img.src = base64Str;
+    });
+  }
+
   // Genera hash HMAC-SHA256 usando Web Crypto API
   private async generateHMAC(message: string, secretKey: string): Promise<string> {
     const encoder = new TextEncoder();
@@ -60,7 +139,17 @@ export class DossierExportService {
     // 1. Perfil del estudiante e historial clínico
     const { data: studentData, error: studentError } = await this.supabase
       .from('users')
-      .select('id, role_id, profiles(first_name, last_name), student_clinical_records!student_clinical_records_student_id_fkey(known_conditions, additional_notes)')
+      .select(`
+        id, 
+        role_id, 
+        profiles(first_name, last_name), 
+        student_clinical_records!student_clinical_records_student_id_fkey(
+          known_conditions, 
+          additional_notes,
+          primary_psychologist:users!primary_psychologist_id(profiles(first_name, last_name)),
+          primary_nutritionist:users!primary_nutritionist_id(profiles(first_name, last_name))
+        )
+      `)
       .eq('id', patientId)
       .single();
 
@@ -87,10 +176,51 @@ export class DossierExportService {
       ? rawClinicalRecord[0]
       : rawClinicalRecord;
 
+    let psychologistName = 'No asignado';
+    let nutritionistName = 'No asignado';
+
+    if (clinicalRecord) {
+      const psy = Array.isArray(clinicalRecord.primary_psychologist) ? clinicalRecord.primary_psychologist[0] : clinicalRecord.primary_psychologist;
+      const psyProfile = psy ? (Array.isArray(psy.profiles) ? psy.profiles[0] : psy.profiles) : null;
+      if (psyProfile) {
+        psychologistName = `${psyProfile.first_name || ''} ${psyProfile.last_name || ''}`.trim();
+      }
+
+      const nut = Array.isArray(clinicalRecord.primary_nutritionist) ? clinicalRecord.primary_nutritionist[0] : clinicalRecord.primary_nutritionist;
+      const nutProfile = nut ? (Array.isArray(nut.profiles) ? nut.profiles[0] : nut.profiles) : null;
+      if (nutProfile) {
+        nutritionistName = `${nutProfile.first_name || ''} ${nutProfile.last_name || ''}`.trim();
+      }
+    }
+
     let decryptedNotes = '';
     if (clinicalRecord?.additional_notes) {
       try {
-        decryptedNotes = this.crypto.decrypt(clinicalRecord.additional_notes);
+        const decrypted = this.crypto.decrypt(clinicalRecord.additional_notes);
+        try {
+          const parsed = JSON.parse(decrypted);
+          if (parsed && typeof parsed === 'object') {
+            if (parsed.notes) {
+              decryptedNotes = parsed.notes;
+            } else if (parsed.additional_notes) {
+              decryptedNotes = parsed.additional_notes;
+            } else if (parsed.general_data?.notes) {
+              decryptedNotes = parsed.general_data.notes;
+            } else {
+              let summary = 'Respuestas de Evaluación Inicial:';
+              Object.keys(parsed).forEach(key => {
+                if (key.startsWith('q')) {
+                  summary += `\n- Pregunta ${key.substring(1)}: ${parsed[key]}`;
+                }
+              });
+              decryptedNotes = summary;
+            }
+          } else {
+            decryptedNotes = decrypted;
+          }
+        } catch (jsonErr) {
+          decryptedNotes = decrypted;
+        }
       } catch (e) {
         decryptedNotes = 'Error al desencriptar notas.';
       }
@@ -99,7 +229,7 @@ export class DossierExportService {
     // 2. Citas completadas (Notas SOAP)
     const { data: appointmentsRaw, error: apptError } = await this.supabase
       .from('appointments')
-      .select('scheduled_date, start_time, end_time, status, notes, professional_id, professional:users!professional_id(profiles(first_name, last_name))')
+      .select('scheduled_date, start_time, end_time, status, notes, cancellation_reason, emergency_change_details, professional_id, professional:users!professional_id(profiles(first_name, last_name))')
       .eq('student_id', patientId)
       .order('scheduled_date', { ascending: false });
 
@@ -177,12 +307,27 @@ export class DossierExportService {
         if (hasWatermark) {
           const { data } = await this.supabase.storage.from('institutional_assets').getPublicUrl('watermark_logo.png');
           if (data && data.publicUrl) {
-            watermarkUrl = data.publicUrl;
+            watermarkUrl = data.publicUrl + '?ts=' + new Date().getTime();
           }
         }
       }
     } catch (e) {
       console.warn('No se pudo verificar el bucket institutional_assets:', e);
+    }
+
+    // 7. Nombre de la Institución Dinámica (Skill 8.4)
+    let institutionName = 'BENEMÉRITA UNIVERSIDAD AUTÓNOMA DE PUEBLA';
+    try {
+      const { data: instData, error: instError } = await this.supabase
+        .from('institutional_settings')
+        .select('institution_name')
+        .eq('id', 1)
+        .maybeSingle();
+      if (!instError && instData && instData.institution_name) {
+        institutionName = instData.institution_name.toUpperCase();
+      }
+    } catch (e) {
+      console.warn('Error al obtener la configuración institucional:', e);
     }
 
     return {
@@ -193,7 +338,10 @@ export class DossierExportService {
       nutritionLogs: nutritionLogs ?? [],
       diaryEntries: decryptedDiary,
       sessionEvaluations: sessionEvaluations,
-      watermarkUrl: watermarkUrl
+      watermarkUrl: watermarkUrl,
+      institutionName: institutionName,
+      psychologistName,
+      nutritionistName
     };
   }
 
@@ -202,8 +350,21 @@ export class DossierExportService {
     const data = await this.getDossierData(patientId);
     const patientName = `${data.student.first_name || ''} ${data.student.last_name || ''}`.trim();
 
-    // 1. Construir la cadena de texto de verificación para el sello de integridad (No Repudio)
-    let payloadStr = `PatientId:${patientId}|Name:${patientName}`;
+    // Obtener los datos del especialista (profesional) que realiza la exportación
+    let exporterId = 'unknown_id';
+    let exporterEmail = 'unknown_email';
+    try {
+      const { data: { user } } = await this.supabase.auth.getUser();
+      if (user) {
+        exporterId = user.id;
+        exporterEmail = user.email || 'unknown_email';
+      }
+    } catch (e) {
+      console.warn('Error al obtener el usuario de exportación en Meta Seal:', e);
+    }
+
+    // 1. Construir la cadena de texto de verificación para el sello de integridad (No Repudio + Trazabilidad de Explotación)
+    let payloadStr = `PatientId:${patientId}|Name:${patientName}|ExporterId:${exporterId}|ExporterEmail:${exporterEmail}`;
     data.appointments.forEach((a: any) => {
       payloadStr += `|ApptDate:${a.scheduled_date}|Notes:${a.notes}`;
     });
@@ -212,6 +373,19 @@ export class DossierExportService {
     });
 
     const metaSealHash = await this.generateHMAC(payloadStr, 'AMATI_NOM024_SECRET_KEY');
+
+    // Cargar y procesar el logo de la universidad (en blanco y marca de agua)
+    let watermarkBase64: string | null = null;
+    let whiteLogoBase64: string | null = null;
+    if (data.watermarkUrl) {
+      try {
+        const base64 = await this.getBase64ImageFromURL(data.watermarkUrl);
+        whiteLogoBase64 = await this.convertImageToWhite(base64);
+        watermarkBase64 = await this.convertImageToWatermark(base64, 0.05); // 5% opacidad
+      } catch (e) {
+        console.warn('Error procesando imagen del logo para marca de agua:', e);
+      }
+    }
 
     // 2. Crear instancia de jsPDF
     const doc = new jsPDF({
@@ -223,36 +397,74 @@ export class DossierExportService {
     const pageWidth = doc.internal.pageSize.getWidth();
     const pageHeight = doc.internal.pageSize.getHeight();
 
-    // 3. Dibujar marca de agua
+    // 3. Dibujar marca de agua y pie de página sutil (Powered by Amati)
     const drawWatermark = () => {
-      doc.setFontSize(28);
-      doc.setTextColor(240, 242, 245);
+      if (watermarkBase64) {
+        const size = 120; // 12 cm de ancho/alto
+        doc.addImage(watermarkBase64, 'PNG', (pageWidth - size) / 2, (pageHeight - size) / 2, size, size);
+      } else {
+        // Fallback de texto
+        doc.setFontSize(20);
+        doc.setTextColor(240, 242, 245);
+        doc.setFont('helvetica', 'bold');
+        doc.text(data.institutionName, pageWidth / 2, pageHeight / 2, { align: 'center', angle: 45 });
+      }
+
+      // Pie de página sutil (Powered by Amati)
+      doc.setFontSize(8);
+      doc.setTextColor(160, 174, 192); // Slate 400
+      doc.setFont('helvetica', 'normal');
+      doc.text('Powered by Amati', pageWidth / 2, pageHeight - 8, { align: 'center' });
+
+      // Leyenda de seguridad roja vertical en el margen derecho (sin emoji para evitar encoding garbled, y rotado 270 grados para leerse de arriba a abajo en la mitad inferior de la página)
+      doc.setFontSize(7);
+      doc.setTextColor(220, 38, 38); // Rojo
       doc.setFont('helvetica', 'bold');
-      doc.text('AMATI CLÍNICO • BUAP', pageWidth / 2, pageHeight / 2, { align: 'center', angle: 45 });
+      doc.text('CONFIDENCIAL - ESTE DOCUMENTO INCLUYE INFORMACIÓN SENSIBLE - MANEJAR CON CUIDADO', pageWidth - 5, 145, { angle: 270 });
+    };
+
+    // 4. Dibujar encabezado institucional (franja azul + logo grande centrado + nombre abajo)
+    const drawHeader = () => {
+      // Franja superior azul de 30 mm de alto para acomodar el logo de 2 cm centrado
+      doc.setFillColor(30, 58, 138); // Navy blue
+      doc.rect(0, 0, pageWidth, 30, 'F');
+
+      if (whiteLogoBase64) {
+        const logoSize = 20; // Logo superior aumentado a 2 cm (20 mm)
+        doc.addImage(whiteLogoBase64, 'PNG', (pageWidth - logoSize) / 2, 2, logoSize, logoSize);
+        
+        // Nombre de la institución en blanco en la franja, centrado en la parte de abajo
+        doc.setFontSize(8);
+        doc.setTextColor(255, 255, 255);
+        doc.setFont('helvetica', 'bold');
+        doc.text(data.institutionName, pageWidth / 2, 26, { align: 'center' });
+      } else {
+        doc.setFontSize(10);
+        doc.setTextColor(255, 255, 255);
+        doc.setFont('helvetica', 'bold');
+        doc.text(data.institutionName, pageWidth / 2, 17, { align: 'center' });
+      }
     };
 
     drawWatermark();
+    drawHeader();
 
-    // 4. Franja superior
-    doc.setFillColor(30, 58, 138); // Navy blue
-    doc.rect(0, 0, pageWidth, 12, 'F');
-
-    // Título del documento
+    // Título del documento (bajado para dar espacio a la franja de 30 mm)
     doc.setFontSize(14);
     doc.setTextColor(30, 58, 138);
     doc.setFont('helvetica', 'bold');
-    doc.text('DOSSIER CLÍNICO UNIFICADO (NOM-024 / HIPAA)', 15, 22);
+    doc.text('DOSSIER CLÍNICO UNIFICADO (NOM-024 / HIPAA)', 15, 38);
 
     doc.setFontSize(8);
     doc.setTextColor(100, 116, 139);
     doc.setFont('helvetica', 'normal');
-    doc.text(`Sello Digital de Integridad (Meta Seal): ${metaSealHash}`, 15, 26);
+    doc.text(`Sello Digital de Integridad (Meta Seal): ${metaSealHash}`, 15, 42);
 
     // Línea divisoria
     doc.setDrawColor(226, 232, 240);
-    doc.line(15, 28, pageWidth - 15, 28);
+    doc.line(15, 44, pageWidth - 15, 44);
 
-    let y = 35;
+    let y = 51;
 
     // Resumen ejecutivo
     doc.setFontSize(10);
@@ -262,24 +474,26 @@ export class DossierExportService {
     y += 5;
 
     doc.setFillColor(248, 250, 252);
-    doc.rect(15, y, pageWidth - 30, 22, 'F');
-    doc.rect(15, y, pageWidth - 30, 22, 'S');
+    doc.rect(15, y, pageWidth - 30, 27, 'F');
+    doc.rect(15, y, pageWidth - 30, 27, 'S');
 
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(8.5);
     doc.text(`Paciente: ${patientName}`, 18, y + 5);
     doc.text(`Matrícula/ID: ${data.student.id}`, 18, y + 10);
-    doc.text(`Condiciones: ${data.student.student_clinical_records?.known_conditions?.join(', ') || 'Ninguna registrada'}`, 18, y + 15);
-    doc.text(`Sello HMAC: ${metaSealHash.substring(0, 32)}...`, 18, y + 20);
+    doc.text(`Especialistas Tratantes: Psic. ${data.psychologistName || 'No asignado'} | Nut. ${data.nutritionistName || 'No asignado'}`, 18, y + 15);
+    doc.text(`Condiciones: ${data.student.student_clinical_records?.known_conditions?.join(', ') || 'Ninguna registrada'}`, 18, y + 20);
+    doc.text(`Sello HMAC: ${metaSealHash.substring(0, 32)}...`, 18, y + 25);
 
-    y += 32;
+    y += 37;
 
     // Validador de cambio de página
     const checkPageBreak = (neededHeight: number) => {
       if (y + neededHeight > pageHeight - 20) {
         doc.addPage();
         drawWatermark();
-        y = 20; // reset y
+        drawHeader();
+        y = 38; // reset y para iniciar después del encabezado de 30mm
       }
     };
 
@@ -303,14 +517,71 @@ export class DossierExportService {
         doc.setFontSize(9);
         doc.setTextColor(51, 65, 85);
         const dateStr = new Date(a.scheduled_date).toLocaleDateString();
-        doc.text(`Sesión del día ${dateStr} con ${a.professional?.full_name || 'Especialista'}`, 15, y);
+        const timeStr = a.start_time ? a.start_time.substring(0, 5) : '';
+        const titleText = `Sesión del día ${dateStr}` + (timeStr ? ` a las ${timeStr}` : '') + ` con ${a.profiles?.full_name || 'Especialista'}`;
+        doc.text(titleText, 15, y);
+
+        // Dibujar estado de asistencia/cancelación en el extremo derecho (traducido a español)
+        let statusText = '';
+        let statusColor = [100, 116, 139];
+        switch (a.status) {
+          case 'completed':
+            statusText = 'Asistió';
+            statusColor = [16, 185, 129]; // Verde esmeralda
+            break;
+          case 'absent':
+            statusText = 'Se ausentó';
+            statusColor = [239, 68, 68]; // Rojo
+            break;
+          case 'rescheduled':
+            statusText = 'Se reprogramó';
+            statusColor = [245, 158, 11]; // Ámbar
+            break;
+          case 'canceled':
+          case 'cancelled':
+            statusText = 'Cancelada';
+            statusColor = [220, 38, 38]; // Rojo oscuro
+            break;
+          case 'scheduled':
+            statusText = 'Programada';
+            statusColor = [59, 130, 246]; // Azul
+            break;
+          default:
+            statusText = a.status ? a.status.charAt(0).toUpperCase() + a.status.slice(1) : 'Programada';
+            if (statusText === 'Scheduled') statusText = 'Programada';
+            if (statusText === 'Canceled') statusText = 'Cancelada';
+            break;
+        }
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(8.5);
+        doc.setTextColor(statusColor[0], statusColor[1], statusColor[2]);
+        doc.text(statusText, pageWidth - 15, y, { align: 'right' });
+
         y += 4;
 
         doc.setFont('helvetica', 'normal');
         doc.setFontSize(8.5);
         doc.setTextColor(71, 85, 105);
-        const cleanNotes = a.notes ? a.notes.replace(/<[^>]*>/g, '\n').replace(/\n+/g, '\n').trim() : 'Sin notas.';
-        const splitNotes = doc.splitTextToSize(cleanNotes, pageWidth - 30);
+
+        let noteContent = a.notes ? a.notes
+          .replace(/<[^>]*>/g, ' ')
+          .replace(/&nbsp;/g, ' ')
+          .replace(/&amp;/g, '&')
+          .replace(/&lt;/g, '<')
+          .replace(/&gt;/g, '>')
+          .replace(/&quot;/g, '"')
+          .replace(/&#39;/g, "'")
+          .replace(/\s+/g, ' ')
+          .trim() : '';
+
+        if (a.status === 'canceled') {
+          const reason = a.cancellation_reason || a.emergency_change_details || 'No especificada';
+          noteContent = `Razón de cancelación: ${reason}` + (noteContent ? `\nNotas del Especialista: ${noteContent}` : '');
+        } else if (!noteContent) {
+          noteContent = 'Sin notas.';
+        }
+
+        const splitNotes = doc.splitTextToSize(noteContent, pageWidth - 30);
         
         splitNotes.forEach((line: string) => {
           checkPageBreak(5);
@@ -434,6 +705,16 @@ export class DossierExportService {
       subject: `HMAC Integrity Seal: ${metaSealHash}`,
       keywords: `Amati, NOM-024, HIPAA, ${metaSealHash}`
     });
+
+    // 8. Numeración de páginas dinámica al final de la generación (Página N de M) sin encimarse
+    const totalPages = doc.getNumberOfPages();
+    for (let i = 1; i <= totalPages; i++) {
+      doc.setPage(i);
+      doc.setFontSize(8);
+      doc.setTextColor(160, 174, 192); // Slate 400
+      doc.setFont('helvetica', 'normal');
+      doc.text(`Página ${i} de ${totalPages}`, pageWidth / 2, pageHeight - 14, { align: 'center' });
+    }
 
     const pdfBlob = doc.output('blob');
     return pdfBlob;

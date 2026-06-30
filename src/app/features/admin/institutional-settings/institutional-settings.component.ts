@@ -130,30 +130,16 @@ export class InstitutionalSettingsComponent implements OnInit {
     this.successMessage = '';
 
     try {
-      // 1. Verificar si el bucket existe, si no, intentar crearlo automáticamente
-      const { data: buckets } = await this.supabase.storage.listBuckets();
-      const bucketExists = buckets?.some((b: any) => b.id === 'institutional_assets');
-
-      if (!bucketExists) {
-        console.log('📦 [Storage]: Bucket institutional_assets no encontrado. Creando bucket público...');
-        const { error: createErr } = await this.supabase.storage.createBucket('institutional_assets', { public: true });
-        if (createErr) {
-          console.warn('Nota: No se pudo crear el bucket automáticamente (puede requerir crearse manualmente en el Dashboard de Supabase):', createErr);
-        } else {
-          console.log('✅ [Storage]: Bucket institutional_assets creado exitosamente.');
-        }
-      }
-
       // Subir con nombre fijo watermark_logo.png al bucket institutional_assets
       const { data, error } = await this.supabase.storage
         .from('institutional_assets')
         .upload('watermark_logo.png', file, {
-          cacheControl: '3600',
+          cacheControl: '0', // Evitar almacenamiento en caché del servidor
           upsert: true
         });
-
+ 
       if (error) {
-        if (error.message?.includes('Bucket not found') || error.name === 'StorageApiError') {
+        if (error.message?.includes('Bucket not found')) {
           throw new Error('El bucket "institutional_assets" no existe en Supabase. Por favor, créalo en el Dashboard de Supabase -> Storage -> New Bucket (Nombre: institutional_assets, Público: activado).');
         }
         throw error;

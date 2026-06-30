@@ -107,9 +107,16 @@ El sistema está compuesto por un Frontend Angular, un Backend PostgREST (Postgr
 - **Marca de Agua Institucional Dinámica (Admin-Uploaded Watermark):**
   - El motor de exportación consulta dinámicamente el bucket `institutional_assets` de Supabase Storage para recuperar la imagen oficial cargada por el Administrador.
   - Renderiza la imagen como membrete superior y como marca de agua diagonal centellante (opacidad del 12%) a lo largo de todo el documento.
-- **Meta Seal (Sello Criptográfico de Metadatos y No Repudio):**
-  - **Incrustación Criptográfica:** Generación de un hash HMAC-SHA256 utilizando `Web Crypto API` que combina la matrícula del profesional tratante, el ID del paciente, el nivel de riesgo y la marca de tiempo UTC.
-  - **Sello Visible e Invisible:** El hash se inyecta en los metadatos binarios del PDF (Document Info) y se despliega como un sello de verificación formal en el resumen ejecutivo, garantizando el principio de **No Repudio, Autenticidad e Integridad** bajo cumplimiento estricto de la **NOM-024** y **HIPAA**.
+- **Meta Seal (Sello Criptográfico de Metadatos, No Repudio y Trazabilidad):**
+  - **Incrustación Criptográfica:** Generación de un hash HMAC-SHA256 utilizando `Web Crypto API` que combina la matrícula/ID y correo del profesional exportador (`ExporterId`, `ExporterEmail`), el ID del paciente, las fechas y contenidos de citas/diario, y la marca de tiempo UTC.
+  - **Sello Visible e Invisible:** El hash se inyecta en los metadatos binarios del PDF (Document Info - Subject/Keywords) y se despliega en el resumen ejecutivo, garantizando el principio de **No Repudio, Autenticidad e Integridad** bajo cumplimiento estricto de la **NOM-024** y **HIPAA**.
+  - **Trazabilidad de Filtración Forense Digital:** El Sello vincula al médico firmante con la exportación, permitiendo determinar con certeza matemática quién descargó el archivo si este es compartido ilegalmente.
+- **Medidas DLP y Esteganografía Forense Física (Anti-Foto/Anti-Impresión):**
+  - **Espaciado Dinámico de Texto:** Especificación para modular microscópicamente el tracking y espaciado (entre `0.01 mm` y `0.03 mm`) de ciertos caracteres en los párrafos del reporte PDF, codificando binariamente el ID del especialista.
+  - **Validación:** Ante capturas de pantalla, fotos con celular o páginas impresas físicamente, un análisis de proporciones de distancia en la imagen permite reconstruir el ID y auditar la procedencia del leak.
+- **Imagen Institucional y Logotipo BUAP:**
+  - El encabezado superior del PDF incluye una franja azul marino de **30 mm de alto** que presenta el logo oficial de la universidad aumentado a **2 cm (20 mm)**, con su color convertido dinámicamente a blanco puro sobre fondo azul, seguido del nombre oficial de la institución centrado abajo. Este encabezado se repite en cada página nueva.
+  - Se dibuja una marca de agua central del logo con opacidad del 5% y el pie de página `"Powered by Amati"`.
 
 ---
 

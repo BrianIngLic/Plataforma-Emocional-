@@ -20,8 +20,8 @@
     "semantic_hash": "9b7e1de8e28daa4e2a307e1e0f1cf529"
   },
   "db/schema.sql": {
-    "mtime": 1782800474.219893,
-    "ast_hash": "9a51502853f4c908e3bef8c1e7011af2",
+    "mtime": 1782800095.215091,
+    "ast_hash": "544ab88b4328cea828b68d88abc205e7",
     "semantic_hash": ""
   },
   "package.json": {
@@ -360,8 +360,8 @@
     "semantic_hash": "e9fbe2f84e3d2e67d94ed6d56840ff5d"
   },
   "spec.md": {
-    "mtime": 1782800474.2245905,
-    "ast_hash": "85bf570b489640ef930b036cbc6131c0",
+    "mtime": 1782800095.2419631,
+    "ast_hash": "7b0a86bd06f2e787388872bb83398a60",
     "semantic_hash": ""
   },
   "src/app/app.html": {
@@ -480,8 +480,8 @@
     "semantic_hash": ""
   },
   "task.md": {
-    "mtime": 1782800474.2262516,
-    "ast_hash": "cefd61e76603c00d2f06a33e10837c0d",
+    "mtime": 1782800095.243642,
+    "ast_hash": "57293e2f884fe459fc3a94ba03345a2c",
     "semantic_hash": ""
   },
   "public/amati-logo.svg": {

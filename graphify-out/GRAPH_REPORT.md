@@ -1,16 +1,16 @@
-# Graph Report - Ecosistema-de-Asistencia-Emocional-con-IA-Generativa  (2026-06-25)
+# Graph Report - Ecosistema-de-Asistencia-Emocional-con-IA-Generativa  (2026-06-29)
 
 ## Corpus Check
-- 93 files · ~50,368 words
+- 94 files · ~53,278 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 768 nodes · 1154 edges · 84 communities (35 shown, 49 thin omitted)
+- 781 nodes · 1172 edges · 82 communities (34 shown, 48 thin omitted)
 - Extraction: 94% EXTRACTED · 6% INFERRED · 0% AMBIGUOUS · INFERRED: 72 edges (avg confidence: 0.6)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `7a2d5370`
+- Built from commit: `7aa7f887`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -83,10 +83,8 @@
 - [[_COMMUNITY_Community 65|Community 65]]
 - [[_COMMUNITY_Community 66|Community 66]]
 - [[_COMMUNITY_Community 67|Community 67]]
-- [[_COMMUNITY_Community 68|Community 68]]
 - [[_COMMUNITY_Community 69|Community 69]]
 - [[_COMMUNITY_Community 70|Community 70]]
-- [[_COMMUNITY_Community 71|Community 71]]
 - [[_COMMUNITY_Community 72|Community 72]]
 - [[_COMMUNITY_Community 73|Community 73]]
 - [[_COMMUNITY_Community 74|Community 74]]
@@ -101,12 +99,12 @@
 
 ## God Nodes (most connected - your core abstractions)
 1. `RiskLevel` - 33 edges
-2. `TriageEngine` - 30 edges
-3. `AuthService` - 30 edges
+2. `AuthService` - 31 edges
+3. `TriageEngine` - 30 edges
 4. `UserMessage` - 28 edges
 5. `FacultiesComponent` - 25 edges
 6. `PsychologistsComponent` - 25 edges
-7. `SupabaseService` - 22 edges
+7. `SupabaseService` - 23 edges
 8. `StudentAgendaComponent` - 19 edges
 9. `classify()` - 18 edges
 10. `PatientProfileComponent` - 17 edges
@@ -132,15 +130,11 @@
 - **Student Emotional Assistance and Care Flow** — dashboard_layout_dashboard_layout_component_student_sidebar, dashboard_dashboard_component_chat_view, dashboard_diary_dashboard_component_therapeutic_refuge, student_agenda_student_agenda_component_appointment_scheduler [INFERRED 0.85]
 - **Psychologist Clinical Command Center and Triage Flow** — psychologist_layout_psychologist_layout_component_psychologist_sidebar, dashboard_dashboard_component_psychologist_triage_view, patients_patients_component_patient_directory, agenda_agenda_component_clinical_timeline, patient_profile_patient_profile_component_clinical_expedient_view [INFERRED 0.85]
 
-## Communities (84 total, 49 thin omitted)
-
-### Community 0 - "Core Services and Auth"
-Cohesion: 0.16
-Nodes (3): CalendarDay, AuthService, ChatMessage
+## Communities (82 total, 48 thin omitted)
 
 ### Community 1 - "Modals Diary and Exceptions"
-Cohesion: 0.17
-Nodes (6): FeedbackModalComponent, FeedbackModalData, TimeBlock, WorkingDay, WorkingDaysMap, DiaryService
+Cohesion: 0.06
+Nodes (13): Appointment, AdminFaculty, FeedbackModalComponent, FeedbackModalData, ProfileAvatarComponent, RegisterComponent, AdminExceptionsService, WorkingDaysMap (+5 more)
 
 ### Community 2 - "Package Config and Dependencies"
 Cohesion: 0.05
@@ -154,13 +148,9 @@ Nodes (28): classifier.py — Clasificador determinista de riesgo pre-LLM.  Este
 Cohesion: 0.11
 Nodes (22): MessageRequest, post_triage(), BaseModel, quick_triage(), Devuelve un resumen del estado de la sesión para depuración/auditoría., Evaluación rápida de un mensaje individual.      Crea un motor de triage efíme, Motor de triage que procesa mensajes a través de capas de seguridad.      El f, Obtiene una sesión existente o crea una nueva.          Args:             ses (+14 more)
 
-### Community 7 - "AI Triage and Student Agenda"
-Cohesion: 0.14
-Nodes (3): AiTriageMockService, UrgencyLevel, StudentAgendaComponent
-
 ### Community 8 - "Admin Patient Statistics Overview"
 Cohesion: 0.12
-Nodes (4): OverviewComponent, AdminStatsService, OverviewMetrics, PatientsComponent
+Nodes (5): OverviewComponent, AdminStatsService, ChartDataPoint, OverviewMetrics, PatientsComponent
 
 ### Community 9 - "Alimentary Assessment Dashboard"
 Cohesion: 0.13
@@ -171,8 +161,12 @@ Cohesion: 0.17
 Nodes (16): Psychologist Daily Agenda Timeline, Amati AI Chat Dashboard, Psychologist Triage Dashboard, Amati Therapeutic Refuge and Diary, Student Dashboard Sidebar, Clinical Expedient and AI Insights View, Psychologist Assigned Patients Directory, Profile Avatar Manager Component (+8 more)
 
 ### Community 14 - "Main App Security Interceptors"
-Cohesion: 0.23
-Nodes (6): App, appConfig, routes, authGuard(), roleGuard(), authInterceptor()
+Cohesion: 0.33
+Nodes (4): App, appConfig, routes, authInterceptor()
+
+### Community 15 - "Profile Avatar Manager"
+Cohesion: 0.22
+Nodes (5): CalendarDay, TimeBlock, WorkingDay, AiTriageMockService, UrgencyLevel
 
 ### Community 20 - "Security and Design Principles"
 Cohesion: 0.09
@@ -203,8 +197,8 @@ Cohesion: 0.12
 Nodes (14): normalize_text(), Normaliza el texto del usuario para la clasificación.      Pasos:     1. Conv, get_crisis_message(), Devuelve el mensaje de crisis fijo en español.      Este mensaje se muestra al, Tests completos para el motor de triage determinista.  Cubre: normalización de, Verifica que el mensaje de crisis incluya recursos verificados., El mensaje de crisis debe incluir números de teléfono         de los recursos v, Verifica la normalización de texto: acentos, minúsculas, variantes. (+6 more)
 
 ### Community 53 - "Community 53"
-Cohesion: 0.27
-Nodes (5): environment, Psychologist, ChartDataPoint, DiaryEntry, SupabaseService
+Cohesion: 0.26
+Nodes (5): environment, Psychologist, Holiday, DiaryEntry, SupabaseService
 
 ### Community 54 - "Community 54"
 Cohesion: 0.13
@@ -213,10 +207,6 @@ Nodes (14): Categoría 1: Recursos de Crisis (CERO TOLERANCIA a error), Categor�
 ### Community 55 - "Community 55"
 Cohesion: 0.14
 Nodes (14): devDependencies, @angular/build, @angular/cli, @angular/compiler-cli, jasmine-core, karma, karma-chrome-launcher, karma-coverage (+6 more)
-
-### Community 56 - "Community 56"
-Cohesion: 0.27
-Nodes (4): AdminFaculty, Campus, Faculty, FacultyService
 
 ### Community 57 - "Community 57"
 Cohesion: 0.18
@@ -231,8 +221,8 @@ Cohesion: 0.22
 Nodes (8): 1. Requisitos del Sistema, 2. Automatización con Makefile, 3. Estructura de Scripts (`scripts/`), 4. Estructura del Repositorio, Comandos de Configuración e Instalación, Comandos de Contenedores (Docker), Comandos de Ejecución y Diagnóstico, Guía de Operación y Desarrollo
 
 ### Community 60 - "Community 60"
-Cohesion: 0.32
-Nodes (3): Appointment, AdminExceptionsService, Holiday
+Cohesion: 0.50
+Nodes (3): EmergencyChangeRequest, WebPushSubscriptionPayload, WhatsAppRoutingSession
 
 ### Community 61 - "Community 61"
 Cohesion: 0.25
@@ -258,6 +248,10 @@ Nodes (6): check_metaphoric_patterns(), _has_cooccurrence(), _pattern_found_in_s
 Cohesion: 0.33
 Nodes (6): scripts, build, ng, start, test, watch
 
+### Community 70 - "Community 70"
+Cohesion: 0.24
+Nodes (4): authGuard(), roleGuard(), AuditService, ChatMessage
+
 ### Community 73 - "Community 73"
 Cohesion: 0.50
 Nodes (3): Verifica que el override NO se active en nivel VERDE., Una clasificación VERDE no debe producir override., TestOverrideInactiveOnVerde
@@ -271,17 +265,17 @@ Cohesion: 0.50
 Nodes (3): Verifica detección de variantes informales → ROJO., kiero morir' (variante informal) debe ser ROJO., TestClassifyRojoInformal
 
 ## Knowledge Gaps
-- **179 isolated node(s):** `$schema`, `version`, `newProjectRoot`, `projectType`, `style` (+174 more)
+- **182 isolated node(s):** `$schema`, `version`, `newProjectRoot`, `projectType`, `style` (+177 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **49 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **48 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `SupabaseService` connect `Community 53` to `Core Services and Auth`, `Modals Diary and Exceptions`, `Community 67`, `Community 70`, `Main App Security Interceptors`, `Community 56`, `Community 60`?**
-  _High betweenness centrality (0.051) - this node is a cross-community bridge._
-- **Why does `AuthService` connect `Core Services and Auth` to `Modals Diary and Exceptions`, `Community 67`, `Community 70`, `Main App Security Interceptors`, `Community 53`, `Community 56`?**
-  _High betweenness centrality (0.038) - this node is a cross-community bridge._
+- **Why does `SupabaseService` connect `Community 53` to `Core Services and Auth`, `Modals Diary and Exceptions`, `Community 67`, `Community 70`, `Admin Patient Statistics Overview`, `Main App Security Interceptors`, `Profile Avatar Manager`, `Community 60`?**
+  _High betweenness centrality (0.054) - this node is a cross-community bridge._
+- **Why does `AuthService` connect `Core Services and Auth` to `Modals Diary and Exceptions`, `Community 67`, `Community 70`, `Community 72`, `Profile Avatar Manager`, `Community 53`, `Psychologist Layout Navigation`, `Community 60`?**
+  _High betweenness centrality (0.040) - this node is a cross-community bridge._
 - **Why does `PsychologistsComponent` connect `Psychologist Profile and Utilities` to `Community 53`?**
   _High betweenness centrality (0.030) - this node is a cross-community bridge._
 - **Are the 19 inferred relationships involving `RiskLevel` (e.g. with `TriageEngine` and `OverrideSignal`) actually correct?**
@@ -291,4 +285,4 @@ _Questions this graph is uniquely positioned to answer:_
 - **Are the 16 inferred relationships involving `UserMessage` (e.g. with `MessageRequest` and `TriageEngine`) actually correct?**
   _`UserMessage` has 16 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `Motor determinista de triage para clasificación de riesgo en salud mental. Todas`, `$schema`, `version` to the rest of the system?**
-  _244 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _247 weakly-connected nodes found - possible documentation gaps or missing edges._

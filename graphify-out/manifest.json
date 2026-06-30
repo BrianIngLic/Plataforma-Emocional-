@@ -660,8 +660,8 @@
     "semantic_hash": ""
   },
   "src/app/core/services/session-evaluation.service.ts": {
-    "mtime": 1782772327.6083863,
-    "ast_hash": "630cb33c7d6b1ecf96e13d2614a75c19",
+    "mtime": 1782779261.384904,
+    "ast_hash": "83dabe6a0070fc10f87ae0d819dc6224",
     "semantic_hash": ""
   },
   "src/app/features/admin/admin-settings/admin-settings.component.ts": {
@@ -690,8 +690,8 @@
     "semantic_hash": ""
   },
   "src/app/core/services/dossier-export.service.ts": {
-    "mtime": 1782777296.0349672,
-    "ast_hash": "d5c1a1eec9e670bb3ac92ac0cc496a75",
+    "mtime": 1782780424.5378733,
+    "ast_hash": "0c9fcf932b5d9b3bedd8572465f2cd61",
     "semantic_hash": ""
   },
   "src/app/features/student/session-feedback/emoji-scale/emoji-scale.component.ts": {
@@ -700,8 +700,8 @@
     "semantic_hash": ""
   },
   "src/app/features/student/session-feedback/session-feedback.component.ts": {
-    "mtime": 1782772668.4154718,
-    "ast_hash": "f7fb0e0146da92316b5f83324e8c60a9",
+    "mtime": 1782779261.3951797,
+    "ast_hash": "2dee6d28bac3311815e34136be41bde7",
     "semantic_hash": ""
   },
   "src/app/features/student/session-feedback/emoji-scale/emoji-scale.component.html": {

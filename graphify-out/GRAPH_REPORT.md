@@ -1,16 +1,16 @@
 # Graph Report - Plataforma-Emocional-  (2026-06-29)
 
 ## Corpus Check
-- 104 files · ~92,390 words
+- 104 files · ~92,478 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 902 nodes · 1290 edges · 78 communities (24 shown, 54 thin omitted)
+- 902 nodes · 1290 edges · 78 communities (23 shown, 55 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 19 edges (avg confidence: 0.91)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `0ba53ef6`
+- Built from commit: `00170f13`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -126,11 +126,11 @@
 - **Student Emotional Assistance and Care Flow** — dashboard_layout_dashboard_layout_component_student_sidebar, dashboard_dashboard_component_chat_view, dashboard_diary_dashboard_component_therapeutic_refuge, student_agenda_student_agenda_component_appointment_scheduler [INFERRED 0.85]
 - **Psychologist Clinical Command Center and Triage Flow** — psychologist_layout_psychologist_layout_component_psychologist_sidebar, dashboard_dashboard_component_psychologist_triage_view, patients_patients_component_patient_directory, agenda_agenda_component_clinical_timeline, patient_profile_patient_profile_component_clinical_expedient_view [INFERRED 0.85]
 
-## Communities (78 total, 54 thin omitted)
+## Communities (78 total, 55 thin omitted)
 
 ### Community 0 - "Core Services and Auth"
-Cohesion: 0.17
-Nodes (5): environment, Psychologist, CryptoService, DiaryEntry, SupabaseService
+Cohesion: 0.20
+Nodes (6): environment, Psychologist, EmergencyChangeRequest, WebPushSubscriptionPayload, WhatsAppRoutingSession, SupabaseService
 
 ### Community 1 - "Modals Diary and Exceptions"
 Cohesion: 0.08
@@ -212,10 +212,6 @@ Nodes (7): EmergencyModalData, AgendaService, TimeBlock, WorkingDay, CalendarDay
 Cohesion: 0.08
 Nodes (25): 1.1. Principios Visuales y Tokens de Diseño, 1. Filosofía de Diseño y Sistema Visual (Design System & Aesthetics), 2.1. Objetivo UX y Mecánicas Estilo Duolingo, 2.2. Arquitectura de Interfaces y Maquetación, 2.3. Especificación de Estructura Angular (Código Base Standalone), 2. Especificación UX/UI 1: Sistema de Logros y Gamificación (Estilo Duolingo), 3.1. Objetivo UX y Diseño Arquitectónico Bidireccional, 3.2. Estructura de Interfaz (Split View de 2 Columnas) (+17 more)
 
-### Community 73 - "Community 73"
-Cohesion: 0.50
-Nodes (3): EmergencyChangeRequest, WebPushSubscriptionPayload, WhatsAppRoutingSession
-
 ### Community 76 - "Community 76"
 Cohesion: 0.11
 Nodes (7): Appointment, OverviewComponent, AdminExceptionsService, Holiday, AdminStatsService, ChartDataPoint, OverviewMetrics
@@ -223,7 +219,7 @@ Nodes (7): Appointment, OverviewComponent, AdminExceptionsService, Holiday, Admi
 ## Knowledge Gaps
 - **206 isolated node(s):** `$schema`, `version`, `newProjectRoot`, `projectType`, `style` (+201 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **54 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **55 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_

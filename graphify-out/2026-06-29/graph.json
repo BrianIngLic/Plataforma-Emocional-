@@ -1824,7 +1824,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_clinical_service",
-      "community": 73,
+      "community": 0,
       "norm_label": "clinical.service.ts"
     },
     {
@@ -1874,7 +1874,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_crypto_service",
-      "community": 73,
+      "community": 0,
       "norm_label": "crypto.service.ts"
     },
     {
@@ -1884,7 +1884,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "services_crypto_service_cryptoservice",
-      "community": 73,
+      "community": 0,
       "norm_label": "cryptoservice"
     },
     {
@@ -1894,7 +1894,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "services_crypto_service_cryptoservice_derivekey",
-      "community": 73,
+      "community": 0,
       "norm_label": ".derivekey()"
     },
     {
@@ -1904,7 +1904,7 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "services_crypto_service_cryptoservice_clearkey",
-      "community": 73,
+      "community": 0,
       "norm_label": ".clearkey()"
     },
     {
@@ -1914,7 +1914,7 @@
       "source_location": "L39",
       "_origin": "ast",
       "id": "services_crypto_service_cryptoservice_getkey",
-      "community": 73,
+      "community": 0,
       "norm_label": ".getkey()"
     },
     {
@@ -1924,7 +1924,7 @@
       "source_location": "L53",
       "_origin": "ast",
       "id": "services_crypto_service_cryptoservice_encrypt",
-      "community": 73,
+      "community": 0,
       "norm_label": ".encrypt()"
     },
     {
@@ -1934,7 +1934,7 @@
       "source_location": "L61",
       "_origin": "ast",
       "id": "services_crypto_service_cryptoservice_decrypt",
-      "community": 73,
+      "community": 0,
       "norm_label": ".decrypt()"
     },
     {
@@ -1944,7 +1944,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_diary_service",
-      "community": 73,
+      "community": 0,
       "norm_label": "diary.service.ts"
     },
     {
@@ -1954,7 +1954,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "services_diary_service_diaryentry",
-      "community": 73,
+      "community": 0,
       "norm_label": "diaryentry"
     },
     {
@@ -2004,7 +2004,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_dossier_export_service",
-      "community": 73,
+      "community": 0,
       "norm_label": "dossier-export.service.ts"
     },
     {
@@ -2051,7 +2051,7 @@
       "label": ".exportDossier()",
       "file_type": "code",
       "source_file": "src/app/core/services/dossier-export.service.ts",
-      "source_location": "L175",
+      "source_location": "L187",
       "_origin": "ast",
       "id": "services_dossier_export_service_dossierexportservice_exportdossier",
       "community": 8,
@@ -2064,7 +2064,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_emergency_notification_service",
-      "community": 0,
+      "community": 73,
       "norm_label": "emergency-notification.service.ts"
     },
     {
@@ -2074,7 +2074,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "services_emergency_notification_service_emergencychangerequest",
-      "community": 0,
+      "community": 73,
       "norm_label": "emergencychangerequest"
     },
     {
@@ -2084,7 +2084,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "services_emergency_notification_service_webpushsubscriptionpayload",
-      "community": 0,
+      "community": 73,
       "norm_label": "webpushsubscriptionpayload"
     },
     {
@@ -2094,7 +2094,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "services_emergency_notification_service_whatsapproutingsession",
-      "community": 0,
+      "community": 73,
       "norm_label": "whatsapproutingsession"
     },
     {
@@ -6044,7 +6044,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "perfil_paciente_perfil_paciente_component",
-      "community": 73,
+      "community": 0,
       "norm_label": "perfil-paciente.component.ts"
     },
     {
@@ -6634,7 +6634,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "patient_profile_patient_profile_component",
-      "community": 73,
+      "community": 0,
       "norm_label": "patient-profile.component.ts"
     },
     {

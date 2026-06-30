@@ -65,7 +65,7 @@ export class SessionFeedbackComponent implements OnInit {
       // 2. Obtener detalles de la cita para professionalId y professionalName
       const { data: appointment, error } = await this.supabaseService.supabase
         .from('appointments')
-        .select('professional_id, profiles:professional_id(full_name)')
+        .select('professional_id, professional:users!appointments_professional_id_fkey(profiles(first_name, last_name))')
         .eq('id', this.appointmentId)
         .single();
 
@@ -76,7 +76,9 @@ export class SessionFeedbackComponent implements OnInit {
       }
 
       this.professionalId = appointment.professional_id;
-      this.professionalName = (appointment.profiles as any)?.full_name || 'tu especialista';
+      const professional = Array.isArray(appointment.professional) ? appointment.professional[0] : appointment.professional;
+      const profile = Array.isArray(professional?.profiles) ? professional.profiles[0] : professional?.profiles;
+      this.professionalName = [profile?.first_name, profile?.last_name].filter(Boolean).join(' ').trim() || 'tu especialista';
       this.isLoading.set(false);
     } catch (err) {
       console.error('Error en onboarding de feedback:', err);

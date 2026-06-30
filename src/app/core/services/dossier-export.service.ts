@@ -99,14 +99,15 @@ export class DossierExportService {
     // 2. Citas completadas (Notas SOAP)
     const { data: appointmentsRaw, error: apptError } = await this.supabase
       .from('appointments')
-      .select('scheduled_date, start_time, end_time, status, notes, professional_id, profiles:professional_id(first_name, last_name)')
+      .select('scheduled_date, start_time, end_time, status, notes, professional_id, professional:users!professional_id(profiles(first_name, last_name))')
       .eq('student_id', patientId)
       .order('scheduled_date', { ascending: false });
 
     if (apptError) throw apptError;
 
     const appointments = (appointmentsRaw ?? []).map((appt: any) => {
-      const profProfile = Array.isArray(appt.profiles) ? appt.profiles[0] : appt.profiles;
+      const professional = Array.isArray(appt.professional) ? appt.professional[0] : appt.professional;
+      const profProfile = Array.isArray(professional?.profiles) ? professional.profiles[0] : professional?.profiles;
       const fullName = profProfile ? `${profProfile.first_name || ''} ${profProfile.last_name || ''}`.trim() : 'Especialista';
       return {
         ...appt,
@@ -121,7 +122,7 @@ export class DossierExportService {
     // 3. Bitácora alimentaria y nutricional
     const { data: nutritionLogs, error: nutritionError } = await this.supabase
       .from('nutrition_logs')
-      .select('id, log_date, notes, food_items(*)')
+      .select('id, log_date, total_calories, total_protein, total_carbs, total_fats, food_items(*)')
       .eq('student_id', patientId)
       .order('log_date', { ascending: false });
 
@@ -302,7 +303,7 @@ export class DossierExportService {
         doc.setFontSize(9);
         doc.setTextColor(51, 65, 85);
         const dateStr = new Date(a.scheduled_date).toLocaleDateString();
-        doc.text(`Sesión del día ${dateStr} con ${a.profiles?.full_name || 'Especialista'}`, 15, y);
+        doc.text(`Sesión del día ${dateStr} con ${a.professional?.full_name || 'Especialista'}`, 15, y);
         y += 4;
 
         doc.setFont('helvetica', 'normal');
@@ -340,7 +341,7 @@ export class DossierExportService {
         doc.setFontSize(9);
         doc.setTextColor(51, 65, 85);
         const dateStr = new Date(log.log_date).toLocaleDateString();
-        doc.text(`Fecha: ${dateStr} - Nota: ${log.notes || 'Sin observaciones'}`, 15, y);
+        doc.text(`Fecha: ${dateStr} - Resumen Diario: ${log.total_calories || 0} kcal (P: ${log.total_protein || 0}g, C: ${log.total_carbs || 0}g, G: ${log.total_fats || 0}g)`, 15, y);
         y += 5;
 
         if (log.food_items && log.food_items.length > 0) {

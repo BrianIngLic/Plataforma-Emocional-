@@ -690,8 +690,8 @@
     "semantic_hash": ""
   },
   "src/app/core/services/dossier-export.service.ts": {
-    "mtime": 1782776358.5248456,
-    "ast_hash": "0472818ceeee5a6d03c366c1eb41ab6c",
+    "mtime": 1782777296.0349672,
+    "ast_hash": "d5c1a1eec9e670bb3ac92ac0cc496a75",
     "semantic_hash": ""
   },
   "src/app/features/student/session-feedback/emoji-scale/emoji-scale.component.ts": {

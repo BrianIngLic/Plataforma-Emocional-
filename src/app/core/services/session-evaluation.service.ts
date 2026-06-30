@@ -164,7 +164,7 @@ export class SessionEvaluationService {
     // Paso 1: citas completadas del paciente con nombre del profesional
     const { data: appointments, error: apptError } = await this.supabase
       .from('appointments')
-      .select('id, scheduled_date, professional_id, profiles:professional_id(full_name)')
+      .select('id, scheduled_date, professional_id, professional:users!appointments_professional_id_fkey(profiles(first_name, last_name))')
       .eq('student_id', patientId)
       .eq('status', 'completed');
 
@@ -195,7 +195,12 @@ export class SessionEvaluationService {
       .filter((a: any) => !evaluatedIds.has(a.id))
       .map((a: any) => ({
         appointmentId:    a.id as string,
-        professionalName: (a.profiles as any)?.full_name ?? 'Profesional',
+        professionalName: (() => {
+          const professional = Array.isArray(a.professional) ? a.professional[0] : a.professional;
+          const profile = Array.isArray(professional?.profiles) ? professional.profiles[0] : professional?.profiles;
+          const fullName = [profile?.first_name, profile?.last_name].filter(Boolean).join(' ').trim();
+          return fullName || 'Profesional';
+        })(),
         date:             a.scheduled_date as string,
       }));
 

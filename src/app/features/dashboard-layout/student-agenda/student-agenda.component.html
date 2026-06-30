@@ -13,54 +13,193 @@
     </div>
   </div>
 
-  <div class="header">
-    <h1>Agendar Sesión</h1>
-    <p>Selecciona un día y hora disponible según tu evaluación de IA.</p>
+  <!-- TOP BANNER TERAPÉUTICO Y GAMIFICADO -->
+  <div class="therapeutic-banner">
+    <div class="banner-content">
+      <div class="avatar-calm">🌿</div>
+      <div class="affirmation-area">
+        <span class="welcome-title">Espacio de Confianza y Cuidado</span>
+        <p class="dynamic-text">
+          Agendar una cita es un poderoso acto de amor propio y valentía. Estamos aquí para acompañarte a tu propio ritmo, sin presiones ni juicios.
+        </p>
+      </div>
+    </div>
+    <div class="gamification-header">
+      <div class="support-badge-box">
+        <span class="heart-icon">💖</span>
+        <div class="badge-info">
+          <strong>Paso de Valentía</strong>
+          <span class="sub-text">Cuidar de ti es tu mayor logro</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMBO BOX DE SELECCIÓN DE SERVICIO UNIFICADO -->
+  <div class="specialty-selector-container" style="max-width: 1200px; margin: 0 auto 2rem auto; padding: 0 2rem;">
+    <div class="selector-card" style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.5rem; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); flex-wrap: wrap; gap: 1rem;">
+      <div class="selector-info" style="display: flex; align-items: center; gap: 1rem;">
+        <mat-icon [style.color]="selectedSpecialty === 'psychologist' ? '#0ea5e9' : '#10b981'" style="font-size: 32px; width: 32px; height: 32px;">
+          {{ selectedSpecialty === 'psychologist' ? 'psychology' : 'restaurant_menu' }}
+        </mat-icon>
+        <div>
+          <h3 style="margin: 0; color: var(--text-primary); font-size: 1.2rem;">Tipo de Atención Requerida</h3>
+          <p style="margin: 0.25rem 0 0 0; color: var(--text-secondary); font-size: 0.9rem;">Elige la especialidad para consultar disponibilidad y agendar en tu calendario unificado.</p>
+        </div>
+      </div>
+      
+      <div class="combo-box-wrapper" style="min-width: 280px;">
+        <select [(ngModel)]="selectedSpecialty" (change)="onSpecialtyChange()" style="width: 100%; padding: 0.8rem 1.2rem; font-size: 1rem; font-weight: 600; color: var(--text-primary); background: var(--input-bg); border: 2px solid var(--border-color); border-radius: 8px; outline: none; cursor: pointer;">
+          <option value="psychologist">🧠 Psicología (Salud Emocional)</option>
+          <option value="nutritionist">🍏 Nutrición (Salud Alimentaria)</option>
+        </select>
+      </div>
+    </div>
   </div>
 
   <div class="layout" *ngIf="!loading; else spinner">
     
     <!-- Error State -->
-    <div class="empty-state error" *ngIf="errorMsg && !loading && !psychologistId && availablePsychologists.length === 0">
+    <div class="empty-state error-card" *ngIf="errorMsg && !loading && !assignedProfessionalId && availableProfessionals.length === 0">
       <mat-icon>error_outline</mat-icon>
       <p>{{ errorMsg }}</p>
     </div>
 
-    <!-- Directorio de Psicólogos -->
-    <div class="directory-card" *ngIf="!psychologistId && availablePsychologists.length > 0 && !loading" style="background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border-color); padding: 2rem;">
-      <div class="card-header" style="text-align: center; margin-bottom: 2rem;">
-        <mat-icon style="font-size: 48px; width: 48px; height: 48px; color: var(--primary-color);">group</mat-icon>
-        <h2>Directorio de Especialistas</h2>
-        <p style="color: var(--text-secondary);">Selecciona un psicólogo de tu facultad (<strong>{{studentFaculty}}</strong>) para comenzar a agendar citas.</p>
-        <button class="btn btn-primary" (click)="autoAssignPsychologist()" style="margin-top: 1rem;">
-          <mat-icon>auto_awesome</mat-icon> Asignación Automática
+    <!-- Directorio de Profesionales (Premium Card) -->
+    <div class="directory-card sidebar-card" *ngIf="!assignedProfessionalId && availableProfessionals.length > 0 && !loading">
+      <div class="card-header-main">
+        <mat-icon class="header-icon">group</mat-icon>
+        <h2>Directorio de Especialistas ({{ professionalRoleTitle }})</h2>
+        <p class="subtitle">Selecciona un {{ professionalRoleTitle.toLowerCase() }} de tu facultad (<strong>{{studentFaculty}}</strong>) para comenzar tu acompañamiento.</p>
+        <button class="btn-auto-assign" (click)="autoAssignProfessional()">
+          <mat-icon>auto_awesome</mat-icon> Asignación Automática Inteligente
         </button>
       </div>
       
-      <div class="psy-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1.5rem;">
-        <div class="psy-card card" *ngFor="let psy of availablePsychologists" style="padding: 1.5rem; text-align: center; background: var(--bg-primary); border-radius: 8px; border: 1px solid var(--border-color);">
-          <div class="avatar-wrapper" style="width: 80px; height: 80px; border-radius: 50%; overflow: hidden; margin: 0 auto 1rem; background: var(--bg-card);">
-            <img [src]="psy.avatar || 'assets/avatars/default.svg'" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover;" (error)="psy.avatar = ''">
-            <mat-icon *ngIf="!psy.avatar" style="font-size: 60px; width: 60px; height: 60px; line-height: 80px; color: var(--text-secondary);">account_circle</mat-icon>
+      <div class="psy-grid">
+        <div class="psy-card card" *ngFor="let prof of availableProfessionals">
+          <div class="avatar-wrapper">
+            <img [src]="prof.avatar || 'assets/avatars/default.svg'" alt="Avatar" (error)="prof.avatar = ''">
+            <mat-icon *ngIf="!prof.avatar">account_circle</mat-icon>
           </div>
-          <h3 style="margin: 0 0 0.5rem; color: var(--text-primary); font-size: 1.1rem;">{{ psy.name }}</h3>
-          <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: center; gap: 4px;">
-            <mat-icon style="font-size: 16px; width: 16px; height: 16px;">school</mat-icon> {{ psy.faculty }}
+          <h3>{{ prof.name }}</h3>
+          <p class="faculty-tag">
+            <mat-icon>school</mat-icon> {{ prof.faculty }}
           </p>
-          <button class="btn btn-outline" (click)="requestPsychologist(psy.id)" style="width: 100%; border: 1px solid var(--primary-color); color: var(--primary-color); background: transparent; padding: 8px; border-radius: 6px; cursor: pointer;">
-            Solicitar Asignación
+          <button class="btn-request" (click)="requestProfessional(prof.id)">
+            Solicitar Acompañamiento
           </button>
         </div>
       </div>
     </div>
 
-    <div class="calendar-card" *ngIf="psychologistId && !loading && !errorMsg">
-      <div *ngIf="hasActiveReservation && activeReservationDetails" class="active-reservation-banner" style="grid-column: 1 / -1; background: #f3e8ff; color: #7c3aed; border: 1px solid #d8b4fe; padding: 1rem; border-radius: 8px; margin-bottom: 1rem; text-align: center;">
-        <mat-icon style="vertical-align: middle; margin-right: 8px;">event_available</mat-icon>
-        Ya tienes una cita programada para el <strong>{{ formatSpanishDate(activeReservationDetails.date) }}</strong> a las <strong>{{ activeReservationDetails.time.substring(0,5) }}</strong>. No necesitas agendar otra.
+    <!-- BANNER UNIFICADO PREMIUM: ESPECIALISTA TRATANTE + ESTADO DE CITA -->
+    <div class="master-unified-banner" *ngIf="assignedProfessionalId && !loading && !errorMsg" style="grid-column: 1 / -1; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 24px; padding: 2rem; box-shadow: 0 8px 30px rgba(0,0,0,0.04); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 2.5rem; position: relative; overflow: hidden;">
+      <div class="card-bg-glow" style="position: absolute; top: 0; right: 0; width: 450px; height: 100%; background: linear-gradient(135deg, rgba(139, 92, 246, 0.12), rgba(16, 185, 129, 0.12)); pointer-events: none;"></div>
+      
+      <!-- LADO IZQUIERDO: PERFIL DEL ESPECIALISTA -->
+      <div class="prof-main-info" style="display: flex; align-items: center; gap: 1.8rem; flex-wrap: wrap; flex: 1; min-width: 320px;">
+        <div class="avatar-container" style="width: 96px; height: 96px; border-radius: 50%; border: 3px solid #8b5cf6; padding: 4px; background: var(--input-bg); box-shadow: 0 6px 20px rgba(139, 92, 246, 0.2); display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0;">
+          <img *ngIf="professionalAvatar" [src]="professionalAvatar" alt="Avatar Especialista" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+          <mat-icon *ngIf="!professionalAvatar" style="font-size: 54px; width: 54px; height: 54px; color: #8b5cf6;">health_and_safety</mat-icon>
+        </div>
+
+        <div class="prof-details" style="display: flex; flex-direction: column; gap: 4px;">
+          <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+            <span style="background: rgba(139, 92, 246, 0.15); color: #8b5cf6; border: 1px solid rgba(139, 92, 246, 0.3); padding: 4px 14px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">
+              {{ professionalRoleTitle }} Tratante Asignado
+            </span>
+            <span style="background: #10b981; color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; display: flex; align-items: center; gap: 4px; box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);">
+              <mat-icon style="font-size: 14px; width: 14px; height: 14px;">verified</mat-icon> Enlace Activo
+            </span>
+          </div>
+          <h2 style="margin: 0.3rem 0 0.1rem 0; color: var(--text-primary); font-size: 1.8rem; font-weight: 700; letter-spacing: -0.02em;">{{ professionalName }}</h2>
+          <p style="margin: 0; color: var(--text-secondary); font-size: 0.95rem; display: flex; align-items: center; gap: 6px;">
+            <mat-icon style="font-size: 16px; width: 16px; height: 16px; color: #8b5cf6;">email</mat-icon> {{ professionalEmail }}
+          </p>
+        </div>
       </div>
 
-      <!-- CALENDARIO -->
+      <!-- LADO DERECHO: ESTADO DINÁMICO DE CITA Y MODALIDAD -->
+      <div class="appointment-status-container" style="display: flex; flex-direction: column; gap: 12px; flex: 1; min-width: 380px; z-index: 1;">
+        
+        <!-- ESTADO 1: CON CITA ACTIVA -->
+        <div *ngIf="hasActiveReservation && activeReservationDetails" style="background: linear-gradient(135deg, #ede9fe, #f5f3ff); border: 1px solid #c4b5fd; padding: 1.5rem; border-radius: 20px; box-shadow: 0 6px 20px rgba(139, 92, 246, 0.15); display: flex; flex-direction: column; gap: 14px;">
+          <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="background: #8b5cf6; color: white; padding: 10px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);">
+                <mat-icon>event_available</mat-icon>
+              </div>
+              <div>
+                <strong style="color: #4c1d95; font-size: 1.15rem; font-weight: 700; display: block;">¡Cita Confirmada y Protegida!</strong>
+                <span style="color: #581c87; font-size: 0.95rem; display: block; margin-top: 2px;">Para el <strong>{{ formatSpanishDate(activeReservationDetails.date) }}</strong> a las <strong>{{ activeReservationDetails.time.substring(0,5) }}</strong></span>
+              </div>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="background: #6d28d9; color: white; padding: 6px 14px; border-radius: 14px; font-size: 0.8rem; font-weight: 700; text-transform: uppercase;">
+                {{ activeReservationDetails.modality === 'presencial' ? '🏢 Presencial' : '🌐 Virtual' }}
+              </span>
+              <button class="btn-cancel-direct" (click)="openCancelModalDirect(activeReservationDetails)" style="background: #ef4444; color: white; padding: 6px 14px; border-radius: 14px; font-size: 0.85rem; font-weight: 600; border: none; cursor: pointer; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3); transition: all 0.2s;">
+                <mat-icon style="font-size: 16px; width: 16px; height: 16px;">cancel</mat-icon> Cancelar
+              </button>
+            </div>
+          </div>
+
+          <div *ngIf="activeReservationDetails.modality === 'presencial'" style="border-top: 1px dashed #c4b5fd; padding-top: 14px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div style="font-size: 0.95rem; color: #4c1d95;">
+              <strong>Edificio:</strong> {{ activeReservationDetails.building || 'Principal' }} — <strong>Consultorio:</strong> {{ activeReservationDetails.officeRoom || 'Privado' }}
+              <span *ngIf="professionalFacultyName" style="display: block; font-size: 0.85rem; color: #6b21a8; margin-top: 2px;">📌 {{ professionalFacultyName }}</span>
+            </div>
+            <a *ngIf="activeReservationDetails.virtualTourUrl" [href]="activeReservationDetails.virtualTourUrl" target="_blank" style="display: flex; align-items: center; gap: 6px; background: #8b5cf6; color: white; padding: 8px 14px; border-radius: 10px; text-decoration: none; font-weight: 600; font-size: 0.85rem; box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);">
+              <mat-icon style="font-size: 16px; width: 16px; height: 16px;">360</mat-icon> Ver Recorrido Virtual BUAP
+            </a>
+          </div>
+
+          <div *ngIf="activeReservationDetails.modality !== 'presencial'" style="border-top: 1px dashed #c4b5fd; padding-top: 14px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div style="font-size: 0.95rem; color: #4c1d95;">
+              <strong>Enlace de Videollamada:</strong> {{ activeReservationDetails.location || 'Consultorio Virtual' }}
+              <span style="display: block; font-size: 0.82rem; color: #10b981; margin-top: 2px;">📌 Enlace fijo establecido por tu especialista tratante</span>
+            </div>
+            <a *ngIf="activeReservationDetails.location && (activeReservationDetails.location.includes('http') || activeReservationDetails.location.includes('meet') || activeReservationDetails.location.includes('zoom') || activeReservationDetails.location.includes('teams'))" [href]="activeReservationDetails.location.startsWith('http') ? activeReservationDetails.location : 'https://' + activeReservationDetails.location" target="_blank" style="display: flex; align-items: center; gap: 6px; background: #10b981; color: white; padding: 8px 16px; border-radius: 12px; text-decoration: none; font-weight: 700; font-size: 0.85rem; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3); transition: all 0.2s;">
+              <mat-icon style="font-size: 18px; width: 18px; height: 18px;">videocam</mat-icon> 🟢 Ingresar a Videollamada
+            </a>
+          </div>
+        </div>
+
+        <!-- ESTADO 2: SIN CITA ACTIVA (MOSTRAR MODALIDAD Y ANIMAR A RESERVAR) -->
+        <div *ngIf="!hasActiveReservation" style="background: var(--input-bg); border: 1px solid var(--border-color); padding: 1.4rem 1.6rem; border-radius: 20px; display: flex; flex-direction: column; gap: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.02);">
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px;">
+            <span style="font-size: 0.85rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em;">Modalidad de Atención</span>
+            <span style="background: #8b5cf6; color: white; padding: 4px 12px; border-radius: 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase;">
+              {{ professionalModality === 'presencial' ? '🏢 Presencial' : '🌐 Virtual' }}
+            </span>
+          </div>
+          
+          <div *ngIf="professionalModality === 'presencial'" style="color: var(--text-primary); font-size: 1rem;">
+            <strong>Edificio:</strong> {{ professionalBuilding || 'Principal' }} — <strong>Consultorio:</strong> {{ professionalOfficeRoom || 'Privado' }}
+            <span *ngIf="professionalFacultyName" style="display: block; font-size: 0.85rem; color: #8b5cf6; margin-top: 2px;">📌 {{ professionalFacultyName }}</span>
+          </div>
+          
+          <div *ngIf="professionalModality === 'virtual'" style="color: var(--text-primary); font-size: 1rem;">
+            <strong>Enlace de Videollamada:</strong> {{ professionalLocation || 'Consultorio Virtual' }}
+            <span style="display: block; font-size: 0.85rem; color: #8b5cf6; margin-top: 2px;">📌 Enlace permanente establecido en la configuración del especialista</span>
+          </div>
+
+          <div style="border-top: 1px solid var(--border-color); padding-top: 10px; display: flex; align-items: center; gap: 8px; color: #10b981; font-size: 0.9rem; font-weight: 600;">
+            <mat-icon style="font-size: 18px; width: 18px; height: 18px;">event_available</mat-icon> ¡Calendario abierto! Selecciona un día verde abajo para agendar.
+          </div>
+        </div>
+        
+        <a *ngIf="!hasActiveReservation && professionalModality === 'presencial' && professionalVirtualTourUrl" [href]="professionalVirtualTourUrl" target="_blank" style="background: linear-gradient(135deg, #8b5cf6, #a78bfa); color: white; padding: 10px 18px; border-radius: 14px; font-weight: 600; font-size: 0.9rem; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3); transition: all 0.2s;">
+          <mat-icon style="font-size: 20px; width: 20px; height: 20px;">360</mat-icon> Abrir Recorrido Virtual BUAP 360°
+        </a>
+      </div>
+    </div>
+
+    <!-- CALENDARIO PREMIUM UNIFICADO -->
+    <div class="calendar-card" *ngIf="assignedProfessionalId && !loading && !errorMsg">
+
       <div class="cal-header">
         <button (click)="prevMonth()" class="nav-btn"><mat-icon>chevron_left</mat-icon></button>
         <span class="month-title">{{ monthYear | titlecase }}</span>
@@ -94,32 +233,33 @@
       </div>
     </div>
 
-    <!-- HUECOS DISPONIBLES -->
-    <div class="slots-card">
-      <div *ngIf="selectedDateStr(); else noDay">
-        <h3>Horarios Disponibles</h3>
+    <!-- HUECOS DISPONIBLES PREMIUM -->
+    <div class="slots-card" *ngIf="assignedProfessionalId && !loading && !errorMsg">
+      <div *ngIf="selectedDateStr(); else noDay" class="slots-content">
+        <h3>Horarios Disponibles ({{ professionalRoleTitle }})</h3>
         <p class="subtitle">{{ selectedDateStr() | date:'mediumDate' }}</p>
         
         <div class="slots-grid">
-        <button *ngFor="let slot of availableSlots()" 
-                class="slot-btn"
-                [class.my-reservation]="slot.status === 'my_reservation'"
-                (click)="openModal(slot)">
-          <mat-icon *ngIf="slot.status === 'my_reservation'">event_available</mat-icon>
-          <mat-icon *ngIf="slot.status !== 'my_reservation'">schedule</mat-icon>
-          {{ slot.time }}
-        </button>
-      </div>
+          <button *ngFor="let slot of availableSlots()" 
+                  class="slot-btn"
+                  [class.my-reservation]="slot.status === 'my_reservation'"
+                  (click)="openModal(slot)">
+            <mat-icon *ngIf="slot.status === 'my_reservation'">event_available</mat-icon>
+            <mat-icon *ngIf="slot.status !== 'my_reservation'">schedule</mat-icon>
+            {{ slot.time }}
+          </button>
+        </div>
         
         <div *ngIf="availableSlots().length === 0" class="empty-state">
-          No hay más horarios para este día.
+          <mat-icon>auto_awesome</mat-icon>
+          <p>No hay más horarios para este día. Explora otras fechas en verde.</p>
         </div>
       </div>
       
       <ng-template #noDay>
         <div class="empty-state">
           <mat-icon>event_available</mat-icon>
-          <p>Selecciona un día marcado en verde en el calendario.</p>
+          <p>Selecciona un día marcado en verde en el calendario para ver los horarios.</p>
         </div>
       </ng-template>
     </div>
@@ -132,7 +272,7 @@
         <img src="/amati-logo.svg" alt="Amati Logo" class="amati-logo-pulse" />
       </div>
       <h3 class="loading-title">Consultando disponibilidad en tiempo real...</h3>
-      <p class="loading-subtitle">Sincronizando horarios con la Jefatura de Psicología</p>
+      <p class="loading-subtitle">Sincronizando horarios con el personal de la salud</p>
     </div>
   </ng-template>
 

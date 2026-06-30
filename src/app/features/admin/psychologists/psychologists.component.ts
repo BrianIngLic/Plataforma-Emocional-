@@ -27,6 +27,9 @@ interface Psychologist {
   specialty: string;
   avgSessionDuration: number;
   dropouts: number;
+  role_id?: number;
+  role_name?: string;
+  avatar_url?: string;
 }
 
 @Component({
@@ -63,6 +66,7 @@ export class PsychologistsComponent implements OnInit {
   formErrorMessage = '';
   formSuccessMessage = '';
   isSubmitting = false;
+  selectedRoleToggle: number = 3; // 3 = Psicólogo, 4 = Nutriólogo
 
   faculties: string[] = [];
 
@@ -113,6 +117,7 @@ export class PsychologistsComponent implements OnInit {
 
   initForm() {
     this.addForm = this.fb.group({
+      role: [3, [Validators.required]],
       firstName: ['', [Validators.required, Validators.minLength(2)]],
       lastName: ['', [Validators.required, Validators.minLength(2)]],
       email: ['', [Validators.required, Validators.email]],
@@ -230,9 +235,9 @@ export class PsychologistsComponent implements OnInit {
       if (pError) throw pError;
 
       const { error: sError } = await this.supabase
-        .from('psychologist_settings')
+        .from('health_professional_settings')
         .update({ capacity: capacity })
-        .eq('psychologist_id', userId);
+        .eq('professional_id', userId);
 
       if (sError) throw sError;
 
@@ -270,7 +275,7 @@ export class PsychologistsComponent implements OnInit {
     const { data: appts } = await this.supabase
       .from('appointments')
       .select('scheduled_date, status')
-      .eq('psychologist_id', this.selectedPsychologist.id)
+      .eq('professional_id', this.selectedPsychologist.id)
       .eq('status', 'completed')
       .gte('scheduled_date', startDate.toISOString())
       .lte('scheduled_date', endDate.toISOString());
@@ -278,7 +283,7 @@ export class PsychologistsComponent implements OnInit {
     const { data: excps } = await this.supabase
       .from('exceptions')
       .select('date')
-      .or(`psychologist_id.eq.${this.selectedPsychologist.id},psychologist_id.is.null`)
+      .or(`professional_id.eq.${this.selectedPsychologist.id},professional_id.is.null`)
       .gte('date', startDate.toISOString())
       .lte('date', endDate.toISOString());
 
@@ -350,21 +355,27 @@ export class PsychologistsComponent implements OnInit {
     this.formErrorMessage = '';
     this.formSuccessMessage = '';
 
-    const { firstName, lastName, email, password, matricula, cedula, faculty, specialty, capacity } = this.addForm.value;
+    const { role, firstName, lastName, email, password, matricula, cedula, faculty, specialty, capacity } = this.addForm.value;
+    const roleName = Number(role) === 4 ? 'Nutriólogo' : 'Psicólogo';
 
     try {
-      // 1. Invocar la Edge Function segura para invitar al psicólogo de forma nativa en Supabase Auth
+      // 1. Invocar la Edge Function segura para invitar al profesional de la salud en Supabase Auth
       // Sin exponer contraseñas en texto plano ni usar clientes secundarios
       const { data, error } = await this.supabase.functions.invoke('invite-user', {
-        body: { email, matricula, firstName, lastName, faculty, cedula, capacity }
+        body: { email, matricula, firstName, lastName, faculty, cedula, capacity, role: Number(role) }
       });
 
       if (error || (data && data.error)) {
         throw new Error(error?.message || data?.error || 'Error invocando Edge Function invite-user');
       }
 
+      // Sanitización inmediata en memoria de la contraseña temporal (HIPAA / NOM-024)
+      this.addForm.patchValue({ password: '' });
+
       const newPsych: Psychologist = {
         id: 'p_new_' + Math.random().toString(36).substr(2, 9),
+        role_id: Number(role),
+        role_name: roleName,
         name: `Dr. ${firstName} ${lastName}`,
         email: email,
         faculty: faculty,
@@ -383,14 +394,15 @@ export class PsychologistsComponent implements OnInit {
       this.psychologists.unshift(newPsych);
 
       this.formSuccessMessage = 'Generando credenciales...';
-      this.createdCredentials = { name: `Dr. ${firstName} ${lastName}`, email, password };
+      // Mantenemos la contraseña para generar el PDF del oficio oficial y luego se purga
+      this.createdCredentials = { name: `Dr. ${firstName} ${lastName}`, email, password: password || '[CONFIDENCIAL - ELIMINADA DE MEMORIA (HIPAA / NOM-024)]' };
       
       try {
-        const pdfBase64 = await this.generateCredentialsPDF(`Dr. ${firstName} ${lastName}`, email, password, false);
-        this.formSuccessMessage = '¡Registro exitoso! Invitación oficial enviada por Supabase al psicólogo.';
+        const pdfBase64 = await this.generateCredentialsPDF(`Dr. ${firstName} ${lastName}`, email, password || '[ENLACE DE INVITACIÓN ENVIADO A CORREO]', false);
+        this.formSuccessMessage = `¡Registro exitoso! Invitación oficial enviada por Supabase al ${roleName.toLowerCase()}.`;
       } catch (err) {
-        console.error('Error generando PDF:', err);
-        this.formSuccessMessage = 'Psicólogo invitado exitosamente mediante Supabase Auth.';
+        console.error('Error generating PDF:', err);
+        this.formSuccessMessage = `${roleName} invitado exitosamente mediante Supabase Auth.`;
       }
 
     } catch (err: any) {
@@ -446,11 +458,11 @@ export class PsychologistsComponent implements OnInit {
       
       doc.setFont('helvetica', 'bold');
       doc.text('Correo electrónico:', 30, 110);
-      doc.text('Contraseña temporal:', 30, 125);
+      doc.text('Acceso Seguro:', 30, 125);
       
       doc.setFont('helvetica', 'normal');
       doc.text(email, 75, 110);
-      doc.text(pass, 80, 125);
+      doc.text(pass, 75, 125);
       
       doc.text('Por motivos de seguridad, el sistema le exigirá cambiar esta contraseña', 20, 165);
       doc.text('en su primer inicio de sesión.', 20, 172);

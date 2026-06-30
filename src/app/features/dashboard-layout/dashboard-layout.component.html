@@ -89,6 +89,20 @@
 
   <!-- Área de Contenido Dinámico (Chat, Diario, etc) -->
   <main class="main-content" [class.expanded]="isSidebarCollapsed">
+    <!-- Banner de retroalimentación de sesión pendiente -->
+    <div *ngIf="pendingEvaluations().length > 0" class="eval-banner animate-slide-down">
+      <div class="banner-content">
+        <mat-icon class="banner-icon">star</mat-icon>
+        <span class="banner-text">
+          Tienes una sesión pendiente de evaluar con <strong>{{ pendingEvaluations()[0].professionalName }}</strong> del día {{ pendingEvaluations()[0].date | date:'dd/MM/yyyy' }}.
+        </span>
+      </div>
+      <a [routerLink]="['/dashboard/session-feedback', pendingEvaluations()[0].appointmentId]" class="banner-btn">
+        <span>Evaluar Sesión</span>
+        <mat-icon>chevron_right</mat-icon>
+      </a>
+    </div>
+
     <router-outlet></router-outlet>
   </main>
 </div>

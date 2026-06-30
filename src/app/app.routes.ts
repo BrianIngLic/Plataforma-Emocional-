@@ -20,6 +20,12 @@ export const routes: Routes = [
     data: { expectedRole: 'Psicologo' }
   },
   {
+    path: 'nutritionist',
+    loadChildren: () => import('./features/nutritionist/nutritionist.routes').then(m => m.NUTRITIONIST_ROUTES),
+    canActivate: [authGuard, roleGuard],
+    data: { expectedRole: 'Nutricionista' }
+  },
+  {
     path: 'admin',
     loadChildren: () => import('./features/admin/admin.routes').then(m => m.ADMIN_ROUTES),
     canActivate: [authGuard, roleGuard],

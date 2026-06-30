@@ -30,6 +30,10 @@ export class SettingsComponent implements OnInit {
 
   sessionDuration: number = 50;
   location: string = '';
+  modality: 'virtual' | 'presencial' = 'virtual';
+  selectedFacultyId: any = null;
+  building: string = '';
+  officeRoom: string = '';
   today = new Date().toISOString().split('T')[0];
   
   weekDays = [
@@ -79,6 +83,16 @@ export class SettingsComponent implements OnInit {
     if (settings) {
       this.sessionDuration = settings.session_duration;
       this.location = settings.location || '';
+      this.modality = settings.modality || 'virtual';
+      this.selectedFacultyId = settings.faculty_id || null;
+      this.building = settings.building || '';
+      this.officeRoom = settings.office_room || '';
+      
+      if (!this.selectedFacultyId && this.selectedFaculty) {
+        const match = this.faculties.find(f => f.name === this.selectedFaculty);
+        if (match) this.selectedFacultyId = match.id;
+      }
+
       const dbDays: WorkingDaysMap = settings.working_days || {};
       
       this.weekDays = this.weekDays.map(day => {
@@ -87,6 +101,9 @@ export class SettingsComponent implements OnInit {
         }
         return day;
       });
+    } else if (this.selectedFaculty) {
+      const match = this.faculties.find(f => f.name === this.selectedFaculty);
+      if (match) this.selectedFacultyId = match.id;
     }
   }
 
@@ -138,8 +155,8 @@ export class SettingsComponent implements OnInit {
     }
 
     try {
-      await this.agendaService.saveSettings(this.currentUserId, this.sessionDuration, workingDaysMap, this.location);
-      this.showFeedback('success', '¡Ajustes Guardados!', 'Tus horarios han sido actualizados exitosamente.');
+      await this.agendaService.saveSettings(this.currentUserId, this.sessionDuration, workingDaysMap, this.location, this.modality, this.selectedFacultyId ? Number(this.selectedFacultyId) : null, this.building, this.officeRoom);
+      this.showFeedback('success', '¡Ajustes Guardados!', 'Tus horarios y lugar de atención han sido actualizados exitosamente.');
     } catch (e) {
       console.error(e);
       this.showFeedback('error', 'Error', 'Ocurrió un error al guardar los ajustes.');

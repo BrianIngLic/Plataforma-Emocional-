@@ -10,17 +10,17 @@
       
       <!-- PASO 1: Credenciales -->
       <mat-step [stepControl]="credentialsFormGroup" label="Credenciales">
-        <form [formGroup]="credentialsFormGroup" class="step-form">
+        <form [formGroup]="credentialsFormGroup" class="step-form" autocomplete="off">
           <p class="step-description">Ingresa tu número de matrícula institucional para comenzar.</p>
           
           <mat-form-field appearance="outline">
             <mat-label>Matrícula</mat-label>
-            <input matInput formControlName="matricula" placeholder="Ej. 202112345" required>
+            <input matInput formControlName="matricula" placeholder="Ej. 202112345" autocomplete="off" required>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>Correo Electrónico</mat-label>
-            <input matInput type="email" formControlName="email" placeholder="Ej. correo@buap.mx" required>
+            <input matInput type="email" formControlName="email" placeholder="Ej. correo@buap.mx" autocomplete="new-email" required>
             <mat-error *ngIf="credentialsFormGroup.get('email')?.hasError('required')">
               El correo es obligatorio.
             </mat-error>
@@ -31,7 +31,7 @@
 
           <mat-form-field appearance="outline">
             <mat-label>Contraseña</mat-label>
-            <input matInput type="password" formControlName="password" required>
+            <input matInput type="password" formControlName="password" autocomplete="new-password" required>
             <mat-error *ngIf="credentialsFormGroup.get('password')?.hasError('required')">
               La contraseña es obligatoria.
             </mat-error>
@@ -49,20 +49,22 @@
       <!-- PASO 2: Perfil -->
       <mat-step [stepControl]="profileFormGroup" label="Perfil">
         <form [formGroup]="profileFormGroup" class="step-form">
-          <p class="step-description">¿Cómo te llamas?</p>
+          <p class="step-description">Completa tus datos personales y académicos.</p>
+
+          <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; width: 100%;">
+            <mat-form-field appearance="outline">
+              <mat-label>Nombre(s)</mat-label>
+              <input matInput formControlName="firstName" required>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Apellidos</mat-label>
+              <input matInput formControlName="lastName" required>
+            </mat-form-field>
+          </div>
 
           <mat-form-field appearance="outline">
-            <mat-label>Nombre(s)</mat-label>
-            <input matInput formControlName="firstName" required>
-          </mat-form-field>
-
-          <mat-form-field appearance="outline">
-            <mat-label>Apellidos</mat-label>
-            <input matInput formControlName="lastName" required>
-          </mat-form-field>
-
-          <mat-form-field appearance="outline">
-            <mat-label>Facultad a la que perteneces</mat-label>
+            <mat-label>Facultad / Unidad Académica</mat-label>
             <input type="text"
                    placeholder="Escribe para buscar..."
                    matInput
@@ -74,6 +76,42 @@
                 {{f.name}}
               </mat-option>
             </mat-autocomplete>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Programa Educativo (Carrera)</mat-label>
+            <input matInput formControlName="programaEducativo" placeholder="Ej. Licenciatura en Nutrición" required>
+          </mat-form-field>
+
+          <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; width: 100%; align-items: center;">
+            <mat-form-field appearance="outline">
+              <mat-label>Teléfono Celular</mat-label>
+              <input matInput formControlName="celular" placeholder="Ej. 2221234567" required>
+              <mat-error *ngIf="profileFormGroup.get('celular')?.hasError('pattern')">
+                Debe tener 10 dígitos.
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Fecha de Nacimiento</mat-label>
+              <input matInput [matDatepicker]="picker" formControlName="fechaNacimiento">
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+          </div>
+
+          <div class="radio-group-container" style="margin-bottom: 1.25rem; text-align: left; width: 100%;">
+            <label class="radio-label" style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.5rem; font-weight: 500;">Sexo</label>
+            <mat-radio-group formControlName="sexo" class="radio-group" style="display: flex; gap: 1.5rem;" required>
+              <mat-radio-button value="Femenino" color="primary">Femenino</mat-radio-button>
+              <mat-radio-button value="Masculino" color="primary">Masculino</mat-radio-button>
+              <mat-radio-button value="Otro" color="primary">Otro</mat-radio-button>
+            </mat-radio-group>
+          </div>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Antecedentes Clínicos Familiares</mat-label>
+            <textarea matInput formControlName="antecedentesFamiliares" placeholder="Ej. Diabetes, Hipertensión u otras condiciones crónicas en la familia" rows="2" required></textarea>
           </mat-form-field>
 
           <div class="stepper-actions">

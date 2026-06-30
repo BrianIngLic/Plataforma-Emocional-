@@ -1,7 +1,7 @@
 # Tareas de Implementación (Spec-Driven Development)
 
 - [x] Crear el archivo `.constitution.md` en el repositorio base.
-- [x] Redactar la especificación formal en `spec.md` dividida por Skills.
+- [x] Redactar la especificación formal en `spec.md` dividida por Skills en orden numérico estricto.
 - [x] Configurar los perfiles de agentes en `.diana/agents.yaml`.
 
 ## Skill 1: Capa de Datos (PostgreSQL + PostgREST)
@@ -68,23 +68,11 @@
 
 ---
 
-## Skill 6: Mi Diario Personal (Fase actual: Ejecución)
-
-**6.0. Refactorización de Layout Central (`features/dashboard`)**
-- `[x]` Extraer el Sidebar de Chat hacia un componente global `DashboardLayoutComponent`.
-- `[x]` Configurar `<router-outlet>` y redirigir `/dashboard` a `/dashboard/chat`.
-
-**6.1. Servicio de Datos (`core/services/diary.service.ts`)**
-- `[x]` Desarrollar `DiaryService` para manejar el estado reactivo de las entradas del diario (CRUD simulado).
-
-**6.2. Interfaz de Usuario (`features/diary`)**
-- `[x]` Componente Principal: Vista dividida (Calendario interactivo a la izquierda, editor a la derecha).
-- `[x]` Editor: Campo de texto libre y selector Múltiple de Estado de Ánimo (Mood Tracker con iconos).
-- `[x]` Historial: Lógica del calendario para mostrar iconos en días con entradas guardadas.
-
-**6.3. Integración en el Dashboard**
-- `[x]` Crear `diary.routes.ts` y conectarlo como ruta hija bajo `/dashboard/diary`.
-- `[x]` Hacer que el botón "Mi Diario" del menú de navegación navegue dinámicamente a la ruta.
+## Skill 4: NutriMind (Módulo Alimentario)
+**4.1. Dashboard y Progresos**
+- `[ ]` Desarrollar el panel con barras de progreso para proteínas, grasas y carbohidratos.
+- `[ ]` Listado de comidas agrupadas por tiempo (desayuno, comida, cena, colaciones).
+*(Skill 4 se mantendrá sincronizada en el backlog)*
 
 ---
 
@@ -118,14 +106,39 @@
 - `[x]` Servicios: Actualizar `AgendaService.getSettings` y `getStudentAvailableSlots` para realizar un join con `faculties(id, name, virtual_tour_url)`.
 - `[x]` Interfaz del Psicólogo (`settings.component`): Añadir selector de modalidad (`Virtual` vs `Presencial`), con preselección de la facultad base del especialista, campo de edificio y número de oficina/aula.
 - `[x]` Interfaz del Estudiante (`student-agenda.component` y `appointment-modal.component`): Recuperar y mostrar el lugar de atención detallado y habilitar el botón "📍 Abrir Recorrido Virtual" apuntando a la URL inmersiva de la BUAP al agendar y en el banner de cita confirmada.
+- `[x]` Reserva Unificada Estudiantil: Modificar `student-agenda.component` y `appointment-modal.component` con un Combo Box de selección en el mismo calendario unificado y alertas emergentes si no se cuenta con especialista asignado.
 
 **5.7. Refactorización Arquitectónica: Herencia de Personal de la Salud**
-- `[ ]` Base y Modelos (`core/models` o `core/base`): Crear clase/estructura base `HealthProfessionalBase` que encapsule la lógica común de dashboard, agenda, directorio de pacientes y ajustes.
-- `[ ]` Refactor de Componentes Compartidos: Unificar las vistas y lógica redundante entre `features/psychologist` y `features/nutritionist`.
-- `[ ]` Lógica de Factor de Diferenciación (Notas Médicas): Mantener e inyectar dinámicamente `ClinicalNoteComponent` (Quill SOAP) para Psicólogos y `PerfilPaciente` (Gestión Nutricional + PDF) para Nutriólogos.
-- `[ ]` Ruteo y Guards: Adaptar las rutas para consumir la base común de Personal de la Salud manteniendo las URLs limpias (`/psychologist/...` y `/nutritionist/...`).
+- `[x]` Base y Modelos (`core/models` o `core/base`): Crear clase/estructura base `HealthProfessionalBase` que encapsule la lógica común de dashboard, agenda, directorio de pacientes y ajustes.
+- `[x]` Refactor de Componentes Compartidos: Unificar las vistas y lógica redundante entre `features/psychologist` y `features/nutritionist`.
+- `[x]` Lógica de Factor de Diferenciación (Notas Médicas): Mantener e inyectar dinámicamente `ClinicalNoteComponent` (Quill SOAP) para Psicólogos y `PerfilPaciente` (Gestión Nutricional + PDF) para Nutriólogos.
+- `[x]` Ruteo y Guards: Adaptar las rutas para consumir la base común de Personal de la Salud manteniendo las URLs limpias (`/psychologist/...` y `/nutritionist/...`).
 
-*(Skill 4 continúa pausada en el backlog)*
+**5.8. Sistema Híbrido de Difusión Simultánea (Web Push + WhatsApp API)**
+- `[x]` Arquitectura y Spec: Diseñar el modelo de Emisión Simultánea (*Dual Broadcast*) en `spect.md` local y global para mitigar restricciones de planes móviles prepago con redes sociales ilimitadas.
+- `[ ]` Base de Datos: Crear tabla `web_push_subscriptions` y añadir `mobile_phone`, `whatsapp_opt_in` y `dual_notification_status` a `users` y `appointments`.
+- `[ ]` Backend Webhook: Programar Orquestador Híbrido Simultáneo en Supabase Edge Functions (`Promise.allSettled` para Web Push y WhatsApp API).
+- `[ ]` Interfaz del Especialista: Refactorizar modal de cancelación de emergencia en `agenda.component.ts` de especialistas para incorporar motivo explícito y selección de emisión dual.
+
+---
+
+## Skill 6: Mi Diario Personal (Fase actual: Ejecución)
+
+**6.0. Refactorización de Layout Central (`features/dashboard`)**
+- `[x]` Extraer el Sidebar de Chat hacia un componente global `DashboardLayoutComponent`.
+- `[x]` Configurar `<router-outlet>` y redirigir `/dashboard` a `/dashboard/chat`.
+
+**6.1. Servicio de Datos (`core/services/diary.service.ts`)**
+- `[x]` Desarrollar `DiaryService` para manejar el estado reactivo de las entradas del diario (CRUD simulado).
+
+**6.2. Interfaz de Usuario (`features/diary`)**
+- `[x]` Componente Principal: Vista dividida (Calendario interactivo a la izquierda, editor a la derecha).
+- `[x]` Editor: Campo de texto libre y selector Múltiple de Estado de Ánimo (Mood Tracker con iconos).
+- `[x]` Historial: Lógica del calendario para mostrar iconos en días con entradas guardadas.
+
+**6.3. Integración en el Dashboard**
+- `[x]` Crear `diary.routes.ts` y conectarlo como ruta hija bajo `/dashboard/diary`.
+- `[x]` Hacer que el botón "Mi Diario" del menú de navegación navegue dinámicamente a la ruta.
 
 ---
 
@@ -155,31 +168,112 @@
 
 ---
 
-## Backlog Pendiente
-**Skill 8: Módulo de Administración (Core System)**
+## Skill 8: Módulo de Administración (Core System)
 - `[ ]` Dashboard de Administrador (`admin-layout.component`).
-- `[ ]` Formulario seguro de Alta de Personal Clínico (Psicólogos).
+- `[ ]` Formulario seguro de Alta de Personal Clínico (Psicólogos y Nutriólogos).
 - `[ ]` Panel de gestión de usuarios (suspensión, reactivación).
+- `[ ]` **Configuración de Marca de Agua Institucional:** Crear módulo en `features/admin/settings` para subir el logotipo/marca de agua oficial al bucket de Supabase Storage `institutional_assets`.
 
-**Skill 9: RoleGuard Security (Fase actual: Ejecutada)**
+---
+
+## Skill 9: RoleGuard Security (Fase actual: Ejecutada)
 - `[x]` Crear funcional `roleGuard` (`core/guards/role.guard.ts`) que evalúe `expectedRole`.
 - `[x]` Lógica de redirección inteligente al panel base correspondiente (`/dashboard`, `/psychologist`, `/admin`).
 - `[x]` Inyectar `roleGuard` y metadatos `data: { expectedRole }` en `app.routes.ts`.
 
 ---
 
-## Fase de Integración (Backend: PostgreSQL / PostgREST)
+## Skill 10: Sistema de Logros y Gamificación (Estilo Duolingo)
+- `[ ]` Base de Datos: Crear tablas `achievements`, `user_achievements`, `achievement_categories` con RLS en `db/schema.sql`.
+- `[ ]` Capa de Servicios (`core/services/achievements.service.ts`): Desarrollar lógica reactiva (Signals) para calcular rachas (*streaks*), acumular XP y verificar desbloqueos.
+- `[ ]` Interfaz de Gestión (Admin y Clínicos): Crear formulario en Angular para dar de alta logros globales (Admin) y logros de terapia personalizados (Psicólogos/Nutriólogos).
+- `[ ]` Interfaz Estudiantil (`features/achievements`): Diseñar la galería de logros con medallas Glassmorphism, barra de XP y contador de racha en el navbar.
+- `[ ]` Animaciones y Alertas: Implementar notificaciones PWA y SweetAlerts al completar un hito de gamificación.
 
-**9.1. Configuración del Entorno**
+---
+
+## Skill 11: Chat Interno Conectado con Meta Cloud API (WhatsApp Bidireccional)
+- `[ ]` Base de Datos: Crear tablas `internal_meta_chats` y `webhook_logs` en `schema.sql` con indexación para búsquedas rápidas.
+- `[ ]` Backend y Webhooks (`supabase/functions/meta-whatsapp-webhook`): Programar la Edge Function en Deno para enviar mensajes a la API de Meta y recibir respuestas entrantes de WhatsApp.
+- `[ ]` Capa de Servicios (`core/services/internal-chat.service.ts`): Conectar con Supabase Realtime para transmitir y recibir los mensajes en vivo sin recargar la página.
+- `[ ]` Interfaz de Command Center (`features/internal-chat`): Desarrollar el módulo de mensajería interna para Administradores y Médicos (lista de chats, panel central, burbujas de estado de entrega).
+- `[ ]` Ciberseguridad: Auditar el enmascaramiento de números y desinfección de Información Personal de Salud (PHI).
+
+---
+
+## Skill 12: Dossier Clínico Unificado, Marca de Agua y Meta Seal (Exportación Masiva PDF)
+- `[x]` Arquitectura Estricta de Código Abierto: Instalar y configurar `jsPDF` (sin dependencias comerciales o cerradas, respetando el ecosistema existente).
+- `[x]` Capa de Servicios (`core/services/dossier-export.service.ts`): Desarrollar orquestador de datos que unifique consultas de perfil, notas SOAP, registros nutricionales, diario personal y test de Amati IA.
+- `[x]` Marca de Agua Institucional: Aplicar marca de agua diagonal transparente (como membrete y fondo del PDF).
+- `[x]` Implementación de Meta Seal: Generar hash HMAC-SHA256 mediante `Web Crypto API` (`SubtleCrypto`), integrándolo como sello visible en el resumen ejecutivo y en los metadatos del PDF para garantizar el principio legal de No Repudio (NOM-024 / HIPAA).
+- `[x]` Interfaz de Usuario: Insertar botones de "📥 Exportar Dossier Completo" en el perfil del paciente dentro del Command Center clínico y administrativo.
+
+---
+
+## Fase 13: Fase de Integración Backend (PostgreSQL / PostgREST)
+
+**13.1. Configuración del Entorno**
 - `[x]` Configurar `environments/environment.ts` con credenciales de la API y llave de cifrado E2EE.
 - `[x]` Instalar cliente (Supabase JS o HttpClient) y librería criptográfica (`crypto-js`).
 - `[x]` Crear servicio base de conexión (`supabase.service.ts` y `crypto.service.ts`).
 
-**9.2. Refactorización de Autenticación**
+**13.2. Refactorización de Autenticación**
 - `[x]` Conectar `auth.service.ts` con la base de datos para login real y manejo de sesión JWT.
 - `[x]` Conectar el stepper de registro (`register.component.ts`) para guardar datos en las tablas `users`, `profiles` y `student_clinical_records`.
 
-**9.3. Refactorización de Skills**
+**13.3. Refactorización de Skills**
 - `[x]` Conectar `chat.service.ts` con la tabla `messages`.
 - `[x]` Conectar `diary.service.ts` (si existe la tabla, pendiente de crear en schema) o simular.
 - `[x]` Conectar listado de pacientes del psicólogo con las tablas reales.
+
+---
+
+## Skill 13: Sistema de Evaluación Post-Sesión — FIT Gamificado (Fase actual: Planeación)
+
+> **Base clínica:** Session Rating Scale (SRS, Duncan et al.), Working Alliance Inventory (WAI, Horvath & Greenberg), Session Impacts Scale (Elliott & Wexler), Hope Theory (Snyder).
+> **Metodología:** Feedback-Informed Treatment (FIT) + Routine Outcome Monitoring (ROM).
+> **Enfoque UX:** Gamificación con caritas emocionales (emoji-scale), tarjetas secuenciales y micro-animaciones.
+
+---
+
+**13.1. Base de Datos (`db/schema.sql` / migración)**
+- `[x]` Crear tabla `session_evaluations` con columnas: `id`, `appointment_id` (FK), `patient_id` (FK), `professional_id` (FK), `q1_global`, `q2_bond`, `q3_goals`, `q4_impact` (DECIMAL 2,1 cada una), `q5_comment` (TEXT nullable), `score_global` (DECIMAL 2,1 calculado), `rupture_flag` (TEXT: `critical`/`decline`/`healthy`/`pending`), `is_visible_to_professional` (BOOLEAN), `created_at`.
+- `[x]` Restricción UNIQUE en `appointment_id` (una sola evaluación por cita).
+- `[x]` Aplicar RLS: paciente solo puede INSERT en su propia fila; especialista solo SELECT sobre sus citas; admin SELECT sobre `score_global` y `rupture_flag` agregados por profesional.
+
+**13.2. Capa de Servicios (`core/services/session-evaluation.service.ts`)**
+- `[x]` Método `submitEvaluation(payload)`: INSERT + calcula `score_global` (q1×0.20 + q2×0.30 + q3×0.25 + q4×0.25) + determina `rupture_flag`.
+- `[x]` Método `getEvaluationByAppointment(appointmentId)`: bloquear doble envío.
+- `[x]` Método `getEvaluationsByProfessional(professionalId)`: agrega para panel del especialista y admin.
+- `[x]` Integrar con `appointments`: detectar citas recién marcadas como `completed` para habilitar el trigger en panel del estudiante.
+
+**13.3. Componente Emoji-Scale (Reutilizable) (`features/student/session-feedback/emoji-scale/`)**
+- `[x]` Crear `emoji-scale.component.ts/html/scss` con Input `@Input() question: string` y Output `@Output() scored: EventEmitter<number>`.
+- `[x]` 5 emojis pulsables (😞😐🙂😊🤩) con código de color progresivo (rojo → índigo).
+- `[x]` Micro-animación *bounce* al seleccionar 4–5; reacción empática suave al seleccionar 1–2.
+- `[x]` Auto-avance a siguiente tarjeta con *smooth slide* al pulsar un emoji.
+
+**13.4. Cuestionario Gamificado del Paciente (`features/student/session-feedback/`)**
+- `[x]` Crear `session-feedback.component.ts/html/scss`.
+- `[x]` Flujo de tarjetas secuenciales: Q1 → Q2 → Q3 → Q4 → Q5 (textarea libre) → Pantalla de cierre.
+- `[x]` Pantalla de cierre con mensaje motivacional y animación de confeti o partículas.
+- `[x]` Lógica: bloquear el cuestionario si ya fue respondido para esa `appointment_id`.
+- `[x]` Otorgar +10 XP al paciente al completar (integración con Skill 10 - `AchievementsService`).
+- `[x]` Integrar con la racha (*streak*) del día del paciente.
+
+**13.5. Trigger y Notificación en Panel del Estudiante**
+- `[x]` Consultar al cargar el dashboard del estudiante si existe alguna cita con `status = 'completed'` sin evaluación enviada → mostrar banner/card destacada: *"¡Evalúa tu sesión de hoy!"*.
+- `[x]` Ruteo: `/dashboard/session-feedback/:appointmentId` protegido por `AuthGuard`.
+- `[x]` Añadir ruta lazy-loaded en `dashboard.routes.ts`.
+
+**13.6. Panel del Especialista — Evaluaciones y Alertas**
+- `[x]` En el perfil de cada paciente del especialista: mostrar historial de evaluaciones post-sesión (`score_global` por fecha) en mini gráfica de línea.
+- `[x]` Badge de `rupture_flag` visible en la agenda junto a cada cita: `⚠️` `📉` `✅` `💬`.
+- `[x]` Mostrar el comentario cualitativo (`q5_comment`) en la vista de detalle de la cita cuando exista.
+- `[x]` Alerta longitudinal: detectar caída ≥ 0.7 puntos respecto a la sesión anterior del mismo paciente.
+
+**13.7. Panel Administrativo — Evaluación del Especialista**
+- `[x]` Conectar la columna "Evaluación" del panel de Personal Clínico (`admin/psychologists`) a datos reales: promedio de `score_global` de todas las evaluaciones del profesional.
+- `[x]` Reemplazar el valor MOCK (`4.0 + Math.random()`) en `admin-stats.service.ts` por consulta real a `session_evaluations`.
+- `[x]` Mostrar el `rupture_flag` agregado en la vista de detalle del especialista.
+

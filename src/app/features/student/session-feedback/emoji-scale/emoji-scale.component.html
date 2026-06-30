@@ -1,0 +1,31 @@
+<div class="emoji-scale-container">
+  <div class="progress-bar-wrapper">
+    <div class="progress-info">
+      <span>Pregunta {{ questionNumber }} de {{ totalQuestions }}</span>
+      <span>{{ (questionNumber / totalQuestions) * 100 | number:'1.0-0' }}% completado</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" [style.width]="getProgressWidth()"></div>
+    </div>
+  </div>
+
+  <div class="question-box">
+    <h3>{{ question }}</h3>
+  </div>
+
+  <div class="emojis-row">
+    <button 
+      *ngFor="let emoji of emojis" 
+      type="button" 
+      class="emoji-btn" 
+      [class.selected]="selectedRating() === emoji.value"
+      [class.bounce]="selectedRating() === emoji.value && emoji.animation === 'bounce'"
+      [class.empathy-pulse]="selectedRating() === emoji.value && emoji.animation === 'empathy-pulse'"
+      (click)="selectEmoji(emoji.value)"
+      [style.--hover-color]="emoji.color"
+    >
+      <span class="emoji-char">{{ emoji.char }}</span>
+      <span class="emoji-label">{{ emoji.label }}</span>
+    </button>
+  </div>
+</div>

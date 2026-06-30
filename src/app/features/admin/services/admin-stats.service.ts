@@ -124,7 +124,7 @@ export class AdminStatsService {
       .select(`
         id, role_id, 
         profiles(faculty),
-        psychologist_settings(capacity)
+        health_professional_settings(capacity)
       `);
 
     const result = faculties.map(f => {
@@ -139,7 +139,7 @@ export class AdminStatsService {
           if (profileFac === f.name) {
             if (u.role_id === 3) {
               psychs++;
-              const sett = Array.isArray(u.psychologist_settings) ? u.psychologist_settings[0] : u.psychologist_settings;
+              const sett = Array.isArray(u.health_professional_settings) ? u.health_professional_settings[0] : u.health_professional_settings;
               if (sett) {
                 cap += sett.capacity || 0;
               }
@@ -181,16 +181,51 @@ export class AdminStatsService {
   async getPsychologistsWithStats(): Promise<any[]> {
     const supabase = this.supabaseService.supabase;
     
-    // 1. Obtener usuarios psicólogos y sus correos de auth.users mediante RPC segura (Zero-Trust)
-    const { data: users, error } = await supabase.rpc('get_admin_psychologists');
+    // 1. Obtener usuarios psicólogos y nutriólogos y sus correos de auth.users mediante RPC segura (Zero-Trust)
+    let { data: users, error } = await supabase.rpc('get_admin_health_professionals');
 
-    if (error || !users) return [];
+    if (error || !users) {
+      console.warn('⚠️ RPC get_admin_health_professionals no disponible (404/Error). Activando fallback transparente a tablas users, profiles y health_professional_settings...');
+      const { data: fallbackUsers, error: fbErr } = await supabase
+        .from('users')
+        .select(`
+          id, role_id, matricula,
+          profiles (first_name, last_name, faculty, celular, avatar_url),
+          health_professional_settings (capacity, location, modality)
+        `)
+        .in('role_id', [3, 4]);
 
-    // 2. Obtener la cantidad de pacientes asignados a cada psicólogo
+      if (fbErr || !fallbackUsers) {
+        console.error('❌ Error en fallback de getPsychologistsWithStats:', fbErr);
+        return [];
+      }
+
+      users = fallbackUsers.map((u: any) => {
+        const p = Array.isArray(u.profiles) ? u.profiles[0] : u.profiles;
+        const h = Array.isArray(u.health_professional_settings) ? u.health_professional_settings[0] : u.health_professional_settings;
+        return {
+          id: u.id,
+          role_id: u.role_id,
+          matricula: u.matricula || '',
+          first_name: p?.first_name || '',
+          last_name: p?.last_name || '',
+          email: `${u.matricula || u.id.slice(0, 8)}@ep.buap.mx`, // fallback email
+          faculty: p?.faculty || '',
+          celular: p?.celular || '',
+          capacity: h?.capacity || 40,
+          location: h?.location || 'Consultorio Virtual',
+          modality: h?.modality || 'virtual',
+          avatar_url: p?.avatar_url || ''
+        };
+      });
+    }
+
+    if (!users) return [];
+
+    // 2. Obtener la cantidad de pacientes asignados a cada profesional
     const { data: records } = await supabase
       .from('student_clinical_records')
-      .select('primary_psychologist_id')
-      .not('primary_psychologist_id', 'is', null);
+      .select('primary_psychologist_id, primary_nutritionist_id');
 
     const patientsMap: Record<string, number> = {};
     if (records) {
@@ -198,26 +233,47 @@ export class AdminStatsService {
         if (r.primary_psychologist_id) {
           patientsMap[r.primary_psychologist_id] = (patientsMap[r.primary_psychologist_id] || 0) + 1;
         }
+        if (r.primary_nutritionist_id) {
+          patientsMap[r.primary_nutritionist_id] = (patientsMap[r.primary_nutritionist_id] || 0) + 1;
+        }
       });
     }
 
     // 3. Obtener citas para calcular sesiones y asistencia
     const { data: appointments } = await supabase
       .from('appointments')
-      .select('psychologist_id, status')
-      .not('psychologist_id', 'is', null);
+      .select('professional_id, status')
+      .not('professional_id', 'is', null);
 
     const apptMap: Record<string, { scheduled: number; completed: number; canceled: number; total: number }> = {};
     if (appointments) {
       appointments.forEach(a => {
-        if (a.psychologist_id) {
-          if (!apptMap[a.psychologist_id]) {
-            apptMap[a.psychologist_id] = { scheduled: 0, completed: 0, canceled: 0, total: 0 };
+        if (a.professional_id) {
+          if (!apptMap[a.professional_id]) {
+            apptMap[a.professional_id] = { scheduled: 0, completed: 0, canceled: 0, total: 0 };
           }
-          apptMap[a.psychologist_id].total += 1;
-          if (a.status === 'scheduled') apptMap[a.psychologist_id].scheduled += 1;
-          if (a.status === 'completed') apptMap[a.psychologist_id].completed += 1;
-          if (a.status === 'canceled') apptMap[a.psychologist_id].canceled += 1;
+          apptMap[a.professional_id].total += 1;
+          if (a.status === 'scheduled') apptMap[a.professional_id].scheduled += 1;
+          if (a.status === 'completed') apptMap[a.professional_id].completed += 1;
+          if (a.status === 'canceled') apptMap[a.professional_id].canceled += 1;
+        }
+      });
+    }
+
+    // 4. Obtener calificaciones promedio reales
+    const { data: evals } = await supabase
+      .from('session_evaluations')
+      .select('professional_id, score_global');
+
+    const evalsMap: Record<string, { sum: number; count: number }> = {};
+    if (evals) {
+      evals.forEach(e => {
+        if (e.professional_id) {
+          if (!evalsMap[e.professional_id]) {
+            evalsMap[e.professional_id] = { sum: 0, count: 0 };
+          }
+          evalsMap[e.professional_id].sum += Number(e.score_global);
+          evalsMap[e.professional_id].count += 1;
         }
       });
     }
@@ -241,8 +297,14 @@ export class AdminStatsService {
       const sessionsScheduled = pastSessions > 0 ? pastSessions : 1;
       const sessionsCompleted = pastSessions > 0 ? stats.completed : 1;
 
+      // Calcular promedio real o usar 5.0 por defecto
+      const evalInfo = evalsMap[u.id];
+      const avgEval = evalInfo ? Math.round((evalInfo.sum / evalInfo.count) * 10) / 10 : 5.0;
+
       return {
         id: u.id,
+        role_id: u.role_id,
+        role_name: u.role_id === 4 ? 'Nutriólogo' : 'Psicólogo',
         name: `Dr. ${u.first_name || ''} ${u.last_name || ''}`.trim(),
         email: u.email || 'Sin correo registrado',
         faculty: u.faculty || 'Sin asignar',
@@ -251,11 +313,12 @@ export class AdminStatsService {
         attendanceRate: attendanceRate,
         sessionsCompleted: sessionsCompleted,
         sessionsScheduled: sessionsScheduled,
-        evaluation: 4.0 + Number(Math.random().toFixed(1)), // MOCK: Pendiente de implementar calificaciones
+        evaluation: avgEval,
         alert: alert,
-        specialty: 'General',
+        specialty: u.role_id === 4 ? 'Nutrición Clínica' : 'Psicología General',
         avgSessionDuration: 50,
-        dropouts: 0
+        dropouts: 0,
+        avatar_url: u.avatar_url || ''
       };
     });
   }
@@ -361,7 +424,7 @@ export class AdminStatsService {
         status,
         type,
         patient:users!patient_id (profiles(first_name, last_name, faculty)),
-        psychologist:users!psychologist_id (profiles(first_name, last_name))
+        psychologist:users!professional_id (profiles(first_name, last_name))
       `)
       .gte('start_time', startDate.toISOString())
       .lt('start_time', endDate.toISOString());

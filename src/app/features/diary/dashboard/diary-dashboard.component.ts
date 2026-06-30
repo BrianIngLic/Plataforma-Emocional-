@@ -29,7 +29,15 @@ export class DiaryDashboardComponent implements OnInit {
     { icon: '🙏', label: 'Agradecido' }
   ];
 
+  sleepOptions = [
+    { icon: '💤', label: 'Menos de 5h (Agotado)', value: 4 },
+    { icon: '🥱', label: '5 - 6 horas (Regular)', value: 6 },
+    { icon: '🌙', label: '7 - 8 horas (Óptimo)', value: 8 },
+    { icon: '✨', label: 'Más de 8h (Profundo)', value: 9 }
+  ];
+
   selectedMoods: string[] = [];
+  selectedSleep: number | null = null;
   diaryContent = '';
 
   // Gamificación y Rachas (Sin presión)
@@ -40,6 +48,7 @@ export class DiaryDashboardComponent implements OnInit {
   // Insignias Emocionales
   badges = [
     { id: 'explore', icon: '🌿', title: 'Explorador Emocional', desc: 'Registraste tus emociones en el diario con honestidad.', unlocked: true },
+    { id: 'sleep', icon: '🌙', title: 'Guardián del Sueño', desc: 'Registraste tus horas de descanso para entender tu energía vital.', unlocked: false },
     { id: 'brave', icon: '💖', title: 'Corazón Valiente', desc: 'Reconociste una emoción vulnerable (ansiedad o tristeza).', unlocked: false },
     { id: 'calm', icon: '✨', title: 'Mente en Calma', desc: 'Completaste un ciclo de respiración consciente en tu espacio de calma.', unlocked: false },
     { id: 'consistency', icon: '🌟', title: 'Faro de Luz', desc: 'Mantuviste tu diario activo durante 5 días seguidos.', unlocked: true }
@@ -70,8 +79,8 @@ export class DiaryDashboardComponent implements OnInit {
       return 'Es de valientes reconocer cuando el corazón pesa o el cuerpo está exhausto. Descansa sin culpa, mereces cuidarte.';
     } else if (this.selectedMoods.some(m => m.includes('Enojado'))) {
       return 'Tu enojo es válido y trae un mensaje sobre tus límites. Déjalo salir en estas páginas sin temor.';
-    } else if (this.selectedMoods.length > 0) {
-      return 'Cada emoción que sientes es un paso hacia tu autoconocimiento. Gracias por dedicarte este momento hoy.';
+    } else if (this.selectedMoods.length > 0 || this.selectedSleep !== null) {
+      return 'Cada emoción y cada hora de descanso son claves para tu bienestar. Gracias por dedicarte este momento hoy.';
     }
     return 'Este es tu refugio digital. Sin juicios, sin prisas. Escribe lo que necesites o practica un respiro.';
   }
@@ -158,12 +167,22 @@ export class DiaryDashboardComponent implements OnInit {
     }
   }
 
+  selectSleep(val: number) {
+    this.selectedSleep = this.selectedSleep === val ? null : val;
+    if (this.selectedSleep !== null) {
+      const b = this.badges.find(x => x.id === 'sleep');
+      if (b) b.unlocked = true;
+    }
+  }
+
   saveDiary() {
-    if (this.diaryContent.trim() && this.selectedMoods.length > 0) {
-      this.diaryService.saveEntry(this.diaryContent, this.selectedMoods);
+    if (this.diaryContent.trim() && (this.selectedMoods.length > 0 || this.selectedSleep !== null)) {
+      this.diaryService.saveEntry(this.diaryContent, this.selectedMoods, this.selectedSleep);
       this.diaryContent = '';
       this.selectedMoods = [];
+      this.selectedSleep = null;
       this.streakDays++;
+      
       this.dialog.open(FeedbackModalComponent, {
         width: '420px',
         data: {
@@ -179,7 +198,7 @@ export class DiaryDashboardComponent implements OnInit {
         data: {
           type: 'error',
           title: 'Faltan datos',
-          message: '🌿 Por favor selecciona al menos una emoción y escribe algunas palabras sobre tu sentir.',
+          message: '🌿 Por favor selecciona al menos una emoción o tus horas de descanso, y escribe algunas palabras sobre tu sentir.',
           btnText: 'Entendido'
         }
       });

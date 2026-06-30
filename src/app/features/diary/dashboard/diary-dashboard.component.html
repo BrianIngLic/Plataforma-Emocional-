@@ -68,6 +68,7 @@
               <span class="date">{{ entry.date | date:'dd/MM/yyyy HH:mm' }}</span>
               <div class="moods">
                 <span *ngFor="let mood of entry.moods" class="mood-chip">{{ mood }}</span>
+                <span *ngIf="entry.sleepHours" class="sleep-chip">🌙 {{ entry.sleepHours }}h sueño</span>
               </div>
             </div>
             <p class="content">{{ entry.content }}</p>
@@ -88,6 +89,19 @@
                     (click)="toggleMood(mood.label, mood.icon)">
               <span class="icon">{{ mood.icon }}</span>
               <span class="label">{{ mood.label }}</span>
+            </button>
+          </div>
+
+          <!-- SECCIÓN DE HORAS DE SUEÑO TERAPÉUTICA -->
+          <h3 class="section-sub-title">¿Cómo fue tu descanso anoche?</h3>
+          <p class="subtitle">El sueño influye directamente en tu estado de ánimo y energía vital.</p>
+          <div class="sleep-tracker">
+            <button class="sleep-btn" 
+                    *ngFor="let sleep of sleepOptions" 
+                    [class.selected]="selectedSleep === sleep.value"
+                    (click)="selectSleep(sleep.value)">
+              <span class="icon">{{ sleep.icon }}</span>
+              <span class="label">{{ sleep.label }}</span>
             </button>
           </div>
 

@@ -25,26 +25,30 @@ export class AgendaService {
 
   async getSettings(psychologistId: string) {
     const { data, error } = await this.supabase
-      .from('psychologist_settings')
-      .select('*')
-      .eq('psychologist_id', psychologistId)
+      .from('health_professional_settings')
+      .select('*, faculties(id, name, virtual_tour_url)')
+      .eq('professional_id', psychologistId)
       .maybeSingle();
     
     if (error && error.code !== 'PGRST116') {
       console.error('Error fetching settings:', error);
     }
-    return data;
+    return data as any;
   }
 
-  async saveSettings(psychologistId: string, duration: number, workingDays: WorkingDaysMap, location: string) {
+  async saveSettings(psychologistId: string, duration: number, workingDays: WorkingDaysMap, location: string, modality: string = 'virtual', facultyId: number | null = null, building: string = '', officeRoom: string = '') {
     const { data, error } = await this.supabase
-      .from('psychologist_settings')
+      .from('health_professional_settings')
       .upsert({ 
-        psychologist_id: psychologistId, 
+        professional_id: psychologistId, 
         session_duration: duration, 
         working_days: workingDays,
-        location: location || null
-      });
+        location: location || null,
+        modality: modality || 'virtual',
+        faculty_id: facultyId || null,
+        building: building || null,
+        office_room: officeRoom || null
+      }, { onConflict: 'professional_id' });
     
     if (error) throw error;
     return data;
@@ -52,9 +56,9 @@ export class AgendaService {
 
   async getExceptions(psychologistId: string) {
     const { data, error } = await this.supabase
-      .from('psychologist_exceptions')
+      .from('health_professional_exceptions')
       .select('*')
-      .or(`psychologist_id.eq.${psychologistId},psychologist_id.is.null`)
+      .or(`professional_id.eq.${psychologistId},professional_id.is.null`)
       .order('exception_date', { ascending: true });
       
     if (error) console.error('Error fetching exceptions:', error);
@@ -63,7 +67,7 @@ export class AgendaService {
 
   async addException(psychologistId: string, date: string, desc: string, startTime?: string, endTime?: string) {
     const payload: any = {
-      psychologist_id: psychologistId, 
+      professional_id: psychologistId, 
       exception_date: date, 
       description: desc 
     };
@@ -74,7 +78,7 @@ export class AgendaService {
     }
 
     const { data, error } = await this.supabase
-      .from('psychologist_exceptions')
+      .from('health_professional_exceptions')
       .insert(payload)
       .select()
       .single();
@@ -85,7 +89,7 @@ export class AgendaService {
 
   async deleteException(id: string) {
     const { error } = await this.supabase
-      .from('psychologist_exceptions')
+      .from('health_professional_exceptions')
       .delete()
       .eq('id', id);
       
@@ -107,7 +111,7 @@ export class AgendaService {
     const [settings, exceptionsRes, appointmentsRes] = await Promise.all([
       this.getSettings(psychologistId),
       this.getExceptions(psychologistId),
-      this.supabase.from('appointments').select('*').eq('psychologist_id', psychologistId).gte('scheduled_date', startDate).lte('scheduled_date', endDate)
+      this.supabase.from('appointments').select('*').eq('professional_id', psychologistId).gte('scheduled_date', startDate).lte('scheduled_date', endDate).eq('status', 'scheduled')
     ]);
 
     // DEBUG EXTREMO:
@@ -137,8 +141,15 @@ export class AgendaService {
     );
     const hasActiveReservation = !!activeAppointment;
     const activeReservationDetails = activeAppointment ? {
+      id: activeAppointment.id,
       date: activeAppointment.scheduled_date,
-      time: activeAppointment.start_time
+      time: activeAppointment.start_time,
+      modality: settings.modality || 'virtual',
+      location: settings.location || 'Consultorio Virtual',
+      building: settings.building || '',
+      officeRoom: settings.office_room || '',
+      facultyName: (settings.faculties || settings.faculty) ? (Array.isArray(settings.faculties || settings.faculty) ? (settings.faculties || settings.faculty)[0]?.name : (settings.faculties || settings.faculty)?.name) : '',
+      virtualTourUrl: (settings.faculties || settings.faculty) ? (Array.isArray(settings.faculties || settings.faculty) ? (settings.faculties || settings.faculty)[0]?.virtual_tour_url : (settings.faculties || settings.faculty)?.virtual_tour_url) : ''
     } : null;
 
     const availableDays = new Map();
@@ -193,8 +204,11 @@ export class AgendaService {
         });
       }
       
+      const hasMyRes = availableTimes.some(t => t.status === 'my_reservation');
       let status = 'off';
-      if (currentDate < minAllowedDate) {
+      if (hasMyRes) {
+        status = 'available';
+      } else if (currentDate < minAllowedDate) {
         status = 'blind';
       } else if (availableTimes.length > 0) {
         status = 'available';
@@ -203,7 +217,7 @@ export class AgendaService {
       }
 
       const hasSlots = availableTimes.some(t => t.status !== 'taken');
-      availableDays.set(dateStr, { status, hasSlots, slots: availableTimes });
+      availableDays.set(dateStr, { status, hasSlots: hasMyRes || hasSlots, slots: availableTimes });
     }
     
     return { daysMap: availableDays, hasActiveReservation, activeReservationDetails };

@@ -204,7 +204,7 @@
   display: flex;
   align-items: center;
   gap: 1rem;
-  width: 200px;
+  width: 280px;
   flex-shrink: 0;
 
   .psych-avatar {
@@ -677,6 +677,10 @@
 }
 
 @media (max-width: 900px) {
+  .psych-table-header {
+    display: none !important;
+  }
+
   .psych-row {
     flex-direction: column;
     align-items: flex-start;

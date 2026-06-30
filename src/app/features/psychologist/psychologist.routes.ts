@@ -8,15 +8,15 @@ export const PSYCHOLOGIST_ROUTES: Routes = [
     children: [
       {
         path: 'dashboard',
-        loadComponent: () => import('./dashboard/dashboard.component').then(m => m.PsychologistDashboardComponent)
+        loadComponent: () => import('../health-professional/dashboard/dashboard.component').then(m => m.HealthProfessionalDashboardComponent)
       },
       {
         path: 'patients',
-        loadComponent: () => import('./patients/patients.component').then(m => m.PatientsComponent)
+        loadComponent: () => import('../health-professional/patients/patients.component').then(m => m.HealthProfessionalPatientsComponent)
       },
       {
         path: 'agenda',
-        loadComponent: () => import('./agenda/agenda.component').then(m => m.AgendaComponent)
+        loadComponent: () => import('../health-professional/agenda/agenda.component').then(m => m.HealthProfessionalAgendaComponent)
       },
       {
         path: 'patients/:id',
@@ -24,7 +24,7 @@ export const PSYCHOLOGIST_ROUTES: Routes = [
       },
       {
         path: 'settings',
-        loadComponent: () => import('./settings/settings.component').then(m => m.SettingsComponent)
+        loadComponent: () => import('../health-professional/settings/settings.component').then(m => m.HealthProfessionalSettingsComponent)
       },
       {
         path: 'clinical-note/:id',

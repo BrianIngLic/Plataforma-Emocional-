@@ -322,3 +322,34 @@
   50% { transform: scale(1.1); filter: drop-shadow(0 0 18px rgba(139, 92, 246, 0.7)); }
   100% { transform: scale(0.95); filter: drop-shadow(0 0 8px rgba(139, 92, 246, 0.3)); }
 }
+
+/* Badges de Alianza Terapéutica FIT */
+.badge {
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  font-family: monospace;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  
+  &.badge-danger {
+    background: rgba(239,68,68,0.12) !important;
+    color: #ef4444 !important;
+    border: 1px solid rgba(239,68,68,0.2) !important;
+  }
+  
+  &.badge-warning {
+    background: rgba(245,158,11,0.12) !important;
+    color: #f59e0b !important;
+    border: 1px solid rgba(245,158,11,0.2) !important;
+  }
+  
+  &.badge-success {
+    background: rgba(16,185,129,0.12) !important;
+    color: #10b981 !important;
+    border: 1px solid rgba(16,185,129,0.2) !important;
+  }
+}

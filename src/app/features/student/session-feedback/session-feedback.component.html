@@ -1,0 +1,135 @@
+<div class="feedback-page-wrapper">
+  <div *ngIf="isLoading()" class="loading-state">
+    <div class="spinner"></div>
+    <p>Cargando cuestionario de retroalimentación...</p>
+  </div>
+
+  <div *ngIf="alreadyAnswered() && !isLoading()" class="card-glass center-content">
+    <mat-icon class="completed-icon warning">assignment_turned_in</mat-icon>
+    <h2>Esta sesión ya fue evaluada</h2>
+    <p class="desc">Gracias por tus comentarios previos. La retroalimentación es inmutable para asegurar la transparencia clínica.</p>
+    <button class="action-btn" (click)="finish()">Volver al Inicio</button>
+  </div>
+
+  <div *ngIf="!isLoading() && !alreadyAnswered()" class="feedback-card card-glass">
+    <!-- Back Button for Steps 1-4 -->
+    <button *ngIf="currentStep() > 0 && currentStep() < 5" class="back-btn" (click)="goBack()">
+      <mat-icon>arrow_back</mat-icon>
+      <span>Atrás</span>
+    </button>
+
+    <!-- Header info -->
+    <div *ngIf="currentStep() < 5" class="card-header-info">
+      <h2>Retroalimentación Post-Sesión</h2>
+      <p class="prof-label">Con el especialista: <strong>{{ professionalName }}</strong></p>
+    </div>
+
+    <!-- Cuestionario Pasos -->
+    <div class="steps-container">
+      
+      <!-- Paso Q1 -->
+      <div *ngIf="currentStep() === 0" class="step-card slide-in">
+        <app-emoji-scale 
+          [question]="questions[0].question" 
+          [questionNumber]="1" 
+          [totalQuestions]="5" 
+          (scored)="handleScore($event)">
+        </app-emoji-scale>
+      </div>
+
+      <!-- Paso Q2 -->
+      <div *ngIf="currentStep() === 1" class="step-card slide-in">
+        <app-emoji-scale 
+          [question]="questions[1].question" 
+          [questionNumber]="2" 
+          [totalQuestions]="5" 
+          (scored)="handleScore($event)">
+        </app-emoji-scale>
+      </div>
+
+      <!-- Paso Q3 -->
+      <div *ngIf="currentStep() === 2" class="step-card slide-in">
+        <app-emoji-scale 
+          [question]="questions[2].question" 
+          [questionNumber]="3" 
+          [totalQuestions]="5" 
+          (scored)="handleScore($event)">
+        </app-emoji-scale>
+      </div>
+
+      <!-- Paso Q4 -->
+      <div *ngIf="currentStep() === 3" class="step-card slide-in">
+        <app-emoji-scale 
+          [question]="questions[3].question" 
+          [questionNumber]="4" 
+          [totalQuestions]="5" 
+          (scored)="handleScore($event)">
+        </app-emoji-scale>
+      </div>
+
+      <!-- Paso Q5 (Texto Libre) -->
+      <div *ngIf="currentStep() === 4" class="step-card slide-in comment-step">
+        <div class="progress-bar-wrapper">
+          <div class="progress-info">
+            <span>Pregunta 5 de 5</span>
+            <span>80% completado</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" style="width: 80%;"></div>
+          </div>
+        </div>
+
+        <div class="question-box">
+          <h3>¿Hay algo más que te gustaría agregar, cambiar o comentar sobre la sesión de hoy?</h3>
+          <p class="sub-label">Este comentario es confidencial y ayudará a ajustar la dinámica de tu proceso.</p>
+        </div>
+
+        <div class="text-area-box">
+          <textarea 
+            [(ngModel)]="answers.q5" 
+            placeholder="Escribe aquí tus comentarios u observaciones (opcional)..." 
+            rows="5"
+            [disabled]="isSubmitting()"
+          ></textarea>
+        </div>
+
+        <div class="actions-row">
+          <button 
+            type="button" 
+            class="submit-btn" 
+            (click)="submitFeedback()" 
+            [disabled]="isSubmitting()"
+          >
+            <span *ngIf="!isSubmitting()">Enviar Retroalimentación</span>
+            <span *ngIf="isSubmitting()" class="spinner-inline"></span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Pantalla de Éxito y Confeti -->
+      <div *ngIf="currentStep() === 5" class="step-card success-step fade-in">
+        <div class="confetti-wrapper">
+          <!-- Confetti particles will animate here -->
+          <div class="confetti" *ngFor="let c of [1,2,3,4,5,6,7,8,9,10,11,12]" [style.--delay]="c * 0.2 + 's'" [style.--left]="c * 8 + '%'"></div>
+        </div>
+
+        <div class="success-icon-wrapper">
+          <mat-icon class="success-checkmark">stars</mat-icon>
+        </div>
+
+        <h2>¡Sesión Evaluada con Éxito!</h2>
+        <p class="desc">Tu opinión ha sido registrada. La alianza terapéutica es fundamental para tu bienestar.</p>
+
+        <div class="xp-badge-wrapper">
+          <div class="xp-badge">
+            <mat-icon>flash_on</mat-icon>
+            <span>+10 XP Ganados</span>
+          </div>
+        </div>
+
+        <button class="finish-btn" (click)="finish()">Ir al Dashboard</button>
+      </div>
+
+    </div>
+  </div>
+</div>

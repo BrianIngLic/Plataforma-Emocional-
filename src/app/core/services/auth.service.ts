@@ -11,6 +11,11 @@ export class AuthService {
   public currentUser = signal<{ matricula: string, role: string, id: string, name: string, faculty?: string, requires_password_change?: boolean, avatar_url?: string } | null>(null);
   public isLoggedIn = signal<boolean>(false);
 
+  public get isHealthProfessional(): boolean {
+    const role = this.currentUser()?.role;
+    return role === 'Psicologo' || role === 'Nutricionista';
+  }
+
   private auditService = inject(AuditService);
   private inactivityTimeout: any;
   private readonly TIMEOUT_MS = 15 * 60 * 1000; // 15 minutos (NOM-024 / HIPAA)
@@ -97,6 +102,7 @@ export class AuthService {
       let roleName = 'Estudiante';
       if (data.role_id === 3 || data.role_id === '3') roleName = 'Psicologo';
       if (data.role_id === 1 || data.role_id === '1') roleName = 'Admin';
+      if (data.role_id === 4 || data.role_id === '4') roleName = 'Nutricionista';
 
       let fullName = 'Usuario';
       let facultyName = '';
@@ -156,7 +162,22 @@ export class AuthService {
     }
   }
 
-  async register(matricula: string, email: string, pass: string, firstName: string, lastName: string, faculty: string): Promise<string | null> {
+  async register(
+    matricula: string,
+    email: string,
+    pass: string,
+    firstName: string,
+    lastName: string,
+    faculty: string,
+    profileData?: {
+      programa_educativo?: string;
+      celular?: string;
+      antecedentes_familiares?: string;
+      sexo?: string;
+      fecha_nacimiento?: string;
+      edad?: number;
+    }
+  ): Promise<string | null> {
     
     try {
       // 1. Sign up en Supabase Auth
@@ -178,23 +199,29 @@ export class AuthService {
 
       const userId = authData.user.id;
 
-    // 2. Insertar en public.users
-    const { error: userError } = await this.supabaseService.supabase.from('users').insert({
-      id: userId,
-      matricula: matricula,
-      role_id: 2, // Asumiendo que 2 es 'Estudiante'
-      requires_password_change: false
-    });
-    if (userError) console.error('Error insertando user:', userError.message);
+      // 2. Insertar en public.users
+      const { error: userError } = await this.supabaseService.supabase.from('users').insert({
+        id: userId,
+        matricula: matricula,
+        role_id: 2, // 2 = Estudiante
+        requires_password_change: false
+      });
+      if (userError) console.error('Error insertando user:', userError.message);
 
-    // 3. Insertar en public.profiles
-    const { error: profileError } = await this.supabaseService.supabase.from('profiles').insert({
-      user_id: userId,
-      first_name: firstName,
-      last_name: lastName,
-      faculty: faculty
-    });
-    if (profileError) console.error('Error insertando profile:', profileError.message);
+      // 3. Insertar en public.profiles (todos los campos del formulario de registro)
+      const { error: profileError } = await this.supabaseService.supabase.from('profiles').insert({
+        user_id: userId,
+        first_name: firstName,
+        last_name: lastName,
+        faculty: faculty,
+        programa_educativo: profileData?.programa_educativo ?? null,
+        celular: profileData?.celular ?? null,
+        antecedentes_familiares: profileData?.antecedentes_familiares ?? null,
+        sexo: profileData?.sexo ?? null,
+        fecha_nacimiento: profileData?.fecha_nacimiento ?? null,
+        edad: profileData?.edad ?? null
+      });
+      if (profileError) console.error('Error insertando profile:', profileError.message);
 
       this.cryptoService.deriveKey(pass, email);
       await this.loadUserProfile(userId);
@@ -219,6 +246,9 @@ export class AuthService {
     } else if (term.includes('psic') || term.includes('doctor') || term.includes('rivera') || term.includes('osei')) {
       role = 'Psicologo';
       name = 'Dr. Rivera (Simulado)';
+    } else if (term.includes('nutri') || term.includes('nutrition')) {
+      role = 'Nutricionista';
+      name = 'Nutricionista (Simulado)';
     }
 
     this.currentUser.set({ 
@@ -261,6 +291,30 @@ export class AuthService {
     } catch (e) {
       console.error('Excepción al actualizar contraseña:', e);
       return false;
+    }
+  }
+
+  public async updateUserAvatar(avatarUrl: string): Promise<boolean> {
+    const user = this.currentUser();
+    if (!user) return false;
+
+    try {
+      const { error } = await this.supabaseService.supabase
+        .from('profiles')
+        .update({ avatar_url: avatarUrl })
+        .eq('user_id', user.id);
+
+      if (error) {
+        console.error('Error updating avatar in profiles table:', error.message);
+        return false;
+      }
+
+      this.currentUser.set({ ...user, avatar_url: avatarUrl });
+      return true;
+    } catch (e) {
+      console.error('Exception updating avatar:', e);
+      this.currentUser.set({ ...user, avatar_url: avatarUrl });
+      return true;
     }
   }
 

@@ -27,6 +27,10 @@ export const DASHBOARD_ROUTES: Routes = [
         loadComponent: () => import('../student/settings/student-settings.component').then(m => m.StudentSettingsComponent)
       },
       {
+        path: 'session-feedback/:appointmentId',
+        loadComponent: () => import('../student/session-feedback/session-feedback.component').then(m => m.SessionFeedbackComponent)
+      },
+      {
         path: '',
         redirectTo: 'chat',
         pathMatch: 'full'

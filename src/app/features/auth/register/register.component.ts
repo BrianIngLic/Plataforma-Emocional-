@@ -10,6 +10,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule, provideNativeDateAdapter } from '@angular/material/core';
+
 
 import { AuthService } from '../../../core/services/auth.service';
 import { ClinicalService } from '../../../core/services/clinical.service';
@@ -31,8 +34,13 @@ import { FacultyService, Faculty } from '../../../core/services/faculty.service'
     MatButtonModule,
     MatCheckboxModule,
     MatRadioModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    MatDatepickerModule,
+    MatNativeDateModule
+
+
   ],
+  providers: [provideNativeDateAdapter()],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss']
 })
@@ -48,7 +56,13 @@ export class RegisterComponent implements OnInit {
 
   // Paso 1: Credenciales
   credentialsFormGroup = this.fb.group({
-    matricula: ['', Validators.required],
+    
+
+    matricula: ['', [
+      Validators.required,
+      Validators.pattern(/^[0-9]{9}$/)
+    ]],
+
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(6)]],
   });
@@ -57,7 +71,12 @@ export class RegisterComponent implements OnInit {
   profileFormGroup = this.fb.group({
     firstName: ['', Validators.required],
     lastName: ['', Validators.required],
-    faculty: ['', Validators.required]
+    faculty: ['', Validators.required],
+    programaEducativo: ['', Validators.required],
+    celular: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
+    antecedentesFamiliares: ['', Validators.required],
+    sexo: ['', Validators.required],
+    fechaNacimiento: ['', Validators.required]
   });
 
   // Paso 3: Consentimiento
@@ -94,6 +113,18 @@ export class RegisterComponent implements OnInit {
     this.filteredFaculties = this.faculties.filter(f => f.name.toLowerCase().includes(filterValue));
   }
 
+  calculateAge(birthDateString: string): number {
+    if (!birthDateString) return 0;
+    const today = new Date();
+    const birthDate = new Date(birthDateString);
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+    return age;
+  }
+
   async submitRegistration() {
     if (this.credentialsFormGroup.invalid || this.profileFormGroup.invalid || this.consentFormGroup.invalid) {
       this.credentialsFormGroup.markAllAsTouched();
@@ -109,16 +140,28 @@ export class RegisterComponent implements OnInit {
     const firstName = this.profileFormGroup.value.firstName!;
     const lastName = this.profileFormGroup.value.lastName!;
     const faculty = this.profileFormGroup.value.faculty!;
-    
-    // Auth Service enviando faculty
-    const userId = await this.authService.register(matricula, email, password, firstName, lastName, faculty);
+    const fecha = this.profileFormGroup.value.fechaNacimiento;
+
+    const fechaFormateada = fecha
+      ? new Date(fecha).toISOString().split('T')[0]
+      : '';
+
+    const edad = fecha ? this.calculateAge(fecha) : 0;
+
+    // Registrar usuario y guardar TODOS los campos del perfil directamente en public.profiles
+    const userId = await this.authService.register(matricula, email, password, firstName, lastName, faculty, {
+      programa_educativo: this.profileFormGroup.value.programaEducativo || '',
+      celular: this.profileFormGroup.value.celular || '',
+      antecedentes_familiares: this.profileFormGroup.value.antecedentesFamiliares || '',
+      sexo: this.profileFormGroup.value.sexo || '',
+      fecha_nacimiento: fechaFormateada,
+      edad
+    });
 
     if (userId) {
-      // Crear un expediente clínico en blanco por defecto
-      const emptyClinicalData = {};
-      const conditions = [JSON.stringify(emptyClinicalData)]; 
-      
-      const success = await this.clinicalService.submitClinicalRecords(matricula, conditions, true);
+      // Los datos demográficos ya están guardados en public.profiles.
+      // Solo creamos el expediente clínico con el consentimiento del usuario.
+      const success = await this.clinicalService.submitClinicalRecords(matricula, ['{}'], true);
       this.isSubmitting = false;
       if (success) {
         this.router.navigate(['/']); 

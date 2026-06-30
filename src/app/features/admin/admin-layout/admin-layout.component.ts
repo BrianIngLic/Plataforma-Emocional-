@@ -11,6 +11,7 @@ import { AuthService } from '../../../core/services/auth.service';
   templateUrl: './admin-layout.component.html',
   styleUrls: ['./admin-layout.component.scss']
 })
+
 export class AdminLayoutComponent {
   authService = inject(AuthService);
   router = inject(Router);
@@ -18,13 +19,15 @@ export class AdminLayoutComponent {
   isSidebarCollapsed = false;
 
   navItems = [
-    { label: 'Overview', sub: 'Panorama General', icon: 'dashboard', path: './overview' },
-    { label: 'Faculties', sub: 'Facultades', icon: 'business', path: './faculties' },
-    { label: 'Psychologists', sub: 'Psicólogos', icon: 'assignment_ind', path: './psychologists' },
-    { label: 'Patients', sub: 'Directorio de Pacientes', icon: 'people', path: './patients' },
-    { label: 'Reports', sub: 'Reportes y Estadísticas', icon: 'insert_chart', path: './reports' },
-    { label: 'Global Agenda', sub: 'Agenda Global', icon: 'calendar_today', path: './agenda' },
-    { label: 'Alerts', sub: 'Alertas del Sistema', icon: 'notifications', path: './alerts', badge: 5 }
+    { label: 'Panorama General', sub: 'Métricas de ocupación', icon: 'dashboard', path: './overview' },
+    { label: 'Facultades', sub: 'Gestión por divisiones', icon: 'business', path: './faculties' },
+    { label: 'Personal Médico', sub: 'Psicólogos y Nutriólogos', icon: 'assignment_ind', path: './psychologists' },
+    { label: 'Alumnos', sub: 'Asignaciones y seguimiento', icon: 'people', path: './patients' },
+    { label: 'Reportes y Estadísticas', sub: 'Analítica institucional', icon: 'insert_chart', path: './reports' },
+    { label: 'Agenda Global', sub: 'Calendario clínico', icon: 'calendar_today', path: './agenda' },
+    { label: 'Configuración', sub: 'Mi perfil y foto', icon: 'settings', path: './settings' },
+    { label: 'Imagen Institucional', sub: 'Sello y marca de agua', icon: 'branding_watermark', path: './institutional-branding' },
+    { label: 'Alertas', sub: 'Notificaciones del sistema', icon: 'notifications', path: './alerts', badge: 5 }
   ];
 
   get currentUser() {

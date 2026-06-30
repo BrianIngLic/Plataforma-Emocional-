@@ -4,89 +4,272 @@
   flex: 1;
   height: 100%;
   overflow-y: auto;
+  box-sizing: border-box;
+  background: var(--bg-main);
+}
+
+*, *:before, *:after {
+  box-sizing: border-box;
 }
 
 .agenda-container {
-  padding: 2rem;
-  max-width: 1000px;
+  padding: 1.5rem 2rem;
+  max-width: 1400px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 2rem;
-  min-height: min-content;
+  gap: 1.5rem;
+  width: 100%;
 }
 
+/* ==========================================================================
+   DEBUG BANNER
+   ========================================================================== */
 .debug-banner {
   background: var(--input-bg);
   border: 1px dashed var(--border-color);
-  padding: 1rem;
-  border-radius: 12px;
+  padding: 0.8rem 1.2rem;
+  border-radius: 16px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.02);
 
   .banner-title {
     display: flex; align-items: center; gap: 0.5rem;
-    font-weight: 600; color: var(--text-primary);
+    font-weight: 700; color: var(--text-primary); font-size: 1rem;
+    mat-icon { color: #8b5cf6; font-size: 20px; width: 20px; height: 20px; }
   }
 
   .urgency-toggles {
-    display: flex; gap: 0.5rem;
+    display: flex; gap: 0.5rem; flex-wrap: wrap;
     .urg-btn {
-      padding: 0.5rem 1rem; border: none; border-radius: 20px; font-weight: 600; cursor: pointer; transition: all 0.2s;
-      &.low { background: rgba(34,197,94,0.1); color: #22c55e; }
-      &.med { background: rgba(234,179,8,0.1); color: #eab308; }
-      &.high { background: rgba(239,68,68,0.1); color: #ef4444; }
+      padding: 0.4rem 1rem; border: none; border-radius: 20px; font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      &.low { background: rgba(34,197,94,0.15); color: #16a34a; }
+      &.med { background: rgba(234,179,8,0.15); color: #ca8a04; }
+      &.high { background: rgba(239,68,68,0.15); color: #dc2626; }
 
-      &.active.low { background: #22c55e; color: white; }
-      &.active.med { background: #eab308; color: white; }
-      &.active.high { background: #ef4444; color: white; }
+      &:hover { transform: translateY(-2px); }
+
+      &.active.low { background: #16a34a; color: white; box-shadow: 0 4px 12px rgba(22, 163, 74, 0.25); }
+      &.active.med { background: #ca8a04; color: white; box-shadow: 0 4px 12px rgba(202, 138, 4, 0.25); }
+      &.active.high { background: #dc2626; color: white; box-shadow: 0 4px 12px rgba(220, 38, 38, 0.25); }
     }
   }
 }
 
-.header {
-  h1 { margin: 0 0 0.5rem 0; font-size: 2rem; }
-  p { margin: 0; color: var(--text-secondary); }
+/* ==========================================================================
+   TOP BANNER TERAPÉUTICO Y GAMIFICADO
+   ========================================================================== */
+.therapeutic-banner {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(14, 165, 233, 0.15));
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  border-radius: 20px;
+  padding: 1.5rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  box-shadow: 0 8px 25px rgba(139, 92, 246, 0.05);
+  backdrop-filter: blur(12px);
+  width: 100%;
+
+  .banner-content {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+
+    .avatar-calm {
+      font-size: 2.2rem;
+      background: var(--bg-card);
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(139, 92, 246, 0.2);
+      flex-shrink: 0;
+    }
+
+    .affirmation-area {
+      .welcome-title {
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: var(--accent-purple);
+        font-weight: 700;
+        display: block;
+        margin-bottom: 0.2rem;
+      }
+      .dynamic-text {
+        font-size: 1.05rem;
+        color: var(--text-primary);
+        margin: 0;
+        font-weight: 600;
+        font-style: italic;
+        line-height: 1.4;
+        max-width: 750px;
+      }
+    }
+  }
+
+  .gamification-header {
+    .support-badge-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      padding: 0.8rem 1.2rem;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+
+      .heart-icon {
+        font-size: 1.8rem;
+        animation: heartPulse 2s infinite;
+      }
+
+      .badge-info {
+        display: flex;
+        flex-direction: column;
+
+        strong {
+          font-size: 1.05rem;
+          color: var(--text-primary);
+          font-weight: 700;
+        }
+
+        .sub-text {
+          font-size: 0.75rem;
+          color: #10b981;
+          font-weight: 600;
+          margin-top: 0.1rem;
+        }
+      }
+    }
+  }
 }
 
+@keyframes heartPulse {
+  0% { transform: scale(1); filter: drop-shadow(0 0 4px rgba(244, 63, 94, 0.4)); }
+  50% { transform: scale(1.15); filter: drop-shadow(0 0 10px rgba(244, 63, 94, 0.8)); }
+  100% { transform: scale(1); filter: drop-shadow(0 0 4px rgba(244, 63, 94, 0.4)); }
+}
+
+/* ==========================================================================
+   MAIN LAYOUT & CARDS
+   ========================================================================== */
 .layout {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 2rem;
-  align-items: stretch;
+  gap: 1.5rem;
+  align-items: start;
+  width: 100%;
+
+  @media (max-width: 1150px) {
+    grid-template-columns: 1fr;
+  }
 }
 
-.calendar-card, .slots-card {
+.calendar-card {
   background: var(--bg-card);
   border: 1px solid var(--border-color);
-  border-radius: 16px;
+  border-radius: 20px;
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
-  height: 500px; /* Forzar simetría perfecta */
+  box-shadow: 0 6px 25px rgba(0,0,0,0.03);
+  width: 100%;
+  height: fit-content;
+  overflow: visible; /* Elimina cualquier barra de scroll interno */
 }
 
 .slots-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 6px 25px rgba(0,0,0,0.03);
+  width: 100%;
+  height: fit-content;
+  max-height: 780px;
   overflow-y: auto;
 }
 
+/* ==========================================================================
+   BANNER DE CITA ACTIVA
+   ========================================================================== */
+.active-reservation-banner {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(16, 185, 129, 0.15));
+  border: 1px solid rgba(139, 92, 246, 0.4);
+  padding: 1rem 1.2rem;
+  border-radius: 16px;
+  margin-bottom: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.08);
+
+  .banner-icon {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: var(--accent-purple);
+    display: flex; align-items: center; justify-content: center;
+    color: white;
+    box-shadow: 0 4px 10px rgba(139, 92, 246, 0.25);
+    flex-shrink: 0;
+    mat-icon { font-size: 22px; width: 22px; height: 22px; }
+  }
+
+  .banner-text {
+    display: flex; flex-direction: column; gap: 0.2rem;
+    strong { font-size: 1.05rem; color: var(--text-primary); font-weight: 700; }
+    span { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.4; }
+  }
+}
+
+/* ==========================================================================
+   CALENDARIO PREMIUM COMPACTO
+   ========================================================================== */
 .cal-header {
-  display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;
-  .month-title { font-size: 1.2rem; font-weight: 600; }
-  .nav-btn { background: transparent; border: none; color: var(--text-secondary); cursor: pointer; padding: 0.5rem; border-radius: 50%; &:hover { background: var(--hover-color, rgba(0,0,0,0.05)); } }
+  display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;
+  .month-title { font-size: 1.2rem; font-weight: 700; color: var(--text-primary); }
+  .nav-btn { 
+    background: var(--input-bg); 
+    border: 1px solid var(--border-color); 
+    color: var(--text-secondary); 
+    cursor: pointer; 
+    width: 36px; height: 36px; 
+    border-radius: 50%; 
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+    mat-icon { font-size: 20px; width: 20px; height: 20px; }
+    &:hover { background: var(--accent-purple); color: white; transform: scale(1.05); box-shadow: 0 4px 10px rgba(139, 92, 246, 0.2); } 
+  }
 }
 
 .cal-grid {
-  display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.5rem;
-  .weekday { text-align: center; font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 0.5rem; }
+  display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.25rem;
+  background: var(--input-bg);
+  padding: 0.8rem;
+  border-radius: 16px;
+  border: 1px solid rgba(0,0,0,0.03);
+
+  .weekday { text-align: center; font-size: 0.75rem; font-weight: 700; color: var(--text-secondary); margin-bottom: 0.4rem; }
   .day-cell {
-    aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: 12px; cursor: default; position: relative; transition: all 0.2s;
-    .day-number { font-weight: 500; z-index: 2; }
-    &.muted { opacity: 0.3; }
-    &.today .day-number { color: #8b5cf6; font-weight: 700; }
-    &.available { cursor: pointer; &:hover { background: rgba(139, 92, 246, 0.1); } }
-    &.available .indicator { width: 6px; height: 6px; background: #22c55e; border-radius: 50%; margin-top: 4px; }
+    aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: 10px; cursor: default; position: relative; transition: all 0.2s;
+    color: var(--text-primary);
+    .day-number { font-weight: 600; font-size: 0.9rem; z-index: 2; }
+    &.muted { opacity: 0.25; }
+    &.today .day-number { color: #8b5cf6; font-weight: 700; font-size: 1rem; }
+    &.available { cursor: pointer; &:hover { background: rgba(139, 92, 246, 0.15); color: var(--accent-purple); transform: translateY(-2px); } }
+    &.available .indicator { width: 5px; height: 5px; background: #10b981; border-radius: 50%; margin-top: 3px; box-shadow: 0 0 6px rgba(16, 185, 129, 0.5); }
     
     &.blind { 
       background: repeating-linear-gradient(45deg, transparent, transparent 5px, rgba(0,0,0,0.03) 5px, rgba(0,0,0,0.03) 10px); 
@@ -106,52 +289,113 @@
       cursor: not-allowed;
     }
 
-    &.selected { background: #8b5cf6 !important; color: white; .indicator { background: white; } .day-number { color: white; } }
+    &.selected { 
+      background: #8b5cf6 !important; 
+      color: white; 
+      box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+      .indicator { background: white; box-shadow: none; } 
+      .day-number { color: white; } 
+    }
 
     .status-icon {
-      font-size: 14px;
-      width: 14px;
-      height: 14px;
-      margin-top: 4px;
-      opacity: 0.6;
+      font-size: 14px; width: 14px; height: 14px;
+      margin-top: 2px; opacity: 0.6;
       &.block-icon { color: #ef4444; }
       &.blind-icon { color: var(--text-secondary); }
     }
   }
 }
 
+/* ==========================================================================
+   HORARIOS DISPONIBLES PREMIUM COMPACTO
+   ========================================================================== */
 .slots-card {
-  h3 { margin: 0; font-size: 1.1rem; }
-  .subtitle { margin: 0.25rem 0 1.5rem 0; color: var(--text-secondary); font-size: 0.9rem; }
+  h3 { margin: 0; font-size: 1.2rem; font-weight: 700; color: var(--text-primary); }
+  .subtitle { margin: 0.2rem 0 1.2rem 0; color: var(--accent-purple); font-weight: 600; font-size: 0.85rem; }
 }
 
 .slots-grid {
-  display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.8rem;
+  width: 100%;
 }
 
 .slot-btn {
-  display: flex; align-items: center; justify-content: center; gap: 0.5rem;
-  padding: 1rem; background: transparent; border: 1px solid var(--border-color); color: var(--text-primary); border-radius: 12px; font-weight: 600; font-size: 1rem; cursor: pointer; transition: all 0.2s;
-  mat-icon { font-size: 20px; width: 20px; height: 20px; color: #8b5cf6; }
+  display: flex; align-items: center; justify-content: center; gap: 0.6rem;
+  padding: 0.75rem 1rem; background: var(--input-bg); border: 1px solid var(--border-color); color: var(--text-primary); border-radius: 14px; font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+  mat-icon { font-size: 18px; width: 18px; height: 18px; color: #8b5cf6; }
   
   &.my-reservation {
-    background: var(--primary-color, #8b5cf6) !important;
+    background: linear-gradient(135deg, #8b5cf6, #a78bfa) !important;
     color: white;
     border: none;
+    box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+    mat-icon { color: white; }
+    &:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(139, 92, 246, 0.4); }
+  }
+
+  &:hover:not(.my-reservation) { border-color: #8b5cf6; background: rgba(139, 92, 246, 0.08); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(139, 92, 246, 0.15); }
+}
+
+/* ==========================================================================
+   DIRECTORIO DE ESPECIALISTAS
+   ========================================================================== */
+.directory-card {
+  grid-column: 1 / -1;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 6px 25px rgba(0,0,0,0.03);
+
+  .card-header-main {
+    text-align: center; margin-bottom: 2rem;
+    .header-icon { font-size: 42px; width: 42px; height: 42px; color: var(--accent-purple); margin-bottom: 0.8rem; }
+    h2 { font-size: 1.8rem; color: var(--text-primary); margin: 0 0 0.5rem 0; font-weight: 700; }
+    .subtitle { font-size: 1rem; color: var(--text-secondary); margin: 0 0 1.5rem 0; }
     
-    mat-icon {
+    .btn-auto-assign {
+      background: linear-gradient(135deg, #8b5cf6, #a78bfa);
       color: white;
+      padding: 0.8rem 2rem;
+      border-radius: 24px;
+      border: none;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      &:hover { opacity: 0.95; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4); }
     }
   }
 
-  &:hover:not(.my-reservation) { border-color: #8b5cf6; background: rgba(139, 92, 246, 0.05); transform: translateY(-2px); }
+  .psy-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1.5rem;
+    
+    .psy-card {
+      background: var(--input-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.8rem 1.5rem; text-align: center; transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+      &:hover { border-color: rgba(139, 92, 246, 0.4); transform: translateY(-3px); box-shadow: 0 6px 18px rgba(139, 92, 246, 0.12); }
+
+      .avatar-wrapper {
+        width: 70px; height: 70px; border-radius: 50%; overflow: hidden; margin: 0 auto 1.2rem; background: var(--bg-card); border: 2px solid rgba(139, 92, 246, 0.3); box-shadow: 0 4px 10px rgba(139, 92, 246, 0.12);
+        img { width: 100%; height: 100%; object-fit: cover; }
+        mat-icon { font-size: 50px; width: 50px; height: 50px; line-height: 70px; color: var(--text-secondary); }
+      }
+
+      h3 { font-size: 1.15rem; color: var(--text-primary); margin: 0 0 0.4rem 0; font-weight: 700; }
+      .faculty-tag { font-size: 0.85rem; color: var(--text-secondary); margin: 0 0 1.5rem 0; display: flex; align-items: center; justify-content: center; gap: 4px; mat-icon { font-size: 16px; width: 16px; height: 16px; color: #8b5cf6; } }
+      
+      .btn-request {
+        width: 100%; background: transparent; border: 2px solid #8b5cf6; color: #8b5cf6; padding: 0.65rem; border-radius: 14px; font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: all 0.2s;
+        &:hover { background: #8b5cf6; color: white; box-shadow: 0 4px 12px rgba(139, 92, 246, 0.2); }
+      }
+    }
+  }
 }
 
 .empty-state {
-  display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; color: var(--text-secondary); text-align: center; gap: 1rem;
-  mat-icon { font-size: 48px; width: 48px; height: 48px; opacity: 0.5; }
-}
-
-.spinner-container {
-  display: flex; align-items: center; justify-content: center; padding: 4rem; color: var(--text-secondary); font-style: italic;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; color: var(--text-secondary); text-align: center; gap: 1rem; padding: 3rem 1.5rem;
+  mat-icon { font-size: 48px; width: 48px; height: 48px; color: var(--accent-purple); opacity: 0.6; }
+  p { font-size: 1rem; margin: 0; max-width: 350px; line-height: 1.4; }
 }

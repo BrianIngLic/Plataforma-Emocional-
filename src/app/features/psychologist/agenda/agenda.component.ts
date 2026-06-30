@@ -140,7 +140,7 @@ export class AgendaComponent implements OnInit {
     const { data, error } = await this.supabase
       .from('appointments')
       .select('*, student:users!appointments_student_id_fkey(profiles(first_name, last_name, avatar_url))')
-      .eq('psychologist_id', this.currentUserId)
+      .eq('professional_id', this.currentUserId)
       .order('scheduled_date', { ascending: false });
 
     if (error) {
@@ -187,10 +187,10 @@ export class AgendaComponent implements OnInit {
 
     // 2. Obtener excepciones para ese día específico
     const { data: excs } = await this.supabase
-      .from('psychologist_exceptions')
+      .from('health_professional_exceptions')
       .select('*')
       .eq('exception_date', dateString)
-      .or(`psychologist_id.eq.${this.currentUserId},psychologist_id.is.null`);
+      .or(`professional_id.eq.${this.currentUserId},professional_id.is.null`);
       
     this.dayExceptions = excs || [];
 
@@ -198,7 +198,7 @@ export class AgendaComponent implements OnInit {
     const { data: appts, error } = await this.supabase
       .from('appointments')
       .select('*, student:users!appointments_student_id_fkey(profiles(first_name, last_name, avatar_url))')
-      .eq('psychologist_id', this.currentUserId)
+      .eq('professional_id', this.currentUserId)
       .eq('scheduled_date', dateString)
       .order('start_time', { ascending: true });
 

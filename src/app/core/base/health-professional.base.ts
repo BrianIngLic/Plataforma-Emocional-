@@ -145,7 +145,7 @@ export abstract class HealthProfessionalBase {
       if (this.currentUserId && patientIds.length > 0) {
         const { data: appointmentsData, error: appointmentsError } = await this.supabase
           .from('appointments')
-          .select('id, student_id, scheduled_date, status, professional_id, psychologist_id')
+          .select('id, student_id, scheduled_date, status, professional_id')
           .in('student_id', patientIds)
           .order('scheduled_date', { ascending: true });
 

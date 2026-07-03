@@ -329,7 +329,7 @@ export class PerfilPaciente implements OnInit {
           .from('appointments')
           .select('*')
           .eq('student_id', id)
-          .eq('psychologist_id', this.currentUserId) // Usamos la columna psychologist_id para almacenar el ID del nutricionista
+          .eq('professional_id', this.currentUserId)
           .order('scheduled_date', { ascending: false })
           .order('start_time', { ascending: false });
 

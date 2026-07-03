@@ -1,0 +1,74 @@
+<div class="consulta-page">
+  <div class="consulta-header">
+    <div>
+      <p class="eyebrow">Nota Nutricional</p>
+      <h1>Consulta dinámica del nutriólogo</h1>
+      <p class="subtitle">Catálogo vivo, precarga de última consulta y snapshot inmutable de calendario.</p>
+    </div>
+    <div class="header-actions">
+      <button type="button" class="btn ghost" (click)="cancelar()">Volver</button>
+      <button type="submit" form="consulta-form" class="btn primary" [disabled]="saving">
+        {{ saving ? 'Guardando...' : 'Guardar consulta' }}
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="state-box">Cargando catálogo y última consulta...</div>
+
+  <form *ngIf="!loading" id="consulta-form" [formGroup]="form" (ngSubmit)="guardarConsulta()" class="consulta-form">
+    <section class="panel summary-panel">
+      <div class="summary-item">
+        <span>Paciente</span>
+        <strong>{{ pacienteId }}</strong>
+      </div>
+      <div class="summary-item">
+        <label for="calorias_totales">Calorías totales</label>
+        <input id="calorias_totales" type="number" formControlName="calorias_totales" min="0" />
+      </div>
+      <div class="summary-item">
+        <span>Última consulta</span>
+        <strong>{{ ultimaConsulta?.fecha_consulta ? (ultimaConsulta?.fecha_consulta | date:'medium') : 'Sin consulta previa' }}</strong>
+      </div>
+    </section>
+
+    <section class="panel" *ngFor="let bloque of bloques">
+      <div class="panel-header">
+        <h2>{{ bloque.titulo }}</h2>
+        <span>{{ getCamposPorBloque(bloque).length }} campos</span>
+      </div>
+
+      <div class="fields-grid">
+        <div class="field-card" *ngFor="let campo of getCamposPorBloque(bloque)">
+          <label [for]="campo.clave">{{ campo.etiqueta }}</label>
+
+          <ng-container [ngSwitch]="campo.tipo_campo">
+            <input *ngSwitchCase="'text'" [id]="campo.clave" type="text" [formControlName]="campo.clave" />
+
+            <input *ngSwitchCase="'number'" [id]="campo.clave" type="number" [formControlName]="campo.clave" />
+
+            <label *ngSwitchCase="'boolean'" class="boolean-field">
+              <input type="checkbox" [formControlName]="campo.clave" />
+              <span>Sí</span>
+            </label>
+
+            <select *ngSwitchCase="'select'" [id]="campo.clave" [formControlName]="campo.clave">
+              <option value="">Selecciona</option>
+              <option *ngFor="let option of selectOptions" [value]="option">{{ option }}</option>
+            </select>
+
+            <input *ngSwitchDefault [id]="campo.clave" type="text" [formControlName]="campo.clave" />
+          </ng-container>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel snapshot-panel">
+      <div class="panel-header">
+        <h2>Recordatorio 24h</h2>
+        <span>Snapshot</span>
+      </div>
+      <p>Servicio simulado. Se inyecta al guardar en <strong>recordatorio_24h</strong>, no se edita en pantalla.</p>
+      <div class="snapshot-hint">Se toma el registro de ayer desde CalendarioService.obtenerRegistroAyer(paciente_id).</div>
+    </section>
+  </form>
+</div>

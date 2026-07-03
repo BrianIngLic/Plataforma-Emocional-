@@ -561,7 +561,10 @@ export class PerfilPaciente implements OnInit {
   }
 
   openPostSessionModal(session: any) {
-    console.warn('Nota nutricional pendiente para sesión:', session?.id);
+    if (!this.patient?.id) return;
+    this.router.navigate(['/nutritionist/consulta', this.patient.id], {
+      queryParams: { sessionId: session?.id || null }
+    });
   }
 
   async saveNutritionRecord() {

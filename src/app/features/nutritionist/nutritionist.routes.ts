@@ -22,6 +22,11 @@ export const NUTRITIONIST_ROUTES: Routes = [
         data: { animation: 'PerfilPacientePage' }
       },
       {
+        path: 'consulta/:id',
+        loadComponent: () => import('./consulta/consulta.component').then(m => m.ConsultaComponent),
+        data: { animation: 'ConsultaNutricionalPage' }
+      },
+      {
         path: 'agenda',
         loadComponent: () => import('../health-professional/agenda/agenda.component').then(m => m.HealthProfessionalAgendaComponent),
         data: { animation: 'AgendaPage' }

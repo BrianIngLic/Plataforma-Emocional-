@@ -17,6 +17,7 @@ export interface Conversation {
   id: string;
   student_id: string;
   student_name: string;
+  student_phone: string;   // número E.164 del estudiante (para WhatsApp)
   avatar_url: string;
   urgency_score: number;
   last_message: string;
@@ -31,7 +32,6 @@ export class InternalChatService {
   private supabase = inject(SupabaseService).supabase;
 
   async getConversations(): Promise<Conversation[]> {
-    // Consulta para obtener conversaciones uniendo los perfiles del estudiante
     const { data, error } = await this.supabase
       .from('internal_meta_conversations')
       .select(`
@@ -42,6 +42,7 @@ export class InternalChatService {
         last_message_date,
         unread_count,
         student:users!internal_meta_conversations_student_id_fkey(
+          mobile_phone,
           profiles(first_name, last_name, avatar_url)
         )
       `)
@@ -59,11 +60,13 @@ export class InternalChatService {
       const firstName = studentProfile?.first_name || '';
       const lastName = studentProfile?.last_name || '';
       const avatarUrl = studentProfile?.avatar_url || '';
+      const phone = item.student?.mobile_phone || '';
 
       return {
         id: item.id,
         student_id: item.student_id,
         student_name: `${firstName} ${lastName}`.trim() || 'Estudiante',
+        student_phone: phone,
         avatar_url: avatarUrl,
         urgency_score: Number(item.urgency_score || 0),
         last_message: item.last_message || '',
@@ -88,7 +91,17 @@ export class InternalChatService {
     return (data as WhatsAppMessage[]) || [];
   }
 
-  async sendMessage(conversationId: string, content: string, senderName: string): Promise<WhatsAppMessage | null> {
+  /**
+   * Guarda el mensaje en BD y lo envía via WhatsApp si hay teléfono disponible.
+   * Retorna el mensaje guardado (con status actualizado) o null si falló el INSERT.
+   */
+  async sendMessage(
+    conversationId: string,
+    content: string,
+    senderName: string,
+    studentPhone?: string
+  ): Promise<WhatsAppMessage | null> {
+    // 1️⃣ INSERT optimista en BD con status 'pending'
     const msgPayload = {
       conversation_id: conversationId,
       sender_type: 'professional',
@@ -103,12 +116,78 @@ export class InternalChatService {
       .select()
       .single();
 
-    if (error) {
-      console.error('Error sending message:', error);
+    if (error || !data) {
+      console.error('Error saving message to DB:', error);
       return null;
     }
 
-    return data as WhatsAppMessage;
+    const savedMsg = data as WhatsAppMessage;
+
+    // 2️⃣ Actualizar el resumen de la conversación (last_message / last_message_date)
+    await this.supabase
+      .from('internal_meta_conversations')
+      .update({
+        last_message: content.substring(0, 100),
+        last_message_date: new Date().toISOString()
+      })
+      .eq('id', conversationId);
+
+    // 3️⃣ Enviar via Meta Cloud API si hay teléfono del destinatario
+    if (studentPhone && studentPhone.trim().length > 0) {
+      try {
+        console.log(`📱 Enviando mensaje WhatsApp a ${studentPhone} via Edge Function...`);
+
+        const { data: fnResult, error: fnError } = await this.supabase.functions.invoke(
+          'meta-whatsapp-outbound',
+          {
+            method: 'POST',
+            body: {
+              phone: studentPhone,
+              message: content
+            }
+          }
+        );
+
+        if (fnError) {
+          console.error('❌ Edge Function error:', fnError);
+          // Marcar mensaje como fallido en BD
+          await this.supabase
+            .from('internal_meta_chats')
+            .update({ status: 'failed', error_message: fnError.message || 'Edge Function error' })
+            .eq('id', savedMsg.id);
+          return { ...savedMsg, status: 'failed', error_message: fnError.message };
+        }
+
+        // Extraer wamid (WhatsApp Message ID) de la respuesta de Meta
+        const wamid = fnResult?.data?.messages?.[0]?.id || null;
+        console.log(`✅ Mensaje enviado. WAMID: ${wamid}`, fnResult);
+
+        // Actualizar status y wamid en BD
+        const { data: updatedMsg } = await this.supabase
+          .from('internal_meta_chats')
+          .update({
+            status: 'sent',
+            whatsapp_message_id: wamid
+          })
+          .eq('id', savedMsg.id)
+          .select()
+          .single();
+
+        return (updatedMsg as WhatsAppMessage) ?? { ...savedMsg, status: 'sent', whatsapp_message_id: wamid };
+
+      } catch (e: any) {
+        console.error('❌ Error inesperado enviando WhatsApp:', e);
+        await this.supabase
+          .from('internal_meta_chats')
+          .update({ status: 'failed', error_message: e.message })
+          .eq('id', savedMsg.id);
+        return { ...savedMsg, status: 'failed', error_message: e.message };
+      }
+    } else {
+      // Sin teléfono registrado: dejar el mensaje guardado en BD pero informar
+      console.warn('⚠️ El estudiante no tiene teléfono registrado. Mensaje guardado en BD pero no enviado por WhatsApp.');
+      return savedMsg;
+    }
   }
 
   async markAsRead(conversationId: string): Promise<boolean> {

@@ -1,16 +1,16 @@
 # Graph Report - Plataforma-Emocional-  (2026-06-30)
 
 ## Corpus Check
-- 112 files · ~103,500 words
+- 113 files · ~103,839 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 977 nodes · 1419 edges · 81 communities (26 shown, 55 thin omitted)
+- 978 nodes · 1419 edges · 82 communities (27 shown, 55 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 19 edges (avg confidence: 0.91)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `f184c760`
+- Built from commit: `1114a5ad`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -129,7 +129,7 @@
 - **Student Emotional Assistance and Care Flow** — dashboard_layout_dashboard_layout_component_student_sidebar, dashboard_dashboard_component_chat_view, dashboard_diary_dashboard_component_therapeutic_refuge, student_agenda_student_agenda_component_appointment_scheduler [INFERRED 0.85]
 - **Psychologist Clinical Command Center and Triage Flow** — psychologist_layout_psychologist_layout_component_psychologist_sidebar, dashboard_dashboard_component_psychologist_triage_view, patients_patients_component_patient_directory, agenda_agenda_component_clinical_timeline, patient_profile_patient_profile_component_clinical_expedient_view [INFERRED 0.85]
 
-## Communities (81 total, 55 thin omitted)
+## Communities (82 total, 55 thin omitted)
 
 ### Community 0 - "Core Services and Auth"
 Cohesion: 0.15

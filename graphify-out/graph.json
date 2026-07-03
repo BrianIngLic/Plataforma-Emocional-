@@ -2151,7 +2151,7 @@
       "label": ".requestWebPushPermission()",
       "file_type": "code",
       "source_file": "src/app/core/services/emergency-notification.service.ts",
-      "source_location": "L256",
+      "source_location": "L258",
       "_origin": "ast",
       "id": "services_emergency_notification_service_emergencynotificationservice_requestwebpushpermission",
       "community": 15,
@@ -2161,7 +2161,7 @@
       "label": ".saveWebPushSubscription()",
       "file_type": "code",
       "source_file": "src/app/core/services/emergency-notification.service.ts",
-      "source_location": "L294",
+      "source_location": "L296",
       "_origin": "ast",
       "id": "services_emergency_notification_service_emergencynotificationservice_savewebpushsubscription",
       "community": 15,
@@ -2171,7 +2171,7 @@
       "label": ".updateWhatsAppOptIn()",
       "file_type": "code",
       "source_file": "src/app/core/services/emergency-notification.service.ts",
-      "source_location": "L322",
+      "source_location": "L324",
       "_origin": "ast",
       "id": "services_emergency_notification_service_emergencynotificationservice_updatewhatsappoptin",
       "community": 15,
@@ -2181,7 +2181,7 @@
       "label": ".getActiveRoutingSessions()",
       "file_type": "code",
       "source_file": "src/app/core/services/emergency-notification.service.ts",
-      "source_location": "L347",
+      "source_location": "L349",
       "_origin": "ast",
       "id": "services_emergency_notification_service_emergencynotificationservice_getactiveroutingsessions",
       "community": 15,
@@ -2191,7 +2191,7 @@
       "label": ".closeRoutingSession()",
       "file_type": "code",
       "source_file": "src/app/core/services/emergency-notification.service.ts",
-      "source_location": "L370",
+      "source_location": "L372",
       "_origin": "ast",
       "id": "services_emergency_notification_service_emergencynotificationservice_closeroutingsession",
       "community": 15,
@@ -2201,7 +2201,7 @@
       "label": ".initRealtimeNotificationListener()",
       "file_type": "code",
       "source_file": "src/app/core/services/emergency-notification.service.ts",
-      "source_location": "L392",
+      "source_location": "L394",
       "_origin": "ast",
       "id": "services_emergency_notification_service_emergencynotificationservice_initrealtimenotificationlistener",
       "community": 15,
@@ -8286,6 +8286,16 @@
       "id": "invite_user_index_corsheaders",
       "community": 35,
       "norm_label": "corsheaders"
+    },
+    {
+      "label": "index.ts",
+      "file_type": "code",
+      "source_file": "supabase/functions/meta-whatsapp-outbound/index.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "meta_whatsapp_outbound_index",
+      "community": 70,
+      "norm_label": "index.ts"
     },
     {
       "label": "index.ts",
@@ -24783,5 +24793,5 @@
       "source_file": "src/app/features/psychologist/psychologist-layout/psychologist-layout.component.html"
     }
   ],
-  "built_at_commit": "f184c760e8d1c8dea7cafff5ba87cd82d4bd1bdf"
+  "built_at_commit": "1114a5ad8932a523e10a9363765801caabd5cf78"
 }

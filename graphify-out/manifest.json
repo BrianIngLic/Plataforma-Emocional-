@@ -135,8 +135,8 @@
     "semantic_hash": ""
   },
   "src/app/features/admin/faculties/faculties.component.ts": {
-    "mtime": 1782856216.3985693,
-    "ast_hash": "b16ed5dd0f55970c5513f3d5fbc7a14d",
+    "mtime": 1782856900.0721967,
+    "ast_hash": "5723beaf0816170b15e55a30de2c0465",
     "semantic_hash": ""
   },
   "src/app/features/admin/overview/overview.component.ts": {
@@ -305,7 +305,7 @@
     "semantic_hash": ""
   },
   "supabase/.temp/linked-project.json": {
-    "mtime": 1782606760.0612967,
+    "mtime": 1782858649.9904969,
     "ast_hash": "999abea731fae4248bf7ed5fd94ecb3d",
     "semantic_hash": "999abea731fae4248bf7ed5fd94ecb3d"
   },
@@ -510,8 +510,8 @@
     "semantic_hash": ""
   },
   "src/app/core/services/emergency-notification.service.ts": {
-    "mtime": 1782631769.053941,
-    "ast_hash": "cee7ab74f33ce8d2deb4295d5cd092b3",
+    "mtime": 1782882175.9810557,
+    "ast_hash": "e9362d873b696799a2dddb9e1b89e70a",
     "semantic_hash": ""
   },
   "src/app/features/health-professional/agenda/agenda.component.ts": {
@@ -762,6 +762,11 @@
   "src/app/features/admin/faculties/faculty-detail/faculty-detail.component.html": {
     "mtime": 1782852503.0329745,
     "ast_hash": "9b54e5646b452244da07478b53dc3382",
+    "semantic_hash": ""
+  },
+  "supabase/functions/meta-whatsapp-outbound/index.ts": {
+    "mtime": 1782859343.8048089,
+    "ast_hash": "48146e4900bef340eff6c0dd68345a1e",
     "semantic_hash": ""
   }
 }

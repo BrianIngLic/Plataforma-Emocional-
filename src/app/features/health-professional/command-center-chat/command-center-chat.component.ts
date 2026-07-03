@@ -24,7 +24,9 @@ export class CommandCenterChatComponent implements OnInit, OnDestroy {
   conversations = signal<Conversation[]>([]);
   selectedChat = signal<Conversation | null>(null);
   activeMessages = signal<WhatsAppMessage[]>([]);
-  
+  isSending = signal<boolean>(false);
+  noPhoneWarning = signal<boolean>(false);
+
   activeFilter = signal<'all' | 'urgent'>('all');
   searchQuery = signal<string>('');
   newMessageText = '';
@@ -32,9 +34,9 @@ export class CommandCenterChatComponent implements OnInit, OnDestroy {
   // Selector de plantillas oficiales (para rebasar ventana de 24h)
   showTemplateSelector = signal<boolean>(false);
   templates = [
-    { name: 'appointment_reminder', label: 'Recordatorio de Cita', text: 'TEMPLATE:appointment_reminder|10:00 AM' },
-    { name: 'clinical_follow_up', label: 'Seguimiento Clínico', text: 'TEMPLATE:clinical_follow_up' },
-    { name: 'administrative_alert', label: 'Aviso Administrativo', text: 'TEMPLATE:administrative_alert' }
+    { name: 'appointment_reminder', label: 'Recordatorio de Cita', text: 'Recordatorio: tienes una cita programada. Por favor confírmala o comunícate con nosotros.' },
+    { name: 'clinical_follow_up', label: 'Seguimiento Clínico', text: '¿Cómo te has sentido desde nuestra última sesión? Estamos aquí para apoyarte.' },
+    { name: 'administrative_alert', label: 'Aviso Administrativo', text: 'Tienes un aviso importante de parte del equipo de salud de BUAP. Por favor comunícate con nosotros.' }
   ];
 
   filteredConversations = computed(() => {
@@ -79,6 +81,7 @@ export class CommandCenterChatComponent implements OnInit, OnDestroy {
   async selectConversation(chat: Conversation) {
     this.selectedChat.set(chat);
     this.unsubscribeFromChat();
+    this.noPhoneWarning.set(!chat.student_phone);
 
     // Cargar mensajes iniciales
     const msgs = await this.chatService.getMessages(chat.id);
@@ -122,17 +125,19 @@ export class CommandCenterChatComponent implements OnInit, OnDestroy {
   }
 
   async sendMessage() {
-    if (!this.newMessageText.trim() || !this.selectedChat()) return;
+    if (!this.newMessageText.trim() || !this.selectedChat() || this.isSending()) return;
 
     const chat = this.selectedChat()!;
     const currentUser = this.authService.currentUser();
-    const senderName = currentUser ? currentUser.name : 'Personal Clínico';
+    const senderName = currentUser ? (currentUser as any).name ?? 'Personal Clínico' : 'Personal Clínico';
     const text = this.newMessageText.trim();
     this.newMessageText = '';
+    this.isSending.set(true);
 
     // Añadir mensaje optimista provisional a la vista
+    const tempId = crypto.randomUUID();
     const tempMessage: WhatsAppMessage = {
-      id: crypto.randomUUID(),
+      id: tempId,
       conversation_id: chat.id,
       sender_type: 'professional',
       sender_name: senderName,
@@ -144,13 +149,19 @@ export class CommandCenterChatComponent implements OnInit, OnDestroy {
     this.activeMessages.update(msgs => [...msgs, tempMessage]);
     this.scrollToBottom();
 
-    // Enviar a Supabase (dispara trigger hacia Edge Function)
-    const result = await this.chatService.sendMessage(chat.id, text, senderName);
-    
-    // Si fue exitoso se actualizará por Realtime, de lo contrario reportamos fallo
+    // Enviar a BD + llamar Edge Function WhatsApp
+    const result = await this.chatService.sendMessage(chat.id, text, senderName, chat.student_phone);
+    this.isSending.set(false);
+
     if (!result) {
-      this.activeMessages.update(msgs => 
-        msgs.map(m => m.id === tempMessage.id ? { ...m, status: 'failed' } : m)
+      // Fallo total al guardar en BD
+      this.activeMessages.update(msgs =>
+        msgs.map(m => m.id === tempId ? { ...m, status: 'failed', error_message: 'Error al guardar el mensaje.' } : m)
+      );
+    } else {
+      // Sustituir el optimista por el real (puede tener status 'sent' o 'failed')
+      this.activeMessages.update(msgs =>
+        msgs.map(m => m.id === tempId ? { ...result, id: result.id } : m)
       );
     }
   }

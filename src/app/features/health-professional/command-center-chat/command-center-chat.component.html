@@ -104,6 +104,12 @@
         <span><strong>Aviso NOM-024 e HIPAA:</strong> Por la seguridad del paciente, mantenga esta comunicación estrictamente en el ámbito operativo (citas, seguimiento). No incluya Información Personal de Salud (PHI) ni diagnósticos clínicos detallados.</span>
       </div>
 
+      <!-- Advertencia: sin teléfono registrado -->
+      <div class="no-phone-banner" *ngIf="noPhoneWarning()">
+        <mat-icon>warning_amber</mat-icon>
+        <span>Este estudiante no tiene número de teléfono registrado. El mensaje se guardará en la plataforma pero <strong>no se enviará por WhatsApp</strong>.</span>
+      </div>
+
       <!-- Selector de Plantillas Oficiales -->
       <div class="templates-drawer" *ngIf="showTemplateSelector()">
         <div class="drawer-header">
@@ -127,12 +133,14 @@
         </button>
         <div class="input-wrapper">
           <textarea [(ngModel)]="newMessageText" 
-                    (keyup.enter)="sendMessage()" 
+                    (keydown.enter)="$event.preventDefault(); sendMessage()" 
                     placeholder="Escribe un mensaje oficial para enviar por WhatsApp..." 
                     rows="1" 
+                    [disabled]="isSending()"
                     class="glass-textarea"></textarea>
-          <button mat-flat-button class="send-btn" (click)="sendMessage()" [disabled]="!newMessageText.trim()">
-            <mat-icon>send</mat-icon>
+          <button mat-flat-button class="send-btn" (click)="sendMessage()" [disabled]="!newMessageText.trim() || isSending()">
+            <mat-icon *ngIf="!isSending()">send</mat-icon>
+            <mat-icon *ngIf="isSending()" class="spin">sync</mat-icon>
           </button>
         </div>
       </div>

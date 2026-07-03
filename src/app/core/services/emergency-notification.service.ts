@@ -204,7 +204,93 @@ export class EmergencyNotificationService {
           broadcastResults.whatsapp = { success: false, message: 'Edge Function error', threadId: null };
         } else {
           console.log('✅ Edge Function meta-whatsapp-outbound response:', fnResult);
+
+          // ----------- INSERTAR REGISTRO DE CHAT Y CONVERSACIÓN -----------
+          // 1️⃣ Verificar o crear la conversación interna para este estudiante
+          const { data: existingConv, error: convErr } = await this.supabase
+            .from('internal_meta_conversations')
+            .select('id')
+            .eq('student_id', studentId)
+            .maybeSingle();
+          let conversationId: string | undefined;
+          if (convErr) {
+            console.warn('⚠️ No se pudo consultar conversación interna, intentando crear una nueva.', convErr);
+          }
+          if (existingConv && existingConv.id) {
+            conversationId = existingConv.id;
+          } else {
+            const { data: newConv, error: newConvErr } = await this.supabase
+              .from('internal_meta_conversations')
+              .insert({
+                student_id: studentId,
+                last_message: mensajeWhatsApp,
+                last_message_date: new Date().toISOString(),
+                unread_count: 0
+              })
+              .select('id')
+              .single();
+            if (newConvErr) {
+              console.error('❌ Error creando conversación interna:', newConvErr);
+            }
+            conversationId = newConv?.id;
+          }
+
+          // 2️⃣ Insertar el mensaje en la tabla de chats internos
           const threadId = `wa_thread_${appointmentId}_${Date.now()}`;
+          if (conversationId) {
+              console.log('🔎 Conversation ID for chat insertion:', conversationId);
+            const wamid = fnResult?.data?.messages?.[0]?.id || null;
+            try {
+              // Check for existing cancellation message in this conversation to avoid duplicate inserts
+              const { data: existingCancel } = await this.supabase
+                .from('internal_meta_chats')
+                .select('id')
+                .eq('conversation_id', conversationId)
+                .ilike('message_content', '%cancel%')
+                .limit(1);
+              if (existingCancel && existingCancel.length > 0) {
+                console.warn('⚠️ Duplicate cancellation detected, skipping chat insertion.');
+              } else {
+                const { data: chatInsert, error: chatError } = await this.supabase
+                  .from('internal_meta_chats')
+                  .insert({
+                    // Using newer schema columns
+                    sender_id: professionalId,
+                    recipient_id: studentId,
+                    whatsapp_message_id: wamid,
+                    whatsapp_thread_id: threadId,
+                    message_direction: 'outbound',
+                    message_type: 'text',
+                    content: mensajeWhatsApp,
+                    status: wamid ? 'sent' : 'pending'
+                  })
+                  .select();
+                if (chatError) {
+                  console.error('❌ Error inserting chat internal:', chatError);
+                } else {
+                  console.log('✅ Chat internal inserted:', chatInsert);
+                }
+              }
+            } catch (e) {
+              console.error('❌ Exception inserting chat internal:', e);
+            }
+            // Update conversation summary if applicable
+            try {
+              const { error: convUpdateError } = await this.supabase
+                .from('internal_meta_conversations')
+                .update({
+                  last_message: mensajeWhatsApp,
+                  last_message_date: new Date().toISOString()
+                })
+                .eq('id', conversationId);
+              if (convUpdateError) {
+                console.error('❌ Error updating internal conversation:', convUpdateError);
+              }
+            } catch (e) {
+              console.error('❌ Exception updating conversation:', e);
+            }
+          }
+
           broadcastResults.whatsapp = { success: true, message: 'WhatsApp enviado vía Edge Function', threadId };
         }
       // ==== CREATE BIDIRECTIONAL ROUTING SESSION ==== //

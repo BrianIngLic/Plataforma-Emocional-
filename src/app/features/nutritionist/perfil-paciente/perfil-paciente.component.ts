@@ -8,20 +8,24 @@ import { SupabaseService } from '../../../core/services/supabase.service';
 import { CryptoService } from '../../../core/services/crypto.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { DossierExportService } from '../../../core/services/dossier-export.service';
+import { GamificationService } from '../../../core/services/gamification.service';
+import { BaseChartDirective } from 'ng2-charts';
+import { ChartConfiguration, ChartOptions } from 'chart.js';
 import { jsPDF } from 'jspdf';
 
 @Component({
   selector: 'app-perfil-paciente',
   standalone: true,
-  imports: [CommonModule, MatIconModule, MatButtonModule, FormsModule],
-  templateUrl: './perfil-paciente.html',
-  styleUrl: './perfil-paciente.scss'
+  imports: [CommonModule, MatIconModule, MatButtonModule, FormsModule, BaseChartDirective],
+  templateUrl: '../../psychologist/patient-profile/patient-profile.component.html',
+  styleUrls: ['../../psychologist/patient-profile/patient-profile.component.scss']
 })
 export class PerfilPaciente implements OnInit {
   supabase = inject(SupabaseService).supabase;
   crypto = inject(CryptoService);
   authService = inject(AuthService);
   dossierExport = inject(DossierExportService);
+  gamificationService = inject(GamificationService);
 
   patient: any = null;
   diaryEntries: any[] = [];
@@ -29,6 +33,65 @@ export class PerfilPaciente implements OnInit {
   isExporting = false;
   sessionHistory: any[] = [];
   eat26Result: any = null;
+  patientStreak: any = { current_streak: 0, best_streak: 0, total_xp: 0 };
+  patientAchievements: any[] = [];
+  newAchTitle = '';
+  newAchDesc = '';
+  newAchPoints = 100;
+  newAchIcon = 'verified';
+  newAchNotes = '';
+  isAssigningAchievement = false;
+
+  public lineChartData: ChartConfiguration<'line'>['data'] = {
+    labels: ['Sem 1', 'Sem 2', 'Sem 3', 'Sem 4', 'Sem 5', 'Sem 6', 'Sem 7', 'Sem 8'],
+    datasets: [
+      {
+        data: [18, 16, 15, 14, 12, 11, 10, 9],
+        label: 'Puntuación PHQ-9',
+        borderColor: '#1a56db',
+        backgroundColor: 'rgba(26, 86, 219, 0.1)',
+        tension: 0.4,
+        fill: true
+      }
+    ]
+  };
+
+  public lineChartOptions: ChartOptions<'line'> = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { grid: { display: false } },
+      y: { grid: { color: 'rgba(255, 255, 255, 0.05)' }, min: 0, max: 27 }
+    }
+  };
+
+  allianceStatus: 'critical' | 'decline' | 'healthy' | null = null;
+  allianceDeclineAlert = false;
+  allianceDeclineValue = 0;
+  public allianceChartData: ChartConfiguration<'line'>['data'] = {
+    labels: [],
+    datasets: [
+      {
+        data: [],
+        label: 'Alianza (FIT/SRS)',
+        borderColor: '#8b5cf6',
+        backgroundColor: 'rgba(139, 92, 246, 0.1)',
+        tension: 0.4,
+        fill: true
+      }
+    ]
+  };
+
+  public allianceChartOptions: ChartOptions<'line'> = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { grid: { display: false } },
+      y: { grid: { color: 'rgba(255, 255, 255, 0.05)' }, min: 1.0, max: 5.0 }
+    }
+  };
 
   // Navegación interna (Tabs)
   activeTab: 'expediente' | 'recordatorio' | 'diario' = 'expediente';
@@ -231,7 +294,8 @@ export class PerfilPaciente implements OnInit {
           state: (this.eat26Result && this.eat26Result.hasRisk) ? "Critical" : "Active",
           riskLevel: (this.eat26Result && this.eat26Result.hasRisk) ? "Alto" : (conditions && conditions.length > 0 ? "Moderado" : "Bajo"),
           notes: notes,
-          avatar: p?.avatar_url
+          avatarUrl: p?.avatar_url || '',
+          avatar: p?.avatar_url || ''
         };
       }
 
@@ -310,6 +374,71 @@ export class PerfilPaciente implements OnInit {
           this.patient.nextSession = nextSessionText;
         }
       }
+
+      const { data: evals, error: evalsError } = await this.supabase
+        .from('session_evaluations')
+        .select('created_at, score_global, rupture_flag')
+        .eq('patient_id', id)
+        .order('created_at', { ascending: true });
+
+      if (evalsError) {
+        console.warn('Advertencia obteniendo evaluaciones:', evalsError);
+      }
+
+      if (evals && evals.length > 0) {
+        this.allianceStatus = evals[evals.length - 1].rupture_flag as any;
+
+        if (evals.length >= 2) {
+          const lastScore = Number(evals[evals.length - 1].score_global);
+          const prevScore = Number(evals[evals.length - 2].score_global);
+          const diff = prevScore - lastScore;
+          if (diff >= 0.7) {
+            this.allianceDeclineAlert = true;
+            this.allianceDeclineValue = diff;
+          }
+        }
+
+        const labels = evals.map(e => new Date(e.created_at).toLocaleDateString([], { day: '2-digit', month: 'short' }));
+        const dataPoints = evals.map(e => Number(e.score_global));
+
+        this.allianceChartData = {
+          labels,
+          datasets: [
+            {
+              data: dataPoints,
+              label: 'Alianza (FIT/SRS)',
+              borderColor: '#8b5cf6',
+              backgroundColor: 'rgba(139, 92, 246, 0.1)',
+              tension: 0.4,
+              fill: true
+            }
+          ]
+        };
+      }
+
+      const { data: streakData } = await this.supabase
+        .from('user_streaks')
+        .select('*')
+        .eq('user_id', id)
+        .maybeSingle();
+
+      this.patientStreak = streakData || { current_streak: 0, best_streak: 0, total_xp: 0 };
+
+      const { data: userAchs } = await this.supabase
+        .from('user_achievements')
+        .select('*, achievement:achievements(*)')
+        .eq('user_id', id);
+
+      this.patientAchievements = userAchs ? userAchs.map((ua: any) => ({
+        id: ua.achievement.id,
+        title: ua.achievement.title,
+        description: ua.achievement.description,
+        points: ua.achievement.points,
+        badge_url: ua.achievement.badge_url || 'verified',
+        is_completed: ua.is_completed,
+        earned_at: ua.earned_at,
+        notes: ua.notes
+      })) : [];
 
     } catch (err) {
       console.error('Unexpected error loading patient data:', err);
@@ -417,6 +546,22 @@ export class PerfilPaciente implements OnInit {
 
   goBack() {
     this.router.navigate(['/nutritionist/pacientes']);
+  }
+
+  getAlertClass(flag: string): string {
+    if (flag === 'critical') return 'badge-danger';
+    if (flag === 'decline') return 'badge-warning';
+    return 'badge-success';
+  }
+
+  getAlertText(flag: string): string {
+    if (flag === 'critical') return '⚠️ Ruptura';
+    if (flag === 'decline') return '📉 Caída';
+    return '✅ Sólida';
+  }
+
+  openPostSessionModal(session: any) {
+    console.warn('Nota nutricional pendiente para sesión:', session?.id);
   }
 
   async saveNutritionRecord() {
@@ -655,6 +800,42 @@ export class PerfilPaciente implements OnInit {
       alert('Error al generar el dossier clínico.');
     } finally {
       this.isExporting = false;
+    }
+  }
+
+  async assignClinicalAchievement() {
+    if (!this.patient?.id || !this.newAchTitle.trim() || !this.newAchDesc.trim()) {
+      alert('Por favor completa el título y la descripción de la meta.');
+      return;
+    }
+
+    this.isAssigningAchievement = true;
+    try {
+      const success = await this.gamificationService.awardClinicalAchievement(
+        this.patient.id,
+        this.newAchTitle.trim(),
+        this.newAchDesc.trim(),
+        this.newAchPoints,
+        this.newAchIcon,
+        this.newAchNotes.trim()
+      );
+
+      if (success) {
+        alert(`¡Meta clínica "${this.newAchTitle}" asignada con éxito!`);
+        this.newAchTitle = '';
+        this.newAchDesc = '';
+        this.newAchNotes = '';
+        this.newAchPoints = 100;
+        this.newAchIcon = 'verified';
+        await this.loadPatientData(this.patient.id);
+      } else {
+        alert('Error al asignar la meta clínica.');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Ocurrió un error inesperado al guardar.');
+    } finally {
+      this.isAssigningAchievement = false;
     }
   }
 }

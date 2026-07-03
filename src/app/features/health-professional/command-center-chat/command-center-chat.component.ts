@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { RouterModule } from '@angular/router';
+import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { InternalChatService, Conversation, WhatsAppMessage } from '../../../core/services/internal-chat.service';
 import { AuthService } from '../../../core/services/auth.service';
 
@@ -18,7 +18,7 @@ import { AuthService } from '../../../core/services/auth.service';
 export class CommandCenterChatComponent implements OnInit, OnDestroy {
   private chatService = inject(InternalChatService);
   private authService = inject(AuthService);
-
+private route = inject(ActivatedRoute); private router = inject(Router);
   @ViewChild('messagesViewport') messagesViewport!: ElementRef;
 
   conversations = signal<Conversation[]>([]);
@@ -58,6 +58,14 @@ export class CommandCenterChatComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
     await this.loadConversations();
+    // Auto-select conversation if studentId query param is present
+    const studentId = this.route.snapshot.queryParamMap.get('studentId');
+    if (studentId) {
+      const convo = this.conversations().find(c => c.student_id === studentId);
+      if (convo) {
+        this.selectConversation(convo);
+      }
+    }
   }
 
   ngOnDestroy() {

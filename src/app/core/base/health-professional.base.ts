@@ -60,6 +60,48 @@ export abstract class HealthProfessionalBase {
     );
   }
 
+  private isFutureOrToday(dateValue: any): boolean {
+    const key = this.getDateKey(dateValue);
+    if (!key) return false;
+    return key >= this.getDateKey(new Date().toISOString());
+  }
+
+  private isActiveAppointmentStatus(status: any): boolean {
+    return !['cancelled', 'no_show'].includes(String(status || '').toLowerCase());
+  }
+
+  private getDateKey(value: any): string {
+    if (!value) return '';
+    return String(value).substring(0, 10);
+  }
+
+  private compareDateKeys(a: string, b: string): number {
+    return a.localeCompare(b);
+  }
+
+  private formatSessionDate(value: any): string {
+    const key = this.getDateKey(value);
+    return key || 'Sin registro';
+  }
+
+  private getPatientSessions(appointments: any[], patientId: string) {
+    const patientAppointments = appointments.filter(appt => appt.student_id === patientId);
+
+    const lastCompleted = [...patientAppointments]
+      .filter(appt => appt.status === 'completed' && appt.scheduled_date)
+      .sort((a, b) => this.compareDateKeys(this.getDateKey(a.scheduled_date), this.getDateKey(b.scheduled_date)))
+      .pop();
+
+    const nextScheduled = [...patientAppointments]
+      .filter(appt => this.isFutureOrToday(appt.scheduled_date) && this.isActiveAppointmentStatus(appt.status))
+      .sort((a, b) => this.compareDateKeys(this.getDateKey(a.scheduled_date), this.getDateKey(b.scheduled_date)))[0];
+
+    return {
+      lastSession: lastCompleted ? this.formatSessionDate(lastCompleted.scheduled_date) : 'Sin registro',
+      nextSession: nextScheduled ? this.formatSessionDate(nextScheduled.scheduled_date) : 'Por agendar'
+    };
+  }
+
   async loadPatientsBase() {
     if (this.currentUserId) {
       const { data: sett } = await this.supabase
@@ -97,6 +139,27 @@ export abstract class HealthProfessionalBase {
     }
 
     if (data) {
+      const patientIds = data.map((u: any) => u.id);
+      let appointments: any[] = [];
+
+      if (this.currentUserId && patientIds.length > 0) {
+        const { data: appointmentsData, error: appointmentsError } = await this.supabase
+          .from('appointments')
+          .select('id, student_id, scheduled_date, status, professional_id, psychologist_id')
+          .in('student_id', patientIds)
+          .order('scheduled_date', { ascending: true });
+
+        if (appointmentsError) {
+          console.error('Error cargando citas de pacientes:', appointmentsError.message);
+        } else {
+          const byId = new Map<string, any>();
+          for (const appt of appointmentsData || []) {
+            byId.set(appt.id, appt);
+          }
+          appointments = Array.from(byId.values());
+        }
+      }
+
       this.patientsData = data.map((u: any) => {
         const records = u.student_clinical_records;
         const recordObj = Array.isArray(records) ? records[0] : records;
@@ -104,6 +167,7 @@ export abstract class HealthProfessionalBase {
         const diagnosis = conditions && conditions.length > 0 ? conditions.join(', ') : "Evaluación Pendiente";
         
         const assignedId = this.isNutritionist ? recordObj?.primary_nutritionist_id : recordObj?.primary_psychologist_id;
+        const sessionData = this.getPatientSessions(appointments, u.id);
 
         return {
           id: u.id,
@@ -113,8 +177,8 @@ export abstract class HealthProfessionalBase {
           avatarUrl: Array.isArray(u.profiles) ? u.profiles[0]?.avatar_url : u.profiles?.avatar_url,
           faculty: Array.isArray(u.profiles) ? u.profiles[0]?.faculty : u.profiles?.faculty,
           diagnosis: diagnosis, 
-          lastSession: new Date().toISOString().split('T')[0],
-          nextSession: "Por agendar",
+          lastSession: sessionData.lastSession,
+          nextSession: sessionData.nextSession,
           state: "active",
           riskLevel: "low",
           assignedId: assignedId || null,
@@ -166,7 +230,10 @@ export abstract class HealthProfessionalBase {
   }
 
   viewProfileBase(patientId: string) {
-    const routePrefix = this.isNutritionist ? '/nutritionist/pacientes' : '/psychologist/patients';
+    const currentUrl = (this.router.url || '').toLowerCase();
+    const routePrefix = currentUrl.includes('/nutritionist')
+      ? '/nutritionist/pacientes'
+      : '/psychologist/patients';
     this.router.navigate([routePrefix, patientId]);
   }
 }

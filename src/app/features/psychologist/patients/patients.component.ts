@@ -135,4 +135,10 @@ export class PatientsComponent implements OnInit {
   viewProfile(id: string) {
     this.router.navigate(['/psychologist/patients', id]);
   }
+
+  // Open chat with patient (opens command center chat with studentId query param)
+  openChat(patient: any) {
+    // Navigate to the WhatsApp chat component, passing the patient id as a query param
+    this.router.navigate(['/psychologist/whatsapp-chat'], { queryParams: { studentId: patient.id } });
+  }
 }

@@ -111,3 +111,31 @@
 .text-blue { color: #0ea5e9; }
 .text-green { color: #10b981; }
 .text-amber { color: #f59e0b; }
+
+@media (max-width: 767px) {
+  .dashboard-container {
+    padding: 4rem 1rem 1rem 1rem !important; /* Espacio para el botón de menú flotante */
+    gap: 1rem !important;
+  }
+
+  .panel-header {
+    flex-direction: column;
+    align-items: flex-start !important;
+    gap: 0.5rem;
+    
+    .legend {
+      flex-wrap: wrap;
+      gap: 0.5rem !important;
+    }
+  }
+
+  .panel-list .list-item.agenda-item {
+    flex-wrap: wrap;
+    align-items: flex-start !important;
+    gap: 0.5rem !important;
+    
+    .time {
+      width: auto !important;
+    }
+  }
+}

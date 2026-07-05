@@ -1,3 +1,14 @@
+:host {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+*, *:before, *:after {
+  box-sizing: border-box;
+}
+
 .agenda-layout {
   display: flex; gap: 1.5rem; padding: 2rem; max-width: 1400px; margin: 0 auto; align-items: flex-start;
 }
@@ -142,5 +153,105 @@
     background-color: rgba(239, 68, 68, 0.12) !important;
     border: 1px solid rgba(239, 68, 68, 0.25) !important;
     color: #ef4444 !important;
+  }
+}
+
+@media (max-width: 1024px) {
+  .agenda-layout {
+    flex-direction: column;
+    padding: 4rem 1rem 1rem 1rem !important;
+    gap: 1rem !important;
+  }
+
+  .calendar-sidebar {
+    width: 100% !important;
+  }
+
+  .agenda-main {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+  }
+
+  .timeline .timeline-item {
+    .time-col {
+      width: 50px !important;
+      font-size: 0.8rem !important;
+      padding-right: 0.5rem !important;
+    }
+    
+    .marker-col {
+      margin-right: 0.75rem !important;
+    }
+    
+    .content-col .card-content {
+      padding: 0.75rem !important;
+      
+      .header {
+        flex-direction: column;
+        align-items: flex-start !important;
+        gap: 0.5rem;
+        
+        .view-profile-btn {
+          align-self: flex-end;
+        }
+      }
+    }
+  }
+
+  .appointment-card {
+    flex-direction: column;
+    align-items: stretch !important;
+    gap: 0.75rem;
+    
+    .appt-date {
+      border-right: none !important;
+      border-bottom: 1px solid var(--border-color);
+      padding-right: 0 !important;
+      padding-bottom: 0.5rem;
+      align-items: flex-start !important;
+    }
+    
+    .appt-time {
+      border-right: none !important;
+      padding: 0 !important;
+      align-items: flex-start !important;
+    }
+    
+    .appt-details {
+      padding-left: 0 !important;
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  .top-bar {
+    padding: 1rem !important;
+    
+    .search-box {
+      display: grid !important;
+      grid-template-columns: auto 1fr !important;
+      gap: 0.75rem !important;
+      width: 100%;
+      
+      mat-icon {
+        grid-column: 1;
+        grid-row: 1;
+        align-self: center;
+      }
+      
+      input {
+        grid-column: 2;
+        grid-row: 1;
+        width: 100% !important;
+        min-width: 0 !important;
+      }
+      
+      button {
+        grid-column: 1 / span 2;
+        grid-row: 2;
+        width: 100% !important;
+      }
+    }
   }
 }

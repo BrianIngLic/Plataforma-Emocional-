@@ -189,17 +189,21 @@ interface ChatMessage {
   styles: [`
     :host {
       display: block;
+      flex: 1 1 auto;
       height: 100%;
+      min-height: 0;
     }
 
     .dashboard-container {
       min-height: 100%;
       height: 100%;
+      overflow-y: auto;
       
       &.chat-mode {
         padding: 0;
         display: flex;
         flex-direction: column;
+        overflow: hidden;
       }
     }
     
@@ -349,6 +353,62 @@ interface ChatMessage {
           &:hover { background: #0ea5e9; color: white; transform: translateY(-2px); box-shadow: 0 4px 6px rgba(14, 165, 233, 0.2); }
           &:active { transform: scale(0.95); }
         }
+      }
+    }
+
+    @media (max-width: 767px) {
+      .unlocked-content {
+        padding: 4rem 1rem 1rem 1rem !important;
+      }
+      .unlocked-header {
+        flex-direction: column;
+        align-items: flex-start !important;
+        gap: 0.75rem !important;
+        h1 {
+          font-size: 1.4rem !important;
+        }
+      }
+      .recall-card {
+        padding: 1rem !important;
+        .card-header {
+          flex-direction: column;
+          align-items: flex-start !important;
+          gap: 0.5rem !important;
+        }
+      }
+      .placeholder-cards {
+        grid-template-columns: 1fr !important;
+      }
+      .chat-container {
+        padding-top: 3.5rem;
+      }
+      .chat-header {
+        padding: 0.75rem 1rem !important;
+        flex-direction: column;
+        align-items: flex-start !important;
+        gap: 0.75rem;
+        
+        .hybrid-progress-container {
+          width: 100% !important;
+          margin-left: 0 !important;
+          justify-content: flex-start !important;
+        }
+      }
+      .chat-messages {
+        padding: 1rem !important;
+      }
+      .chat-input-area {
+        padding: 1rem !important;
+        .quick-replies {
+          gap: 0.35rem !important;
+          .reply-btn {
+            padding: 0.5rem 0.85rem !important;
+            font-size: 0.8rem !important;
+          }
+        }
+      }
+      .message-wrapper {
+        max-width: 90% !important;
       }
     }
 

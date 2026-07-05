@@ -381,3 +381,44 @@
   from { transform: translateY(20px); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
 }
+
+@media (max-width: 767px) {
+  .auth-container {
+    padding: 1rem 0.5rem !important;
+  }
+  
+  .glass-card {
+    padding: 1.5rem 1rem !important;
+    border-radius: 16px !important;
+  }
+
+  .brand-header {
+    margin-bottom: 1.5rem !important;
+    h2 {
+      font-size: 1.5rem !important;
+    }
+  }
+
+  .form-row {
+    grid-template-columns: 1fr !important;
+    gap: 0.5rem !important;
+  }
+
+  .stepper-actions {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 0.75rem;
+    
+    button {
+      width: 100% !important;
+      margin: 0 !important;
+    }
+  }
+
+  .custom-stepper {
+    ::ng-deep .mat-horizontal-stepper-header-container {
+      display: none !important; /* Hide stepper header steps on mobile to save space */
+    }
+  }
+}
+

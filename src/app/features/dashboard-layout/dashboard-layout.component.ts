@@ -34,11 +34,19 @@ export class DashboardLayoutComponent implements OnInit {
     return this.authService.currentUser();
   }
 
+  isMobile() {
+    return typeof window !== 'undefined' && window.innerWidth < 768;
+  }
+
   isPsychologist() {
     return this.currentUser?.role === 'psychologist';
   }
 
   ngOnInit() {
+    if (this.isMobile()) {
+      this.isSidebarCollapsed = true;
+    }
+
     // Solicitar permiso de notificaciones Web Push de escritorio al entrar al dashboard
     this.emergencyNotificationService.requestWebPushPermission();
 
@@ -58,6 +66,9 @@ export class DashboardLayoutComponent implements OnInit {
         this.loadHistory();
       }
       this.checkPendingEvaluations();
+      if (this.isMobile()) {
+        this.isSidebarCollapsed = true;
+      }
     });
     
     // Initial check
@@ -94,10 +105,16 @@ export class DashboardLayoutComponent implements OnInit {
         this.router.navigate(['/dashboard/chat']);
       }
     }
+    if (this.isMobile()) {
+      this.isSidebarCollapsed = true;
+    }
   }
 
   async loadChat(chatId: string) {
     await this.chatService.loadSpecificChat(chatId);
+    if (this.isMobile()) {
+      this.isSidebarCollapsed = true;
+    }
   }
 
   toggleSidebar() {

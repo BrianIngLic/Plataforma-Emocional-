@@ -1,11 +1,11 @@
 # Graph Report - Plataforma-Emocional-  (2026-07-05)
 
 ## Corpus Check
-- 165 files · ~130,007 words
+- 165 files · ~129,906 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1375 nodes · 1920 edges · 131 communities (63 shown, 68 thin omitted)
+- 1373 nodes · 1917 edges · 127 communities (64 shown, 63 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 21 edges (avg confidence: 0.9)
 - Token cost: 0 input · 0 output
 
@@ -16,7 +16,6 @@
 
 ## Community Hubs (Navigation)
 - [[_COMMUNITY_Community 0|Community 0]]
-- [[_COMMUNITY_Community 1|Community 1]]
 - [[_COMMUNITY_Package Config and Dependencies|Package Config and Dependencies]]
 - [[_COMMUNITY_Angular Architect Configurations|Angular Architect Configurations]]
 - [[_COMMUNITY_Angular Build Schemas|Angular Build Schemas]]
@@ -82,7 +81,6 @@
 - [[_COMMUNITY_Community 65|Community 65]]
 - [[_COMMUNITY_Community 66|Community 66]]
 - [[_COMMUNITY_Community 67|Community 67]]
-- [[_COMMUNITY_Community 68|Community 68]]
 - [[_COMMUNITY_Community 69|Community 69]]
 - [[_COMMUNITY_Community 70|Community 70]]
 - [[_COMMUNITY_Community 71|Community 71]]
@@ -137,16 +135,14 @@
 - [[_COMMUNITY_Community 121|Community 121]]
 - [[_COMMUNITY_Community 122|Community 122]]
 - [[_COMMUNITY_Community 123|Community 123]]
-- [[_COMMUNITY_Community 128|Community 128]]
-- [[_COMMUNITY_Community 129|Community 129]]
-- [[_COMMUNITY_Community 130|Community 130]]
+- [[_COMMUNITY_Community 134|Community 134]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `AuthService` - 49 edges
 2. `SupabaseService` - 40 edges
 3. `FacultiesComponent` - 31 edges
 4. `AgendaComponent` - 29 edges
-5. `ConsultaComponent` - 28 edges
+5. `ConsultaComponent` - 26 edges
 6. `PsychologistsComponent` - 25 edges
 7. `PerfilPaciente` - 24 edges
 8. `StudentAgendaComponent` - 22 edges
@@ -174,11 +170,7 @@
 - **Student Emotional Assistance and Care Flow** — dashboard_layout_dashboard_layout_component_student_sidebar, dashboard_dashboard_component_chat_view, dashboard_diary_dashboard_component_therapeutic_refuge, student_agenda_student_agenda_component_appointment_scheduler [INFERRED 0.85]
 - **Psychologist Clinical Command Center and Triage Flow** — psychologist_layout_psychologist_layout_component_psychologist_sidebar, dashboard_dashboard_component_psychologist_triage_view, patients_patients_component_patient_directory, agenda_agenda_component_clinical_timeline, patient_profile_patient_profile_component_clinical_expedient_view [INFERRED 0.85]
 
-## Communities (131 total, 68 thin omitted)
-
-### Community 0 - "Community 0"
-Cohesion: 0.22
-Nodes (5): EmojiScaleComponent, PendingEvaluationItem, ProfessionalEvaluationSummary, SessionEvaluation, SessionEvaluationPayload
+## Communities (127 total, 63 thin omitted)
 
 ### Community 2 - "Package Config and Dependencies"
 Cohesion: 0.05
@@ -197,8 +189,8 @@ Cohesion: 0.13
 Nodes (3): AiTriageMockService, UrgencyLevel, StudentAgendaComponent
 
 ### Community 8 - "Admin Patient Statistics Overview"
-Cohesion: 0.13
-Nodes (8): environment, Psychologist, HealthProfessionalItem, HealthProfessionalRegistrationPayload, PatientAssignmentPayload, AdminStatsService, ChartDataPoint, OverviewMetrics
+Cohesion: 0.06
+Nodes (10): OverviewComponent, AdminSkill8Service, HealthProfessionalItem, HealthProfessionalRegistrationPayload, PatientAssignmentPayload, AdminStatsService, ChartDataPoint, OverviewMetrics (+2 more)
 
 ### Community 9 - "Alimentary Assessment Dashboard"
 Cohesion: 0.12
@@ -209,8 +201,12 @@ Cohesion: 0.17
 Nodes (16): Psychologist Daily Agenda Timeline, Amati AI Chat Dashboard, Psychologist Triage Dashboard, Amati Therapeutic Refuge and Diary, Student Dashboard Sidebar, Clinical Expedient and AI Insights View, Psychologist Assigned Patients Directory, Profile Avatar Manager Component (+8 more)
 
 ### Community 14 - "Main App Security Interceptors"
-Cohesion: 0.21
-Nodes (6): App, appConfig, routes, authGuard(), roleGuard(), authInterceptor()
+Cohesion: 0.16
+Nodes (7): App, appConfig, routes, authGuard(), roleGuard(), authInterceptor(), AuditService
+
+### Community 18 - "Dashboard Main Navigation Layout"
+Cohesion: 0.14
+Nodes (3): AuthService, CalendarDay, CalendarDay
 
 ### Community 20 - "Security and Design Principles"
 Cohesion: 0.06
@@ -241,8 +237,8 @@ Cohesion: 0.29
 Nodes (6): 1. Ciberseguridad y Privacidad como Pilar Absoluto, 2. La Especificación es la Ley, 3. Prioridad Clínica y Responsabilidad, 4. Diseño y UX (User Experience), 5. Prácticas de Desarrollo y Documentación, Constitución del Ecosistema de Asistencia Emocional
 
 ### Community 59 - "Community 59"
-Cohesion: 0.13
-Nodes (9): Appointment, AdminFaculty, DetailedStats, FeedbackModalComponent, FeedbackModalData, WorkingDaysMap, Campus, Faculty (+1 more)
+Cohesion: 0.12
+Nodes (11): Appointment, AdminFaculty, DetailedStats, FeedbackModalComponent, FeedbackModalData, TimeBlock, WorkingDay, WorkingDaysMap (+3 more)
 
 ### Community 63 - "Community 63"
 Cohesion: 0.12
@@ -265,20 +261,20 @@ Cohesion: 0.14
 Nodes (4): CommandCenterChatComponent, Conversation, InternalChatService, WhatsAppMessage
 
 ### Community 84 - "Community 84"
-Cohesion: 0.14
-Nodes (6): ChatMessage, CryptoService, DiaryEntry, GamificationService, UserStreak, StreakBadgeComponent
+Cohesion: 0.15
+Nodes (8): ChatMessage, GamificationService, UserStreak, PendingEvaluationItem, ProfessionalEvaluationSummary, SessionEvaluation, SessionEvaluationPayload, StreakBadgeComponent
 
 ### Community 85 - "Community 85"
 Cohesion: 0.05
 Nodes (55): benchmark_pair(), count_tokens(), main(), print_table(), backup_dir_for(), build_compress_prompt(), build_fix_prompt(), call_claude() (+47 more)
 
 ### Community 87 - "Community 87"
-Cohesion: 0.17
-Nodes (7): CampoFormulario, Holiday, TimeBlock, WorkingDay, SupabaseService, CalendarDay, CalendarDay
+Cohesion: 0.14
+Nodes (7): environment, CampoFormulario, Psychologist, Holiday, CryptoService, DiaryEntry, SupabaseService
 
 ### Community 88 - "Community 88"
-Cohesion: 0.08
-Nodes (9): BloqueVisual, ConsultaComponent, CalendarioService, RegistroAyerSnapshot, CampoFormulario, CampoFormularioTipo, ConsultaNutricionRow, NuevaConsultaNutricionPayload (+1 more)
+Cohesion: 0.14
+Nodes (3): BloqueVisual, ConsultaComponent, CampoFormulario
 
 ### Community 89 - "Community 89"
 Cohesion: 0.22
@@ -404,17 +400,21 @@ Nodes (4): Auto-Clarity, Boundaries, Examples, Rules
 Cohesion: 0.50
 Nodes (3): CampoFormulario, CampoFormularioTipo, ConsultaNutricionRow
 
+### Community 134 - "Community 134"
+Cohesion: 0.18
+Nodes (6): CalendarioService, RegistroAyerSnapshot, CampoFormularioTipo, ConsultaNutricionRow, NuevaConsultaNutricionPayload, NutricionService
+
 ## Knowledge Gaps
 - **368 isolated node(s):** `$schema`, `version`, `newProjectRoot`, `projectType`, `style` (+363 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **68 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **63 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `SupabaseService` connect `Community 87` to `Community 0`, `Community 67`, `Admin Patient Statistics Overview`, `Main App Security Interceptors`, `Community 78`, `Dashboard Main Navigation Layout`, `Community 84`, `Community 88`, `Community 59`?**
-  _High betweenness centrality (0.066) - this node is a cross-community bridge._
-- **Why does `AuthService` connect `Dashboard Main Navigation Layout` to `Community 0`, `Community 67`, `Admin Patient Statistics Overview`, `Community 78`, `Main App Security Interceptors`, `Community 84`, `Community 87`, `Community 88`, `Community 59`?**
+- **Why does `SupabaseService` connect `Community 87` to `Community 0`, `Community 67`, `Community 134`, `Admin Patient Statistics Overview`, `Community 74`, `Main App Security Interceptors`, `Community 78`, `Dashboard Main Navigation Layout`, `Community 84`, `Community 59`?**
+  _High betweenness centrality (0.064) - this node is a cross-community bridge._
+- **Why does `AuthService` connect `Dashboard Main Navigation Layout` to `Community 0`, `Community 67`, `Community 134`, `Admin Patient Statistics Overview`, `Community 74`, `Community 78`, `Main App Security Interceptors`, `Community 81`, `Community 84`, `Community 87`, `Community 24`, `Community 59`?**
   _High betweenness centrality (0.046) - this node is a cross-community bridge._
 - **Why does `FacultiesComponent` connect `Faculty Occupancy Management` to `Community 59`?**
   _High betweenness centrality (0.043) - this node is a cross-community bridge._

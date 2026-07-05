@@ -2494,7 +2494,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "guards_role_guard",
-      "community": 18,
+      "community": 14,
       "norm_label": "role.guard.ts"
     },
     {
@@ -2534,7 +2534,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_agenda_service",
-      "community": 87,
+      "community": 59,
       "norm_label": "agenda.service.ts"
     },
     {
@@ -2544,7 +2544,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "services_agenda_service_timeblock",
-      "community": 87,
+      "community": 59,
       "norm_label": "timeblock"
     },
     {
@@ -2554,7 +2554,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "services_agenda_service_workingday",
-      "community": 87,
+      "community": 59,
       "norm_label": "workingday"
     },
     {
@@ -2694,7 +2694,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_audit_service",
-      "community": 18,
+      "community": 87,
       "norm_label": "audit.service.ts"
     },
     {
@@ -2704,7 +2704,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "services_audit_service_auditservice",
-      "community": 18,
+      "community": 14,
       "norm_label": "auditservice"
     },
     {
@@ -2714,7 +2714,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "services_audit_service_auditservice_logevent",
-      "community": 18,
+      "community": 14,
       "norm_label": ".logevent()"
     },
     {
@@ -2724,7 +2724,7 @@
       "source_location": "L40",
       "_origin": "ast",
       "id": "services_audit_service_auditservice_logunauthorizedaccess",
-      "community": 18,
+      "community": 14,
       "norm_label": ".logunauthorizedaccess()"
     },
     {
@@ -3014,7 +3014,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_clinical_service",
-      "community": 18,
+      "community": 87,
       "norm_label": "clinical.service.ts"
     },
     {
@@ -3064,7 +3064,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_crypto_service",
-      "community": 84,
+      "community": 87,
       "norm_label": "crypto.service.ts"
     },
     {
@@ -3074,7 +3074,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "services_crypto_service_cryptoservice",
-      "community": 84,
+      "community": 87,
       "norm_label": "cryptoservice"
     },
     {
@@ -3084,7 +3084,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "services_crypto_service_cryptoservice_derivekey",
-      "community": 84,
+      "community": 87,
       "norm_label": ".derivekey()"
     },
     {
@@ -3094,7 +3094,7 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "services_crypto_service_cryptoservice_clearkey",
-      "community": 84,
+      "community": 87,
       "norm_label": ".clearkey()"
     },
     {
@@ -3104,7 +3104,7 @@
       "source_location": "L39",
       "_origin": "ast",
       "id": "services_crypto_service_cryptoservice_getkey",
-      "community": 84,
+      "community": 87,
       "norm_label": ".getkey()"
     },
     {
@@ -3114,7 +3114,7 @@
       "source_location": "L53",
       "_origin": "ast",
       "id": "services_crypto_service_cryptoservice_encrypt",
-      "community": 84,
+      "community": 87,
       "norm_label": ".encrypt()"
     },
     {
@@ -3124,7 +3124,7 @@
       "source_location": "L61",
       "_origin": "ast",
       "id": "services_crypto_service_cryptoservice_decrypt",
-      "community": 84,
+      "community": 87,
       "norm_label": ".decrypt()"
     },
     {
@@ -3134,7 +3134,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_diary_service",
-      "community": 84,
+      "community": 87,
       "norm_label": "diary.service.ts"
     },
     {
@@ -3144,7 +3144,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "services_diary_service_diaryentry",
-      "community": 84,
+      "community": 87,
       "norm_label": "diaryentry"
     },
     {
@@ -3154,7 +3154,7 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "services_diary_service_diaryservice",
-      "community": 130,
+      "community": 76,
       "norm_label": "diaryservice"
     },
     {
@@ -3164,7 +3164,7 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "services_diary_service_diaryservice_constructor",
-      "community": 130,
+      "community": 76,
       "norm_label": ".constructor()"
     },
     {
@@ -3174,7 +3174,7 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "services_diary_service_diaryservice_loadentries",
-      "community": 130,
+      "community": 76,
       "norm_label": ".loadentries()"
     },
     {
@@ -3184,7 +3184,7 @@
       "source_location": "L55",
       "_origin": "ast",
       "id": "services_diary_service_diaryservice_saveentry",
-      "community": 130,
+      "community": 76,
       "norm_label": ".saveentry()"
     },
     {
@@ -3194,7 +3194,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_dossier_export_service",
-      "community": 84,
+      "community": 87,
       "norm_label": "dossier-export.service.ts"
     },
     {
@@ -3204,7 +3204,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "services_dossier_export_service_dossierexportservice",
-      "community": 128,
+      "community": 8,
       "norm_label": "dossierexportservice"
     },
     {
@@ -3214,7 +3214,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "services_dossier_export_service_dossierexportservice_getbase64imagefromurl",
-      "community": 128,
+      "community": 8,
       "norm_label": ".getbase64imagefromurl()"
     },
     {
@@ -3224,7 +3224,7 @@
       "source_location": "L39",
       "_origin": "ast",
       "id": "services_dossier_export_service_dossierexportservice_convertimagetowhite",
-      "community": 128,
+      "community": 8,
       "norm_label": ".convertimagetowhite()"
     },
     {
@@ -3234,7 +3234,7 @@
       "source_location": "L80",
       "_origin": "ast",
       "id": "services_dossier_export_service_dossierexportservice_convertimagetowatermark",
-      "community": 128,
+      "community": 8,
       "norm_label": ".convertimagetowatermark()"
     },
     {
@@ -3244,7 +3244,7 @@
       "source_location": "L118",
       "_origin": "ast",
       "id": "services_dossier_export_service_dossierexportservice_generatehmac",
-      "community": 128,
+      "community": 8,
       "norm_label": ".generatehmac()"
     },
     {
@@ -3254,7 +3254,7 @@
       "source_location": "L138",
       "_origin": "ast",
       "id": "services_dossier_export_service_dossierexportservice_getdossierdata",
-      "community": 128,
+      "community": 8,
       "norm_label": ".getdossierdata()"
     },
     {
@@ -3264,7 +3264,7 @@
       "source_location": "L349",
       "_origin": "ast",
       "id": "services_dossier_export_service_dossierexportservice_exportdossier",
-      "community": 128,
+      "community": 8,
       "norm_label": ".exportdossier()"
     },
     {
@@ -3714,7 +3714,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "nutrition_calendario_service",
-      "community": 88,
+      "community": 134,
       "norm_label": "calendario.service.ts"
     },
     {
@@ -3724,7 +3724,7 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "nutrition_calendario_service_registroayersnapshot",
-      "community": 88,
+      "community": 134,
       "norm_label": "registroayersnapshot"
     },
     {
@@ -3734,7 +3734,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "nutrition_calendario_service_calendarioservice",
-      "community": 88,
+      "community": 134,
       "norm_label": "calendarioservice"
     },
     {
@@ -3744,7 +3744,7 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "nutrition_calendario_service_calendarioservice_obtenerregistroayer",
-      "community": 88,
+      "community": 134,
       "norm_label": ".obtenerregistroayer()"
     },
     {
@@ -3754,7 +3754,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "nutrition_nutricion_service",
-      "community": 88,
+      "community": 134,
       "norm_label": "nutricion.service.ts"
     },
     {
@@ -3764,7 +3764,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "nutrition_nutricion_service_campoformulariotipo",
-      "community": 88,
+      "community": 134,
       "norm_label": "campoformulariotipo"
     },
     {
@@ -3784,7 +3784,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "nutrition_nutricion_service_consultanutricionrow",
-      "community": 88,
+      "community": 134,
       "norm_label": "consultanutricionrow"
     },
     {
@@ -3794,7 +3794,7 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "nutrition_nutricion_service_nuevaconsultanutricionpayload",
-      "community": 88,
+      "community": 134,
       "norm_label": "nuevaconsultanutricionpayload"
     },
     {
@@ -3804,7 +3804,7 @@
       "source_location": "L39",
       "_origin": "ast",
       "id": "nutrition_nutricion_service_nutricionservice",
-      "community": 88,
+      "community": 134,
       "norm_label": "nutricionservice"
     },
     {
@@ -3814,7 +3814,7 @@
       "source_location": "L42",
       "_origin": "ast",
       "id": "nutrition_nutricion_service_nutricionservice_obtenercamposformulario",
-      "community": 88,
+      "community": 134,
       "norm_label": ".obtenercamposformulario()"
     },
     {
@@ -3824,7 +3824,7 @@
       "source_location": "L57",
       "_origin": "ast",
       "id": "nutrition_nutricion_service_nutricionservice_obtenerultimaconsulta",
-      "community": 88,
+      "community": 134,
       "norm_label": ".obtenerultimaconsulta()"
     },
     {
@@ -3834,7 +3834,7 @@
       "source_location": "L73",
       "_origin": "ast",
       "id": "nutrition_nutricion_service_nutricionservice_crearconsulta",
-      "community": 88,
+      "community": 134,
       "norm_label": ".crearconsulta()"
     },
     {
@@ -3844,7 +3844,7 @@
       "source_location": "L87",
       "_origin": "ast",
       "id": "nutrition_nutricion_service_nutricionservice_agruparcamposporbloque",
-      "community": 88,
+      "community": 134,
       "norm_label": ".agruparcamposporbloque()"
     },
     {
@@ -3854,7 +3854,7 @@
       "source_location": "L93",
       "_origin": "ast",
       "id": "nutrition_nutricion_service_nutricionservice_esbloquedos",
-      "community": 88,
+      "community": 134,
       "norm_label": ".esbloquedos()"
     },
     {
@@ -3864,7 +3864,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_profile_service",
-      "community": 87,
+      "community": 74,
       "norm_label": "profile.service.ts"
     },
     {
@@ -3914,7 +3914,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_session_evaluation_service",
-      "community": 0,
+      "community": 84,
       "norm_label": "session-evaluation.service.ts"
     },
     {
@@ -3924,7 +3924,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "services_session_evaluation_service_sessionevaluationpayload",
-      "community": 0,
+      "community": 84,
       "norm_label": "sessionevaluationpayload"
     },
     {
@@ -3934,7 +3934,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "services_session_evaluation_service_sessionevaluation",
-      "community": 0,
+      "community": 84,
       "norm_label": "sessionevaluation"
     },
     {
@@ -3944,7 +3944,7 @@
       "source_location": "L33",
       "_origin": "ast",
       "id": "services_session_evaluation_service_pendingevaluationitem",
-      "community": 0,
+      "community": 84,
       "norm_label": "pendingevaluationitem"
     },
     {
@@ -3954,7 +3954,7 @@
       "source_location": "L40",
       "_origin": "ast",
       "id": "services_session_evaluation_service_professionalevaluationsummary",
-      "community": 0,
+      "community": 84,
       "norm_label": "professionalevaluationsummary"
     },
     {
@@ -5264,7 +5264,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "overview_overview_component_overviewcomponent",
-      "community": 129,
+      "community": 8,
       "norm_label": "overviewcomponent"
     },
     {
@@ -5274,7 +5274,7 @@
       "source_location": "L109",
       "_origin": "ast",
       "id": "overview_overview_component_overviewcomponent_constructor",
-      "community": 129,
+      "community": 8,
       "norm_label": ".constructor()"
     },
     {
@@ -5284,7 +5284,7 @@
       "source_location": "L111",
       "_origin": "ast",
       "id": "overview_overview_component_overviewcomponent_ngoninit",
-      "community": 129,
+      "community": 8,
       "norm_label": ".ngoninit()"
     },
     {
@@ -5294,7 +5294,7 @@
       "source_location": "L115",
       "_origin": "ast",
       "id": "overview_overview_component_overviewcomponent_loadstats",
-      "community": 129,
+      "community": 8,
       "norm_label": ".loadstats()"
     },
     {
@@ -5304,7 +5304,7 @@
       "source_location": "L141",
       "_origin": "ast",
       "id": "overview_overview_component_overviewcomponent_getoccupancycolor",
-      "community": 129,
+      "community": 8,
       "norm_label": ".getoccupancycolor()"
     },
     {
@@ -5324,7 +5324,7 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "src_app_features_admin_patients_patients_component_ts_patients_patients_component_patientscomponent",
-      "community": 1,
+      "community": 8,
       "norm_label": "patientscomponent"
     },
     {
@@ -5334,7 +5334,7 @@
       "source_location": "L108",
       "_origin": "ast",
       "id": "src_app_features_admin_patients_patients_component_ts_patients_patients_component_patientscomponent_constructor",
-      "community": 1,
+      "community": 8,
       "norm_label": ".constructor()"
     },
     {
@@ -5344,7 +5344,7 @@
       "source_location": "L110",
       "_origin": "ast",
       "id": "src_app_features_admin_patients_patients_component_ts_patients_patients_component_patientscomponent_ngoninit",
-      "community": 1,
+      "community": 8,
       "norm_label": ".ngoninit()"
     },
     {
@@ -5354,7 +5354,7 @@
       "source_location": "L130",
       "_origin": "ast",
       "id": "patients_patients_component_patientscomponent_loadorphanedstudents",
-      "community": 1,
+      "community": 8,
       "norm_label": ".loadorphanedstudents()"
     },
     {
@@ -5364,7 +5364,7 @@
       "source_location": "L141",
       "_origin": "ast",
       "id": "patients_patients_component_patientscomponent_assignprofessional",
-      "community": 1,
+      "community": 8,
       "norm_label": ".assignprofessional()"
     },
     {
@@ -5374,7 +5374,7 @@
       "source_location": "L166",
       "_origin": "ast",
       "id": "patients_patients_component_patientscomponent_getavailableprofessionals",
-      "community": 1,
+      "community": 8,
       "norm_label": ".getavailableprofessionals()"
     },
     {
@@ -5384,7 +5384,7 @@
       "source_location": "L171",
       "_origin": "ast",
       "id": "patients_patients_component_patientscomponent_updatecharts",
-      "community": 1,
+      "community": 8,
       "norm_label": ".updatecharts()"
     },
     {
@@ -5394,7 +5394,7 @@
       "source_location": "L205",
       "_origin": "ast",
       "id": "patients_patients_component_patientscomponent_exportpatientdossier",
-      "community": 1,
+      "community": 8,
       "norm_label": ".exportpatientdossier()"
     },
     {
@@ -5404,7 +5404,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "psychologists_psychologists_component",
-      "community": 8,
+      "community": 87,
       "norm_label": "psychologists.component.ts"
     },
     {
@@ -5414,7 +5414,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "psychologists_psychologists_component_psychologist",
-      "community": 8,
+      "community": 87,
       "norm_label": "psychologist"
     },
     {
@@ -5814,7 +5814,7 @@
       "source_location": "L43",
       "_origin": "ast",
       "id": "services_admin_skill8_service_adminskill8service",
-      "community": 68,
+      "community": 8,
       "norm_label": "adminskill8service"
     },
     {
@@ -5824,7 +5824,7 @@
       "source_location": "L51",
       "_origin": "ast",
       "id": "services_admin_skill8_service_adminskill8service_gethealthprofessionals",
-      "community": 68,
+      "community": 8,
       "norm_label": ".gethealthprofessionals()"
     },
     {
@@ -5834,7 +5834,7 @@
       "source_location": "L102",
       "_origin": "ast",
       "id": "services_admin_skill8_service_adminskill8service_registerhealthprofessional",
-      "community": 68,
+      "community": 8,
       "norm_label": ".registerhealthprofessional()"
     },
     {
@@ -5844,7 +5844,7 @@
       "source_location": "L140",
       "_origin": "ast",
       "id": "services_admin_skill8_service_adminskill8service_assignpatienttoprofessionals",
-      "community": 68,
+      "community": 8,
       "norm_label": ".assignpatienttoprofessionals()"
     },
     {
@@ -5854,7 +5854,7 @@
       "source_location": "L169",
       "_origin": "ast",
       "id": "services_admin_skill8_service_adminskill8service_uploadinstitutionalasset",
-      "community": 68,
+      "community": 8,
       "norm_label": ".uploadinstitutionalasset()"
     },
     {
@@ -5864,7 +5864,7 @@
       "source_location": "L199",
       "_origin": "ast",
       "id": "services_admin_skill8_service_adminskill8service_getinstitutionalasseturl",
-      "community": 68,
+      "community": 8,
       "norm_label": ".getinstitutionalasseturl()"
     },
     {
@@ -5874,7 +5874,7 @@
       "source_location": "L210",
       "_origin": "ast",
       "id": "services_admin_skill8_service_adminskill8service_listinstitutionalassets",
-      "community": 68,
+      "community": 8,
       "norm_label": ".listinstitutionalassets()"
     },
     {
@@ -5884,7 +5884,7 @@
       "source_location": "L236",
       "_origin": "ast",
       "id": "services_admin_skill8_service_adminskill8service_getorphanedstudents",
-      "community": 68,
+      "community": 8,
       "norm_label": ".getorphanedstudents()"
     },
     {
@@ -6264,7 +6264,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "register_register_component",
-      "community": 18,
+      "community": 59,
       "norm_label": "register.component.ts"
     },
     {
@@ -6684,7 +6684,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "student_agenda_student_agenda_component",
-      "community": 87,
+      "community": 59,
       "norm_label": "student-agenda.component.ts"
     },
     {
@@ -7054,7 +7054,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "achievements_dashboard_achievements_dashboard_component",
-      "community": 84,
+      "community": 81,
       "norm_label": "achievements-dashboard.component.ts"
     },
     {
@@ -7884,7 +7884,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_features_nutritionist_agenda_agenda_component_ts_agenda_agenda_component",
-      "community": 87,
+      "community": 18,
       "norm_label": "agenda.component.ts"
     },
     {
@@ -7894,7 +7894,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "src_app_features_nutritionist_agenda_agenda_component_ts_agenda_agenda_component_calendarday",
-      "community": 87,
+      "community": 18,
       "norm_label": "calendarday"
     },
     {
@@ -8034,7 +8034,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "consulta_consulta_component",
-      "community": 88,
+      "community": 134,
       "norm_label": "consulta.component.ts"
     },
     {
@@ -8128,30 +8128,10 @@
       "norm_label": ".getcamposporbloque()"
     },
     {
-      "label": ".getCamposNumericos()",
-      "file_type": "code",
-      "source_file": "src/app/features/nutritionist/consulta/consulta.component.ts",
-      "source_location": "L268",
-      "_origin": "ast",
-      "id": "consulta_consulta_component_consultacomponent_getcamposnumericos",
-      "community": 88,
-      "norm_label": ".getcamposnumericos()"
-    },
-    {
-      "label": ".hasCamposNumericos()",
-      "file_type": "code",
-      "source_file": "src/app/features/nutritionist/consulta/consulta.component.ts",
-      "source_location": "L272",
-      "_origin": "ast",
-      "id": "consulta_consulta_component_consultacomponent_hascamposnumericos",
-      "community": 88,
-      "norm_label": ".hascamposnumericos()"
-    },
-    {
       "label": ".getRichTextCamposPorBloque()",
       "file_type": "code",
       "source_file": "src/app/features/nutritionist/consulta/consulta.component.ts",
-      "source_location": "L276",
+      "source_location": "L264",
       "_origin": "ast",
       "id": "consulta_consulta_component_consultacomponent_getrichtextcamposporbloque",
       "community": 88,
@@ -8161,7 +8141,7 @@
       "label": ".hasRichTextCampos()",
       "file_type": "code",
       "source_file": "src/app/features/nutritionist/consulta/consulta.component.ts",
-      "source_location": "L280",
+      "source_location": "L268",
       "_origin": "ast",
       "id": "consulta_consulta_component_consultacomponent_hasrichtextcampos",
       "community": 88,
@@ -8171,7 +8151,7 @@
       "label": ".getFoodTableCamposPorBloque()",
       "file_type": "code",
       "source_file": "src/app/features/nutritionist/consulta/consulta.component.ts",
-      "source_location": "L284",
+      "source_location": "L272",
       "_origin": "ast",
       "id": "consulta_consulta_component_consultacomponent_getfoodtablecamposporbloque",
       "community": 88,
@@ -8181,7 +8161,7 @@
       "label": ".hasFoodTableCampos()",
       "file_type": "code",
       "source_file": "src/app/features/nutritionist/consulta/consulta.component.ts",
-      "source_location": "L288",
+      "source_location": "L276",
       "_origin": "ast",
       "id": "consulta_consulta_component_consultacomponent_hasfoodtablecampos",
       "community": 88,
@@ -8191,7 +8171,7 @@
       "label": ".getFormArray()",
       "file_type": "code",
       "source_file": "src/app/features/nutritionist/consulta/consulta.component.ts",
-      "source_location": "L292",
+      "source_location": "L280",
       "_origin": "ast",
       "id": "consulta_consulta_component_consultacomponent_getformarray",
       "community": 88,
@@ -8201,7 +8181,7 @@
       "label": ".agregarFilaTabla()",
       "file_type": "code",
       "source_file": "src/app/features/nutritionist/consulta/consulta.component.ts",
-      "source_location": "L296",
+      "source_location": "L284",
       "_origin": "ast",
       "id": "consulta_consulta_component_consultacomponent_agregarfilatabla",
       "community": 88,
@@ -8211,7 +8191,7 @@
       "label": ".eliminarFilaTabla()",
       "file_type": "code",
       "source_file": "src/app/features/nutritionist/consulta/consulta.component.ts",
-      "source_location": "L309",
+      "source_location": "L297",
       "_origin": "ast",
       "id": "consulta_consulta_component_consultacomponent_eliminarfilatabla",
       "community": 88,
@@ -8221,7 +8201,7 @@
       "label": ".isConfirmingDelete()",
       "file_type": "code",
       "source_file": "src/app/features/nutritionist/consulta/consulta.component.ts",
-      "source_location": "L318",
+      "source_location": "L306",
       "_origin": "ast",
       "id": "consulta_consulta_component_consultacomponent_isconfirmingdelete",
       "community": 88,
@@ -8231,7 +8211,7 @@
       "label": ".handleDeleteClick()",
       "file_type": "code",
       "source_file": "src/app/features/nutritionist/consulta/consulta.component.ts",
-      "source_location": "L322",
+      "source_location": "L310",
       "_origin": "ast",
       "id": "consulta_consulta_component_consultacomponent_handledeleteclick",
       "community": 88,
@@ -8241,7 +8221,7 @@
       "label": ".onInputRow()",
       "file_type": "code",
       "source_file": "src/app/features/nutritionist/consulta/consulta.component.ts",
-      "source_location": "L351",
+      "source_location": "L339",
       "_origin": "ast",
       "id": "consulta_consulta_component_consultacomponent_oninputrow",
       "community": 88,
@@ -8251,7 +8231,7 @@
       "label": ".isBooleanField()",
       "file_type": "code",
       "source_file": "src/app/features/nutritionist/consulta/consulta.component.ts",
-      "source_location": "L365",
+      "source_location": "L353",
       "_origin": "ast",
       "id": "consulta_consulta_component_consultacomponent_isbooleanfield",
       "community": 88,
@@ -8261,7 +8241,7 @@
       "label": ".guardarConsulta()",
       "file_type": "code",
       "source_file": "src/app/features/nutritionist/consulta/consulta.component.ts",
-      "source_location": "L369",
+      "source_location": "L357",
       "_origin": "ast",
       "id": "consulta_consulta_component_consultacomponent_guardarconsulta",
       "community": 88,
@@ -8271,7 +8251,7 @@
       "label": ".markNoShow()",
       "file_type": "code",
       "source_file": "src/app/features/nutritionist/consulta/consulta.component.ts",
-      "source_location": "L423",
+      "source_location": "L411",
       "_origin": "ast",
       "id": "consulta_consulta_component_consultacomponent_marknoshow",
       "community": 88,
@@ -8281,7 +8261,7 @@
       "label": ".cancelar()",
       "file_type": "code",
       "source_file": "src/app/features/nutritionist/consulta/consulta.component.ts",
-      "source_location": "L446",
+      "source_location": "L434",
       "_origin": "ast",
       "id": "consulta_consulta_component_consultacomponent_cancelar",
       "community": 88,
@@ -8291,7 +8271,7 @@
       "label": ".esBloqueDos()",
       "file_type": "code",
       "source_file": "src/app/features/nutritionist/consulta/consulta.component.ts",
-      "source_location": "L450",
+      "source_location": "L438",
       "_origin": "ast",
       "id": "consulta_consulta_component_consultacomponent_esbloquedos",
       "community": 88,
@@ -8574,7 +8554,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "perfil_paciente_perfil_paciente_component",
-      "community": 84,
+      "community": 87,
       "norm_label": "perfil-paciente.component.ts"
     },
     {
@@ -8954,7 +8934,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_features_psychologist_agenda_agenda_component_ts_agenda_agenda_component",
-      "community": 87,
+      "community": 18,
       "norm_label": "agenda.component.ts"
     },
     {
@@ -8964,7 +8944,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "src_app_features_psychologist_agenda_agenda_component_ts_agenda_agenda_component_calendarday",
-      "community": 87,
+      "community": 18,
       "norm_label": "calendarday"
     },
     {
@@ -9204,7 +9184,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "patient_profile_patient_profile_component",
-      "community": 84,
+      "community": 87,
       "norm_label": "patient-profile.component.ts"
     },
     {
@@ -9544,7 +9524,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "psychologist_layout_psychologist_layout_component",
-      "community": 18,
+      "community": 24,
       "norm_label": "psychologist-layout.component.ts"
     },
     {
@@ -9984,7 +9964,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "profile_avatar_profile_avatar_component",
-      "community": 59,
+      "community": 74,
       "norm_label": "profile-avatar.component.ts"
     },
     {
@@ -10094,7 +10074,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "environments_environment",
-      "community": 8,
+      "community": 87,
       "norm_label": "environment.ts"
     },
     {
@@ -10104,7 +10084,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "environments_environment_environment",
-      "community": 8,
+      "community": 87,
       "norm_label": "environment"
     },
     {
@@ -21454,17 +21434,6 @@
       "context": "return_type",
       "confidence": "EXTRACTED",
       "source_file": "src/app/features/nutritionist/consulta/consulta.component.ts",
-      "source_location": "L268",
-      "weight": 1.0,
-      "source": "consulta_consulta_component_consultacomponent_getcamposnumericos",
-      "target": "nutrition_nutricion_service_campoformulario",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "references",
-      "context": "return_type",
-      "confidence": "EXTRACTED",
-      "source_file": "src/app/features/nutritionist/consulta/consulta.component.ts",
       "source_location": "L164",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -28092,16 +28061,6 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/app/features/nutritionist/consulta/consulta.component.ts",
-      "source_location": "L268",
-      "weight": 1.0,
-      "source": "consulta_consulta_component_consultacomponent",
-      "target": "consulta_consulta_component_consultacomponent_getcamposnumericos",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "src/app/features/nutritionist/consulta/consulta.component.ts",
       "source_location": "L164",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -28154,18 +28113,8 @@
       "source_file": "src/app/features/nutritionist/consulta/consulta.component.ts",
       "source_location": "L310",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "consulta_consulta_component_consultacomponent",
-      "target": "consulta_consulta_component_consultacomponent_handledeleteclick"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "src/app/features/nutritionist/consulta/consulta.component.ts",
-      "source_location": "L272",
-      "weight": 1.0,
-      "source": "consulta_consulta_component_consultacomponent",
-      "target": "consulta_consulta_component_consultacomponent_hascamposnumericos",
+      "target": "consulta_consulta_component_consultacomponent_handledeleteclick",
       "confidence_score": 1.0
     },
     {
@@ -28204,9 +28153,9 @@
       "source_file": "src/app/features/nutritionist/consulta/consulta.component.ts",
       "source_location": "L306",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "consulta_consulta_component_consultacomponent",
-      "target": "consulta_consulta_component_consultacomponent_isconfirmingdelete"
+      "target": "consulta_consulta_component_consultacomponent_isconfirmingdelete",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -28363,9 +28312,9 @@
       "source_file": "src/app/features/nutritionist/consulta/consulta.component.ts",
       "source_location": "L311",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "consulta_consulta_component_consultacomponent_handledeleteclick",
-      "target": "consulta_consulta_component_consultacomponent_getformarray"
+      "target": "consulta_consulta_component_consultacomponent_getformarray",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -28396,9 +28345,9 @@
       "source_file": "src/app/features/nutritionist/consulta/consulta.component.ts",
       "source_location": "L319",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "consulta_consulta_component_consultacomponent_handledeleteclick",
-      "target": "consulta_consulta_component_consultacomponent_eliminarfilatabla"
+      "target": "consulta_consulta_component_consultacomponent_eliminarfilatabla",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",

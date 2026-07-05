@@ -39,6 +39,10 @@ export const ADMIN_ROUTES: Routes = [
         loadComponent: () => import('./institutional-settings/institutional-settings.component').then(m => m.InstitutionalSettingsComponent)
       },
       {
+        path: 'nutritionist-fields',
+        loadComponent: () => import('./nutritionist-fields/nutritionist-fields.component').then(m => m.NutritionistFieldsComponent)
+      },
+      {
         path: 'faculties/:id',
         loadComponent: () => import('./faculties/faculty-detail/faculty-detail.component').then(m => m.FacultyDetailComponent)
       },

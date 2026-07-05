@@ -248,11 +248,17 @@ export class PerfilPaciente implements OnInit {
             // Cargar datos específicos (Nutricionista)
             if (this.clinicalNotesObj.specific_data) {
               this.specificData = { ...this.specificData, ...this.clinicalNotesObj.specific_data };
+              if (this.clinicalNotesObj.specific_data.comentarios_clinicos && !this.specificData.comentarios) {
+                this.specificData.comentarios = this.clinicalNotesObj.specific_data.comentarios_clinicos;
+              }
             }
 
             // Cargar consumo semanal (Nutricionista)
             if (this.clinicalNotesObj.weekly_consumption) {
               this.weeklyConsumption = { ...this.weeklyConsumption, ...this.clinicalNotesObj.weekly_consumption };
+              if (this.clinicalNotesObj.weekly_consumption.comentarios_semanales && !this.weeklyConsumption.comentarios) {
+                this.weeklyConsumption.comentarios = this.clinicalNotesObj.weekly_consumption.comentarios_semanales;
+              }
             }
 
             // Cargar recordatorio de 24 horas
@@ -570,6 +576,14 @@ export class PerfilPaciente implements OnInit {
   async saveNutritionRecord() {
     this.isSavingRecord = true;
     
+    // Map comments to clinical keys before saving
+    if (this.specificData) {
+      (this.specificData as any).comentarios_clinicos = this.specificData.comentarios;
+    }
+    if (this.weeklyConsumption) {
+      (this.weeklyConsumption as any).comentarios_semanales = this.weeklyConsumption.comentarios;
+    }
+
     // Unificar los datos en el objeto que se va a cifrar
     this.clinicalNotesObj.specific_data = this.specificData;
     this.clinicalNotesObj.weekly_consumption = this.weeklyConsumption;

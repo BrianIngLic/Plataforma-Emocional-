@@ -1,0 +1,140 @@
+<div class="fields-page">
+  <div class="page-header">
+    <div>
+      <h1 style="font-size: 1.8rem; font-weight: 800; color: var(--text-primary); margin: 0;">Configuración de Formulario</h1>
+      <p style="color: var(--text-secondary); margin: 0.35rem 0 0;">Gestione los campos dinámicos, tipos de entrada y ordenamiento para la consulta de nutrición.</p>
+    </div>
+    <button class="btn-primary" (click)="openAddModal()" style="display: inline-flex; align-items: center; gap: 0.5rem; border: none; border-radius: 10px; padding: 0.75rem 1.25rem; font-weight: 700; cursor: pointer; background: #3b82f6; color: white;">
+      <mat-icon>add</mat-icon> Nuevo Campo
+    </button>
+  </div>
+
+  <div *ngIf="loading" class="state-box" style="padding: 2rem; text-align: center; border: 1px dashed var(--border-color); border-radius: 16px; color: var(--text-secondary); background: var(--bg-card); margin-top: 1.5rem;">
+    Cargando catálogo de campos...
+  </div>
+
+  <div *ngIf="!loading" class="blocks-container" style="display: flex; flex-direction: column; gap: 2rem; margin-top: 1.5rem;">
+    <div *ngFor="let bName of bloques" class="block-card" style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.5rem;">
+      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; margin-bottom: 1rem;">
+        <h2 style="font-size: 1.2rem; font-weight: 700; color: var(--text-primary); margin: 0;">{{ bName }}</h2>
+        <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); background: var(--border-color); padding: 0.25rem 0.75rem; border-radius: 999px;">
+          {{ getCamposPorBloqueName(bName).length }} campos
+        </span>
+      </div>
+
+      <div style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse; min-width: 700px;">
+          <thead>
+            <tr style="border-bottom: 1px solid var(--border-color); text-align: left;">
+              <th style="padding: 0.75rem; font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); width: 15%;">Clave</th>
+              <th style="padding: 0.75rem; font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); width: 25%;">Etiqueta</th>
+              <th style="padding: 0.75rem; font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); width: 20%;">Tipo</th>
+              <th style="padding: 0.75rem; font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); width: 10%; text-align: center;">Orden</th>
+              <th style="padding: 0.75rem; font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); width: 10%; text-align: center;">Estado</th>
+              <th style="padding: 0.75rem; font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); width: 20%; text-align: center;">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let campo of getCamposPorBloqueName(bName); let idx = index" style="border-bottom: 1px solid var(--border-color); transition: background 0.2s;" hover="background: rgba(0,0,0,0.01);">
+              <td style="padding: 0.75rem; font-family: monospace; font-size: 0.85rem; color: var(--text-secondary);">{{ campo.clave }}</td>
+              <td style="padding: 0.75rem; font-weight: 600; color: var(--text-primary);">
+                {{ campo.etiqueta }}
+                <div style="font-size: 0.75rem; color: var(--text-secondary); font-weight: 400; margin-top: 0.25rem;">{{ campo.ayuda }}</div>
+              </td>
+              <td style="padding: 0.75rem;">
+                <span class="badge" style="background: rgba(59, 130, 246, 0.1); color: #3b82f6; padding: 0.25rem 0.5rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600;">
+                  {{ campo.tipo_campo }}
+                </span>
+              </td>
+              <td style="padding: 0.75rem; text-align: center; font-weight: 600; color: var(--text-secondary);">{{ campo.orden }}</td>
+              <td style="padding: 0.75rem; text-align: center;">
+                <button type="button" (click)="toggleActivo(campo)" [style.background]="campo.activo ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)'" [style.color]="campo.activo ? '#10b981' : '#ef4444'" style="border: none; border-radius: 999px; padding: 0.25rem 0.75rem; font-size: 0.8rem; font-weight: 700; cursor: pointer;">
+                  {{ campo.activo ? 'Activo' : 'Inactivo' }}
+                </button>
+              </td>
+              <td style="padding: 0.75rem; text-align: center;">
+                <div style="display: inline-flex; gap: 0.25rem; align-items: center;">
+                  <button type="button" (click)="moveOrder(campo, 'up')" [disabled]="idx === 0" style="background: transparent; border: none; cursor: pointer; color: var(--text-secondary);" [style.opacity]="idx === 0 ? '0.3' : '1'">
+                    <mat-icon style="font-size: 20px; width: 20px; height: 20px;">arrow_upward</mat-icon>
+                  </button>
+                  <button type="button" (click)="moveOrder(campo, 'down')" [disabled]="idx === getCamposPorBloqueName(bName).length - 1" style="background: transparent; border: none; cursor: pointer; color: var(--text-secondary);" [style.opacity]="idx === getCamposPorBloqueName(bName).length - 1 ? '0.3' : '1'">
+                    <mat-icon style="font-size: 20px; width: 20px; height: 20px;">arrow_downward</mat-icon>
+                  </button>
+                  <button type="button" (click)="openEditModal(campo)" style="background: transparent; border: none; cursor: pointer; color: #3b82f6;">
+                    <mat-icon style="font-size: 20px; width: 20px; height: 20px;">edit</mat-icon>
+                  </button>
+                  <button type="button" (click)="deleteField(campo)" style="background: transparent; border: none; cursor: pointer; color: #ef4444;">
+                    <mat-icon style="font-size: 20px; width: 20px; height: 20px;">delete</mat-icon>
+                  </button>
+                </div>
+              </td>
+            </tr>
+            <tr *ngIf="getCamposPorBloqueName(bName).length === 0">
+              <td colspan="6" style="padding: 1.5rem; text-align: center; color: var(--text-secondary); font-size: 0.9rem;">
+                No hay campos configurados en este bloque.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Add/Edit Field -->
+  <div *ngIf="showAddModal" class="modal-overlay" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.4); display: flex; justify-content: center; align-items: center; z-index: 1000; backdrop-filter: blur(4px);">
+    <div class="modal-content" style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 2rem; width: 100%; max-width: 500px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);">
+      <h2 style="font-size: 1.3rem; font-weight: 800; color: var(--text-primary); margin: 0 0 1.5rem;">
+        {{ selectedCampo ? 'Editar Campo' : 'Nuevo Campo' }}
+      </h2>
+
+      <form [formGroup]="fieldForm" (ngSubmit)="saveField()" style="display: flex; flex-direction: column; gap: 1.25rem;">
+        <div style="display: flex; flex-direction: column; gap: 0.4rem;">
+          <label style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary);">Bloque del Formulario</label>
+          <select formControlName="bloque" style="padding: 0.75rem; border-radius: 10px; border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-primary); outline: none;">
+            <option *ngFor="let b of bloques" [value]="b">{{ b }}</option>
+          </select>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 0.4rem;">
+          <label style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary);">Clave (Identificador único en inglés)</label>
+          <input type="text" formControlName="clave" placeholder="Ej. actividad_fisica" style="padding: 0.75rem; border-radius: 10px; border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-primary); outline: none;" />
+          <small style="color: var(--text-secondary); font-size: 0.75rem;">Solo minúsculas, números y guiones bajos.</small>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 0.4rem;">
+          <label style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary);">Etiqueta (Texto que se mostrará)</label>
+          <input type="text" formControlName="etiqueta" placeholder="Ej. Actividad física" style="padding: 0.75rem; border-radius: 10px; border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-primary); outline: none;" />
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 0.4rem;">
+          <label style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary);">Tipo de Entrada</label>
+          <select formControlName="tipo_campo" style="padding: 0.75rem; border-radius: 10px; border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-primary); outline: none;">
+            <option *ngFor="let t of tipos" [value]="t.value">{{ t.label }}</option>
+          </select>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 0.4rem;">
+          <label style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary);">Orden de Visualización</label>
+          <input type="number" formControlName="orden" style="padding: 0.75rem; border-radius: 10px; border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-primary); outline: none;" />
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 0.4rem;">
+          <label style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary);">Texto de Ayuda / Hint</label>
+          <input type="text" formControlName="ayuda" placeholder="Ej. Especifique frecuencia y tipo" style="padding: 0.75rem; border-radius: 10px; border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-primary); outline: none;" />
+        </div>
+
+        <div style="display: inline-flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+          <input type="checkbox" formControlName="activo" id="modal-activo" style="width: 18px; height: 18px;" />
+          <label for="modal-activo" style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary); cursor: pointer;">Habilitado en el formulario</label>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1rem;">
+          <button type="button" class="btn secondary" (click)="closeModal()" style="border: 1px solid var(--border-color); border-radius: 10px; padding: 0.75rem 1.25rem; background: var(--input-bg); color: var(--text-primary); cursor: pointer; font-weight: 700;">Cancelar</button>
+          <button type="submit" class="btn primary" [disabled]="saving" style="border: none; border-radius: 10px; padding: 0.75rem 1.25rem; background: #3b82f6; color: white; cursor: pointer; font-weight: 700;">
+            {{ saving ? 'Guardando...' : 'Guardar' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { SupabaseService } from '../supabase.service';
 
-export type CampoFormularioTipo = 'text' | 'number' | 'boolean' | 'select';
+export type CampoFormularioTipo = 'text' | 'number' | 'boolean' | 'select' | 'rich-text' | 'food-table';
 
 export interface CampoFormulario {
   id: string;

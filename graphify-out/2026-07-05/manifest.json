@@ -865,8 +865,8 @@
     "semantic_hash": ""
   },
   "src/app/features/nutritionist/consulta/consulta.component.ts": {
-    "mtime": 1783241037.484824,
-    "ast_hash": "586ea3953e66a65527ddb1059aea15ba",
+    "mtime": 1783240729.5680153,
+    "ast_hash": "7f45eb4d1a7a1744642159e6d6cb348e",
     "semantic_hash": ""
   },
   "src/app/features/nutritionist/consulta/consulta.types.ts": {
@@ -1025,8 +1025,8 @@
     "semantic_hash": ""
   },
   "src/app/features/nutritionist/consulta/consulta.component.html": {
-    "mtime": 1783241059.9159884,
-    "ast_hash": "d79be5c556ab82be8f90120fffba1660",
+    "mtime": 1783240740.4505272,
+    "ast_hash": "ea7b62ae99096d59749c465884483d86",
     "semantic_hash": ""
   },
   "src/app/features/admin/nutritionist-fields/nutritionist-fields.component.ts": {

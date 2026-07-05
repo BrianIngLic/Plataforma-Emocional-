@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { QuillModule } from 'ngx-quill';
 import { SupabaseService } from '../../../core/services/supabase.service';
+import { CryptoService } from '../../../core/services/crypto.service';
 
 @Component({
   selector: 'app-clinical-note',
@@ -23,20 +24,29 @@ import { SupabaseService } from '../../../core/services/supabase.service';
       <div class="clinical-sheet">
         
         <!-- Membrete / Encabezado -->
-        <div class="sheet-header">
-          <div class="logo-area">
-            <div class="logo">
-              <img src="/amati-logo.svg" alt="Amati" style="width: 24px; height: 24px;" /> Amati
+        <div class="sheet-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+          <!-- Izquierda: Logo Institucional y Título del Documento -->
+          <div class="logo-area" style="display: flex; align-items: center; gap: 0.75rem;">
+            <img *ngIf="institutionalLogoUrl" [src]="institutionalLogoUrl" alt="Logo Institucional" style="max-height: 54px; max-width: 130px; object-fit: contain;" />
+            <div>
+              <div class="doc-title" style="font-size: 1.25rem; font-weight: 700; color: var(--text-primary); letter-spacing: 0.5px; margin-bottom: 0.25rem;">NOTA DE EVOLUCIÓN CLÍNICA</div>
+              <div style="font-size: 0.9rem; color: #64748b; font-weight: 500;">Expediente Clínico del Estudiante</div>
             </div>
-            <div class="doc-title">NOTA DE EVOLUCIÓN CLÍNICA</div>
           </div>
-          <div class="date-area">
-            <p><strong>Fecha de Emisión:</strong> {{ currentDate | date:'dd - MM - yyyy' }}</p>
-            <p><strong>Estatus:</strong> 
-              <span class="status-badge" [ngStyle]="{'background': isReadOnly ? '#bbf7d0' : '#fef08a', 'color': isReadOnly ? '#166534' : '#854d0e'}">
-                {{ isReadOnly ? 'Finalizada' : 'Borrador' }}
-              </span>
-            </p>
+          
+          <!-- Derecha: Logo de Amati, Fecha y Estatus -->
+          <div style="display: flex; align-items: center; gap: 1.5rem;">
+            <div class="date-area" style="text-align: right;">
+              <p style="margin: 0.15rem 0;"><strong>Fecha de Emisión:</strong> {{ currentDate | date:'dd - MM - yyyy' }}</p>
+              <p style="margin: 0.15rem 0;"><strong>Estatus:</strong> 
+                <span class="status-badge" [ngStyle]="{'background': isReadOnly ? '#bbf7d0' : '#fef08a', 'color': isReadOnly ? '#166534' : '#854d0e'}">
+                  {{ isReadOnly ? 'Finalizada' : 'Borrador' }}
+                </span>
+              </p>
+            </div>
+            <div class="logo" style="display: flex; align-items: center; gap: 0.35rem; font-size: 1.4rem; font-weight: 800; color: var(--text-primary);">
+              <img src="/amati-logo.svg" alt="Amati" style="width: 28px; height: 28px;" /> Amati
+            </div>
           </div>
         </div>
 
@@ -61,7 +71,25 @@ import { SupabaseService } from '../../../core/services/supabase.service';
                   <th>Nombre Completo:</th>
                   <td>{{ patient.first_name }} {{ patient.last_name }}</td>
                   <th>Expediente / ID:</th>
-                  <td>{{ patient.student_id.substring(0,8).toUpperCase() }}</td>
+                  <td>{{ patient.student_id?.substring(0,8)?.toUpperCase() }}</td>
+                </tr>
+                <tr>
+                  <th>Matrícula:</th>
+                  <td>{{ patient.matricula }}</td>
+                  <th>Facultad:</th>
+                  <td>{{ patient.faculty }}</td>
+                </tr>
+                <tr>
+                  <th>Celular:</th>
+                  <td>{{ patient.celular }}</td>
+                  <th>Sexo:</th>
+                  <td>{{ patient.sexo }}</td>
+                </tr>
+                <tr>
+                  <th>Fecha de Nacimiento:</th>
+                  <td>{{ patient.fecha_nacimiento }}</td>
+                  <th>Edad:</th>
+                  <td>{{ patient.edad }}</td>
                 </tr>
                 <tr>
                   <th>Fecha de Sesión:</th>
@@ -107,6 +135,7 @@ import { SupabaseService } from '../../../core/services/supabase.service';
 })
 export class ClinicalNoteComponent implements OnInit {
   supabase = inject(SupabaseService).supabase;
+  crypto = inject(CryptoService);
   location = inject(Location);
   route = inject(ActivatedRoute);
   router = inject(Router);
@@ -118,6 +147,7 @@ export class ClinicalNoteComponent implements OnInit {
   isReadOnly = false;
 
   currentDate = new Date();
+  institutionalLogoUrl: string | null = null;
 
   // Plantilla SOAP pre-llenada en HTML
   notesContent = `
@@ -170,19 +200,58 @@ export class ClinicalNoteComponent implements OnInit {
       if (this.appointment && this.appointment.student_id) {
         const { data: pData, error: pError } = await this.supabase
           .from('users')
-          .select('id, profiles(first_name, last_name)')
+          .select('id, matricula, profiles(first_name, last_name, faculty), student_clinical_records!student_clinical_records_student_id_fkey(additional_notes)')
           .eq('id', this.appointment.student_id)
           .single();
           
         if (pError) throw pError;
-        if (pData && pData.profiles) {
+        if (pData) {
           const profile = Array.isArray(pData.profiles) ? pData.profiles[0] : pData.profiles;
+          const records = pData.student_clinical_records;
+          const recordObj = Array.isArray(records) ? records[0] : records;
+          
+          let matricula = pData.matricula || 'N/A';
+          let faculty = profile?.faculty || 'N/A';
+          let celular = 'N/A';
+          let sexo = 'N/A';
+          let fechaNacimiento = 'N/A';
+          let edad = 'N/A';
+
+          if (recordObj && recordObj.additional_notes) {
+            try {
+              const decrypted = this.crypto.decrypt(recordObj.additional_notes);
+              const parsed = JSON.parse(decrypted);
+              const gen = parsed.general_data || {};
+              celular = gen.celular || 'N/A';
+              sexo = gen.sexo || 'N/A';
+              fechaNacimiento = gen.fecha_nacimiento || 'N/A';
+              edad = gen.edad ? `${gen.edad} años` : 'N/A';
+            } catch(e) {
+              console.warn('Error decrypting notes for general data:', e);
+            }
+          }
+
           this.patient = {
             student_id: pData.id,
-            first_name: profile.first_name,
-            last_name: profile.last_name
+            first_name: profile?.first_name || 'Paciente',
+            last_name: profile?.last_name || 'Sin Nombre',
+            matricula: matricula,
+            faculty: faculty,
+            celular: celular,
+            sexo: sexo,
+            fecha_nacimiento: fechaNacimiento,
+            edad: edad
           };
         }
+      }
+
+      // Fetch institutional logo URL
+      const { data: assetData } = this.supabase.storage
+        .from('institutional_assets')
+        .getPublicUrl('watermark_logo.png');
+
+      if (assetData) {
+        this.institutionalLogoUrl = assetData.publicUrl;
       }
       
       // Formatear fecha

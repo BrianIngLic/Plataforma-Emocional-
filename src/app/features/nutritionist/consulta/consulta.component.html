@@ -1,74 +1,232 @@
-<div class="consulta-page">
-  <div class="consulta-header">
-    <div>
-      <p class="eyebrow">Nota Nutricional</p>
-      <h1>Consulta dinámica del nutriólogo</h1>
-      <p class="subtitle">Catálogo vivo, precarga de última consulta y snapshot inmutable de calendario.</p>
-    </div>
-    <div class="header-actions">
-      <button type="button" class="btn ghost" (click)="cancelar()">Volver</button>
+<div class="page-container">
+  <!-- Barra superior de navegación -->
+  <div class="top-nav" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+    <button class="back-btn" (click)="cancelar()" style="display: inline-flex; align-items: center; gap: 0.5rem; background: transparent; border: none; color: var(--text-secondary); font-size: 1rem; font-weight: 500; cursor: pointer; transition: color 0.2s;">
+      <mat-icon>arrow_back</mat-icon> Volver
+    </button>
+    <div style="display: flex; gap: 0.75rem;">
+      <button *ngIf="sessionId" type="button" class="btn secondary" (click)="markNoShow()" [disabled]="loading || saving" style="background: rgba(244, 63, 94, 0.1); color: #f43f5e; border: none; border-radius: 10px; padding: 0.75rem 1rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem;">
+        <mat-icon>person_off</mat-icon> Marcar Inasistencia
+      </button>
       <button type="submit" form="consulta-form" class="btn primary" [disabled]="saving">
         {{ saving ? 'Guardando...' : 'Guardar consulta' }}
       </button>
     </div>
   </div>
 
-  <div *ngIf="loading" class="state-box">Cargando catálogo y última consulta...</div>
-
-  <form *ngIf="!loading" id="consulta-form" [formGroup]="form" (ngSubmit)="guardarConsulta()" class="consulta-form">
-    <section class="panel summary-panel">
-      <div class="summary-item">
-        <span>Paciente</span>
-        <strong>{{ pacienteId }}</strong>
-      </div>
-      <div class="summary-item">
-        <label for="calorias_totales">Calorías totales</label>
-        <input id="calorias_totales" type="number" formControlName="calorias_totales" min="0" />
-      </div>
-      <div class="summary-item">
-        <span>Última consulta</span>
-        <strong>{{ ultimaConsulta?.fecha_consulta ? (ultimaConsulta?.fecha_consulta | date:'medium') : 'Sin consulta previa' }}</strong>
-      </div>
-    </section>
-
-    <section class="panel" *ngFor="let bloque of bloques">
-      <div class="panel-header">
-        <h2>{{ bloque.titulo }}</h2>
-        <span>{{ getCamposPorBloque(bloque).length }} campos</span>
-      </div>
-
-      <div class="fields-grid">
-        <div class="field-card" *ngFor="let campo of getCamposPorBloque(bloque)">
-          <label [for]="campo.clave">{{ campo.etiqueta }}</label>
-
-          <ng-container [ngSwitch]="campo.tipo_campo">
-            <input *ngSwitchCase="'text'" [id]="campo.clave" type="text" [formControlName]="campo.clave" />
-
-            <input *ngSwitchCase="'number'" [id]="campo.clave" type="number" [formControlName]="campo.clave" />
-
-            <label *ngSwitchCase="'boolean'" class="boolean-field">
-              <input type="checkbox" [formControlName]="campo.clave" />
-              <span>Sí</span>
-            </label>
-
-            <select *ngSwitchCase="'select'" [id]="campo.clave" [formControlName]="campo.clave">
-              <option value="">Selecciona</option>
-              <option *ngFor="let option of selectOptions" [value]="option">{{ option }}</option>
-            </select>
-
-            <input *ngSwitchDefault [id]="campo.clave" type="text" [formControlName]="campo.clave" />
-          </ng-container>
+  <!-- Hoja Clínica (Contenedor principal) -->
+  <div class="clinical-sheet">
+    <!-- Membrete / Encabezado -->
+    <div class="sheet-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+      <!-- Izquierda: Logo Institucional y Título del Documento -->
+      <div class="logo-area" style="display: flex; align-items: center; gap: 0.75rem;">
+        <img *ngIf="institutionalLogoUrl" [src]="institutionalLogoUrl" alt="Logo Institucional" style="max-height: 54px; max-width: 130px; object-fit: contain;" />
+        <div>
+          <div class="doc-title" style="font-size: 1.25rem; font-weight: 700; color: var(--text-primary); letter-spacing: 0.5px;">NOTA DE EVOLUCIÓN NUTRICIONAL</div>
+          <div style="font-size: 0.9rem; color: #64748b; font-weight: 500;">Expediente Clínico del Estudiante</div>
         </div>
       </div>
-    </section>
-
-    <section class="panel snapshot-panel">
-      <div class="panel-header">
-        <h2>Recordatorio 24h</h2>
-        <span>Snapshot</span>
+      
+      <!-- Derecha: Logo de Amati, Fecha y Estatus -->
+      <div style="display: flex; align-items: center; gap: 1.5rem;">
+        <div class="date-area" style="text-align: right;">
+          <p style="margin: 0.15rem 0; font-size: 0.9rem;"><strong>Fecha de Emisión:</strong> {{ currentDate | date:'dd - MM - yyyy' }}</p>
+          <p style="margin: 0.15rem 0; font-size: 0.9rem;"><strong>Estatus:</strong> 
+            <span class="status-badge" style="background: #fef08a; color: #854d0e; padding: 0.2rem 0.6rem; border-radius: 999px; font-size: 0.8rem; font-weight: 600;">
+              Borrador
+            </span>
+          </p>
+        </div>
+        <div class="logo" style="display: flex; align-items: center; gap: 0.35rem; font-size: 1.4rem; font-weight: 800; color: var(--text-primary);">
+          <img src="/amati-logo.svg" alt="Amati" style="width: 28px; height: 28px;" /> Amati
+        </div>
       </div>
-      <p>Servicio simulado. Se inyecta al guardar en <strong>recordatorio_24h</strong>, no se edita en pantalla.</p>
-      <div class="snapshot-hint">Se toma el registro de ayer desde CalendarioService.obtenerRegistroAyer(paciente_id).</div>
-    </section>
-  </form>
+    </div>
+
+    <hr class="divider">
+
+    <div *ngIf="loading" class="state-box">Cargando catálogo y última consulta...</div>
+
+    <form *ngIf="!loading" id="consulta-form" [formGroup]="form" (ngSubmit)="guardarConsulta()" class="consulta-form">
+      <!-- Datos de Identificación (Tabla) -->
+      <div class="info-section">
+        <h3 class="section-title">Datos de Identificación del Paciente</h3>
+        <table class="info-table">
+          <tbody>
+            <tr>
+              <th>Nombre Completo:</th>
+              <td>{{ patient?.first_name }} {{ patient?.last_name }}</td>
+              <th>Expediente / ID:</th>
+              <td>{{ patient?.student_id?.substring(0,8)?.toUpperCase() }}</td>
+            </tr>
+            <tr>
+              <th>Matrícula:</th>
+              <td>{{ patient?.matricula }}</td>
+              <th>Facultad:</th>
+              <td>{{ patient?.faculty }}</td>
+            </tr>
+            <tr>
+              <th>Celular:</th>
+              <td>{{ patient?.celular }}</td>
+              <th>Sexo:</th>
+              <td>{{ patient?.sexo }}</td>
+            </tr>
+            <tr>
+              <th>Fecha de Nacimiento:</th>
+              <td>{{ patient?.fecha_nacimiento }}</td>
+              <th>Edad:</th>
+              <td>{{ patient?.edad }}</td>
+            </tr>
+            <tr>
+              <th>Última Consulta:</th>
+              <td colspan="3">{{ ultimaConsulta?.fecha_consulta ? (ultimaConsulta?.fecha_consulta | date:'dd - MM - yyyy') : 'Sin consulta previa' }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <section class="panel" *ngFor="let bloque of bloques">
+        <div class="panel-header">
+          <h2>{{ bloque.titulo }}</h2>
+          <span>{{ getCamposPorBloque(bloque).length }} campos</span>
+        </div>
+
+        <div class="fields-grid" *ngIf="getCamposPorBloque(bloque).length > 0">
+          <div class="field-card" *ngFor="let campo of getCamposPorBloque(bloque)">
+            <label [for]="campo.clave">{{ campo.etiqueta }}</label>
+
+            <ng-container [ngSwitch]="campo.tipo_campo">
+              <input *ngSwitchCase="'text'" [id]="campo.clave" type="text" [formControlName]="campo.clave" />
+
+              <input *ngSwitchCase="'number'" [id]="campo.clave" type="number" [formControlName]="campo.clave" />
+
+              <label *ngSwitchCase="'boolean'" class="boolean-field">
+                <input type="checkbox" [formControlName]="campo.clave" />
+                <span>Sí</span>
+              </label>
+
+              <select *ngSwitchCase="'select'" [id]="campo.clave" [formControlName]="campo.clave">
+                <option value="">Selecciona</option>
+                <option *ngFor="let option of selectOptions" [value]="option">{{ option }}</option>
+              </select>
+
+              <input *ngSwitchDefault [id]="campo.clave" type="text" [formControlName]="campo.clave" />
+            </ng-container>
+          </div>
+        </div>
+
+        <!-- Numeric fields grouped side-by-side -->
+        <div class="numeric-fields-row" *ngIf="hasCamposNumericos(bloque)" style="display: flex; flex-wrap: wrap; gap: 1.5rem; margin-top: 1.5rem; margin-bottom: 0.5rem;">
+          <div class="field-card compact" *ngFor="let campo of getCamposNumericos(bloque)" style="display: flex; flex-direction: column; gap: 0.45rem; min-width: 150px; flex: 1 1 150px; max-width: 220px;">
+            <label [for]="campo.clave" style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary);">{{ campo.etiqueta }}</label>
+            <input type="number" [id]="campo.clave" [formControlName]="campo.clave" style="padding: 0.75rem 0.9rem; border-radius: 10px; border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-primary); outline: none; width: 100%;" />
+          </div>
+        </div>
+
+        <!-- Food Tables generated dynamically by config -->
+        <ng-container *ngIf="hasFoodTableCampos(bloque)">
+          <div class="food-tables-container" style="display: flex; flex-direction: column; gap: 2rem; margin-top: 1.5rem;">
+            <div class="food-table-wrapper" *ngFor="let campo of getFoodTableCamposPorBloque(bloque)" style="border: 1px solid var(--border-color); border-radius: 12px; overflow: hidden; background: var(--bg-card);">
+              <div style="background: var(--bg-hover, rgba(0,0,0,0.03)); padding: 0.75rem 1rem; font-weight: 700; color: var(--text-primary); border-bottom: 1px solid var(--border-color); font-size: 1rem;">
+                <span>{{ campo.etiqueta }}</span>
+              </div>
+              <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; min-width: 600px;">
+                  <thead>
+                    <tr style="background: var(--bg-card); border-bottom: 1px solid var(--border-color); text-align: left;">
+                      <th style="padding: 0.75rem; font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); width: 25%;">Alimento</th>
+                      <th style="padding: 0.75rem; font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); width: 15%;">Cantidad</th>
+                      <th style="padding: 0.75rem; font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); width: 15%;">Unidad</th>
+                      <th style="padding: 0.75rem; font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); width: 15%;">Frecuencia</th>
+                      <th style="padding: 0.75rem; font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); width: 20%;">Nota</th>
+                      <th style="padding: 0.75rem; font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); width: 10%; text-align: center;">Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody [formArrayName]="campo.clave">
+                    <tr *ngFor="let row of getFormArray(campo.clave).controls; let idx = index" [formGroupName]="idx" style="border-bottom: 1px solid var(--border-color);">
+                      <td style="padding: 0.5rem 0.75rem;">
+                        <input type="text" formControlName="alimento" placeholder="Ej. Leche entera" (input)="onInputRow(campo.clave, idx)" style="width: 100%; padding: 0.5rem; border: 1px solid var(--border-color); border-radius: 8px; background: var(--input-bg); color: var(--text-primary); outline: none;" />
+                      </td>
+                      <td style="padding: 0.5rem 0.75rem;">
+                        <input type="text" formControlName="cantidad" placeholder="Ej. 1" (input)="onInputRow(campo.clave, idx)" style="width: 100%; padding: 0.5rem; border: 1px solid var(--border-color); border-radius: 8px; background: var(--input-bg); color: var(--text-primary); outline: none;" />
+                      </td>
+                      <td style="padding: 0.5rem 0.75rem;">
+                        <input type="text" formControlName="unidad" placeholder="Ej. Vaso / Taza" (input)="onInputRow(campo.clave, idx)" style="width: 100%; padding: 0.5rem; border: 1px solid var(--border-color); border-radius: 8px; background: var(--input-bg); color: var(--text-primary); outline: none;" />
+                      </td>
+                      <td style="padding: 0.5rem 0.75rem;">
+                        <input type="text" formControlName="frecuencia" placeholder="Ej. 3 veces/sem" (input)="onInputRow(campo.clave, idx)" style="width: 100%; padding: 0.5rem; border: 1px solid var(--border-color); border-radius: 8px; background: var(--input-bg); color: var(--text-primary); outline: none;" />
+                      </td>
+                      <td style="padding: 0.5rem 0.75rem;">
+                        <input type="text" formControlName="nota" placeholder="Ej. Deslactosada" (input)="onInputRow(campo.clave, idx)" style="width: 100%; padding: 0.5rem; border: 1px solid var(--border-color); border-radius: 8px; background: var(--input-bg); color: var(--text-primary); outline: none;" />
+                      </td>
+                      <td style="padding: 0.5rem 0.75rem; text-align: center; white-space: nowrap;">
+                        <div style="display: inline-flex; align-items: center; gap: 0.35rem; justify-content: center;">
+                          <span *ngIf="isConfirmingDelete(campo.clave, idx)" style="font-size: 0.75rem; color: #ef4444; font-weight: 700; animation: fadeIn 0.2s;">
+                            ¿Seguro?
+                          </span>
+                          <button type="button" 
+                                  [disabled]="getFormArray(campo.clave).length <= 1"
+                                  (click)="handleDeleteClick(campo.clave, idx)" 
+                                  [style.color]="getFormArray(campo.clave).length <= 1 ? 'var(--text-secondary)' : '#ef4444'"
+                                  [style.opacity]="getFormArray(campo.clave).length <= 1 ? '0.3' : '1'"
+                                  [style.cursor]="getFormArray(campo.clave).length <= 1 ? 'not-allowed' : 'pointer'"
+                                  style="background: transparent; border: none; display: inline-flex; align-items: center; justify-content: center; padding: 0.25rem;">
+                            <mat-icon style="font-size: 20px; width: 20px; height: 20px;">
+                              {{ isConfirmingDelete(campo.clave, idx) ? 'warning' : 'delete' }}
+                            </mat-icon>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr *ngIf="getFormArray(campo.clave).length === 0">
+                      <td colspan="6" style="padding: 1.5rem; text-align: center; color: var(--text-secondary); font-size: 0.9rem;">
+                        No hay alimentos registrados en esta categoría.
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+
+        <!-- Rich Text fields generated dynamically by config -->
+        <ng-container *ngIf="hasRichTextCampos(bloque)">
+          <div class="rich-text-fields" style="display: flex; flex-direction: column; gap: 1.5rem; margin-top: 1.5rem;">
+            <div class="field-card full-width" *ngFor="let campo of getRichTextCamposPorBloque(bloque)">
+              <label [for]="campo.clave" style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.5rem; display: block;">{{ campo.etiqueta }}</label>
+              <quill-editor 
+                [id]="campo.clave"
+                [formControlName]="campo.clave" 
+                [modules]="quillModules" 
+                [placeholder]="'Redacte ' + campo.etiqueta.toLowerCase() + ' aquí...'"
+                theme="snow"
+                style="height: 120px; display: block; background: var(--bg-card); margin-bottom: 3.5rem;">
+              </quill-editor>
+            </div>
+          </div>
+        </ng-container>
+      </section>
+
+      <!-- Calorías Totales de la Consulta (Movido al final) -->
+      <section class="panel" style="margin-bottom: 1rem;">
+        <div class="panel-header">
+          <h2>Total de Calorías</h2>
+        </div>
+        <div style="display: flex; align-items: center; gap: 0.5rem; max-width: 250px;">
+          <input id="calorias_totales" type="number" formControlName="calorias_totales" min="0" style="padding: 0.75rem 0.9rem; border-radius: 10px; border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-primary); outline: none; width: 120px;" />
+          <span style="font-weight: 600; color: var(--text-secondary);">kcal</span>
+        </div>
+      </section>
+
+      <section class="panel snapshot-panel">
+        <div class="panel-header">
+          <h2>Recordatorio 24h</h2>
+          <span>Snapshot</span>
+        </div>
+        <p>Servicio simulado. Se inyecta al guardar en <strong>recordatorio_24h</strong>, no se edita en pantalla.</p>
+        <div class="snapshot-hint">Se toma el registro de ayer desde CalendarioService.obtenerRegistroAyer(paciente_id).</div>
+      </section>
+    </form>
+  </div>
 </div>

@@ -69,8 +69,15 @@
               [(ngModel)]="email" 
               placeholder="Ej. usuario@correo.com" 
               autocomplete="username"
-              required>
+              required
+              email
+              #emailInput="ngModel"
+              (input)="sanitizeEmailInput($event)">
           </div>
+          <small *ngIf="emailInput.invalid && (emailInput.dirty || emailInput.touched)" style="color: #ef4444; display: block; margin-top: 0.35rem;">
+            <span *ngIf="emailInput.hasError('required')">El correo es obligatorio.</span>
+            <span *ngIf="emailInput.hasError('email')">Ingresa un correo válido.</span>
+          </small>
         </div>
 
         <div class="form-group">
@@ -84,8 +91,15 @@
               [(ngModel)]="pass" 
               placeholder="••••••••" 
               autocomplete="current-password"
-              required>
+              required
+              minlength="6"
+              #passwordInput="ngModel"
+              (input)="sanitizePasswordInput($event)">
           </div>
+          <small *ngIf="passwordInput.invalid && (passwordInput.dirty || passwordInput.touched)" style="color: #ef4444; display: block; margin-top: 0.35rem;">
+            <span *ngIf="passwordInput.hasError('required')">La contraseña es obligatoria.</span>
+            <span *ngIf="passwordInput.hasError('minlength')">Debe tener al menos 6 caracteres.</span>
+          </small>
         </div>
 
         <div class="forgot-password">

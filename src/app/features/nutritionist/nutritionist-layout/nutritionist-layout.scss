@@ -7,6 +7,12 @@
   overflow: hidden;
 }
 
+.profile-container {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--bg-default);
+}
+
 .layout-container {
   display: flex;
   min-height: 100vh;
@@ -64,7 +70,7 @@
     }
 
     .nav-item, .logout-btn, .footer-link {
-      justify-content: center;
+      justify-content: flex-start;
       padding: 0.75rem 0;
       mat-icon { margin: 0; font-size: 24px; width: 24px; height: 24px; }
     }

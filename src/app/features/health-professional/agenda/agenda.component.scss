@@ -191,3 +191,35 @@
     }
   }
 }
+
+@media (max-width: 767px) {
+  .top-bar {
+    padding: 1rem !important;
+    
+    .search-box {
+      display: grid !important;
+      grid-template-columns: auto 1fr !important;
+      gap: 0.75rem !important;
+      width: 100%;
+      
+      mat-icon {
+        grid-column: 1;
+        grid-row: 1;
+        align-self: center;
+      }
+      
+      input {
+        grid-column: 2;
+        grid-row: 1;
+        width: 100% !important;
+        min-width: 0 !important;
+      }
+      
+      button {
+        grid-column: 1 / span 2;
+        grid-row: 2;
+        width: 100% !important;
+      }
+    }
+  }
+}

@@ -73,6 +73,72 @@
 .session-item { border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; &:last-child { border-bottom: none; padding-bottom: 0; } .session-top { display: flex; justify-content: space-between; margin-bottom: 0.25rem; .date { font-size: 0.8rem; font-family: monospace; color: var(--text-primary); font-weight: 600; } .mood-badge { font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; &.scheduled { background: rgba(16,185,129,0.1); color: #10b981; } &.completed { background: rgba(59,130,246,0.1); color: #3b82f6; } &.absent, &.no_show, &.unknown { background: rgba(239,68,68,0.1); color: #ef4444; } } } .type { font-size: 0.75rem; color: var(--text-secondary); display: block; margin-bottom: 0.5rem; } .notes { font-size: 0.85rem; line-height: 1.5; margin: 0; color: var(--text-secondary); } }
 
 /* Tabs */
+
+/* Responsive Tab Navigation */
+.profile-tabs {
+  display: flex;
+  gap: 0.5rem;
+  border-bottom: 2px solid var(--border-color);
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.25rem;
+  flex-wrap: wrap; /* allow wrapping on small screens */
+  justify-content: space-between;
+}
+
+.profile-tabs .tab-btn {
+  flex: 1 1 auto;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.95rem;
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s;
+  text-align: center;
+}
+
+.profile-tabs .tab-btn.active {
+  color: #10b981 !important;
+  border-bottom: 3px solid #10b981 !important;
+}
+
+@media (max-width: 767px) {
+  .profile-tabs {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.25rem;
+  }
+  .profile-tabs .tab-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* Table Responsiveness */
+.table-container {
+  overflow-x: auto;
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+}
+
+.recall-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 600px; /* reduced from 800px for better mobile fit */
+  text-align: left;
+  font-size: 0.85rem;
+}
+
+@media (max-width: 767px) {
+  .recall-table {
+    min-width: 0;
+    font-size: 0.75rem;
+  }
+}
+
 .tab-btn {
   &.active {
     color: #10b981 !important;

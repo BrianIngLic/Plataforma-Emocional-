@@ -150,8 +150,8 @@
     "semantic_hash": ""
   },
   "src/app/features/admin/psychologists/psychologists.component.ts": {
-    "mtime": 1782770809.439557,
-    "ast_hash": "a5c45c4ada3b01f8f93a446a9453eef8",
+    "mtime": 1783370556.6417437,
+    "ast_hash": "434a7b11ccff1fcd5d3e7318b91f77b3",
     "semantic_hash": ""
   },
   "src/app/features/admin/reports/reports.component.ts": {
@@ -310,8 +310,8 @@
     "semantic_hash": "999abea731fae4248bf7ed5fd94ecb3d"
   },
   "supabase/functions/invite-user/index.ts": {
-    "mtime": 1782431843.2788775,
-    "ast_hash": "cbab4424b43b1a809f5f8a5c27210813",
+    "mtime": 1783371661.1062505,
+    "ast_hash": "517888c709313f6267e0db64e1ec04cc",
     "semantic_hash": ""
   },
   "supabase/functions/send-welcome-email/index.ts": {
@@ -395,8 +395,8 @@
     "semantic_hash": ""
   },
   "src/app/features/admin/psychologists/psychologists.component.html": {
-    "mtime": 1782771107.2971878,
-    "ast_hash": "3889eeb0478c79214174fde4baee36e0",
+    "mtime": 1783371669.7798066,
+    "ast_hash": "6c121c4aea10f9e8e2cee0c1dd735f22",
     "semantic_hash": ""
   },
   "src/app/features/admin/reports/reports.component.html": {

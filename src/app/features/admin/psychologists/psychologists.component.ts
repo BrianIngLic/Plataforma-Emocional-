@@ -58,6 +58,20 @@ export class PsychologistsComponent implements OnInit {
   // Calendar State
   currentMonthDate = new Date();
   calendarDays: { date: Date, isCurrentMonth: boolean, isPast: boolean, blocked: boolean, appointments: number }[] = [];
+  selectedDate: Date = new Date();
+  selectedPsychologistAppointments: any[] = [];
+
+  get appointmentsForSelectedDate() {
+    if (!this.selectedDate) return [];
+    const tzOffset = this.selectedDate.getTimezoneOffset() * 60000;
+    const selStr = new Date(this.selectedDate.getTime() - tzOffset).toISOString().split('T')[0];
+    return this.selectedPsychologistAppointments.filter((a: any) => {
+      const dStr = a.scheduled_date.split('T')[0];
+      return dStr === selStr;
+    }).sort((a: any, b: any) => {
+      return a.scheduled_date.localeCompare(b.scheduled_date);
+    });
+  }
 
   
   // Registration Form state
@@ -191,6 +205,7 @@ export class PsychologistsComponent implements OnInit {
   viewDetail(p: Psychologist) {
     this.selectedPsychologist = p;
     this.activeTab = 'profile';
+    this.selectedDate = new Date();
     
     // Parse first name / last name
     const parts = p.name.replace('Dr. ', '').split(' ');
@@ -273,9 +288,23 @@ export class PsychologistsComponent implements OnInit {
 
     const { data: appts } = await this.supabase
       .from('appointments')
-      .select('scheduled_date, status')
+      .select(`
+        id,
+        scheduled_date,
+        start_time,
+        end_time,
+        status,
+        priority_level,
+        type,
+        patient:users!patient_id (
+          profiles (
+            first_name,
+            last_name,
+            faculty
+          )
+        )
+      `)
       .eq('professional_id', this.selectedPsychologist.id)
-      .eq('status', 'completed')
       .gte('scheduled_date', startDate.toISOString())
       .lte('scheduled_date', endDate.toISOString());
 
@@ -287,12 +316,15 @@ export class PsychologistsComponent implements OnInit {
       .lte('date', endDate.toISOString());
 
     const apptMap: Record<string, number> = {};
+    const allAppointments: any[] = [];
     if (appts) {
       appts.forEach((a: any) => {
         const d = a.scheduled_date.split('T')[0];
-        apptMap[d] = (apptMap[d] || 0) + 1;
+        apptMap[d] = (apptMap[d] || 0) + (a.status !== 'canceled' ? 1 : 0);
+        allAppointments.push(a);
       });
     }
+    this.selectedPsychologistAppointments = allAppointments;
 
     const excpSet = new Set<string>();
     if (excps) {

@@ -134,7 +134,7 @@
       "source_location": "",
       "_origin": "ast",
       "id": "path",
-      "community": 90,
+      "community": 89,
       "norm_label": "path"
     },
     {
@@ -2344,7 +2344,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "base_health_professional_base",
-      "community": 87,
+      "community": 68,
       "norm_label": "health-professional.base.ts"
     },
     {
@@ -2634,7 +2634,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "services_agenda_service_agendaservice",
-      "community": 67,
+      "community": 87,
       "norm_label": "agendaservice"
     },
     {
@@ -2644,7 +2644,7 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "services_agenda_service_agendaservice_getsettings",
-      "community": 67,
+      "community": 87,
       "norm_label": ".getsettings()"
     },
     {
@@ -2654,7 +2654,7 @@
       "source_location": "L39",
       "_origin": "ast",
       "id": "services_agenda_service_agendaservice_savesettings",
-      "community": 67,
+      "community": 87,
       "norm_label": ".savesettings()"
     },
     {
@@ -2664,7 +2664,7 @@
       "source_location": "L57",
       "_origin": "ast",
       "id": "services_agenda_service_agendaservice_getexceptions",
-      "community": 67,
+      "community": 87,
       "norm_label": ".getexceptions()"
     },
     {
@@ -2674,7 +2674,7 @@
       "source_location": "L68",
       "_origin": "ast",
       "id": "services_agenda_service_agendaservice_addexception",
-      "community": 67,
+      "community": 87,
       "norm_label": ".addexception()"
     },
     {
@@ -2684,7 +2684,7 @@
       "source_location": "L90",
       "_origin": "ast",
       "id": "services_agenda_service_agendaservice_deleteexception",
-      "community": 67,
+      "community": 87,
       "norm_label": ".deleteexception()"
     },
     {
@@ -2694,7 +2694,7 @@
       "source_location": "L101",
       "_origin": "ast",
       "id": "services_agenda_service_agendaservice_getstudentavailableslots",
-      "community": 67,
+      "community": 87,
       "norm_label": ".getstudentavailableslots()"
     },
     {
@@ -3194,7 +3194,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_diary_service",
-      "community": 84,
+      "community": 130,
       "norm_label": "diary.service.ts"
     },
     {
@@ -3204,7 +3204,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "services_diary_service_diaryentry",
-      "community": 84,
+      "community": 130,
       "norm_label": "diaryentry"
     },
     {
@@ -3334,7 +3334,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_emergency_notification_service",
-      "community": 87,
+      "community": 84,
       "norm_label": "emergency-notification.service.ts"
     },
     {
@@ -3344,7 +3344,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "services_emergency_notification_service_emergencychangerequest",
-      "community": 87,
+      "community": 84,
       "norm_label": "emergencychangerequest"
     },
     {
@@ -3354,7 +3354,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "services_emergency_notification_service_webpushsubscriptionpayload",
-      "community": 87,
+      "community": 84,
       "norm_label": "webpushsubscriptionpayload"
     },
     {
@@ -3364,7 +3364,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "services_emergency_notification_service_whatsapproutingsession",
-      "community": 87,
+      "community": 84,
       "norm_label": "whatsapproutingsession"
     },
     {
@@ -3594,7 +3594,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_gamification_service",
-      "community": 84,
+      "community": 68,
       "norm_label": "gamification.service.ts"
     },
     {
@@ -3604,7 +3604,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "services_gamification_service_userstreak",
-      "community": 84,
+      "community": 68,
       "norm_label": "userstreak"
     },
     {
@@ -4114,7 +4114,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_supabase_service",
-      "community": 87,
+      "community": 68,
       "norm_label": "supabase.service.ts"
     },
     {
@@ -4124,7 +4124,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "services_supabase_service_supabaseservice",
-      "community": 87,
+      "community": 68,
       "norm_label": "supabaseservice"
     },
     {
@@ -4134,7 +4134,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "services_supabase_service_supabaseservice_constructor",
-      "community": 87,
+      "community": 68,
       "norm_label": ".constructor()"
     },
     {
@@ -5044,7 +5044,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "institutional_settings_institutional_settings_component",
-      "community": 87,
+      "community": 68,
       "norm_label": "institutional-settings.component.ts"
     },
     {
@@ -5164,7 +5164,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "nutritionist_fields_nutritionist_fields_component",
-      "community": 87,
+      "community": 68,
       "norm_label": "nutritionist-fields.component.ts"
     },
     {
@@ -5174,7 +5174,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "nutritionist_fields_nutritionist_fields_component_campoformulario",
-      "community": 87,
+      "community": 68,
       "norm_label": "campoformulario"
     },
     {
@@ -5464,7 +5464,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "psychologists_psychologists_component",
-      "community": 87,
+      "community": 68,
       "norm_label": "psychologists.component.ts"
     },
     {
@@ -5474,7 +5474,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "psychologists_psychologists_component_psychologist",
-      "community": 87,
+      "community": 68,
       "norm_label": "psychologist"
     },
     {
@@ -5521,7 +5521,7 @@
       "label": ".filteredPsychologists()",
       "file_type": "code",
       "source_file": "src/app/features/admin/psychologists/psychologists.component.ts",
-      "source_location": "L141",
+      "source_location": "L140",
       "_origin": "ast",
       "id": "psychologists_psychologists_component_psychologistscomponent_filteredpsychologists",
       "community": 5,
@@ -5531,7 +5531,7 @@
       "label": ".alertCounts()",
       "file_type": "code",
       "source_file": "src/app/features/admin/psychologists/psychologists.component.ts",
-      "source_location": "L146",
+      "source_location": "L145",
       "_origin": "ast",
       "id": "psychologists_psychologists_component_psychologistscomponent_alertcounts",
       "community": 5,
@@ -5541,7 +5541,7 @@
       "label": ".getRatingStars()",
       "file_type": "code",
       "source_file": "src/app/features/admin/psychologists/psychologists.component.ts",
-      "source_location": "L154",
+      "source_location": "L153",
       "_origin": "ast",
       "id": "psychologists_psychologists_component_psychologistscomponent_getratingstars",
       "community": 5,
@@ -5551,7 +5551,7 @@
       "label": ".getPct()",
       "file_type": "code",
       "source_file": "src/app/features/admin/psychologists/psychologists.component.ts",
-      "source_location": "L164",
+      "source_location": "L163",
       "_origin": "ast",
       "id": "psychologists_psychologists_component_psychologistscomponent_getpct",
       "community": 5,
@@ -5561,7 +5561,7 @@
       "label": ".getEfficiency()",
       "file_type": "code",
       "source_file": "src/app/features/admin/psychologists/psychologists.component.ts",
-      "source_location": "L168",
+      "source_location": "L167",
       "_origin": "ast",
       "id": "psychologists_psychologists_component_psychologistscomponent_getefficiency",
       "community": 5,
@@ -5571,7 +5571,7 @@
       "label": ".getChargeColor()",
       "file_type": "code",
       "source_file": "src/app/features/admin/psychologists/psychologists.component.ts",
-      "source_location": "L172",
+      "source_location": "L171",
       "_origin": "ast",
       "id": "psychologists_psychologists_component_psychologistscomponent_getchargecolor",
       "community": 5,
@@ -5581,7 +5581,7 @@
       "label": ".getAlertClass()",
       "file_type": "code",
       "source_file": "src/app/features/admin/psychologists/psychologists.component.ts",
-      "source_location": "L178",
+      "source_location": "L177",
       "_origin": "ast",
       "id": "psychologists_psychologists_component_psychologistscomponent_getalertclass",
       "community": 5,
@@ -5591,7 +5591,7 @@
       "label": ".getAlertText()",
       "file_type": "code",
       "source_file": "src/app/features/admin/psychologists/psychologists.component.ts",
-      "source_location": "L185",
+      "source_location": "L184",
       "_origin": "ast",
       "id": "psychologists_psychologists_component_psychologistscomponent_getalerttext",
       "community": 5,
@@ -5601,7 +5601,7 @@
       "label": ".viewDetail()",
       "file_type": "code",
       "source_file": "src/app/features/admin/psychologists/psychologists.component.ts",
-      "source_location": "L192",
+      "source_location": "L191",
       "_origin": "ast",
       "id": "psychologists_psychologists_component_psychologistscomponent_viewdetail",
       "community": 5,
@@ -5611,7 +5611,7 @@
       "label": ".closeDetail()",
       "file_type": "code",
       "source_file": "src/app/features/admin/psychologists/psychologists.component.ts",
-      "source_location": "L214",
+      "source_location": "L213",
       "_origin": "ast",
       "id": "psychologists_psychologists_component_psychologistscomponent_closedetail",
       "community": 5,
@@ -5621,7 +5621,7 @@
       "label": ".setTab()",
       "file_type": "code",
       "source_file": "src/app/features/admin/psychologists/psychologists.component.ts",
-      "source_location": "L218",
+      "source_location": "L217",
       "_origin": "ast",
       "id": "psychologists_psychologists_component_psychologistscomponent_settab",
       "community": 5,
@@ -5631,7 +5631,7 @@
       "label": ".saveProfileChanges()",
       "file_type": "code",
       "source_file": "src/app/features/admin/psychologists/psychologists.component.ts",
-      "source_location": "L222",
+      "source_location": "L221",
       "_origin": "ast",
       "id": "psychologists_psychologists_component_psychologistscomponent_saveprofilechanges",
       "community": 5,
@@ -5641,7 +5641,7 @@
       "label": ".generateCalendar()",
       "file_type": "code",
       "source_file": "src/app/features/admin/psychologists/psychologists.component.ts",
-      "source_location": "L259",
+      "source_location": "L258",
       "_origin": "ast",
       "id": "psychologists_psychologists_component_psychologistscomponent_generatecalendar",
       "community": 5,
@@ -5651,7 +5651,7 @@
       "label": ".prevMonth()",
       "file_type": "code",
       "source_file": "src/app/features/admin/psychologists/psychologists.component.ts",
-      "source_location": "L323",
+      "source_location": "L322",
       "_origin": "ast",
       "id": "psychologists_psychologists_component_psychologistscomponent_prevmonth",
       "community": 5,
@@ -5661,7 +5661,7 @@
       "label": ".nextMonth()",
       "file_type": "code",
       "source_file": "src/app/features/admin/psychologists/psychologists.component.ts",
-      "source_location": "L328",
+      "source_location": "L327",
       "_origin": "ast",
       "id": "psychologists_psychologists_component_psychologistscomponent_nextmonth",
       "community": 5,
@@ -5671,7 +5671,7 @@
       "label": ".openAddModal()",
       "file_type": "code",
       "source_file": "src/app/features/admin/psychologists/psychologists.component.ts",
-      "source_location": "L333",
+      "source_location": "L332",
       "_origin": "ast",
       "id": "psychologists_psychologists_component_psychologistscomponent_openaddmodal",
       "community": 5,
@@ -5681,7 +5681,7 @@
       "label": ".closeAddModal()",
       "file_type": "code",
       "source_file": "src/app/features/admin/psychologists/psychologists.component.ts",
-      "source_location": "L343",
+      "source_location": "L342",
       "_origin": "ast",
       "id": "psychologists_psychologists_component_psychologistscomponent_closeaddmodal",
       "community": 5,
@@ -5691,37 +5691,17 @@
       "label": ".onSubmit()",
       "file_type": "code",
       "source_file": "src/app/features/admin/psychologists/psychologists.component.ts",
-      "source_location": "L348",
+      "source_location": "L347",
       "_origin": "ast",
       "id": "psychologists_psychologists_component_psychologistscomponent_onsubmit",
       "community": 5,
       "norm_label": ".onsubmit()"
     },
     {
-      "label": ".generateRandomPassword()",
-      "file_type": "code",
-      "source_file": "src/app/features/admin/psychologists/psychologists.component.ts",
-      "source_location": "L429",
-      "_origin": "ast",
-      "id": "psychologists_psychologists_component_psychologistscomponent_generaterandompassword",
-      "community": 5,
-      "norm_label": ".generaterandompassword()"
-    },
-    {
-      "label": ".generateCredentialsPDF()",
-      "file_type": "code",
-      "source_file": "src/app/features/admin/psychologists/psychologists.component.ts",
-      "source_location": "L438",
-      "_origin": "ast",
-      "id": "psychologists_psychologists_component_psychologistscomponent_generatecredentialspdf",
-      "community": 5,
-      "norm_label": ".generatecredentialspdf()"
-    },
-    {
       "label": ".sendEmail()",
       "file_type": "code",
       "source_file": "src/app/features/admin/psychologists/psychologists.component.ts",
-      "source_location": "L486",
+      "source_location": "L419",
       "_origin": "ast",
       "id": "psychologists_psychologists_component_psychologistscomponent_sendemail",
       "community": 5,
@@ -5774,7 +5754,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_admin_exceptions_service",
-      "community": 87,
+      "community": 76,
       "norm_label": "admin-exceptions.service.ts"
     },
     {
@@ -5784,7 +5764,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "services_admin_exceptions_service_holiday",
-      "community": 87,
+      "community": 76,
       "norm_label": "holiday"
     },
     {
@@ -5834,7 +5814,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_admin_skill8_service",
-      "community": 8,
+      "community": 18,
       "norm_label": "admin-skill8.service.ts"
     },
     {
@@ -5844,7 +5824,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "services_admin_skill8_service_healthprofessionalregistrationpayload",
-      "community": 8,
+      "community": 18,
       "norm_label": "healthprofessionalregistrationpayload"
     },
     {
@@ -5854,7 +5834,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "services_admin_skill8_service_patientassignmentpayload",
-      "community": 8,
+      "community": 18,
       "norm_label": "patientassignmentpayload"
     },
     {
@@ -5954,7 +5934,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_admin_stats_service",
-      "community": 59,
+      "community": 8,
       "norm_label": "admin-stats.service.ts"
     },
     {
@@ -5974,7 +5954,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "services_admin_stats_service_chartdatapoint",
-      "community": 59,
+      "community": 8,
       "norm_label": "chartdatapoint"
     },
     {
@@ -6494,7 +6474,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_features_chat_dashboard_dashboard_component_ts_dashboard_dashboard_component",
-      "community": 84,
+      "community": 68,
       "norm_label": "dashboard.component.ts"
     },
     {
@@ -7064,7 +7044,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "dashboard_diary_dashboard_component",
-      "community": 59,
+      "community": 130,
       "norm_label": "diary-dashboard.component.ts"
     },
     {
@@ -7524,7 +7504,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "emergency_change_modal_emergency_change_modal_component",
-      "community": 18,
+      "community": 87,
       "norm_label": "emergency-change-modal.component.ts"
     },
     {
@@ -7534,7 +7514,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "emergency_change_modal_emergency_change_modal_component_emergencymodaldata",
-      "community": 18,
+      "community": 87,
       "norm_label": "emergencymodaldata"
     },
     {
@@ -8624,7 +8604,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "pacientes_pacientes_component",
-      "community": 87,
+      "community": 68,
       "norm_label": "pacientes.component.ts"
     },
     {
@@ -9634,7 +9614,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_features_psychologist_patients_patients_component_ts_patients_patients_component",
-      "community": 87,
+      "community": 68,
       "norm_label": "patients.component.ts"
     },
     {
@@ -10324,7 +10304,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "environments_environment",
-      "community": 87,
+      "community": 68,
       "norm_label": "environment.ts"
     },
     {
@@ -10334,7 +10314,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "environments_environment_environment",
-      "community": 87,
+      "community": 68,
       "norm_label": "environment"
     },
     {
@@ -25017,26 +24997,6 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/app/features/admin/psychologists/psychologists.component.ts",
-      "source_location": "L426",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "psychologists_psychologists_component_psychologistscomponent",
-      "target": "psychologists_psychologists_component_psychologistscomponent_generatecredentialspdf"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "src/app/features/admin/psychologists/psychologists.component.ts",
-      "source_location": "L417",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "psychologists_psychologists_component_psychologistscomponent",
-      "target": "psychologists_psychologists_component_psychologistscomponent_generaterandompassword"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "src/app/features/admin/psychologists/psychologists.component.ts",
       "source_location": "L173",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -25268,17 +25228,6 @@
       "confidence_score": 1.0,
       "source": "psychologists_psychologists_component_psychologistscomponent_prevmonth",
       "target": "psychologists_psychologists_component_psychologistscomponent_generatecalendar"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "src/app/features/admin/psychologists/psychologists.component.ts",
-      "source_location": "L389",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "psychologists_psychologists_component_psychologistscomponent_onsubmit",
-      "target": "psychologists_psychologists_component_psychologistscomponent_generatecredentialspdf"
     },
     {
       "relation": "contains",
@@ -28498,9 +28447,9 @@
       "source_file": "src/app/features/nutritionist/consulta/consulta.component.ts",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "consulta_consulta_component",
-      "target": "feedback_modal_feedback_modal_component",
-      "confidence_score": 1.0
+      "target": "feedback_modal_feedback_modal_component"
     },
     {
       "relation": "imports",
@@ -28509,9 +28458,9 @@
       "source_file": "src/app/features/nutritionist/consulta/consulta.component.ts",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "consulta_consulta_component",
-      "target": "feedback_modal_feedback_modal_component_feedbackmodalcomponent",
-      "confidence_score": 1.0
+      "target": "feedback_modal_feedback_modal_component_feedbackmodalcomponent"
     },
     {
       "relation": "method",
@@ -28759,9 +28708,9 @@
       "source_file": "src/app/features/nutritionist/consulta/consulta.component.ts",
       "source_location": "L38",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "consulta_consulta_component_consultacomponent",
-      "target": "consulta_consulta_component_consultacomponent_showfeedback",
-      "confidence_score": 1.0
+      "target": "consulta_consulta_component_consultacomponent_showfeedback"
     },
     {
       "relation": "method",
@@ -28780,9 +28729,9 @@
       "source_file": "src/app/features/nutritionist/consulta/consulta.component.ts",
       "source_location": "L511",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "consulta_consulta_component_consultacomponent_guardarantecedentes",
-      "target": "consulta_consulta_component_consultacomponent_showfeedback",
-      "confidence_score": 1.0
+      "target": "consulta_consulta_component_consultacomponent_showfeedback"
     },
     {
       "relation": "calls",
@@ -29983,9 +29932,9 @@
       "source_file": "src/app/features/psychologist/clinical-note/clinical-note.component.ts",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "clinical_note_clinical_note_component",
-      "target": "feedback_modal_feedback_modal_component",
-      "confidence_score": 1.0
+      "target": "feedback_modal_feedback_modal_component"
     },
     {
       "relation": "imports",
@@ -29994,9 +29943,9 @@
       "source_file": "src/app/features/psychologist/clinical-note/clinical-note.component.ts",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "clinical_note_clinical_note_component",
-      "target": "feedback_modal_feedback_modal_component_feedbackmodalcomponent",
-      "confidence_score": 1.0
+      "target": "feedback_modal_feedback_modal_component_feedbackmodalcomponent"
     },
     {
       "relation": "method",
@@ -30074,9 +30023,9 @@
       "source_file": "src/app/features/psychologist/clinical-note/clinical-note.component.ts",
       "source_location": "L192",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "clinical_note_clinical_note_component_clinicalnotecomponent",
-      "target": "clinical_note_clinical_note_component_clinicalnotecomponent_showfeedback",
-      "confidence_score": 1.0
+      "target": "clinical_note_clinical_note_component_clinicalnotecomponent_showfeedback"
     },
     {
       "relation": "method",
@@ -30095,9 +30044,9 @@
       "source_file": "src/app/features/psychologist/clinical-note/clinical-note.component.ts",
       "source_location": "L429",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "clinical_note_clinical_note_component_clinicalnotecomponent_guardarantecedentes",
-      "target": "clinical_note_clinical_note_component_clinicalnotecomponent_showfeedback",
-      "confidence_score": 1.0
+      "target": "clinical_note_clinical_note_component_clinicalnotecomponent_showfeedback"
     },
     {
       "relation": "calls",

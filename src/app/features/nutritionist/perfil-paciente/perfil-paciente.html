@@ -109,7 +109,7 @@
                 </div>
                 <div style="grid-column: span 1;">
                   <label style="display: block; font-size: 0.75rem; color: var(--text-secondary); text-transform: uppercase; margin-bottom: 0.25rem; font-weight: 600;">Antecedentes Familiares</label>
-                  <p style="margin: 0; color: var(--text-primary); font-weight: 500; white-space: pre-wrap;">{{ generalData?.antecedentes_familiares || 'Sin registrar' }}</p>
+                  <div [innerHTML]="generalData?.antecedentes_familiares || 'Sin registrar'" style="margin: 0; color: var(--text-primary); font-weight: 500;"></div>
                 </div>
               </div>
             </div>

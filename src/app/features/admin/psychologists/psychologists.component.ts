@@ -121,7 +121,6 @@ export class PsychologistsComponent implements OnInit {
       firstName: ['', [Validators.required, Validators.minLength(2)]],
       lastName: ['', [Validators.required, Validators.minLength(2)]],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
       matricula: ['', [Validators.required]],
       cedula: ['', [Validators.required]],
       faculty: [this.faculties.length > 0 ? this.faculties[0] : '', [Validators.required]],
@@ -342,7 +341,7 @@ export class PsychologistsComponent implements OnInit {
 
   closeAddModal() {
     this.showAddModal = false;
-    this.createdCredentials = null;
+    this.createdUser = null;
   }
 
   async onSubmit() {
@@ -355,7 +354,7 @@ export class PsychologistsComponent implements OnInit {
     this.formErrorMessage = '';
     this.formSuccessMessage = '';
 
-    const { role, firstName, lastName, email, password, matricula, cedula, faculty, specialty, capacity } = this.addForm.value;
+    const { role, firstName, lastName, email, matricula, cedula, faculty, specialty, capacity } = this.addForm.value;
     const roleName = Number(role) === 4 ? 'Nutriólogo' : 'Psicólogo';
 
     try {
@@ -368,9 +367,6 @@ export class PsychologistsComponent implements OnInit {
       if (error || (data && data.error)) {
         throw new Error(error?.message || data?.error || 'Error invocando Edge Function invite-user');
       }
-
-      // Sanitización inmediata en memoria de la contraseña temporal (HIPAA / NOM-024)
-      this.addForm.patchValue({ password: '' });
 
       const newPsych: Psychologist = {
         id: 'p_new_' + Math.random().toString(36).substr(2, 9),
@@ -393,17 +389,8 @@ export class PsychologistsComponent implements OnInit {
 
       this.psychologists.unshift(newPsych);
 
-      this.formSuccessMessage = 'Generando credenciales...';
-      // Mantenemos la contraseña para generar el PDF del oficio oficial y luego se purga
-      this.createdCredentials = { name: `Dr. ${firstName} ${lastName}`, email, password: password || '[CONFIDENCIAL - ELIMINADA DE MEMORIA (HIPAA / NOM-024)]' };
-      
-      try {
-        const pdfBase64 = await this.generateCredentialsPDF(`Dr. ${firstName} ${lastName}`, email, password || '[ENLACE DE INVITACIÓN ENVIADO A CORREO]', false);
-        this.formSuccessMessage = `¡Registro exitoso! Invitación oficial enviada por Supabase al ${roleName.toLowerCase()}.`;
-      } catch (err) {
-        console.error('Error generating PDF:', err);
-        this.formSuccessMessage = `${roleName} invitado exitosamente mediante Supabase Auth.`;
-      }
+      this.createdUser = { name: `Dr. ${firstName} ${lastName}`, email };
+      this.formSuccessMessage = `¡Registro exitoso! Invitación oficial enviada por Supabase al ${roleName.toLowerCase()}.`;
 
     } catch (err: any) {
       console.error('Error durante el registro:', err.message || err);
@@ -418,74 +405,20 @@ export class PsychologistsComponent implements OnInit {
       }
       
       this.formErrorMessage = errorMsg;
-      this.createdCredentials = null;
+      this.createdUser = null;
     } finally {
       this.isSubmitting = false;
     }
   }
 
-  createdCredentials: { name: string, email: string, password: string } | null = null;
-
-  generateRandomPassword() {
-    const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*';
-    let pass = '';
-    for (let i = 0; i < 12; i++) {
-      pass += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    this.addForm.patchValue({ password: pass });
-  }
-
-  generateCredentialsPDF(name: string, email: string, pass: string, shouldSave: boolean = true): Promise<string> {
-    return new Promise((resolve) => {
-      import('jspdf').then(({ jsPDF }) => {
-        const doc = new jsPDF();
-      
-      doc.setFontSize(22);
-      doc.setTextColor(37, 99, 235);
-      doc.text('Plataforma de Asistencia Emocional', 105, 30, { align: 'center' });
-      
-      doc.setFontSize(16);
-      doc.setTextColor(0, 0, 0);
-      doc.text('Credenciales de Acceso Oficiales', 105, 45, { align: 'center' });
-      
-      doc.setFontSize(12);
-      doc.text(`Estimado/a ${name},`, 20, 70);
-      doc.text('Su cuenta como especialista clínico ha sido creada exitosamente en la plataforma.', 20, 80);
-      
-      doc.setDrawColor(200);
-      doc.setFillColor(245, 245, 245);
-      doc.roundedRect(20, 95, 170, 50, 3, 3, 'FD');
-      
-      doc.setFont('helvetica', 'bold');
-      doc.text('Correo electrónico:', 30, 110);
-      doc.text('Acceso Seguro:', 30, 125);
-      
-      doc.setFont('helvetica', 'normal');
-      doc.text(email, 75, 110);
-      doc.text(pass, 75, 125);
-      
-      doc.text('Por motivos de seguridad, el sistema le exigirá cambiar esta contraseña', 20, 165);
-      doc.text('en su primer inicio de sesión.', 20, 172);
-      
-      doc.setTextColor(37, 99, 235);
-      doc.text('Enlace de acceso: https://plataforma-emocional.com', 20, 190);
-      
-      if (shouldSave) {
-        doc.save(`Credenciales_${name.replace(/ /g, '_')}.pdf`);
-      }
-      
-      const pdfBase64 = btoa(doc.output());
-      resolve(pdfBase64);
-    });
-  });
-}
+  createdUser: { name: string, email: string } | null = null;
 
   isResendingEmail = false;
   manualEmailSent = false;
 
   async sendEmail() {
-    if (!this.createdCredentials) return;
-    const { email } = this.createdCredentials;
+    if (!this.createdUser) return;
+    const { email } = this.createdUser;
     
     this.isResendingEmail = true;
     try {

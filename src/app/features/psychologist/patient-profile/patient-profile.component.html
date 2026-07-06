@@ -67,10 +67,12 @@
             <label>Medicamentos</label>
             <ul><li *ngFor="let med of patient.medications"><mat-icon class="text-primary">medication</mat-icon> {{med}}</li></ul>
           </div>
+          <div style="grid-column: span 3;" *ngIf="patient.antecedentes_familiares">
+            <label>Antecedentes Familiares</label>
+            <div [innerHTML]="patient.antecedentes_familiares" style="margin: 0.25rem 0 0; color: var(--text-primary); font-weight: 500;"></div>
+          </div>
         </div>
-      </div>
-
-      <!-- Amati AI Insights -->
+      </div>      <!-- Amati AI Insights -->
       <div class="card ai-card">
         <h2 class="card-title"><mat-icon class="text-purple">smart_toy</mat-icon> Análisis de Amati (IA)</h2>
         <div class="ai-content">

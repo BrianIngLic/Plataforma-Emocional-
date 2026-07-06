@@ -207,7 +207,7 @@ export class PerfilPaciente implements OnInit {
       // 1. Obtener usuario + perfil + expediente clínico
       const { data: userData, error: userError } = await this.supabase
         .from('users')
-        .select('id, matricula, profiles(first_name, last_name, avatar_url, faculty), student_clinical_records!student_clinical_records_student_id_fkey(known_conditions, additional_notes)')
+        .select('id, matricula, profiles(first_name, last_name, avatar_url, faculty, antecedentes_familiares), student_clinical_records!student_clinical_records_student_id_fkey(known_conditions, additional_notes)')
         .eq('id', id)
         .single();
 
@@ -238,7 +238,7 @@ export class PerfilPaciente implements OnInit {
                 programa_educativo: 'Pendiente de registrar',
                 celular: 'Sin registrar',
                 correo: 'sin_registrar@buap.mx',
-                antecedentes_familiares: 'Sin registrar',
+                antecedentes_familiares: p?.antecedentes_familiares || 'Sin registrar',
                 sexo: 'Sin registrar',
                 fecha_nacimiento: '',
                 edad: 22
@@ -278,7 +278,7 @@ export class PerfilPaciente implements OnInit {
             programa_educativo: 'Pendiente de registrar',
             celular: 'Sin registrar',
             correo: 'sin_registrar@buap.mx',
-            antecedentes_familiares: 'Sin registrar',
+            antecedentes_familiares: p?.antecedentes_familiares || 'Sin registrar',
             sexo: 'Sin registrar',
             fecha_nacimiento: '',
             edad: 22
@@ -301,7 +301,8 @@ export class PerfilPaciente implements OnInit {
           riskLevel: (this.eat26Result && this.eat26Result.hasRisk) ? "Alto" : (conditions && conditions.length > 0 ? "Moderado" : "Bajo"),
           notes: notes,
           avatarUrl: p?.avatar_url || '',
-          avatar: p?.avatar_url || ''
+          avatar: p?.avatar_url || '',
+          antecedentes_familiares: this.generalData?.antecedentes_familiares || p?.antecedentes_familiares || ''
         };
       }
 
@@ -724,13 +725,16 @@ export class PerfilPaciente implements OnInit {
     doc.text(`Correo: ${this.generalData?.correo || 'N/A'}`, 110, 55);
     doc.text(`Sexo: ${this.generalData?.sexo || 'N/A'}`, 110, 59);
     doc.text(`Edad: ${this.generalData?.edad || 'N/A'} años`, 110, 63);
-
     // Antecedentes
     doc.setFont('helvetica', 'bold');
     doc.text('Antecedentes Clínicos Familiares: ', 18, 68);
     doc.setFont('helvetica', 'normal');
-    doc.text(this.generalData?.antecedentes_familiares || 'Ninguno registrado', 65, 68);
-
+    const cleanAntecedentes = (this.generalData?.antecedentes_familiares || 'Ninguno registrado')
+      .replace(/<[^>]*>/g, ' ')
+      .replace(/&nbsp;/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+    doc.text(cleanAntecedentes, 65, 68);
     // 5. Datos Específicos
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(9);

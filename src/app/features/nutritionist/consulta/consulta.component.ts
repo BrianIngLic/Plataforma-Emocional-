@@ -1,8 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { FeedbackModalComponent } from '../../../shared/components/feedback-modal/feedback-modal.component';
 import { NutricionService, CampoFormulario, ConsultaNutricionRow, NuevaConsultaNutricionPayload } from '../../../core/services/nutrition/nutricion.service';
 import { CalendarioService, RegistroAyerSnapshot } from '../../../core/services/nutrition/calendario.service';
 import { AuthService } from '../../../core/services/auth.service';
@@ -18,7 +20,7 @@ interface BloqueVisual {
 @Component({
   selector: 'app-consulta-nutricion',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule, MatIconModule, QuillModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule, MatIconModule, QuillModule, MatDialogModule],
   templateUrl: './consulta.component.html',
   styleUrls: ['./consulta.component.scss']
 })
@@ -31,6 +33,14 @@ export class ConsultaComponent implements OnInit {
   private authService = inject(AuthService);
   private supabaseService = inject(SupabaseService);
   private crypto = inject(CryptoService);
+  private dialog = inject(MatDialog);
+
+  showFeedback(type: 'success' | 'error', title: string, message: string) {
+    this.dialog.open(FeedbackModalComponent, {
+      width: '400px',
+      data: { type, title, message }
+    });
+  }
 
   form: FormGroup<any> = this.fb.group({
     calorias_totales: new FormControl<number | null>(0, { nonNullable: false, validators: [Validators.min(0)] })
@@ -49,6 +59,11 @@ export class ConsultaComponent implements OnInit {
   currentDate = new Date();
   institutionalLogoUrl: string | null = null;
   sessionId: string | null = null;
+
+  // Antecedentes Familiares Compartidos
+  isEditingAntecedentes = false;
+  savingAntecedentes = false;
+  antecedentesContent = '';
 
   quillModules = {
     toolbar: [
@@ -83,7 +98,7 @@ export class ConsultaComponent implements OnInit {
     try {
       const { data: pData, error: pError } = await this.supabaseService.supabase
         .from('users')
-        .select('id, matricula, profiles(first_name, last_name, faculty), student_clinical_records!student_clinical_records_student_id_fkey(additional_notes)')
+        .select('id, matricula, profiles(first_name, last_name, faculty, antecedentes_familiares), student_clinical_records!student_clinical_records_student_id_fkey(additional_notes)')
         .eq('id', this.pacienteId)
         .single();
         
@@ -99,6 +114,7 @@ export class ConsultaComponent implements OnInit {
         let sexo = 'N/A';
         let fechaNacimiento = 'N/A';
         let edad = 'N/A';
+        let antecedentesFamiliares = profile?.antecedentes_familiares || '';
 
         if (recordObj && recordObj.additional_notes) {
           try {
@@ -109,6 +125,9 @@ export class ConsultaComponent implements OnInit {
             sexo = gen.sexo || 'N/A';
             fechaNacimiento = gen.fecha_nacimiento || 'N/A';
             edad = gen.edad ? `${gen.edad} años` : 'N/A';
+            if (gen.antecedentes_familiares) {
+              antecedentesFamiliares = gen.antecedentes_familiares;
+            }
           } catch(e) {
             console.warn('Error decrypting notes for general data:', e);
           }
@@ -123,8 +142,11 @@ export class ConsultaComponent implements OnInit {
           celular: celular,
           sexo: sexo,
           fecha_nacimiento: fechaNacimiento,
-          edad: edad
+          edad: edad,
+          antecedentes_familiares: antecedentesFamiliares
         };
+
+        this.antecedentesContent = antecedentesFamiliares;
       }
 
       // Fetch institutional logo URL
@@ -258,19 +280,7 @@ export class ConsultaComponent implements OnInit {
   }
 
   getCamposPorBloque(bloque: BloqueVisual): CampoFormulario[] {
-    return bloque.campos.filter(c => 
-      c.tipo_campo !== 'rich-text' && 
-      c.tipo_campo !== 'food-table' && 
-      c.tipo_campo !== 'number'
-    );
-  }
-
-  getCamposNumericos(bloque: BloqueVisual): CampoFormulario[] {
-    return bloque.campos.filter(c => c.tipo_campo === 'number');
-  }
-
-  hasCamposNumericos(bloque: BloqueVisual): boolean {
-    return bloque.campos.some(c => c.tipo_campo === 'number');
+    return bloque.campos.filter(c => c.tipo_campo !== 'rich-text' && c.tipo_campo !== 'food-table');
   }
 
   getRichTextCamposPorBloque(bloque: BloqueVisual): CampoFormulario[] {
@@ -440,6 +450,70 @@ export class ConsultaComponent implements OnInit {
     } else {
       alert('Inasistencia registrada.');
       this.cancelar();
+    }
+  }
+
+  toggleEditAntecedentes() {
+    this.isEditingAntecedentes = true;
+  }
+
+  cancelEditAntecedentes() {
+    this.antecedentesContent = this.patient?.antecedentes_familiares || '';
+    this.isEditingAntecedentes = false;
+  }
+
+  async guardarAntecedentes() {
+    if (!this.patient) return;
+    this.savingAntecedentes = true;
+
+    try {
+      const { data: recordData, error: fetchError } = await this.supabaseService.supabase
+        .from('student_clinical_records')
+        .select('additional_notes')
+        .eq('student_id', this.patient.student_id)
+        .maybeSingle();
+
+      if (fetchError) throw fetchError;
+
+      let clinicalNotesObj: any = {};
+      if (recordData?.additional_notes) {
+        try {
+          const decrypted = this.crypto.decrypt(recordData.additional_notes);
+          clinicalNotesObj = JSON.parse(decrypted);
+        } catch(e) {
+          console.warn('Error decrypting clinical record:', e);
+        }
+      }
+
+      clinicalNotesObj.general_data = clinicalNotesObj.general_data || {};
+      clinicalNotesObj.general_data.antecedentes_familiares = this.antecedentesContent;
+
+      const encryptedNotes = this.crypto.encrypt(JSON.stringify(clinicalNotesObj));
+
+      const { error: updateError } = await this.supabaseService.supabase
+        .from('student_clinical_records')
+        .update({ additional_notes: encryptedNotes })
+        .eq('student_id', this.patient.student_id);
+
+      if (updateError) throw updateError;
+
+      const { error: profileError } = await this.supabaseService.supabase
+        .from('profiles')
+        .update({ antecedentes_familiares: this.antecedentesContent })
+        .eq('user_id', this.patient.student_id);
+
+      if (profileError) {
+        console.warn('Error updating profile table:', profileError);
+      }
+
+      this.patient.antecedentes_familiares = this.antecedentesContent;
+      this.isEditingAntecedentes = false;
+      this.showFeedback('success', '¡Antecedentes Actualizados!', 'Los antecedentes familiares han sido guardados exitosamente.');
+    } catch(err) {
+      console.error('Error al guardar antecedentes:', err);
+      this.showFeedback('error', 'Error al Guardar', 'Ocurrió un error al intentar guardar los antecedentes familiares.');
+    } finally {
+      this.savingAntecedentes = false;
     }
   }
 

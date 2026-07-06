@@ -4,13 +4,15 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { QuillModule } from 'ngx-quill';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { FeedbackModalComponent } from '../../../shared/components/feedback-modal/feedback-modal.component';
 import { SupabaseService } from '../../../core/services/supabase.service';
 import { CryptoService } from '../../../core/services/crypto.service';
 
 @Component({
   selector: 'app-clinical-note',
   standalone: true,
-  imports: [CommonModule, FormsModule, MatIconModule, QuillModule],
+  imports: [CommonModule, FormsModule, MatIconModule, QuillModule, MatDialogModule],
   template: `
     <div class="page-container">
       <!-- Barra superior de navegación -->
@@ -101,6 +103,52 @@ import { CryptoService } from '../../../core/services/crypto.service';
             </table>
           </div>
 
+          <!-- Antecedentes Clínicos Familiares (Campo Compartido) -->
+          <div class="panel shared-panel" style="margin-bottom: 2rem; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.5rem;">
+            <div class="panel-header" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem; margin-bottom: 1rem;">
+              <h3 class="section-title" style="display: flex; align-items: center; gap: 0.5rem; margin: 0; font-size: 1.15rem; font-weight: 700; color: var(--text-primary);">
+                <mat-icon style="color: #8b5cf6;">family_history</mat-icon> Antecedentes Clínicos Familiares (Compartido)
+              </h3>
+              <div>
+                <button *ngIf="!isEditingAntecedentes" type="button" class="btn btn-outline" (click)="toggleEditAntecedentes()" style="display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.85rem; padding: 0.5rem 0.85rem; border: 1px solid #8b5cf6; border-radius: 8px; color: #8b5cf6; background: transparent; cursor: pointer; font-weight: 600;">
+                  <mat-icon style="font-size: 18px; width: 18px; height: 18px;">edit</mat-icon> Editar Antecedentes
+                </button>
+                <div *ngIf="isEditingAntecedentes" style="display: flex; gap: 0.5rem;">
+                  <button type="button" class="btn btn-outline" (click)="cancelEditAntecedentes()" style="display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.85rem; padding: 0.5rem 0.85rem; border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-secondary); background: transparent; cursor: pointer; font-weight: 600;">
+                    Cancelar
+                  </button>
+                  <button type="button" class="btn btn-primary" (click)="guardarAntecedentes()" [disabled]="savingAntecedentes" style="display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.85rem; padding: 0.5rem 0.85rem; border: none; border-radius: 8px; color: white; background: #8b5cf6; cursor: pointer; font-weight: 600;">
+                    <mat-icon style="font-size: 18px; width: 18px; height: 18px;">save</mat-icon> {{ savingAntecedentes ? 'Guardando...' : 'Guardar' }}
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="editor-wrapper" style="position: relative;">
+              <!-- Editor en modo edición -->
+              <quill-editor 
+                *ngIf="isEditingAntecedentes"
+                [(ngModel)]="antecedentesContent" 
+                [ngModelOptions]="{standalone: true}"
+                [modules]="quillModules" 
+                [readOnly]="false"
+                placeholder="Escriba los antecedentes familiares aquí..."
+                theme="snow"
+                style="min-height: 100px; display: block; background: var(--bg-card); margin-bottom: 1rem;">
+              </quill-editor>
+              <!-- Editor en modo lectura -->
+              <quill-editor 
+                *ngIf="!isEditingAntecedentes"
+                [(ngModel)]="antecedentesContent" 
+                [ngModelOptions]="{standalone: true}"
+                [modules]="{ toolbar: false }" 
+                [readOnly]="true"
+                placeholder="No hay antecedentes familiares registrados."
+                theme="snow"
+                style="min-height: 100px; display: block; background: var(--bg-card); margin-bottom: 1rem;">
+              </quill-editor>
+            </div>
+          </div>
+
           <!-- Redactor de Notas Clínicas (Quill) -->
           <div class="editor-section">
             <h3 class="section-title">Evolución y Notas de la Sesión</h3>
@@ -139,6 +187,14 @@ export class ClinicalNoteComponent implements OnInit {
   location = inject(Location);
   route = inject(ActivatedRoute);
   router = inject(Router);
+  dialog = inject(MatDialog);
+
+  showFeedback(type: 'success' | 'error', title: string, message: string) {
+    this.dialog.open(FeedbackModalComponent, {
+      width: '400px',
+      data: { type, title, message }
+    });
+  }
 
   appointmentId: string = '';
   appointment: any = null;
@@ -148,6 +204,11 @@ export class ClinicalNoteComponent implements OnInit {
 
   currentDate = new Date();
   institutionalLogoUrl: string | null = null;
+
+  // Antecedentes Familiares Compartidos
+  isEditingAntecedentes = false;
+  savingAntecedentes = false;
+  antecedentesContent = '';
 
   // Plantilla SOAP pre-llenada en HTML
   notesContent = `
@@ -200,7 +261,7 @@ export class ClinicalNoteComponent implements OnInit {
       if (this.appointment && this.appointment.student_id) {
         const { data: pData, error: pError } = await this.supabase
           .from('users')
-          .select('id, matricula, profiles(first_name, last_name, faculty), student_clinical_records!student_clinical_records_student_id_fkey(additional_notes)')
+          .select('id, matricula, profiles(first_name, last_name, faculty, antecedentes_familiares), student_clinical_records!student_clinical_records_student_id_fkey(additional_notes)')
           .eq('id', this.appointment.student_id)
           .single();
           
@@ -216,6 +277,7 @@ export class ClinicalNoteComponent implements OnInit {
           let sexo = 'N/A';
           let fechaNacimiento = 'N/A';
           let edad = 'N/A';
+          let antecedentesFamiliares = profile?.antecedentes_familiares || '';
 
           if (recordObj && recordObj.additional_notes) {
             try {
@@ -226,6 +288,9 @@ export class ClinicalNoteComponent implements OnInit {
               sexo = gen.sexo || 'N/A';
               fechaNacimiento = gen.fecha_nacimiento || 'N/A';
               edad = gen.edad ? `${gen.edad} años` : 'N/A';
+              if (gen.antecedentes_familiares) {
+                antecedentesFamiliares = gen.antecedentes_familiares;
+              }
             } catch(e) {
               console.warn('Error decrypting notes for general data:', e);
             }
@@ -240,8 +305,11 @@ export class ClinicalNoteComponent implements OnInit {
             celular: celular,
             sexo: sexo,
             fecha_nacimiento: fechaNacimiento,
-            edad: edad
+            edad: edad,
+            antecedentes_familiares: antecedentesFamiliares
           };
+
+          this.antecedentesContent = antecedentesFamiliares;
         }
       }
 
@@ -300,6 +368,70 @@ export class ClinicalNoteComponent implements OnInit {
       alert('Error al actualizar');
     } else {
       this.goBack();
+    }
+  }
+
+  toggleEditAntecedentes() {
+    this.isEditingAntecedentes = true;
+  }
+
+  cancelEditAntecedentes() {
+    this.antecedentesContent = this.patient?.antecedentes_familiares || '';
+    this.isEditingAntecedentes = false;
+  }
+
+  async guardarAntecedentes() {
+    if (!this.patient) return;
+    this.savingAntecedentes = true;
+
+    try {
+      const { data: recordData, error: fetchError } = await this.supabase
+        .from('student_clinical_records')
+        .select('additional_notes')
+        .eq('student_id', this.patient.student_id)
+        .maybeSingle();
+
+      if (fetchError) throw fetchError;
+
+      let clinicalNotesObj: any = {};
+      if (recordData?.additional_notes) {
+        try {
+          const decrypted = this.crypto.decrypt(recordData.additional_notes);
+          clinicalNotesObj = JSON.parse(decrypted);
+        } catch(e) {
+          console.warn('Error decrypting clinical record:', e);
+        }
+      }
+
+      clinicalNotesObj.general_data = clinicalNotesObj.general_data || {};
+      clinicalNotesObj.general_data.antecedentes_familiares = this.antecedentesContent;
+
+      const encryptedNotes = this.crypto.encrypt(JSON.stringify(clinicalNotesObj));
+
+      const { error: updateError } = await this.supabase
+        .from('student_clinical_records')
+        .update({ additional_notes: encryptedNotes })
+        .eq('student_id', this.patient.student_id);
+
+      if (updateError) throw updateError;
+
+      const { error: profileError } = await this.supabase
+        .from('profiles')
+        .update({ antecedentes_familiares: this.antecedentesContent })
+        .eq('user_id', this.patient.student_id);
+
+      if (profileError) {
+        console.warn('Error updating profile table:', profileError);
+      }
+
+      this.patient.antecedentes_familiares = this.antecedentesContent;
+      this.isEditingAntecedentes = false;
+      this.showFeedback('success', '¡Antecedentes Actualizados!', 'Los antecedentes familiares han sido guardados exitosamente.');
+    } catch(err) {
+      console.error('Error al guardar antecedentes:', err);
+      this.showFeedback('error', 'Error al Guardar', 'Ocurrió un error al intentar guardar los antecedentes familiares.');
+    } finally {
+      this.savingAntecedentes = false;
     }
   }
 

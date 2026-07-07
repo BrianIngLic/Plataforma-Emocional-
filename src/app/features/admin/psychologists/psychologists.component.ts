@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, HostListener } from '@angular/core';
 import { CommonModule, registerLocaleData } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -9,6 +9,8 @@ import { AdminStatsService } from '../services/admin-stats.service';
 import { createClient } from '@supabase/supabase-js';
 import { environment } from '../../../../environments/environment';
 import localeEs from '@angular/common/locales/es';
+import { DossierExportService } from '../../../core/services/dossier-export.service';
+import { AdminSkill8Service } from '../services/admin-skill8.service';
 
 registerLocaleData(localeEs, 'es');
 
@@ -42,14 +44,39 @@ interface Psychologist {
 export class PsychologistsComponent implements OnInit {
   supabase = inject(SupabaseService).supabase;
   fb = inject(FormBuilder);
-
   adminStats = inject(AdminStatsService);
+  adminSkill8 = inject(AdminSkill8Service);
+  dossierExport = inject(DossierExportService);
 
   psychologists: Psychologist[] = [];
+
+  // Patient Management State
+  assignedPatients: any[] = [];
+  availableStudents: any[] = [];
+  searchStudentQuery = '';
+  showAssignDropdown = false;
+  isExporting: { [studentId: string]: boolean } = {};
+  selectedStudentForProfile: any = null;
+  showStudentProfileModal = false;
+
+  // Unassign Confirm Modal State
+  showUnassignConfirmModal = false;
+  studentIdToUnassign: string | null = null;
+  studentNameToUnassign = '';
 
   selectedFilter: string = 'all';
   selectedPsychologist: Psychologist | null = null;
   activeTab: 'profile' | 'calendar' | 'stats' = 'profile';
+
+  profileContainerScrollTop = 0;
+
+  @HostListener('document:scroll', ['$event'])
+  onScroll(event?: Event) {
+    const scrollEl = document.querySelector('.content-body');
+    if (scrollEl) {
+      this.profileContainerScrollTop = scrollEl.scrollTop;
+    }
+  }
   
   // Profile Edit State
   editForm!: FormGroup;
@@ -115,6 +142,11 @@ export class PsychologistsComponent implements OnInit {
     this.initForm();
     await this.loadFaculties();
     this.psychologists = await this.adminStats.getPsychologistsWithStats();
+    
+    // Initialize scroll position
+    setTimeout(() => {
+      this.onScroll();
+    }, 100);
   }
 
   async loadFaculties() {
@@ -221,8 +253,9 @@ export class PsychologistsComponent implements OnInit {
     });
 
     this.generateCalendar();
-    const efficiency = this.getEfficiency(p);
-    this.barChartData.datasets[0].data = [p.sessionsCompleted, p.sessionsScheduled, p.attendanceRate, efficiency];
+    this.loadAssignedPatients();
+    this.loadAvailableStudents();
+    this.loadPerformanceChart(p.id);
   }
 
   closeDetail() {
@@ -295,8 +328,7 @@ export class PsychologistsComponent implements OnInit {
         end_time,
         status,
         priority_level,
-        type,
-        patient:users!patient_id (
+        patient:users!student_id (
           profiles (
             first_name,
             last_name,
@@ -309,18 +341,18 @@ export class PsychologistsComponent implements OnInit {
       .lte('scheduled_date', endDate.toISOString());
 
     const { data: excps } = await this.supabase
-      .from('exceptions')
-      .select('date')
+      .from('health_professional_exceptions')
+      .select('exception_date')
       .or(`professional_id.eq.${this.selectedPsychologist.id},professional_id.is.null`)
-      .gte('date', startDate.toISOString())
-      .lte('date', endDate.toISOString());
+      .gte('exception_date', startDate.toISOString())
+      .lte('exception_date', endDate.toISOString());
 
     const apptMap: Record<string, number> = {};
     const allAppointments: any[] = [];
     if (appts) {
       appts.forEach((a: any) => {
         const d = a.scheduled_date.split('T')[0];
-        apptMap[d] = (apptMap[d] || 0) + (a.status !== 'canceled' ? 1 : 0);
+        apptMap[d] = (apptMap[d] || 0) + (a.status !== 'canceled' && a.status !== 'cancelled' ? 1 : 0);
         allAppointments.push(a);
       });
     }
@@ -328,7 +360,11 @@ export class PsychologistsComponent implements OnInit {
 
     const excpSet = new Set<string>();
     if (excps) {
-      excps.forEach((e: any) => excpSet.add(e.date.split('T')[0]));
+      excps.forEach((e: any) => {
+        if (e.exception_date) {
+          excpSet.add(e.exception_date.split('T')[0]);
+        }
+      });
     }
 
     const days = [];
@@ -366,14 +402,17 @@ export class PsychologistsComponent implements OnInit {
     this.formErrorMessage = '';
     this.formSuccessMessage = '';
     this.addForm.reset({
-      faculty: 'Engineering',
+      role: 3,
       capacity: 35
     });
+    this.selectedRoleToggle = 3;
+    this.updateBodyScroll();
   }
 
   closeAddModal() {
     this.showAddModal = false;
     this.createdUser = null;
+    this.updateBodyScroll();
   }
 
   async onSubmit() {
@@ -466,5 +505,264 @@ export class PsychologistsComponent implements OnInit {
     } finally {
       this.isResendingEmail = false;
     }
+  }
+
+  // Patient Management Methods
+  async loadAssignedPatients() {
+    if (!this.selectedPsychologist) return;
+    const specialist = this.selectedPsychologist;
+    const field = specialist.role_id === 4 ? 'primary_nutritionist_id' : 'primary_psychologist_id';
+    
+    const { data, error } = await this.supabase
+      .from('student_clinical_records')
+      .select(`
+        student_id,
+        student:users!student_id (
+          id,
+          matricula,
+          profiles (
+            first_name,
+            last_name,
+            faculty,
+            celular
+          )
+        )
+      `)
+      .eq(field, specialist.id);
+
+    if (error) {
+      console.error('Error loading assigned patients:', error);
+      this.assignedPatients = [];
+    } else {
+      this.assignedPatients = (data || []).map((d: any) => {
+        const student = d.student;
+        if (student) {
+          student.email = student.matricula ? `${student.matricula}@ep.buap.mx` : '';
+        }
+        return student;
+      }).filter(Boolean);
+    }
+  }
+
+  async loadAvailableStudents() {
+    const { data, error } = await this.supabase
+      .from('users')
+      .select(`
+        id,
+        matricula,
+        profiles (
+          first_name,
+          last_name,
+          faculty,
+          celular
+        )
+      `)
+      .eq('role_id', 2);
+
+    if (error) {
+      console.error('Error loading available students:', error);
+      this.availableStudents = [];
+    } else {
+      this.availableStudents = (data || []).map((student: any) => {
+        student.email = student.matricula ? `${student.matricula}@ep.buap.mx` : '';
+        return student;
+      });
+    }
+  }
+
+  get filteredAvailableStudents() {
+    if (!this.searchStudentQuery.trim()) {
+      return [];
+    }
+    const query = this.searchStudentQuery.toLowerCase().trim();
+    const assignedIds = new Set(this.assignedPatients.map(p => p.id));
+    return this.availableStudents.filter(s => {
+      if (assignedIds.has(s.id)) return false;
+      const firstName = s.profiles?.first_name?.toLowerCase() || '';
+      const lastName = s.profiles?.last_name?.toLowerCase() || '';
+      const matricula = s.matricula?.toLowerCase() || '';
+      return firstName.includes(query) || lastName.includes(query) || matricula.includes(query);
+    });
+  }
+
+  async assignPatient(studentId: string) {
+    if (!this.selectedPsychologist) return;
+    const specialist = this.selectedPsychologist;
+    const isNutritionist = specialist.role_id === 4;
+
+    try {
+      const { data: currentRecord } = await this.supabase
+        .from('student_clinical_records')
+        .select('primary_psychologist_id, primary_nutritionist_id')
+        .eq('student_id', studentId)
+        .maybeSingle();
+
+      const payload = {
+        studentId,
+        primaryPsychologistId: isNutritionist ? currentRecord?.primary_psychologist_id : specialist.id,
+        primaryNutritionistId: isNutritionist ? specialist.id : currentRecord?.primary_nutritionist_id
+      };
+
+      await this.adminSkill8.assignPatientToProfessionals(payload);
+      
+      this.searchStudentQuery = '';
+      this.showAssignDropdown = false;
+      await this.loadAssignedPatients();
+      
+      this.selectedPsychologist.patients = this.assignedPatients.length;
+      const index = this.psychologists.findIndex(p => p.id === specialist.id);
+      if (index !== -1) {
+        this.psychologists[index].patients = this.assignedPatients.length;
+      }
+    } catch (err: any) {
+      console.error('Error assigning patient:', err);
+      alert('Error al asignar el paciente: ' + (err.message || err));
+    }
+  }
+
+  openUnassignModal(studentId: string, studentName: string) {
+    this.studentIdToUnassign = studentId;
+    this.studentNameToUnassign = studentName;
+    this.showUnassignConfirmModal = true;
+    this.updateBodyScroll();
+  }
+
+  closeUnassignModal() {
+    this.showUnassignConfirmModal = false;
+    this.studentIdToUnassign = null;
+    this.studentNameToUnassign = '';
+    this.updateBodyScroll();
+  }
+
+  openStudentProfile(student: any) {
+    this.selectedStudentForProfile = student;
+    this.showStudentProfileModal = true;
+    this.updateBodyScroll();
+  }
+
+  closeStudentProfile() {
+    this.showStudentProfileModal = false;
+    this.selectedStudentForProfile = null;
+    this.updateBodyScroll();
+  }
+
+  updateBodyScroll() {
+    const isModalOpen = this.showAddModal || this.showStudentProfileModal || this.showUnassignConfirmModal;
+    if (isModalOpen) {
+      document.body.classList.add('modal-open');
+    } else {
+      document.body.classList.remove('modal-open');
+    }
+  }
+
+  async confirmUnassign() {
+    if (!this.studentIdToUnassign) return;
+    const studentId = this.studentIdToUnassign;
+    this.closeUnassignModal();
+    await this.unassignPatient(studentId);
+  }
+
+  async unassignPatient(studentId: string) {
+    if (!this.selectedPsychologist) return;
+    
+    const specialist = this.selectedPsychologist;
+    const isNutritionist = specialist.role_id === 4;
+
+    try {
+      const { data: currentRecord } = await this.supabase
+        .from('student_clinical_records')
+        .select('primary_psychologist_id, primary_nutritionist_id')
+        .eq('student_id', studentId)
+        .maybeSingle();
+
+      const payload = {
+        studentId,
+        primaryPsychologistId: isNutritionist ? currentRecord?.primary_psychologist_id : null,
+        primaryNutritionistId: isNutritionist ? null : currentRecord?.primary_nutritionist_id
+      };
+
+      await this.adminSkill8.assignPatientToProfessionals(payload);
+      await this.loadAssignedPatients();
+
+      this.selectedPsychologist.patients = this.assignedPatients.length;
+      const index = this.psychologists.findIndex(p => p.id === specialist.id);
+      if (index !== -1) {
+        this.psychologists[index].patients = this.assignedPatients.length;
+      }
+    } catch (err: any) {
+      console.error('Error unassigning patient:', err);
+      alert('Error al dar de baja al paciente: ' + (err.message || err));
+    }
+  }
+
+  async downloadPatientDossier(studentId: string, studentName: string) {
+    this.isExporting[studentId] = true;
+    try {
+      const blob = await this.dossierExport.exportDossier(studentId);
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `dossier_clinico_${studentName.replace(/\s+/g, '_')}.pdf`;
+      a.click();
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error('Error al exportar dossier:', err);
+      alert('Error al generar el dossier clínico.');
+    } finally {
+      this.isExporting[studentId] = false;
+    }
+  }
+
+  // Dynamic Chart Loading Method
+  async loadPerformanceChart(professionalId: string) {
+    const today = new Date();
+    const startOfRange = new Date(today.getFullYear(), today.getMonth() - 5, 1);
+    
+    const { data, error } = await this.supabase
+      .from('appointments')
+      .select('scheduled_date, status')
+      .eq('professional_id', professionalId)
+      .gte('scheduled_date', startOfRange.toISOString());
+      
+    if (error) {
+      console.error('Error loading chart data:', error);
+      return;
+    }
+    
+    const monthNames = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+    const labels: string[] = [];
+    const completedData: number[] = [0, 0, 0, 0, 0, 0];
+    const noShowData: number[] = [0, 0, 0, 0, 0, 0];
+    
+    const monthKeys: string[] = [];
+    for (let i = 5; i >= 0; i--) {
+      const d = new Date(today.getFullYear(), today.getMonth() - i, 1);
+      labels.push(monthNames[d.getMonth()]);
+      const monthKey = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+      monthKeys.push(monthKey);
+    }
+    
+    if (data) {
+      data.forEach((a: any) => {
+        const date = new Date(a.scheduled_date);
+        const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+        const index = monthKeys.indexOf(monthKey);
+        if (index !== -1) {
+          if (a.status === 'completed') {
+            completedData[index]++;
+          } else if (a.status === 'no_show' || a.status === 'cancelled') {
+            noShowData[index]++;
+          }
+        }
+      });
+    }
+    
+    this.barChartData = {
+      labels: labels,
+      datasets: [
+        { data: completedData, label: 'Sesiones Completadas', backgroundColor: '#6366f1' },
+        { data: noShowData, label: 'Inasistencias', backgroundColor: '#ef4444' }
+      ]
+    };
   }
 }

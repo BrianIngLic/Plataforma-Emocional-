@@ -49,6 +49,12 @@ export class AdminLayoutComponent {
     this.isSidebarCollapsed = !this.isSidebarCollapsed;
   }
 
+  closeSidebarOnMobile() {
+    if (window.innerWidth <= 768) {
+      this.isSidebarCollapsed = false;
+    }
+  }
+
   async logout() {
     this.authService.logout();
   }

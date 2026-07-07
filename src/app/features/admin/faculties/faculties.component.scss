@@ -496,27 +496,18 @@
 // Modals
 .modal-overlay {
   position: fixed;
-  top: 0;
-  left: -280px; /* Default sidebar width expanded */
-  right: 0;
+  inset: 0;
+  width: 100vw;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.15);
   z-index: 200;
   display: flex;
   align-items: center;
   justify-content: center;
-  backdrop-filter: blur(6px);
-  padding: 2rem;
+  padding: 1rem;
   box-sizing: border-box;
-  transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-
-  :host-context(.expanded) & {
-    left: -80px; /* Sidebar collapsed width */
-  }
-
-  @media (max-width: 768px) {
-    left: 0;
-  }
+  backdrop-filter: blur(6px);
+  overflow-y: auto;
 }
 
 .modal-card {
@@ -632,7 +623,7 @@
 
 @keyframes modal-enter {
   from { transform: scale(0.95); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
+  to { transform: none; opacity: 1; }
 }
 
 @media (max-width: 768px) {
@@ -648,6 +639,23 @@
     .occupancy-bar-wrapper {
       width: 100%;
     }
+
+    .faculty-identity, .patients-ratio, .psychologists-count, .badge-group {
+      width: 100%;
+    }
+  }
+
+  .faculties-list-header {
+    display: none;
+  }
+
+  .header-strip {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .sort-selector {
+    flex-wrap: wrap;
   }
 }
 

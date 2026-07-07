@@ -454,7 +454,7 @@
   </div>
 
   <!-- Secure Add Psychologist Modal (Formulario seguro de Alta de Personal Clínico) -->
-  <div class="modal-overlay" *ngIf="showAddModal" (click)="closeAddModal()" [style.top.px]="profileContainerScrollTop">
+  <div class="modal-overlay" *ngIf="showAddModal" (click)="closeAddModal()">
     <div class="modal-card form-modal" (click)="$event.stopPropagation()">
       <div class="modal-header">
         <div class="modal-title-wrapper">
@@ -560,7 +560,7 @@
   </div>
 
   <!-- Student Profile Details Modal (Modal de Perfil de Alumno) -->
-  <div class="modal-overlay" *ngIf="showStudentProfileModal && selectedStudentForProfile" (click)="closeStudentProfile()" [style.top.px]="profileContainerScrollTop">
+  <div class="modal-overlay" *ngIf="showStudentProfileModal && selectedStudentForProfile" (click)="closeStudentProfile()">
     <div class="modal-card" (click)="$event.stopPropagation()" style="width: 100%; max-width: 480px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; overflow: hidden; animation: zoom-in 0.2s ease; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);">
       <div style="background: linear-gradient(135deg, #10b981, #3b82f6); padding: 1.5rem; position: relative; color: white;">
         <button type="button" 
@@ -608,7 +608,7 @@
   </div>
 
   <!-- Unassign Confirmation Modal -->
-  <div class="modal-overlay" *ngIf="showUnassignConfirmModal" (click)="closeUnassignModal()" [style.top.px]="profileContainerScrollTop">
+  <div class="modal-overlay" *ngIf="showUnassignConfirmModal" (click)="closeUnassignModal()">
     <div class="modal-card" (click)="$event.stopPropagation()" style="width: 100%; max-width: 400px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; overflow: hidden; animation: zoom-in 0.2s ease; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5); padding: 1.5rem; display: flex; flex-direction: column; gap: 1.25rem;">
       <div style="display: flex; align-items: center; gap: 10px; color: #ef4444;">
         <mat-icon style="font-size: 32px; width: 32px; height: 32px;">warning_amber</mat-icon>

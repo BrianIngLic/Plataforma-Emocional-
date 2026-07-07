@@ -1,4 +1,7 @@
 <div class="layout-container">
+  <!-- Sidebar Backdrop for Mobile (Click outside to close) -->
+  <div class="sidebar-backdrop" *ngIf="isSidebarCollapsed" (click)="toggleSidebar()"></div>
+
   <!-- Sidebar -->
   <aside class="sidebar" [class.collapsed]="isSidebarCollapsed">
     
@@ -17,7 +20,7 @@
 
     <div class="sidebar-content">
       <nav class="nav-menu">
-        <a *ngFor="let item of navItems" [routerLink]="item.path" routerLinkActive="active" class="nav-item">
+        <a *ngFor="let item of navItems" [routerLink]="item.path" routerLinkActive="active" class="nav-item" (click)="closeSidebarOnMobile()">
           <div class="icon-wrapper">
             <mat-icon>{{ item.icon }}</mat-icon>
             <span *ngIf="item.badge && isSidebarCollapsed" class="mini-badge-pulse"></span>

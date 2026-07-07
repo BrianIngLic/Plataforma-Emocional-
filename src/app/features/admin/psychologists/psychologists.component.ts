@@ -63,6 +63,8 @@ export class PsychologistsComponent implements OnInit {
   showUnassignConfirmModal = false;
   studentIdToUnassign: string | null = null;
   studentNameToUnassign = '';
+  showUnassignSuccessModal = false;
+  unassignedStudentName = '';
 
   selectedFilter: string = 'all';
   selectedPsychologist: Psychologist | null = null;
@@ -646,8 +648,14 @@ export class PsychologistsComponent implements OnInit {
     this.updateBodyScroll();
   }
 
+  closeUnassignSuccessModal() {
+    this.showUnassignSuccessModal = false;
+    this.unassignedStudentName = '';
+    this.updateBodyScroll();
+  }
+
   updateBodyScroll() {
-    const isModalOpen = this.showAddModal || this.showStudentProfileModal || this.showUnassignConfirmModal;
+    const isModalOpen = this.showAddModal || this.showStudentProfileModal || this.showUnassignConfirmModal || this.showUnassignSuccessModal;
     if (isModalOpen) {
       document.body.classList.add('modal-open');
     } else {
@@ -658,8 +666,21 @@ export class PsychologistsComponent implements OnInit {
   async confirmUnassign() {
     if (!this.studentIdToUnassign) return;
     const studentId = this.studentIdToUnassign;
-    this.closeUnassignModal();
-    await this.unassignPatient(studentId);
+    const studentName = this.studentNameToUnassign;
+    
+    // Close confirmation modal, but don't update body scroll classes yet
+    this.showUnassignConfirmModal = false;
+    this.studentIdToUnassign = null;
+    this.studentNameToUnassign = '';
+    
+    try {
+      await this.unassignPatient(studentId);
+      this.unassignedStudentName = studentName;
+      this.showUnassignSuccessModal = true;
+      this.updateBodyScroll();
+    } catch (err) {
+      this.updateBodyScroll();
+    }
   }
 
   async unassignPatient(studentId: string) {

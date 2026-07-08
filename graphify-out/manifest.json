@@ -130,8 +130,8 @@
     "semantic_hash": ""
   },
   "src/app/features/admin/agenda/agenda.component.ts": {
-    "mtime": 1782770258.7829058,
-    "ast_hash": "e997a6bbae676ad7081752d5ae80c1d3",
+    "mtime": 1783488437.3702228,
+    "ast_hash": "3e4c6e8af7f15fc7b601d51f76e7e898",
     "semantic_hash": ""
   },
   "src/app/features/admin/faculties/faculties.component.ts": {
@@ -155,18 +155,18 @@
     "semantic_hash": ""
   },
   "src/app/features/admin/reports/reports.component.ts": {
-    "mtime": 1782025438.7677662,
-    "ast_hash": "537997e4c2497f24ef6c1dff723bf025",
-    "semantic_hash": "537997e4c2497f24ef6c1dff723bf025"
+    "mtime": 1783483502.637651,
+    "ast_hash": "9c318650940fe91c2585de1be1ed4a16",
+    "semantic_hash": ""
   },
   "src/app/features/admin/services/admin-exceptions.service.ts": {
-    "mtime": 1782607691.9351003,
-    "ast_hash": "34742e7ac186d1593b53eb5a0d14a73f",
+    "mtime": 1783488433.4084787,
+    "ast_hash": "e4767b0498b6372db46f75e6df1ccc31",
     "semantic_hash": ""
   },
   "src/app/features/admin/services/admin-stats.service.ts": {
-    "mtime": 1782772752.0049727,
-    "ast_hash": "b7059fd9df3ee04064747943d485b894",
+    "mtime": 1783487869.599234,
+    "ast_hash": "8895a789dbae01d9ef839e677192687b",
     "semantic_hash": ""
   },
   "src/app/features/alimentary/alimentary-dashboard/alimentary-dashboard.component.ts": {
@@ -400,9 +400,9 @@
     "semantic_hash": ""
   },
   "src/app/features/admin/reports/reports.component.html": {
-    "mtime": 1782025438.7662516,
-    "ast_hash": "585b8fe8843675acd42c5f0080387081",
-    "semantic_hash": "585b8fe8843675acd42c5f0080387081"
+    "mtime": 1783483522.9282715,
+    "ast_hash": "46e08b54828e5099ec6ba44ce338cba3",
+    "semantic_hash": ""
   },
   "src/app/features/auth/login/login.component.html": {
     "mtime": 1783241187.3774893,
@@ -480,7 +480,7 @@
     "semantic_hash": ""
   },
   "task.md": {
-    "mtime": 1783464371.6627085,
+    "mtime": 1783483471.2212627,
     "ast_hash": "163904362fa23caaf7b1431a55a246f9",
     "semantic_hash": ""
   },

@@ -1,7 +1,7 @@
 # Graph Report - Plataforma-Emocional-  (2026-07-08)
 
 ## Corpus Check
-- 170 files · ~145,656 words
+- 170 files · ~145,668 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary

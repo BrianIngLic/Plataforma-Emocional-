@@ -177,3 +177,15 @@ body.modal-open {
   max-width: 95vw !important;
 }
 
+/* Alerta para citas pasadas sin notas ni marcadas como inasistencia */
+.appt-past-alert {
+  background: rgba(245, 158, 11, 0.15) !important;
+  background-color: rgba(245, 158, 11, 0.15) !important;
+  color: #eab308 !important;
+  border-color: rgba(245, 158, 11, 0.3) !important;
+  
+  .patient-name, .psychologist-name, div, span, p, small, mat-icon {
+    color: #eab308 !important;
+  }
+}
+

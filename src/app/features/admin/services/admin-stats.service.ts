@@ -419,7 +419,7 @@ export class AdminStatsService {
       // 1. Consultar citas filtrando por la columna de fecha correcta: scheduled_date
       const { data: appointments, error } = await supabase
         .from('appointments')
-        .select('id, student_id, professional_id, scheduled_date, start_time, end_time, status')
+        .select('id, student_id, professional_id, scheduled_date, start_time, end_time, status, notes')
         .gte('scheduled_date', startDate.toISOString())
         .lte('scheduled_date', endDate.toISOString());
 
@@ -468,6 +468,7 @@ export class AdminStatsService {
           startTime: startTimeStr,
           endTime: endTimeStr,
           status: a.status,
+          notes: a.notes,
           type: 'virtual' // Default fallback dado que la BD no tiene columna type
         };
       });
@@ -493,7 +494,7 @@ export class AdminStatsService {
       const [usersRes, profilesRes, patientSettingsRes, evaluationsRes] = await Promise.all([
         supabase.from('users').select('id, role_id, created_at'),
         supabase.from('profiles').select('user_id, first_name, last_name, faculty'),
-        supabase.from('patient_settings').select('student_id, status, updated_at'),
+        supabase.from('patient_settings').select('patient_id, status, created_at'),
         supabase.from('session_evaluations').select('appointment_id, score_global')
       ]);
 
@@ -512,7 +513,7 @@ export class AdminStatsService {
       const settingsMap = new Map<string, any>();
       if (patientSettingsRes.data) {
         patientSettingsRes.data.forEach((s: any) => {
-          settingsMap.set(s.student_id, s);
+          settingsMap.set(s.patient_id, s);
         });
       }
 
@@ -537,7 +538,7 @@ export class AdminStatsService {
             last_name: profile?.last_name || '',
             faculty: profile?.faculty || 'Sin asignar',
             status: settings?.status || 'active',
-            status_updated_at: settings?.updated_at || u.created_at || null
+            status_updated_at: settings?.created_at || u.created_at || null
           });
         });
       }

@@ -103,7 +103,7 @@
             <div class="time-col">{{ item.time }}</div>
             <div class="marker-col"><div class="dot"></div><div class="line"></div></div>
             <div class="content-col">
-              <div class="card-content">
+              <div class="card-content" [class.appt-past-alert]="item.isAlert">
                 <div class="header">
                   <div class="title-area">
                     <mat-icon *ngIf="item.type === 'block'">access_time</mat-icon>

@@ -435,7 +435,7 @@
                 </div>
                 
                 <!-- Appointment details card -->
-                <div style="flex: 1; background: var(--bg-hover, rgba(255,255,255,0.02)); border: 1px solid var(--border-color); border-radius: 8px; padding: 0.75rem 1rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem; box-sizing: border-box;">
+                <div [class.appt-past-alert]="isAlertAppointment(appt)" style="flex: 1; background: var(--bg-hover, rgba(255,255,255,0.02)); border: 1px solid var(--border-color); border-radius: 8px; padding: 0.75rem 1rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem; box-sizing: border-box;">
                   <div>
                     <div style="font-weight: 600; font-size: 0.85rem; color: var(--text-primary);">
                       {{ appt.patient?.profiles?.first_name || 'Paciente' }} {{ appt.patient?.profiles?.last_name || '' }}
@@ -449,8 +449,8 @@
                     <span class="badge" [style.background]="(appt.priority_level === 'Emergency' || appt.priority_level === 'emergency') ? 'rgba(239, 68, 68, 0.1)' : 'rgba(99, 102, 241, 0.1)'" [style.color]="(appt.priority_level === 'Emergency' || appt.priority_level === 'emergency') ? '#ef4444' : '#6366f1'" style="font-size: 0.7rem; padding: 2px 6px; border-radius: 4px; font-weight: 600;">
                       {{ (appt.priority_level === 'Routine' || appt.priority_level === 'routine') ? 'Rutina' : ((appt.priority_level === 'Emergency' || appt.priority_level === 'emergency') ? 'Urgencia' : (appt.priority_level || 'General')) }}
                     </span>
-                    <span class="badge" [style.background]="appt.status === 'completed' ? 'rgba(16, 185, 129, 0.1)' : 'rgba(245, 158, 11, 0.1)'" [style.color]="appt.status === 'completed' ? '#10b981' : '#f59e0b'" style="font-size: 0.7rem; padding: 2px 6px; border-radius: 4px; font-weight: 600;">
-                      {{ appt.status === 'completed' ? 'Completada' : (appt.status === 'scheduled' ? 'Programada' : appt.status) }}
+                    <span class="badge" [style.background]="isAlertAppointment(appt) ? 'rgba(245, 158, 11, 0.15)' : (appt.status === 'completed' ? 'rgba(16, 185, 129, 0.1)' : 'rgba(245, 158, 11, 0.1)')" [style.color]="isAlertAppointment(appt) ? '#f59e0b' : (appt.status === 'completed' ? '#10b981' : '#f59e0b')" style="font-size: 0.7rem; padding: 2px 6px; border-radius: 4px; font-weight: 600;">
+                      {{ isAlertAppointment(appt) ? 'Alerta' : (appt.status === 'completed' ? 'Completada' : (appt.status === 'scheduled' ? 'Programada' : appt.status)) }}
                     </span>
                   </div>
                 </div>

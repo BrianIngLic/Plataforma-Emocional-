@@ -4281,7 +4281,7 @@
       "label": ".currentUser()",
       "file_type": "code",
       "source_file": "src/app/features/admin/admin-layout/admin-layout.component.ts",
-      "source_location": "L33",
+      "source_location": "L34",
       "_origin": "ast",
       "id": "admin_layout_admin_layout_component_adminlayoutcomponent_currentuser",
       "community": 22,
@@ -4291,7 +4291,7 @@
       "label": ".todayDateString()",
       "file_type": "code",
       "source_file": "src/app/features/admin/admin-layout/admin-layout.component.ts",
-      "source_location": "L37",
+      "source_location": "L38",
       "_origin": "ast",
       "id": "admin_layout_admin_layout_component_adminlayoutcomponent_todaydatestring",
       "community": 22,
@@ -4301,7 +4301,7 @@
       "label": ".toggleSidebar()",
       "file_type": "code",
       "source_file": "src/app/features/admin/admin-layout/admin-layout.component.ts",
-      "source_location": "L46",
+      "source_location": "L47",
       "_origin": "ast",
       "id": "admin_layout_admin_layout_component_adminlayoutcomponent_togglesidebar",
       "community": 22,
@@ -4311,7 +4311,7 @@
       "label": ".closeSidebarOnMobile()",
       "file_type": "code",
       "source_file": "src/app/features/admin/admin-layout/admin-layout.component.ts",
-      "source_location": "L50",
+      "source_location": "L51",
       "_origin": "ast",
       "id": "admin_layout_admin_layout_component_adminlayoutcomponent_closesidebaronmobile",
       "community": 22,
@@ -4321,7 +4321,7 @@
       "label": ".logout()",
       "file_type": "code",
       "source_file": "src/app/features/admin/admin-layout/admin-layout.component.ts",
-      "source_location": "L56",
+      "source_location": "L57",
       "_origin": "ast",
       "id": "admin_layout_admin_layout_component_adminlayoutcomponent_logout",
       "community": 22,
@@ -18408,9 +18408,9 @@
       "source_file": "scratch/test_join.js",
       "source_location": "L1",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "scratch_test_join",
-      "target": "scratch_test_join_createclient"
+      "target": "scratch_test_join_createclient",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18418,9 +18418,9 @@
       "source_file": "scratch/test_join.js",
       "source_location": "L8",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "scratch_test_join",
-      "target": "scratch_test_join_run"
+      "target": "scratch_test_join_run",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18428,9 +18428,9 @@
       "source_file": "scratch/test_join.js",
       "source_location": "L6",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "scratch_test_join",
-      "target": "scratch_test_join_supabase"
+      "target": "scratch_test_join_supabase",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18438,9 +18438,9 @@
       "source_file": "scratch/test_reports.js",
       "source_location": "L1",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "scratch_test_reports",
-      "target": "scratch_test_reports_createclient"
+      "target": "scratch_test_reports_createclient",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18448,9 +18448,9 @@
       "source_file": "scratch/test_reports.js",
       "source_location": "L8",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "scratch_test_reports",
-      "target": "scratch_test_reports_run"
+      "target": "scratch_test_reports_run",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18458,9 +18458,9 @@
       "source_file": "scratch/test_reports.js",
       "source_location": "L6",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "scratch_test_reports",
-      "target": "scratch_test_reports_supabase"
+      "target": "scratch_test_reports_supabase",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18468,9 +18468,9 @@
       "source_file": "scratch/test_supabase.js",
       "source_location": "L1",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "scratch_test_supabase",
-      "target": "scratch_test_supabase_createclient"
+      "target": "scratch_test_supabase_createclient",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18478,9 +18478,9 @@
       "source_file": "scratch/test_supabase.js",
       "source_location": "L8",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "scratch_test_supabase",
-      "target": "scratch_test_supabase_run"
+      "target": "scratch_test_supabase_run",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18488,9 +18488,9 @@
       "source_file": "scratch/test_supabase.js",
       "source_location": "L6",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "scratch_test_supabase",
-      "target": "scratch_test_supabase_supabase"
+      "target": "scratch_test_supabase_supabase",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",

@@ -1204,7 +1204,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "angular",
-      "community": 4,
+      "community": 0,
       "norm_label": "angular.json"
     },
     {
@@ -1214,7 +1214,7 @@
       "source_location": "L2",
       "_origin": "ast",
       "id": "angular_schema",
-      "community": 4,
+      "community": 0,
       "norm_label": "$schema"
     },
     {
@@ -1224,7 +1224,7 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "angular_version",
-      "community": 4,
+      "community": 0,
       "norm_label": "version"
     },
     {
@@ -1234,7 +1234,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "angular_newprojectroot",
-      "community": 4,
+      "community": 0,
       "norm_label": "newprojectroot"
     },
     {
@@ -1244,7 +1244,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "angular_projects",
-      "community": 4,
+      "community": 0,
       "norm_label": "projects"
     },
     {
@@ -1254,7 +1254,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "angular_projects_plataforma_emocional",
-      "community": 4,
+      "community": 0,
       "norm_label": "plataforma_emocional"
     },
     {
@@ -1264,7 +1264,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "angular_plataforma_emocional_projecttype",
-      "community": 4,
+      "community": 0,
       "norm_label": "projecttype"
     },
     {
@@ -1274,7 +1274,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "angular_plataforma_emocional_schematics",
-      "community": 4,
+      "community": 0,
       "norm_label": "schematics"
     },
     {
@@ -1284,7 +1284,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "angular_schematics_schematics_angular_component",
-      "community": 4,
+      "community": 0,
       "norm_label": "@schematics/angular:component"
     },
     {
@@ -1294,7 +1294,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "angular_schematics_angular_component_style",
-      "community": 4,
+      "community": 0,
       "norm_label": "style"
     },
     {
@@ -1304,7 +1304,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "angular_plataforma_emocional_root",
-      "community": 4,
+      "community": 0,
       "norm_label": "root"
     },
     {
@@ -1314,7 +1314,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "angular_plataforma_emocional_sourceroot",
-      "community": 4,
+      "community": 0,
       "norm_label": "sourceroot"
     },
     {
@@ -1324,7 +1324,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "angular_plataforma_emocional_prefix",
-      "community": 4,
+      "community": 0,
       "norm_label": "prefix"
     },
     {
@@ -1644,7 +1644,7 @@
       "source_location": "L99",
       "_origin": "ast",
       "id": "angular_cli",
-      "community": 4,
+      "community": 136,
       "norm_label": "cli"
     },
     {
@@ -1654,7 +1654,7 @@
       "source_location": "L100",
       "_origin": "ast",
       "id": "angular_cli_analytics",
-      "community": 4,
+      "community": 136,
       "norm_label": "analytics"
     },
     {
@@ -1704,7 +1704,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "package",
-      "community": 2,
+      "community": 133,
       "norm_label": "package.json"
     },
     {
@@ -1714,7 +1714,7 @@
       "source_location": "L2",
       "_origin": "ast",
       "id": "package_name",
-      "community": 2,
+      "community": 133,
       "norm_label": "name"
     },
     {
@@ -1724,7 +1724,7 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "package_version",
-      "community": 2,
+      "community": 133,
       "norm_label": "version"
     },
     {
@@ -1734,7 +1734,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "package_scripts",
-      "community": 2,
+      "community": 135,
       "norm_label": "scripts"
     },
     {
@@ -1744,7 +1744,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "package_scripts_ng",
-      "community": 2,
+      "community": 135,
       "norm_label": "ng"
     },
     {
@@ -1754,7 +1754,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "package_scripts_start",
-      "community": 2,
+      "community": 135,
       "norm_label": "start"
     },
     {
@@ -1764,7 +1764,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "package_scripts_build",
-      "community": 2,
+      "community": 135,
       "norm_label": "build"
     },
     {
@@ -1774,7 +1774,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "package_scripts_watch",
-      "community": 2,
+      "community": 135,
       "norm_label": "watch"
     },
     {
@@ -1784,7 +1784,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "package_scripts_test",
-      "community": 2,
+      "community": 135,
       "norm_label": "test"
     },
     {
@@ -1794,7 +1794,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "package_prettier",
-      "community": 2,
+      "community": 133,
       "norm_label": "prettier"
     },
     {
@@ -1804,7 +1804,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "package_prettier_printwidth",
-      "community": 2,
+      "community": 133,
       "norm_label": "printwidth"
     },
     {
@@ -1814,7 +1814,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "package_prettier_singlequote",
-      "community": 2,
+      "community": 133,
       "norm_label": "singlequote"
     },
     {
@@ -1824,7 +1824,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "package_prettier_overrides",
-      "community": 2,
+      "community": 133,
       "norm_label": "overrides"
     },
     {
@@ -1834,7 +1834,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "package_private",
-      "community": 2,
+      "community": 133,
       "norm_label": "private"
     },
     {
@@ -2144,7 +2144,7 @@
       "source_location": "L55",
       "_origin": "ast",
       "id": "package_devdependencies_angular_cli",
-      "community": 4,
+      "community": 136,
       "norm_label": "@angular/cli"
     },
     {
@@ -2554,7 +2554,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "guards_role_guard",
-      "community": 133,
+      "community": 18,
       "norm_label": "role.guard.ts"
     },
     {
@@ -2754,7 +2754,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_audit_service",
-      "community": 133,
+      "community": 18,
       "norm_label": "audit.service.ts"
     },
     {
@@ -2764,7 +2764,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "services_audit_service_auditservice",
-      "community": 133,
+      "community": 18,
       "norm_label": "auditservice"
     },
     {
@@ -2774,7 +2774,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "services_audit_service_auditservice_logevent",
-      "community": 133,
+      "community": 18,
       "norm_label": ".logevent()"
     },
     {
@@ -2784,7 +2784,7 @@
       "source_location": "L40",
       "_origin": "ast",
       "id": "services_audit_service_auditservice_logunauthorizedaccess",
-      "community": 133,
+      "community": 18,
       "norm_label": ".logunauthorizedaccess()"
     },
     {
@@ -2944,7 +2944,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_chat_service",
-      "community": 18,
+      "community": 30,
       "norm_label": "chat.service.ts"
     },
     {
@@ -2954,7 +2954,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "services_chat_service_chatmessage",
-      "community": 18,
+      "community": 30,
       "norm_label": "chatmessage"
     },
     {
@@ -3124,7 +3124,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_crypto_service",
-      "community": 67,
+      "community": 30,
       "norm_label": "crypto.service.ts"
     },
     {
@@ -3134,7 +3134,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "services_crypto_service_cryptoservice",
-      "community": 67,
+      "community": 30,
       "norm_label": "cryptoservice"
     },
     {
@@ -3144,7 +3144,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "services_crypto_service_cryptoservice_derivekey",
-      "community": 67,
+      "community": 30,
       "norm_label": ".derivekey()"
     },
     {
@@ -3154,7 +3154,7 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "services_crypto_service_cryptoservice_clearkey",
-      "community": 67,
+      "community": 30,
       "norm_label": ".clearkey()"
     },
     {
@@ -3164,7 +3164,7 @@
       "source_location": "L39",
       "_origin": "ast",
       "id": "services_crypto_service_cryptoservice_getkey",
-      "community": 67,
+      "community": 30,
       "norm_label": ".getkey()"
     },
     {
@@ -3174,7 +3174,7 @@
       "source_location": "L53",
       "_origin": "ast",
       "id": "services_crypto_service_cryptoservice_encrypt",
-      "community": 67,
+      "community": 30,
       "norm_label": ".encrypt()"
     },
     {
@@ -3184,7 +3184,7 @@
       "source_location": "L61",
       "_origin": "ast",
       "id": "services_crypto_service_cryptoservice_decrypt",
-      "community": 67,
+      "community": 30,
       "norm_label": ".decrypt()"
     },
     {
@@ -3194,7 +3194,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_diary_service",
-      "community": 18,
+      "community": 30,
       "norm_label": "diary.service.ts"
     },
     {
@@ -3204,7 +3204,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "services_diary_service_diaryentry",
-      "community": 18,
+      "community": 30,
       "norm_label": "diaryentry"
     },
     {
@@ -3254,7 +3254,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_dossier_export_service",
-      "community": 67,
+      "community": 30,
       "norm_label": "dossier-export.service.ts"
     },
     {
@@ -3594,7 +3594,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_gamification_service",
-      "community": 18,
+      "community": 30,
       "norm_label": "gamification.service.ts"
     },
     {
@@ -3604,7 +3604,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "services_gamification_service_userstreak",
-      "community": 18,
+      "community": 30,
       "norm_label": "userstreak"
     },
     {
@@ -3624,7 +3624,7 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "services_gamification_service_gamificationservice",
-      "community": 18,
+      "community": 30,
       "norm_label": "gamificationservice"
     },
     {
@@ -3634,7 +3634,7 @@
       "source_location": "L42",
       "_origin": "ast",
       "id": "services_gamification_service_gamificationservice_constructor",
-      "community": 18,
+      "community": 30,
       "norm_label": ".constructor()"
     },
     {
@@ -3644,7 +3644,7 @@
       "source_location": "L50",
       "_origin": "ast",
       "id": "services_gamification_service_gamificationservice_loadgamificationdata",
-      "community": 18,
+      "community": 30,
       "norm_label": ".loadgamificationdata()"
     },
     {
@@ -3654,7 +3654,7 @@
       "source_location": "L120",
       "_origin": "ast",
       "id": "services_gamification_service_gamificationservice_registeractivity",
-      "community": 18,
+      "community": 30,
       "norm_label": ".registeractivity()"
     },
     {
@@ -3664,7 +3664,7 @@
       "source_location": "L149",
       "_origin": "ast",
       "id": "services_gamification_service_gamificationservice_awardclinicalachievement",
-      "community": 18,
+      "community": 30,
       "norm_label": ".awardclinicalachievement()"
     },
     {
@@ -3674,7 +3674,7 @@
       "source_location": "L242",
       "_origin": "ast",
       "id": "services_gamification_service_gamificationservice_getglobalcatalogachievements",
-      "community": 18,
+      "community": 30,
       "norm_label": ".getglobalcatalogachievements()"
     },
     {
@@ -3814,7 +3814,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "nutrition_nutricion_service",
-      "community": 131,
+      "community": 88,
       "norm_label": "nutricion.service.ts"
     },
     {
@@ -3824,7 +3824,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "nutrition_nutricion_service_campoformulariotipo",
-      "community": 131,
+      "community": 88,
       "norm_label": "campoformulariotipo"
     },
     {
@@ -3844,7 +3844,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "nutrition_nutricion_service_consultanutricionrow",
-      "community": 131,
+      "community": 88,
       "norm_label": "consultanutricionrow"
     },
     {
@@ -3854,7 +3854,7 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "nutrition_nutricion_service_nuevaconsultanutricionpayload",
-      "community": 131,
+      "community": 88,
       "norm_label": "nuevaconsultanutricionpayload"
     },
     {
@@ -3864,7 +3864,7 @@
       "source_location": "L39",
       "_origin": "ast",
       "id": "nutrition_nutricion_service_nutricionservice",
-      "community": 139,
+      "community": 88,
       "norm_label": "nutricionservice"
     },
     {
@@ -3874,7 +3874,7 @@
       "source_location": "L42",
       "_origin": "ast",
       "id": "nutrition_nutricion_service_nutricionservice_obtenercamposformulario",
-      "community": 139,
+      "community": 88,
       "norm_label": ".obtenercamposformulario()"
     },
     {
@@ -3884,7 +3884,7 @@
       "source_location": "L57",
       "_origin": "ast",
       "id": "nutrition_nutricion_service_nutricionservice_obtenerultimaconsulta",
-      "community": 139,
+      "community": 88,
       "norm_label": ".obtenerultimaconsulta()"
     },
     {
@@ -3894,7 +3894,7 @@
       "source_location": "L73",
       "_origin": "ast",
       "id": "nutrition_nutricion_service_nutricionservice_crearconsulta",
-      "community": 139,
+      "community": 88,
       "norm_label": ".crearconsulta()"
     },
     {
@@ -3904,7 +3904,7 @@
       "source_location": "L87",
       "_origin": "ast",
       "id": "nutrition_nutricion_service_nutricionservice_agruparcamposporbloque",
-      "community": 139,
+      "community": 88,
       "norm_label": ".agruparcamposporbloque()"
     },
     {
@@ -3914,7 +3914,7 @@
       "source_location": "L93",
       "_origin": "ast",
       "id": "nutrition_nutricion_service_nutricionservice_esbloquedos",
-      "community": 139,
+      "community": 88,
       "norm_label": ".esbloquedos()"
     },
     {
@@ -3924,7 +3924,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_profile_service",
-      "community": 67,
+      "community": 74,
       "norm_label": "profile.service.ts"
     },
     {
@@ -4311,7 +4311,7 @@
       "label": ".ngOnInit()",
       "file_type": "code",
       "source_file": "src/app/features/admin/agenda/agenda.component.ts",
-      "source_location": "L102",
+      "source_location": "L106",
       "_origin": "ast",
       "id": "src_app_features_admin_agenda_agenda_component_ts_agenda_agenda_component_agendacomponent_ngoninit",
       "community": 11,
@@ -4321,7 +4321,7 @@
       "label": ".setCurrentDayAsActive()",
       "file_type": "code",
       "source_file": "src/app/features/admin/agenda/agenda.component.ts",
-      "source_location": "L114",
+      "source_location": "L118",
       "_origin": "ast",
       "id": "agenda_agenda_component_agendacomponent_setcurrentdayasactive",
       "community": 11,
@@ -4331,7 +4331,7 @@
       "label": ".loadAppointments()",
       "file_type": "code",
       "source_file": "src/app/features/admin/agenda/agenda.component.ts",
-      "source_location": "L122",
+      "source_location": "L126",
       "_origin": "ast",
       "id": "agenda_agenda_component_agendacomponent_loadappointments",
       "community": 11,
@@ -4341,7 +4341,7 @@
       "label": ".calculateMetrics()",
       "file_type": "code",
       "source_file": "src/app/features/admin/agenda/agenda.component.ts",
-      "source_location": "L190",
+      "source_location": "L194",
       "_origin": "ast",
       "id": "agenda_agenda_component_agendacomponent_calculatemetrics",
       "community": 11,
@@ -4351,7 +4351,7 @@
       "label": ".saturatedFaculties()",
       "file_type": "code",
       "source_file": "src/app/features/admin/agenda/agenda.component.ts",
-      "source_location": "L198",
+      "source_location": "L202",
       "_origin": "ast",
       "id": "agenda_agenda_component_agendacomponent_saturatedfaculties",
       "community": 11,
@@ -4361,7 +4361,7 @@
       "label": ".saturatedFacultiesNamesString()",
       "file_type": "code",
       "source_file": "src/app/features/admin/agenda/agenda.component.ts",
-      "source_location": "L202",
+      "source_location": "L206",
       "_origin": "ast",
       "id": "agenda_agenda_component_agendacomponent_saturatedfacultiesnamesstring",
       "community": 11,
@@ -4371,7 +4371,7 @@
       "label": ".getApptAt()",
       "file_type": "code",
       "source_file": "src/app/features/admin/agenda/agenda.component.ts",
-      "source_location": "L206",
+      "source_location": "L210",
       "_origin": "ast",
       "id": "agenda_agenda_component_agendacomponent_getapptat",
       "community": 11,
@@ -4381,7 +4381,7 @@
       "label": ".selectAppt()",
       "file_type": "code",
       "source_file": "src/app/features/admin/agenda/agenda.component.ts",
-      "source_location": "L210",
+      "source_location": "L214",
       "_origin": "ast",
       "id": "agenda_agenda_component_agendacomponent_selectappt",
       "community": 11,
@@ -4391,7 +4391,7 @@
       "label": ".getStatusClass()",
       "file_type": "code",
       "source_file": "src/app/features/admin/agenda/agenda.component.ts",
-      "source_location": "L214",
+      "source_location": "L218",
       "_origin": "ast",
       "id": "agenda_agenda_component_agendacomponent_getstatusclass",
       "community": 11,
@@ -4401,7 +4401,7 @@
       "label": ".getStatusText()",
       "file_type": "code",
       "source_file": "src/app/features/admin/agenda/agenda.component.ts",
-      "source_location": "L220",
+      "source_location": "L224",
       "_origin": "ast",
       "id": "agenda_agenda_component_agendacomponent_getstatustext",
       "community": 11,
@@ -4411,7 +4411,7 @@
       "label": ".getOccupancyBarColor()",
       "file_type": "code",
       "source_file": "src/app/features/admin/agenda/agenda.component.ts",
-      "source_location": "L226",
+      "source_location": "L230",
       "_origin": "ast",
       "id": "agenda_agenda_component_agendacomponent_getoccupancybarcolor",
       "community": 11,
@@ -4421,7 +4421,7 @@
       "label": ".prevWeek()",
       "file_type": "code",
       "source_file": "src/app/features/admin/agenda/agenda.component.ts",
-      "source_location": "L232",
+      "source_location": "L236",
       "_origin": "ast",
       "id": "agenda_agenda_component_agendacomponent_prevweek",
       "community": 11,
@@ -4431,7 +4431,7 @@
       "label": ".nextWeek()",
       "file_type": "code",
       "source_file": "src/app/features/admin/agenda/agenda.component.ts",
-      "source_location": "L239",
+      "source_location": "L243",
       "_origin": "ast",
       "id": "agenda_agenda_component_agendacomponent_nextweek",
       "community": 11,
@@ -4441,7 +4441,7 @@
       "label": ".resetWeek()",
       "file_type": "code",
       "source_file": "src/app/features/admin/agenda/agenda.component.ts",
-      "source_location": "L246",
+      "source_location": "L250",
       "_origin": "ast",
       "id": "agenda_agenda_component_agendacomponent_resetweek",
       "community": 11,
@@ -4451,7 +4451,7 @@
       "label": ".popoverMonthYearString()",
       "file_type": "code",
       "source_file": "src/app/features/admin/agenda/agenda.component.ts",
-      "source_location": "L255",
+      "source_location": "L259",
       "_origin": "ast",
       "id": "agenda_agenda_component_agendacomponent_popovermonthyearstring",
       "community": 11,
@@ -4461,7 +4461,7 @@
       "label": ".toggleCalendarPopover()",
       "file_type": "code",
       "source_file": "src/app/features/admin/agenda/agenda.component.ts",
-      "source_location": "L261",
+      "source_location": "L265",
       "_origin": "ast",
       "id": "agenda_agenda_component_agendacomponent_togglecalendarpopover",
       "community": 11,
@@ -4471,7 +4471,7 @@
       "label": ".generatePopoverCalendar()",
       "file_type": "code",
       "source_file": "src/app/features/admin/agenda/agenda.component.ts",
-      "source_location": "L269",
+      "source_location": "L273",
       "_origin": "ast",
       "id": "agenda_agenda_component_agendacomponent_generatepopovercalendar",
       "community": 11,
@@ -4481,7 +4481,7 @@
       "label": ".popoverPrevMonth()",
       "file_type": "code",
       "source_file": "src/app/features/admin/agenda/agenda.component.ts",
-      "source_location": "L300",
+      "source_location": "L304",
       "_origin": "ast",
       "id": "agenda_agenda_component_agendacomponent_popoverprevmonth",
       "community": 11,
@@ -4491,7 +4491,7 @@
       "label": ".popoverNextMonth()",
       "file_type": "code",
       "source_file": "src/app/features/admin/agenda/agenda.component.ts",
-      "source_location": "L309",
+      "source_location": "L313",
       "_origin": "ast",
       "id": "agenda_agenda_component_agendacomponent_popovernextmonth",
       "community": 11,
@@ -4501,7 +4501,7 @@
       "label": ".togglePopoverViewMode()",
       "file_type": "code",
       "source_file": "src/app/features/admin/agenda/agenda.component.ts",
-      "source_location": "L318",
+      "source_location": "L322",
       "_origin": "ast",
       "id": "agenda_agenda_component_agendacomponent_togglepopoverviewmode",
       "community": 11,
@@ -4511,7 +4511,7 @@
       "label": ".selectPopoverMonth()",
       "file_type": "code",
       "source_file": "src/app/features/admin/agenda/agenda.component.ts",
-      "source_location": "L328",
+      "source_location": "L332",
       "_origin": "ast",
       "id": "agenda_agenda_component_agendacomponent_selectpopovermonth",
       "community": 11,
@@ -4521,7 +4521,7 @@
       "label": ".selectPopoverYear()",
       "file_type": "code",
       "source_file": "src/app/features/admin/agenda/agenda.component.ts",
-      "source_location": "L334",
+      "source_location": "L338",
       "_origin": "ast",
       "id": "agenda_agenda_component_agendacomponent_selectpopoveryear",
       "community": 11,
@@ -4531,7 +4531,7 @@
       "label": ".selectSpecificDate()",
       "file_type": "code",
       "source_file": "src/app/features/admin/agenda/agenda.component.ts",
-      "source_location": "L340",
+      "source_location": "L344",
       "_origin": "ast",
       "id": "agenda_agenda_component_agendacomponent_selectspecificdate",
       "community": 11,
@@ -4541,7 +4541,7 @@
       "label": ".switchCalendarViewMode()",
       "file_type": "code",
       "source_file": "src/app/features/admin/agenda/agenda.component.ts",
-      "source_location": "L372",
+      "source_location": "L376",
       "_origin": "ast",
       "id": "agenda_agenda_component_agendacomponent_switchcalendarviewmode",
       "community": 11,
@@ -4551,7 +4551,7 @@
       "label": ".selectHeaderDay()",
       "file_type": "code",
       "source_file": "src/app/features/admin/agenda/agenda.component.ts",
-      "source_location": "L382",
+      "source_location": "L386",
       "_origin": "ast",
       "id": "agenda_agenda_component_agendacomponent_selectheaderday",
       "community": 11,
@@ -6554,38 +6554,58 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "reports_reports_component",
-      "community": 30,
+      "community": 68,
       "norm_label": "reports.component.ts"
     },
     {
       "label": "ReportsComponent",
       "file_type": "code",
       "source_file": "src/app/features/admin/reports/reports.component.ts",
-      "source_location": "L14",
+      "source_location": "L15",
       "_origin": "ast",
       "id": "reports_reports_component_reportscomponent",
-      "community": 30,
+      "community": 68,
       "norm_label": "reportscomponent"
     },
     {
       "label": ".constructor()",
       "file_type": "code",
       "source_file": "src/app/features/admin/reports/reports.component.ts",
-      "source_location": "L184",
+      "source_location": "L165",
       "_origin": "ast",
       "id": "reports_reports_component_reportscomponent_constructor",
-      "community": 30,
+      "community": 68,
       "norm_label": ".constructor()"
     },
     {
       "label": ".ngOnInit()",
       "file_type": "code",
       "source_file": "src/app/features/admin/reports/reports.component.ts",
-      "source_location": "L186",
+      "source_location": "L167",
       "_origin": "ast",
       "id": "reports_reports_component_reportscomponent_ngoninit",
-      "community": 30,
+      "community": 68,
       "norm_label": ".ngoninit()"
+    },
+    {
+      "label": ".loadReports()",
+      "file_type": "code",
+      "source_file": "src/app/features/admin/reports/reports.component.ts",
+      "source_location": "L171",
+      "_origin": "ast",
+      "id": "reports_reports_component_reportscomponent_loadreports",
+      "community": 68,
+      "norm_label": ".loadreports()"
+    },
+    {
+      "label": ".updateCharts()",
+      "file_type": "code",
+      "source_file": "src/app/features/admin/reports/reports.component.ts",
+      "source_location": "L193",
+      "_origin": "ast",
+      "id": "reports_reports_component_reportscomponent_updatecharts",
+      "community": 68,
+      "norm_label": ".updatecharts()"
     },
     {
       "label": "admin-exceptions.service.ts",
@@ -6641,7 +6661,7 @@
       "label": ".addException()",
       "file_type": "code",
       "source_file": "src/app/features/admin/services/admin-exceptions.service.ts",
-      "source_location": "L59",
+      "source_location": "L77",
       "_origin": "ast",
       "id": "services_admin_exceptions_service_adminexceptionsservice_addexception",
       "community": 81,
@@ -6774,7 +6794,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_admin_stats_service",
-      "community": 67,
+      "community": 59,
       "norm_label": "admin-stats.service.ts"
     },
     {
@@ -6794,7 +6814,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "services_admin_stats_service_chartdatapoint",
-      "community": 67,
+      "community": 59,
       "norm_label": "chartdatapoint"
     },
     {
@@ -6866,6 +6886,16 @@
       "id": "services_admin_stats_service_adminstatsservice_getagendaappointments",
       "community": 68,
       "norm_label": ".getagendaappointments()"
+    },
+    {
+      "label": ".getReportsData()",
+      "file_type": "code",
+      "source_file": "src/app/features/admin/services/admin-stats.service.ts",
+      "source_location": "L480",
+      "_origin": "ast",
+      "id": "services_admin_stats_service_adminstatsservice_getreportsdata",
+      "community": 68,
+      "norm_label": ".getreportsdata()"
     },
     {
       "label": "alimentary-dashboard.component.ts",
@@ -7314,7 +7344,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_features_chat_dashboard_dashboard_component_ts_dashboard_dashboard_component",
-      "community": 18,
+      "community": 30,
       "norm_label": "dashboard.component.ts"
     },
     {
@@ -7424,7 +7454,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "dashboard_layout_dashboard_layout_component",
-      "community": 18,
+      "community": 30,
       "norm_label": "dashboard-layout.component.ts"
     },
     {
@@ -8024,7 +8054,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "achievements_dashboard_achievements_dashboard_component",
-      "community": 18,
+      "community": 30,
       "norm_label": "achievements-dashboard.component.ts"
     },
     {
@@ -8104,7 +8134,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "streak_badge_streak_badge_component",
-      "community": 18,
+      "community": 30,
       "norm_label": "streak-badge.component.ts"
     },
     {
@@ -8114,7 +8144,7 @@
       "source_location": "L77",
       "_origin": "ast",
       "id": "streak_badge_streak_badge_component_streakbadgecomponent",
-      "community": 18,
+      "community": 30,
       "norm_label": "streakbadgecomponent"
     },
     {
@@ -8854,7 +8884,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_features_nutritionist_agenda_agenda_component_ts_agenda_agenda_component",
-      "community": 87,
+      "community": 67,
       "norm_label": "agenda.component.ts"
     },
     {
@@ -8864,7 +8894,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "src_app_features_nutritionist_agenda_agenda_component_ts_agenda_agenda_component_calendarday",
-      "community": 87,
+      "community": 67,
       "norm_label": "calendarday"
     },
     {
@@ -9564,7 +9594,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "perfil_paciente_perfil_paciente_component",
-      "community": 67,
+      "community": 30,
       "norm_label": "perfil-paciente.component.ts"
     },
     {
@@ -9944,7 +9974,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_features_psychologist_agenda_agenda_component_ts_agenda_agenda_component",
-      "community": 87,
+      "community": 67,
       "norm_label": "agenda.component.ts"
     },
     {
@@ -9954,7 +9984,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "src_app_features_psychologist_agenda_agenda_component_ts_agenda_agenda_component_calendarday",
-      "community": 87,
+      "community": 67,
       "norm_label": "calendarday"
     },
     {
@@ -10094,7 +10124,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "clinical_note_clinical_note_component",
-      "community": 67,
+      "community": 59,
       "norm_label": "clinical-note.component.ts"
     },
     {
@@ -10234,7 +10264,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "patient_profile_patient_profile_component",
-      "community": 67,
+      "community": 30,
       "norm_label": "patient-profile.component.ts"
     },
     {
@@ -11034,7 +11064,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "profile_avatar_profile_avatar_component",
-      "community": 59,
+      "community": 74,
       "norm_label": "profile-avatar.component.ts"
     },
     {
@@ -24503,9 +24533,9 @@
       "source_file": "src/app/features/admin/directory/directory.component.ts",
       "source_location": "L1035",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "directory_directory_component_directorycomponent",
-      "target": "directory_directory_component_directorycomponent_closereassignstatusmodal",
-      "confidence_score": 1.0
+      "target": "directory_directory_component_directorycomponent_closereassignstatusmodal"
     },
     {
       "relation": "method",
@@ -24993,9 +25023,9 @@
       "source_file": "src/app/features/admin/directory/directory.component.ts",
       "source_location": "L1028",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "directory_directory_component_directorycomponent",
-      "target": "directory_directory_component_directorycomponent_showerrormodal",
-      "confidence_score": 1.0
+      "target": "directory_directory_component_directorycomponent_showerrormodal"
     },
     {
       "relation": "method",
@@ -25003,9 +25033,9 @@
       "source_file": "src/app/features/admin/directory/directory.component.ts",
       "source_location": "L1021",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "directory_directory_component_directorycomponent",
-      "target": "directory_directory_component_directorycomponent_showsuccessmodal",
-      "confidence_score": 1.0
+      "target": "directory_directory_component_directorycomponent_showsuccessmodal"
     },
     {
       "relation": "method",
@@ -25348,9 +25378,9 @@
       "source_file": "src/app/features/admin/directory/directory.component.ts",
       "source_location": "L986",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "directory_directory_component_directorycomponent_savespecialistreassignment",
-      "target": "directory_directory_component_directorycomponent_showerrormodal",
-      "confidence_score": 1.0
+      "target": "directory_directory_component_directorycomponent_showerrormodal"
     },
     {
       "relation": "calls",
@@ -25359,9 +25389,9 @@
       "source_file": "src/app/features/admin/directory/directory.component.ts",
       "source_location": "L1015",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "directory_directory_component_directorycomponent_savespecialistreassignment",
-      "target": "directory_directory_component_directorycomponent_showsuccessmodal",
-      "confidence_score": 1.0
+      "target": "directory_directory_component_directorycomponent_showsuccessmodal"
     },
     {
       "relation": "calls",
@@ -25370,9 +25400,9 @@
       "source_file": "src/app/features/admin/directory/directory.component.ts",
       "source_location": "L1025",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "directory_directory_component_directorycomponent_showsuccessmodal",
-      "target": "directory_directory_component_directorycomponent_updatebodyscroll",
-      "confidence_score": 1.0
+      "target": "directory_directory_component_directorycomponent_updatebodyscroll"
     },
     {
       "relation": "calls",
@@ -25381,9 +25411,9 @@
       "source_file": "src/app/features/admin/directory/directory.component.ts",
       "source_location": "L1032",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "directory_directory_component_directorycomponent_showerrormodal",
-      "target": "directory_directory_component_directorycomponent_updatebodyscroll",
-      "confidence_score": 1.0
+      "target": "directory_directory_component_directorycomponent_updatebodyscroll"
     },
     {
       "relation": "calls",
@@ -25392,9 +25422,9 @@
       "source_file": "src/app/features/admin/directory/directory.component.ts",
       "source_location": "L1037",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "directory_directory_component_directorycomponent_closereassignstatusmodal",
-      "target": "directory_directory_component_directorycomponent_updatebodyscroll",
-      "confidence_score": 1.0
+      "target": "directory_directory_component_directorycomponent_updatebodyscroll"
     },
     {
       "relation": "calls",
@@ -27570,6 +27600,28 @@
       "target": "reports_reports_component_reportscomponent"
     },
     {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/features/admin/reports/reports.component.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "reports_reports_component",
+      "target": "services_admin_stats_service"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/features/admin/reports/reports.component.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "reports_reports_component",
+      "target": "services_admin_stats_service_adminstatsservice"
+    },
+    {
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/app/features/admin/reports/reports.component.ts",
@@ -27583,11 +27635,53 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/app/features/admin/reports/reports.component.ts",
+      "source_location": "L171",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "reports_reports_component_reportscomponent",
+      "target": "reports_reports_component_reportscomponent_loadreports"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/features/admin/reports/reports.component.ts",
       "source_location": "L186",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "reports_reports_component_reportscomponent",
       "target": "reports_reports_component_reportscomponent_ngoninit"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/features/admin/reports/reports.component.ts",
+      "source_location": "L193",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "reports_reports_component_reportscomponent",
+      "target": "reports_reports_component_reportscomponent_updatecharts"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/features/admin/reports/reports.component.ts",
+      "source_location": "L168",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "reports_reports_component_reportscomponent_ngoninit",
+      "target": "reports_reports_component_reportscomponent_loadreports"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/features/admin/reports/reports.component.ts",
+      "source_location": "L185",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "reports_reports_component_reportscomponent_loadreports",
+      "target": "reports_reports_component_reportscomponent_updatecharts"
     },
     {
       "relation": "contains",
@@ -27860,6 +27954,16 @@
       "confidence_score": 1.0,
       "source": "services_admin_stats_service_adminstatsservice",
       "target": "services_admin_stats_service_adminstatsservice_getpsychologistswithstats"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/features/admin/services/admin-stats.service.ts",
+      "source_location": "L457",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "services_admin_stats_service_adminstatsservice",
+      "target": "services_admin_stats_service_adminstatsservice_getreportsdata"
     },
     {
       "relation": "contains",
@@ -36887,5 +36991,5 @@
       "source_file": "src/app/features/psychologist/psychologist-layout/psychologist-layout.component.html"
     }
   ],
-  "built_at_commit": "9192770febd76510d0d107a109633e324f6e5c2e"
+  "built_at_commit": "f9e02555747cc91e48049755e64400b8ec7f854a"
 }

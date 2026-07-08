@@ -37,22 +37,40 @@ export class AdminExceptionsService {
     const holidays = await this.getMexicoHolidays(year);
     if (!holidays || holidays.length === 0) return { success: false, count: 0 };
 
-    // Filtramos para asegurar que no se dupliquen (Supabase puede rechazar duplicados si tuvieramos un constraint, pero por si acaso lo hacemos masivo)
     const records = holidays.map(h => ({
       professional_id: null, // null significa global
       exception_date: h.date,
-      reason: h.localName
+      description: h.localName
     }));
 
-    const { data, error } = await this.supabaseService.supabase
+    // Evitar duplicados consultando excepciones existentes
+    const holidayDates = records.map(r => r.exception_date);
+    const { data: existing, error: queryErr } = await this.supabaseService.supabase
       .from('health_professional_exceptions')
-      .insert(records);
+      .select('exception_date')
+      .is('professional_id', null)
+      .in('exception_date', holidayDates);
 
-    if (error) {
-      return { success: false, count: 0, error };
+    if (queryErr) {
+      return { success: false, count: 0, error: queryErr };
     }
 
-    return { success: true, count: records.length };
+    const existingDates = new Set(existing?.map((e: any) => e.exception_date) || []);
+    const newRecords = records.filter(r => !existingDates.has(r.exception_date));
+
+    if (newRecords.length === 0) {
+      return { success: true, count: 0 };
+    }
+
+    const { error: insertErr } = await this.supabaseService.supabase
+      .from('health_professional_exceptions')
+      .insert(newRecords);
+
+    if (insertErr) {
+      return { success: false, count: 0, error: insertErr };
+    }
+
+    return { success: true, count: newRecords.length };
   }
 
   // Registra una excepción manualmente
@@ -62,7 +80,7 @@ export class AdminExceptionsService {
       .insert({
         professional_id: psychologistId,
         exception_date: date,
-        reason: reason
+        description: reason
       });
       
     return { data, error };

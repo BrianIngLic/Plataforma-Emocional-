@@ -82,9 +82,13 @@ export class AgendaComponent implements OnInit {
     try {
       const result = await this.exceptionsService.importHolidaysToSupabase(year);
       if (result.success) {
+        const msg = result.count > 0 
+          ? `Se han registrado ${result.count} nuevos días festivos globales para ${year}.`
+          : `Todos los días festivos para ${year} ya estaban registrados.`;
+
         this.dialog.open(FeedbackModalComponent, {
           width: '400px',
-          data: { type: 'success', title: 'Festivos Importados', message: `Se han registrado ${result.count} días festivos globales para ${year} (API Nager.Date).` }
+          data: { type: 'success', title: 'Festivos Importados', message: msg }
         });
       } else {
         throw new Error('Error en importación');

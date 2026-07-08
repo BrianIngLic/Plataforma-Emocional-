@@ -15,8 +15,8 @@
     "semantic_hash": "d2fc2624d783980be281b4cf0acc2455"
   },
   "angular.json": {
-    "mtime": 1783241187.3453958,
-    "ast_hash": "5f4bafd81bd9a2426228b1937489f92a",
+    "mtime": 1783464499.7862008,
+    "ast_hash": "a37449bdf5648d8fe0759e5f3e74ca95",
     "semantic_hash": ""
   },
   "db/schema.sql": {
@@ -120,13 +120,13 @@
     "semantic_hash": "d19284c6d222f3dfc8838de4eda95f5d"
   },
   "src/app/features/admin/admin-layout/admin-layout.component.ts": {
-    "mtime": 1783239709.3344016,
-    "ast_hash": "9d93917023c0b087ed64c74c2bef1fd8",
+    "mtime": 1783464365.6667361,
+    "ast_hash": "e27204f065095c2e4990964151091c9d",
     "semantic_hash": ""
   },
   "src/app/features/admin/admin.routes.ts": {
-    "mtime": 1783239703.1033957,
-    "ast_hash": "27a101f0f17414685686856cbe8b73ff",
+    "mtime": 1783464363.4345064,
+    "ast_hash": "9f4861c5f87e0266310e0d87fbb84977",
     "semantic_hash": ""
   },
   "src/app/features/admin/agenda/agenda.component.ts": {
@@ -150,8 +150,8 @@
     "semantic_hash": ""
   },
   "src/app/features/admin/psychologists/psychologists.component.ts": {
-    "mtime": 1783386075.1551228,
-    "ast_hash": "a9a15525bdb5eb9c298696048c946992",
+    "mtime": 1783452300.56997,
+    "ast_hash": "41870a239d4cb5e850b349eced7c1992",
     "semantic_hash": ""
   },
   "src/app/features/admin/reports/reports.component.ts": {
@@ -360,8 +360,8 @@
     "semantic_hash": "e9fbe2f84e3d2e67d94ed6d56840ff5d"
   },
   "spec.md": {
-    "mtime": 1783241187.3726056,
-    "ast_hash": "232d806eff6a2a584cd3731067f0f830",
+    "mtime": 1783464368.3965704,
+    "ast_hash": "c06cccc5b4caa5c3c5c1ab81b87b4724",
     "semantic_hash": ""
   },
   "src/app/app.html": {
@@ -370,8 +370,8 @@
     "semantic_hash": ""
   },
   "src/app/features/admin/admin-layout/admin-layout.component.html": {
-    "mtime": 1782846852.8564796,
-    "ast_hash": "8c7109a440b8fd5e57200885ec24f248",
+    "mtime": 1783450895.7779684,
+    "ast_hash": "1a9e884d7db8b84883a4faeeacb559a5",
     "semantic_hash": ""
   },
   "src/app/features/admin/agenda/agenda.component.html": {
@@ -395,8 +395,8 @@
     "semantic_hash": ""
   },
   "src/app/features/admin/psychologists/psychologists.component.html": {
-    "mtime": 1783386086.3948774,
-    "ast_hash": "c7b4455de21e899cc5d8c79a3e5d90a4",
+    "mtime": 1783459597.934821,
+    "ast_hash": "367d07d99f31a723426af41aa3fb18c5",
     "semantic_hash": ""
   },
   "src/app/features/admin/reports/reports.component.html": {
@@ -480,8 +480,8 @@
     "semantic_hash": ""
   },
   "task.md": {
-    "mtime": 1783241187.4384673,
-    "ast_hash": "996d42633fb7ee01500a86b131c01c71",
+    "mtime": 1783464371.6627085,
+    "ast_hash": "163904362fa23caaf7b1431a55a246f9",
     "semantic_hash": ""
   },
   "public/amati-logo.svg": {
@@ -1082,6 +1082,16 @@
   "public/icons/icon-96x96.png": {
     "mtime": 1783241187.3682892,
     "ast_hash": "ad68075f59b101ac4943c78e1fd9198e",
+    "semantic_hash": ""
+  },
+  "src/app/features/admin/directory/directory.component.ts": {
+    "mtime": 1783480315.8306775,
+    "ast_hash": "d13ea31d2f1c8b78564802e9eb4f4cfc",
+    "semantic_hash": ""
+  },
+  "src/app/features/admin/directory/directory.component.html": {
+    "mtime": 1783480325.234309,
+    "ast_hash": "5f0a50ab6f814b57fee30c2f545d894c",
     "semantic_hash": ""
   }
 }

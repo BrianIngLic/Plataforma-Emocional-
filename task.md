@@ -170,7 +170,11 @@
 
 ## Skill 8: Módulo de Administración (Core System)
 - `[ ]` Dashboard de Administrador (`admin-layout.component`).
-- `[ ]` Formulario seguro de Alta de Personal Clínico (Psicólogos y Nutriólogos).
+- `[x]` **Directorio General Unificado:** Consolidar alumnos y especialistas en `/admin/directory`.
+- `[x]` **Buscador y Selector Dinámico:** Filtro dinámico en cabecera de alumnos y selección de especialista para cargar su perfil de detalle.
+- `[x]` **Filtros Notion-like:** Implementar filtros laterales de checkboxes para asignación, facultades y estados clínicos.
+- `[x]` **Reasignación Inline:** Selectores combobox para reasignar especialistas en tiempo real desde la tabla.
+- `[x]` Formulario seguro de Alta de Personal Clínico (Psicólogos y Nutriólogos) mediante Edge Function.
 - `[ ]` Panel de gestión de usuarios (suspensión, reactivación).
 - `[ ]` **Configuración de Marca de Agua Institucional:** Crear módulo en `features/admin/settings` para subir el logotipo/marca de agua oficial al bucket de Supabase Storage `institutional_assets`.
 

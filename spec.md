@@ -63,7 +63,11 @@ El sistema está compuesto por un Frontend Angular, un Backend PostgREST (Postgr
 
 ### Skill 8: Módulo de Administración (Core System)
 - Interfaz exclusiva para el rol 'Admin'.
-- Panel de control para gestionar altas, bajas y modificaciones del personal clínico (Psicólogos).
+- **Directorio General Unificado:** Consolidación de alumnos y especialistas (psicólogos y nutriólogos) en una sola vista dinámica (`/admin/directory`).
+  - **Buscador y Selector Dinámico:** Filtro de alumnos por búsqueda de texto y selector de especialista en la cabecera superior. Al elegir un especialista, se despliega su vista detallada (perfil, calendario, gráficos, pacientes asignados).
+  - **Filtros Notion-like:** Barra de filtros interactivos mediante checkboxes para filtrar alumnos por asignación ("Sin Psicólogo", "Sin Nutriólogo"), por división de facultad y por estado clínico ("Activo", "Baja", "Alta Médica").
+  - **Reasignación Inline:** Selectores combobox embebidos directamente en la tabla para asignar o cambiar en tiempo real los especialistas asignados a cada alumno.
+- Panel de control para gestionar altas, bajas y modificaciones del personal clínico (Psicólogos y Nutriólogos) mediante modal de registro seguro.
 - Asignación manual de pacientes (Estudiantes) a psicólogos específicos (opcional, dependiendo de la política de la clínica).
 - **Gestión de Activos Institucionales:** Carga protegida del logotipo oficial y marca de agua de la institución hacia el bucket de Supabase Storage `institutional_assets`.
 

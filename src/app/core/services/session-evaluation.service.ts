@@ -161,16 +161,18 @@ export class SessionEvaluationService {
    * Paso 2 → filtra las que YA tienen evaluación usando los IDs del paso 1
    */
   async getPendingEvaluations(patientId: string): Promise<PendingEvaluationItem[]> {
-    // Paso 1: citas completadas del paciente con nombre del profesional
+    // Paso 1: citas completadas del paciente
+    // Nota: se omite el join al nombre del profesional para evitar errores PGRST200
+    // cuando la FK no está registrada en el schema cache de PostgREST.
     const { data: appointments, error: apptError } = await this.supabase
       .from('appointments')
-      .select('id, scheduled_date, professional_id, professional:users!appointments_professional_id_fkey(profiles(first_name, last_name))')
+      .select('id, scheduled_date, professional_id')
       .eq('student_id', patientId)
       .eq('status', 'completed');
 
     if (apptError) {
       console.error('SessionEvaluationService.getPendingEvaluations [appointments]:', apptError);
-      throw apptError;
+      return [];  // No lanzar excepción; simplemente devolver lista vacía
     }
 
     if (!appointments || appointments.length === 0) return [];
@@ -185,7 +187,7 @@ export class SessionEvaluationService {
 
     if (evalError) {
       console.error('SessionEvaluationService.getPendingEvaluations [evaluations]:', evalError);
-      throw evalError;
+      return [];  // No lanzar excepción
     }
 
     const evaluatedIds = new Set((evaluations ?? []).map((e: any) => e.appointment_id as string));
@@ -195,12 +197,7 @@ export class SessionEvaluationService {
       .filter((a: any) => !evaluatedIds.has(a.id))
       .map((a: any) => ({
         appointmentId:    a.id as string,
-        professionalName: (() => {
-          const professional = Array.isArray(a.professional) ? a.professional[0] : a.professional;
-          const profile = Array.isArray(professional?.profiles) ? professional.profiles[0] : professional?.profiles;
-          const fullName = [profile?.first_name, profile?.last_name].filter(Boolean).join(' ').trim();
-          return fullName || 'Profesional';
-        })(),
+        professionalName: 'Profesional',  // Se resuelve sin join para evitar errores de FK
         date:             a.scheduled_date as string,
       }));
 

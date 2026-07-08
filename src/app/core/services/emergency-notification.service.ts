@@ -39,6 +39,9 @@ export class EmergencyNotificationService {
   private supabase = inject(SupabaseService).supabase;
   private authService = inject(AuthService);
 
+  /** Evita doble suscripción al Realtime cuando ngOnInit se ejecuta más de una vez */
+  private realtimeInitialized = false;
+
   /**
    * Wrapper method called directly from dialog confirmation
    */
@@ -487,6 +490,12 @@ export class EmergencyNotificationService {
       console.warn('⚠️ No se puede inicializar Realtime Listener sin usuario autenticado.');
       return;
     }
+
+    // Guard: evitar suscribirse dos veces al mismo canal (causaría el error postgres_changes)
+    if (this.realtimeInitialized) {
+      return;
+    }
+    this.realtimeInitialized = true;
 
     console.log(`🚀 [Supabase Realtime]: Inicializando canal de escucha para citas del usuario: ${user.id}`);
 

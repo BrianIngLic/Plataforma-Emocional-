@@ -25,6 +25,8 @@ export class StudentSettingsComponent implements OnInit {
 
   faculties: Faculty[] = [];
   selectedFaculty: string = '';
+  firstName: string = '';
+  lastName: string = '';
   isSaving = false;
 
   get currentUser() {
@@ -34,21 +36,25 @@ export class StudentSettingsComponent implements OnInit {
   async ngOnInit() {
     this.faculties = await this.facultyService.getFaculties();
     const user = this.currentUser;
-    if (user && user.faculty) {
-      this.selectedFaculty = user.faculty;
+    if (user) {
+      if (user.faculty) this.selectedFaculty = user.faculty;
+      // Separar el nombre completo en nombre y apellido
+      const parts = (user.name && user.name !== 'Usuario') ? user.name.split(' ') : [];
+      this.firstName = parts[0] || '';
+      this.lastName = parts.slice(1).join(' ') || '';
     }
   }
 
   confirmSave() {
-    if (!this.selectedFaculty) return;
+    if (!this.selectedFaculty && !this.firstName && !this.lastName) return;
 
     const dialogRef = this.dialog.open(FeedbackModalComponent, {
       width: '400px',
       data: {
         type: 'confirm',
         title: 'Confirmar Cambio',
-        message: '¿Estás seguro que deseas cambiar tu facultad? Esto podría afectar la lista de especialistas disponibles para ti.',
-        btnText: 'Sí, cambiar',
+        message: '¿Estás seguro que deseas guardar los cambios en tu perfil?',
+        btnText: 'Sí, guardar',
         cancelBtnText: 'Cancelar'
       }
     });
@@ -63,24 +69,31 @@ export class StudentSettingsComponent implements OnInit {
   async performSave() {
     this.isSaving = true;
     const user = this.authService.currentUser();
-    
+
     if (user && user.id) {
+      const updatePayload: any = {};
+      if (this.selectedFaculty) updatePayload.faculty    = this.selectedFaculty;
+      if (this.firstName !== undefined) updatePayload.first_name = this.firstName.trim();
+      if (this.lastName  !== undefined) updatePayload.last_name  = this.lastName.trim();
+
       const { error } = await this.supabaseService.supabase
         .from('profiles')
-        .update({ faculty: this.selectedFaculty })
+        .update(updatePayload)
         .eq('user_id', user.id);
-        
+
       this.isSaving = false;
 
       if (!error) {
+        const fullName = `${this.firstName.trim()} ${this.lastName.trim()}`.trim();
         this.authService.currentUser.set({
           ...user,
-          faculty: this.selectedFaculty
+          faculty: this.selectedFaculty || user.faculty,
+          name: fullName || user.name
         });
 
         this.dialog.open(FeedbackModalComponent, {
           width: '400px',
-          data: { type: 'success', title: 'Ajustes Guardados', message: 'Tu facultad ha sido actualizada correctamente.' }
+          data: { type: 'success', title: 'Perfil Guardado', message: 'Tus datos han sido actualizados correctamente.' }
         });
       } else {
         this.dialog.open(FeedbackModalComponent, {

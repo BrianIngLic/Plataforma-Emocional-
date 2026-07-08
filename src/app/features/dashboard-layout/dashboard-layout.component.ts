@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal, computed, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet, RouterLink, RouterLinkActive, Router, NavigationEnd } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
@@ -7,13 +7,20 @@ import { ChatService } from '../../core/services/chat.service';
 import { EmergencyNotificationService } from '../../core/services/emergency-notification.service';
 import { SessionEvaluationService, PendingEvaluationItem } from '../../core/services/session-evaluation.service';
 import { GamificationService } from '../../core/services/gamification.service';
-import { StreakBadgeComponent } from '../gamification/streak-badge/streak-badge.component';
+import { AchievementsDashboardComponent } from '../gamification/achievements-dashboard/achievements-dashboard.component';
 import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-dashboard-layout',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive, MatIconModule, StreakBadgeComponent],
+  imports: [
+    CommonModule,
+    RouterOutlet,
+    RouterLink,
+    RouterLinkActive,
+    MatIconModule,
+    AchievementsDashboardComponent
+  ],
   templateUrl: './dashboard-layout.component.html',
   styleUrls: ['./dashboard-layout.component.scss']
 })
@@ -30,6 +37,15 @@ export class DashboardLayoutComponent implements OnInit {
   chatHistory: any[] = [];
   pendingEvaluations = signal<PendingEvaluationItem[]>([]);
 
+  /** Panel de logros deslizante */
+  showAchievementsPanel = false;
+
+  /** Menú contextual del user-profile */
+  showProfileMenu = false;
+
+  /** Nivel calculado desde el XP total */
+  currentLevel = computed(() => Math.floor(this.gamificationService.totalXp() / 500) + 1);
+
   get currentUser() {
     return this.authService.currentUser();
   }
@@ -40,6 +56,36 @@ export class DashboardLayoutComponent implements OnInit {
 
   isPsychologist() {
     return this.currentUser?.role === 'psychologist';
+  }
+
+  /** Cierra el menú si el clic fue fuera del wrapper */
+  @HostListener('document:click')
+  onDocumentClick() {
+    if (this.showProfileMenu) {
+      this.showProfileMenu = false;
+    }
+  }
+
+  toggleProfileMenu(event: Event) {
+    event.stopPropagation(); // Evita que dispare onDocumentClick inmediatamente
+    this.showProfileMenu = !this.showProfileMenu;
+  }
+
+  closeProfileMenu() {
+    this.showProfileMenu = false;
+  }
+
+  openAchievements() {
+    this.showProfileMenu = false;
+    this.showAchievementsPanel = true;
+    this.gamificationService.loadGamificationData();
+  }
+
+  toggleAchievementsPanel() {
+    this.showAchievementsPanel = !this.showAchievementsPanel;
+    if (this.showAchievementsPanel) {
+      this.gamificationService.loadGamificationData();
+    }
   }
 
   ngOnInit() {
@@ -66,6 +112,9 @@ export class DashboardLayoutComponent implements OnInit {
         this.loadHistory();
       }
       this.checkPendingEvaluations();
+      // Cerrar panel al navegar
+      this.showAchievementsPanel = false;
+      this.showProfileMenu = false;
       if (this.isMobile()) {
         this.isSidebarCollapsed = true;
       }

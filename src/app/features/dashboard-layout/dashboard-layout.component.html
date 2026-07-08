@@ -59,16 +59,6 @@
             <small>Nutrición</small>
           </div>
         </a>
-        <a class="nav-item" routerLink="/dashboard/achievements" routerLinkActive="active">
-          <mat-icon>emoji_events</mat-icon>
-          <div class="nav-text" style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
-            <div>
-              <span>Mis Logros</span>
-              <small>Racha & Desafíos</small>
-            </div>
-            <app-streak-badge style="margin-left: 8px;"></app-streak-badge>
-          </div>
-        </a>
       </nav>
 
       <div class="recent-chats" *ngIf="showChatHistory">
@@ -88,17 +78,39 @@
       <div class="footer-link" routerLink="/dashboard/settings" style="cursor: pointer;">
         <mat-icon>settings</mat-icon> <span class="nav-text">Configuración</span>
       </div>
-      
-      <div class="user-profile" *ngIf="currentUser">
-        <div class="avatar" [style.background-image]="currentUser.avatar_url ? 'url(' + currentUser.avatar_url + ')' : ''" [style.background-size]="'cover'" [style.background-position]="'center'">
-          <mat-icon *ngIf="!currentUser.avatar_url">person</mat-icon>
+
+      <!-- Menú contextual del perfil -->
+      <div class="profile-menu-wrapper" *ngIf="currentUser">
+
+        <!-- Popup de opciones (aparece SOBRE el user-profile) -->
+        <div class="profile-popup" *ngIf="showProfileMenu">
+          <div class="profile-popup-item" (click)="openAchievements()">
+            <mat-icon>emoji_events</mat-icon>
+            <span>Mis Logros</span>
+            <small>{{ gamificationService.totalXp() }} XP · Nivel {{ currentLevel() }}</small>
+          </div>
+          <!-- Aquí se pueden agregar más opciones en el futuro -->
         </div>
-        <div class="user-info">
-          <span class="name" style="text-transform: capitalize;">{{ currentUser.name || 'Estudiante' }}</span>
-          <small class="role"><mat-icon>school</mat-icon> {{ currentUser.role || 'Estudiante' }}</small>
+
+        <!-- User-profile card (abre/cierra el menú) -->
+        <div class="user-profile" (click)="toggleProfileMenu($event)">
+          <div class="avatar"
+               [style.background-image]="currentUser.avatar_url ? 'url(' + currentUser.avatar_url + ')' : ''"
+               [style.background-size]="'cover'"
+               [style.background-position]="'center'">
+            <mat-icon *ngIf="!currentUser.avatar_url">person</mat-icon>
+          </div>
+          <div class="user-info">
+            <span class="name" style="text-transform: capitalize;">{{ currentUser.name || 'Estudiante' }}</span>
+            <small class="role">
+              <mat-icon>school</mat-icon>
+              {{ currentUser.role || 'Estudiante' }}
+            </small>
+          </div>
+          <mat-icon class="profile-chevron" [class.rotated]="showProfileMenu">expand_less</mat-icon>
         </div>
       </div>
-      
+
       <div class="footer-link logout" (click)="logout()">
         <mat-icon>logout</mat-icon> <span class="nav-text">Cerrar sesión</span>
       </div>
@@ -123,4 +135,44 @@
 
     <router-outlet></router-outlet>
   </main>
+
+  <!-- ═══════════════════════════════════════════
+       PANEL DE LOGROS — slide-over desde el sidebar
+  ════════════════════════════════════════════════ -->
+  <!-- Backdrop -->
+  <div class="achievements-backdrop"
+       *ngIf="showAchievementsPanel"
+       (click)="toggleAchievementsPanel()">
+  </div>
+
+  <!-- Panel deslizante -->
+  <aside class="achievements-panel" [class.open]="showAchievementsPanel">
+    <!-- Header del panel -->
+    <div class="achievements-panel-header">
+      <div class="panel-user-info">
+        <div class="panel-avatar"
+             [style.background-image]="currentUser?.avatar_url ? 'url(' + currentUser!.avatar_url + ')' : ''"
+             [style.background-size]="'cover'"
+             [style.background-position]="'center'">
+          <mat-icon *ngIf="!currentUser?.avatar_url">person</mat-icon>
+        </div>
+        <div>
+          <h3>{{ currentUser?.name || 'Estudiante' }}</h3>
+          <p>
+            <mat-icon>local_fire_department</mat-icon>
+            {{ gamificationService.currentStreak() }} días de racha &bull;
+            Nivel {{ currentLevel() }}
+          </p>
+        </div>
+      </div>
+      <button class="panel-close-btn" (click)="toggleAchievementsPanel()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <!-- Contenido: barra XP + logros -->
+    <div class="achievements-panel-body">
+      <app-achievements-dashboard></app-achievements-dashboard>
+    </div>
+  </aside>
 </div>

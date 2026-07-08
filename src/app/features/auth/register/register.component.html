@@ -131,10 +131,9 @@
                 formControlName="celular"
                 placeholder="Ej. 2221234567"
                 required
-                type="text"
+                type="tel"
                 inputmode="numeric"
-                maxlength="10"
-                (input)="sanitizeNumericField($event, 'profileFormGroup', 'celular', 10)">
+                mask="000-000-0000">
               <mat-error *ngIf="profileFormGroup.get('celular')?.hasError('pattern')">
                 Debe tener 10 dígitos.
               </mat-error>

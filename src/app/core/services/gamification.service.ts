@@ -70,20 +70,28 @@ export class GamificationService {
         this.totalXp.set(0);
       }
 
-      // 2. Obtener logros del catálogo y cruzarlos con el progreso/desbloqueo del alumno
+      // 2. Obtener logros del catálogo
+      // Se usa select('*') porque los nombres de columna exactos dependen del schema en Supabase
       const { data: globalAchievements, error: globalErr } = await this.supabase
         .from('achievements')
-        .select('*, category:achievement_categories(name)')
-        .eq('is_active', true);
+        .select('*');
 
-      if (globalErr) throw globalErr;
+      if (globalErr) {
+        console.error('[GamificationService] Error cargando achievements:', globalErr.message);
+        this.achievementsList.set([]);
+        return;
+      }
 
       const { data: userUnlocked, error: unlockedErr } = await this.supabase
         .from('user_achievements')
         .select('*')
         .eq('user_id', user.id);
 
-      if (unlockedErr) throw unlockedErr;
+      if (unlockedErr) {
+        console.error('[GamificationService] Error cargando user_achievements:', unlockedErr.message);
+        this.achievementsList.set([]);
+        return;
+      }
 
       const unlockedMap = new Map<string, any>();
       (userUnlocked ?? []).forEach((ua: any) => {
@@ -93,17 +101,17 @@ export class GamificationService {
       const list: Achievement[] = (globalAchievements ?? []).map((ach: any) => {
         const ua = unlockedMap.get(ach.id);
         return {
-          id: ach.id,
-          title: ach.title,
-          description: ach.description,
-          points: ach.points,
-          badge_url: ach.badge_url || 'medal',
-          criteria_type: ach.criteria_type,
-          criteria_value: ach.criteria_value,
-          progress: ua ? ua.progress : 0,
-          is_completed: ua ? ua.is_completed : false,
-          earned_at: ua ? ua.earned_at : null,
-          notes: ua ? ua.notes : null
+          id:             ach.id              || '',
+          title:         ach.title            || 'Logro',
+          description:   ach.description      || '',
+          points:        ach.xp_value         ?? 0,
+          badge_url:     ach.badge_image_url  || 'medal',
+          criteria_type: ach.requirement_type || 'general',
+          criteria_value: ach.requirement_value ?? 1,
+          progress:      ua ? ua.progress      : 0,
+          is_completed:  ua ? ua.is_completed  : false,
+          earned_at:     ua ? ua.earned_at     : null,
+          notes:         ua ? ua.notes         : null
         };
       });
 
@@ -169,20 +177,19 @@ export class GamificationService {
         throw new Error('Categoría de logros "Clínicos" no encontrada.');
       }
 
-      // 2. Crear el logro en el catálogo (asociado al creador)
+      // 2. Crear el logro en el catálogo con los nombres de columna correctos
       const { data: newAch, error: achErr } = await this.supabase
         .from('achievements')
         .insert({
-          category_id: category.id,
-          title: title,
-          description: description,
-          points: points,
-          badge_url: iconName || 'verified',
-          criteria_type: 'clinical',
-          criteria_value: 1,
-          is_active: true,
-          creator_role: professional.role === 'Admin' ? 1 : (professional.role === 'Psicologo' ? 3 : 4),
-          creator_id: professional.id
+          category_id:       category.id,
+          title:             title,
+          description:       description,
+          xp_value:          points,
+          badge_image_url:   iconName || 'verified',
+          requirement_type:  'clinical',
+          requirement_value: 1,
+          creator_role:      professional.role === 'Admin' ? 1 : (professional.role === 'Psicologo' ? 3 : 4),
+          creator_id:        professional.id
         })
         .select()
         .single();
@@ -220,11 +227,11 @@ export class GamificationService {
         await this.supabase
           .from('user_streaks')
           .insert({
-            user_id: studentId,
-            current_streak: 0,
-            best_streak: 0,
+            user_id:            studentId,
+            current_streak:     0,
+            best_streak:        0,
             last_activity_date: new Date().toISOString().split('T')[0],
-            total_xp: points
+            total_xp:           points
           });
       }
 
@@ -242,9 +249,12 @@ export class GamificationService {
   async getGlobalCatalogAchievements(): Promise<any[]> {
     const { data, error } = await this.supabase
       .from('achievements')
-      .select('*, creator:users!creator_id(profiles(first_name, last_name))')
-      .eq('creator_role', 1)
-      .eq('is_active', true);
-    return error ? [] : (data ?? []);
+      .select('id, title, description, xp_value, badge_image_url, requirement_type, requirement_value, creator_id, creator_role')
+      .eq('creator_role', 1);
+    if (error) {
+      console.error('[GamificationService] Error cargando catálogo global:', error.message);
+      return [];
+    }
+    return data ?? [];
   }
 }

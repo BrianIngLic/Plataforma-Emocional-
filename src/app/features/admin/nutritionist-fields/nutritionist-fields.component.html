@@ -4,9 +4,6 @@
       <h1 style="font-size: 1.8rem; font-weight: 800; color: var(--text-primary); margin: 0;">Configuración de Formulario</h1>
       <p style="color: var(--text-secondary); margin: 0.35rem 0 0;">Gestione los campos dinámicos, tipos de entrada y ordenamiento para la consulta de nutrición.</p>
     </div>
-    <button class="btn-primary" (click)="openAddModal()" style="display: inline-flex; align-items: center; gap: 0.5rem; border: none; border-radius: 10px; padding: 0.75rem 1.25rem; font-weight: 700; cursor: pointer; background: #3b82f6; color: white;">
-      <mat-icon>add</mat-icon> Nuevo Campo
-    </button>
   </div>
 
   <div *ngIf="loading" class="state-box" style="padding: 2rem; text-align: center; border: 1px dashed var(--border-color); border-radius: 16px; color: var(--text-secondary); background: var(--bg-card); margin-top: 1.5rem;">
@@ -26,10 +23,9 @@
         <table style="width: 100%; border-collapse: collapse; min-width: 700px;">
           <thead>
             <tr style="border-bottom: 1px solid var(--border-color); text-align: left;">
-              <th style="padding: 0.75rem; font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); width: 15%;">Clave</th>
-              <th style="padding: 0.75rem; font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); width: 25%;">Etiqueta</th>
+              <th style="padding: 0.75rem; font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); width: 20%;">Clave</th>
+              <th style="padding: 0.75rem; font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); width: 30%;">Etiqueta</th>
               <th style="padding: 0.75rem; font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); width: 20%;">Tipo</th>
-              <th style="padding: 0.75rem; font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); width: 10%; text-align: center;">Orden</th>
               <th style="padding: 0.75rem; font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); width: 10%; text-align: center;">Estado</th>
               <th style="padding: 0.75rem; font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); width: 20%; text-align: center;">Acciones</th>
             </tr>
@@ -43,10 +39,9 @@
               </td>
               <td style="padding: 0.75rem;">
                 <span class="badge" style="background: rgba(59, 130, 246, 0.1); color: #3b82f6; padding: 0.25rem 0.5rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600;">
-                  {{ campo.tipo_campo }}
+                  {{ getTipoLabel(campo.tipo_campo) }}
                 </span>
               </td>
-              <td style="padding: 0.75rem; text-align: center; font-weight: 600; color: var(--text-secondary);">{{ campo.orden }}</td>
               <td style="padding: 0.75rem; text-align: center;">
                 <button type="button" (click)="toggleActivo(campo)" [style.background]="campo.activo ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)'" [style.color]="campo.activo ? '#10b981' : '#ef4444'" style="border: none; border-radius: 999px; padding: 0.25rem 0.75rem; font-size: 0.8rem; font-weight: 700; cursor: pointer;">
                   {{ campo.activo ? 'Activo' : 'Inactivo' }}
@@ -70,8 +65,32 @@
               </td>
             </tr>
             <tr *ngIf="getCamposPorBloqueName(bName).length === 0">
-              <td colspan="6" style="padding: 1.5rem; text-align: center; color: var(--text-secondary); font-size: 0.9rem;">
+              <td colspan="5" style="padding: 1.5rem; text-align: center; color: var(--text-secondary); font-size: 0.9rem;">
                 No hay campos configurados en este bloque.
+              </td>
+            </tr>
+            <!-- Fila interactiva para agregar nuevo campo (estilo food-table) -->
+            <tr style="border-top: 2px solid var(--border-color); background: rgba(59, 130, 246, 0.02);">
+              <td style="padding: 0.5rem 0.75rem;">
+                <input type="text" [(ngModel)]="newField[bName].clave" placeholder="nueva_clave" style="width: 100%; padding: 0.5rem; border: 1px solid var(--border-color); border-radius: 8px; background: var(--input-bg); color: var(--text-primary); outline: none; font-family: monospace; font-size: 0.85rem;" />
+              </td>
+              <td style="padding: 0.5rem 0.75rem;">
+                <input type="text" [(ngModel)]="newField[bName].etiqueta" placeholder="Nueva Etiqueta..." style="width: 100%; padding: 0.5rem; border: 1px solid var(--border-color); border-radius: 8px; background: var(--input-bg); color: var(--text-primary); outline: none; font-size: 0.95rem; font-weight: 600;" />
+              </td>
+              <td style="padding: 0.5rem 0.75rem;">
+                <select [(ngModel)]="newField[bName].tipo_campo" style="width: 100%; padding: 0.5rem; border: 1px solid var(--border-color); border-radius: 8px; background: var(--input-bg); color: var(--text-primary); outline: none; font-size: 0.85rem;">
+                  <option *ngFor="let t of tipos" [value]="t.value">{{ t.label }}</option>
+                </select>
+              </td>
+              <td style="padding: 0.5rem 0.75rem; text-align: center;">
+                <button type="button" (click)="newField[bName].activo = !newField[bName].activo" [style.background]="newField[bName].activo ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)'" [style.color]="newField[bName].activo ? '#10b981' : '#ef4444'" style="border: none; border-radius: 999px; padding: 0.25rem 0.75rem; font-size: 0.8rem; font-weight: 700; cursor: pointer;">
+                  {{ newField[bName].activo ? 'Activo' : 'Inactivo' }}
+                </button>
+              </td>
+              <td style="padding: 0.5rem 0.75rem; text-align: center;">
+                <button type="button" (click)="addInlineField(bName)" [disabled]="savingInline[bName] || !newField[bName].clave || !newField[bName].etiqueta" style="display: inline-flex; align-items: center; gap: 0.35rem; border: none; border-radius: 8px; padding: 0.5rem 0.85rem; font-weight: 700; cursor: pointer; background: #3b82f6; color: white;">
+                  <mat-icon style="font-size: 18px; width: 18px; height: 18px;">add</mat-icon> Añadir
+                </button>
               </td>
             </tr>
           </tbody>
@@ -113,10 +132,7 @@
           </select>
         </div>
 
-        <div style="display: flex; flex-direction: column; gap: 0.4rem;">
-          <label style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary);">Orden de Visualización</label>
-          <input type="number" formControlName="orden" style="padding: 0.75rem; border-radius: 10px; border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-primary); outline: none;" />
-        </div>
+        <!-- Orden se maneja dinámicamente -->
 
         <div style="display: flex; flex-direction: column; gap: 0.4rem;">
           <label style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary);">Texto de Ayuda / Hint</label>

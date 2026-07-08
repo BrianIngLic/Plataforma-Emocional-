@@ -104,7 +104,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "agents_skills_caveman_compress_scripts_benchmark_py_scripts_benchmark",
-      "community": 141,
+      "community": 1,
       "norm_label": "benchmark.py"
     },
     {
@@ -114,7 +114,7 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "agents_skills_caveman_compress_scripts_benchmark_py_scripts_benchmark_count_tokens",
-      "community": 141,
+      "community": 1,
       "norm_label": "count_tokens()"
     },
     {
@@ -124,7 +124,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "agents_skills_caveman_compress_scripts_benchmark_py_scripts_benchmark_benchmark_pair",
-      "community": 141,
+      "community": 1,
       "norm_label": "benchmark_pair()"
     },
     {
@@ -134,7 +134,7 @@
       "source_location": "",
       "_origin": "ast",
       "id": "path",
-      "community": 89,
+      "community": 1,
       "norm_label": "path"
     },
     {
@@ -144,7 +144,7 @@
       "source_location": "L37",
       "_origin": "ast",
       "id": "agents_skills_caveman_compress_scripts_benchmark_py_scripts_benchmark_print_table",
-      "community": 141,
+      "community": 1,
       "norm_label": "print_table()"
     },
     {
@@ -154,7 +154,7 @@
       "source_location": "L44",
       "_origin": "ast",
       "id": "agents_skills_caveman_compress_scripts_benchmark_py_scripts_benchmark_main",
-      "community": 141,
+      "community": 1,
       "norm_label": "main()"
     },
     {
@@ -194,7 +194,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "agents_skills_caveman_compress_scripts_compress_py_scripts_compress",
-      "community": 87,
+      "community": 1,
       "norm_label": "compress.py"
     },
     {
@@ -204,7 +204,7 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "agents_skills_caveman_compress_scripts_compress_py_scripts_compress_split_frontmatter",
-      "community": 87,
+      "community": 1,
       "norm_label": "split_frontmatter()"
     },
     {
@@ -214,7 +214,7 @@
       "source_location": "L69",
       "_origin": "ast",
       "id": "agents_skills_caveman_compress_scripts_compress_py_scripts_compress_backup_dir_for",
-      "community": 87,
+      "community": 1,
       "norm_label": "backup_dir_for()"
     },
     {
@@ -224,7 +224,7 @@
       "source_location": "L93",
       "_origin": "ast",
       "id": "agents_skills_caveman_compress_scripts_compress_py_scripts_compress_is_sensitive_path",
-      "community": 87,
+      "community": 1,
       "norm_label": "is_sensitive_path()"
     },
     {
@@ -234,7 +234,7 @@
       "source_location": "L106",
       "_origin": "ast",
       "id": "agents_skills_caveman_compress_scripts_compress_py_scripts_compress_strip_llm_wrapper",
-      "community": 87,
+      "community": 1,
       "norm_label": "strip_llm_wrapper()"
     },
     {
@@ -244,7 +244,7 @@
       "source_location": "L122",
       "_origin": "ast",
       "id": "agents_skills_caveman_compress_scripts_compress_py_scripts_compress_call_claude",
-      "community": 87,
+      "community": 1,
       "norm_label": "call_claude()"
     },
     {
@@ -254,7 +254,7 @@
       "source_location": "L171",
       "_origin": "ast",
       "id": "agents_skills_caveman_compress_scripts_compress_py_scripts_compress_build_compress_prompt",
-      "community": 87,
+      "community": 1,
       "norm_label": "build_compress_prompt()"
     },
     {
@@ -264,7 +264,7 @@
       "source_location": "L190",
       "_origin": "ast",
       "id": "agents_skills_caveman_compress_scripts_compress_py_scripts_compress_build_fix_prompt",
-      "community": 87,
+      "community": 1,
       "norm_label": "build_fix_prompt()"
     },
     {
@@ -274,7 +274,7 @@
       "source_location": "L222",
       "_origin": "ast",
       "id": "agents_skills_caveman_compress_scripts_compress_py_scripts_compress_compress_file",
-      "community": 87,
+      "community": 1,
       "norm_label": "compress_file()"
     },
     {
@@ -284,7 +284,7 @@
       "source_location": "L29",
       "_origin": "ast",
       "id": "agents_skills_caveman_compress_scripts_compress_py_scripts_compress_rationale_29",
-      "community": 87,
+      "community": 1,
       "norm_label": "split yaml frontmatter from body. returns (frontmatter, body).      memory fil"
     },
     {
@@ -294,7 +294,7 @@
       "source_location": "L70",
       "_origin": "ast",
       "id": "agents_skills_caveman_compress_scripts_compress_py_scripts_compress_rationale_70",
-      "community": 87,
+      "community": 1,
       "norm_label": "resolve the out-of-tree backup directory for a given source file.      backups"
     },
     {
@@ -304,7 +304,7 @@
       "source_location": "L94",
       "_origin": "ast",
       "id": "agents_skills_caveman_compress_scripts_compress_py_scripts_compress_rationale_94",
-      "community": 87,
+      "community": 1,
       "norm_label": "heuristic denylist for files that must never be shipped to a third-party api."
     },
     {
@@ -314,7 +314,7 @@
       "source_location": "L107",
       "_origin": "ast",
       "id": "agents_skills_caveman_compress_scripts_compress_py_scripts_compress_rationale_107",
-      "community": 87,
+      "community": 1,
       "norm_label": "strip outer ```markdown ... ``` fence when it wraps the entire output."
     },
     {
@@ -324,7 +324,7 @@
       "source_location": "L123",
       "_origin": "ast",
       "id": "agents_skills_caveman_compress_scripts_compress_py_scripts_compress_rationale_123",
-      "community": 87,
+      "community": 1,
       "norm_label": "send a prompt to claude.      prefers the anthropic sdk when anthropic_api_key"
     },
     {
@@ -334,7 +334,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "agents_skills_caveman_compress_scripts_detect_py_scripts_detect",
-      "community": 135,
+      "community": 1,
       "norm_label": "detect.py"
     },
     {
@@ -344,7 +344,7 @@
       "source_location": "L42",
       "_origin": "ast",
       "id": "agents_skills_caveman_compress_scripts_detect_py_scripts_detect_is_code_line",
-      "community": 135,
+      "community": 1,
       "norm_label": "_is_code_line()"
     },
     {
@@ -354,7 +354,7 @@
       "source_location": "L47",
       "_origin": "ast",
       "id": "agents_skills_caveman_compress_scripts_detect_py_scripts_detect_is_json_content",
-      "community": 135,
+      "community": 1,
       "norm_label": "_is_json_content()"
     },
     {
@@ -364,7 +364,7 @@
       "source_location": "L56",
       "_origin": "ast",
       "id": "agents_skills_caveman_compress_scripts_detect_py_scripts_detect_is_yaml_content",
-      "community": 135,
+      "community": 1,
       "norm_label": "_is_yaml_content()"
     },
     {
@@ -374,7 +374,7 @@
       "source_location": "L72",
       "_origin": "ast",
       "id": "agents_skills_caveman_compress_scripts_detect_py_scripts_detect_detect_file_type",
-      "community": 135,
+      "community": 1,
       "norm_label": "detect_file_type()"
     },
     {
@@ -384,7 +384,7 @@
       "source_location": "L118",
       "_origin": "ast",
       "id": "agents_skills_caveman_compress_scripts_detect_py_scripts_detect_should_compress",
-      "community": 135,
+      "community": 1,
       "norm_label": "should_compress()"
     },
     {
@@ -394,7 +394,7 @@
       "source_location": "L43",
       "_origin": "ast",
       "id": "agents_skills_caveman_compress_scripts_detect_py_scripts_detect_rationale_43",
-      "community": 135,
+      "community": 1,
       "norm_label": "check if a line looks like code."
     },
     {
@@ -404,7 +404,7 @@
       "source_location": "L48",
       "_origin": "ast",
       "id": "agents_skills_caveman_compress_scripts_detect_py_scripts_detect_rationale_48",
-      "community": 135,
+      "community": 1,
       "norm_label": "check if content is valid json."
     },
     {
@@ -414,7 +414,7 @@
       "source_location": "L57",
       "_origin": "ast",
       "id": "agents_skills_caveman_compress_scripts_detect_py_scripts_detect_rationale_57",
-      "community": 135,
+      "community": 1,
       "norm_label": "heuristic: check if content looks like yaml."
     },
     {
@@ -424,7 +424,7 @@
       "source_location": "L73",
       "_origin": "ast",
       "id": "agents_skills_caveman_compress_scripts_detect_py_scripts_detect_rationale_73",
-      "community": 135,
+      "community": 1,
       "norm_label": "classify a file as 'natural_language', 'code', 'config', or 'unknown'.      re"
     },
     {
@@ -434,7 +434,7 @@
       "source_location": "L119",
       "_origin": "ast",
       "id": "agents_skills_caveman_compress_scripts_detect_py_scripts_detect_rationale_119",
-      "community": 135,
+      "community": 1,
       "norm_label": "return true if the file is natural language and should be compressed."
     },
     {
@@ -674,7 +674,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "agent_skills_caveman_compress_scripts_benchmark_py_scripts_benchmark",
-      "community": 140,
+      "community": 1,
       "norm_label": "benchmark.py"
     },
     {
@@ -684,7 +684,7 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "agent_skills_caveman_compress_scripts_benchmark_py_scripts_benchmark_count_tokens",
-      "community": 140,
+      "community": 1,
       "norm_label": "count_tokens()"
     },
     {
@@ -694,7 +694,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "agent_skills_caveman_compress_scripts_benchmark_py_scripts_benchmark_benchmark_pair",
-      "community": 140,
+      "community": 1,
       "norm_label": "benchmark_pair()"
     },
     {
@@ -704,7 +704,7 @@
       "source_location": "L37",
       "_origin": "ast",
       "id": "agent_skills_caveman_compress_scripts_benchmark_py_scripts_benchmark_print_table",
-      "community": 140,
+      "community": 1,
       "norm_label": "print_table()"
     },
     {
@@ -714,7 +714,7 @@
       "source_location": "L44",
       "_origin": "ast",
       "id": "agent_skills_caveman_compress_scripts_benchmark_py_scripts_benchmark_main",
-      "community": 140,
+      "community": 1,
       "norm_label": "main()"
     },
     {
@@ -894,7 +894,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "agent_skills_caveman_compress_scripts_detect_py_scripts_detect",
-      "community": 133,
+      "community": 1,
       "norm_label": "detect.py"
     },
     {
@@ -904,7 +904,7 @@
       "source_location": "L42",
       "_origin": "ast",
       "id": "agent_skills_caveman_compress_scripts_detect_py_scripts_detect_is_code_line",
-      "community": 133,
+      "community": 1,
       "norm_label": "_is_code_line()"
     },
     {
@@ -914,7 +914,7 @@
       "source_location": "L47",
       "_origin": "ast",
       "id": "agent_skills_caveman_compress_scripts_detect_py_scripts_detect_is_json_content",
-      "community": 133,
+      "community": 1,
       "norm_label": "_is_json_content()"
     },
     {
@@ -924,7 +924,7 @@
       "source_location": "L56",
       "_origin": "ast",
       "id": "agent_skills_caveman_compress_scripts_detect_py_scripts_detect_is_yaml_content",
-      "community": 133,
+      "community": 1,
       "norm_label": "_is_yaml_content()"
     },
     {
@@ -934,7 +934,7 @@
       "source_location": "L72",
       "_origin": "ast",
       "id": "agent_skills_caveman_compress_scripts_detect_py_scripts_detect_detect_file_type",
-      "community": 133,
+      "community": 1,
       "norm_label": "detect_file_type()"
     },
     {
@@ -944,7 +944,7 @@
       "source_location": "L118",
       "_origin": "ast",
       "id": "agent_skills_caveman_compress_scripts_detect_py_scripts_detect_should_compress",
-      "community": 133,
+      "community": 1,
       "norm_label": "should_compress()"
     },
     {
@@ -954,7 +954,7 @@
       "source_location": "L43",
       "_origin": "ast",
       "id": "agent_skills_caveman_compress_scripts_detect_py_scripts_detect_rationale_43",
-      "community": 133,
+      "community": 1,
       "norm_label": "check if a line looks like code."
     },
     {
@@ -964,7 +964,7 @@
       "source_location": "L48",
       "_origin": "ast",
       "id": "agent_skills_caveman_compress_scripts_detect_py_scripts_detect_rationale_48",
-      "community": 133,
+      "community": 1,
       "norm_label": "check if content is valid json."
     },
     {
@@ -974,7 +974,7 @@
       "source_location": "L57",
       "_origin": "ast",
       "id": "agent_skills_caveman_compress_scripts_detect_py_scripts_detect_rationale_57",
-      "community": 133,
+      "community": 1,
       "norm_label": "heuristic: check if content looks like yaml."
     },
     {
@@ -984,7 +984,7 @@
       "source_location": "L73",
       "_origin": "ast",
       "id": "agent_skills_caveman_compress_scripts_detect_py_scripts_detect_rationale_73",
-      "community": 133,
+      "community": 1,
       "norm_label": "classify a file as 'natural_language', 'code', 'config', or 'unknown'.      re"
     },
     {
@@ -994,7 +994,7 @@
       "source_location": "L119",
       "_origin": "ast",
       "id": "agent_skills_caveman_compress_scripts_detect_py_scripts_detect_rationale_119",
-      "community": 133,
+      "community": 1,
       "norm_label": "return true if the file is natural language and should be compressed."
     },
     {
@@ -1204,7 +1204,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "angular",
-      "community": 4,
+      "community": 81,
       "norm_label": "angular.json"
     },
     {
@@ -1214,7 +1214,7 @@
       "source_location": "L2",
       "_origin": "ast",
       "id": "angular_schema",
-      "community": 4,
+      "community": 81,
       "norm_label": "$schema"
     },
     {
@@ -1224,7 +1224,7 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "angular_version",
-      "community": 4,
+      "community": 81,
       "norm_label": "version"
     },
     {
@@ -1234,7 +1234,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "angular_newprojectroot",
-      "community": 4,
+      "community": 81,
       "norm_label": "newprojectroot"
     },
     {
@@ -1244,7 +1244,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "angular_projects",
-      "community": 4,
+      "community": 81,
       "norm_label": "projects"
     },
     {
@@ -1254,7 +1254,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "angular_projects_plataforma_emocional",
-      "community": 4,
+      "community": 85,
       "norm_label": "plataforma_emocional"
     },
     {
@@ -1264,7 +1264,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "angular_plataforma_emocional_projecttype",
-      "community": 4,
+      "community": 85,
       "norm_label": "projecttype"
     },
     {
@@ -1274,7 +1274,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "angular_plataforma_emocional_schematics",
-      "community": 4,
+      "community": 85,
       "norm_label": "schematics"
     },
     {
@@ -1284,7 +1284,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "angular_schematics_schematics_angular_component",
-      "community": 4,
+      "community": 85,
       "norm_label": "@schematics/angular:component"
     },
     {
@@ -1294,7 +1294,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "angular_schematics_angular_component_style",
-      "community": 4,
+      "community": 85,
       "norm_label": "style"
     },
     {
@@ -1304,7 +1304,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "angular_plataforma_emocional_root",
-      "community": 4,
+      "community": 85,
       "norm_label": "root"
     },
     {
@@ -1314,7 +1314,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "angular_plataforma_emocional_sourceroot",
-      "community": 4,
+      "community": 85,
       "norm_label": "sourceroot"
     },
     {
@@ -1324,7 +1324,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "angular_plataforma_emocional_prefix",
-      "community": 4,
+      "community": 85,
       "norm_label": "prefix"
     },
     {
@@ -1334,7 +1334,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "angular_plataforma_emocional_architect",
-      "community": 0,
+      "community": 130,
       "norm_label": "architect"
     },
     {
@@ -1364,7 +1364,7 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "angular_build_options",
-      "community": 0,
+      "community": 84,
       "norm_label": "options"
     },
     {
@@ -1374,7 +1374,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "angular_options_browser",
-      "community": 0,
+      "community": 84,
       "norm_label": "browser"
     },
     {
@@ -1384,7 +1384,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "angular_options_polyfills",
-      "community": 0,
+      "community": 84,
       "norm_label": "polyfills"
     },
     {
@@ -1394,7 +1394,7 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "angular_options_tsconfig",
-      "community": 0,
+      "community": 84,
       "norm_label": "tsconfig"
     },
     {
@@ -1404,7 +1404,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "angular_options_inlinestylelanguage",
-      "community": 0,
+      "community": 84,
       "norm_label": "inlinestylelanguage"
     },
     {
@@ -1414,7 +1414,7 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "angular_options_assets",
-      "community": 0,
+      "community": 84,
       "norm_label": "assets"
     },
     {
@@ -1424,7 +1424,7 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "angular_options_styles",
-      "community": 0,
+      "community": 84,
       "norm_label": "styles"
     },
     {
@@ -1444,7 +1444,7 @@
       "source_location": "L37",
       "_origin": "ast",
       "id": "angular_configurations_production",
-      "community": 0,
+      "community": 75,
       "norm_label": "production"
     },
     {
@@ -1454,7 +1454,7 @@
       "source_location": "L38",
       "_origin": "ast",
       "id": "angular_production_budgets",
-      "community": 0,
+      "community": 75,
       "norm_label": "budgets"
     },
     {
@@ -1464,7 +1464,7 @@
       "source_location": "L50",
       "_origin": "ast",
       "id": "angular_production_outputhashing",
-      "community": 0,
+      "community": 75,
       "norm_label": "outputhashing"
     },
     {
@@ -1474,7 +1474,7 @@
       "source_location": "L51",
       "_origin": "ast",
       "id": "angular_production_serviceworker",
-      "community": 0,
+      "community": 75,
       "norm_label": "serviceworker"
     },
     {
@@ -1534,7 +1534,7 @@
       "source_location": "L61",
       "_origin": "ast",
       "id": "angular_architect_serve",
-      "community": 0,
+      "community": 75,
       "norm_label": "serve"
     },
     {
@@ -1544,7 +1544,7 @@
       "source_location": "L62",
       "_origin": "ast",
       "id": "angular_serve_builder",
-      "community": 0,
+      "community": 75,
       "norm_label": "builder"
     },
     {
@@ -1554,7 +1554,7 @@
       "source_location": "L63",
       "_origin": "ast",
       "id": "angular_serve_configurations",
-      "community": 0,
+      "community": 75,
       "norm_label": "configurations"
     },
     {
@@ -1564,7 +1564,7 @@
       "source_location": "L65",
       "_origin": "ast",
       "id": "angular_production_buildtarget",
-      "community": 0,
+      "community": 75,
       "norm_label": "buildtarget"
     },
     {
@@ -1584,7 +1584,7 @@
       "source_location": "L71",
       "_origin": "ast",
       "id": "angular_serve_defaultconfiguration",
-      "community": 0,
+      "community": 75,
       "norm_label": "defaultconfiguration"
     },
     {
@@ -1594,7 +1594,7 @@
       "source_location": "L73",
       "_origin": "ast",
       "id": "angular_architect_extract_i18n",
-      "community": 0,
+      "community": 130,
       "norm_label": "extract-i18n"
     },
     {
@@ -1604,7 +1604,7 @@
       "source_location": "L74",
       "_origin": "ast",
       "id": "angular_extract_i18n_builder",
-      "community": 0,
+      "community": 130,
       "norm_label": "builder"
     },
     {
@@ -1614,7 +1614,7 @@
       "source_location": "L76",
       "_origin": "ast",
       "id": "angular_architect_test",
-      "community": 0,
+      "community": 130,
       "norm_label": "test"
     },
     {
@@ -1624,7 +1624,7 @@
       "source_location": "L77",
       "_origin": "ast",
       "id": "angular_test_builder",
-      "community": 0,
+      "community": 130,
       "norm_label": "builder"
     },
     {
@@ -1634,7 +1634,7 @@
       "source_location": "L78",
       "_origin": "ast",
       "id": "angular_test_options",
-      "community": 0,
+      "community": 84,
       "norm_label": "options"
     },
     {
@@ -1644,7 +1644,7 @@
       "source_location": "L99",
       "_origin": "ast",
       "id": "angular_cli",
-      "community": 4,
+      "community": 81,
       "norm_label": "cli"
     },
     {
@@ -1654,7 +1654,7 @@
       "source_location": "L100",
       "_origin": "ast",
       "id": "angular_cli_analytics",
-      "community": 4,
+      "community": 81,
       "norm_label": "analytics"
     },
     {
@@ -2048,10 +2048,20 @@
       "norm_label": "ngx-markdown"
     },
     {
-      "label": "ngx-quill",
+      "label": "ngx-mask",
       "file_type": "code",
       "source_file": "package.json",
       "source_location": "L45",
+      "_origin": "ast",
+      "id": "package_dependencies_ngx_mask",
+      "community": 2,
+      "norm_label": "ngx-mask"
+    },
+    {
+      "label": "ngx-quill",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L46",
       "_origin": "ast",
       "id": "package_dependencies_ngx_quill",
       "community": 2,
@@ -2061,7 +2071,7 @@
       "label": "pdf-lib",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L46",
+      "source_location": "L47",
       "_origin": "ast",
       "id": "package_dependencies_pdf_lib",
       "community": 2,
@@ -2071,7 +2081,7 @@
       "label": "pdfmake",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L47",
+      "source_location": "L48",
       "_origin": "ast",
       "id": "package_dependencies_pdfmake",
       "community": 2,
@@ -2081,7 +2091,7 @@
       "label": "quill",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L48",
+      "source_location": "L49",
       "_origin": "ast",
       "id": "package_dependencies_quill",
       "community": 2,
@@ -2091,7 +2101,7 @@
       "label": "rxjs",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L49",
+      "source_location": "L50",
       "_origin": "ast",
       "id": "package_dependencies_rxjs",
       "community": 2,
@@ -2101,7 +2111,7 @@
       "label": "tslib",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L50",
+      "source_location": "L51",
       "_origin": "ast",
       "id": "package_dependencies_tslib",
       "community": 2,
@@ -2111,7 +2121,7 @@
       "label": "zone.js",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L51",
+      "source_location": "L52",
       "_origin": "ast",
       "id": "package_dependencies_zone_js",
       "community": 2,
@@ -2121,7 +2131,7 @@
       "label": "devDependencies",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L53",
+      "source_location": "L54",
       "_origin": "ast",
       "id": "package_devdependencies",
       "community": 4,
@@ -2131,7 +2141,7 @@
       "label": "@angular/build",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L54",
+      "source_location": "L55",
       "_origin": "ast",
       "id": "package_devdependencies_angular_build",
       "community": 4,
@@ -2141,17 +2151,17 @@
       "label": "@angular/cli",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L55",
+      "source_location": "L56",
       "_origin": "ast",
       "id": "package_devdependencies_angular_cli",
-      "community": 4,
+      "community": 81,
       "norm_label": "@angular/cli"
     },
     {
       "label": "@angular/compiler-cli",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L56",
+      "source_location": "L57",
       "_origin": "ast",
       "id": "package_devdependencies_angular_compiler_cli",
       "community": 4,
@@ -2161,7 +2171,7 @@
       "label": "@types/jasmine",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L57",
+      "source_location": "L58",
       "_origin": "ast",
       "id": "package_devdependencies_types_jasmine",
       "community": 4,
@@ -2171,7 +2181,7 @@
       "label": "@types/quill",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L58",
+      "source_location": "L59",
       "_origin": "ast",
       "id": "package_devdependencies_types_quill",
       "community": 4,
@@ -2181,7 +2191,7 @@
       "label": "jasmine-core",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L59",
+      "source_location": "L60",
       "_origin": "ast",
       "id": "package_devdependencies_jasmine_core",
       "community": 4,
@@ -2191,7 +2201,7 @@
       "label": "karma",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L60",
+      "source_location": "L61",
       "_origin": "ast",
       "id": "package_devdependencies_karma",
       "community": 4,
@@ -2201,7 +2211,7 @@
       "label": "karma-chrome-launcher",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L61",
+      "source_location": "L62",
       "_origin": "ast",
       "id": "package_devdependencies_karma_chrome_launcher",
       "community": 4,
@@ -2211,7 +2221,7 @@
       "label": "karma-coverage",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L62",
+      "source_location": "L63",
       "_origin": "ast",
       "id": "package_devdependencies_karma_coverage",
       "community": 4,
@@ -2221,7 +2231,7 @@
       "label": "karma-jasmine",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L63",
+      "source_location": "L64",
       "_origin": "ast",
       "id": "package_devdependencies_karma_jasmine",
       "community": 4,
@@ -2231,7 +2241,7 @@
       "label": "karma-jasmine-html-reporter",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L64",
+      "source_location": "L65",
       "_origin": "ast",
       "id": "package_devdependencies_karma_jasmine_html_reporter",
       "community": 4,
@@ -2241,7 +2251,7 @@
       "label": "supabase",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L65",
+      "source_location": "L66",
       "_origin": "ast",
       "id": "package_devdependencies_supabase",
       "community": 4,
@@ -2251,7 +2261,7 @@
       "label": "typescript",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L66",
+      "source_location": "L67",
       "_origin": "ast",
       "id": "package_devdependencies_typescript",
       "community": 4,
@@ -2391,7 +2401,7 @@
       "label": "appConfig",
       "file_type": "code",
       "source_file": "src/app/app.config.ts",
-      "source_location": "L12",
+      "source_location": "L13",
       "_origin": "ast",
       "id": "app_app_config_appconfig",
       "community": 14,
@@ -2714,7 +2724,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_agenda_service",
-      "community": 142,
+      "community": 59,
       "norm_label": "agenda.service.ts"
     },
     {
@@ -2724,7 +2734,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "services_agenda_service_timeblock",
-      "community": 142,
+      "community": 59,
       "norm_label": "timeblock"
     },
     {
@@ -2734,7 +2744,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "services_agenda_service_workingday",
-      "community": 142,
+      "community": 59,
       "norm_label": "workingday"
     },
     {
@@ -2754,7 +2764,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "services_agenda_service_agendaservice",
-      "community": 142,
+      "community": 59,
       "norm_label": "agendaservice"
     },
     {
@@ -2764,7 +2774,7 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "services_agenda_service_agendaservice_getsettings",
-      "community": 142,
+      "community": 59,
       "norm_label": ".getsettings()"
     },
     {
@@ -2774,7 +2784,7 @@
       "source_location": "L39",
       "_origin": "ast",
       "id": "services_agenda_service_agendaservice_savesettings",
-      "community": 142,
+      "community": 59,
       "norm_label": ".savesettings()"
     },
     {
@@ -2784,7 +2794,7 @@
       "source_location": "L57",
       "_origin": "ast",
       "id": "services_agenda_service_agendaservice_getexceptions",
-      "community": 142,
+      "community": 59,
       "norm_label": ".getexceptions()"
     },
     {
@@ -2794,7 +2804,7 @@
       "source_location": "L68",
       "_origin": "ast",
       "id": "services_agenda_service_agendaservice_addexception",
-      "community": 142,
+      "community": 59,
       "norm_label": ".addexception()"
     },
     {
@@ -2804,7 +2814,7 @@
       "source_location": "L90",
       "_origin": "ast",
       "id": "services_agenda_service_agendaservice_deleteexception",
-      "community": 142,
+      "community": 59,
       "norm_label": ".deleteexception()"
     },
     {
@@ -2814,7 +2824,7 @@
       "source_location": "L101",
       "_origin": "ast",
       "id": "services_agenda_service_agendaservice_getstudentavailableslots",
-      "community": 142,
+      "community": 59,
       "norm_label": ".getstudentavailableslots()"
     },
     {
@@ -2991,7 +3001,7 @@
       "label": ".login()",
       "file_type": "code",
       "source_file": "src/app/core/services/auth.service.ts",
-      "source_location": "L136",
+      "source_location": "L143",
       "_origin": "ast",
       "id": "services_auth_service_authservice_login",
       "community": 18,
@@ -3001,7 +3011,7 @@
       "label": ".register()",
       "file_type": "code",
       "source_file": "src/app/core/services/auth.service.ts",
-      "source_location": "L165",
+      "source_location": "L172",
       "_origin": "ast",
       "id": "services_auth_service_authservice_register",
       "community": 18,
@@ -3011,7 +3021,7 @@
       "label": ".activateMockSession()",
       "file_type": "code",
       "source_file": "src/app/core/services/auth.service.ts",
-      "source_location": "L238",
+      "source_location": "L245",
       "_origin": "ast",
       "id": "services_auth_service_authservice_activatemocksession",
       "community": 18,
@@ -3021,7 +3031,7 @@
       "label": ".requestPasswordReset()",
       "file_type": "code",
       "source_file": "src/app/core/services/auth.service.ts",
-      "source_location": "L265",
+      "source_location": "L272",
       "_origin": "ast",
       "id": "services_auth_service_authservice_requestpasswordreset",
       "community": 18,
@@ -3031,7 +3041,7 @@
       "label": ".updatePassword()",
       "file_type": "code",
       "source_file": "src/app/core/services/auth.service.ts",
-      "source_location": "L281",
+      "source_location": "L288",
       "_origin": "ast",
       "id": "services_auth_service_authservice_updatepassword",
       "community": 18,
@@ -3041,7 +3051,7 @@
       "label": ".updateUserAvatar()",
       "file_type": "code",
       "source_file": "src/app/core/services/auth.service.ts",
-      "source_location": "L297",
+      "source_location": "L304",
       "_origin": "ast",
       "id": "services_auth_service_authservice_updateuseravatar",
       "community": 18,
@@ -3051,7 +3061,7 @@
       "label": ".logout()",
       "file_type": "code",
       "source_file": "src/app/core/services/auth.service.ts",
-      "source_location": "L321",
+      "source_location": "L328",
       "_origin": "ast",
       "id": "services_auth_service_authservice_logout",
       "community": 18,
@@ -3064,7 +3074,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_chat_service",
-      "community": 30,
+      "community": 18,
       "norm_label": "chat.service.ts"
     },
     {
@@ -3074,7 +3084,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "services_chat_service_chatmessage",
-      "community": 30,
+      "community": 18,
       "norm_label": "chatmessage"
     },
     {
@@ -3244,7 +3254,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_crypto_service",
-      "community": 67,
+      "community": 68,
       "norm_label": "crypto.service.ts"
     },
     {
@@ -3254,7 +3264,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "services_crypto_service_cryptoservice",
-      "community": 131,
+      "community": 68,
       "norm_label": "cryptoservice"
     },
     {
@@ -3264,7 +3274,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "services_crypto_service_cryptoservice_derivekey",
-      "community": 131,
+      "community": 68,
       "norm_label": ".derivekey()"
     },
     {
@@ -3274,7 +3284,7 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "services_crypto_service_cryptoservice_clearkey",
-      "community": 131,
+      "community": 68,
       "norm_label": ".clearkey()"
     },
     {
@@ -3284,7 +3294,7 @@
       "source_location": "L39",
       "_origin": "ast",
       "id": "services_crypto_service_cryptoservice_getkey",
-      "community": 131,
+      "community": 68,
       "norm_label": ".getkey()"
     },
     {
@@ -3294,7 +3304,7 @@
       "source_location": "L53",
       "_origin": "ast",
       "id": "services_crypto_service_cryptoservice_encrypt",
-      "community": 131,
+      "community": 68,
       "norm_label": ".encrypt()"
     },
     {
@@ -3304,7 +3314,7 @@
       "source_location": "L61",
       "_origin": "ast",
       "id": "services_crypto_service_cryptoservice_decrypt",
-      "community": 131,
+      "community": 68,
       "norm_label": ".decrypt()"
     },
     {
@@ -3314,7 +3324,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_diary_service",
-      "community": 30,
+      "community": 68,
       "norm_label": "diary.service.ts"
     },
     {
@@ -3324,7 +3334,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "services_diary_service_diaryentry",
-      "community": 30,
+      "community": 68,
       "norm_label": "diaryentry"
     },
     {
@@ -3334,7 +3344,7 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "services_diary_service_diaryservice",
-      "community": 81,
+      "community": 135,
       "norm_label": "diaryservice"
     },
     {
@@ -3344,7 +3354,7 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "services_diary_service_diaryservice_constructor",
-      "community": 81,
+      "community": 135,
       "norm_label": ".constructor()"
     },
     {
@@ -3354,7 +3364,7 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "services_diary_service_diaryservice_loadentries",
-      "community": 81,
+      "community": 135,
       "norm_label": ".loadentries()"
     },
     {
@@ -3364,7 +3374,7 @@
       "source_location": "L55",
       "_origin": "ast",
       "id": "services_diary_service_diaryservice_saveentry",
-      "community": 81,
+      "community": 135,
       "norm_label": ".saveentry()"
     },
     {
@@ -3374,7 +3384,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_dossier_export_service",
-      "community": 67,
+      "community": 68,
       "norm_label": "dossier-export.service.ts"
     },
     {
@@ -3384,7 +3394,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "services_dossier_export_service_dossierexportservice",
-      "community": 67,
+      "community": 131,
       "norm_label": "dossierexportservice"
     },
     {
@@ -3394,7 +3404,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "services_dossier_export_service_dossierexportservice_getbase64imagefromurl",
-      "community": 67,
+      "community": 131,
       "norm_label": ".getbase64imagefromurl()"
     },
     {
@@ -3404,7 +3414,7 @@
       "source_location": "L39",
       "_origin": "ast",
       "id": "services_dossier_export_service_dossierexportservice_convertimagetowhite",
-      "community": 67,
+      "community": 131,
       "norm_label": ".convertimagetowhite()"
     },
     {
@@ -3414,7 +3424,7 @@
       "source_location": "L80",
       "_origin": "ast",
       "id": "services_dossier_export_service_dossierexportservice_convertimagetowatermark",
-      "community": 67,
+      "community": 131,
       "norm_label": ".convertimagetowatermark()"
     },
     {
@@ -3424,7 +3434,7 @@
       "source_location": "L118",
       "_origin": "ast",
       "id": "services_dossier_export_service_dossierexportservice_generatehmac",
-      "community": 67,
+      "community": 131,
       "norm_label": ".generatehmac()"
     },
     {
@@ -3434,7 +3444,7 @@
       "source_location": "L138",
       "_origin": "ast",
       "id": "services_dossier_export_service_dossierexportservice_getdossierdata",
-      "community": 67,
+      "community": 131,
       "norm_label": ".getdossierdata()"
     },
     {
@@ -3444,7 +3454,7 @@
       "source_location": "L349",
       "_origin": "ast",
       "id": "services_dossier_export_service_dossierexportservice_exportdossier",
-      "community": 67,
+      "community": 131,
       "norm_label": ".exportdossier()"
     },
     {
@@ -3454,7 +3464,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_emergency_notification_service",
-      "community": 68,
+      "community": 30,
       "norm_label": "emergency-notification.service.ts"
     },
     {
@@ -3464,7 +3474,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "services_emergency_notification_service_emergencychangerequest",
-      "community": 68,
+      "community": 30,
       "norm_label": "emergencychangerequest"
     },
     {
@@ -3474,7 +3484,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "services_emergency_notification_service_webpushsubscriptionpayload",
-      "community": 68,
+      "community": 30,
       "norm_label": "webpushsubscriptionpayload"
     },
     {
@@ -3484,7 +3494,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "services_emergency_notification_service_whatsapproutingsession",
-      "community": 68,
+      "community": 30,
       "norm_label": "whatsapproutingsession"
     },
     {
@@ -3501,7 +3511,7 @@
       "label": ".sendEmergencyNotification()",
       "file_type": "code",
       "source_file": "src/app/core/services/emergency-notification.service.ts",
-      "source_location": "L45",
+      "source_location": "L48",
       "_origin": "ast",
       "id": "services_emergency_notification_service_emergencynotificationservice_sendemergencynotification",
       "community": 15,
@@ -3511,7 +3521,7 @@
       "label": ".sendEmergencyChange()",
       "file_type": "code",
       "source_file": "src/app/core/services/emergency-notification.service.ts",
-      "source_location": "L80",
+      "source_location": "L83",
       "_origin": "ast",
       "id": "services_emergency_notification_service_emergencynotificationservice_sendemergencychange",
       "community": 15,
@@ -3521,7 +3531,7 @@
       "label": ".requestWebPushPermission()",
       "file_type": "code",
       "source_file": "src/app/core/services/emergency-notification.service.ts",
-      "source_location": "L348",
+      "source_location": "L351",
       "_origin": "ast",
       "id": "services_emergency_notification_service_emergencynotificationservice_requestwebpushpermission",
       "community": 15,
@@ -3531,7 +3541,7 @@
       "label": ".saveWebPushSubscription()",
       "file_type": "code",
       "source_file": "src/app/core/services/emergency-notification.service.ts",
-      "source_location": "L386",
+      "source_location": "L389",
       "_origin": "ast",
       "id": "services_emergency_notification_service_emergencynotificationservice_savewebpushsubscription",
       "community": 15,
@@ -3541,7 +3551,7 @@
       "label": ".updateWhatsAppOptIn()",
       "file_type": "code",
       "source_file": "src/app/core/services/emergency-notification.service.ts",
-      "source_location": "L414",
+      "source_location": "L417",
       "_origin": "ast",
       "id": "services_emergency_notification_service_emergencynotificationservice_updatewhatsappoptin",
       "community": 15,
@@ -3551,7 +3561,7 @@
       "label": ".getActiveRoutingSessions()",
       "file_type": "code",
       "source_file": "src/app/core/services/emergency-notification.service.ts",
-      "source_location": "L439",
+      "source_location": "L442",
       "_origin": "ast",
       "id": "services_emergency_notification_service_emergencynotificationservice_getactiveroutingsessions",
       "community": 15,
@@ -3561,7 +3571,7 @@
       "label": ".closeRoutingSession()",
       "file_type": "code",
       "source_file": "src/app/core/services/emergency-notification.service.ts",
-      "source_location": "L462",
+      "source_location": "L465",
       "_origin": "ast",
       "id": "services_emergency_notification_service_emergencynotificationservice_closeroutingsession",
       "community": 15,
@@ -3571,7 +3581,7 @@
       "label": ".initRealtimeNotificationListener()",
       "file_type": "code",
       "source_file": "src/app/core/services/emergency-notification.service.ts",
-      "source_location": "L484",
+      "source_location": "L487",
       "_origin": "ast",
       "id": "services_emergency_notification_service_emergencynotificationservice_initrealtimenotificationlistener",
       "community": 15,
@@ -3581,7 +3591,7 @@
       "label": ".initWaKeepAliveListener()",
       "file_type": "code",
       "source_file": "src/app/core/services/emergency-notification.service.ts",
-      "source_location": "L607",
+      "source_location": "L616",
       "_origin": "ast",
       "id": "services_emergency_notification_service_emergencynotificationservice_initwakeepalivelistener",
       "community": 15,
@@ -3591,7 +3601,7 @@
       "label": ".registrarInteraccionWhatsApp()",
       "file_type": "code",
       "source_file": "src/app/core/services/emergency-notification.service.ts",
-      "source_location": "L629",
+      "source_location": "L638",
       "_origin": "ast",
       "id": "services_emergency_notification_service_emergencynotificationservice_registrarinteraccionwhatsapp",
       "community": 15,
@@ -3714,7 +3724,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_gamification_service",
-      "community": 30,
+      "community": 68,
       "norm_label": "gamification.service.ts"
     },
     {
@@ -3724,7 +3734,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "services_gamification_service_userstreak",
-      "community": 30,
+      "community": 68,
       "norm_label": "userstreak"
     },
     {
@@ -3734,7 +3744,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "services_gamification_service_achievement",
-      "community": 85,
+      "community": 30,
       "norm_label": "achievement"
     },
     {
@@ -3771,7 +3781,7 @@
       "label": ".registerActivity()",
       "file_type": "code",
       "source_file": "src/app/core/services/gamification.service.ts",
-      "source_location": "L120",
+      "source_location": "L128",
       "_origin": "ast",
       "id": "services_gamification_service_gamificationservice_registeractivity",
       "community": 30,
@@ -3781,7 +3791,7 @@
       "label": ".awardClinicalAchievement()",
       "file_type": "code",
       "source_file": "src/app/core/services/gamification.service.ts",
-      "source_location": "L149",
+      "source_location": "L157",
       "_origin": "ast",
       "id": "services_gamification_service_gamificationservice_awardclinicalachievement",
       "community": 30,
@@ -3791,7 +3801,7 @@
       "label": ".getGlobalCatalogAchievements()",
       "file_type": "code",
       "source_file": "src/app/core/services/gamification.service.ts",
-      "source_location": "L242",
+      "source_location": "L249",
       "_origin": "ast",
       "id": "services_gamification_service_gamificationservice_getglobalcatalogachievements",
       "community": 30,
@@ -3894,7 +3904,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "nutrition_calendario_service",
-      "community": 131,
+      "community": 88,
       "norm_label": "calendario.service.ts"
     },
     {
@@ -3904,7 +3914,7 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "nutrition_calendario_service_registroayersnapshot",
-      "community": 131,
+      "community": 88,
       "norm_label": "registroayersnapshot"
     },
     {
@@ -3914,7 +3924,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "nutrition_calendario_service_calendarioservice",
-      "community": 131,
+      "community": 88,
       "norm_label": "calendarioservice"
     },
     {
@@ -3924,7 +3934,7 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "nutrition_calendario_service_calendarioservice_obtenerregistroayer",
-      "community": 131,
+      "community": 88,
       "norm_label": ".obtenerregistroayer()"
     },
     {
@@ -4211,7 +4221,7 @@
       "label": ".getEvaluationsByProfessional()",
       "file_type": "code",
       "source_file": "src/app/core/services/session-evaluation.service.ts",
-      "source_location": "L217",
+      "source_location": "L214",
       "_origin": "ast",
       "id": "services_session_evaluation_service_sessionevaluationservice_getevaluationsbyprofessional",
       "community": 80,
@@ -4221,7 +4231,7 @@
       "label": ".getAverageScoreForProfessional()",
       "file_type": "code",
       "source_file": "src/app/core/services/session-evaluation.service.ts",
-      "source_location": "L241",
+      "source_location": "L238",
       "_origin": "ast",
       "id": "services_session_evaluation_service_sessionevaluationservice_getaveragescoreforprofessional",
       "community": 80,
@@ -4281,7 +4291,7 @@
       "label": ".currentUser()",
       "file_type": "code",
       "source_file": "src/app/features/admin/admin-layout/admin-layout.component.ts",
-      "source_location": "L34",
+      "source_location": "L33",
       "_origin": "ast",
       "id": "admin_layout_admin_layout_component_adminlayoutcomponent_currentuser",
       "community": 22,
@@ -4291,7 +4301,7 @@
       "label": ".todayDateString()",
       "file_type": "code",
       "source_file": "src/app/features/admin/admin-layout/admin-layout.component.ts",
-      "source_location": "L38",
+      "source_location": "L37",
       "_origin": "ast",
       "id": "admin_layout_admin_layout_component_adminlayoutcomponent_todaydatestring",
       "community": 22,
@@ -4301,7 +4311,7 @@
       "label": ".toggleSidebar()",
       "file_type": "code",
       "source_file": "src/app/features/admin/admin-layout/admin-layout.component.ts",
-      "source_location": "L47",
+      "source_location": "L46",
       "_origin": "ast",
       "id": "admin_layout_admin_layout_component_adminlayoutcomponent_togglesidebar",
       "community": 22,
@@ -4311,7 +4321,7 @@
       "label": ".closeSidebarOnMobile()",
       "file_type": "code",
       "source_file": "src/app/features/admin/admin-layout/admin-layout.component.ts",
-      "source_location": "L51",
+      "source_location": "L50",
       "_origin": "ast",
       "id": "admin_layout_admin_layout_component_adminlayoutcomponent_closesidebaronmobile",
       "community": 22,
@@ -4321,7 +4331,7 @@
       "label": ".logout()",
       "file_type": "code",
       "source_file": "src/app/features/admin/admin-layout/admin-layout.component.ts",
-      "source_location": "L57",
+      "source_location": "L56",
       "_origin": "ast",
       "id": "admin_layout_admin_layout_component_adminlayoutcomponent_logout",
       "community": 22,
@@ -4374,7 +4384,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_features_admin_agenda_agenda_component_ts_agenda_agenda_component",
-      "community": 59,
+      "community": 68,
       "norm_label": "agenda.component.ts"
     },
     {
@@ -4384,7 +4394,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "agenda_agenda_component_appointment",
-      "community": 59,
+      "community": 68,
       "norm_label": "appointment"
     },
     {
@@ -4734,7 +4744,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "directory_directory_component",
-      "community": 67,
+      "community": 68,
       "norm_label": "directory.component.ts"
     },
     {
@@ -4744,7 +4754,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "directory_directory_component_studentitem",
-      "community": 67,
+      "community": 68,
       "norm_label": "studentitem"
     },
     {
@@ -4754,7 +4764,7 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "directory_directory_component_specialistitem",
-      "community": 67,
+      "community": 68,
       "norm_label": "specialistitem"
     },
     {
@@ -5434,7 +5444,7 @@
       "source_location": "L100",
       "_origin": "ast",
       "id": "faculties_faculties_component_facultiescomponent_constructor",
-      "community": 59,
+      "community": 6,
       "norm_label": ".constructor()"
     },
     {
@@ -5904,7 +5914,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "institutional_settings_institutional_settings_component_institutionalsettingscomponent",
-      "community": 130,
+      "community": 27,
       "norm_label": "institutionalsettingscomponent"
     },
     {
@@ -5914,7 +5924,7 @@
       "source_location": "L29",
       "_origin": "ast",
       "id": "institutional_settings_institutional_settings_component_institutionalsettingscomponent_ngoninit",
-      "community": 130,
+      "community": 27,
       "norm_label": ".ngoninit()"
     },
     {
@@ -5924,7 +5934,7 @@
       "source_location": "L34",
       "_origin": "ast",
       "id": "institutional_settings_institutional_settings_component_institutionalsettingscomponent_loadinstitutionsettings",
-      "community": 130,
+      "community": 27,
       "norm_label": ".loadinstitutionsettings()"
     },
     {
@@ -5934,7 +5944,7 @@
       "source_location": "L50",
       "_origin": "ast",
       "id": "institutional_settings_institutional_settings_component_institutionalsettingscomponent_saveinstitutionname",
-      "community": 130,
+      "community": 27,
       "norm_label": ".saveinstitutionname()"
     },
     {
@@ -5944,7 +5954,7 @@
       "source_location": "L71",
       "_origin": "ast",
       "id": "institutional_settings_institutional_settings_component_institutionalsettingscomponent_loadinstitutionalwatermark",
-      "community": 130,
+      "community": 27,
       "norm_label": ".loadinstitutionalwatermark()"
     },
     {
@@ -5954,7 +5964,7 @@
       "source_location": "L92",
       "_origin": "ast",
       "id": "institutional_settings_institutional_settings_component_institutionalsettingscomponent_ondragover",
-      "community": 130,
+      "community": 27,
       "norm_label": ".ondragover()"
     },
     {
@@ -5964,7 +5974,7 @@
       "source_location": "L98",
       "_origin": "ast",
       "id": "institutional_settings_institutional_settings_component_institutionalsettingscomponent_ondragleave",
-      "community": 130,
+      "community": 27,
       "norm_label": ".ondragleave()"
     },
     {
@@ -5974,7 +5984,7 @@
       "source_location": "L104",
       "_origin": "ast",
       "id": "institutional_settings_institutional_settings_component_institutionalsettingscomponent_ondrop",
-      "community": 130,
+      "community": 27,
       "norm_label": ".ondrop()"
     },
     {
@@ -5984,7 +5994,7 @@
       "source_location": "L115",
       "_origin": "ast",
       "id": "institutional_settings_institutional_settings_component_institutionalsettingscomponent_onfileselected",
-      "community": 130,
+      "community": 27,
       "norm_label": ".onfileselected()"
     },
     {
@@ -5994,7 +6004,7 @@
       "source_location": "L122",
       "_origin": "ast",
       "id": "institutional_settings_institutional_settings_component_institutionalsettingscomponent_handlefileupload",
-      "community": 130,
+      "community": 27,
       "norm_label": ".handlefileupload()"
     },
     {
@@ -6004,7 +6014,7 @@
       "source_location": "L158",
       "_origin": "ast",
       "id": "institutional_settings_institutional_settings_component_institutionalsettingscomponent_removewatermark",
-      "community": 5,
+      "community": 27,
       "norm_label": ".removewatermark()"
     },
     {
@@ -6041,17 +6051,47 @@
       "label": ".ngOnInit()",
       "file_type": "code",
       "source_file": "src/app/features/admin/nutritionist-fields/nutritionist-fields.component.ts",
-      "source_location": "L55",
+      "source_location": "L58",
       "_origin": "ast",
       "id": "nutritionist_fields_nutritionist_fields_component_nutritionistfieldscomponent_ngoninit",
       "community": 27,
       "norm_label": ".ngoninit()"
     },
     {
+      "label": ".resetInlineFields()",
+      "file_type": "code",
+      "source_file": "src/app/features/admin/nutritionist-fields/nutritionist-fields.component.ts",
+      "source_location": "L63",
+      "_origin": "ast",
+      "id": "nutritionist_fields_nutritionist_fields_component_nutritionistfieldscomponent_resetinlinefields",
+      "community": 27,
+      "norm_label": ".resetinlinefields()"
+    },
+    {
+      "label": ".getTipoLabel()",
+      "file_type": "code",
+      "source_file": "src/app/features/admin/nutritionist-fields/nutritionist-fields.component.ts",
+      "source_location": "L75",
+      "_origin": "ast",
+      "id": "nutritionist_fields_nutritionist_fields_component_nutritionistfieldscomponent_gettipolabel",
+      "community": 27,
+      "norm_label": ".gettipolabel()"
+    },
+    {
+      "label": ".addInlineField()",
+      "file_type": "code",
+      "source_file": "src/app/features/admin/nutritionist-fields/nutritionist-fields.component.ts",
+      "source_location": "L80",
+      "_origin": "ast",
+      "id": "nutritionist_fields_nutritionist_fields_component_nutritionistfieldscomponent_addinlinefield",
+      "community": 27,
+      "norm_label": ".addinlinefield()"
+    },
+    {
       "label": ".loadFields()",
       "file_type": "code",
       "source_file": "src/app/features/admin/nutritionist-fields/nutritionist-fields.component.ts",
-      "source_location": "L59",
+      "source_location": "L130",
       "_origin": "ast",
       "id": "nutritionist_fields_nutritionist_fields_component_nutritionistfieldscomponent_loadfields",
       "community": 27,
@@ -6061,7 +6101,7 @@
       "label": ".openAddModal()",
       "file_type": "code",
       "source_file": "src/app/features/admin/nutritionist-fields/nutritionist-fields.component.ts",
-      "source_location": "L78",
+      "source_location": "L149",
       "_origin": "ast",
       "id": "nutritionist_fields_nutritionist_fields_component_nutritionistfieldscomponent_openaddmodal",
       "community": 27,
@@ -6071,7 +6111,7 @@
       "label": ".openEditModal()",
       "file_type": "code",
       "source_file": "src/app/features/admin/nutritionist-fields/nutritionist-fields.component.ts",
-      "source_location": "L93",
+      "source_location": "L164",
       "_origin": "ast",
       "id": "nutritionist_fields_nutritionist_fields_component_nutritionistfieldscomponent_openeditmodal",
       "community": 27,
@@ -6081,7 +6121,7 @@
       "label": ".closeModal()",
       "file_type": "code",
       "source_file": "src/app/features/admin/nutritionist-fields/nutritionist-fields.component.ts",
-      "source_location": "L108",
+      "source_location": "L179",
       "_origin": "ast",
       "id": "nutritionist_fields_nutritionist_fields_component_nutritionistfieldscomponent_closemodal",
       "community": 27,
@@ -6091,7 +6131,7 @@
       "label": ".saveField()",
       "file_type": "code",
       "source_file": "src/app/features/admin/nutritionist-fields/nutritionist-fields.component.ts",
-      "source_location": "L113",
+      "source_location": "L184",
       "_origin": "ast",
       "id": "nutritionist_fields_nutritionist_fields_component_nutritionistfieldscomponent_savefield",
       "community": 27,
@@ -6101,7 +6141,7 @@
       "label": ".deleteField()",
       "file_type": "code",
       "source_file": "src/app/features/admin/nutritionist-fields/nutritionist-fields.component.ts",
-      "source_location": "L166",
+      "source_location": "L237",
       "_origin": "ast",
       "id": "nutritionist_fields_nutritionist_fields_component_nutritionistfieldscomponent_deletefield",
       "community": 27,
@@ -6111,7 +6151,7 @@
       "label": ".toggleActivo()",
       "file_type": "code",
       "source_file": "src/app/features/admin/nutritionist-fields/nutritionist-fields.component.ts",
-      "source_location": "L184",
+      "source_location": "L255",
       "_origin": "ast",
       "id": "nutritionist_fields_nutritionist_fields_component_nutritionistfieldscomponent_toggleactivo",
       "community": 27,
@@ -6121,7 +6161,7 @@
       "label": ".moveOrder()",
       "file_type": "code",
       "source_file": "src/app/features/admin/nutritionist-fields/nutritionist-fields.component.ts",
-      "source_location": "L199",
+      "source_location": "L270",
       "_origin": "ast",
       "id": "nutritionist_fields_nutritionist_fields_component_nutritionistfieldscomponent_moveorder",
       "community": 27,
@@ -6131,7 +6171,7 @@
       "label": ".updateFieldOrder()",
       "file_type": "code",
       "source_file": "src/app/features/admin/nutritionist-fields/nutritionist-fields.component.ts",
-      "source_location": "L224",
+      "source_location": "L295",
       "_origin": "ast",
       "id": "nutritionist_fields_nutritionist_fields_component_nutritionistfieldscomponent_updatefieldorder",
       "community": 27,
@@ -6141,7 +6181,7 @@
       "label": ".getNextOrden()",
       "file_type": "code",
       "source_file": "src/app/features/admin/nutritionist-fields/nutritionist-fields.component.ts",
-      "source_location": "L231",
+      "source_location": "L302",
       "_origin": "ast",
       "id": "nutritionist_fields_nutritionist_fields_component_nutritionistfieldscomponent_getnextorden",
       "community": 27,
@@ -6151,7 +6191,7 @@
       "label": ".getCamposPorBloqueName()",
       "file_type": "code",
       "source_file": "src/app/features/admin/nutritionist-fields/nutritionist-fields.component.ts",
-      "source_location": "L237",
+      "source_location": "L308",
       "_origin": "ast",
       "id": "nutritionist_fields_nutritionist_fields_component_nutritionistfieldscomponent_getcamposporbloquename",
       "community": 27,
@@ -6314,7 +6354,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "psychologists_psychologists_component",
-      "community": 67,
+      "community": 68,
       "norm_label": "psychologists.component.ts"
     },
     {
@@ -6324,7 +6364,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "psychologists_psychologists_component_psychologist",
-      "community": 67,
+      "community": 68,
       "norm_label": "psychologist"
     },
     {
@@ -6824,7 +6864,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "services_admin_exceptions_service_adminexceptionsservice",
-      "community": 81,
+      "community": 133,
       "norm_label": "adminexceptionsservice"
     },
     {
@@ -6834,7 +6874,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "services_admin_exceptions_service_adminexceptionsservice_getmexicoholidays",
-      "community": 81,
+      "community": 133,
       "norm_label": ".getmexicoholidays()"
     },
     {
@@ -6844,7 +6884,7 @@
       "source_location": "L36",
       "_origin": "ast",
       "id": "services_admin_exceptions_service_adminexceptionsservice_importholidaystosupabase",
-      "community": 81,
+      "community": 133,
       "norm_label": ".importholidaystosupabase()"
     },
     {
@@ -6854,7 +6894,7 @@
       "source_location": "L77",
       "_origin": "ast",
       "id": "services_admin_exceptions_service_adminexceptionsservice_addexception",
-      "community": 81,
+      "community": 133,
       "norm_label": ".addexception()"
     },
     {
@@ -6904,7 +6944,7 @@
       "source_location": "L43",
       "_origin": "ast",
       "id": "services_admin_skill8_service_adminskill8service",
-      "community": 137,
+      "community": 87,
       "norm_label": "adminskill8service"
     },
     {
@@ -6914,7 +6954,7 @@
       "source_location": "L51",
       "_origin": "ast",
       "id": "services_admin_skill8_service_adminskill8service_gethealthprofessionals",
-      "community": 137,
+      "community": 87,
       "norm_label": ".gethealthprofessionals()"
     },
     {
@@ -6924,7 +6964,7 @@
       "source_location": "L102",
       "_origin": "ast",
       "id": "services_admin_skill8_service_adminskill8service_registerhealthprofessional",
-      "community": 137,
+      "community": 87,
       "norm_label": ".registerhealthprofessional()"
     },
     {
@@ -6934,7 +6974,7 @@
       "source_location": "L140",
       "_origin": "ast",
       "id": "services_admin_skill8_service_adminskill8service_assignpatienttoprofessionals",
-      "community": 137,
+      "community": 87,
       "norm_label": ".assignpatienttoprofessionals()"
     },
     {
@@ -6944,7 +6984,7 @@
       "source_location": "L169",
       "_origin": "ast",
       "id": "services_admin_skill8_service_adminskill8service_uploadinstitutionalasset",
-      "community": 137,
+      "community": 87,
       "norm_label": ".uploadinstitutionalasset()"
     },
     {
@@ -6954,7 +6994,7 @@
       "source_location": "L199",
       "_origin": "ast",
       "id": "services_admin_skill8_service_adminskill8service_getinstitutionalasseturl",
-      "community": 137,
+      "community": 87,
       "norm_label": ".getinstitutionalasseturl()"
     },
     {
@@ -6964,7 +7004,7 @@
       "source_location": "L210",
       "_origin": "ast",
       "id": "services_admin_skill8_service_adminskill8service_listinstitutionalassets",
-      "community": 137,
+      "community": 87,
       "norm_label": ".listinstitutionalassets()"
     },
     {
@@ -6974,7 +7014,7 @@
       "source_location": "L236",
       "_origin": "ast",
       "id": "services_admin_skill8_service_adminskill8service_getorphanedstudents",
-      "community": 137,
+      "community": 87,
       "norm_label": ".getorphanedstudents()"
     },
     {
@@ -6984,7 +7024,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_admin_stats_service",
-      "community": 59,
+      "community": 68,
       "norm_label": "admin-stats.service.ts"
     },
     {
@@ -7004,7 +7044,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "services_admin_stats_service_chartdatapoint",
-      "community": 59,
+      "community": 68,
       "norm_label": "chartdatapoint"
     },
     {
@@ -7401,7 +7441,7 @@
       "label": "RegisterComponent",
       "file_type": "code",
       "source_file": "src/app/features/auth/register/register.component.ts",
-      "source_location": "L47",
+      "source_location": "L48",
       "_origin": "ast",
       "id": "register_register_component_registercomponent",
       "community": 73,
@@ -7411,7 +7451,7 @@
       "label": ".sanitizeNumericField()",
       "file_type": "code",
       "source_file": "src/app/features/auth/register/register.component.ts",
-      "source_location": "L91",
+      "source_location": "L92",
       "_origin": "ast",
       "id": "register_register_component_registercomponent_sanitizenumericfield",
       "community": 73,
@@ -7421,7 +7461,7 @@
       "label": ".sanitizeTextField()",
       "file_type": "code",
       "source_file": "src/app/features/auth/register/register.component.ts",
-      "source_location": "L105",
+      "source_location": "L106",
       "_origin": "ast",
       "id": "register_register_component_registercomponent_sanitizetextfield",
       "community": 73,
@@ -7431,7 +7471,7 @@
       "label": ".sanitizeDateField()",
       "file_type": "code",
       "source_file": "src/app/features/auth/register/register.component.ts",
-      "source_location": "L114",
+      "source_location": "L115",
       "_origin": "ast",
       "id": "register_register_component_registercomponent_sanitizedatefield",
       "community": 73,
@@ -7441,7 +7481,7 @@
       "label": ".sanitizeCredentialField()",
       "file_type": "code",
       "source_file": "src/app/features/auth/register/register.component.ts",
-      "source_location": "L122",
+      "source_location": "L123",
       "_origin": "ast",
       "id": "register_register_component_registercomponent_sanitizecredentialfield",
       "community": 73,
@@ -7451,7 +7491,7 @@
       "label": ".openPrivacyModal()",
       "file_type": "code",
       "source_file": "src/app/features/auth/register/register.component.ts",
-      "source_location": "L131",
+      "source_location": "L132",
       "_origin": "ast",
       "id": "register_register_component_registercomponent_openprivacymodal",
       "community": 73,
@@ -7461,7 +7501,7 @@
       "label": ".closePrivacyModal()",
       "file_type": "code",
       "source_file": "src/app/features/auth/register/register.component.ts",
-      "source_location": "L137",
+      "source_location": "L138",
       "_origin": "ast",
       "id": "register_register_component_registercomponent_closeprivacymodal",
       "community": 73,
@@ -7471,7 +7511,7 @@
       "label": ".ngOnInit()",
       "file_type": "code",
       "source_file": "src/app/features/auth/register/register.component.ts",
-      "source_location": "L141",
+      "source_location": "L142",
       "_origin": "ast",
       "id": "register_register_component_registercomponent_ngoninit",
       "community": 73,
@@ -7481,7 +7521,7 @@
       "label": ".filterFaculties()",
       "file_type": "code",
       "source_file": "src/app/features/auth/register/register.component.ts",
-      "source_location": "L151",
+      "source_location": "L152",
       "_origin": "ast",
       "id": "register_register_component_registercomponent_filterfaculties",
       "community": 73,
@@ -7491,7 +7531,7 @@
       "label": ".calculateAge()",
       "file_type": "code",
       "source_file": "src/app/features/auth/register/register.component.ts",
-      "source_location": "L156",
+      "source_location": "L157",
       "_origin": "ast",
       "id": "register_register_component_registercomponent_calculateage",
       "community": 73,
@@ -7501,7 +7541,7 @@
       "label": ".submitRegistration()",
       "file_type": "code",
       "source_file": "src/app/features/auth/register/register.component.ts",
-      "source_location": "L168",
+      "source_location": "L169",
       "_origin": "ast",
       "id": "register_register_component_registercomponent_submitregistration",
       "community": 73,
@@ -7534,7 +7574,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_features_chat_dashboard_dashboard_component_ts_dashboard_dashboard_component",
-      "community": 30,
+      "community": 18,
       "norm_label": "dashboard.component.ts"
     },
     {
@@ -7651,7 +7691,7 @@
       "label": "DashboardLayoutComponent",
       "file_type": "code",
       "source_file": "src/app/features/dashboard-layout/dashboard-layout.component.ts",
-      "source_location": "L20",
+      "source_location": "L27",
       "_origin": "ast",
       "id": "dashboard_layout_dashboard_layout_component_dashboardlayoutcomponent",
       "community": 77,
@@ -7661,7 +7701,7 @@
       "label": ".currentUser()",
       "file_type": "code",
       "source_file": "src/app/features/dashboard-layout/dashboard-layout.component.ts",
-      "source_location": "L33",
+      "source_location": "L49",
       "_origin": "ast",
       "id": "dashboard_layout_dashboard_layout_component_dashboardlayoutcomponent_currentuser",
       "community": 77,
@@ -7671,7 +7711,7 @@
       "label": ".isMobile()",
       "file_type": "code",
       "source_file": "src/app/features/dashboard-layout/dashboard-layout.component.ts",
-      "source_location": "L37",
+      "source_location": "L53",
       "_origin": "ast",
       "id": "dashboard_layout_dashboard_layout_component_dashboardlayoutcomponent_ismobile",
       "community": 77,
@@ -7681,17 +7721,67 @@
       "label": ".isPsychologist()",
       "file_type": "code",
       "source_file": "src/app/features/dashboard-layout/dashboard-layout.component.ts",
-      "source_location": "L41",
+      "source_location": "L57",
       "_origin": "ast",
       "id": "dashboard_layout_dashboard_layout_component_dashboardlayoutcomponent_ispsychologist",
       "community": 77,
       "norm_label": ".ispsychologist()"
     },
     {
+      "label": ".onDocumentClick()",
+      "file_type": "code",
+      "source_file": "src/app/features/dashboard-layout/dashboard-layout.component.ts",
+      "source_location": "L63",
+      "_origin": "ast",
+      "id": "dashboard_layout_dashboard_layout_component_dashboardlayoutcomponent_ondocumentclick",
+      "community": 77,
+      "norm_label": ".ondocumentclick()"
+    },
+    {
+      "label": ".toggleProfileMenu()",
+      "file_type": "code",
+      "source_file": "src/app/features/dashboard-layout/dashboard-layout.component.ts",
+      "source_location": "L69",
+      "_origin": "ast",
+      "id": "dashboard_layout_dashboard_layout_component_dashboardlayoutcomponent_toggleprofilemenu",
+      "community": 77,
+      "norm_label": ".toggleprofilemenu()"
+    },
+    {
+      "label": ".closeProfileMenu()",
+      "file_type": "code",
+      "source_file": "src/app/features/dashboard-layout/dashboard-layout.component.ts",
+      "source_location": "L74",
+      "_origin": "ast",
+      "id": "dashboard_layout_dashboard_layout_component_dashboardlayoutcomponent_closeprofilemenu",
+      "community": 77,
+      "norm_label": ".closeprofilemenu()"
+    },
+    {
+      "label": ".openAchievements()",
+      "file_type": "code",
+      "source_file": "src/app/features/dashboard-layout/dashboard-layout.component.ts",
+      "source_location": "L78",
+      "_origin": "ast",
+      "id": "dashboard_layout_dashboard_layout_component_dashboardlayoutcomponent_openachievements",
+      "community": 77,
+      "norm_label": ".openachievements()"
+    },
+    {
+      "label": ".toggleAchievementsPanel()",
+      "file_type": "code",
+      "source_file": "src/app/features/dashboard-layout/dashboard-layout.component.ts",
+      "source_location": "L84",
+      "_origin": "ast",
+      "id": "dashboard_layout_dashboard_layout_component_dashboardlayoutcomponent_toggleachievementspanel",
+      "community": 77,
+      "norm_label": ".toggleachievementspanel()"
+    },
+    {
       "label": ".ngOnInit()",
       "file_type": "code",
       "source_file": "src/app/features/dashboard-layout/dashboard-layout.component.ts",
-      "source_location": "L45",
+      "source_location": "L91",
       "_origin": "ast",
       "id": "dashboard_layout_dashboard_layout_component_dashboardlayoutcomponent_ngoninit",
       "community": 77,
@@ -7701,7 +7791,7 @@
       "label": ".checkPendingEvaluations()",
       "file_type": "code",
       "source_file": "src/app/features/dashboard-layout/dashboard-layout.component.ts",
-      "source_location": "L81",
+      "source_location": "L130",
       "_origin": "ast",
       "id": "dashboard_layout_dashboard_layout_component_dashboardlayoutcomponent_checkpendingevaluations",
       "community": 77,
@@ -7711,7 +7801,7 @@
       "label": ".loadHistory()",
       "file_type": "code",
       "source_file": "src/app/features/dashboard-layout/dashboard-layout.component.ts",
-      "source_location": "L93",
+      "source_location": "L142",
       "_origin": "ast",
       "id": "dashboard_layout_dashboard_layout_component_dashboardlayoutcomponent_loadhistory",
       "community": 77,
@@ -7721,7 +7811,7 @@
       "label": ".onNewAction()",
       "file_type": "code",
       "source_file": "src/app/features/dashboard-layout/dashboard-layout.component.ts",
-      "source_location": "L97",
+      "source_location": "L146",
       "_origin": "ast",
       "id": "dashboard_layout_dashboard_layout_component_dashboardlayoutcomponent_onnewaction",
       "community": 77,
@@ -7731,7 +7821,7 @@
       "label": ".loadChat()",
       "file_type": "code",
       "source_file": "src/app/features/dashboard-layout/dashboard-layout.component.ts",
-      "source_location": "L113",
+      "source_location": "L162",
       "_origin": "ast",
       "id": "dashboard_layout_dashboard_layout_component_dashboardlayoutcomponent_loadchat",
       "community": 77,
@@ -7741,7 +7831,7 @@
       "label": ".toggleSidebar()",
       "file_type": "code",
       "source_file": "src/app/features/dashboard-layout/dashboard-layout.component.ts",
-      "source_location": "L120",
+      "source_location": "L169",
       "_origin": "ast",
       "id": "dashboard_layout_dashboard_layout_component_dashboardlayoutcomponent_togglesidebar",
       "community": 77,
@@ -7751,7 +7841,7 @@
       "label": ".logout()",
       "file_type": "code",
       "source_file": "src/app/features/dashboard-layout/dashboard-layout.component.ts",
-      "source_location": "L124",
+      "source_location": "L173",
       "_origin": "ast",
       "id": "dashboard_layout_dashboard_layout_component_dashboardlayoutcomponent_logout",
       "community": 77,
@@ -7874,7 +7964,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "student_agenda_student_agenda_component",
-      "community": 142,
+      "community": 59,
       "norm_label": "student-agenda.component.ts"
     },
     {
@@ -8254,7 +8344,7 @@
       "source_location": "L104",
       "_origin": "ast",
       "id": "achievements_dashboard_achievements_dashboard_component_achievementsdashboardcomponent",
-      "community": 85,
+      "community": 30,
       "norm_label": "achievementsdashboardcomponent"
     },
     {
@@ -8264,7 +8354,7 @@
       "source_location": "L128",
       "_origin": "ast",
       "id": "achievements_dashboard_achievements_dashboard_component_achievementsdashboardcomponent_ngoninit",
-      "community": 85,
+      "community": 30,
       "norm_label": ".ngoninit()"
     },
     {
@@ -8274,7 +8364,7 @@
       "source_location": "L132",
       "_origin": "ast",
       "id": "achievements_dashboard_achievements_dashboard_component_achievementsdashboardcomponent_selectcategory",
-      "community": 85,
+      "community": 30,
       "norm_label": ".selectcategory()"
     },
     {
@@ -8284,7 +8374,7 @@
       "source_location": "L136",
       "_origin": "ast",
       "id": "achievements_dashboard_achievements_dashboard_component_achievementsdashboardcomponent_getleveltitle",
-      "community": 85,
+      "community": 30,
       "norm_label": ".getleveltitle()"
     },
     {
@@ -8294,7 +8384,7 @@
       "source_location": "L145",
       "_origin": "ast",
       "id": "achievements_dashboard_achievements_dashboard_component_achievementsdashboardcomponent_getbadgeicon",
-      "community": 85,
+      "community": 30,
       "norm_label": ".getbadgeicon()"
     },
     {
@@ -8304,7 +8394,7 @@
       "source_location": "L157",
       "_origin": "ast",
       "id": "achievements_dashboard_achievements_dashboard_component_achievementsdashboardcomponent_getbadgecolor",
-      "community": 85,
+      "community": 30,
       "norm_label": ".getbadgecolor()"
     },
     {
@@ -8314,7 +8404,7 @@
       "source_location": "L170",
       "_origin": "ast",
       "id": "achievements_dashboard_achievements_dashboard_component_achievementsdashboardcomponent_getbadgebg",
-      "community": 85,
+      "community": 30,
       "norm_label": ".getbadgebg()"
     },
     {
@@ -8344,7 +8434,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_features_health_professional_agenda_agenda_component_ts_agenda_agenda_component",
-      "community": 68,
+      "community": 59,
       "norm_label": "agenda.component.ts"
     },
     {
@@ -8354,7 +8444,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "src_app_features_health_professional_agenda_agenda_component_ts_agenda_agenda_component_calendarday",
-      "community": 68,
+      "community": 59,
       "norm_label": "calendarday"
     },
     {
@@ -8564,7 +8654,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "emergency_change_modal_emergency_change_modal_component",
-      "community": 142,
+      "community": 59,
       "norm_label": "emergency-change-modal.component.ts"
     },
     {
@@ -8574,7 +8664,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "emergency_change_modal_emergency_change_modal_component_emergencymodaldata",
-      "community": 142,
+      "community": 59,
       "norm_label": "emergencymodaldata"
     },
     {
@@ -8584,7 +8674,7 @@
       "source_location": "L551",
       "_origin": "ast",
       "id": "emergency_change_modal_emergency_change_modal_component_emergencychangemodalcomponent",
-      "community": 5,
+      "community": 27,
       "norm_label": "emergencychangemodalcomponent"
     },
     {
@@ -8594,7 +8684,7 @@
       "source_location": "L565",
       "_origin": "ast",
       "id": "emergency_change_modal_emergency_change_modal_component_emergencychangemodalcomponent_constructor",
-      "community": 5,
+      "community": 27,
       "norm_label": ".constructor()"
     },
     {
@@ -8604,7 +8694,7 @@
       "source_location": "L570",
       "_origin": "ast",
       "id": "emergency_change_modal_emergency_change_modal_component_emergencychangemodalcomponent_ngoninit",
-      "community": 5,
+      "community": 27,
       "norm_label": ".ngoninit()"
     },
     {
@@ -8614,7 +8704,7 @@
       "source_location": "L589",
       "_origin": "ast",
       "id": "emergency_change_modal_emergency_change_modal_component_emergencychangemodalcomponent_setactiontype",
-      "community": 5,
+      "community": 27,
       "norm_label": ".setactiontype()"
     },
     {
@@ -8624,7 +8714,7 @@
       "source_location": "L598",
       "_origin": "ast",
       "id": "emergency_change_modal_emergency_change_modal_component_emergencychangemodalcomponent_close",
-      "community": 5,
+      "community": 27,
       "norm_label": ".close()"
     },
     {
@@ -8634,7 +8724,7 @@
       "source_location": "L602",
       "_origin": "ast",
       "id": "emergency_change_modal_emergency_change_modal_component_emergencychangemodalcomponent_sanitizeinput",
-      "community": 5,
+      "community": 27,
       "norm_label": ".sanitizeinput()"
     },
     {
@@ -8644,7 +8734,7 @@
       "source_location": "L611",
       "_origin": "ast",
       "id": "emergency_change_modal_emergency_change_modal_component_emergencychangemodalcomponent_confirm",
-      "community": 5,
+      "community": 27,
       "norm_label": ".confirm()"
     },
     {
@@ -9074,7 +9164,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_features_nutritionist_agenda_agenda_component_ts_agenda_agenda_component",
-      "community": 142,
+      "community": 18,
       "norm_label": "agenda.component.ts"
     },
     {
@@ -9084,7 +9174,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "src_app_features_nutritionist_agenda_agenda_component_ts_agenda_agenda_component_calendarday",
-      "community": 142,
+      "community": 18,
       "norm_label": "calendarday"
     },
     {
@@ -9224,7 +9314,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "consulta_consulta_component",
-      "community": 131,
+      "community": 88,
       "norm_label": "consulta.component.ts"
     },
     {
@@ -9784,7 +9874,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "perfil_paciente_perfil_paciente_component",
-      "community": 67,
+      "community": 68,
       "norm_label": "perfil-paciente.component.ts"
     },
     {
@@ -10164,7 +10254,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_features_psychologist_agenda_agenda_component_ts_agenda_agenda_component",
-      "community": 68,
+      "community": 59,
       "norm_label": "agenda.component.ts"
     },
     {
@@ -10174,7 +10264,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "src_app_features_psychologist_agenda_agenda_component_ts_agenda_agenda_component_calendarday",
-      "community": 68,
+      "community": 59,
       "norm_label": "calendarday"
     },
     {
@@ -10324,7 +10414,7 @@
       "source_location": "L184",
       "_origin": "ast",
       "id": "clinical_note_clinical_note_component_clinicalnotecomponent",
-      "community": 5,
+      "community": 27,
       "norm_label": "clinicalnotecomponent"
     },
     {
@@ -10334,7 +10424,7 @@
       "source_location": "L192",
       "_origin": "ast",
       "id": "clinical_note_clinical_note_component_clinicalnotecomponent_showfeedback",
-      "community": 5,
+      "community": 27,
       "norm_label": ".showfeedback()"
     },
     {
@@ -10344,7 +10434,7 @@
       "source_location": "L235",
       "_origin": "ast",
       "id": "clinical_note_clinical_note_component_clinicalnotecomponent_ngoninit",
-      "community": 5,
+      "community": 27,
       "norm_label": ".ngoninit()"
     },
     {
@@ -10354,7 +10444,7 @@
       "source_location": "L242",
       "_origin": "ast",
       "id": "clinical_note_clinical_note_component_clinicalnotecomponent_loaddata",
-      "community": 5,
+      "community": 27,
       "norm_label": ".loaddata()"
     },
     {
@@ -10364,7 +10454,7 @@
       "source_location": "L340",
       "_origin": "ast",
       "id": "clinical_note_clinical_note_component_clinicalnotecomponent_savenote",
-      "community": 5,
+      "community": 27,
       "norm_label": ".savenote()"
     },
     {
@@ -10374,7 +10464,7 @@
       "source_location": "L356",
       "_origin": "ast",
       "id": "clinical_note_clinical_note_component_clinicalnotecomponent_marknoshow",
-      "community": 5,
+      "community": 27,
       "norm_label": ".marknoshow()"
     },
     {
@@ -10384,7 +10474,7 @@
       "source_location": "L374",
       "_origin": "ast",
       "id": "clinical_note_clinical_note_component_clinicalnotecomponent_toggleeditantecedentes",
-      "community": 5,
+      "community": 27,
       "norm_label": ".toggleeditantecedentes()"
     },
     {
@@ -10394,7 +10484,7 @@
       "source_location": "L378",
       "_origin": "ast",
       "id": "clinical_note_clinical_note_component_clinicalnotecomponent_canceleditantecedentes",
-      "community": 5,
+      "community": 27,
       "norm_label": ".canceleditantecedentes()"
     },
     {
@@ -10404,7 +10494,7 @@
       "source_location": "L383",
       "_origin": "ast",
       "id": "clinical_note_clinical_note_component_clinicalnotecomponent_guardarantecedentes",
-      "community": 5,
+      "community": 27,
       "norm_label": ".guardarantecedentes()"
     },
     {
@@ -10414,7 +10504,7 @@
       "source_location": "L438",
       "_origin": "ast",
       "id": "clinical_note_clinical_note_component_clinicalnotecomponent_goback",
-      "community": 5,
+      "community": 27,
       "norm_label": ".goback()"
     },
     {
@@ -10454,7 +10544,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "patient_profile_patient_profile_component",
-      "community": 67,
+      "community": 68,
       "norm_label": "patient-profile.component.ts"
     },
     {
@@ -11024,7 +11114,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "emoji_scale_emoji_scale_component",
-      "community": 84,
+      "community": 30,
       "norm_label": "emoji-scale.component.ts"
     },
     {
@@ -11034,7 +11124,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "emoji_scale_emoji_scale_component_emojiscalecomponent",
-      "community": 84,
+      "community": 30,
       "norm_label": "emojiscalecomponent"
     },
     {
@@ -11044,7 +11134,7 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "emoji_scale_emoji_scale_component_emojiscalecomponent_selectemoji",
-      "community": 84,
+      "community": 30,
       "norm_label": ".selectemoji()"
     },
     {
@@ -11054,7 +11144,7 @@
       "source_location": "L36",
       "_origin": "ast",
       "id": "emoji_scale_emoji_scale_component_emojiscalecomponent_getprogresswidth",
-      "community": 84,
+      "community": 30,
       "norm_label": ".getprogresswidth()"
     },
     {
@@ -11064,7 +11154,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "session_feedback_session_feedback_component",
-      "community": 84,
+      "community": 30,
       "norm_label": "session-feedback.component.ts"
     },
     {
@@ -11144,47 +11234,47 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "settings_student_settings_component_studentsettingscomponent",
-      "community": 75,
+      "community": 72,
       "norm_label": "studentsettingscomponent"
     },
     {
       "label": ".currentUser()",
       "file_type": "code",
       "source_file": "src/app/features/student/settings/student-settings.component.ts",
-      "source_location": "L30",
+      "source_location": "L32",
       "_origin": "ast",
       "id": "settings_student_settings_component_studentsettingscomponent_currentuser",
-      "community": 75,
+      "community": 72,
       "norm_label": ".currentuser()"
     },
     {
       "label": ".ngOnInit()",
       "file_type": "code",
       "source_file": "src/app/features/student/settings/student-settings.component.ts",
-      "source_location": "L34",
+      "source_location": "L36",
       "_origin": "ast",
       "id": "settings_student_settings_component_studentsettingscomponent_ngoninit",
-      "community": 75,
+      "community": 72,
       "norm_label": ".ngoninit()"
     },
     {
       "label": ".confirmSave()",
       "file_type": "code",
       "source_file": "src/app/features/student/settings/student-settings.component.ts",
-      "source_location": "L42",
+      "source_location": "L48",
       "_origin": "ast",
       "id": "settings_student_settings_component_studentsettingscomponent_confirmsave",
-      "community": 75,
+      "community": 72,
       "norm_label": ".confirmsave()"
     },
     {
       "label": ".performSave()",
       "file_type": "code",
       "source_file": "src/app/features/student/settings/student-settings.component.ts",
-      "source_location": "L63",
+      "source_location": "L69",
       "_origin": "ast",
       "id": "settings_student_settings_component_studentsettingscomponent_performsave",
-      "community": 75,
+      "community": 72,
       "norm_label": ".performsave()"
     },
     {
@@ -11364,7 +11454,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "environments_environment",
-      "community": 67,
+      "community": 68,
       "norm_label": "environment.ts"
     },
     {
@@ -11374,7 +11464,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "environments_environment_environment",
-      "community": 67,
+      "community": 68,
       "norm_label": "environment"
     },
     {
@@ -18176,6 +18266,16 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "package.json",
+      "source_location": "L45",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "package_dependencies",
+      "target": "package_dependencies_ngx_mask"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
       "source_location": "L43",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -18408,9 +18508,9 @@
       "source_file": "scratch/test_join.js",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scratch_test_join",
-      "target": "scratch_test_join_createclient",
-      "confidence_score": 1.0
+      "target": "scratch_test_join_createclient"
     },
     {
       "relation": "contains",
@@ -18418,9 +18518,9 @@
       "source_file": "scratch/test_join.js",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scratch_test_join",
-      "target": "scratch_test_join_run",
-      "confidence_score": 1.0
+      "target": "scratch_test_join_run"
     },
     {
       "relation": "contains",
@@ -18428,9 +18528,9 @@
       "source_file": "scratch/test_join.js",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scratch_test_join",
-      "target": "scratch_test_join_supabase",
-      "confidence_score": 1.0
+      "target": "scratch_test_join_supabase"
     },
     {
       "relation": "contains",
@@ -18438,9 +18538,9 @@
       "source_file": "scratch/test_reports.js",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scratch_test_reports",
-      "target": "scratch_test_reports_createclient",
-      "confidence_score": 1.0
+      "target": "scratch_test_reports_createclient"
     },
     {
       "relation": "contains",
@@ -18448,9 +18548,9 @@
       "source_file": "scratch/test_reports.js",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scratch_test_reports",
-      "target": "scratch_test_reports_run",
-      "confidence_score": 1.0
+      "target": "scratch_test_reports_run"
     },
     {
       "relation": "contains",
@@ -18458,9 +18558,9 @@
       "source_file": "scratch/test_reports.js",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scratch_test_reports",
-      "target": "scratch_test_reports_supabase",
-      "confidence_score": 1.0
+      "target": "scratch_test_reports_supabase"
     },
     {
       "relation": "contains",
@@ -18468,9 +18568,9 @@
       "source_file": "scratch/test_supabase.js",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scratch_test_supabase",
-      "target": "scratch_test_supabase_createclient",
-      "confidence_score": 1.0
+      "target": "scratch_test_supabase_createclient"
     },
     {
       "relation": "contains",
@@ -18478,9 +18578,9 @@
       "source_file": "scratch/test_supabase.js",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scratch_test_supabase",
-      "target": "scratch_test_supabase_run",
-      "confidence_score": 1.0
+      "target": "scratch_test_supabase_run"
     },
     {
       "relation": "contains",
@@ -18488,9 +18588,9 @@
       "source_file": "scratch/test_supabase.js",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scratch_test_supabase",
-      "target": "scratch_test_supabase_supabase",
-      "confidence_score": 1.0
+      "target": "scratch_test_supabase_supabase"
     },
     {
       "relation": "contains",
@@ -26756,6 +26856,16 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/app/features/admin/nutritionist-fields/nutritionist-fields.component.ts",
+      "source_location": "L75",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "nutritionist_fields_nutritionist_fields_component_nutritionistfieldscomponent",
+      "target": "nutritionist_fields_nutritionist_fields_component_nutritionistfieldscomponent_addinlinefield"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/features/admin/nutritionist-fields/nutritionist-fields.component.ts",
       "source_location": "L108",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -26791,6 +26901,16 @@
       "confidence_score": 1.0,
       "source": "nutritionist_fields_nutritionist_fields_component_nutritionistfieldscomponent",
       "target": "nutritionist_fields_nutritionist_fields_component_nutritionistfieldscomponent_getnextorden"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/features/admin/nutritionist-fields/nutritionist-fields.component.ts",
+      "source_location": "L75",
+      "weight": 1.0,
+      "source": "nutritionist_fields_nutritionist_fields_component_nutritionistfieldscomponent",
+      "target": "nutritionist_fields_nutritionist_fields_component_nutritionistfieldscomponent_gettipolabel",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -26846,6 +26966,16 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/app/features/admin/nutritionist-fields/nutritionist-fields.component.ts",
+      "source_location": "L63",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "nutritionist_fields_nutritionist_fields_component_nutritionistfieldscomponent",
+      "target": "nutritionist_fields_nutritionist_fields_component_nutritionistfieldscomponent_resetinlinefields"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/features/admin/nutritionist-fields/nutritionist-fields.component.ts",
       "source_location": "L113",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -26881,6 +27011,39 @@
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "nutritionist_fields_nutritionist_fields_component_nutritionistfieldscomponent_ngoninit",
+      "target": "nutritionist_fields_nutritionist_fields_component_nutritionistfieldscomponent_loadfields"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/features/admin/nutritionist-fields/nutritionist-fields.component.ts",
+      "source_location": "L59",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "nutritionist_fields_nutritionist_fields_component_nutritionistfieldscomponent_ngoninit",
+      "target": "nutritionist_fields_nutritionist_fields_component_nutritionistfieldscomponent_resetinlinefields"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/features/admin/nutritionist-fields/nutritionist-fields.component.ts",
+      "source_location": "L95",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "nutritionist_fields_nutritionist_fields_component_nutritionistfieldscomponent_addinlinefield",
+      "target": "nutritionist_fields_nutritionist_fields_component_nutritionistfieldscomponent_getnextorden"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/features/admin/nutritionist-fields/nutritionist-fields.component.ts",
+      "source_location": "L109",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "nutritionist_fields_nutritionist_fields_component_nutritionistfieldscomponent_addinlinefield",
       "target": "nutritionist_fields_nutritionist_fields_component_nutritionistfieldscomponent_loadfields"
     },
     {
@@ -28972,6 +29135,28 @@
       "target": "dashboard_dashboard_component_dashboardcomponent_sendmessage"
     },
     {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/features/dashboard-layout/dashboard-layout.component.ts",
+      "source_location": "L10",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "dashboard_layout_dashboard_layout_component",
+      "target": "achievements_dashboard_achievements_dashboard_component"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/features/dashboard-layout/dashboard-layout.component.ts",
+      "source_location": "L10",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "dashboard_layout_dashboard_layout_component",
+      "target": "achievements_dashboard_achievements_dashboard_component_achievementsdashboardcomponent"
+    },
+    {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/app/features/dashboard-layout/dashboard-layout.component.ts",
@@ -29023,6 +29208,16 @@
       "confidence_score": 1.0,
       "source": "dashboard_layout_dashboard_layout_component_dashboardlayoutcomponent",
       "target": "dashboard_layout_dashboard_layout_component_dashboardlayoutcomponent_checkpendingevaluations"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/features/dashboard-layout/dashboard-layout.component.ts",
+      "source_location": "L74",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "dashboard_layout_dashboard_layout_component_dashboardlayoutcomponent",
+      "target": "dashboard_layout_dashboard_layout_component_dashboardlayoutcomponent_closeprofilemenu"
     },
     {
       "relation": "method",
@@ -29098,11 +29293,51 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/app/features/dashboard-layout/dashboard-layout.component.ts",
+      "source_location": "L63",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "dashboard_layout_dashboard_layout_component_dashboardlayoutcomponent",
+      "target": "dashboard_layout_dashboard_layout_component_dashboardlayoutcomponent_ondocumentclick"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/features/dashboard-layout/dashboard-layout.component.ts",
       "source_location": "L54",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "dashboard_layout_dashboard_layout_component_dashboardlayoutcomponent",
       "target": "dashboard_layout_dashboard_layout_component_dashboardlayoutcomponent_onnewaction"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/features/dashboard-layout/dashboard-layout.component.ts",
+      "source_location": "L78",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "dashboard_layout_dashboard_layout_component_dashboardlayoutcomponent",
+      "target": "dashboard_layout_dashboard_layout_component_dashboardlayoutcomponent_openachievements"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/features/dashboard-layout/dashboard-layout.component.ts",
+      "source_location": "L84",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "dashboard_layout_dashboard_layout_component_dashboardlayoutcomponent",
+      "target": "dashboard_layout_dashboard_layout_component_dashboardlayoutcomponent_toggleachievementspanel"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/features/dashboard-layout/dashboard-layout.component.ts",
+      "source_location": "L69",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "dashboard_layout_dashboard_layout_component_dashboardlayoutcomponent",
+      "target": "dashboard_layout_dashboard_layout_component_dashboardlayoutcomponent_toggleprofilemenu"
     },
     {
       "relation": "method",
@@ -37407,5 +37642,5 @@
       "source_file": "src/app/features/psychologist/psychologist-layout/psychologist-layout.component.html"
     }
   ],
-  "built_at_commit": "b5cfff7137785543542e7cf990b9b99d18af2ad5"
+  "built_at_commit": "2b0562bd47ea535a134c0d0dac55837a9de5440b"
 }

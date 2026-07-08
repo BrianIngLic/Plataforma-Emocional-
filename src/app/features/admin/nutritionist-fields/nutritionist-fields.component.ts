@@ -32,6 +32,9 @@ export class NutritionistFieldsComponent implements OnInit {
   showAddModal = false;
   selectedCampo: CampoFormulario | null = null;
 
+  newField: Record<string, { clave: string; etiqueta: string; tipo_campo: 'text' | 'number' | 'boolean' | 'select' | 'rich-text' | 'food-table'; activo: boolean }> = {};
+  savingInline: Record<string, boolean> = {};
+
   fieldForm: FormGroup = this.fb.group({
     bloque: ['Datos específicos', [Validators.required]],
     clave: ['', [Validators.required, Validators.pattern(/^[a-z0-9_]+$/)]],
@@ -53,7 +56,75 @@ export class NutritionistFieldsComponent implements OnInit {
   ];
 
   ngOnInit() {
+    this.resetInlineFields();
     this.loadFields();
+  }
+
+  resetInlineFields() {
+    this.bloques.forEach(b => {
+      this.newField[b] = {
+        clave: '',
+        etiqueta: '',
+        tipo_campo: 'text',
+        activo: true
+      };
+      this.savingInline[b] = false;
+    });
+  }
+
+  getTipoLabel(tipo: string): string {
+    const found = this.tipos.find(t => t.value === tipo);
+    return found ? found.label : tipo;
+  }
+
+  async addInlineField(bloque: string) {
+    const field = this.newField[bloque];
+    if (!field.clave || !field.etiqueta) {
+      alert('Por favor complete la clave y la etiqueta.');
+      return;
+    }
+
+    const pattern = /^[a-z0-9_]+$/;
+    if (!pattern.test(field.clave)) {
+      alert('La clave solo debe contener minúsculas, números y guiones bajos.');
+      return;
+    }
+
+    if (this.campos.some(c => c.clave === field.clave)) {
+      alert('La clave ya existe. Por favor use una clave única.');
+      return;
+    }
+
+    this.savingInline[bloque] = true;
+    try {
+      const nextOrden = this.getNextOrden(bloque);
+      const { error } = await this.supabaseService.supabase
+        .from('campos_formulario')
+        .insert({
+          bloque,
+          clave: field.clave,
+          etiqueta: field.etiqueta,
+          tipo_campo: field.tipo_campo,
+          orden: nextOrden,
+          activo: field.activo
+        });
+
+      if (error) throw error;
+      
+      await this.loadFields();
+      this.newField[bloque] = {
+        clave: '',
+        etiqueta: '',
+        tipo_campo: 'text',
+        activo: true
+      };
+      alert('Campo agregado con éxito.');
+    } catch (err) {
+      console.error('Error adding inline field:', err);
+      alert('Error al agregar campo.');
+    } finally {
+      this.savingInline[bloque] = false;
+    }
   }
 
   async loadFields() {

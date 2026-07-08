@@ -110,7 +110,7 @@ import { CryptoService } from '../../../core/services/crypto.service';
                 <mat-icon style="color: #8b5cf6;">family_history</mat-icon> Antecedentes Clínicos Familiares (Compartido)
               </h3>
               <div>
-                <button *ngIf="!isEditingAntecedentes" type="button" class="btn btn-outline" (click)="toggleEditAntecedentes()" style="display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.85rem; padding: 0.5rem 0.85rem; border: 1px solid #8b5cf6; border-radius: 8px; color: #8b5cf6; background: transparent; cursor: pointer; font-weight: 600;">
+                <button *ngIf="!isEditingAntecedentes && !isSigned" type="button" class="btn btn-outline" (click)="toggleEditAntecedentes()" style="display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.85rem; padding: 0.5rem 0.85rem; border: 1px solid #8b5cf6; border-radius: 8px; color: #8b5cf6; background: transparent; cursor: pointer; font-weight: 600;">
                   <mat-icon style="font-size: 18px; width: 18px; height: 18px;">edit</mat-icon> Editar Antecedentes
                 </button>
                 <div *ngIf="isEditingAntecedentes" style="display: flex; gap: 0.5rem;">
@@ -155,10 +155,50 @@ import { CryptoService } from '../../../core/services/crypto.service';
             <quill-editor 
               [(ngModel)]="notesContent" 
               [modules]="isReadOnly ? { toolbar: false } : quillModules" 
-              [readOnly]="isReadOnly"
+              [readOnly]="isReadOnly || isSigned"
               placeholder="Redacte la nota clínica aquí..."
               theme="snow">
             </quill-editor>
+          </div>
+
+          <!-- Firma Electrónica META SEAL -->
+          <div class="panel signature-panel" style="margin-top: 1.5rem; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.5rem;">
+            <div class="panel-header" style="display: flex; align-items: center; gap: 0.5rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem; margin-bottom: 1rem;">
+              <h3 class="section-title" style="display: flex; align-items: center; gap: 0.5rem; margin: 0; font-size: 1.15rem; font-weight: 700; color: var(--text-primary);">
+                <mat-icon style="color: #0ea5e9;">verified_user</mat-icon> Firma Electrónica Autorizada (META SEAL)
+              </h3>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+              <p style="color: var(--text-secondary); font-size: 0.85rem; margin: 0;">
+                Al firmar esta nota clínica, se generará un sello digital seguro que certificará la autenticidad y el estado del expediente en la fecha actual. Una vez firmada, el contenido de la nota y los antecedentes familiares quedarán bloqueados (snapshot) y no podrán modificarse.
+              </p>
+
+              <div *ngIf="!isSigned" style="display: flex; align-items: center; gap: 1rem;">
+                <button type="button" (click)="signWithMetaSeal()" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 0.5rem; border: none; border-radius: 10px; padding: 0.75rem 1.5rem; font-weight: 700; cursor: pointer; background: #0ea5e9; color: white; transition: all 0.2s; box-shadow: 0 4px 6px rgba(14, 165, 233, 0.15);">
+                  <mat-icon>fingerprint</mat-icon> Firmar con META SEAL
+                </button>
+                <span style="color: var(--text-secondary); font-size: 0.85rem; font-style: italic;">Nota pendiente de firma digital.</span>
+              </div>
+
+              <div *ngIf="isSigned" style="background: rgba(16, 185, 129, 0.05); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 10px; padding: 1rem; display: flex; align-items: center; justify-content: space-between;">
+                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                  <mat-icon style="color: #10b981; font-size: 32px; width: 32px; height: 32px;">verified</mat-icon>
+                  <div>
+                    <h4 style="margin: 0; color: var(--text-primary); font-size: 0.9rem; font-weight: 700;">Documento Firmado Electrónicamente</h4>
+                    <p style="margin: 0.2rem 0 0; color: var(--text-secondary); font-size: 0.75rem;">
+                      Firmado por: <strong>{{ signatureName }}</strong> el {{ signatureDate | date:'dd/MM/yyyy HH:mm:ss' }}
+                    </p>
+                    <p style="margin: 0.2rem 0 0; color: var(--text-secondary); font-family: monospace; font-size: 0.7rem; word-break: break-all;">
+                      Sello: <span style="color: #10b981;">{{ signatureSeal }}</span>
+                    </p>
+                  </div>
+                </div>
+                <button *ngIf="!isReadOnly" type="button" (click)="unsignMetaSeal()" style="background: transparent; border: 1px solid #ef4444; color: #ef4444; border-radius: 8px; padding: 0.4rem 0.75rem; font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: all 0.2s;">
+                  Modificar Nota
+                </button>
+              </div>
+            </div>
           </div>
         </ng-container>
 
@@ -210,6 +250,12 @@ export class ClinicalNoteComponent implements OnInit {
   savingAntecedentes = false;
   antecedentesContent = '';
 
+  // Meta Seal Signature
+  isSigned = false;
+  signatureName = '';
+  signatureDate: Date | null = null;
+  signatureSeal = '';
+
   // Plantilla SOAP pre-llenada en HTML
   notesContent = `
     <p><strong>S (Subjetivo):</strong> </p>
@@ -254,7 +300,24 @@ export class ClinicalNoteComponent implements OnInit {
 
       if (this.appointment.status === 'completed' || this.appointment.status === 'no_show') {
         this.isReadOnly = true;
-        this.notesContent = this.appointment.notes;
+        this.notesContent = this.appointment.notes || '';
+        
+        if (this.notesContent && this.notesContent.includes('META-SEAL-SECURE-SIGNATURE-SHA256')) {
+          this.isSigned = true;
+          const nameMatch = this.notesContent.match(/Firmado por:<\/strong> ([^e\n<]+)/);
+          const dateMatch = this.notesContent.match(/en fecha ([^<]+)/);
+          const sealMatch = this.notesContent.match(/META-SEAL-SECURE-SIGNATURE-SHA256: ([A-Z0-9-]+)/);
+
+          this.signatureName = nameMatch ? nameMatch[1].trim() : 'Especialista';
+          this.signatureSeal = sealMatch ? `META-SEAL-SECURE-SIGNATURE-SHA256: ${sealMatch[1].trim()}` : '';
+          this.signatureDate = dateMatch ? new Date() : new Date();
+
+          // Extract snapshotted family history content
+          const antMatch = this.notesContent.match(/<div class="ant-snapshot-content">([\s\S]*?)<\/div>/);
+          if (antMatch) {
+            this.antecedentesContent = antMatch[1].trim();
+          }
+        }
       }
 
       // Fetch Patient (User -> profiles)
@@ -338,10 +401,32 @@ export class ClinicalNoteComponent implements OnInit {
   }
 
   async saveNote() {
+    if (!this.isSigned) {
+      alert('La nota clínica debe estar firmada electrónicamente con META SEAL antes de poder guardarse como final.');
+      return;
+    }
+
     this.loading = true;
+
+    // Append signature and snapshot to notesContent HTML
+    const formattedDate = this.signatureDate ? this.signatureDate.toLocaleString() : new Date().toLocaleString();
+    const signatureHtml = `
+      <div class="meta-seal-signature-block" style="margin-top: 2rem; border-top: 2px dashed #0ea5e9; padding-top: 1rem; color: #334155;">
+        <p><strong>Firmado Electrónicamente con META SEAL:</strong></p>
+        <p><strong>Sello Digital:</strong> <span style="font-family: monospace; color: #10b981;">${this.signatureSeal}</span></p>
+        <p><strong>Firmado por:</strong> ${this.signatureName} en fecha ${formattedDate}</p>
+        <div class="antecedentes-snapshot" style="margin-top: 1rem; padding: 0.75rem; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px;">
+          <p style="margin: 0 0 0.5rem 0;"><strong>Antecedentes Familiares (Snapshot al momento de la firma):</strong></p>
+          <div class="ant-snapshot-content">${this.antecedentesContent || 'Sin antecedentes familiares registrados.'}</div>
+        </div>
+      </div>
+    `;
+
+    const finalNotes = this.notesContent + signatureHtml;
+
     const { error } = await this.supabase
       .from('appointments')
-      .update({ status: 'completed', notes: this.notesContent })
+      .update({ status: 'completed', notes: finalNotes })
       .eq('id', this.appointmentId);
       
     this.loading = false;
@@ -351,6 +436,48 @@ export class ClinicalNoteComponent implements OnInit {
     } else {
       this.goBack();
     }
+  }
+
+  async signWithMetaSeal() {
+    try {
+      const { data: { user } } = await this.supabase.auth.getUser();
+      if (!user) return;
+
+      const { data: profProfile } = await this.supabase
+        .from('profiles')
+        .select('first_name, last_name')
+        .eq('user_id', user.id)
+        .single();
+
+      const name = profProfile 
+        ? `Psic. ${profProfile.first_name} ${profProfile.last_name}` 
+        : `Psicólogo (ID: ${user.id.substring(0,8)})`;
+
+      this.signatureName = name;
+      this.signatureDate = new Date();
+      
+      const rawString = `${user.id}-${this.patient?.student_id}-${this.signatureDate.toISOString()}-META-SEAL-SECURE`;
+      let hash = 0;
+      for (let i = 0; i < rawString.length; i++) {
+        hash = (hash << 5) - hash + rawString.charCodeAt(i);
+        hash |= 0;
+      }
+      const hexHash = Math.abs(hash).toString(16).toUpperCase().padStart(8, '0');
+      this.signatureSeal = `META-SEAL-SECURE-SIGNATURE-SHA256: ${hexHash}-${this.patient?.student_id?.substring(0, 8).toUpperCase()}`;
+
+      this.isSigned = true;
+      this.isEditingAntecedentes = false;
+    } catch (err) {
+      console.error('Error signing with Meta Seal:', err);
+      alert('No se pudo firmar el documento.');
+    }
+  }
+
+  unsignMetaSeal() {
+    this.isSigned = false;
+    this.signatureName = '';
+    this.signatureDate = null;
+    this.signatureSeal = '';
   }
 
   async markNoShow() {

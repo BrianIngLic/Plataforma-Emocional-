@@ -26,7 +26,6 @@ export class AdminLayoutComponent {
     { label: 'Agenda Global', sub: 'Calendario clínico', icon: 'calendar_today', path: './agenda' },
     { label: 'Chat WhatsApp', sub: 'WhatsApp Bidireccional', icon: 'chat', path: './whatsapp-chat' },
     { label: 'Configuración de Nota', sub: 'Campos consulta nutrición', icon: 'settings_suggest', path: './nutritionist-fields' },
-    { label: 'Configuración', sub: 'Mi perfil y foto', icon: 'settings', path: './settings' },
     { label: 'Imagen Institucional', sub: 'Sello y marca de agua', icon: 'branding_watermark', path: './institutional-branding' },
     { label: 'Alertas', sub: 'Notificaciones del sistema', icon: 'notifications', path: './alerts', badge: 5 }
   ];

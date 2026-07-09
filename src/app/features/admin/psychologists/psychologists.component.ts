@@ -208,6 +208,21 @@ export class PsychologistsComponent implements OnInit {
     return stars;
   }
 
+  isPastAppointment(appt: any): boolean {
+    if (!appt.scheduled_date) return false;
+    const apptDate = new Date(appt.scheduled_date);
+    const today = new Date();
+    today.setHours(0,0,0,0);
+    return apptDate < today;
+  }
+
+  isAlertAppointment(appt: any): boolean {
+    const isPast = this.isPastAppointment(appt);
+    const hasNoNote = !appt.notes || appt.notes.trim() === '';
+    const isNotNoShow = appt.status !== 'no_show';
+    return isPast && hasNoNote && isNotNoShow;
+  }
+
   getPct(p: Psychologist): number {
     return Math.round((p.patients / p.capacity) * 100);
   }
@@ -329,6 +344,7 @@ export class PsychologistsComponent implements OnInit {
         start_time,
         end_time,
         status,
+        notes,
         priority_level,
         patient:users!student_id (
           profiles (

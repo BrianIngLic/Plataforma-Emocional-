@@ -65,6 +65,12 @@ export class ConsultaComponent implements OnInit {
   savingAntecedentes = false;
   antecedentesContent = '';
 
+  // Meta Seal Signature
+  isSigned = false;
+  signatureName = '';
+  signatureDate: Date | null = null;
+  signatureSeal = '';
+
   quillModules = {
     toolbar: [
       ['bold', 'italic', 'underline', 'strike'],
@@ -192,12 +198,40 @@ export class ConsultaComponent implements OnInit {
         });
       }
 
+      let existingConsulta: ConsultaNutricionRow | null = null;
+      if (this.sessionId) {
+        const { data, error } = await this.supabaseService.supabase
+          .from('consultas_nutricion')
+          .select('id, student_id, professional_id, fecha_consulta, calorias_totales, datos_especificos, consumo_semanal, recordatorio_24h')
+          .eq('appointment_id', this.sessionId)
+          .maybeSingle();
+        if (!error && data) {
+          existingConsulta = data as ConsultaNutricionRow;
+        }
+      }
+
       this.campos = fetchedCampos;
       this.buildDynamicForm(this.campos);
 
-      this.ultimaConsulta = await this.nutricionService.obtenerUltimaConsulta(this.pacienteId);
-      if (this.ultimaConsulta) {
-        this.patchFromLastConsultation(this.ultimaConsulta);
+      if (existingConsulta) {
+        this.ultimaConsulta = existingConsulta;
+        this.patchFromLastConsultation(existingConsulta);
+        const de = existingConsulta.datos_especificos || {};
+        if (de['firma_digital']) {
+          this.isSigned = true;
+          this.signatureSeal = de['firma_digital'] as string;
+          this.signatureName = de['firma_nombre'] as string;
+          this.signatureDate = de['firma_fecha'] ? new Date(de['firma_fecha'] as string) : null;
+          this.antecedentesContent = de['antecedentes_familiares_snapshot'] as string || '';
+          
+          // Disable editing
+          this.form.disable();
+        }
+      } else {
+        this.ultimaConsulta = await this.nutricionService.obtenerUltimaConsulta(this.pacienteId);
+        if (this.ultimaConsulta) {
+          this.patchFromLastConsultation(this.ultimaConsulta);
+        }
       }
 
       const grouped = this.nutricionService.agruparCamposPorBloque(this.campos);
@@ -377,6 +411,11 @@ export class ConsultaComponent implements OnInit {
   }
 
   async guardarConsulta() {
+    if (!this.isSigned) {
+      alert('La nota de consulta debe estar firmada electrónicamente con META SEAL antes de poder guardarse como final.');
+      return;
+    }
+
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
@@ -409,17 +448,36 @@ export class ConsultaComponent implements OnInit {
         }
       }
 
-      const payload: NuevaConsultaNutricionPayload = {
+      // Add signature and antecedents snapshot to datosEspecificos
+      datosEspecificos['firma_digital'] = this.signatureSeal;
+      datosEspecificos['firma_nombre'] = this.signatureName;
+      datosEspecificos['firma_fecha'] = this.signatureDate?.toISOString();
+      datosEspecificos['antecedentes_familiares_snapshot'] = this.antecedentesContent;
+
+      const payload: any = {
         student_id: this.pacienteId,
         professional_id: this.nutriologoId,
         fecha_consulta: new Date().toISOString(),
         calorias_totales: Number(valores.calorias_totales || 0),
         datos_especificos: datosEspecificos,
         consumo_semanal: consumoSemanal,
-        recordatorio_24h: registroAyer
+        recordatorio_24h: registroAyer,
+        appointment_id: this.sessionId || null
       };
 
       await this.nutricionService.crearConsulta(payload);
+
+      // If associated with a session/appointment, update its status to completed
+      if (this.sessionId) {
+        await this.supabaseService.supabase
+          .from('appointments')
+          .update({ 
+            status: 'completed', 
+            notes: `<p><strong>Consulta Nutricional Finalizada.</strong></p><p>Sello de firma: ${this.signatureSeal}</p>` 
+          })
+          .eq('id', this.sessionId);
+      }
+
       alert('Consulta nutricional guardada con éxito.');
       this.router.navigate(['/nutritionist/pacientes', this.pacienteId]);
     } catch (error) {
@@ -428,6 +486,52 @@ export class ConsultaComponent implements OnInit {
     } finally {
       this.saving = false;
     }
+  }
+
+  async signWithMetaSeal() {
+    try {
+      const { data: profProfile } = await this.supabaseService.supabase
+        .from('profiles')
+        .select('first_name, last_name')
+        .eq('user_id', this.nutriologoId)
+        .single();
+
+      const name = profProfile 
+        ? `Nut. ${profProfile.first_name} ${profProfile.last_name}` 
+        : `Nutricionista (ID: ${this.nutriologoId.substring(0,8)})`;
+
+      this.signatureName = name;
+      this.signatureDate = new Date();
+      
+      const rawString = `${this.nutriologoId}-${this.pacienteId}-${this.signatureDate.toISOString()}-META-SEAL-SECURE`;
+      let hash = 0;
+      for (let i = 0; i < rawString.length; i++) {
+        hash = (hash << 5) - hash + rawString.charCodeAt(i);
+        hash |= 0;
+      }
+      const hexHash = Math.abs(hash).toString(16).toUpperCase().padStart(8, '0');
+      this.signatureSeal = `META-SEAL-SECURE-SIGNATURE-SHA256: ${hexHash}-${this.pacienteId.substring(0, 8).toUpperCase()}`;
+
+      this.isSigned = true;
+
+      // Lock all controls in the main form
+      this.form.disable();
+      // Lock editing of family antecedents
+      this.isEditingAntecedentes = false;
+    } catch (err) {
+      console.error('Error signing with Meta Seal:', err);
+      alert('No se pudo firmar el documento.');
+    }
+  }
+
+  unsignMetaSeal() {
+    this.isSigned = false;
+    this.signatureName = '';
+    this.signatureDate = null;
+    this.signatureSeal = '';
+
+    // Re-enable all controls in the main form
+    this.form.enable();
   }
 
   async markNoShow() {

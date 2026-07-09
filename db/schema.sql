@@ -252,7 +252,7 @@ SET bloque = EXCLUDED.bloque,
     activo = EXCLUDED.activo;
 
 -- =========================================================================================
--- DIARIO
+-- DIARIO EMOCIONAL
 -- =========================================================================================
 CREATE TABLE public.diary_entries (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -262,6 +262,35 @@ CREATE TABLE public.diary_entries (
     high_risk BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+-- =========================================================================================
+-- DIARIO ALIMENTARIO PERSONAL (Automonitoreo emocional-nutricional del estudiante)
+-- Tabla separada de nutrition_logs (módulo clínico del nutriólogo con macros calculados).
+-- Esta tabla registra la experiencia subjetiva del estudiante: hora de comida,
+-- estado emocional antes/después y descripción libre de lo consumido.
+-- =========================================================================================
+CREATE TABLE public.food_diary_entries (
+    id          UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    student_id  UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+    diary_date  DATE NOT NULL DEFAULT CURRENT_DATE,
+    meal_time   TIME NOT NULL,
+    mood_before TEXT NOT NULL,
+    what_i_ate  TEXT NOT NULL,   -- Texto enriquecido (HTML de Quill)
+    mood_after  TEXT NOT NULL,
+    created_at  TIMESTAMPTZ DEFAULT NOW(),
+    updated_at  TIMESTAMPTZ DEFAULT NOW()
+);
+
+ALTER TABLE public.food_diary_entries ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "food_diary_own"
+    ON public.food_diary_entries
+    FOR ALL
+    USING  (auth.uid() = student_id)
+    WITH CHECK (auth.uid() = student_id);
+
+CREATE INDEX idx_food_diary_student_date
+    ON public.food_diary_entries(student_id, diary_date DESC);
 
 -- =========================================================================================
 -- COMUNICACIÓN DUAL Y ENRUTAMIENTO BIDIRECCIONAL (WEB PUSH & WHATSAPP)

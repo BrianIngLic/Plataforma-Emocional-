@@ -49,6 +49,9 @@
             <mat-error *ngIf="credentialsFormGroup.get('email')?.hasError('email')">
               Debe ser un correo válido.
             </mat-error>
+            <mat-error *ngIf="credentialsFormGroup.get('email')?.hasError('emailExists')">
+              {{ emailExistsError }}
+            </mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
@@ -69,7 +72,16 @@
           </mat-form-field>
 
           <div class="stepper-actions">
-            <button mat-flat-button color="primary" matStepperNext>Siguiente</button>
+            <button
+              mat-flat-button
+              color="primary"
+              (click)="checkEmailAndNext()"
+              [disabled]="checkingEmail">
+              <span *ngIf="!checkingEmail">Siguiente</span>
+              <span *ngIf="checkingEmail" style="display:flex;align-items:center;gap:8px;">
+                <mat-icon class="spin-icon">sync</mat-icon> Verificando...
+              </span>
+            </button>
           </div>
         </form>
       </mat-step>

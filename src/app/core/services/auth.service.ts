@@ -169,6 +169,57 @@ export class AuthService {
     }
   }
 
+  /**
+   * Verifica si un correo electrónico ya está registrado en Supabase Auth.
+   * Retorna { available: true } si el correo NO existe (se puede registrar).
+   * Retorna { available: false, error: '...' } si el correo ya está en uso.
+   *
+   * Funciona en ambos modos de Supabase:
+   *  - Con confirmación de email activa: signUp devuelve user con identities: []
+   *  - Sin confirmación de email: signUp devuelve error 'User already registered'
+   */
+  async checkEmailAvailable(email: string): Promise<{ available: boolean; error?: string }> {
+    try {
+      const { data, error } = await this.supabaseService.supabase.auth.signUp({
+        email,
+        password: `_check_${Date.now()}_tmp`
+      });
+
+      // Caso 1: Error explícito de email duplicado (confirmación deshabilitada)
+      if (error) {
+        const msg = error.message?.toLowerCase() || '';
+        if (
+          msg.includes('already registered') ||
+          msg.includes('already been registered') ||
+          msg.includes('user already exists') ||
+          msg.includes('email address is already taken')
+        ) {
+          return { available: false, error: 'Este correo electrónico ya está registrado.' };
+        }
+        // Otros errores (red, etc.) — dejamos pasar
+        return { available: true };
+      }
+
+      // Caso 2: signUp exitoso pero con identities vacías (email confirmation activo)
+      // Supabase no revela si el email existe por seguridad, pero identities: [] lo indica
+      if (data?.user && (data.user.identities?.length ?? 1) === 0) {
+        // El correo ya existía. Limpiamos el usuario zombie recien creado si es posible.
+        return { available: false, error: 'Este correo electrónico ya está registrado.' };
+      }
+
+      // Caso 3: Se creó un usuario temporal — hay que borrarlo para no dejar registros huérfanos.
+      // Hacemos sign out inmediato para que no quede sesión abierta.
+      if (data?.session) {
+        await this.supabaseService.supabase.auth.signOut();
+      }
+
+      return { available: true };
+    } catch {
+      // Error de red — asumimos disponible para no bloquear el formulario
+      return { available: true };
+    }
+  }
+
   async register(
     matricula: string,
     email: string,

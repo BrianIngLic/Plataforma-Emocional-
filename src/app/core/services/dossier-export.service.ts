@@ -281,6 +281,25 @@ export class DossierExportService {
       };
     });
 
+    // 4b. Diario alimentario personal (food_diary_entries)
+    let foodDiaryEntries: any[] = [];
+    try {
+      const { data: foodData, error: foodError } = await this.supabase
+        .from('food_diary_entries')
+        .select('diary_date, meal_time, mood_before, what_i_ate, mood_after, created_at')
+        .eq('student_id', patientId)
+        .order('diary_date', { ascending: false })
+        .order('meal_time', { ascending: true });
+
+      if (!foodError && foodData) {
+        foodDiaryEntries = foodData;
+      } else if (foodError) {
+        console.warn('Advertencia obteniendo diario alimentario:', foodError.message);
+      }
+    } catch (e) {
+      console.warn('Excepción obteniendo diario alimentario:', e);
+    }
+
     // 5. Evaluaciones de alianza terapéutica (FIT)
     let sessionEvaluations: any[] = [];
     try {
@@ -336,6 +355,7 @@ export class DossierExportService {
       decryptedNotes,
       appointments: appointments ?? [],
       nutritionLogs: nutritionLogs ?? [],
+      foodDiaryEntries,
       diaryEntries: decryptedDiary,
       sessionEvaluations: sessionEvaluations,
       watermarkUrl: watermarkUrl,
@@ -614,33 +634,103 @@ export class DossierExportService {
     doc.text('III. BITÁCORA Y DIARIO ALIMENTARIO', 15, y);
     y += 6;
 
-    if (data.nutritionLogs.length === 0) {
+    const hasNutritionData = data.nutritionLogs.length > 0 || data.foodDiaryEntries.length > 0;
+
+    if (!hasNutritionData) {
       doc.setFont('helvetica', 'italic');
       doc.setFontSize(9);
-      doc.text('No se encontraron registros nutricionales.', 15, y);
+      doc.text('No se encontraron registros nutricionales ni de diario alimentario.', 15, y);
       y += 6;
     } else {
-      data.nutritionLogs.forEach((log: any) => {
-        checkPageBreak(20);
+
+      // ── Registros Clínicos del Nutriólogo (nutrition_logs) ──────────────
+      if (data.nutritionLogs.length > 0) {
+        checkPageBreak(8);
         doc.setFont('helvetica', 'bold');
-        doc.setFontSize(9);
-        doc.setTextColor(51, 65, 85);
-        const dateStr = new Date(log.log_date).toLocaleDateString();
-        doc.text(`Fecha: ${dateStr} - Resumen Diario: ${log.total_calories || 0} kcal (P: ${log.total_protein || 0}g, C: ${log.total_carbs || 0}g, G: ${log.total_fats || 0}g)`, 15, y);
+        doc.setFontSize(8.5);
+        doc.setTextColor(30, 58, 138);
+        doc.text('Registros Clínicos (Módulo Nutriólogo)', 15, y);
         y += 5;
 
-        if (log.food_items && log.food_items.length > 0) {
-          log.food_items.forEach((item: any) => {
-            checkPageBreak(6);
+        data.nutritionLogs.forEach((log: any) => {
+          checkPageBreak(20);
+          doc.setFont('helvetica', 'bold');
+          doc.setFontSize(9);
+          doc.setTextColor(51, 65, 85);
+          const dateStr = new Date(log.log_date).toLocaleDateString();
+          doc.text(`Fecha: ${dateStr} — ${log.total_calories || 0} kcal (P: ${log.total_protein || 0}g, C: ${log.total_carbs || 0}g, G: ${log.total_fats || 0}g)`, 15, y);
+          y += 5;
+
+          if (log.food_items && log.food_items.length > 0) {
+            log.food_items.forEach((item: any) => {
+              checkPageBreak(6);
+              doc.setFont('helvetica', 'normal');
+              doc.setFontSize(8);
+              doc.setTextColor(71, 85, 105);
+              doc.text(`• ${item.name} (${item.amount || '-'}): ${item.calories || 0} kcal, P: ${item.protein || 0}g, C: ${item.carbs || 0}g, G: ${item.fat || 0}g`, 18, y);
+              y += 5;
+            });
+          }
+          y += 2;
+        });
+      }
+
+      // ── Diario Alimentario Personal (food_diary_entries) ────────────────
+      if (data.foodDiaryEntries.length > 0) {
+        checkPageBreak(10);
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(8.5);
+        doc.setTextColor(30, 58, 138);
+        doc.text('Diario Alimentario Personal (Automonitoreo Emocional-Nutricional)', 15, y);
+        y += 5;
+
+        // Agrupar por fecha
+        const byDate: Record<string, any[]> = {};
+        data.foodDiaryEntries.forEach((e: any) => {
+          if (!byDate[e.diary_date]) byDate[e.diary_date] = [];
+          byDate[e.diary_date].push(e);
+        });
+
+        Object.keys(byDate).forEach(dateKey => {
+          checkPageBreak(10);
+          doc.setFont('helvetica', 'bold');
+          doc.setFontSize(9);
+          doc.setTextColor(51, 65, 85);
+          const localDate = new Date(dateKey + 'T12:00:00').toLocaleDateString('es-MX', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+          doc.text(localDate.charAt(0).toUpperCase() + localDate.slice(1), 15, y);
+          y += 5;
+
+          byDate[dateKey].forEach((meal: any) => {
+            checkPageBreak(18);
+            const timeStr = meal.meal_time ? meal.meal_time.substring(0, 5) : '';
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(8.5);
+            doc.setTextColor(71, 85, 105);
+            doc.text(`  ${timeStr}  |  Antes: ${meal.mood_before}  →  Después: ${meal.mood_after}`, 15, y);
+            y += 4.5;
+
+            // Strip HTML from what_i_ate
+            const cleanFood = (meal.what_i_ate || '')
+              .replace(/<[^>]*>/g, ' ')
+              .replace(/&nbsp;/g, ' ')
+              .replace(/&amp;/g, '&')
+              .replace(/\s+/g, ' ')
+              .trim();
+
             doc.setFont('helvetica', 'normal');
             doc.setFontSize(8);
-            doc.setTextColor(71, 85, 105);
-            doc.text(`• ${item.name} (${item.amount || '-'}): ${item.calories || 0} kcal, P: ${item.protein || 0}g, C: ${item.carbs || 0}g, G: ${item.fat || 0}g`, 18, y);
-            y += 5;
+            doc.setTextColor(100, 116, 139);
+            const splitFood = doc.splitTextToSize(`  ${cleanFood}`, pageWidth - 32);
+            splitFood.forEach((line: string) => {
+              checkPageBreak(5);
+              doc.text(line, 15, y);
+              y += 4.5;
+            });
+            y += 2;
           });
-        }
-        y += 2;
-      });
+          y += 1;
+        });
+      }
     }
 
     // Diario emocional

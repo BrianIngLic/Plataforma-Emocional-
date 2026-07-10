@@ -1,0 +1,755 @@
+<div class="directory-container">
+
+  <!-- Top Search & Action Bar (Hidden when viewing specialist details) -->
+  <div class="top-bar-panel" *ngIf="!selectedPsychologist">
+    <div class="search-box">
+      <mat-icon>search</mat-icon>
+      <input type="text" 
+             [(ngModel)]="searchQuery" 
+             placeholder="Buscar alumnos por nombre, matrícula o facultad..." />
+    </div>
+
+    <button class="add-btn" (click)="openAddModal()">
+      <mat-icon>person_add</mat-icon>
+      <span>Alta de Especialista</span>
+    </button>
+  </div>
+
+  <!-- SECTION A: GENERAL STUDENT DIRECTORY (Visible when no specialist is selected) -->
+  <div class="main-directory-layout" *ngIf="!selectedPsychologist">
+    
+    <!-- Student Table Panel (Full-Width) -->
+    <div class="directory-table-panel full-width">
+      <div class="panel-header">
+        <div class="panel-title-wrapper">
+          <mat-icon class="title-icon blue">people</mat-icon>
+          <span class="panel-title">Directorio General</span>
+        </div>
+        <span class="panel-sub">{{ filteredStudents.length }} alumnos encontrados</span>
+      </div>
+
+      <!-- Notion-style Horizontal Filters Bar -->
+      <div class="notion-horizontal-filters">
+        <!-- Filter 1: Asignación -->
+        <div class="notion-filter-item">
+          <button type="button" class="filter-pill" (click)="toggleFilterDropdown('assignment', $event)" [class.active]="filterNoPsychologist || filterNoNutritionist">
+            <mat-icon class="pill-icon">assignment_ind</mat-icon>
+            <span>Asignación</span>
+            <span class="active-indicator" *ngIf="filterNoPsychologist || filterNoNutritionist"></span>
+            <mat-icon class="chevron-icon">expand_more</mat-icon>
+          </button>
+          <div class="filter-dropdown-menu" *ngIf="activeFilterDropdown === 'assignment'" (click)="$event.stopPropagation()">
+            <label class="dropdown-checkbox">
+              <input type="checkbox" [(ngModel)]="filterNoPsychologist" />
+              <span class="checkbox-box"></span>
+              <span class="label-text">Sin Psicólogo</span>
+            </label>
+            <label class="dropdown-checkbox">
+              <input type="checkbox" [(ngModel)]="filterNoNutritionist" />
+              <span class="checkbox-box"></span>
+              <span class="label-text">Sin Nutriólogo</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Filter 2: Estado Clínico -->
+        <div class="notion-filter-item">
+          <button type="button" class="filter-pill" (click)="toggleFilterDropdown('status', $event)" [class.active]="!selectedStatuses.has('active') || selectedStatuses.size > 1">
+            <mat-icon class="pill-icon">info_outline</mat-icon>
+            <span>Estado Clínico</span>
+            <span class="active-indicator" *ngIf="!selectedStatuses.has('active') || selectedStatuses.size > 1"></span>
+            <mat-icon class="chevron-icon">expand_more</mat-icon>
+          </button>
+          <div class="filter-dropdown-menu" *ngIf="activeFilterDropdown === 'status'" (click)="$event.stopPropagation()">
+            <label class="dropdown-checkbox">
+              <input type="checkbox" [checked]="selectedStatuses.has('active')" (change)="toggleStatusFilter('active')" />
+              <span class="checkbox-box"></span>
+              <span class="label-text">Activo</span>
+            </label>
+            <label class="dropdown-checkbox">
+              <input type="checkbox" [checked]="selectedStatuses.has('dropout')" (change)="toggleStatusFilter('dropout')" />
+              <span class="checkbox-box"></span>
+              <span class="label-text">Baja (Dropout)</span>
+            </label>
+            <label class="dropdown-checkbox">
+              <input type="checkbox" [checked]="selectedStatuses.has('discharged')" (change)="toggleStatusFilter('discharged')" />
+              <span class="checkbox-box"></span>
+              <span class="label-text">Alta Médica</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Filter 3: Facultad -->
+        <div class="notion-filter-item">
+          <button type="button" class="filter-pill" (click)="toggleFilterDropdown('faculty', $event)" [class.active]="selectedFaculties.size > 0">
+            <mat-icon class="pill-icon">school</mat-icon>
+            <span>Facultad</span>
+            <span class="active-indicator" *ngIf="selectedFaculties.size > 0"></span>
+            <mat-icon class="chevron-icon">expand_more</mat-icon>
+          </button>
+          <div class="filter-dropdown-menu scrollable-menu" *ngIf="activeFilterDropdown === 'faculty'" (click)="$event.stopPropagation()">
+            <div class="dropdown-search-box">
+              <mat-icon>search</mat-icon>
+              <input type="text" [(ngModel)]="searchFacultyQuery" placeholder="Buscar facultad..." />
+            </div>
+            <div class="dropdown-scroll-list">
+              <label class="dropdown-checkbox" *ngFor="let fac of filteredFacultiesForFilter">
+                <input type="checkbox" [checked]="selectedFaculties.has(fac)" (change)="toggleFacultyFilter(fac)" />
+                <span class="checkbox-box"></span>
+                <span class="label-text">{{ fac }}</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Filter 4: Ver Especialista (Detalles) -->
+        <div class="notion-filter-item">
+          <button type="button" class="filter-pill" (click)="toggleFilterDropdown('specialist', $event)" [class.active]="selectedSpecialistFilterId !== ''">
+            <mat-icon class="pill-icon">assignment_ind</mat-icon>
+            <span>Ver Especialista</span>
+            <span class="active-indicator" *ngIf="selectedSpecialistFilterId !== ''"></span>
+            <mat-icon class="chevron-icon">expand_more</mat-icon>
+          </button>
+          <div class="filter-dropdown-menu scrollable-menu" *ngIf="activeFilterDropdown === 'specialist'" (click)="$event.stopPropagation()">
+            <div class="dropdown-search-box">
+              <mat-icon>search</mat-icon>
+              <input type="text" [(ngModel)]="searchSpecialistQuery" placeholder="Buscar especialista..." />
+            </div>
+            <div class="dropdown-scroll-list">
+              <!-- Clear option to reset selection -->
+              <button type="button" class="dropdown-option-btn clear-option" (click)="selectSpecialistFilter('')">
+                -- Ninguno (Ver Directorio) --
+              </button>
+              <div class="dropdown-group-label" *ngIf="filteredPsychologistsForFilter.length > 0">Psicólogos</div>
+              <button type="button" class="dropdown-option-btn" *ngFor="let p of filteredPsychologistsForFilter" (click)="selectSpecialistFilter(p.id)">
+                {{ p.name }} ({{ p.patients }}/{{ p.capacity }} pac.)
+              </button>
+              <div class="dropdown-group-label" *ngIf="filteredNutritionistsForFilter.length > 0">Nutriólogos</div>
+              <button type="button" class="dropdown-option-btn" *ngFor="let n of filteredNutritionistsForFilter" (click)="selectSpecialistFilter(n.id)">
+                {{ n.name }} ({{ n.patients }}/{{ n.capacity }} pac.)
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Reset Button -->
+        <button type="button" class="btn-reset-filters" *ngIf="hasActiveFilters()" (click)="clearFilters()">
+          Restablecer
+        </button>
+      </div>
+
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Alumno</th>
+              <th>Facultad</th>
+              <th>Estado</th>
+              <th>Psicólogo Asignado</th>
+              <th>Nutriólogo Asignado</th>
+              <th class="text-right">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let student of filteredStudents">
+              <!-- Identity -->
+              <td>
+                <div class="student-identity">
+                  <div class="student-avatar" [style.background]="'linear-gradient(135deg, #3b82f6, #8b5cf6)'">
+                    <img *ngIf="student.avatar_url" [src]="student.avatar_url" alt="Avatar" />
+                    <span *ngIf="!student.avatar_url">{{ student.name.substring(0, 2) | uppercase }}</span>
+                  </div>
+                  <div class="info">
+                    <h4>{{ student.name }}</h4>
+                    <span class="sub font-mono">{{ student.matricula }}</span>
+                  </div>
+                </div>
+              </td>
+              <!-- Faculty -->
+              <td>
+                <span class="faculty-text">{{ student.faculty }}</span>
+              </td>
+              <!-- Status Badge -->
+              <td>
+                <span class="status-badge" [ngClass]="student.status">
+                  {{ student.status === 'active' ? 'Activo' : student.status === 'dropout' ? 'Baja' : 'Alta Médica' }}
+                </span>
+              </td>
+              <!-- Psychologist assignment (shown as text label) -->
+              <td>
+                <span class="specialist-label" [class.unassigned]="!student.primaryPsychologistId">
+                  {{ getSpecialistName(student.primaryPsychologistId) }}
+                </span>
+              </td>
+              <!-- Nutritionist assignment (shown as text label) -->
+              <td>
+                <span class="specialist-label" [class.unassigned]="!student.primaryNutritionistId">
+                  {{ getSpecialistName(student.primaryNutritionistId) }}
+                </span>
+              </td>
+              <!-- Actions -->
+              <td class="text-right">
+                <div class="action-buttons-group">
+                  <button type="button" class="btn-icon view" (click)="openStudentProfile(student)" title="Ver Perfil">
+                    <mat-icon>visibility</mat-icon>
+                  </button>
+                  <button type="button" class="btn-icon export" (click)="exportPatientDossier(student.id, student.name)" [disabled]="isExporting[student.id]" title="Exportar Dossier PDF">
+                    <mat-icon>{{ isExporting[student.id] ? 'hourglass_empty' : 'picture_as_pdf' }}</mat-icon>
+                  </button>
+                </div>
+              </td>
+            </tr>
+            <tr *ngIf="filteredStudents.length === 0">
+              <td colspan="6" class="empty-state">
+                <mat-icon>people_outline</mat-icon>
+                <p>No se encontraron alumnos que coincidan con los filtros aplicados.</p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION B: SPECIALIST DETAIL VIEW (Visible when a specialist is selected) -->
+  <div class="profile-container" *ngIf="selectedPsychologist">
+    <!-- Back button -->
+    <button class="back-btn" (click)="closeDetail()">
+      <mat-icon>arrow_back</mat-icon> Volver al Directorio General
+    </button>
+
+    <!-- Header Card -->
+    <div class="card header-card">
+      <div class="patient-header">
+        <div class="profile-avatar large">
+          <img *ngIf="selectedPsychologist.avatar_url" [src]="selectedPsychologist.avatar_url" alt="Avatar" />
+          <span *ngIf="!selectedPsychologist.avatar_url">{{ selectedPsychologist.name.substring(0, 2) | uppercase }}</span>
+        </div>
+        <div class="info">
+          <h1>{{ selectedPsychologist.name }}</h1>
+          <p>{{ selectedPsychologist.faculty }} • {{ selectedPsychologist.specialty }}</p>
+          <div class="badges">
+            <span class="badge blue">
+              <mat-icon>email</mat-icon> {{ selectedPsychologist.email }}
+            </span>
+            <span class="badge" [ngClass]="getAlertClass(selectedPsychologist.alert)">
+              {{ getAlertText(selectedPsychologist.alert) }}
+            </span>
+            <span class="badge role" [style.background]="selectedPsychologist.role_id === 4 ? '#d1fae5' : '#e0e7ff'" [style.color]="selectedPsychologist.role_id === 4 ? '#065f46' : '#4338ca'">
+              {{ selectedPsychologist.role_name }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Details layout grid -->
+    <div class="details-layout">
+      <!-- Left Column: Config edit form -->
+      <div class="left-col">
+        <div class="card">
+          <h3><mat-icon>edit</mat-icon> Configuración</h3>
+          
+          <form [formGroup]="editForm" (ngSubmit)="saveProfileChanges()" class="edit-form-style">
+            <div class="form-row-2col">
+              <div class="form-item">
+                <label>Nombre</label>
+                <input type="text" formControlName="firstName" />
+              </div>
+              <div class="form-item">
+                <label>Apellidos</label>
+                <input type="text" formControlName="lastName" />
+              </div>
+            </div>
+
+            <div class="form-item">
+              <label>Facultad Asignada</label>
+              <select formControlName="faculty">
+                <option *ngFor="let f of faculties" [value]="f">{{ f }}</option>
+              </select>
+            </div>
+
+            <div class="form-item">
+              <label>Especialidad Principal</label>
+              <input type="text" formControlName="specialty" />
+            </div>
+
+            <div class="form-item">
+              <label>Capacidad Máxima</label>
+              <input type="number" formControlName="capacity" />
+            </div>
+
+            <button type="submit" class="save-profile-btn" [disabled]="editForm.invalid || isSavingProfile">
+              <mat-icon>save</mat-icon>
+              <span>{{ isSavingProfile ? 'Guardando...' : 'Guardar Cambios' }}</span>
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Right Column: Performance Stats and charts -->
+      <div class="right-col">
+        <div class="card flex-stats-card">
+          <h3><mat-icon>analytics</mat-icon> Rendimiento Operativo</h3>
+          
+          <div class="stats-split-row">
+            <!-- Chart -->
+            <div class="chart-box">
+              <canvas baseChart [data]="barChartData" [options]="barChartOptions" type="bar"></canvas>
+            </div>
+            
+            <!-- Statistics -->
+            <div class="stats-info-box">
+              <div class="capacity-bar-container">
+                <div class="labels">
+                  <span>Nivel de Carga</span>
+                  <span [style.color]="getChargeColor(getPct(selectedPsychologist))" class="val-bold">
+                    {{ getPct(selectedPsychologist) }}% ({{ selectedPsychologist.patients }} / {{ selectedPsychologist.capacity }} Pacientes)
+                  </span>
+                </div>
+                <div class="progress-bar-bg">
+                  <div class="progress-bar-fill" [style.width]="getPct(selectedPsychologist) + '%'" [style.backgroundColor]="getChargeColor(getPct(selectedPsychologist))"></div>
+                </div>
+              </div>
+
+              <div class="metrics-grid">
+                <div class="metric-card">
+                  <span class="lbl">Completadas</span>
+                  <span class="val">{{ selectedPsychologist.sessionsCompleted }}</span>
+                </div>
+                <div class="metric-card">
+                  <span class="lbl">Programadas</span>
+                  <span class="val">{{ selectedPsychologist.sessionsScheduled }}</span>
+                </div>
+                <div class="metric-card">
+                  <span class="lbl">Asistencia</span>
+                  <span class="val green-text">{{ selectedPsychologist.attendanceRate }}%</span>
+                </div>
+                <div class="metric-card">
+                  <span class="lbl">Eficiencia</span>
+                  <span class="val blue-text">{{ getEfficiency(selectedPsychologist) }}%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Assigned patients list -->
+        <div class="card patients-assign-card">
+          <div class="header-row">
+            <h3><mat-icon>people</mat-icon> Pacientes Asignados</h3>
+            
+            <!-- Add patient autocomplete search input -->
+            <div class="assign-search-wrapper">
+              <div class="input-container">
+                <mat-icon>person_add</mat-icon>
+                <input type="text" 
+                       [(ngModel)]="searchStudentQuery" 
+                       (focus)="showAssignDropdown = true"
+                       placeholder="Asignar alumno..." />
+                <button *ngIf="searchStudentQuery" (click)="searchStudentQuery = ''; showAssignDropdown = false" class="close-input-btn">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </div>
+              
+              <!-- Autocomplete suggestions -->
+              <div *ngIf="showAssignDropdown && filteredAvailableStudents.length > 0" class="autocomplete-dropdown">
+                <div *ngFor="let student of filteredAvailableStudents" 
+                     (click)="assignPatient(student.id)"
+                     class="suggestion-item">
+                  <span class="name">{{ student.profiles?.first_name }} {{ student.profiles?.last_name }}</span>
+                  <span class="details">Matrícula: {{ student.matricula }} • {{ student.profiles?.faculty }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="assignedPatients.length === 0" class="empty-patients-box">
+            <mat-icon>people_outline</mat-icon>
+            <p>No hay pacientes asignados a este especialista.</p>
+          </div>
+
+          <div *ngIf="assignedPatients.length > 0" class="patients-grid-list">
+            <div *ngFor="let patient of assignedPatients" class="patient-grid-card">
+              <div class="left">
+                <div class="avatar-circle">
+                  {{ patient.profiles?.first_name?.charAt(0) || 'P' }}{{ patient.profiles?.last_name?.charAt(0) || '' }}
+                </div>
+                <div class="info">
+                  <span class="name">{{ patient.profiles?.first_name }} {{ patient.profiles?.last_name }}</span>
+                  <span class="sub">Matrícula: {{ patient.matricula }} • {{ patient.profiles?.faculty }}</span>
+                </div>
+              </div>
+              
+              <div class="right-actions">
+                <button type="button" class="btn-icon-circle view" (click)="openStudentProfile(patient)" title="Ver Perfil">
+                  <mat-icon>visibility</mat-icon>
+                </button>
+                <button type="button" class="btn-icon-circle export" (click)="downloadPatientDossier(patient.id, patient.profiles?.first_name + ' ' + patient.profiles?.last_name)" [disabled]="isExporting[patient.id]" title="Exportar Dossier PDF">
+                  <mat-icon>{{ isExporting[patient.id] ? 'hourglass_empty' : 'assignment' }}</mat-icon>
+                </button>
+                <button type="button" class="btn-icon-circle delete" (click)="openUnassignModal(patient.id, patient.profiles?.first_name + ' ' + patient.profiles?.last_name)" title="Dar de baja de especialista">
+                  <mat-icon>person_remove</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Calendar & Sessions row -->
+    <div class="calendar-sessions-layout">
+      <!-- Calendar -->
+      <div class="calendar-card-panel">
+        <div class="card">
+          <div class="calendar-header">
+            <h3><mat-icon>calendar_month</mat-icon> Calendario</h3>
+            <div class="month-nav">
+              <button type="button" (click)="prevMonth()"><mat-icon>chevron_left</mat-icon></button>
+              <span class="month-label">{{ currentMonthDate | date:'MMM yyyy':'':'es' | titlecase }}</span>
+              <button type="button" (click)="nextMonth()"><mat-icon>chevron_right</mat-icon></button>
+            </div>
+          </div>
+
+          <div class="calendar-grid">
+            <div class="day-header">D</div>
+            <div class="day-header">L</div>
+            <div class="day-header">M</div>
+            <div class="day-header">M</div>
+            <div class="day-header">J</div>
+            <div class="day-header">V</div>
+            <div class="day-header">S</div>
+
+            <div *ngFor="let day of calendarDays" 
+                 (click)="selectedDate = day.date"
+                 [ngClass]="{
+                   'other-month': !day.isCurrentMonth,
+                   'selected': selectedDate && day.date.toDateString() === selectedDate.toDateString()
+                 }"
+                 class="day-cell">
+              <span class="day-number">{{ day.date.getDate() }}</span>
+              <div *ngIf="day.appointments > 0 || day.blocked" 
+                   [ngClass]="day.blocked ? 'blocked-dot' : 'appt-dot'" 
+                   class="status-dot"></div>
+            </div>
+          </div>
+
+          <div class="calendar-legends">
+            <span class="legend"><span class="dot red"></span> Bloqueado</span>
+            <span class="legend"><span class="dot green"></span> Con Citas</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Daily Sessions -->
+      <div class="sessions-card-panel">
+        <div class="card">
+          <div class="sessions-header">
+            <h3><mat-icon>history</mat-icon> Sesiones del Día</h3>
+            <span class="date-lbl">{{ selectedDate | date:'longDate':'':'es' | titlecase }}</span>
+          </div>
+
+          <div class="sessions-timeline-list">
+            <div *ngIf="appointmentsForSelectedDate.length === 0" class="empty-sessions">
+              <mat-icon>coffee</mat-icon>
+              <p>No hay sesiones programadas para este día.</p>
+            </div>
+
+            <div *ngIf="appointmentsForSelectedDate.length > 0" class="timeline">
+              <div *ngFor="let appt of appointmentsForSelectedDate" class="timeline-item">
+                <span class="time-lbl">{{ appt.scheduled_date | date:'shortTime' }}</span>
+                <div class="timeline-bullet-wrapper">
+                  <div class="bullet"></div>
+                  <div class="line"></div>
+                </div>
+                <div class="session-info-card">
+                  <div class="details">
+                    <span class="patient-name">
+                      {{ appt.patient?.profiles?.first_name }} {{ appt.patient?.profiles?.last_name }}
+                    </span>
+                    <span class="patient-faculty">Facultad: {{ appt.patient?.profiles?.faculty }}</span>
+                  </div>
+                  <div class="badges">
+                    <span class="badge priority" [ngClass]="appt.priority_level">
+                      {{ appt.priority_level === 'Emergency' || appt.priority_level === 'emergency' ? 'Urgencia' : 'Rutina' }}
+                    </span>
+                    <span class="badge status" [ngClass]="appt.status">
+                      {{ appt.status === 'completed' ? 'Completada' : 'Programada' }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: ADD HEALTH PROFESSIONAL -->
+  <div class="modal-overlay" *ngIf="showAddModal" (click)="closeAddModal()">
+    <div class="modal-card form-modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <div class="modal-title-wrapper">
+          <mat-icon>person_add</mat-icon>
+          <h3>Alta Segura de Personal Clínico</h3>
+        </div>
+        <button class="modal-close-btn" (click)="closeAddModal()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Success State -->
+        <div *ngIf="createdUser" class="success-state">
+          <mat-icon>check_circle</mat-icon>
+          <h3>¡Personal Registrado!</h3>
+          <p>Se ha enviado un correo electrónico con un enlace de invitación. El especialista deberá activar su cuenta y definir su contraseña.</p>
+          <div class="actions">
+            <button type="button" class="btn-resend" [disabled]="isResendingEmail || manualEmailSent" (click)="sendEmail()">
+              <mat-icon>{{ manualEmailSent ? 'mark_email_read' : 'email' }}</mat-icon>
+              <span>{{ isResendingEmail ? 'Enviando...' : (manualEmailSent ? '¡Enviado!' : 'Reenviar Invitación') }}</span>
+            </button>
+          </div>
+          <button type="button" class="btn-close" (click)="closeAddModal()">Cerrar y Volver al Panel</button>
+        </div>
+
+        <!-- Form -->
+        <form [formGroup]="addForm" (ngSubmit)="onSubmit()" class="add-form" *ngIf="!createdUser">
+          <div class="role-toggle-group">
+            <button type="button" (click)="addForm.patchValue({role: 3}); selectedRoleToggle = 3" [class.active]="selectedRoleToggle === 3">
+              <mat-icon>psychology</mat-icon> Psicólogo Clínico
+            </button>
+            <button type="button" (click)="addForm.patchValue({role: 4}); selectedRoleToggle = 4" [class.active]="selectedRoleToggle === 4">
+              <mat-icon>eco</mat-icon> Nutriólogo
+            </button>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Nombre *</label>
+              <input type="text" formControlName="firstName" placeholder="Nombre" />
+            </div>
+            <div class="form-group">
+              <label>Apellidos *</label>
+              <input type="text" formControlName="lastName" placeholder="Apellidos" />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Correo Electrónico *</label>
+              <input type="email" formControlName="email" placeholder="ejemplo@mindtrack.com" />
+            </div>
+            <div class="form-group">
+              <label>Cédula Profesional *</label>
+              <input type="text" formControlName="cedula" placeholder="No. de Cédula" />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Cédula / Cód. Empleado *</label>
+              <input type="text" formControlName="matricula" placeholder="M-1002" />
+            </div>
+            <div class="form-group">
+              <label>Facultad Principal *</label>
+              <select formControlName="faculty">
+                <option *ngFor="let fac of faculties" [value]="fac">{{ fac }}</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Especialidad Clínica *</label>
+              <input type="text" formControlName="specialty" placeholder="e.g. Ansiedad, Terapia Familiar" />
+            </div>
+            <div class="form-group">
+              <label>Capacidad de Pacientes *</label>
+              <input type="number" formControlName="capacity" />
+            </div>
+          </div>
+
+          <div class="form-error-wrapper" *ngIf="formErrorMessage">
+            {{ formErrorMessage }}
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="cancel-btn" (click)="closeAddModal()" [disabled]="isSubmitting">Cancelar</button>
+            <button type="submit" class="submit-btn" [disabled]="isSubmitting">
+              <span *ngIf="!isSubmitting">Registrar {{ selectedRoleToggle === 4 ? 'Nutriólogo' : 'Psicólogo' }}</span>
+              <span *ngIf="isSubmitting">Registrando...</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: STUDENT PROFILE -->
+  <div class="modal-overlay" *ngIf="showStudentProfileModal && selectedStudentForProfile" (click)="closeStudentProfile()">
+    <div class="modal-card detail-student-modal" (click)="$event.stopPropagation()">
+      <div class="student-profile-header">
+        <button type="button" (click)="closeStudentProfile()" class="close-btn">
+          <mat-icon>close</mat-icon>
+        </button>
+        <div class="row">
+          <div class="avatar-big">
+            {{ selectedStudentForProfile.name.substring(0, 2) | uppercase }}
+          </div>
+          <div class="info">
+            <h2>{{ selectedStudentForProfile.name }}</h2>
+            <span class="badge-status">Estudiante Activo</span>
+          </div>
+        </div>
+      </div>
+      <div class="student-profile-body">
+        <div class="grid-2col">
+          <div class="info-item">
+            <span class="label">Matrícula</span>
+            <span class="val font-mono">{{ selectedStudentForProfile.matricula }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">Facultad</span>
+            <span class="val">{{ selectedStudentForProfile.faculty }}</span>
+          </div>
+        </div>
+        <div class="info-item cell">
+          <span class="label">Número de Celular</span>
+          <span class="val phone-row">
+            <mat-icon>phone</mat-icon>
+            {{ selectedStudentForProfile.celular || 'No registrado' }}
+          </span>
+        </div>
+
+        <!-- Specialist Assignment Section inside Modal -->
+        <div class="info-item cell specialist-assignment-section">
+          <span class="label-header">Especialistas Tratantes</span>
+          
+          <div class="specialist-display-list" *ngIf="!isEditingSpecialists">
+            <div class="spec-row">
+              <span class="spec-type">Psicólogo:</span>
+              <span class="spec-name" [class.unassigned]="!selectedStudentForProfile.primaryPsychologistId">
+                {{ getSpecialistName(selectedStudentForProfile.primaryPsychologistId) }}
+              </span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-type">Nutriólogo:</span>
+              <span class="spec-name" [class.unassigned]="!selectedStudentForProfile.primaryNutritionistId">
+                {{ getSpecialistName(selectedStudentForProfile.primaryNutritionistId) }}
+              </span>
+            </div>
+            <button type="button" class="btn-edit-specs" (click)="isEditingSpecialists = true">
+              <mat-icon>edit</mat-icon> Editar Especialistas
+            </button>
+          </div>
+
+          <div class="specialist-edit-form" *ngIf="isEditingSpecialists">
+            <div class="select-group custom-assign-dropdown">
+              <label>Psicólogo Asignado</label>
+              <div class="custom-dropdown-container">
+                <button type="button" class="custom-dropdown-trigger" (click)="toggleAssignDropdown('psychologist', $event)" [class.active]="activeAssignDropdown === 'psychologist'">
+                  <span class="trigger-value">{{ getSpecialistName(tempPsychologistId) || '-- Sin psicólogo asignado --' }}</span>
+                  <mat-icon>expand_more</mat-icon>
+                </button>
+                <div class="custom-dropdown-menu" *ngIf="activeAssignDropdown === 'psychologist'" (click)="$event.stopPropagation()">
+                  <div class="dropdown-search-box">
+                    <mat-icon>search</mat-icon>
+                    <input type="text" [(ngModel)]="searchPsychologistAssignQuery" placeholder="Buscar psicólogo..." />
+                  </div>
+                  <div class="dropdown-scroll-list">
+                    <button type="button" class="dropdown-option-btn clear-option" (click)="selectPsychologistAssign('')">
+                      -- Sin psicólogo asignado --
+                    </button>
+                    <button type="button" class="dropdown-option-btn" *ngFor="let p of filteredPsychologistsForAssign" (click)="selectPsychologistAssign(p.id)" [class.selected]="p.id === tempPsychologistId">
+                      {{ p.name }} (Ocupación: {{ p.patients }}/{{ p.capacity }} pac.)
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="select-group custom-assign-dropdown">
+              <label>Nutriólogo Asignado</label>
+              <div class="custom-dropdown-container">
+                <button type="button" class="custom-dropdown-trigger" (click)="toggleAssignDropdown('nutritionist', $event)" [class.active]="activeAssignDropdown === 'nutritionist'">
+                  <span class="trigger-value">{{ getSpecialistName(tempNutritionistId) || '-- Sin nutriólogo asignado --' }}</span>
+                  <mat-icon>expand_more</mat-icon>
+                </button>
+                <div class="custom-dropdown-menu" *ngIf="activeAssignDropdown === 'nutritionist'" (click)="$event.stopPropagation()">
+                  <div class="dropdown-search-box">
+                    <mat-icon>search</mat-icon>
+                    <input type="text" [(ngModel)]="searchNutritionistAssignQuery" placeholder="Buscar nutriólogo..." />
+                  </div>
+                  <div class="dropdown-scroll-list">
+                    <button type="button" class="dropdown-option-btn clear-option" (click)="selectNutritionistAssign('')">
+                      -- Sin nutriólogo asignado --
+                    </button>
+                    <button type="button" class="dropdown-option-btn" *ngFor="let n of filteredNutritionistsForAssign" (click)="selectNutritionistAssign(n.id)" [class.selected]="n.id === tempNutritionistId">
+                      {{ n.name }} (Ocupación: {{ n.patients }}/{{ n.capacity }} pac.)
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-actions-inline">
+              <button type="button" class="btn-cancel-inline" (click)="isEditingSpecialists = false">Cancelar</button>
+              <button type="button" class="btn-save-inline" (click)="saveSpecialistReassignment()">Guardar</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="student-profile-footer" *ngIf="!isEditingSpecialists">
+        <button type="button" (click)="closeStudentProfile()" class="close-btn-footer">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: UNASSIGN CONFIRMATION -->
+  <div class="modal-overlay" *ngIf="showUnassignConfirmModal" (click)="closeUnassignModal()">
+    <div class="modal-card confirm-modal" (click)="$event.stopPropagation()">
+      <div class="warning-title">
+        <mat-icon>warning_amber</mat-icon>
+        <h3>Confirmar Baja</h3>
+      </div>
+      <p class="warning-text">¿Estás seguro de que deseas dar de baja a <strong>{{ studentNameToUnassign }}</strong> de este especialista?</p>
+      <div class="confirm-actions">
+        <button type="button" (click)="closeUnassignModal()" class="btn-cancel">Cancelar</button>
+        <button type="button" (click)="confirmUnassign()" class="btn-danger">Confirmar Baja</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: UNASSIGN SUCCESS -->
+  <div class="modal-overlay" *ngIf="showUnassignSuccessModal" (click)="closeUnassignSuccessModal()">
+    <div class="modal-card success-alert-modal" (click)="$event.stopPropagation()">
+      <mat-icon class="success-icon">check_circle_outline</mat-icon>
+      <h3>Paciente Desvinculado</h3>
+      <p>El estudiante <strong>{{ unassignedStudentName }}</strong> ha sido dado de baja de este especialista con éxito.</p>
+      <button type="button" (click)="closeUnassignSuccessModal()" class="btn-ok">Aceptar</button>
+    </div>
+  </div>
+
+  <!-- Success / Error Status Modal for Reassignment -->
+  <div class="modal-overlay alert-modal-overlay" *ngIf="showReassignStatusModal" (click)="closeReassignStatusModal()">
+    <div class="modal-card alert-modal-card animate-scale-in" (click)="$event.stopPropagation()">
+      <div class="alert-icon-container" [class.success]="reassignStatusSuccess" [class.error]="!reassignStatusSuccess">
+        <mat-icon>{{ reassignStatusSuccess ? 'check_circle' : 'error' }}</mat-icon>
+      </div>
+      
+      <h3>{{ reassignStatusSuccess ? '¡Operación Exitosa!' : '¡Error en la Operación!' }}</h3>
+      <p class="alert-message">{{ reassignStatusMessage }}</p>
+      
+      <div class="alert-modal-actions">
+        <button type="button" class="btn-confirm-alert" [class.success]="reassignStatusSuccess" (click)="closeReassignStatusModal()">
+          Aceptar
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>

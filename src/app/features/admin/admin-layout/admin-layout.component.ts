@@ -21,12 +21,11 @@ export class AdminLayoutComponent {
   navItems = [
     { label: 'Panorama General', sub: 'Métricas de ocupación', icon: 'dashboard', path: './overview' },
     { label: 'Facultades', sub: 'Gestión por divisiones', icon: 'business', path: './faculties' },
-    { label: 'Personal Médico', sub: 'Psicólogos y Nutriólogos', icon: 'assignment_ind', path: './psychologists' },
-    { label: 'Alumnos', sub: 'Asignaciones y seguimiento', icon: 'people', path: './patients' },
+    { label: 'Directorio General', sub: 'Alumnos y Especialistas', icon: 'folder_shared', path: './directory' },
     { label: 'Reportes y Estadísticas', sub: 'Analítica institucional', icon: 'insert_chart', path: './reports' },
     { label: 'Agenda Global', sub: 'Calendario clínico', icon: 'calendar_today', path: './agenda' },
     { label: 'Chat WhatsApp', sub: 'WhatsApp Bidireccional', icon: 'chat', path: './whatsapp-chat' },
-    { label: 'Configuración', sub: 'Mi perfil y foto', icon: 'settings', path: './settings' },
+    { label: 'Configuración de Nota', sub: 'Campos consulta nutrición', icon: 'settings_suggest', path: './nutritionist-fields' },
     { label: 'Imagen Institucional', sub: 'Sello y marca de agua', icon: 'branding_watermark', path: './institutional-branding' },
     { label: 'Alertas', sub: 'Notificaciones del sistema', icon: 'notifications', path: './alerts', badge: 5 }
   ];
@@ -46,6 +45,12 @@ export class AdminLayoutComponent {
 
   toggleSidebar() {
     this.isSidebarCollapsed = !this.isSidebarCollapsed;
+  }
+
+  closeSidebarOnMobile() {
+    if (window.innerWidth <= 768) {
+      this.isSidebarCollapsed = false;
+    }
   }
 
   async logout() {

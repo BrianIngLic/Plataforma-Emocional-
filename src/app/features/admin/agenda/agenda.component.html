@@ -1,73 +1,22 @@
 <div class="agenda-container">
 
   <!-- Action Bar -->
-  <div class="action-bar" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; position: relative;">
-    <div class="week-selector" style="display: flex; align-items: center; gap: 12px;">
-      <button class="today-btn" (click)="resetWeek()" style="background: white; border: 1px solid var(--border-color, #cbd5e1); padding: 8px 16px; border-radius: 8px; font-weight: 600; color: var(--text-primary, #0f172a); cursor: pointer; transition: all 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">Hoy</button>
-      <div style="display: flex; align-items: center; gap: 4px;">
-        <button class="nav-btn" (click)="prevWeek()" style="background: transparent; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 6px; border-radius: 50%; color: var(--text-secondary, #64748b);"><mat-icon>chevron_left</mat-icon></button>
-        <button class="nav-btn" (click)="nextWeek()" style="background: transparent; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 6px; border-radius: 50%; color: var(--text-secondary, #64748b);"><mat-icon>chevron_right</mat-icon></button>
-      </div>
-      <div class="current-week" (click)="toggleCalendarPopover()" style="font-size: 1.35rem; font-weight: 600; color: var(--text-primary, #0f172a); margin-left: 8px; cursor: pointer; display: flex; align-items: center; gap: 8px; padding: 4px 8px; border-radius: 8px; transition: background 0.2s;" [style.background]="showCalendarPopover ? 'rgba(59, 130, 246, 0.1)' : 'transparent'">
-        <span>{{ currentDateRangeString }}</span>
-        <mat-icon style="color: #3b82f6; font-size: 22px; width: 22px; height: 22px;">calendar_today</mat-icon>
-      </div>
+  <div class="action-bar" style="display: flex; justify-content: flex-end; align-items: center; margin-bottom: 20px; gap: 16px;">
+    <!-- Toggle Group (Semana / Día) -->
+    <div class="view-toggle-group">
+      <button class="toggle-btn" [class.active]="calendarViewMode === 'week'" (click)="switchCalendarViewMode('week')">Semana</button>
+      <button class="toggle-btn" [class.active]="calendarViewMode === 'day'" (click)="switchCalendarViewMode('day')">Día</button>
     </div>
 
-    <!-- Calendar Popover Overlay -->
-    <div class="calendar-popover" *ngIf="showCalendarPopover">
-      <div class="calendar-header">
-        <button class="btn-icon" (click)="popoverPrevMonth()"><mat-icon>chevron_left</mat-icon></button>
-        <div class="month-title" (click)="togglePopoverViewMode()">{{ popoverMonthYearString | titlecase }} <span class="arrow">▼</span></div>
-        <button class="btn-icon" (click)="popoverNextMonth()"><mat-icon>chevron_right</mat-icon></button>
-      </div>
+    <button class="import-holidays-btn" (click)="loadHolidays()" [disabled]="isImportingHolidays" style="display: flex; align-items: center; gap: 8px; background: #8b5cf6; color: white; border: none; padding: 8px 16px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: background 0.2s;">
+      <mat-icon>event_busy</mat-icon>
+      <span>{{ isImportingHolidays ? 'Importando...' : 'Importar Festivos Oficiales' }}</span>
+    </button>
 
-      <!-- Vista de Días -->
-      <div class="calendar-grid" *ngIf="popoverViewMode === 'days'">
-        <div class="weekday-header">L</div>
-        <div class="weekday-header">M</div>
-        <div class="weekday-header">X</div>
-        <div class="weekday-header">J</div>
-        <div class="weekday-header">V</div>
-        <div class="weekday-header">S</div>
-        <div class="weekday-header">D</div>
-
-        <div *ngFor="let day of popoverCalendarDays" 
-             class="day-cell"
-             [class.other-month]="!day.isCurrentMonth"
-             [class.selected]="day.date.getTime() === popoverDate.getTime()"
-             (click)="selectSpecificDate(day.date)">
-          <span class="date-number">{{ day.date.getDate() }}</span>
-        </div>
-      </div>
-
-      <!-- Vista de Meses -->
-      <div class="months-grid" *ngIf="popoverViewMode === 'months'">
-        <div class="month-box" *ngFor="let month of monthsList; let i = index" (click)="selectPopoverMonth(i)">
-          {{ month }}
-        </div>
-      </div>
-
-      <!-- Vista de Años -->
-      <div class="years-grid" *ngIf="popoverViewMode === 'years'">
-        <div class="year-box" *ngFor="let year of yearsList" (click)="selectPopoverYear(year)">
-          {{ year }}
-        </div>
-      </div>
-    </div>
-
-    <div style="display: flex; align-items: center; gap: 16px;">
-      <!-- Toggle Group (Semana / Día) -->
-      <div class="view-toggle-group">
-        <button class="toggle-btn" [class.active]="calendarViewMode === 'week'" (click)="switchCalendarViewMode('week')">Semana</button>
-        <button class="toggle-btn" [class.active]="calendarViewMode === 'day'" (click)="switchCalendarViewMode('day')">Día</button>
-      </div>
-
-      <button class="import-holidays-btn" (click)="loadHolidays()" [disabled]="isImportingHolidays" style="display: flex; align-items: center; gap: 8px; background: #8b5cf6; color: white; border: none; padding: 8px 16px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: background 0.2s;">
-        <mat-icon>event_busy</mat-icon>
-        <span>{{ isImportingHolidays ? 'Importando...' : 'Importar Festivos Oficiales' }}</span>
-      </button>
-    </div>
+    <button class="block-day-btn" (click)="openBlockDayModal()" style="display: flex; align-items: center; gap: 8px; background: #ef4444; color: white; border: none; padding: 8px 16px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: background 0.2s;">
+      <mat-icon>block</mat-icon>
+      <span>Bloquear Día Manual</span>
+    </button>
   </div>
 
   <!-- KPI Metrics Strip -->
@@ -126,18 +75,61 @@
     
     <!-- Left: Weekly Grid Table -->
     <div class="panel grid-panel">
-      <div class="panel-header border-b">
-        <div class="panel-title-wrapper">
-          <mat-icon class="title-icon blue">date_range</mat-icon>
-          <span class="panel-title" style="font-size: 1.15rem; font-weight: 600; color: var(--text-primary, #0f172a);">
+      <div class="panel-header border-b" style="position: relative;">
+        <div class="panel-title-wrapper" (click)="toggleCalendarPopover()" style="cursor: pointer; display: flex; align-items: center; gap: 8px; padding: 4px 8px; border-radius: 8px; transition: background 0.2s;" [style.background]="showCalendarPopover ? 'rgba(59, 130, 246, 0.1)' : 'transparent'">
+          <mat-icon class="title-icon blue" style="color: #3b82f6;">date_range</mat-icon>
+          <span class="panel-title" style="font-size: 1.15rem; font-weight: 600; color: var(--text-primary, #f8fafc);">
             {{ currentDateRangeString }}
           </span>
+          <mat-icon style="color: #3b82f6; font-size: 20px; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center;">arrow_drop_down</mat-icon>
         </div>
         
         <div class="week-controls">
           <button (click)="prevWeek()" class="control-btn"><mat-icon>chevron_left</mat-icon></button>
           <button (click)="resetWeek()" class="control-btn text">Hoy</button>
           <button (click)="nextWeek()" class="control-btn"><mat-icon>chevron_right</mat-icon></button>
+        </div>
+
+        <!-- Calendar Popover Overlay (Moved here) -->
+        <div class="calendar-popover" *ngIf="showCalendarPopover" style="top: 100%; left: 0;">
+          <div class="calendar-header">
+            <button class="btn-icon" (click)="popoverPrevMonth(); $event.stopPropagation();"><mat-icon>chevron_left</mat-icon></button>
+            <div class="month-title" (click)="togglePopoverViewMode(); $event.stopPropagation();">{{ popoverMonthYearString | titlecase }} <span class="arrow">▼</span></div>
+            <button class="btn-icon" (click)="popoverNextMonth(); $event.stopPropagation();"><mat-icon>chevron_right</mat-icon></button>
+          </div>
+
+          <!-- Vista de Días -->
+          <div class="calendar-grid" *ngIf="popoverViewMode === 'days'">
+            <div class="weekday-header">L</div>
+            <div class="weekday-header">M</div>
+            <div class="weekday-header">X</div>
+            <div class="weekday-header">J</div>
+            <div class="weekday-header">V</div>
+            <div class="weekday-header">S</div>
+            <div class="weekday-header">D</div>
+
+            <div *ngFor="let day of popoverCalendarDays" 
+                 class="day-cell"
+                 [class.other-month]="!day.isCurrentMonth"
+                 [class.selected]="day.date.getTime() === popoverDate.getTime()"
+                 (click)="selectSpecificDate(day.date); $event.stopPropagation();">
+              <span class="date-number">{{ day.date.getDate() }}</span>
+            </div>
+          </div>
+
+          <!-- Vista de Meses -->
+          <div class="months-grid" *ngIf="popoverViewMode === 'months'">
+            <div class="month-box" *ngFor="let month of monthsList; let i = index" (click)="selectPopoverMonth(i); $event.stopPropagation();">
+              {{ month }}
+            </div>
+          </div>
+
+          <!-- Vista de Años -->
+          <div class="years-grid" *ngIf="popoverViewMode === 'years'">
+            <div class="year-box" *ngFor="let year of yearsList" (click)="selectPopoverYear(year); $event.stopPropagation();">
+              {{ year }}
+            </div>
+          </div>
         </div>
       </div>
 
@@ -166,19 +158,27 @@
             <tr *ngFor="let hour of hours; let hi = index">
               <td class="time-cell">{{ hour }}</td>
               <td *ngFor="let d of days; let di = index" class="appt-cell">
-                <!-- If appointment exists -->
-                <button 
-                  *ngIf="getApptAt(di, hi) as appt" 
-                  (click)="selectAppt(appt)"
-                  class="appt-block"
-                  [ngClass]="getStatusClass(appt.status)"
-                >
-                  <p class="patient-name">{{ appt.patient }}</p>
-                  <p class="psychologist-name">{{ appt.psychologist.split(' ')[1] }}</p>
-                </button>
-                
-                <!-- Blank cell -->
-                <div *ngIf="!getApptAt(di, hi)" class="empty-cell"></div>
+                <!-- If day is blocked -->
+                <ng-container *ngIf="weekDays[di]?.isBlocked; else normalCell">
+                  <div class="blocked-cell-placeholder" style="background: rgba(239, 68, 68, 0.05); height: 100%; display: flex; align-items: center; justify-content: center; color: #ef4444; font-size: 0.7rem; font-weight: 500; min-height: 40px; border-radius: 6px;" [title]="weekDays[di].blockedReason">
+                    Bloqueado
+                  </div>
+                </ng-container>
+                <ng-template #normalCell>
+                  <!-- If appointment exists -->
+                  <button 
+                    *ngIf="getApptAt(di, hi) as appt" 
+                    (click)="selectAppt(appt)"
+                    class="appt-block"
+                    [ngClass]="isAlertAppointment(appt) ? 'appt-past-alert' : getStatusClass(appt.status)"
+                  >
+                    <p class="patient-name">{{ appt.patient }}</p>
+                    <p class="psychologist-name">{{ appt.psychologist.split(' ')[1] }}</p>
+                  </button>
+                  
+                  <!-- Blank cell -->
+                  <div *ngIf="!getApptAt(di, hi)" class="empty-cell"></div>
+                </ng-template>
               </td>
             </tr>
           </tbody>
@@ -208,20 +208,28 @@
             <tr *ngFor="let hour of hours; let hi = index">
               <td class="time-cell">{{ hour }}</td>
               <td class="appt-cell" style="width: 90%;">
-                <!-- If appointment exists -->
-                <button 
-                  *ngIf="getApptAt(activeDayIndex, hi) as appt" 
-                  (click)="selectAppt(appt)"
-                  class="appt-block"
-                  [ngClass]="getStatusClass(appt.status)"
-                  style="max-width: 400px; margin: 0 auto;"
-                >
-                  <p class="patient-name">{{ appt.patient }}</p>
-                  <p class="psychologist-name">{{ appt.psychologist }} — {{ appt.faculty }}</p>
-                </button>
-                
-                <!-- Blank cell -->
-                <div *ngIf="!getApptAt(activeDayIndex, hi)" class="empty-cell"></div>
+                <!-- If day is blocked -->
+                <ng-container *ngIf="weekDays[activeDayIndex]?.isBlocked; else normalDayCell">
+                  <div class="blocked-cell-placeholder" style="background: rgba(239, 68, 68, 0.05); height: 100%; display: flex; align-items: center; justify-content: center; color: #ef4444; font-size: 0.85rem; font-weight: 600; padding: 12px; border-radius: 6px;" [title]="weekDays[activeDayIndex].blockedReason">
+                    Día Bloqueado Institucionalmente: {{ weekDays[activeDayIndex].blockedReason }}
+                  </div>
+                </ng-container>
+                <ng-template #normalDayCell>
+                  <!-- If appointment exists -->
+                  <button 
+                    *ngIf="getApptAt(activeDayIndex, hi) as appt" 
+                    (click)="selectAppt(appt)"
+                    class="appt-block"
+                    [ngClass]="isAlertAppointment(appt) ? 'appt-past-alert' : getStatusClass(appt.status)"
+                    style="max-width: 400px; margin: 0 auto;"
+                  >
+                    <p class="patient-name">{{ appt.patient }}</p>
+                    <p class="psychologist-name">{{ appt.psychologist }} — {{ appt.faculty }}</p>
+                  </button>
+                  
+                  <!-- Blank cell -->
+                  <div *ngIf="!getApptAt(activeDayIndex, hi)" class="empty-cell"></div>
+                </ng-template>
               </td>
             </tr>
           </tbody>
@@ -258,50 +266,85 @@
         </div>
       </div>
 
-      <!-- Selected Appointment Detail Card -->
-      <div class="panel detail-panel" *ngIf="selectedAppt">
-        <div class="panel-header border-b">
-          <span class="panel-title">Detalle de la Cita</span>
-          <button class="close-detail-btn" (click)="selectedAppt = null">Cerrar</button>
-        </div>
 
-        <div class="detail-body">
-          <div class="detail-row">
-            <small>Paciente</small>
-            <span>{{ selectedAppt.patient }}</span>
-          </div>
-          <div class="detail-row">
-            <small>Psicólogo</small>
-            <span>{{ selectedAppt.psychologist }}</span>
-          </div>
-          <div class="detail-row">
-            <small>Facultad</small>
-            <span>{{ selectedAppt.faculty }}</span>
-          </div>
-          <div class="detail-row">
-            <small>Tipo de Consulta</small>
-            <span>{{ selectedAppt.type }}</span>
-          </div>
-          <div class="detail-row">
-            <small>Día / Hora</small>
-            <span>{{ days[selectedAppt.day] }} a las {{ hours[selectedAppt.hour] }}</span>
-          </div>
-          <div class="detail-row split">
-            <small>Estado</small>
-            <span class="badge inline" [ngClass]="getStatusClass(selectedAppt.status)">
-              {{ getStatusText(selectedAppt.status) }}
-            </span>
-          </div>
-        </div>
-      </div>
-
-      <div class="panel empty-detail-panel" *ngIf="!selectedAppt">
-        <mat-icon>access_time</mat-icon>
-        <p>Selecciona una cita del calendario para ver sus detalles específicos.</p>
-      </div>
 
     </div>
 
   </div>
 
+</div>
+
+<!-- Modal Bloquear Día Manual -->
+<div class="modal-backdrop" *ngIf="showBlockDayModal" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 1000;">
+  <div class="modal-card" style="background: var(--bg-card, #1e293b); border: 1px solid var(--border-color, rgba(255,255,255,0.08)); padding: 24px; border-radius: 16px; width: 400px; max-width: 90%; display: flex; flex-direction: column; gap: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.3);">
+    <h3 style="margin: 0; font-size: 1.15rem; font-weight: 600; color: var(--text-primary, #f8fafc); display: flex; align-items: center; gap: 8px;">
+      <mat-icon style="color: #ef4444;">block</mat-icon>
+      Bloquear Día de Forma Global
+    </h3>
+    
+    <div style="display: flex; flex-direction: column; gap: 6px;">
+      <label style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary, #94a3b8);">Fecha a Bloquear</label>
+      <input type="date" [(ngModel)]="blockDayDate" style="background: rgba(0,0,0,0.15); border: 1px solid var(--border-color, rgba(255,255,255,0.1)); padding: 10px; border-radius: 8px; color: var(--text-primary, #f8fafc); font-family: inherit; font-size: 0.85rem; outline: none; width: 100%; box-sizing: border-box;" />
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 6px;">
+      <label style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary, #94a3b8);">Motivo / Descripción</label>
+      <input type="text" [(ngModel)]="blockDayReason" placeholder="Ej. Consejo Universitario, Contingencia..." style="background: rgba(0,0,0,0.15); border: 1px solid var(--border-color, rgba(255,255,255,0.1)); padding: 10px; border-radius: 8px; color: var(--text-primary, #f8fafc); font-family: inherit; font-size: 0.85rem; outline: none; width: 100%; box-sizing: border-box;" />
+    </div>
+
+    <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 8px;">
+      <button (click)="closeBlockDayModal()" style="background: transparent; border: 1px solid var(--border-color, rgba(255,255,255,0.1)); color: var(--text-secondary, #94a3b8); padding: 8px 16px; border-radius: 8px; font-weight: 600; cursor: pointer;">Cancelar</button>
+      <button (click)="saveBlockDayException()" [disabled]="!blockDayDate || !blockDayReason || isSavingBlockDay" style="background: #ef4444; border: none; color: white; padding: 8px 16px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: background 0.2s;">
+        {{ isSavingBlockDay ? 'Bloqueando...' : 'Bloquear Día' }}
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Detalle de la Cita -->
+<div class="modal-backdrop" *ngIf="selectedAppt" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 1000;">
+  <div class="modal-card" style="background: var(--bg-card, #1e293b); border: 1px solid var(--border-color, rgba(255,255,255,0.08)); padding: 24px; border-radius: 16px; width: 450px; max-width: 90%; display: flex; flex-direction: column; gap: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.3);">
+    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color, rgba(255,255,255,0.08)); padding-bottom: 12px;">
+      <h3 style="margin: 0; font-size: 1.2rem; font-weight: 600; color: var(--text-primary, #f8fafc); display: flex; align-items: center; gap: 8px;">
+        <mat-icon style="color: #3b82f6;">calendar_today</mat-icon>
+        Detalle de la Cita
+      </h3>
+      <button (click)="selectedAppt = null" style="background: transparent; border: none; color: var(--text-secondary, #94a3b8); cursor: pointer; display: flex; align-items: center;"><mat-icon>close</mat-icon></button>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 14px;">
+      <div style="display: flex; flex-direction: column; gap: 4px;">
+        <small style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary, #94a3b8); text-transform: uppercase;">Paciente</small>
+        <span style="font-size: 0.95rem; font-weight: 500; color: var(--text-primary, #f8fafc);">{{ selectedAppt.patient }}</span>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 4px;">
+        <small style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary, #94a3b8); text-transform: uppercase;">Psicólogo</small>
+        <span style="font-size: 0.95rem; font-weight: 500; color: var(--text-primary, #f8fafc);">{{ selectedAppt.psychologist }}</span>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 4px;">
+        <small style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary, #94a3b8); text-transform: uppercase;">Facultad</small>
+        <span style="font-size: 0.95rem; font-weight: 500; color: var(--text-primary, #f8fafc);">{{ selectedAppt.faculty }}</span>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 4px;">
+        <small style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary, #94a3b8); text-transform: uppercase;">Tipo de Consulta</small>
+        <span style="font-size: 0.95rem; font-weight: 500; color: var(--text-primary, #f8fafc); text-transform: capitalize;">{{ selectedAppt.type }}</span>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 4px;">
+        <small style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary, #94a3b8); text-transform: uppercase;">Día / Hora</small>
+        <span style="font-size: 0.95rem; font-weight: 500; color: var(--text-primary, #f8fafc);">{{ days[selectedAppt.day] }} a las {{ hours[selectedAppt.hour] }}</span>
+      </div>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 6px; background: rgba(255,255,255,0.02); padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);">
+        <small style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary, #94a3b8); text-transform: uppercase;">Estado</small>
+        <span class="badge inline" [ngClass]="isAlertAppointment(selectedAppt) ? 'appt-past-alert' : getStatusClass(selectedAppt.status)" style="font-size: 0.8rem; padding: 4px 8px; border-radius: 6px; font-weight: 600;">
+          {{ isAlertAppointment(selectedAppt) ? 'Alerta (Sin Nota / Inasistencia)' : getStatusText(selectedAppt.status) }}
+        </span>
+      </div>
+    </div>
+
+    <div style="display: flex; justify-content: flex-end; margin-top: 8px;">
+      <button (click)="selectedAppt = null" style="background: var(--primary-color, #3b82f6); border: none; color: white; padding: 8px 24px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: background 0.2s;">
+        Aceptar
+      </button>
+    </div>
+  </div>
 </div>

@@ -63,7 +63,11 @@ El sistema está compuesto por un Frontend Angular, un Backend PostgREST (Postgr
 
 ### Skill 8: Módulo de Administración (Core System)
 - Interfaz exclusiva para el rol 'Admin'.
-- Panel de control para gestionar altas, bajas y modificaciones del personal clínico (Psicólogos).
+- **Directorio General Unificado:** Consolidación de alumnos y especialistas (psicólogos y nutriólogos) en una sola vista dinámica (`/admin/directory`).
+  - **Buscador y Selector Dinámico:** Filtro de alumnos por búsqueda de texto y selector de especialista en la cabecera superior. Al elegir un especialista, se despliega su vista detallada (perfil, calendario, gráficos, pacientes asignados).
+  - **Filtros Notion-like:** Barra de filtros interactivos mediante checkboxes para filtrar alumnos por asignación ("Sin Psicólogo", "Sin Nutriólogo"), por división de facultad y por estado clínico ("Activo", "Baja", "Alta Médica").
+  - **Reasignación Inline:** Selectores combobox embebidos directamente en la tabla para asignar o cambiar en tiempo real los especialistas asignados a cada alumno.
+- Panel de control para gestionar altas, bajas y modificaciones del personal clínico (Psicólogos y Nutriólogos) mediante modal de registro seguro.
 - Asignación manual de pacientes (Estudiantes) a psicólogos específicos (opcional, dependiendo de la política de la clínica).
 - **Gestión de Activos Institucionales:** Carga protegida del logotipo oficial y marca de agua de la institución hacia el bucket de Supabase Storage `institutional_assets`.
 
@@ -118,13 +122,9 @@ El sistema está compuesto por un Frontend Angular, un Backend PostgREST (Postgr
   - El encabezado superior del PDF incluye una franja azul marino de **30 mm de alto** que presenta el logo oficial de la universidad aumentado a **2 cm (20 mm)**, con su color convertido dinámicamente a blanco puro sobre fondo azul, seguido del nombre oficial de la institución centrado abajo. Este encabezado se repite en cada página nueva.
   - Se dibuja una marca de agua central del logo con opacidad del 5% y el pie de página `"Powered by Amati"`.
 
----
-
 ### Skill 13: Sistema de Evaluación Post-Sesión — FIT Gamificado (Spect Kit + Diana)
 
 **Objetivo:** Construir un sistema de retroalimentación clínica post-sesión fundamentado en el marco de **Feedback-Informed Treatment (FIT)** y la **Session Rating Scale (SRS)** de Duncan et al., que permita al alumno/paciente evaluar cada sesión de manera lúdica e interactiva mediante gamificación, y proporcione al especialista (psicólogo/nutriólogo) y al administrador métricas accionables de alianza terapéutica con alertas tempranas de ruptura.
-
----
 
 #### 13.1. Fundamentación Clínica (Instrumentos Base)
 
@@ -213,3 +213,18 @@ Pesos clínicos (suma = 1.0):
 - `core/services/session-evaluation.service.ts` — CRUD de evaluaciones
 - `features/psychologist/` y `features/nutritionist/` — Nuevo badge de evaluación y alertas en perfil de paciente y agenda
 - `features/admin/psychologists/` — Columna "Evaluación" ya existente conectada a datos reales
+
+### Skill 14: Responsividad Móvil y Optimización de Layouts
+- **Sidebar Drawer (Overlay):** En pantallas con un ancho inferior a 768px (móviles), los sidebars de estudiantes y psicólogos deben transformarse en paneles desplegables (drawers) que se muestren encima del contenido principal. Se agregará un fondo semi-transparente (backdrop overlay) y un gatillo flotante (hamburger menu) para abrirlo y cerrarlo de forma amigable.
+- **Simplificación del Chat:** Eliminar o esconder el encabezado (`.chat-header`) en móviles para dar prioridad al historial de mensajes.
+- **Botón Unificado "+":** En la barra de entrada del chat para dispositivos móviles, unificar los botones de acciones de adjuntos/imágenes/emojis en un único botón "+" ubicado a la izquierda y pegado directamente al input sin separación. Este botón desplegará un menú flotante para las acciones secundarias.
+- **Prevención de Rupturas por Teclado:** Evitar que el teclado virtual en navegadores móviles rompa el layout visual fijando el contenedor `:host` con `position: fixed; inset: 0` y utilizando `100dvh` (Dynamic Viewport Height).
+- **Alineación Vertical:** Apilar las columnas y grillas de componentes complejos (como el Diario Emocional y las secciones del Psicólogo) para que queden legibles en pantallas estrechas.
+
+### Skill 15: Animaciones Premium y Micro-Interacciones
+- **Transición de Entrada de Páginas (Page Transitions):** Todas las vistas principales del sistema (diario, chat, triage, agenda, etc.) se deslizarán suavemente hacia arriba y se desvanecerán al cargarse usando una curva `cubic-bezier(0.16, 1, 0.3, 1)` para un efecto fluido y premium.
+- **Entrada Dinámica de Mensajes:** Las burbujas del chat no aparecerán bruscamente; en su lugar, se animarán con una escala sutil y elevación hacia arriba cuando se agreguen al flujo.
+- **Micro-interacciones en Botones y Tarjetas:**
+  - Los botones de estado de ánimo (`.mood-btn`) y botones de envío escalarán ligeramente hacia arriba (`scale(1.03)`) al pasar el ratón por encima, y se comprimirán (`scale(0.97)`) al ser presionados.
+  - Las tarjetas de estadísticas y calendario se elevarán sutilmente y generarán una sombra profunda (`transform: translateY(-4px)`) en hover.
+  - Los ítems de navegación lateral (`.nav-item`) se desplazarán lateralmente hacia la derecha (`transform: translateX(4px)`) al pasar el cursor para guiar el foco visual.

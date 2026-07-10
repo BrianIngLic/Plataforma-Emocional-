@@ -40,6 +40,7 @@ export class DashboardComponent implements OnInit {
     { label: 'Dime palabras de calma y compasión', icon: 'spa' },
     { label: 'Ayúdame con un ejercicio rápido', icon: 'bubble_chart' }
   ];
+  showMobileActions = false;
 
   @ViewChild('chatScroll') private chatScrollContainer!: ElementRef;
 
@@ -56,11 +57,16 @@ export class DashboardComponent implements OnInit {
     await this.gamificationService.loadGamificationData();
   }
 
+  toggleMobileActions() {
+    this.showMobileActions = !this.showMobileActions;
+  }
+
   sendMessage() {
     if (this.inputText.trim()) {
       this.chatService.sendMessage(this.inputText);
       this.gamificationService.registerActivity('amati');
       this.inputText = '';
+      this.showMobileActions = false;
       // Incrementar sutilmente el nivel de calma de forma gamificada
       if (this.calmLevel < 98) {
         this.calmLevel += 2;
@@ -71,6 +77,7 @@ export class DashboardComponent implements OnInit {
   sendSuggestion(suggestion: string) {
     this.chatService.sendMessage(suggestion);
     this.gamificationService.registerActivity('amati');
+    this.showMobileActions = false;
     if (this.calmLevel < 98) {
       this.calmLevel += 2;
     }

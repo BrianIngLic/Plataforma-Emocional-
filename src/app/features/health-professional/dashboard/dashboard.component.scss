@@ -1,5 +1,12 @@
 :host {
   display: block;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+*, *:before, *:after {
+  box-sizing: border-box;
 }
 
 .dashboard-container {
@@ -111,3 +118,9 @@
 .text-blue { color: #0ea5e9; }
 .text-green { color: #10b981; }
 .text-amber { color: #f59e0b; }
+
+@media (max-width: 767px) {
+  .dashboard-container {
+    padding: 4rem 1rem 1rem 1rem !important;
+  }
+}

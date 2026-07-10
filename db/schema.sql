@@ -166,6 +166,33 @@ CREATE TABLE public.health_professional_exceptions (
 -- =========================================================================================
 -- NUTRICIÓN
 -- =========================================================================================
+CREATE TABLE public.campos_formulario (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    bloque TEXT NOT NULL,
+    clave TEXT NOT NULL UNIQUE,
+    etiqueta TEXT NOT NULL,
+    tipo_campo TEXT NOT NULL CHECK (tipo_campo IN ('text', 'number', 'boolean', 'select', 'rich-text', 'food-table')),
+    orden INTEGER NOT NULL DEFAULT 0,
+    ayuda TEXT,
+    opciones JSONB NOT NULL DEFAULT '[]'::jsonb,
+    activo BOOLEAN NOT NULL DEFAULT TRUE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE public.consultas_nutricion (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    student_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+    professional_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+    appointment_id UUID REFERENCES public.appointments(id) ON DELETE SET NULL,
+    fecha_consulta TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    calorias_totales INTEGER NOT NULL DEFAULT 0 CHECK (calorias_totales >= 0),
+    datos_especificos JSONB NOT NULL DEFAULT '{}'::jsonb,
+    consumo_semanal JSONB NOT NULL DEFAULT '{}'::jsonb,
+    recordatorio_24h JSONB NOT NULL DEFAULT '{}'::jsonb,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
 CREATE TABLE public.nutrition_logs (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     student_id UUID REFERENCES public.users(id) ON DELETE CASCADE,
@@ -189,8 +216,43 @@ CREATE TABLE public.food_items (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+INSERT INTO public.campos_formulario (bloque, clave, etiqueta, tipo_campo, orden, ayuda, opciones, activo)
+VALUES
+    ('Datos específicos', 'problemas_gastrointestinales', 'Problemas gastrointestinales', 'text', 10, 'Dolor, reflujo, estreñimiento u otros malestares digestivos.', '[]'::jsonb, TRUE),
+    ('Datos específicos', 'alergia_intolerancia', 'Alergias o intolerancias', 'text', 20, 'Alergias alimentarias o intolerancias relevantes.', '[]'::jsonb, TRUE),
+    ('Datos específicos', 'enfermedad_padecimiento', 'Enfermedad o padecimiento', 'text', 30, 'Condición clínica que impacta la alimentación.', '[]'::jsonb, TRUE),
+    ('Datos específicos', 'medicamentos_consumo', 'Medicamentos en consumo', 'text', 40, 'Medicamentos o suplementos actuales.', '[]'::jsonb, TRUE),
+    ('Datos específicos', 'alimentos_desagrado', 'Alimentos de desagrado', 'text', 50, 'Alimentos que el paciente evita.', '[]'::jsonb, TRUE),
+    ('Datos específicos', 'actividad_fisica', 'Actividad física', 'text', 60, 'Tipo de actividad física habitual.', '[]'::jsonb, TRUE),
+    ('Datos específicos', 'dias_actividad', 'Días de actividad por semana', 'number', 70, 'Número de días con actividad física semanal.', '[]'::jsonb, TRUE),
+    ('Datos específicos', 'tiempo_actividad', 'Tiempo de actividad por día (min)', 'number', 80, 'Minutos aproximados por sesión.', '[]'::jsonb, TRUE),
+    ('Datos específicos', 'comidas_al_dia', 'Comidas al día', 'number', 90, 'Número de comidas principales.', '[]'::jsonb, TRUE),
+    ('Datos específicos', 'colaciones_al_dia', 'Colaciones al día', 'number', 100, 'Número de colaciones.', '[]'::jsonb, TRUE),
+    ('Datos específicos', 'comidas_mantener', 'Comidas que desea mantener', 'text', 110, 'Hábitos o platillos que quiere conservar.', '[]'::jsonb, TRUE),
+    ('Datos específicos', 'consumo_agua', 'Consumo de agua (L)', 'number', 120, 'Litros de agua al día o promedio.', '[]'::jsonb, TRUE),
+    ('Datos específicos', 'tiempo_sueno', 'Tiempo de sueño (hrs)', 'number', 130, 'Horas promedio de sueño por noche.', '[]'::jsonb, TRUE),
+    ('Datos específicos', 'antecedentes_familiares', 'Antecedentes Clínicos Familiares', 'rich-text', 135, 'Antecedentes clínicos familiares.', '[]'::jsonb, TRUE),
+    ('Datos específicos', 'comentarios_clinicos', 'Comentarios clínicos', 'rich-text', 140, 'Observaciones libres del nutriólogo.', '[]'::jsonb, TRUE),
+    ('Consumo semanal', 'verduras', 'Verduras', 'food-table', 210, 'Registro de consumo semanal.', '[]'::jsonb, TRUE),
+    ('Consumo semanal', 'frutas', 'Frutas', 'food-table', 220, 'Registro de consumo semanal.', '[]'::jsonb, TRUE),
+    ('Consumo semanal', 'lacteos', 'Lácteos', 'food-table', 230, 'Registro de consumo semanal.', '[]'::jsonb, TRUE),
+    ('Consumo semanal', 'cereales', 'Cereales', 'food-table', 240, 'Registro de consumo semanal.', '[]'::jsonb, TRUE),
+    ('Consumo semanal', 'leguminosas', 'Leguminosas', 'food-table', 250, 'Registro de consumo semanal.', '[]'::jsonb, TRUE),
+    ('Consumo semanal', 'azucar', 'Azúcar', 'food-table', 260, 'Registro de consumo semanal.', '[]'::jsonb, TRUE),
+    ('Consumo semanal', 'aoa', 'AOA', 'food-table', 270, 'Registro de consumo semanal.', '[]'::jsonb, TRUE),
+    ('Consumo semanal', 'aceites', 'Aceites y grasas', 'food-table', 280, 'Registro de consumo semanal.', '[]'::jsonb, TRUE),
+    ('Consumo semanal', 'comentarios_semanales', 'Comentarios semanales', 'rich-text', 290, 'Observaciones sobre la frecuencia alimentaria.', '[]'::jsonb, TRUE)
+ON CONFLICT (clave) DO UPDATE
+SET bloque = EXCLUDED.bloque,
+    etiqueta = EXCLUDED.etiqueta,
+    tipo_campo = EXCLUDED.tipo_campo,
+    orden = EXCLUDED.orden,
+    ayuda = EXCLUDED.ayuda,
+    opciones = EXCLUDED.opciones,
+    activo = EXCLUDED.activo;
+
 -- =========================================================================================
--- DIARIO
+-- DIARIO EMOCIONAL
 -- =========================================================================================
 CREATE TABLE public.diary_entries (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -200,6 +262,35 @@ CREATE TABLE public.diary_entries (
     high_risk BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+-- =========================================================================================
+-- DIARIO ALIMENTARIO PERSONAL (Automonitoreo emocional-nutricional del estudiante)
+-- Tabla separada de nutrition_logs (módulo clínico del nutriólogo con macros calculados).
+-- Esta tabla registra la experiencia subjetiva del estudiante: hora de comida,
+-- estado emocional antes/después y descripción libre de lo consumido.
+-- =========================================================================================
+CREATE TABLE public.food_diary_entries (
+    id          UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    student_id  UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+    diary_date  DATE NOT NULL DEFAULT CURRENT_DATE,
+    meal_time   TIME NOT NULL,
+    mood_before TEXT NOT NULL,
+    what_i_ate  TEXT NOT NULL,   -- Texto enriquecido (HTML de Quill)
+    mood_after  TEXT NOT NULL,
+    created_at  TIMESTAMPTZ DEFAULT NOW(),
+    updated_at  TIMESTAMPTZ DEFAULT NOW()
+);
+
+ALTER TABLE public.food_diary_entries ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "food_diary_own"
+    ON public.food_diary_entries
+    FOR ALL
+    USING  (auth.uid() = student_id)
+    WITH CHECK (auth.uid() = student_id);
+
+CREATE INDEX idx_food_diary_student_date
+    ON public.food_diary_entries(student_id, diary_date DESC);
 
 -- =========================================================================================
 -- COMUNICACIÓN DUAL Y ENRUTAMIENTO BIDIRECCIONAL (WEB PUSH & WHATSAPP)
@@ -305,6 +396,8 @@ ALTER TABLE public.student_clinical_records ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.chats ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.messages ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.appointments ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.campos_formulario ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.consultas_nutricion ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.diary_entries ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.health_professional_settings ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.health_professional_exceptions ENABLE ROW LEVEL SECURITY;
@@ -331,9 +424,39 @@ CREATE POLICY admin_manage_profiles ON public.profiles FOR ALL USING (
 );
 
 -- Nota Normativa HIPAA Minimum Necessary & NOM-024:
--- Para garantizar el estricto confinamiento de RLS, la Jefatura/Admin (role_id = 1) NO tiene ninguna política
--- asignada en las tablas student_clinical_records, chats, messages, diary_entries, ni nutrition_logs.
--- Por diseño arquitectónico de PostgreSQL RLS, cualquier intento de acceso a notas SOAP o PHI será rechazado.
+-- El acceso al módulo nutricional queda limitado a Nutriólogo, paciente propietario y Admin.
+-- Las tablas student_clinical_records, chats, messages y diary_entries siguen sin políticas de lectura para Admin.
+
+-- Nutrición: catálogo de campos solo para Admin y Nutriólogo
+CREATE POLICY campos_formulario_select ON public.campos_formulario
+    FOR SELECT USING (public.get_auth_role() IN (1, 4));
+
+CREATE POLICY campos_formulario_admin_all ON public.campos_formulario
+    FOR ALL USING (public.get_auth_role() = 1)
+    WITH CHECK (public.get_auth_role() = 1);
+
+-- Nutrición: consultas inmutables, visibles para paciente, nutriólogo y admin
+CREATE POLICY consultas_nutricion_select ON public.consultas_nutricion
+    FOR SELECT USING (
+        student_id = auth.uid()
+        OR professional_id = auth.uid()
+        OR public.get_auth_role() = 1
+    );
+
+CREATE POLICY consultas_nutricion_insert ON public.consultas_nutricion
+    FOR INSERT WITH CHECK (
+        professional_id = auth.uid()
+        OR public.get_auth_role() = 1
+    );
+
+CREATE POLICY consultas_nutricion_admin_all ON public.consultas_nutricion
+    FOR ALL USING (public.get_auth_role() = 1)
+    WITH CHECK (public.get_auth_role() = 1);
+
+CREATE INDEX idx_campos_formulario_bloque_activo ON public.campos_formulario (bloque, activo, orden);
+CREATE INDEX idx_consultas_nutricion_student_fecha ON public.consultas_nutricion (student_id, fecha_consulta DESC);
+CREATE INDEX idx_consultas_nutricion_professional_fecha ON public.consultas_nutricion (professional_id, fecha_consulta DESC);
+CREATE UNIQUE INDEX uq_consultas_nutricion_appointment_id ON public.consultas_nutricion (appointment_id) WHERE appointment_id IS NOT NULL;
 
 -- Política de Auditoría: Solo inserción pública autenticada, solo lectura para Admin (Jefatura)
 CREATE POLICY audit_insert ON public.audit_logs FOR INSERT TO authenticated WITH CHECK (true);

@@ -39,6 +39,9 @@ export class EmergencyNotificationService {
   private supabase = inject(SupabaseService).supabase;
   private authService = inject(AuthService);
 
+  /** Evita doble suscripción al Realtime cuando ngOnInit se ejecuta más de una vez */
+  private realtimeInitialized = false;
+
   /**
    * Wrapper method called directly from dialog confirmation
    */
@@ -173,55 +176,147 @@ export class EmergencyNotificationService {
         
         // CUMPLIMIENTO HIPAA Y NOM-024: Prevención de fuga de datos clínicos en canales comerciales (Meta WhatsApp Cloud API)
         // Sanitizamos los detalles para asegurar que no se envíe información médica o diagnóstica sensible a través de WhatsApp.
-        const sanitizedDetails = details.replace(/<[^>]*>?/gm, '').substring(0, 200);
-        const whatsappPayload = {
-          messaging_product: 'whatsapp',
-          to: phone,
-          type: 'template',
-          template: {
-            name: 'emergency_appointment_update',
-            language: { code: 'es_MX' },
-            components: [
-              {
-                type: 'body',
-                parameters: [
-                  { type: 'text', text: changeType === 'cancel' ? 'Cancelación de Cita' : 'Reubicación de Cita' },
-                  { type: 'text', text: sanitizedDetails }
-                ]
-              }
-            ]
-          }
-        };
-        console.log('🔒 [Cumplimiento NOM-024]: Payload sanitizado de WhatsApp sin PHI generado exitosamente.', whatsappPayload);
+        const sanitizedDetails = details.replace(/\<[^\<]*\>?/gm, '').substring(0, 200);
 
-        const threadId = `wa_thread_${appointmentId}_${Date.now()}`;
-        broadcastResults.whatsapp = { 
-          success: true, 
-          message: `Mensaje de plantilla WhatsApp enviado exitosamente a ${phone}.`, 
-          threadId 
+        // Construir mensaje de texto según el tipo de cambio
+        const tipoTexto =
+          changeType === 'cancel'   ? '❌ Cancelación de Cita' :
+          changeType === 'virtual'  ? '🌐 Cambio a Modalidad Virtual' :
+          changeType === 'relocate' ? '📍 Reubicación de Cita' : '🚨 Cambio de Emergencia';
+
+        const mensajeWhatsApp =
+          `${tipoTexto} - BUAP Asistencia\n\n` +
+          `Se ha registrado un cambio urgente en tu cita.\n` +
+          `Detalles: ${sanitizedDetails}\n\n` +
+          `Por favor confirma recepción respondiendo este mensaje.`;
+
+        // NOTA: La Edge Function agrega el PHONE_NUMBER_ID en el servidor.
+        // Usamos texto libre (no plantilla) para no depender de aprobación en Meta Business Manager.
+        const payload: any = {
+          phone: phone,           // número destinatario en E.164 (ej. +523112670160)
+          message: mensajeWhatsApp
         };
 
-        // Crear la sesión de enrutamiento bidireccional (WhatsApp Routing Session)
-        console.log('🔄 [Enrutamiento Bidireccional]: Creando sesión activa en whatsapp_routing_sessions...');
-        const { data: sessionData, error: sessionError } = await this.supabase
-          .from('whatsapp_routing_sessions')
-          .insert({
-            appointment_id: appointmentId,
-            student_id: studentId,
-            professional_id: professionalId,
-            session_status: 'active',
-            whatsapp_thread_id: threadId,
-            last_message_at: new Date().toISOString()
-          })
-          .select()
-          .maybeSingle();
-
-        if (sessionError) {
-          console.error('❌ Error creando sesión de enrutamiento WhatsApp:', sessionError);
+        // Invoke Edge Function to send WhatsApp message
+        const { data: fnResult, error: fnError } = await this.supabase.functions.invoke('meta-whatsapp-outbound', {
+          method: 'POST',
+          body: payload
+        });
+        if (fnError) {
+          console.error('❌ Edge Function meta-whatsapp-outbound error:', fnError);
+          broadcastResults.whatsapp = { success: false, message: 'Edge Function error', threadId: null };
         } else {
-          console.log('✅ [Enrutamiento Bidireccional]: Sesión de chat activada exitosamente.', sessionData);
-          broadcastResults.routingSession = sessionData;
+          console.log('✅ Edge Function meta-whatsapp-outbound response:', fnResult);
+
+          // ----------- INSERTAR REGISTRO DE CHAT Y CONVERSACIÓN -----------
+          // 1️⃣ Verificar o crear la conversación interna para este estudiante
+          const { data: existingConv, error: convErr } = await this.supabase
+            .from('internal_meta_conversations')
+            .select('id')
+            .eq('student_id', studentId)
+            .maybeSingle();
+          let conversationId: string | undefined;
+          if (convErr) {
+            console.warn('⚠️ No se pudo consultar conversación interna, intentando crear una nueva.', convErr);
+          }
+          if (existingConv && existingConv.id) {
+            conversationId = existingConv.id;
+          } else {
+            const { data: newConv, error: newConvErr } = await this.supabase
+              .from('internal_meta_conversations')
+              .insert({
+                student_id: studentId,
+                last_message: mensajeWhatsApp,
+                last_message_date: new Date().toISOString(),
+                unread_count: 0
+              })
+              .select('id')
+              .single();
+            if (newConvErr) {
+              console.error('❌ Error creando conversación interna:', newConvErr);
+            }
+            conversationId = newConv?.id;
+          }
+
+          // 2️⃣ Insertar el mensaje en la tabla de chats internos
+          const threadId = `wa_thread_${appointmentId}_${Date.now()}`;
+          if (conversationId) {
+              console.log('🔎 Conversation ID for chat insertion:', conversationId);
+            const wamid = fnResult?.data?.messages?.[0]?.id || null;
+            try {
+              // Check for existing cancellation message in this conversation to avoid duplicate inserts
+              const { data: existingCancel } = await this.supabase
+                .from('internal_meta_chats')
+                .select('id')
+                .eq('conversation_id', conversationId)
+                .ilike('message_content', '%cancel%')
+                .limit(1);
+              if (existingCancel && existingCancel.length > 0) {
+                console.warn('⚠️ Duplicate cancellation detected, skipping chat insertion.');
+              } else {
+                const { data: chatInsert, error: chatError } = await this.supabase
+                  .from('internal_meta_chats')
+                  .insert({
+                    // Using newer schema columns
+                    sender_id: professionalId,
+                    recipient_id: studentId,
+                    whatsapp_message_id: wamid,
+                    whatsapp_thread_id: threadId,
+                    message_direction: 'outbound',
+                    message_type: 'text',
+                    content: mensajeWhatsApp,
+                    status: wamid ? 'sent' : 'pending'
+                  })
+                  .select();
+                if (chatError) {
+                  console.error('❌ Error inserting chat internal:', chatError);
+                } else {
+                  console.log('✅ Chat internal inserted:', chatInsert);
+                }
+              }
+            } catch (e) {
+              console.error('❌ Exception inserting chat internal:', e);
+            }
+            // Update conversation summary if applicable
+            try {
+              const { error: convUpdateError } = await this.supabase
+                .from('internal_meta_conversations')
+                .update({
+                  last_message: mensajeWhatsApp,
+                  last_message_date: new Date().toISOString()
+                })
+                .eq('id', conversationId);
+              if (convUpdateError) {
+                console.error('❌ Error updating internal conversation:', convUpdateError);
+              }
+            } catch (e) {
+              console.error('❌ Exception updating conversation:', e);
+            }
+          }
+
+          broadcastResults.whatsapp = { success: true, message: 'WhatsApp enviado vía Edge Function', threadId };
         }
+      // ==== CREATE BIDIRECTIONAL ROUTING SESSION ==== //
+      console.log('🔄 [Enrutamiento Bidireccional]: Creando sesión activa en whatsapp_routing_sessions...');
+      const { data: sessionData, error: sessionError } = await this.supabase
+        .from('whatsapp_routing_sessions')
+        .insert({
+          appointment_id: appointmentId,
+          student_id: studentId,
+          professional_id: professionalId,
+          session_status: 'active',
+          whatsapp_thread_id: `wa_thread_${appointmentId}_${Date.now()}`,
+          last_message_at: new Date().toISOString()
+        })
+        .select()
+        .maybeSingle();
+
+      if (sessionError) {
+        console.error('❌ Error creando sesión de enrutamiento WhatsApp:', sessionError);
+      } else {
+        console.log('✅ [Enrutamiento Bidireccional]: Sesión de chat activada exitosamente.', sessionData);
+        broadcastResults.routingSession = sessionData;
+      }
       }
 
       // --- EMISIÓN EN TIEMPO REAL VÍA MESH BROADCAST (Bypasses PostgreSQL WAL) ---
@@ -396,6 +491,12 @@ export class EmergencyNotificationService {
       return;
     }
 
+    // Guard: evitar suscribirse dos veces al mismo canal (causaría el error postgres_changes)
+    if (this.realtimeInitialized) {
+      return;
+    }
+    this.realtimeInitialized = true;
+
     console.log(`🚀 [Supabase Realtime]: Inicializando canal de escucha para citas del usuario: ${user.id}`);
 
     // Set para evitar duplicar alertas si llegan por múltiples vías (WAL, Broadcast Mesh o Polling)
@@ -505,5 +606,44 @@ export class EmergencyNotificationService {
         // Silenciar errores de red en polling
       }
     }, 5000);
+  }
+
+  /**
+   * Escucha el evento wa_keepalive enviado por la Edge Function cron (wa-keepalive).
+   * Cuando lo recibe, muestra un banner persistente con un enlace wa.me para que
+   * el estudiante renueve la ventana de 24h de WhatsApp con un solo toque.
+   */
+  initWaKeepAliveListener(onRenewalNeeded: (waLink: string, mensaje: string) => void) {
+    const user = this.authService.currentUser();
+    if (!user?.id) return;
+
+    console.log(`📱 [WA Keep-Alive]: Iniciando listener para renovación de sesión WhatsApp del usuario ${user.id}`);
+
+    this.supabase
+      .channel(`emergency_room_${user.id}`)
+      .on('broadcast', { event: `wa_keepalive_${user.id}` }, (payload: any) => {
+        console.log('📱 [WA Keep-Alive]: Aviso de renovación recibido:', payload);
+        const data = payload.payload;
+        if (data?.wa_link) {
+          onRenewalNeeded(data.wa_link, data.mensaje || 'Tu sesión de WhatsApp está por vencer. Toca para renovarla.');
+        }
+      })
+      .subscribe();
+  }
+
+  /**
+   * Registra la última interacción de WhatsApp del estudiante en la BD.
+   * Debe llamarse cuando el estudiante envía el mensaje de renovación.
+   */
+  async registrarInteraccionWhatsApp() {
+    const user = this.authService.currentUser();
+    if (!user?.id) return;
+
+    await this.supabase
+      .from('users')
+      .update({ wa_last_interaction_at: new Date().toISOString() })
+      .eq('id', user.id);
+
+    console.log('✅ [WA Keep-Alive]: Interacción de WhatsApp registrada.');
   }
 }

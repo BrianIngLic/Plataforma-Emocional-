@@ -74,98 +74,15 @@ body {
   border-radius: 4px;
 }
 
-/* ==========================================================================
-   AMATI SVG GLOBAL LOADING ANIMATION (PREMIUM UI/UX)
-   ========================================================================== */
-.amati-loading-container {
-  text-align: center;
-  padding: 5rem 2rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-}
-
-.amati-loader-wrapper {
-  position: relative;
-  width: 110px;
-  height: 110px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 2rem;
-}
-
-/* Aro giratorio exterior luminoso */
-.spinner-ring {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border: 3px solid rgba(139, 92, 246, 0.15);
-  border-top: 3px solid #8b5cf6;
-  border-right: 3px solid #0ea5e9;
-  border-radius: 50%;
-  animation: spinRing 1.5s linear infinite;
-  box-shadow: 0 0 15px rgba(139, 92, 246, 0.3);
-}
-
-/* Latido y resplandor del logo SVG */
-.amati-logo-pulse {
-  width: 70px;
-  height: 70px;
-  z-index: 2;
-  animation: logoPulse 2s ease-in-out infinite;
-  filter: drop-shadow(0 0 10px rgba(139, 92, 246, 0.4));
-}
-
-.loading-title {
-  font-size: 1.35rem;
-  color: var(--text-primary);
-  margin: 0 0 0.5rem 0;
-  font-weight: 600;
-  letter-spacing: -0.3px;
-}
-
-.loading-subtitle {
-  font-size: 0.95rem;
-  color: var(--text-secondary);
-  max-width: 360px;
-  margin: 0 auto;
-  line-height: 1.5;
-}
-
-@keyframes spinRing {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-@keyframes logoPulse {
-  0% { transform: scale(0.95); filter: drop-shadow(0 0 8px rgba(139, 92, 246, 0.3)); }
-  50% { transform: scale(1.1); filter: drop-shadow(0 0 18px rgba(139, 92, 246, 0.7)); }
-  100% { transform: scale(0.95); filter: drop-shadow(0 0 8px rgba(139, 92, 246, 0.3)); }
-}
-
-/* ==========================================================================
-   SMOOTH PANEL TRANSITIONS (PREMIUM MICRO-ANIMATION)
-   ========================================================================== */
-.main-content > *,
-.content-body > * {
-  animation: panelFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) both;
-  display: block;
-  width: 100%;
-}
-
-@keyframes panelFadeIn {
+/* ANIMACIONES GLOBALES PREMIUM */
+@keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(8px) scale(0.99);
+    transform: translateY(16px);
   }
   to {
     opacity: 1;
-    transform: translateY(0) scale(1);
+    transform: none;
   }
 }
 
@@ -182,15 +99,93 @@ body.modal-open {
   }
 
   /* Reset layout constraints and containing block transform so position: fixed covers full screen */
-  .content-body > * {
+  .content-body > *,
+  .main-content > *,
+  .diary-layout,
+  .chat-main,
+  .dashboard-container,
+  .patients-container,
+  .agenda-container,
+  .settings-container,
+  .admin-container,
+  .overview-container,
+  .faculties-container,
+  .psych-container,
+  .reports-container,
+  .profile-container,
+  .auth-layout,
+  .auth-container,
+  .agenda-layout {
     transform: none !important;
     animation: none !important;
   }
 
-  .main-content > * {
-    transform: none !important;
-    animation: none !important;
+  .profile-container {
+    overflow-y: hidden !important;
   }
 }
 
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.35s ease-out forwards;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* Aplicación automática a todas las vistas principales de la aplicación */
+.diary-layout,
+.chat-main,
+.dashboard-container,
+.patients-container,
+.agenda-container,
+.settings-container,
+.admin-container,
+.overview-container,
+.faculties-container,
+.psych-container,
+.reports-container,
+.profile-container,
+.auth-layout,
+.auth-container,
+.agenda-layout {
+  animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* CDK Dialogs Mobile Responsive Override */
+.cdk-overlay-pane {
+  max-width: 95vw !important;
+}
+
+/* Alerta para citas pasadas sin notas ni marcadas como inasistencia */
+.appt-past-alert {
+  background: rgba(245, 158, 11, 0.15) !important;
+  background-color: rgba(245, 158, 11, 0.15) !important;
+  color: #eab308 !important;
+  border-color: rgba(245, 158, 11, 0.3) !important;
+  
+  .patient-name, .psychologist-name, div, span, p, small, mat-icon {
+    color: #eab308 !important;
+  }
+}
 

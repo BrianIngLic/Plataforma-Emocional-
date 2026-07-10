@@ -170,7 +170,11 @@
 
 ## Skill 8: Módulo de Administración (Core System)
 - `[ ]` Dashboard de Administrador (`admin-layout.component`).
-- `[ ]` Formulario seguro de Alta de Personal Clínico (Psicólogos y Nutriólogos).
+- `[x]` **Directorio General Unificado:** Consolidar alumnos y especialistas en `/admin/directory`.
+- `[x]` **Buscador y Selector Dinámico:** Filtro dinámico en cabecera de alumnos y selección de especialista para cargar su perfil de detalle.
+- `[x]` **Filtros Notion-like:** Implementar filtros laterales de checkboxes para asignación, facultades y estados clínicos.
+- `[x]` **Reasignación Inline:** Selectores combobox para reasignar especialistas en tiempo real desde la tabla.
+- `[x]` Formulario seguro de Alta de Personal Clínico (Psicólogos y Nutriólogos) mediante Edge Function.
 - `[ ]` Panel de gestión de usuarios (suspensión, reactivación).
 - `[ ]` **Configuración de Marca de Agua Institucional:** Crear módulo en `features/admin/settings` para subir el logotipo/marca de agua oficial al bucket de Supabase Storage `institutional_assets`.
 
@@ -276,4 +280,69 @@
 - `[x]` Conectar la columna "Evaluación" del panel de Personal Clínico (`admin/psychologists`) a datos reales: promedio de `score_global` de todas las evaluaciones del profesional.
 - `[x]` Reemplazar el valor MOCK (`4.0 + Math.random()`) en `admin-stats.service.ts` por consulta real a `session_evaluations`.
 - `[x]` Mostrar el `rupture_flag` agregado en la vista de detalle del especialista.
+
+## Skill 10: Responsividad Móvil (Fase actual: Ejecutada)
+
+**10.1. Ajuste General y Viewport**
+- `[x]` Configurar meta tag viewport en `index.html` con `maximum-scale=1.0, user-scalable=no, viewport-fit=cover`.
+
+**10.2. Drawer/Sidebar tipo Overlay**
+- `[x]` Implementar Drawer/Sidebar tipo overlay en `DashboardLayoutComponent` (Estudiante).
+- `[x]` Implementar Drawer/Sidebar tipo overlay en `PsychologistLayoutComponent` (Psicólogo).
+- `[x]` Agregar fondo semi-transparente (backdrop overlay) al abrir el sidebar en móviles.
+- `[x]` Crear gatillo flotante (hamburger menu) visible solo en móviles para abrir el sidebar.
+- `[x]` Configurar cierre automático del sidebar al cambiar de ruta.
+
+**10.3. Interfaz del Chat Optimizado**
+- `[x]` Ocultar el encabezado (`.chat-header`) en móviles para dar prioridad al historial de mensajes.
+- `[x]` Unificar botones de entrada en un solo botón `+` pegado directamente al input.
+- `[x]` Desarrollar menú flotante móvil para desplegar el resto de acciones (adjuntos, imágenes, emojis) al presionar `+`.
+
+**10.4. Prevención de Rupturas por Teclado y Spacing**
+- `[x]` Ajustar contenedores `:host` con `position: fixed; inset: 0` y `100dvh` para evitar deformaciones por el teclado virtual.
+- `[x]` Optimizar el Diario Emocional y vistas del Psicólogo apilándolos de forma vertical y ajustando márgenes.
+- `[x]` Adaptar el Módulo Alimentario (`AlimentaryDashboardComponent`) para dispositivos móviles.
+- `[x]` Adaptar el Registro de Expediente con Stepper (`RegisterComponent`) para pantallas móviles.
+- `[x]` Adaptar la Agenda Estudiantil (`StudentAgendaComponent`) para pantallas móviles.
+- `[x]` Adaptar las Configuraciones del Estudiante (`StudentSettingsComponent`) para pantallas móviles.
+- `[x]` Corregir bloqueos de desplazamiento vertical en Ajustes del Estudiante y Módulo Alimentario.
+
+---
+
+## Skill 11: Animaciones Premium (Fase actual: Ejecutada)
+
+**11.1. Configuración de Animaciones Globales**
+- `[x]` Definir variables y animaciones de keyframes (`fadeIn`, `fadeInUp`, `slideIn`) en `styles.scss`.
+- `[x]` Crear clases de animación reutilizables (`.animate-fade-in-up`, etc.).
+- `[x]` Aplicar animaciones de entrada suave a los contenedores principales de las páginas en `styles.scss` (diario, chat, triage, pacientes, etc.).
+
+**11.2. Micro-interacciones de Botones y Tarjetas**
+- `[x]` Añadir transiciones fluidas de escala y rotación a los botones de estado de ánimo en `diary-dashboard`.
+- `[x]` Aplicar efectos de flotación y sombras en hover a las tarjetas estadísticas del psicólogo (`.stat-card`).
+- `[x]` Aplicar efectos de desplazamiento lateral en hover a los ítems del sidebar (`.nav-item`).
+- `[x]` Aplicar micro-animación en hover para los días del calendario emocional.
+
+**11.3. Animación de Entrada del Chat**
+- `[x]` Diseñar e implementar animación de escala y deslizamiento ascendente (`messageFadeIn`) para las burbujas de conversación (`.message-wrapper`).
+- `[x]` Aplicar transiciones y micro-escalado al botón de enviar y sugerencias chips.
+
+## Corrección de Regresiones de Responsividad y Conflictos (Rama Nutricionista)
+- `[x]` Limpieza y resolución de marcadores de conflicto en el Chatbot (`dashboard.component.ts` y `dashboard.component.scss`).
+- `[x]` Corrección de selectores rotos (`-minimal`) en el media query del chatbot para asegurar la responsividad en móviles.
+- `[x]` Adición del botón flotante móvil "+" (`mobile-add-btn`) y el menú de acciones secundario (`mobile-actions-menu`) en `dashboard.component.html`.
+- `[x]` Eliminación de bloques `@media (max-width: 767px)` duplicados en `student-agenda.component.scss` y `diary-dashboard.component.scss`.
+- `[x]` Resolución de marcadores de conflicto y unificación de transiciones en botones de ánimo/sueño y celdas de calendario en `diary-dashboard.component.scss`.
+- `[x]` Rediseño responsivo de la agenda del estudiante (desbloqueo de ancho del banner unificado, apilamiento de columnas, y adaptación del combo box selector de especialidad).
+- `[x]` Adaptación del modal de confirmación y cancelación de citas (`cdk-overlay-pane`) para que no exceda las dimensiones de la pantalla móvil (`max-width: 95vw`).
+- `[x]` Rediseño responsivo del diario emocional (enlace correcto a `.diary-therapeutic-layout` en lugar de `.diary-layout`, pestañas deslizables horizontalmente y ajuste de paddings en móviles).
+- `[x]` Rediseño responsivo de la configuración del estudiante (apilamiento vertical de botones de avatar en `profile-avatar.component.scss` y centrado/ancho completo para el botón de guardar cambios en `student-settings.component.scss`).
+- `[x]` Verificación de compilación exitosa (`npm run build`) post-merge.
+
+## Responsividad de la Interfaz del Psicólogo
+- `[x]` Agenda (`agenda.component.scss`): apilar verticalmente, ancho del 100% para sidebar, y padding superior seguro en móviles.
+- `[x]` Notas Clínicas (`clinical-note.component.scss`): padding superior en contenedor, reducción de padding en hoja clínica, apilado de cabecera/pie de página, y conversión de `.info-table` a bloques verticales.
+- `[x]` Expediente del Paciente (`patient-profile.component.scss`): padding superior seguro, alineación centrada del avatar y estadísticas rápidas, colapso de `.info-grid` a una sola columna, y ajuste proporcional de celdas del calendario.
+- `[x]` Configuración y Horarios (`settings.component.scss`): padding superior seguro, colapso de `.settings-grid` a una sola columna, pestañas principales deslizables horizontalmente, apilamiento de `.day-item` y rango de horas verticalmente, y apilamiento de `.exception-item`.
+- `[x]` Directorio de Pacientes (`patients.component.scss`): padding superior seguro y límite de `90vw` en el ancho de `.modal-content`.
+- `[x]` Verificación de compilación exitosa (`npm run build`).
 

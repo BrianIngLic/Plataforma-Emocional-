@@ -6,10 +6,42 @@
 
   <div class="settings-grid">
     
-    <div style="margin-bottom: 2rem;">
+    <div class="avatar-wrapper" style="margin-bottom: 2rem; width: 100%; max-width: 100%; box-sizing: border-box;">
       <app-profile-avatar></app-profile-avatar>
     </div>
 
+    <!-- Datos Personales -->
+    <div class="card settings-card">
+      <div class="card-header">
+        <h3><mat-icon>person</mat-icon> Datos Personales</h3>
+        <p>Tu nombre completo se mostrará en el sistema y en tus citas.</p>
+      </div>
+
+      <div class="card-body">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Nombre(s)</label>
+            <input
+              type="text"
+              class="styled-input"
+              [(ngModel)]="firstName"
+              placeholder="Ej. María"
+            />
+          </div>
+          <div class="form-group">
+            <label>Apellido(s)</label>
+            <input
+              type="text"
+              class="styled-input"
+              [(ngModel)]="lastName"
+              placeholder="Ej. García López"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Datos Académicos -->
     <div class="card settings-card">
       <div class="card-header">
         <h3><mat-icon>school</mat-icon> Datos Académicos</h3>
@@ -25,9 +57,10 @@
           </select>
         </div>
 
-        <div class="actions" style="margin-top: 2rem; display: flex; justify-content: flex-end;">
-          <button mat-flat-button color="primary" (click)="confirmSave()" [disabled]="isSaving || !selectedFaculty" style="padding: 6px 24px;">
-            <mat-icon style="margin-right: 8px;">save</mat-icon> Guardar Cambios
+        <div class="actions">
+          <button mat-flat-button color="primary" (click)="confirmSave()" [disabled]="isSaving" class="btn-primary">
+            <mat-icon style="margin-right: 8px;">save</mat-icon>
+            {{ isSaving ? 'Guardando...' : 'Guardar Cambios' }}
           </button>
         </div>
       </div>

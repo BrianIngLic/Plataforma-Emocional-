@@ -15,23 +15,54 @@
           
           <mat-form-field appearance="outline">
             <mat-label>Matrícula</mat-label>
-            <input matInput formControlName="matricula" placeholder="Ej. 202112345" autocomplete="off" required>
+            <input
+              matInput
+              formControlName="matricula"
+              placeholder="Ej. 202112345"
+              autocomplete="off"
+              required
+              type="text"
+              inputmode="numeric"
+              maxlength="9"
+              (input)="sanitizeNumericField($event, 'credentialsFormGroup', 'matricula', 9)">
+            <mat-error *ngIf="credentialsFormGroup.get('matricula')?.hasError('required')">
+              La matrícula es obligatoria.
+            </mat-error>
+            <mat-error *ngIf="credentialsFormGroup.get('matricula')?.hasError('pattern')">
+              Debe contener exactamente 9 números.
+            </mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>Correo Electrónico</mat-label>
-            <input matInput type="email" formControlName="email" placeholder="Ej. correo@buap.mx" autocomplete="new-email" required>
+            <input
+              matInput
+              type="email"
+              formControlName="email"
+              placeholder="Ej. correo@buap.mx"
+              autocomplete="new-email"
+              required
+              (input)="sanitizeCredentialField($event, 'credentialsFormGroup', 'email')">
             <mat-error *ngIf="credentialsFormGroup.get('email')?.hasError('required')">
               El correo es obligatorio.
             </mat-error>
             <mat-error *ngIf="credentialsFormGroup.get('email')?.hasError('email')">
               Debe ser un correo válido.
             </mat-error>
+            <mat-error *ngIf="credentialsFormGroup.get('email')?.hasError('emailExists')">
+              {{ emailExistsError }}
+            </mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>Contraseña</mat-label>
-            <input matInput type="password" formControlName="password" autocomplete="new-password" required>
+            <input
+              matInput
+              type="password"
+              formControlName="password"
+              autocomplete="new-password"
+              required
+              (input)="sanitizeCredentialField($event, 'credentialsFormGroup', 'password')">
             <mat-error *ngIf="credentialsFormGroup.get('password')?.hasError('required')">
               La contraseña es obligatoria.
             </mat-error>
@@ -41,7 +72,16 @@
           </mat-form-field>
 
           <div class="stepper-actions">
-            <button mat-flat-button color="primary" matStepperNext>Siguiente</button>
+            <button
+              mat-flat-button
+              color="primary"
+              (click)="checkEmailAndNext()"
+              [disabled]="checkingEmail">
+              <span *ngIf="!checkingEmail">Siguiente</span>
+              <span *ngIf="checkingEmail" style="display:flex;align-items:center;gap:8px;">
+                <mat-icon class="spin-icon">sync</mat-icon> Verificando...
+              </span>
+            </button>
           </div>
         </form>
       </mat-step>
@@ -54,12 +94,18 @@
           <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; width: 100%;">
             <mat-form-field appearance="outline">
               <mat-label>Nombre(s)</mat-label>
-              <input matInput formControlName="firstName" required>
+              <input matInput formControlName="firstName" required (input)="sanitizeTextField($event, 'profileFormGroup', 'firstName')">
+              <mat-error *ngIf="profileFormGroup.get('firstName')?.hasError('required')">
+                El nombre es obligatorio.
+              </mat-error>
             </mat-form-field>
 
             <mat-form-field appearance="outline">
               <mat-label>Apellidos</mat-label>
-              <input matInput formControlName="lastName" required>
+              <input matInput formControlName="lastName" required (input)="sanitizeTextField($event, 'profileFormGroup', 'lastName')">
+              <mat-error *ngIf="profileFormGroup.get('lastName')?.hasError('required')">
+                Los apellidos son obligatorios.
+              </mat-error>
             </mat-form-field>
           </div>
 
@@ -71,6 +117,9 @@
                    formControlName="faculty"
                    [matAutocomplete]="auto"
                    required>
+            <mat-error *ngIf="profileFormGroup.get('faculty')?.hasError('required')">
+              Debes seleccionar una facultad.
+            </mat-error>
             <mat-autocomplete #auto="matAutocomplete">
               <mat-option *ngFor="let f of filteredFaculties" [value]="f.name">
                 {{f.name}}
@@ -80,13 +129,23 @@
 
           <mat-form-field appearance="outline">
             <mat-label>Programa Educativo (Carrera)</mat-label>
-            <input matInput formControlName="programaEducativo" placeholder="Ej. Licenciatura en Nutrición" required>
+            <input matInput formControlName="programaEducativo" placeholder="Ej. Licenciatura en Nutrición" required (input)="sanitizeTextField($event, 'profileFormGroup', 'programaEducativo')">
+            <mat-error *ngIf="profileFormGroup.get('programaEducativo')?.hasError('required')">
+              El programa educativo es obligatorio.
+            </mat-error>
           </mat-form-field>
 
           <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; width: 100%; align-items: center;">
             <mat-form-field appearance="outline">
               <mat-label>Teléfono Celular</mat-label>
-              <input matInput formControlName="celular" placeholder="Ej. 2221234567" required>
+              <input
+                matInput
+                formControlName="celular"
+                placeholder="Ej. 2221234567"
+                required
+                type="tel"
+                inputmode="numeric"
+                mask="000-000-0000">
               <mat-error *ngIf="profileFormGroup.get('celular')?.hasError('pattern')">
                 Debe tener 10 dígitos.
               </mat-error>
@@ -94,9 +153,18 @@
 
             <mat-form-field appearance="outline">
               <mat-label>Fecha de Nacimiento</mat-label>
-              <input matInput [matDatepicker]="picker" formControlName="fechaNacimiento">
+              <input
+                matInput
+                [matDatepicker]="picker"
+                formControlName="fechaNacimiento"
+                type="text"
+                inputmode="numeric"
+                (input)="sanitizeDateField($event)">
               <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
               <mat-datepicker #picker></mat-datepicker>
+              <mat-error *ngIf="profileFormGroup.get('fechaNacimiento')?.hasError('required')">
+                La fecha de nacimiento es obligatoria.
+              </mat-error>
             </mat-form-field>
           </div>
 
@@ -107,11 +175,17 @@
               <mat-radio-button value="Masculino" color="primary">Masculino</mat-radio-button>
               <mat-radio-button value="Otro" color="primary">Otro</mat-radio-button>
             </mat-radio-group>
+            <mat-error *ngIf="profileFormGroup.get('sexo')?.hasError('required')" style="display: block; margin-top: 0.5rem;">
+              Debes seleccionar un sexo.
+            </mat-error>
           </div>
 
           <mat-form-field appearance="outline">
             <mat-label>Antecedentes Clínicos Familiares</mat-label>
-            <textarea matInput formControlName="antecedentesFamiliares" placeholder="Ej. Diabetes, Hipertensión u otras condiciones crónicas en la familia" rows="2" required></textarea>
+            <textarea matInput formControlName="antecedentesFamiliares" placeholder="Ej. Diabetes, Hipertensión u otras condiciones crónicas en la familia" rows="2" required (input)="sanitizeTextField($event, 'profileFormGroup', 'antecedentesFamiliares')"></textarea>
+            <mat-error *ngIf="profileFormGroup.get('antecedentesFamiliares')?.hasError('required')">
+              Este campo es obligatorio.
+            </mat-error>
           </mat-form-field>
 
           <div class="stepper-actions">
@@ -132,6 +206,9 @@
           <mat-checkbox formControlName="acceptedTerms" color="primary" class="consent-check">
             He leído y acepto el <a href="#" (click)="openPrivacyModal($event)" style="color: var(--accent-purple); text-decoration: underline;">Aviso de Privacidad y Términos de Uso</a>.
           </mat-checkbox>
+          <mat-error *ngIf="consentFormGroup.get('acceptedTerms')?.hasError('requiredTrue')" style="display: block; margin-top: 0.5rem;">
+            Debes aceptar los términos para continuar.
+          </mat-error>
 
           <div class="stepper-actions submit-actions">
             <button mat-button matStepperPrevious [disabled]="isSubmitting">Atrás</button>

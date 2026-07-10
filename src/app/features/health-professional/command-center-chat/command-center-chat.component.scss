@@ -418,6 +418,27 @@
     }
   }
 
+  .no-phone-banner {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 24px;
+    background: #fff7ed;
+    border-bottom: 1px solid #fed7aa;
+    color: #c2410c;
+    font-size: 0.78rem;
+    line-height: 1.4;
+
+    mat-icon {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+      color: #ea580c;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+  }
+
   .templates-drawer {
     background: white;
     border-top: 1px solid #e2e8f0;
@@ -553,4 +574,14 @@
     h3 { margin: 0; font-size: 1.15rem; font-weight: 700; color: #1e293b; }
     p { margin: 8px 0 0 0; font-size: 0.88rem; max-width: 320px; line-height: 1.5; }
   }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.spin {
+  animation: spin 1s linear infinite;
+  display: inline-block;
 }

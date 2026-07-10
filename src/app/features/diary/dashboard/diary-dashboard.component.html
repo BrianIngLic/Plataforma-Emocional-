@@ -1,11 +1,14 @@
 <div class="diary-therapeutic-layout">
-  <!-- Top Banner de Contención Emocional -->
+
+  <!-- ═══════════════════════════════════════════
+       TOP BANNER — Afirmación y racha
+  ════════════════════════════════════════════════ -->
   <div class="therapeutic-banner">
     <div class="banner-content">
       <div class="avatar-calm">🌱</div>
       <div class="affirmation-area">
         <span class="welcome-title">Refugio de Bienestar Amati</span>
-        <p class="dynamic-text">“{{ dynamicAffirmation }}”</p>
+        <p class="dynamic-text">"{{ dynamicAffirmation }}"</p>
       </div>
     </div>
     <div class="gamification-header">
@@ -19,10 +22,12 @@
     </div>
   </div>
 
-  <!-- Pestañas de Navegación Terapéutica -->
+  <!-- ═══════════════════════════════════════════
+       PESTAÑAS DE NAVEGACIÓN
+  ════════════════════════════════════════════════ -->
   <div class="therapeutic-tabs">
     <button class="tab-btn" [class.active]="activeTab === 'write'" (click)="activeTab = 'write'">
-      <mat-icon>edit_note</mat-icon> Diario Emocional
+      <mat-icon>edit_note</mat-icon> Diario Emocional-Nutricional
     </button>
     <button class="tab-btn" [class.active]="activeTab === 'breathe'" (click)="activeTab = 'breathe'">
       <mat-icon>self_improvement</mat-icon> Espacio de Respiración
@@ -32,33 +37,33 @@
     </button>
   </div>
 
-  <!-- MAIN CONTAINER CON LAS 3 VISTAS -->
+  <!-- ═══════════════════════════════════════════
+       CONTENIDO
+  ════════════════════════════════════════════════ -->
   <div class="tab-content-container">
-    
-    <!-- VISTA 1: DIARIO Y CALENDARIO -->
+
+    <!-- ══════ VISTA 1: DIARIO + COMIDAS ══════ -->
     <div class="diary-main-grid" *ngIf="activeTab === 'write'">
-      <!-- Columna Izquierda: Calendario e Historial unificados en una sola tarjeta premium -->
+
+      <!-- Columna izquierda: Calendario + Historial -->
       <section class="calendar-section sidebar-card">
         <div class="calendar-header">
           <h2>Calendario Emocional</h2>
           <p>{{ monthName }} {{ year }}</p>
         </div>
-        
+
         <div class="calendar-grid">
           <div class="day-name">Lun</div><div class="day-name">Mar</div><div class="day-name">Mié</div>
           <div class="day-name">Jue</div><div class="day-name">Vie</div><div class="day-name">Sáb</div>
           <div class="day-name">Dom</div>
-          
-          <!-- Offsets -->
           <div class="calendar-day empty" *ngFor="let blank of blankDays"></div>
-          
-          <!-- Days -->
-          <div class="calendar-day" *ngFor="let day of calendarDays" [ngClass]="{'has-entry': getMoodForDay(day) !== null}">
+          <div class="calendar-day" *ngFor="let day of calendarDays"
+               [ngClass]="{'has-entry': getMoodForDay(day) !== null}">
             <span class="date">{{ day }}</span>
             <span class="mood-indicator" *ngIf="getMoodForDay(day)">{{ getMoodForDay(day) }}</span>
           </div>
         </div>
-        
+
         <hr class="section-divider" />
 
         <div class="history-list">
@@ -76,15 +81,23 @@
         </div>
       </section>
 
-      <!-- Columna Derecha: Editor Premium -->
+      <!-- Columna derecha: Editor emocional + Registro de comidas -->
       <section class="editor-section">
+
+        <!-- ────────────────────────────────────
+             PARTE 1: DIARIO EMOCIONAL (existente)
+        ──────────────────────────────────────── -->
         <div class="editor-container">
+          <div class="section-eyebrow">
+            <mat-icon>favorite</mat-icon>
+            <span>Estado Emocional del Día</span>
+          </div>
           <h2>¿Cómo te sientes hoy?</h2>
           <p class="subtitle">Selecciona las emociones que mejor te describen en este momento (puedes marcar varias).</p>
-          
+
           <div class="mood-tracker">
-            <button class="mood-btn" 
-                    *ngFor="let mood of availableMoods" 
+            <button class="mood-btn"
+                    *ngFor="let mood of availableMoods"
                     [class.selected]="selectedMoods.includes(mood.icon + ' ' + mood.label)"
                     (click)="toggleMood(mood.label, mood.icon)">
               <span class="icon">{{ mood.icon }}</span>
@@ -92,12 +105,11 @@
             </button>
           </div>
 
-          <!-- SECCIÓN DE HORAS DE SUEÑO TERAPÉUTICA -->
           <h3 class="section-sub-title">¿Cómo fue tu descanso anoche?</h3>
           <p class="subtitle">El sueño influye directamente en tu estado de ánimo y energía vital.</p>
           <div class="sleep-tracker">
-            <button class="sleep-btn" 
-                    *ngFor="let sleep of sleepOptions" 
+            <button class="sleep-btn"
+                    *ngFor="let sleep of sleepOptions"
                     [class.selected]="selectedSleep === sleep.value"
                     (click)="selectSleep(sleep.value)">
               <span class="icon">{{ sleep.icon }}</span>
@@ -106,39 +118,201 @@
           </div>
 
           <div class="text-editor">
-            <textarea [(ngModel)]="diaryContent" 
-                      placeholder="Escribe tus pensamientos aquí. Este es un espacio seguro y confidencial para ti..."></textarea>
+            <quill-editor
+              [(ngModel)]="diaryContent"
+              [modules]="quillModules"
+              placeholder="Escribe tus pensamientos aquí. Este es un espacio seguro y confidencial para ti..."
+              class="diary-quill">
+            </quill-editor>
           </div>
-          
+
           <div class="editor-actions">
             <p class="privacy-note">
-              <mat-icon>lock</mat-icon> <span>Tu diario es privado y analizado por IA. Solo en alto riesgo se alertará a tu psicólogo para cuidarte.</span>
+              <mat-icon>lock</mat-icon>
+              <span>Tu diario es privado y analizado por IA. Solo en alto riesgo se alertará a tu psicólogo para cuidarte.</span>
             </p>
             <button mat-flat-button color="primary" class="save-btn" (click)="saveDiary()">
-              Guardar Entrada
+              Guardar Entrada Emocional
             </button>
           </div>
         </div>
+
+        <!-- ────────────────────────────────────
+             PARTE 2: REGISTRO DE COMIDAS
+        ──────────────────────────────────────── -->
+        <div class="food-section">
+
+          <!-- Header de sección -->
+          <div class="food-section-header">
+            <div class="food-section-title">
+              <mat-icon>restaurant</mat-icon>
+              <div>
+                <h2>Registro de Comidas</h2>
+                <p>Una entrada por cada vez que comas</p>
+              </div>
+            </div>
+            <button class="add-food-btn" (click)="openFoodForm()" *ngIf="!showFoodForm">
+              <mat-icon>add</mat-icon>
+              <span>Añadir entrada</span>
+            </button>
+          </div>
+
+          <!-- Lista de entradas del día -->
+          <div class="food-entries-list" *ngIf="foodEntries().length > 0">
+            <div class="food-entry-card"
+                 *ngFor="let entry of foodEntries()"
+                 [class.editing]="editingFoodId === entry.id">
+
+              <!-- Hora -->
+              <div class="entry-time-badge">
+                <mat-icon>schedule</mat-icon>
+                {{ entry.meal_time.substring(0, 5) }}
+              </div>
+
+              <!-- Contenido -->
+              <div class="entry-body">
+                <!-- Emociones antes/después -->
+                <div class="entry-moods-row">
+                  <span class="mood-tag before">
+                    <mat-icon>sentiment_satisfied</mat-icon>
+                    Antes: <strong>{{ entry.mood_before }}</strong>
+                  </span>
+                  <span class="mood-tag after">
+                    <mat-icon>sentiment_very_satisfied</mat-icon>
+                    Después: <strong>{{ entry.mood_after }}</strong>
+                  </span>
+                </div>
+                <!-- Preview de lo comido (texto plano) -->
+                <p class="entry-food-preview">{{ stripHtml(entry.what_i_ate) }}</p>
+              </div>
+
+              <!-- Acciones -->
+              <div class="entry-actions">
+                <button class="action-btn edit" (click)="editFoodEntry(entry)" title="Editar">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button class="action-btn delete" (click)="deleteFoodEntry(entry.id)" title="Eliminar">
+                  <mat-icon>delete_outline</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Estado vacío -->
+          <div class="food-empty" *ngIf="foodEntries().length === 0 && !showFoodForm">
+            <span class="empty-icon">🍽️</span>
+            <p>Aún no hay registros de comidas hoy.</p>
+            <small>Añade tu primera entrada cuando comas.</small>
+          </div>
+
+          <!-- ─── FORMULARIO DE NUEVA/EDITAR ENTRADA ─── -->
+          <div class="food-form" *ngIf="showFoodForm">
+            <div class="food-form-header">
+              <span>{{ editingFoodId ? 'Editar entrada' : 'Nueva entrada — completa los campos' }}</span>
+              <button class="form-close-btn" (click)="cancelFoodForm()">
+                <mat-icon>close</mat-icon>
+              </button>
+            </div>
+
+            <!-- Hora -->
+            <div class="form-field">
+              <label class="form-label">
+                <mat-icon>schedule</mat-icon> Hora
+              </label>
+              <div class="time-picker-row">
+                <input type="time" class="time-input" [(ngModel)]="newMealTime" />
+              </div>
+            </div>
+
+            <!-- Antes de comer -->
+            <div class="form-field">
+              <label class="form-label mood-before-label">
+                <mat-icon>sentiment_satisfied_alt</mat-icon>
+                Antes de comer — ¿Cómo te sentías?
+              </label>
+              <div class="compact-mood-grid">
+                <button class="compact-mood-btn"
+                        *ngFor="let m of availableMoods"
+                        [class.selected]="newMoodBefore === m.icon + ' ' + m.label"
+                        (click)="newMoodBefore = m.icon + ' ' + m.label">
+                  <span>{{ m.icon }}</span>
+                  <small>{{ m.label }}</small>
+                </button>
+              </div>
+            </div>
+
+            <!-- ¿Qué comiste? — Quill rich text -->
+            <div class="form-field">
+              <label class="form-label">
+                <mat-icon>lunch_dining</mat-icon> ¿Qué comiste?
+              </label>
+              <quill-editor
+                [(ngModel)]="newWhatIAte"
+                [modules]="quillModules"
+                placeholder="Describe lo que comiste. Puedes detallar ingredientes, preparación, cantidades..."
+                class="food-quill">
+              </quill-editor>
+            </div>
+
+            <!-- Después de comer -->
+            <div class="form-field">
+              <label class="form-label mood-after-label">
+                <mat-icon>sentiment_very_satisfied</mat-icon>
+                Después de comer — ¿Cómo te sentiste?
+              </label>
+              <div class="compact-mood-grid">
+                <button class="compact-mood-btn"
+                        *ngFor="let m of availableMoods"
+                        [class.selected]="newMoodAfter === m.icon + ' ' + m.label"
+                        (click)="newMoodAfter = m.icon + ' ' + m.label">
+                  <span>{{ m.icon }}</span>
+                  <small>{{ m.label }}</small>
+                </button>
+              </div>
+            </div>
+
+            <!-- Acciones del formulario -->
+            <div class="form-actions">
+              <button class="cancel-food-btn" (click)="cancelFoodForm()">Cancelar</button>
+              <button class="save-food-btn"
+                      (click)="saveFoodEntry()"
+                      [disabled]="!isFoodFormValid() || isSavingFood">
+                <span *ngIf="!isSavingFood">
+                  <mat-icon>{{ editingFoodId ? 'save' : 'add_circle' }}</mat-icon>
+                  {{ editingFoodId ? 'Guardar cambios' : 'Guardar entrada' }}
+                </span>
+                <span *ngIf="isSavingFood">Guardando...</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Botón flotante "Añadir entrada" debajo de la lista -->
+          <button class="add-food-inline-btn" (click)="openFoodForm()"
+                  *ngIf="foodEntries().length > 0 && !showFoodForm">
+            <mat-icon>add</mat-icon> Añadir entrada de comida
+          </button>
+
+        </div>
+        <!-- /food-section -->
+
       </section>
     </div>
+    <!-- /diary-main-grid -->
 
-    <!-- VISTA 2: ESPACIO DE RESPIRACIÓN Y CALMA -->
+    <!-- ══════ VISTA 2: RESPIRACIÓN ══════ -->
     <div class="breathe-container" *ngIf="activeTab === 'breathe'">
       <div class="breathe-card">
         <h2>Regulación Emocional y Calma</h2>
         <p class="breathe-desc">La respiración consciente estimula el nervio vago, reduciendo los niveles de cortisol y deteniendo el ciclo de la ansiedad en pocos minutos.</p>
-        
         <div class="breathe-circle-wrapper" (click)="startBreathing()">
           <div class="breathe-ring" [ngClass]="breathePhase"></div>
           <div class="breathe-center">
             <span class="action-text">{{ isBreathing ? 'Detener' : 'Iniciar' }}</span>
           </div>
         </div>
-
         <div class="phase-display">
           <h3>{{ breatheText }}</h3>
         </div>
-
         <div class="breathe-instructions" *ngIf="!isBreathing">
           <div class="inst-step"><span>1</span> Ponte en una postura cómoda y afloja los hombros.</div>
           <div class="inst-step"><span>2</span> Al presionar Iniciar, el círculo se expandirá para indicar la inhalación.</div>
@@ -147,13 +321,12 @@
       </div>
     </div>
 
-    <!-- VISTA 3: LOGROS EMOCIONALES Y GAMIFICACIÓN -->
+    <!-- ══════ VISTA 3: LOGROS ══════ -->
     <div class="badges-container" *ngIf="activeTab === 'badges'">
       <div class="badges-header">
         <h2>Insignias de Autocuidado</h2>
         <p>En Amati no hay fallas ni presiones. Cada paso que das hacia tu bienestar es digno de celebrarse.</p>
       </div>
-      
       <div class="badges-grid">
         <div class="badge-card" *ngFor="let b of badges" [class.unlocked]="b.unlocked">
           <div class="badge-icon-wrapper">

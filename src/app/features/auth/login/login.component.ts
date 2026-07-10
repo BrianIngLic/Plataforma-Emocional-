@@ -36,11 +36,37 @@ export class LoginComponent implements OnInit {
     this.showInactivityModal = false;
   }
 
+  sanitizeEmailInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    this.email = input.value.replace(/\s/g, '').replace(/[^a-zA-Z0-9@._-]/g, '');
+    input.value = this.email;
+  }
+
+  sanitizePasswordInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    this.pass = input.value.replace(/\s/g, '');
+    input.value = this.pass;
+  }
+
+  private isEmailValid(email: string): boolean {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  }
+
   async onLogin() {
     this.errorMessage = '';
-    
+
     if (!this.email || !this.pass) {
       this.errorMessage = 'Por favor ingresa tu correo y contraseña.';
+      return;
+    }
+
+    if (!this.isEmailValid(this.email)) {
+      this.errorMessage = 'Ingresa un correo electrónico válido.';
+      return;
+    }
+
+    if (this.pass.length < 6) {
+      this.errorMessage = 'La contraseña debe tener al menos 6 caracteres.';
       return;
     }
 

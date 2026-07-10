@@ -1,29 +1,27 @@
-# Graph Report - Plataforma-Emocional-  (2026-06-30)
+# Graph Report - Plataforma-Emocional-  (2026-07-08)
 
 ## Corpus Check
-- 112 files · ~103,500 words
+- 170 files · ~147,876 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 977 nodes · 1419 edges · 81 communities (26 shown, 55 thin omitted)
-- Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 19 edges (avg confidence: 0.91)
+- 1521 nodes · 2145 edges · 144 communities (76 shown, 68 thin omitted)
+- Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 22 edges (avg confidence: 0.89)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `f184c760`
+- Built from commit: `2b0562bd`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
-- [[_COMMUNITY_Core Services and Auth|Core Services and Auth]]
-- [[_COMMUNITY_Modals Diary and Exceptions|Modals Diary and Exceptions]]
+- [[_COMMUNITY_Community 0|Community 0]]
+- [[_COMMUNITY_Community 1|Community 1]]
 - [[_COMMUNITY_Package Config and Dependencies|Package Config and Dependencies]]
-- [[_COMMUNITY_Angular Architect Configurations|Angular Architect Configurations]]
 - [[_COMMUNITY_Angular Build Schemas|Angular Build Schemas]]
 - [[_COMMUNITY_Psychologist Profile and Utilities|Psychologist Profile and Utilities]]
 - [[_COMMUNITY_Faculty Occupancy Management|Faculty Occupancy Management]]
 - [[_COMMUNITY_AI Triage and Student Agenda|AI Triage and Student Agenda]]
-- [[_COMMUNITY_Admin Patient Statistics Overview|Admin Patient Statistics Overview]]
 - [[_COMMUNITY_Alimentary Assessment Dashboard|Alimentary Assessment Dashboard]]
 - [[_COMMUNITY_Patient Profile Expedient|Patient Profile Expedient]]
 - [[_COMMUNITY_Admin Agenda Metrics|Admin Agenda Metrics]]
@@ -84,29 +82,84 @@
 - [[_COMMUNITY_Community 67|Community 67]]
 - [[_COMMUNITY_Community 68|Community 68]]
 - [[_COMMUNITY_Community 69|Community 69]]
+- [[_COMMUNITY_Community 70|Community 70]]
 - [[_COMMUNITY_Community 71|Community 71]]
 - [[_COMMUNITY_Community 72|Community 72]]
 - [[_COMMUNITY_Community 73|Community 73]]
 - [[_COMMUNITY_Community 74|Community 74]]
 - [[_COMMUNITY_Community 75|Community 75]]
-- [[_COMMUNITY_Community 76|Community 76]]
+- [[_COMMUNITY_Community 77|Community 77]]
 - [[_COMMUNITY_Community 78|Community 78]]
+- [[_COMMUNITY_Community 79|Community 79]]
+- [[_COMMUNITY_Community 80|Community 80]]
 - [[_COMMUNITY_Community 81|Community 81]]
 - [[_COMMUNITY_Community 82|Community 82]]
 - [[_COMMUNITY_Community 83|Community 83]]
+- [[_COMMUNITY_Community 84|Community 84]]
+- [[_COMMUNITY_Community 85|Community 85]]
 - [[_COMMUNITY_Community 87|Community 87]]
+- [[_COMMUNITY_Community 88|Community 88]]
+- [[_COMMUNITY_Community 89|Community 89]]
+- [[_COMMUNITY_Community 90|Community 90]]
+- [[_COMMUNITY_Community 91|Community 91]]
+- [[_COMMUNITY_Community 92|Community 92]]
+- [[_COMMUNITY_Community 93|Community 93]]
+- [[_COMMUNITY_Community 94|Community 94]]
+- [[_COMMUNITY_Community 95|Community 95]]
+- [[_COMMUNITY_Community 96|Community 96]]
+- [[_COMMUNITY_Community 97|Community 97]]
+- [[_COMMUNITY_Community 98|Community 98]]
+- [[_COMMUNITY_Community 99|Community 99]]
+- [[_COMMUNITY_Community 100|Community 100]]
+- [[_COMMUNITY_Community 101|Community 101]]
+- [[_COMMUNITY_Community 102|Community 102]]
+- [[_COMMUNITY_Community 103|Community 103]]
+- [[_COMMUNITY_Community 104|Community 104]]
+- [[_COMMUNITY_Community 105|Community 105]]
+- [[_COMMUNITY_Community 106|Community 106]]
+- [[_COMMUNITY_Community 107|Community 107]]
+- [[_COMMUNITY_Community 108|Community 108]]
+- [[_COMMUNITY_Community 109|Community 109]]
+- [[_COMMUNITY_Community 110|Community 110]]
+- [[_COMMUNITY_Community 111|Community 111]]
+- [[_COMMUNITY_Community 112|Community 112]]
+- [[_COMMUNITY_Community 113|Community 113]]
+- [[_COMMUNITY_Community 114|Community 114]]
+- [[_COMMUNITY_Community 115|Community 115]]
+- [[_COMMUNITY_Community 116|Community 116]]
+- [[_COMMUNITY_Community 117|Community 117]]
+- [[_COMMUNITY_Community 118|Community 118]]
+- [[_COMMUNITY_Community 119|Community 119]]
+- [[_COMMUNITY_Community 120|Community 120]]
+- [[_COMMUNITY_Community 121|Community 121]]
+- [[_COMMUNITY_Community 122|Community 122]]
+- [[_COMMUNITY_Community 123|Community 123]]
+- [[_COMMUNITY_Community 130|Community 130]]
+- [[_COMMUNITY_Community 131|Community 131]]
+- [[_COMMUNITY_Community 132|Community 132]]
+- [[_COMMUNITY_Community 133|Community 133]]
+- [[_COMMUNITY_Community 134|Community 134]]
+- [[_COMMUNITY_Community 135|Community 135]]
+- [[_COMMUNITY_Community 136|Community 136]]
+- [[_COMMUNITY_Community 137|Community 137]]
+- [[_COMMUNITY_Community 138|Community 138]]
+- [[_COMMUNITY_Community 139|Community 139]]
+- [[_COMMUNITY_Community 140|Community 140]]
+- [[_COMMUNITY_Community 143|Community 143]]
+- [[_COMMUNITY_Community 144|Community 144]]
+- [[_COMMUNITY_Community 145|Community 145]]
 
 ## God Nodes (most connected - your core abstractions)
-1. `AuthService` - 48 edges
-2. `SupabaseService` - 37 edges
-3. `FacultiesComponent` - 31 edges
-4. `AgendaComponent` - 29 edges
-5. `PsychologistsComponent` - 25 edges
-6. `StudentAgendaComponent` - 22 edges
-7. `PatientProfileComponent` - 21 edges
-8. `HealthProfessionalAgendaComponent` - 20 edges
-9. `PerfilPaciente` - 20 edges
-10. `FacultyService` - 16 edges
+1. `DirectoryComponent` - 64 edges
+2. `AuthService` - 49 edges
+3. `SupabaseService` - 42 edges
+4. `PsychologistsComponent` - 41 edges
+5. `AgendaComponent` - 34 edges
+6. `ConsultaComponent` - 32 edges
+7. `FacultiesComponent` - 31 edges
+8. `PerfilPaciente` - 24 edges
+9. `StudentAgendaComponent` - 22 edges
+10. `PatientProfileComponent` - 21 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `Skill 9: RoleGuard Security` --semantically_similar_to--> `Ciberseguridad y Privacidad`  [INFERRED] [semantically similar]
@@ -129,23 +182,19 @@
 - **Student Emotional Assistance and Care Flow** — dashboard_layout_dashboard_layout_component_student_sidebar, dashboard_dashboard_component_chat_view, dashboard_diary_dashboard_component_therapeutic_refuge, student_agenda_student_agenda_component_appointment_scheduler [INFERRED 0.85]
 - **Psychologist Clinical Command Center and Triage Flow** — psychologist_layout_psychologist_layout_component_psychologist_sidebar, dashboard_dashboard_component_psychologist_triage_view, patients_patients_component_patient_directory, agenda_agenda_component_clinical_timeline, patient_profile_patient_profile_component_clinical_expedient_view [INFERRED 0.85]
 
-## Communities (81 total, 55 thin omitted)
+## Communities (144 total, 68 thin omitted)
 
-### Community 0 - "Core Services and Auth"
-Cohesion: 0.15
-Nodes (9): environment, Psychologist, Holiday, HealthProfessionalRegistrationPayload, PatientAssignmentPayload, EmergencyChangeRequest, WebPushSubscriptionPayload, WhatsAppRoutingSession (+1 more)
+### Community 0 - "Community 0"
+Cohesion: 0.08
+Nodes (31): build, extract-i18n, serve, test, builder, configurations, defaultConfiguration, options (+23 more)
 
-### Community 1 - "Modals Diary and Exceptions"
-Cohesion: 0.05
-Nodes (13): AchievementsDashboardComponent, DashboardLayoutComponent, DASHBOARD_ROUTES, ChatService, Achievement, GamificationService, UserStreak, PendingEvaluationItem (+5 more)
+### Community 1 - "Community 1"
+Cohesion: 0.22
+Nodes (13): backup_dir_for(), build_compress_prompt(), build_fix_prompt(), call_claude(), compress_file(), is_sensitive_path(), Strip outer ```markdown ... ``` fence when it wraps the entire output., Send a prompt to Claude.      Prefers the Anthropic SDK when ANTHROPIC_API_KEY (+5 more)
 
 ### Community 2 - "Package Config and Dependencies"
 Cohesion: 0.05
-Nodes (40): dependencies, @angular/animations, @angular/cdk, @angular/common, @angular/compiler, @angular/core, @angular/forms, @angular/material (+32 more)
-
-### Community 3 - "Angular Architect Configurations"
-Cohesion: 0.08
-Nodes (30): build, extract-i18n, serve, test, builder, configurations, defaultConfiguration, options (+22 more)
+Nodes (42): dependencies, @angular/animations, @angular/cdk, @angular/common, @angular/compiler, @angular/core, @angular/forms, @angular/material (+34 more)
 
 ### Community 4 - "Angular Build Schemas"
 Cohesion: 0.07
@@ -154,10 +203,6 @@ Nodes (28): cli, analytics, newProjectRoot, prefix, projectType, root, schematic
 ### Community 7 - "AI Triage and Student Agenda"
 Cohesion: 0.13
 Nodes (3): AiTriageMockService, UrgencyLevel, StudentAgendaComponent
-
-### Community 8 - "Admin Patient Statistics Overview"
-Cohesion: 0.11
-Nodes (4): AdminSkill8Service, HealthProfessionalItem, DossierExportService, PatientsComponent
 
 ### Community 9 - "Alimentary Assessment Dashboard"
 Cohesion: 0.12
@@ -171,16 +216,16 @@ Nodes (16): Psychologist Daily Agenda Timeline, Amati AI Chat Dashboard, Psychol
 Cohesion: 0.21
 Nodes (6): App, appConfig, routes, authGuard(), roleGuard(), authInterceptor()
 
-### Community 17 - "Therapeutic Diary Dashboard"
-Cohesion: 0.14
-Nodes (3): DiaryDashboardComponent, DIARY_ROUTES, DiaryService
+### Community 18 - "Dashboard Main Navigation Layout"
+Cohesion: 0.10
+Nodes (6): AuditService, AuthService, ChatMessage, EmergencyChangeRequest, WebPushSubscriptionPayload, WhatsAppRoutingSession
 
 ### Community 20 - "Security and Design Principles"
 Cohesion: 0.06
-Nodes (33): angular-architect, cybersec-guardian, postgrest-dev, ux-specialist, Ciberseguridad y Privacidad, Diseño y UX, LoginComponent Template, 13.1. Fundamentación Clínica (Instrumentos Base) (+25 more)
+Nodes (35): angular-architect, cybersec-guardian, postgrest-dev, ux-specialist, Ciberseguridad y Privacidad, Diseño y UX, LoginComponent Template, 13.1. Fundamentación Clínica (Instrumentos Base) (+27 more)
 
 ### Community 27 - "Clinical Note Management"
-Cohesion: 0.12
+Cohesion: 0.09
 Nodes (3): ClinicalNoteComponent, EmergencyChangeModalComponent, InstitutionalSettingsComponent
 
 ### Community 28 - "AI Command Center Integration"
@@ -191,65 +236,233 @@ Nodes (5): ai-integrator, AgendaComponent Template, OverviewComponent Template, 
 Cohesion: 0.40
 Nodes (5): AdminLayoutComponent Template, FacultiesComponent Template, PsychologistsComponent Template, ReportsComponent Template, Skill 8: Módulo de Administración
 
+### Community 30 - "System Reports View"
+Cohesion: 0.22
+Nodes (5): EmojiScaleComponent, PendingEvaluationItem, ProfessionalEvaluationSummary, SessionEvaluation, SessionEvaluationPayload
+
 ### Community 43 - "Project README Overview"
 Cohesion: 0.25
 Nodes (7): Additional Resources, Building, Code scaffolding, Development server, PlataformaEmocional, Running end-to-end tests, Running unit tests
 
 ### Community 55 - "Community 55"
-Cohesion: 0.12
-Nodes (15): Fase 13: Fase de Integración Backend (PostgreSQL / PostgREST), Skill 10: Sistema de Logros y Gamificación (Estilo Duolingo), Skill 11: Chat Interno Conectado con Meta Cloud API (WhatsApp Bidireccional), Skill 12: Dossier Clínico Unificado, Marca de Agua y Meta Seal (Exportación Masiva PDF), Skill 13: Sistema de Evaluación Post-Sesión — FIT Gamificado (Fase actual: Planeación), Skill 1: Capa de Datos (PostgreSQL + PostgREST), Skill 2: Autenticación y Onboarding Clínico (Fase actual: Ejecutada), Skill 3: Amati Chat Estudiantil (Fase actual: Ejecución) (+7 more)
+Cohesion: 0.10
+Nodes (19): Corrección de Regresiones de Responsividad y Conflictos (Rama Nutricionista), Fase 13: Fase de Integración Backend (PostgreSQL / PostgREST), Responsividad de la Interfaz del Psicólogo, Skill 10: Responsividad Móvil (Fase actual: Ejecutada), Skill 10: Sistema de Logros y Gamificación (Estilo Duolingo), Skill 11: Animaciones Premium (Fase actual: Ejecutada), Skill 11: Chat Interno Conectado con Meta Cloud API (WhatsApp Bidireccional), Skill 12: Dossier Clínico Unificado, Marca de Agua y Meta Seal (Exportación Masiva PDF) (+11 more)
 
 ### Community 57 - "Community 57"
 Cohesion: 0.29
 Nodes (6): 1. Ciberseguridad y Privacidad como Pilar Absoluto, 2. La Especificación es la Ley, 3. Prioridad Clínica y Responsabilidad, 4. Diseño y UX (User Experience), 5. Prácticas de Desarrollo y Documentación, Constitución del Ecosistema de Asistencia Emocional
 
 ### Community 59 - "Community 59"
-Cohesion: 0.13
-Nodes (10): Appointment, AdminFaculty, DetailedStats, FeedbackModalComponent, FeedbackModalData, ChartDataPoint, WorkingDaysMap, Campus (+2 more)
+Cohesion: 0.14
+Nodes (8): AdminFaculty, DetailedStats, FeedbackModalComponent, FeedbackModalData, WorkingDaysMap, Campus, Faculty, FacultyService
 
 ### Community 63 - "Community 63"
 Cohesion: 0.12
 Nodes (15): 1. Visión General de la Arquitectura, 2.1.1. Modelo de Datos Relacional (PostgreSQL), 2.1.2. Políticas de Seguridad (RLS), 2.1.3. Motor de Rachas (*Streak Engine*), 2.1. Skill 10: Sistema de Logros y Gamificación (Duolingo Style), 2.2.1. Flujo Bidireccional, 2.2.2. Tabla de Seguimiento, 2.2. Skill 11: Chat Interno Conectado con Meta Cloud API (WhatsApp) (+7 more)
 
 ### Community 67 - "Community 67"
-Cohesion: 0.15
-Nodes (7): EmergencyModalData, AgendaService, TimeBlock, WorkingDay, CalendarDay, CalendarDay, CalendarDay
+Cohesion: 0.06
+Nodes (11): SpecialistItem, StudentItem, OverviewComponent, ReportsComponent, AdminSkill8Service, HealthProfessionalItem, AdminStatsService, ChartDataPoint (+3 more)
+
+### Community 68 - "Community 68"
+Cohesion: 0.16
+Nodes (9): environment, CampoFormulario, Psychologist, HealthProfessionalRegistrationPayload, PatientAssignmentPayload, CryptoService, DiaryEntry, UserStreak (+1 more)
+
+### Community 70 - "Community 70"
+Cohesion: 0.50
+Nodes (3): ACCESS_TOKEN, corsHeaders, PHONE_NUMBER_ID
 
 ### Community 71 - "Community 71"
 Cohesion: 0.08
 Nodes (25): 1.1. Principios Visuales y Tokens de Diseño, 1. Filosofía de Diseño y Sistema Visual (Design System & Aesthetics), 2.1. Objetivo UX y Mecánicas Estilo Duolingo, 2.2. Arquitectura de Interfaces y Maquetación, 2.3. Especificación de Estructura Angular (Código Base Standalone), 2. Especificación UX/UI 1: Sistema de Logros y Gamificación (Estilo Duolingo), 3.1. Objetivo UX y Diseño Arquitectónico Bidireccional, 3.2. Estructura de Interfaz (Split View de 2 Columnas) (+17 more)
 
+### Community 75 - "Community 75"
+Cohesion: 0.15
+Nodes (7): EmergencyModalData, AgendaService, TimeBlock, WorkingDay, CalendarDay, CalendarDay, CalendarDay
+
 ### Community 78 - "Community 78"
 Cohesion: 0.14
 Nodes (4): CommandCenterChatComponent, Conversation, InternalChatService, WhatsAppMessage
 
-### Community 81 - "Community 81"
-Cohesion: 0.16
-Nodes (3): OverviewComponent, AdminStatsService, OverviewMetrics
+### Community 84 - "Community 84"
+Cohesion: 0.22
+Nodes (13): backup_dir_for(), build_compress_prompt(), build_fix_prompt(), call_claude(), compress_file(), is_sensitive_path(), Strip outer ```markdown ... ``` fence when it wraps the entire output., Send a prompt to Claude.      Prefers the Anthropic SDK when ANTHROPIC_API_KEY (+5 more)
+
+### Community 85 - "Community 85"
+Cohesion: 0.25
+Nodes (10): detect_file_type(), _is_code_line(), _is_json_content(), _is_yaml_content(), Return True if the file is natural language and should be compressed., Check if a line looks like code., Check if content is valid JSON., Heuristic: check if content looks like YAML. (+2 more)
 
 ### Community 87 - "Community 87"
-Cohesion: 0.24
-Nodes (3): ChatMessage, CryptoService, DiaryEntry
+Cohesion: 0.25
+Nodes (10): detect_file_type(), _is_code_line(), _is_json_content(), _is_yaml_content(), Return True if the file is natural language and should be compressed., Check if a line looks like code., Check if content is valid JSON., Heuristic: check if content looks like YAML. (+2 more)
+
+### Community 88 - "Community 88"
+Cohesion: 0.10
+Nodes (4): BloqueVisual, ConsultaComponent, CampoFormulario, ConsultaNutricionRow
+
+### Community 89 - "Community 89"
+Cohesion: 0.20
+Nodes (17): count_bullets(), extract_code_blocks(), extract_headings(), extract_inline_codes(), extract_paths(), extract_urls(), Line-based fenced code block extractor.      Handles ``` and ~~~ fences with v, read_file() (+9 more)
+
+### Community 90 - "Community 90"
+Cohesion: 0.22
+Nodes (16): count_bullets(), extract_code_blocks(), extract_headings(), extract_inline_codes(), extract_paths(), extract_urls(), Line-based fenced code block extractor.      Handles ``` and ~~~ fences with v, read_file() (+8 more)
+
+### Community 91 - "Community 91"
+Cohesion: 0.14
+Nodes (13): Before / After, Benchmarks, How It Work, <img src="../../docs/assets/dancing-rock.svg" width="20" height="20" alt="rock"/> Caveman (285 tokens), Install, 📄 Original (706 tokens), Part of Caveman, Security (+5 more)
+
+### Community 92 - "Community 92"
+Cohesion: 0.14
+Nodes (13): Before / After, Benchmarks, How It Work, <img src="../../docs/assets/dancing-rock.svg" width="20" height="20" alt="rock"/> Caveman (285 tokens), Install, 📄 Original (706 tokens), Part of Caveman, Security (+5 more)
+
+### Community 93 - "Community 93"
+Cohesion: 0.17
+Nodes (11): Boundaries, Caveman Compress, Compress, Compression Rules, Pattern, Preserve EXACTLY (never modify), Preserve Structure, Process (+3 more)
+
+### Community 94 - "Community 94"
+Cohesion: 0.17
+Nodes (11): Boundaries, Caveman Compress, Compress, Compression Rules, Pattern, Preserve EXACTLY (never modify), Preserve Structure, Process (+3 more)
+
+### Community 95 - "Community 95"
+Cohesion: 0.25
+Nodes (7): Auth behavior, File size limit, Reporting a vulnerability, Security, Snyk High Risk Rating, What the skill does NOT do, What triggers the rating
+
+### Community 96 - "Community 96"
+Cohesion: 0.25
+Nodes (7): Caveman Help, Configure Default Mode, Deactivate, Language, Modes, More, Skills
+
+### Community 97 - "Community 97"
+Cohesion: 0.25
+Nodes (7): Auth behavior, File size limit, Reporting a vulnerability, Security, Snyk High Risk Rating, What the skill does NOT do, What triggers the rating
+
+### Community 98 - "Community 98"
+Cohesion: 0.25
+Nodes (7): Caveman Help, Configure Default Mode, Deactivate, Language, Modes, More, Skills
+
+### Community 99 - "Community 99"
+Cohesion: 0.29
+Nodes (6): cavecrew, Example chaining, How to invoke, Model overrides, See also, What it does
+
+### Community 100 - "Community 100"
+Cohesion: 0.29
+Nodes (6): Auto-clarity (inherited), Chaining patterns, Output contracts, What NOT to do, When to use cavecrew vs alternatives, Why this exists (the real win)
+
+### Community 101 - "Community 101"
+Cohesion: 0.29
+Nodes (6): cavecrew, Example chaining, How to invoke, Model overrides, See also, What it does
+
+### Community 102 - "Community 102"
+Cohesion: 0.29
+Nodes (6): Auto-clarity (inherited), Chaining patterns, Output contracts, What NOT to do, When to use cavecrew vs alternatives, Why this exists (the real win)
+
+### Community 103 - "Community 103"
+Cohesion: 0.33
+Nodes (5): caveman-commit, Example output, How to invoke, See also, What it does
+
+### Community 104 - "Community 104"
+Cohesion: 0.33
+Nodes (5): caveman-help, Example output, How to invoke, See also, What it does
+
+### Community 105 - "Community 105"
+Cohesion: 0.33
+Nodes (5): caveman, Example output, How to invoke, See also, What it does
+
+### Community 106 - "Community 106"
+Cohesion: 0.33
+Nodes (5): caveman-review, Example output, How to invoke, See also, What it does
+
+### Community 107 - "Community 107"
+Cohesion: 0.33
+Nodes (5): Auto-Clarity, Boundaries, Intensity, Persistence, Rules
+
+### Community 108 - "Community 108"
+Cohesion: 0.33
+Nodes (5): caveman-stats, Example output, How to invoke, See also, What it does
+
+### Community 109 - "Community 109"
+Cohesion: 0.33
+Nodes (5): caveman-commit, Example output, How to invoke, See also, What it does
+
+### Community 110 - "Community 110"
+Cohesion: 0.33
+Nodes (5): caveman-help, Example output, How to invoke, See also, What it does
+
+### Community 111 - "Community 111"
+Cohesion: 0.33
+Nodes (5): caveman, Example output, How to invoke, See also, What it does
+
+### Community 112 - "Community 112"
+Cohesion: 0.33
+Nodes (5): caveman-review, Example output, How to invoke, See also, What it does
+
+### Community 113 - "Community 113"
+Cohesion: 0.33
+Nodes (5): Auto-Clarity, Boundaries, Intensity, Persistence, Rules
+
+### Community 114 - "Community 114"
+Cohesion: 0.33
+Nodes (5): caveman-stats, Example output, How to invoke, See also, What it does
+
+### Community 115 - "Community 115"
+Cohesion: 0.40
+Nodes (4): Auto-Clarity, Boundaries, Examples, Rules
+
+### Community 116 - "Community 116"
+Cohesion: 0.40
+Nodes (4): Auto-Clarity, Boundaries, Examples, Rules
+
+### Community 117 - "Community 117"
+Cohesion: 0.40
+Nodes (4): Auto-Clarity, Boundaries, Examples, Rules
+
+### Community 118 - "Community 118"
+Cohesion: 0.40
+Nodes (4): Auto-Clarity, Boundaries, Examples, Rules
+
+### Community 119 - "Community 119"
+Cohesion: 0.50
+Nodes (3): CampoFormulario, CampoFormularioTipo, ConsultaNutricionRow
+
+### Community 131 - "Community 131"
+Cohesion: 0.36
+Nodes (4): CalendarioService, RegistroAyerSnapshot, CampoFormularioTipo, NuevaConsultaNutricionPayload
+
+### Community 132 - "Community 132"
+Cohesion: 0.50
+Nodes (3): assetGroups, index, $schema
+
+### Community 133 - "Community 133"
+Cohesion: 0.32
+Nodes (3): Appointment, AdminExceptionsService, Holiday
+
+### Community 138 - "Community 138"
+Cohesion: 0.70
+Nodes (4): benchmark_pair(), count_tokens(), main(), print_table()
+
+### Community 139 - "Community 139"
+Cohesion: 0.70
+Nodes (4): benchmark_pair(), count_tokens(), main(), print_table()
 
 ## Knowledge Gaps
-- **210 isolated node(s):** `$schema`, `version`, `newProjectRoot`, `projectType`, `style` (+205 more)
+- **388 isolated node(s):** `$schema`, `version`, `newProjectRoot`, `projectType`, `style` (+383 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **55 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **68 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `SupabaseService` connect `Core Services and Auth` to `Modals Diary and Exceptions`, `Community 67`, `Community 68`, `Community 74`, `Main App Security Interceptors`, `Community 78`, `Dashboard Main Navigation Layout`, `Community 87`, `Community 59`?**
-  _High betweenness centrality (0.105) - this node is a cross-community bridge._
-- **Why does `AuthService` connect `Dashboard Main Navigation Layout` to `Core Services and Auth`, `Modals Diary and Exceptions`, `Community 67`, `Community 68`, `Community 74`, `Community 78`, `Main App Security Interceptors`, `Community 87`, `Community 59`?**
-  _High betweenness centrality (0.097) - this node is a cross-community bridge._
-- **Why does `FacultiesComponent` connect `Faculty Occupancy Management` to `Community 59`?**
-  _High betweenness centrality (0.040) - this node is a cross-community bridge._
-- **What connects `$schema`, `version`, `newProjectRoot` to the rest of the system?**
-  _214 weakly-connected nodes found - possible documentation gaps or missing edges._
-- **Should `Modals Diary and Exceptions` be split into smaller, more focused modules?**
-  _Cohesion score 0.05202661826981246 - nodes in this community are weakly interconnected._
+- **Why does `SupabaseService` connect `Community 68` to `Community 67`, `Community 131`, `Community 133`, `Community 74`, `Community 75`, `Main App Security Interceptors`, `Community 78`, `Dashboard Main Navigation Layout`, `Community 59`, `System Reports View`?**
+  _High betweenness centrality (0.063) - this node is a cross-community bridge._
+- **Why does `AgendaComponent` connect `Admin Agenda Metrics` to `Community 133`?**
+  _High betweenness centrality (0.044) - this node is a cross-community bridge._
+- **Why does `AuthService` connect `Dashboard Main Navigation Layout` to `Community 131`, `Community 68`, `Community 74`, `Community 75`, `Community 78`, `Main App Security Interceptors`, `Community 59`, `System Reports View`?**
+  _High betweenness centrality (0.038) - this node is a cross-community bridge._
+- **What connects `Caveman compress scripts.  This package provides tools to compress natural lan`, `Split YAML frontmatter from body. Returns (frontmatter, body).      Memory fil`, `Resolve the out-of-tree backup directory for a given source file.      Backups` to the rest of the system?**
+  _416 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Should `Community 0` be split into smaller, more focused modules?**
+  _Cohesion score 0.07956989247311828 - nodes in this community are weakly interconnected._
 - **Should `Package Config and Dependencies` be split into smaller, more focused modules?**
-  _Cohesion score 0.04878048780487805 - nodes in this community are weakly interconnected._
-- **Should `Angular Architect Configurations` be split into smaller, more focused modules?**
-  _Cohesion score 0.08275862068965517 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.046511627906976744 - nodes in this community are weakly interconnected._
+- **Should `Angular Build Schemas` be split into smaller, more focused modules?**
+  _Cohesion score 0.06896551724137931 - nodes in this community are weakly interconnected._

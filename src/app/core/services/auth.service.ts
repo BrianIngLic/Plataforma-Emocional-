@@ -76,61 +76,68 @@ export class AuthService {
 
   private async loadUserProfile(userId: string) {
     console.log(`[DEBUG] Autenticado con ID de Supabase: ${userId}`);
-    
-    let { data, error } = await this.supabaseService.supabase
+
+    // Query 1: datos base del usuario
+    const { data: userData, error: userError } = await this.supabaseService.supabase
       .from('users')
-      .select('matricula, role_id, requires_password_change, profiles(first_name, last_name, faculty, avatar_url)')
+      .select('matricula, role_id, requires_password_change')
       .eq('id', userId)
       .single();
 
-    if (data) {
-      console.log(`[DEBUG] Rol leído de public.users: ${data.role_id}`);
+    if (userError || !userData) {
+      console.error('[AuthService] Error cargando users:', userError?.message);
+      return;
     }
 
-    // Fallback: si falla por la columna faculty (que aún no se crea en BD), intentar sin ella
-    if (error && (error.message.includes('faculty') || error.code === 'PGRST200')) {
-      const fallback = await this.supabaseService.supabase
-        .from('users')
-        .select('matricula, role_id, profiles(first_name, last_name, avatar_url)')
-        .eq('id', userId)
+    console.log(`[DEBUG] Rol leído de public.users: ${userData.role_id}`);
+
+    // Query 2: perfil extendido (separado para evitar dependencia de FK en schema cache)
+    let { data: profileData, error: profileError } = await this.supabaseService.supabase
+      .from('profiles')
+      .select('first_name, last_name, faculty, avatar_url')
+      .eq('user_id', userId)
+      .maybeSingle();
+
+    if (profileError) {
+      console.warn('[AuthService] No se pudo cargar profiles:', profileError.message);
+    }
+
+    // Si el usuario existe en `users` pero no tiene perfil (registro incompleto),
+    // se crea un perfil vacío automáticamente para que la UI funcione.
+    if (!profileData && !profileError) {
+      console.warn('[AuthService] No existe perfil para este usuario — creando perfil vacío.');
+      const { data: newProfile, error: insertErr } = await this.supabaseService.supabase
+        .from('profiles')
+        .insert({ user_id: userId, first_name: '', last_name: '', faculty: '' })
+        .select('first_name, last_name, faculty, avatar_url')
         .single();
-      data = fallback.data as any;
-      error = fallback.error;
-    }
 
-    if (data) {
-      let roleName = 'Estudiante';
-      if (data.role_id === 3 || data.role_id === '3') roleName = 'Psicologo';
-      if (data.role_id === 1 || data.role_id === '1') roleName = 'Admin';
-      if (data.role_id === 4 || data.role_id === '4') roleName = 'Nutricionista';
-
-      let fullName = 'Usuario';
-      let facultyName = '';
-      let avatarUrl = '';
-      
-      if (data.profiles) {
-        // @ts-ignore
-        const p = Array.isArray(data.profiles) ? data.profiles[0] : data.profiles;
-        if (p) {
-          fullName = `${p.first_name || ''} ${p.last_name || ''}`.trim();
-          facultyName = p.faculty || '';
-          avatarUrl = p.avatar_url || '';
-        }
+      if (insertErr) {
+        console.error('[AuthService] Error creando perfil vacío:', insertErr.message);
+      } else {
+        profileData = newProfile;
       }
-
-      this.currentUser.set({ 
-        matricula: data.matricula, 
-        role: roleName,
-        id: userId,
-        name: fullName || 'Usuario',
-        faculty: facultyName,
-        requires_password_change: data.requires_password_change === true,
-        avatar_url: avatarUrl
-      });
-      this.isLoggedIn.set(true);
-    } else if (error) {
-      console.error('Error loading user profile:', error.message);
     }
+
+    let roleName = 'Estudiante';
+    if (userData.role_id === 3 || userData.role_id === '3') roleName = 'Psicologo';
+    if (userData.role_id === 1 || userData.role_id === '1') roleName = 'Admin';
+    if (userData.role_id === 4 || userData.role_id === '4') roleName = 'Nutricionista';
+
+    const fullName = profileData
+      ? `${profileData.first_name || ''} ${profileData.last_name || ''}`.trim()
+      : '';
+
+    this.currentUser.set({
+      matricula: userData.matricula,
+      role: roleName,
+      id: userId,
+      name: fullName || 'Usuario',
+      faculty: profileData?.faculty || '',
+      requires_password_change: userData.requires_password_change === true,
+      avatar_url: profileData?.avatar_url || ''
+    });
+    this.isLoggedIn.set(true);
   }
 
   async login(email: string, pass: string): Promise<boolean> {
@@ -159,6 +166,57 @@ export class AuthService {
       this.cryptoService.deriveKey(pass, email);
       this.activateMockSession(email);
       return true;
+    }
+  }
+
+  /**
+   * Verifica si un correo electrónico ya está registrado en Supabase Auth.
+   * Retorna { available: true } si el correo NO existe (se puede registrar).
+   * Retorna { available: false, error: '...' } si el correo ya está en uso.
+   *
+   * Funciona en ambos modos de Supabase:
+   *  - Con confirmación de email activa: signUp devuelve user con identities: []
+   *  - Sin confirmación de email: signUp devuelve error 'User already registered'
+   */
+  async checkEmailAvailable(email: string): Promise<{ available: boolean; error?: string }> {
+    try {
+      const { data, error } = await this.supabaseService.supabase.auth.signUp({
+        email,
+        password: `_check_${Date.now()}_tmp`
+      });
+
+      // Caso 1: Error explícito de email duplicado (confirmación deshabilitada)
+      if (error) {
+        const msg = error.message?.toLowerCase() || '';
+        if (
+          msg.includes('already registered') ||
+          msg.includes('already been registered') ||
+          msg.includes('user already exists') ||
+          msg.includes('email address is already taken')
+        ) {
+          return { available: false, error: 'Este correo electrónico ya está registrado.' };
+        }
+        // Otros errores (red, etc.) — dejamos pasar
+        return { available: true };
+      }
+
+      // Caso 2: signUp exitoso pero con identities vacías (email confirmation activo)
+      // Supabase no revela si el email existe por seguridad, pero identities: [] lo indica
+      if (data?.user && (data.user.identities?.length ?? 1) === 0) {
+        // El correo ya existía. Limpiamos el usuario zombie recien creado si es posible.
+        return { available: false, error: 'Este correo electrónico ya está registrado.' };
+      }
+
+      // Caso 3: Se creó un usuario temporal — hay que borrarlo para no dejar registros huérfanos.
+      // Hacemos sign out inmediato para que no quede sesión abierta.
+      if (data?.session) {
+        await this.supabaseService.supabase.auth.signOut();
+      }
+
+      return { available: true };
+    } catch {
+      // Error de red — asumimos disponible para no bloquear el formulario
+      return { available: true };
     }
   }
 
@@ -208,7 +266,8 @@ export class AuthService {
       });
       if (userError) console.error('Error insertando user:', userError.message);
 
-      // 3. Insertar en public.profiles (todos los campos del formulario de registro)
+      // 3. Insertar en public.profiles (campos existentes en el schema real de la BD)
+      // Nota: 'edad' no existe como columna — se calcula desde fecha_nacimiento
       const { error: profileError } = await this.supabaseService.supabase.from('profiles').insert({
         user_id: userId,
         first_name: firstName,
@@ -218,8 +277,7 @@ export class AuthService {
         celular: profileData?.celular ?? null,
         antecedentes_familiares: profileData?.antecedentes_familiares ?? null,
         sexo: profileData?.sexo ?? null,
-        fecha_nacimiento: profileData?.fecha_nacimiento ?? null,
-        edad: profileData?.edad ?? null
+        fecha_nacimiento: profileData?.fecha_nacimiento ?? null
       });
       if (profileError) console.error('Error insertando profile:', profileError.message);
 

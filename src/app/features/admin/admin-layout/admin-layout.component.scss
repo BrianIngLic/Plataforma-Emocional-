@@ -212,6 +212,13 @@
   border-radius: 12px;
   margin: 0 1rem 0.5rem 1rem;
   white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateY(-1px);
+  }
 
   .avatar {
     width: 36px;
@@ -378,8 +385,22 @@
   background-color: var(--bg-main, #0f172a);
 }
 
+.sidebar-backdrop {
+  display: none;
+}
+
 // Mobile responsiveness
 @media (max-width: 768px) {
+  .sidebar-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+    z-index: 99;
+    animation: fade-in 0.25s ease-out;
+  }
+
   .sidebar {
     transform: translateX(-100%);
     &.collapsed {
@@ -405,4 +426,9 @@
       }
     }
   }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }

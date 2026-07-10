@@ -1,8 +1,10 @@
 import { Component, OnInit, inject, HostListener, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
+import { FormsModule } from '@angular/forms';
 import { AdminExceptionsService } from '../services/admin-exceptions.service';
 import { AdminStatsService } from '../services/admin-stats.service';
+import { SupabaseService } from '../../../core/services/supabase.service';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { FeedbackModalComponent } from '../../../shared/components/feedback-modal/feedback-modal.component';
 
@@ -20,17 +22,18 @@ interface Appointment {
 @Component({
   selector: 'app-agenda',
   standalone: true,
-  imports: [CommonModule, MatIconModule, MatDialogModule],
+  imports: [CommonModule, MatIconModule, MatDialogModule, FormsModule],
   templateUrl: './agenda.component.html',
   styleUrls: ['./agenda.component.scss']
 })
 export class AgendaComponent implements OnInit {
 
   days = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
-  hours = ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00'];
+  hours = ['07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00'];
 
   private adminStats = inject(AdminStatsService);
   private elRef = inject(ElementRef);
+  private supabaseService = inject(SupabaseService);
 
   appointments: Appointment[] = [];
 
@@ -38,8 +41,15 @@ export class AgendaComponent implements OnInit {
 
   weekOffset = 0;
   selectedAppt: Appointment | null = null;
-  weekDays: { name: string; shortName: string; dateNumber: number; isToday: boolean; dateObj: Date }[] = [];
+  weekDays: { name: string; shortName: string; dateNumber: number; isToday: boolean; dateObj: Date; isBlocked?: boolean; blockedReason?: string | null }[] = [];
   currentDateRangeString: string = '';
+
+  // Modal Bloquear Día Manual
+  showBlockDayModal = false;
+  blockDayDate = '';
+  blockDayReason = '';
+  isSavingBlockDay = false;
+
 
   // Vista Semana vs Día
   calendarViewMode: 'week' | 'day' = 'week';
@@ -82,9 +92,13 @@ export class AgendaComponent implements OnInit {
     try {
       const result = await this.exceptionsService.importHolidaysToSupabase(year);
       if (result.success) {
+        const msg = result.count > 0 
+          ? `Se han registrado ${result.count} nuevos días festivos globales para ${year}.`
+          : `Todos los días festivos para ${year} ya estaban registrados.`;
+
         this.dialog.open(FeedbackModalComponent, {
           width: '400px',
-          data: { type: 'success', title: 'Festivos Importados', message: `Se han registrado ${result.count} días festivos globales para ${year} (API Nager.Date).` }
+          data: { type: 'success', title: 'Festivos Importados', message: msg }
         });
       } else {
         throw new Error('Error en importación');
@@ -96,6 +110,41 @@ export class AgendaComponent implements OnInit {
       });
     } finally {
       this.isImportingHolidays = false;
+    }
+  }
+
+  openBlockDayModal() {
+    this.showBlockDayModal = true;
+    this.blockDayDate = '';
+    this.blockDayReason = '';
+  }
+
+  closeBlockDayModal() {
+    this.showBlockDayModal = false;
+  }
+
+  async saveBlockDayException() {
+    if (!this.blockDayDate || !this.blockDayReason) return;
+    this.isSavingBlockDay = true;
+    try {
+      const result = await this.exceptionsService.addException(this.blockDayDate, this.blockDayReason, null);
+      if (result.error) throw result.error;
+      
+      this.dialog.open(FeedbackModalComponent, {
+        width: '400px',
+        data: { type: 'success', title: 'Día Bloqueado', message: `Se ha bloqueado el día ${this.blockDayDate} globalmente.` }
+      });
+      
+      this.closeBlockDayModal();
+      await this.loadAppointments(); // Recargar agenda
+    } catch (err) {
+      console.error('Error al bloquear día:', err);
+      this.dialog.open(FeedbackModalComponent, {
+        width: '400px',
+        data: { type: 'error', title: 'Error', message: 'No se pudo bloquear el día. Verifique los datos e intente nuevamente.' }
+      });
+    } finally {
+      this.isSavingBlockDay = false;
     }
   }
 
@@ -130,6 +179,23 @@ export class AgendaComponent implements OnInit {
     startOfWeek.setHours(0,0,0,0);
     endOfWeek.setHours(23,59,59,999);
 
+    // Query exceptions (ponytail: fetch global exceptions inside startOfWeek and endOfWeek range)
+    const { data: excps } = await this.supabaseService.supabase
+      .from('health_professional_exceptions')
+      .select('exception_date, description')
+      .is('professional_id', null)
+      .gte('exception_date', startOfWeek.toISOString().split('T')[0])
+      .lte('exception_date', endOfWeek.toISOString().split('T')[0]);
+
+    const excpSet = new Map<string, string>();
+    if (excps) {
+      excps.forEach((e: any) => {
+        if (e.exception_date) {
+          excpSet.set(e.exception_date.substring(0, 10), e.description || 'Festivo / Bloqueado');
+        }
+      });
+    }
+
     // Generar días de la semana (Lunes a Viernes) para el encabezado estilo Google Calendar
     const today = new Date();
     const dayNames = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
@@ -139,12 +205,17 @@ export class AgendaComponent implements OnInit {
     for (let i = 0; i < 5; i++) {
       const d = new Date(startOfWeek.getFullYear(), startOfWeek.getMonth(), startOfWeek.getDate() + i);
       const isToday = d.getDate() === today.getDate() && d.getMonth() === today.getMonth() && d.getFullYear() === today.getFullYear();
+      const dateKey = d.getFullYear() + '-' + ('0'+(d.getMonth()+1)).slice(-2) + '-' + ('0'+d.getDate()).slice(-2);
+      const blockedReason = excpSet.get(dateKey) || null;
+
       this.weekDays.push({
         name: dayNames[i],
         shortName: shortNames[i],
         dateNumber: d.getDate(),
         isToday: isToday,
-        dateObj: d
+        dateObj: d,
+        isBlocked: !!blockedReason,
+        blockedReason: blockedReason
       });
     }
 
@@ -161,9 +232,9 @@ export class AgendaComponent implements OnInit {
       if (dayIdx < 0) dayIdx = 0; 
       if (dayIdx > 4) dayIdx = 4;
 
-      let hourIdx = parseInt(a.startTime.split(':')[0]) - 8;
+      let hourIdx = parseInt(a.startTime.split(':')[0]) - 7;
       if (hourIdx < 0) hourIdx = 0;
-      if (hourIdx > 9) hourIdx = 9;
+      if (hourIdx >= this.hours.length) hourIdx = this.hours.length - 1;
 
       return {
         id: a.id,
@@ -172,8 +243,12 @@ export class AgendaComponent implements OnInit {
         faculty: a.faculty,
         day: dayIdx,
         hour: hourIdx,
+        startTime: a.startTime,
+        endTime: a.endTime,
         type: a.type,
-        status: a.status
+        status: a.status,
+        notes: a.notes,
+        date: a.date
       };
     });
 
@@ -215,6 +290,21 @@ export class AgendaComponent implements OnInit {
     if (status === 'confirmed') return 'status-confirmed';
     if (status === 'urgent') return 'status-urgent';
     return 'status-pending';
+  }
+
+  isPastAppointment(appt: any): boolean {
+    if (!appt.date) return false;
+    const apptDate = new Date(appt.date + 'T00:00:00');
+    const today = new Date();
+    today.setHours(0,0,0,0);
+    return apptDate < today;
+  }
+
+  isAlertAppointment(appt: any): boolean {
+    const isPast = this.isPastAppointment(appt);
+    const hasNoNote = !appt.notes || appt.notes.trim() === '';
+    const isNotNoShow = appt.status !== 'no_show';
+    return isPast && hasNoNote && isNotNoShow;
   }
 
   getStatusText(status: string): string {

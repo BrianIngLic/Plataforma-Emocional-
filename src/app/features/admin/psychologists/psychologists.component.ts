@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, HostListener } from '@angular/core';
 import { CommonModule, registerLocaleData } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -9,6 +9,8 @@ import { AdminStatsService } from '../services/admin-stats.service';
 import { createClient } from '@supabase/supabase-js';
 import { environment } from '../../../../environments/environment';
 import localeEs from '@angular/common/locales/es';
+import { DossierExportService } from '../../../core/services/dossier-export.service';
+import { AdminSkill8Service } from '../services/admin-skill8.service';
 
 registerLocaleData(localeEs, 'es');
 
@@ -42,14 +44,41 @@ interface Psychologist {
 export class PsychologistsComponent implements OnInit {
   supabase = inject(SupabaseService).supabase;
   fb = inject(FormBuilder);
-
   adminStats = inject(AdminStatsService);
+  adminSkill8 = inject(AdminSkill8Service);
+  dossierExport = inject(DossierExportService);
 
   psychologists: Psychologist[] = [];
+
+  // Patient Management State
+  assignedPatients: any[] = [];
+  availableStudents: any[] = [];
+  searchStudentQuery = '';
+  showAssignDropdown = false;
+  isExporting: { [studentId: string]: boolean } = {};
+  selectedStudentForProfile: any = null;
+  showStudentProfileModal = false;
+
+  // Unassign Confirm Modal State
+  showUnassignConfirmModal = false;
+  studentIdToUnassign: string | null = null;
+  studentNameToUnassign = '';
+  showUnassignSuccessModal = false;
+  unassignedStudentName = '';
 
   selectedFilter: string = 'all';
   selectedPsychologist: Psychologist | null = null;
   activeTab: 'profile' | 'calendar' | 'stats' = 'profile';
+
+  profileContainerScrollTop = 0;
+
+  @HostListener('document:scroll', ['$event'])
+  onScroll(event?: Event) {
+    const scrollEl = document.querySelector('.content-body');
+    if (scrollEl) {
+      this.profileContainerScrollTop = scrollEl.scrollTop;
+    }
+  }
   
   // Profile Edit State
   editForm!: FormGroup;
@@ -58,6 +87,20 @@ export class PsychologistsComponent implements OnInit {
   // Calendar State
   currentMonthDate = new Date();
   calendarDays: { date: Date, isCurrentMonth: boolean, isPast: boolean, blocked: boolean, appointments: number }[] = [];
+  selectedDate: Date = new Date();
+  selectedPsychologistAppointments: any[] = [];
+
+  get appointmentsForSelectedDate() {
+    if (!this.selectedDate) return [];
+    const tzOffset = this.selectedDate.getTimezoneOffset() * 60000;
+    const selStr = new Date(this.selectedDate.getTime() - tzOffset).toISOString().split('T')[0];
+    return this.selectedPsychologistAppointments.filter((a: any) => {
+      const dStr = a.scheduled_date.split('T')[0];
+      return dStr === selStr;
+    }).sort((a: any, b: any) => {
+      return a.scheduled_date.localeCompare(b.scheduled_date);
+    });
+  }
 
   
   // Registration Form state
@@ -101,6 +144,11 @@ export class PsychologistsComponent implements OnInit {
     this.initForm();
     await this.loadFaculties();
     this.psychologists = await this.adminStats.getPsychologistsWithStats();
+    
+    // Initialize scroll position
+    setTimeout(() => {
+      this.onScroll();
+    }, 100);
   }
 
   async loadFaculties() {
@@ -121,7 +169,6 @@ export class PsychologistsComponent implements OnInit {
       firstName: ['', [Validators.required, Validators.minLength(2)]],
       lastName: ['', [Validators.required, Validators.minLength(2)]],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
       matricula: ['', [Validators.required]],
       cedula: ['', [Validators.required]],
       faculty: [this.faculties.length > 0 ? this.faculties[0] : '', [Validators.required]],
@@ -161,6 +208,21 @@ export class PsychologistsComponent implements OnInit {
     return stars;
   }
 
+  isPastAppointment(appt: any): boolean {
+    if (!appt.scheduled_date) return false;
+    const apptDate = new Date(appt.scheduled_date);
+    const today = new Date();
+    today.setHours(0,0,0,0);
+    return apptDate < today;
+  }
+
+  isAlertAppointment(appt: any): boolean {
+    const isPast = this.isPastAppointment(appt);
+    const hasNoNote = !appt.notes || appt.notes.trim() === '';
+    const isNotNoShow = appt.status !== 'no_show';
+    return isPast && hasNoNote && isNotNoShow;
+  }
+
   getPct(p: Psychologist): number {
     return Math.round((p.patients / p.capacity) * 100);
   }
@@ -192,6 +254,7 @@ export class PsychologistsComponent implements OnInit {
   viewDetail(p: Psychologist) {
     this.selectedPsychologist = p;
     this.activeTab = 'profile';
+    this.selectedDate = new Date();
     
     // Parse first name / last name
     const parts = p.name.replace('Dr. ', '').split(' ');
@@ -207,8 +270,9 @@ export class PsychologistsComponent implements OnInit {
     });
 
     this.generateCalendar();
-    const efficiency = this.getEfficiency(p);
-    this.barChartData.datasets[0].data = [p.sessionsCompleted, p.sessionsScheduled, p.attendanceRate, efficiency];
+    this.loadAssignedPatients();
+    this.loadAvailableStudents();
+    this.loadPerformanceChart(p.id);
   }
 
   closeDetail() {
@@ -274,30 +338,51 @@ export class PsychologistsComponent implements OnInit {
 
     const { data: appts } = await this.supabase
       .from('appointments')
-      .select('scheduled_date, status')
+      .select(`
+        id,
+        scheduled_date,
+        start_time,
+        end_time,
+        status,
+        notes,
+        priority_level,
+        patient:users!student_id (
+          profiles (
+            first_name,
+            last_name,
+            faculty
+          )
+        )
+      `)
       .eq('professional_id', this.selectedPsychologist.id)
-      .eq('status', 'completed')
       .gte('scheduled_date', startDate.toISOString())
       .lte('scheduled_date', endDate.toISOString());
 
     const { data: excps } = await this.supabase
-      .from('exceptions')
-      .select('date')
+      .from('health_professional_exceptions')
+      .select('exception_date')
       .or(`professional_id.eq.${this.selectedPsychologist.id},professional_id.is.null`)
-      .gte('date', startDate.toISOString())
-      .lte('date', endDate.toISOString());
+      .gte('exception_date', startDate.toISOString())
+      .lte('exception_date', endDate.toISOString());
 
     const apptMap: Record<string, number> = {};
+    const allAppointments: any[] = [];
     if (appts) {
       appts.forEach((a: any) => {
         const d = a.scheduled_date.split('T')[0];
-        apptMap[d] = (apptMap[d] || 0) + 1;
+        apptMap[d] = (apptMap[d] || 0) + (a.status !== 'canceled' && a.status !== 'cancelled' ? 1 : 0);
+        allAppointments.push(a);
       });
     }
+    this.selectedPsychologistAppointments = allAppointments;
 
     const excpSet = new Set<string>();
     if (excps) {
-      excps.forEach((e: any) => excpSet.add(e.date.split('T')[0]));
+      excps.forEach((e: any) => {
+        if (e.exception_date) {
+          excpSet.add(e.exception_date.split('T')[0]);
+        }
+      });
     }
 
     const days = [];
@@ -335,14 +420,17 @@ export class PsychologistsComponent implements OnInit {
     this.formErrorMessage = '';
     this.formSuccessMessage = '';
     this.addForm.reset({
-      faculty: 'Engineering',
+      role: 3,
       capacity: 35
     });
+    this.selectedRoleToggle = 3;
+    this.updateBodyScroll();
   }
 
   closeAddModal() {
     this.showAddModal = false;
-    this.createdCredentials = null;
+    this.createdUser = null;
+    this.updateBodyScroll();
   }
 
   async onSubmit() {
@@ -355,7 +443,7 @@ export class PsychologistsComponent implements OnInit {
     this.formErrorMessage = '';
     this.formSuccessMessage = '';
 
-    const { role, firstName, lastName, email, password, matricula, cedula, faculty, specialty, capacity } = this.addForm.value;
+    const { role, firstName, lastName, email, matricula, cedula, faculty, specialty, capacity } = this.addForm.value;
     const roleName = Number(role) === 4 ? 'Nutriólogo' : 'Psicólogo';
 
     try {
@@ -368,9 +456,6 @@ export class PsychologistsComponent implements OnInit {
       if (error || (data && data.error)) {
         throw new Error(error?.message || data?.error || 'Error invocando Edge Function invite-user');
       }
-
-      // Sanitización inmediata en memoria de la contraseña temporal (HIPAA / NOM-024)
-      this.addForm.patchValue({ password: '' });
 
       const newPsych: Psychologist = {
         id: 'p_new_' + Math.random().toString(36).substr(2, 9),
@@ -393,17 +478,8 @@ export class PsychologistsComponent implements OnInit {
 
       this.psychologists.unshift(newPsych);
 
-      this.formSuccessMessage = 'Generando credenciales...';
-      // Mantenemos la contraseña para generar el PDF del oficio oficial y luego se purga
-      this.createdCredentials = { name: `Dr. ${firstName} ${lastName}`, email, password: password || '[CONFIDENCIAL - ELIMINADA DE MEMORIA (HIPAA / NOM-024)]' };
-      
-      try {
-        const pdfBase64 = await this.generateCredentialsPDF(`Dr. ${firstName} ${lastName}`, email, password || '[ENLACE DE INVITACIÓN ENVIADO A CORREO]', false);
-        this.formSuccessMessage = `¡Registro exitoso! Invitación oficial enviada por Supabase al ${roleName.toLowerCase()}.`;
-      } catch (err) {
-        console.error('Error generating PDF:', err);
-        this.formSuccessMessage = `${roleName} invitado exitosamente mediante Supabase Auth.`;
-      }
+      this.createdUser = { name: `Dr. ${firstName} ${lastName}`, email };
+      this.formSuccessMessage = `¡Registro exitoso! Invitación oficial enviada por Supabase al ${roleName.toLowerCase()}.`;
 
     } catch (err: any) {
       console.error('Error durante el registro:', err.message || err);
@@ -418,74 +494,20 @@ export class PsychologistsComponent implements OnInit {
       }
       
       this.formErrorMessage = errorMsg;
-      this.createdCredentials = null;
+      this.createdUser = null;
     } finally {
       this.isSubmitting = false;
     }
   }
 
-  createdCredentials: { name: string, email: string, password: string } | null = null;
-
-  generateRandomPassword() {
-    const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*';
-    let pass = '';
-    for (let i = 0; i < 12; i++) {
-      pass += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    this.addForm.patchValue({ password: pass });
-  }
-
-  generateCredentialsPDF(name: string, email: string, pass: string, shouldSave: boolean = true): Promise<string> {
-    return new Promise((resolve) => {
-      import('jspdf').then(({ jsPDF }) => {
-        const doc = new jsPDF();
-      
-      doc.setFontSize(22);
-      doc.setTextColor(37, 99, 235);
-      doc.text('Plataforma de Asistencia Emocional', 105, 30, { align: 'center' });
-      
-      doc.setFontSize(16);
-      doc.setTextColor(0, 0, 0);
-      doc.text('Credenciales de Acceso Oficiales', 105, 45, { align: 'center' });
-      
-      doc.setFontSize(12);
-      doc.text(`Estimado/a ${name},`, 20, 70);
-      doc.text('Su cuenta como especialista clínico ha sido creada exitosamente en la plataforma.', 20, 80);
-      
-      doc.setDrawColor(200);
-      doc.setFillColor(245, 245, 245);
-      doc.roundedRect(20, 95, 170, 50, 3, 3, 'FD');
-      
-      doc.setFont('helvetica', 'bold');
-      doc.text('Correo electrónico:', 30, 110);
-      doc.text('Acceso Seguro:', 30, 125);
-      
-      doc.setFont('helvetica', 'normal');
-      doc.text(email, 75, 110);
-      doc.text(pass, 75, 125);
-      
-      doc.text('Por motivos de seguridad, el sistema le exigirá cambiar esta contraseña', 20, 165);
-      doc.text('en su primer inicio de sesión.', 20, 172);
-      
-      doc.setTextColor(37, 99, 235);
-      doc.text('Enlace de acceso: https://plataforma-emocional.com', 20, 190);
-      
-      if (shouldSave) {
-        doc.save(`Credenciales_${name.replace(/ /g, '_')}.pdf`);
-      }
-      
-      const pdfBase64 = btoa(doc.output());
-      resolve(pdfBase64);
-    });
-  });
-}
+  createdUser: { name: string, email: string } | null = null;
 
   isResendingEmail = false;
   manualEmailSent = false;
 
   async sendEmail() {
-    if (!this.createdCredentials) return;
-    const { email } = this.createdCredentials;
+    if (!this.createdUser) return;
+    const { email } = this.createdUser;
     
     this.isResendingEmail = true;
     try {
@@ -501,5 +523,283 @@ export class PsychologistsComponent implements OnInit {
     } finally {
       this.isResendingEmail = false;
     }
+  }
+
+  // Patient Management Methods
+  async loadAssignedPatients() {
+    if (!this.selectedPsychologist) return;
+    const specialist = this.selectedPsychologist;
+    const field = specialist.role_id === 4 ? 'primary_nutritionist_id' : 'primary_psychologist_id';
+    
+    const { data, error } = await this.supabase
+      .from('student_clinical_records')
+      .select(`
+        student_id,
+        student:users!student_id (
+          id,
+          matricula,
+          profiles (
+            first_name,
+            last_name,
+            faculty,
+            celular
+          )
+        )
+      `)
+      .eq(field, specialist.id);
+
+    if (error) {
+      console.error('Error loading assigned patients:', error);
+      this.assignedPatients = [];
+    } else {
+      this.assignedPatients = (data || []).map((d: any) => {
+        const student = d.student;
+        if (student) {
+          student.email = student.matricula ? `${student.matricula}@ep.buap.mx` : '';
+        }
+        return student;
+      }).filter(Boolean);
+    }
+  }
+
+  async loadAvailableStudents() {
+    const { data, error } = await this.supabase
+      .from('users')
+      .select(`
+        id,
+        matricula,
+        profiles (
+          first_name,
+          last_name,
+          faculty,
+          celular
+        )
+      `)
+      .eq('role_id', 2);
+
+    if (error) {
+      console.error('Error loading available students:', error);
+      this.availableStudents = [];
+    } else {
+      this.availableStudents = (data || []).map((student: any) => {
+        student.email = student.matricula ? `${student.matricula}@ep.buap.mx` : '';
+        return student;
+      });
+    }
+  }
+
+  get filteredAvailableStudents() {
+    if (!this.searchStudentQuery.trim()) {
+      return [];
+    }
+    const query = this.searchStudentQuery.toLowerCase().trim();
+    const assignedIds = new Set(this.assignedPatients.map(p => p.id));
+    return this.availableStudents.filter(s => {
+      if (assignedIds.has(s.id)) return false;
+      const firstName = s.profiles?.first_name?.toLowerCase() || '';
+      const lastName = s.profiles?.last_name?.toLowerCase() || '';
+      const matricula = s.matricula?.toLowerCase() || '';
+      return firstName.includes(query) || lastName.includes(query) || matricula.includes(query);
+    });
+  }
+
+  async assignPatient(studentId: string) {
+    if (!this.selectedPsychologist) return;
+    const specialist = this.selectedPsychologist;
+    const isNutritionist = specialist.role_id === 4;
+
+    try {
+      const { data: currentRecord } = await this.supabase
+        .from('student_clinical_records')
+        .select('primary_psychologist_id, primary_nutritionist_id')
+        .eq('student_id', studentId)
+        .maybeSingle();
+
+      const payload = {
+        studentId,
+        primaryPsychologistId: isNutritionist ? currentRecord?.primary_psychologist_id : specialist.id,
+        primaryNutritionistId: isNutritionist ? specialist.id : currentRecord?.primary_nutritionist_id
+      };
+
+      await this.adminSkill8.assignPatientToProfessionals(payload);
+      
+      this.searchStudentQuery = '';
+      this.showAssignDropdown = false;
+      await this.loadAssignedPatients();
+      
+      this.selectedPsychologist.patients = this.assignedPatients.length;
+      const index = this.psychologists.findIndex(p => p.id === specialist.id);
+      if (index !== -1) {
+        this.psychologists[index].patients = this.assignedPatients.length;
+      }
+    } catch (err: any) {
+      console.error('Error assigning patient:', err);
+      alert('Error al asignar el paciente: ' + (err.message || err));
+    }
+  }
+
+  openUnassignModal(studentId: string, studentName: string) {
+    this.studentIdToUnassign = studentId;
+    this.studentNameToUnassign = studentName;
+    this.showUnassignConfirmModal = true;
+    this.updateBodyScroll();
+  }
+
+  closeUnassignModal() {
+    this.showUnassignConfirmModal = false;
+    this.studentIdToUnassign = null;
+    this.studentNameToUnassign = '';
+    this.updateBodyScroll();
+  }
+
+  openStudentProfile(student: any) {
+    this.selectedStudentForProfile = student;
+    this.showStudentProfileModal = true;
+    this.updateBodyScroll();
+  }
+
+  closeStudentProfile() {
+    this.showStudentProfileModal = false;
+    this.selectedStudentForProfile = null;
+    this.updateBodyScroll();
+  }
+
+  closeUnassignSuccessModal() {
+    this.showUnassignSuccessModal = false;
+    this.unassignedStudentName = '';
+    this.updateBodyScroll();
+  }
+
+  updateBodyScroll() {
+    const isModalOpen = this.showAddModal || this.showStudentProfileModal || this.showUnassignConfirmModal || this.showUnassignSuccessModal;
+    if (isModalOpen) {
+      document.body.classList.add('modal-open');
+    } else {
+      document.body.classList.remove('modal-open');
+    }
+  }
+
+  async confirmUnassign() {
+    if (!this.studentIdToUnassign) return;
+    const studentId = this.studentIdToUnassign;
+    const studentName = this.studentNameToUnassign;
+    
+    // Close confirmation modal, but don't update body scroll classes yet
+    this.showUnassignConfirmModal = false;
+    this.studentIdToUnassign = null;
+    this.studentNameToUnassign = '';
+    
+    try {
+      await this.unassignPatient(studentId);
+      this.unassignedStudentName = studentName;
+      this.showUnassignSuccessModal = true;
+      this.updateBodyScroll();
+    } catch (err) {
+      this.updateBodyScroll();
+    }
+  }
+
+  async unassignPatient(studentId: string) {
+    if (!this.selectedPsychologist) return;
+    
+    const specialist = this.selectedPsychologist;
+    const isNutritionist = specialist.role_id === 4;
+
+    try {
+      const { data: currentRecord } = await this.supabase
+        .from('student_clinical_records')
+        .select('primary_psychologist_id, primary_nutritionist_id')
+        .eq('student_id', studentId)
+        .maybeSingle();
+
+      const payload = {
+        studentId,
+        primaryPsychologistId: isNutritionist ? currentRecord?.primary_psychologist_id : null,
+        primaryNutritionistId: isNutritionist ? null : currentRecord?.primary_nutritionist_id
+      };
+
+      await this.adminSkill8.assignPatientToProfessionals(payload);
+      await this.loadAssignedPatients();
+
+      this.selectedPsychologist.patients = this.assignedPatients.length;
+      const index = this.psychologists.findIndex(p => p.id === specialist.id);
+      if (index !== -1) {
+        this.psychologists[index].patients = this.assignedPatients.length;
+      }
+    } catch (err: any) {
+      console.error('Error unassigning patient:', err);
+      alert('Error al dar de baja al paciente: ' + (err.message || err));
+    }
+  }
+
+  async downloadPatientDossier(studentId: string, studentName: string) {
+    this.isExporting[studentId] = true;
+    try {
+      const blob = await this.dossierExport.exportDossier(studentId);
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `dossier_clinico_${studentName.replace(/\s+/g, '_')}.pdf`;
+      a.click();
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error('Error al exportar dossier:', err);
+      alert('Error al generar el dossier clínico.');
+    } finally {
+      this.isExporting[studentId] = false;
+    }
+  }
+
+  // Dynamic Chart Loading Method
+  async loadPerformanceChart(professionalId: string) {
+    const today = new Date();
+    const startOfRange = new Date(today.getFullYear(), today.getMonth() - 5, 1);
+    
+    const { data, error } = await this.supabase
+      .from('appointments')
+      .select('scheduled_date, status')
+      .eq('professional_id', professionalId)
+      .gte('scheduled_date', startOfRange.toISOString());
+      
+    if (error) {
+      console.error('Error loading chart data:', error);
+      return;
+    }
+    
+    const monthNames = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+    const labels: string[] = [];
+    const completedData: number[] = [0, 0, 0, 0, 0, 0];
+    const noShowData: number[] = [0, 0, 0, 0, 0, 0];
+    
+    const monthKeys: string[] = [];
+    for (let i = 5; i >= 0; i--) {
+      const d = new Date(today.getFullYear(), today.getMonth() - i, 1);
+      labels.push(monthNames[d.getMonth()]);
+      const monthKey = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+      monthKeys.push(monthKey);
+    }
+    
+    if (data) {
+      data.forEach((a: any) => {
+        const date = new Date(a.scheduled_date);
+        const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+        const index = monthKeys.indexOf(monthKey);
+        if (index !== -1) {
+          if (a.status === 'completed') {
+            completedData[index]++;
+          } else if (a.status === 'no_show' || a.status === 'cancelled') {
+            noShowData[index]++;
+          }
+        }
+      });
+    }
+    
+    this.barChartData = {
+      labels: labels,
+      datasets: [
+        { data: completedData, label: 'Sesiones Completadas', backgroundColor: '#6366f1' },
+        { data: noShowData, label: 'Inasistencias', backgroundColor: '#ef4444' }
+      ]
+    };
   }
 }

@@ -171,7 +171,7 @@ export class PatientProfileComponent implements OnInit {
       // 1. Fetch user + profile + clinical record
       const { data: userData, error: userError } = await this.supabase
         .from('users')
-        .select('id, profiles(first_name, last_name, avatar_url), student_clinical_records!student_clinical_records_student_id_fkey(known_conditions, additional_notes)')
+        .select('id, profiles(first_name, last_name, avatar_url, antecedentes_familiares), student_clinical_records!student_clinical_records_student_id_fkey(known_conditions, additional_notes)')
         .eq('id', id)
         .single();
 
@@ -186,6 +186,7 @@ export class PatientProfileComponent implements OnInit {
         
         const conditions = recordObj?.known_conditions;
         let notes = recordObj?.additional_notes;
+        let antecedentesFamiliares = p?.antecedentes_familiares || '';
 
         if (notes) {
           try {
@@ -193,6 +194,9 @@ export class PatientProfileComponent implements OnInit {
             const parsedNotes = JSON.parse(decrypted);
             if (parsedNotes.q1) {
                 this.eat26Result = this.calculateEat26Score(parsedNotes);
+            }
+            if (parsedNotes.general_data && parsedNotes.general_data.antecedentes_familiares) {
+              antecedentesFamiliares = parsedNotes.general_data.antecedentes_familiares;
             }
             notes = decrypted;
           } catch(e) {
@@ -216,7 +220,8 @@ export class PatientProfileComponent implements OnInit {
           nextSession: "Por agendar",
           state: (this.eat26Result && this.eat26Result.hasRisk) ? "Critical" : "Active",
           riskLevel: (this.eat26Result && this.eat26Result.hasRisk) ? "Alto" : (conditions && conditions.length > 0 ? "Moderado" : "Bajo"),
-          notes: notes
+          notes: notes,
+          antecedentes_familiares: antecedentesFamiliares
         };
       }
 

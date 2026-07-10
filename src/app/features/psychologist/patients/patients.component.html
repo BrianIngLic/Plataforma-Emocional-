@@ -53,11 +53,12 @@
                 {{ patient.state === 'critical' ? 'Crítico' : (patient.state === 'active' ? 'Activo' : 'Inactivo') }}
               </span>
             </td>
-              <td class="actions-cell">
-                <button class="action-btn view" title="Ver Perfil" (click)="viewProfile(patient.id)"><mat-icon>visibility</mat-icon></button>
-                <button class="action-btn edit" title="Editar"><mat-icon>edit</mat-icon></button>
-                <button class="action-btn history" title="Historial"><mat-icon>description</mat-icon></button>
-              </td>
+            <td class="actions-cell">
+              <button class="action-btn view" title="Ver Perfil" (click)="viewProfile(patient.id)"><mat-icon>visibility</mat-icon></button>
+              <button class="action-btn edit" title="Editar"><mat-icon>edit</mat-icon></button>
+              <button class="action-btn send" title="Enviar mensaje" (click)="openChat(patient)"><mat-icon>chat</mat-icon></button>
+              <button class="action-btn history" title="Historial"><mat-icon>description</mat-icon></button>
+            </td>
           </tr>
         </tbody>
       </table>

@@ -242,11 +242,20 @@ export class AgendaComponent implements OnInit {
       // Extraemos HH:MM directamente de start_time (ej: '16:30:00' -> '16:30')
       const time = a.start_time ? a.start_time.substring(0,5) : '00:00';
       
+      const apptDate = new Date(a.scheduled_date);
+      const today = new Date();
+      today.setHours(0,0,0,0);
+      const isPast = apptDate < today;
+      const hasNoNote = !a.notes || a.notes.trim() === '';
+      const isNotNoShow = a.status !== 'no_show';
+      const isAlert = isPast && hasNoNote && isNotNoShow;
+
       this.timelineItems.push({
         time: time,
         type: 'appointment',
         title: `Cita: ${a.student?.profiles?.first_name || 'Paciente'} ${a.student?.profiles?.last_name || ''}`,
         desc: `Estado: ${a.status === 'scheduled' ? 'Confirmada' : a.status}`,
+        isAlert: isAlert,
         data: a
       });
     });

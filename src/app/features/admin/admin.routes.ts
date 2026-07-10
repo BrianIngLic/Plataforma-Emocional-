@@ -15,12 +15,18 @@ export const ADMIN_ROUTES: Routes = [
         loadComponent: () => import('./faculties/faculties.component').then(m => m.FacultiesComponent)
       },
       {
+        path: 'directory',
+        loadComponent: () => import('./directory/directory.component').then(m => m.DirectoryComponent)
+      },
+      {
         path: 'psychologists',
-        loadComponent: () => import('./psychologists/psychologists.component').then(m => m.PsychologistsComponent)
+        redirectTo: 'directory',
+        pathMatch: 'full'
       },
       {
         path: 'patients',
-        loadComponent: () => import('./patients/patients.component').then(m => m.PatientsComponent)
+        redirectTo: 'directory',
+        pathMatch: 'full'
       },
       {
         path: 'reports',
@@ -37,6 +43,10 @@ export const ADMIN_ROUTES: Routes = [
       {
         path: 'institutional-branding',
         loadComponent: () => import('./institutional-settings/institutional-settings.component').then(m => m.InstitutionalSettingsComponent)
+      },
+      {
+        path: 'nutritionist-fields',
+        loadComponent: () => import('./nutritionist-fields/nutritionist-fields.component').then(m => m.NutritionistFieldsComponent)
       },
       {
         path: 'faculties/:id',

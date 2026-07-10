@@ -18,7 +18,7 @@ serve(async (req) => {
       { auth: { persistSession: false } }
     );
 
-    const { email, matricula, firstName, lastName, faculty, cedula, capacity } = await req.json();
+    const { email, matricula, firstName, lastName, faculty, cedula, capacity, role } = await req.json();
 
     // 1. Enviar invitación nativa de Supabase Auth
     const { data: inviteData, error: inviteError } = await supabaseClient.auth.admin.inviteUserByEmail(email, {
@@ -29,11 +29,11 @@ serve(async (req) => {
 
     const userId = inviteData.user.id;
 
-    // 2. Insertar en public.users con role_id = 3 (Psicólogo)
+    // 2. Insertar en public.users con role_id dinámico (3 = Psicólogo, 4 = Nutriólogo)
     await supabaseClient.from('users').insert({
       id: userId,
       matricula: matricula,
-      role_id: 3,
+      role_id: role ? Number(role) : 3,
       requires_password_change: true
     });
 
@@ -46,9 +46,9 @@ serve(async (req) => {
       cedula: cedula
     });
 
-    // 4. Guardar configuración del psicólogo
-    await supabaseClient.from('psychologist_settings').insert({
-      psychologist_id: userId,
+    // 4. Guardar configuración del profesional de la salud
+    await supabaseClient.from('health_professional_settings').insert({
+      professional_id: userId,
       capacity: capacity
     });
 

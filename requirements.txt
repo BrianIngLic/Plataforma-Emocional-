@@ -1,0 +1,13 @@
+# ==============================================================================
+# DEPENDENCIAS - ECOSISTEMA DE ASISTENCIA EMOCIONAL
+# ==============================================================================
+# Motor de pruebas
+pytest>=7.0.0
+
+# Framework de API (Desarrollos futuros)
+fastapi>=0.100.0
+uvicorn[standard]>=0.22.0
+
+# Base de datos vectorial RAG
+chromadb>=0.4.0
+requests>=2.31.0

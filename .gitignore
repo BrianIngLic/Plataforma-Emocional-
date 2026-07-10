@@ -1,4 +1,21 @@
-# See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
+# Python
+.venv/
+__pycache__/
+*.pyc
+*.egg-info/
+
+# Env / secrets
+.env
+*.env.local
+
+# ChromaDB local data
+backend/chroma_db/
+*.sqlite3
+
+# Frontend (Angular/Node)
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/
 
 # Compiled output
 /dist
@@ -19,6 +36,7 @@ yarn-error.log
 *.launch
 .settings/
 *.sublime-workspace
+*.swp
 
 # Visual Studio Code
 .vscode/*

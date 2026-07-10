@@ -1,0 +1,85 @@
+{
+  "version": "1.0",
+  "project": "Ecosistema de Asistencia Emocional con IA Generativa",
+  "description": "Contrato de comportamiento que define los parámetros y restricciones del sistema de asistencia emocional. El LLM no tiene agencia diagnóstica; las decisiones provienen de reglas deterministas.",
+  "model": {
+    "name": "qwen2.5:14b",
+    "provider": "ollama",
+    "base_url": "http://localhost:11434",
+    "temperature": 0.7,
+    "top_p": 0.9,
+    "max_tokens": 1024
+  },
+  "risk_levels": {
+    "VERDE": {
+      "label": "Sin riesgo",
+      "action": "conversacion_libre",
+      "rag_required": false,
+      "description": "Conversación normal, sin indicadores de malestar significativo"
+    },
+    "AMARILLO": {
+      "label": "Riesgo bajo",
+      "action": "monitoreo_aumentado",
+      "rag_required": false,
+      "description": "Señales de malestar emocional leve: estrés académico, ansiedad situacional"
+    },
+    "NARANJA": {
+      "label": "Riesgo moderado",
+      "action": "rag_clinico_obligatorio",
+      "rag_required": true,
+      "description": "Malestar persistente, desesperanza, aislamiento, deterioro funcional"
+    },
+    "ROJO": {
+      "label": "Riesgo alto / Crisis",
+      "action": "crisis_response_fija",
+      "rag_required": false,
+      "override": true,
+      "description": "Señales de autolesión, ideación suicida, peligro inmediato. Override obligatorio: respuesta fija, NO generada por LLM."
+    }
+  },
+  "override_sources": ["conversational_classifier", "urgency_scale", "manual"],
+  "classifier_config": {
+    "normalize_accents": true,
+    "informal_variants": true,
+    "metaphor_window_sentences": 2,
+    "layers": [
+      {"name": "literal_match", "description": "Búsqueda de términos literales de alto riesgo"},
+      {"name": "metaphoric_pattern", "description": "Co-ocurrencia de patrones metafóricos en ventana de 2 oraciones"},
+      {"name": "medium_risk_match", "description": "Términos de riesgo medio: desesperanza, aislamiento"}
+    ]
+  },
+  "behavioral_rules": {
+    "never_diagnose": true,
+    "never_prescribe": true,
+    "never_replace_professional": true,
+    "always_suggest_professional_help": true,
+    "crisis_resources_from_verified_list_only": true,
+    "log_all_override_events": true
+  },
+  "crisis_resources": [
+    {
+      "name": "Línea de la Vida (Secretaría de Salud)",
+      "phone": "800 911 2000",
+      "hours": "24/7",
+      "cost": "Gratuito"
+    },
+    {
+      "name": "Emergencias",
+      "phone": "911",
+      "hours": "24/7",
+      "cost": "Gratuito"
+    },
+    {
+      "name": "Línea de Atención a Crisis Emocional BUAP",
+      "phone": "222 344 8905",
+      "hours": "Lunes a domingo, 9:00-21:00",
+      "cost": "Gratuito (matrícula activa)"
+    },
+    {
+      "name": "Instituto de la Juventud del Municipio de Puebla",
+      "phone": "222 213 0002",
+      "hours": "Lunes a viernes, 9:00-15:00",
+      "cost": "Gratuito (15-29 años)"
+    }
+  ]
+}

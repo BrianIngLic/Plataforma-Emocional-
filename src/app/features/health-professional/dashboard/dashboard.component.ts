@@ -4,6 +4,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartConfiguration, ChartOptions } from 'chart.js';
 import { AuthService } from '../../../core/services/auth.service';
+import { SupabaseService } from '../../../core/services/supabase.service';
 
 @Component({
   selector: 'app-health-professional-dashboard',
@@ -14,6 +15,9 @@ import { AuthService } from '../../../core/services/auth.service';
 })
 export class HealthProfessionalDashboardComponent implements OnInit {
   authService = inject(AuthService);
+  supabase = inject(SupabaseService).supabase;
+  
+  realAlerts: any[] = [];
 
   get isNutritionist(): boolean {
     return this.authService.currentUser()?.role === 'Nutricionista';
@@ -65,20 +69,87 @@ export class HealthProfessionalDashboardComponent implements OnInit {
 
   // Alertas (Dinámicas según rol)
   get alerts() {
-    if (this.isNutritionist) {
-      return [
-        { id: 1, level: "critical", patient: "Ana Lucía Gómez", message: "EAT-26 finalizado con 34 puntos (Riesgo Alto de TCA).", time: "Hace 1h" },
-        { id: 2, level: "warning", patient: "Mateo Silva", message: "Registró déficit calórico extremo en recordatorio de 24h (< 1000 kcal).", time: "Ayer" },
-        { id: 3, level: "warning", patient: "Sofía Martínez", message: "Reportó malestar estomacal agudo en su diario de alimentación.", time: "Ayer" },
-        { id: 4, level: "info", patient: "Eduardo Mendoza", message: "Completó su registro general de salud previo a consulta.", time: "Hace 3h" }
-      ];
-    }
-    return [
-      { id: 1, level: "critical", patient: "Sara Lindqvist", message: "Ideación de autolesión detectada por Amati en el diario.", time: "08:42" },
-      { id: 2, level: "warning", patient: "Marco Ferretti", message: "Faltó a 3 citas seguidas. Sin respuesta.", time: "Ayer" },
-      { id: 3, level: "warning", patient: "Lena Braun", message: "Su puntuación PHQ-9 aumentó 8 puntos.", time: "Ayer" },
-      { id: 4, level: "info", patient: "David Okafor", message: "Cuestionario de ansiedad pre-sesión completado.", time: "Hace 2h" }
+    const staticAlerts = this.isNutritionist ? [
+      { id: 101, level: "critical", patient: "Ana Lucía Gómez", message: "EAT-26 finalizado con 34 puntos (Riesgo Alto de TCA).", time: "Hace 1h" },
+      { id: 102, level: "warning", patient: "Mateo Silva", message: "Registró déficit calórico extremo en recordatorio de 24h (< 1000 kcal).", time: "Ayer" },
+      { id: 103, level: "warning", patient: "Sofía Martínez", message: "Reportó malestar estomacal agudo en su diario de alimentación.", time: "Ayer" }
+    ] : [
+      { id: 101, level: "critical", patient: "Sara Lindqvist", message: "Ideación de autolesión detectada por Amati en el diario.", time: "08:42" },
+      { id: 102, level: "warning", patient: "Marco Ferretti", message: "Faltó a 3 citas seguidas. Sin respuesta.", time: "Ayer" },
+      { id: 103, level: "warning", patient: "Lena Braun", message: "Su puntuación PHQ-9 aumentó 8 puntos.", time: "Ayer" }
     ];
+
+    return [...this.realAlerts, ...staticAlerts];
+  }
+
+  async loadNotifications() {
+    const user = this.authService.currentUser();
+    if (!user) return;
+
+    try {
+      const { data, error } = await this.supabase
+        .from('professional_notifications')
+        .select('id, message, created_at, student_id')
+        .eq('professional_id', user.id)
+        .eq('is_read', false)
+        .order('created_at', { ascending: false });
+
+      if (!error && data) {
+        // Mapear cada notificación
+        const mapped = [];
+        for (const n of data) {
+          // Obtener el perfil del estudiante de forma separada
+          const { data: prof } = await this.supabase
+            .from('profiles')
+            .select('first_name, last_name')
+            .eq('user_id', n.student_id)
+            .maybeSingle();
+
+          const patientName = prof ? `${prof.first_name || ''} ${prof.last_name || ''}`.trim() : 'Paciente';
+          
+          mapped.push({
+            id: n.id,
+            level: 'info',
+            patient: patientName,
+            message: n.message,
+            time: this.formatTimeAgo(n.created_at),
+            isRealDb: true
+          });
+        }
+        this.realAlerts = mapped;
+      }
+    } catch (e) {
+      console.warn('Error loading professional notifications:', e);
+    }
+  }
+
+  formatTimeAgo(dateStr: string): string {
+    const now = new Date();
+    const date = new Date(dateStr);
+    const diffMs = now.getTime() - date.getTime();
+    const diffMins = Math.floor(diffMs / 60000);
+    if (diffMins < 1) return 'Hace un momento';
+    if (diffMins < 60) return `Hace ${diffMins} min`;
+    const diffHrs = Math.floor(diffMins / 60);
+    if (diffHrs < 24) return `Hace ${diffHrs}h`;
+    return date.toLocaleDateString();
+  }
+
+  async markAllAlertsRead() {
+    const user = this.authService.currentUser();
+    if (!user) return;
+
+    try {
+      await this.supabase
+        .from('professional_notifications')
+        .update({ is_read: true })
+        .eq('professional_id', user.id)
+        .eq('is_read', false);
+
+      this.realAlerts = [];
+    } catch (e) {
+      console.warn('Error marking alerts as read:', e);
+    }
   }
 
   public lineChartData: ChartConfiguration<'line'>['data'] = {
@@ -117,7 +188,8 @@ export class HealthProfessionalDashboardComponent implements OnInit {
     plugins: { legend: { display: false } }
   };
 
-  ngOnInit() {
+  async ngOnInit() {
     this.pieChartData.labels = this.pieChartLabels;
+    await this.loadNotifications();
   }
 }

@@ -118,7 +118,6 @@ export class SessionEvaluationService {
         q3_goals:        q3Goals,
         q4_impact:       q4Impact,
         q5_comment:      payload.q5Comment ?? null,
-        score_global:    scoreGlobal,
         rupture_flag:    ruptureFlag,
       })
       .select()

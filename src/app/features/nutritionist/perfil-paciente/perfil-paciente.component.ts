@@ -29,6 +29,7 @@ export class PerfilPaciente implements OnInit {
 
   patient: any = null;
   diaryEntries: any[] = [];
+  foodDiaryEntries: any[] = [];
   loading = true;
   isExporting = false;
   sessionHistory: any[] = [];
@@ -330,6 +331,24 @@ export class PerfilPaciente implements OnInit {
         });
       }
 
+      // 2b. Fetch food diary entries
+      try {
+        const { data: foodData, error: foodError } = await this.supabase
+          .from('food_diary_entries')
+          .select('id, diary_date, meal_time, mood_before, what_i_ate, mood_after, created_at')
+          .eq('student_id', id)
+          .order('diary_date', { ascending: false })
+          .order('meal_time', { ascending: true });
+
+        if (foodData && !foodError) {
+          this.foodDiaryEntries = foodData;
+        } else if (foodError) {
+          console.error('Error fetching food diary entries:', foodError);
+        }
+      } catch (e) {
+        console.warn('Excepción obteniendo diario alimentario:', e);
+      }
+
       // 3. Obtener historial de citas (donde el nutricionista actual es el tratante)
       if (this.currentUserId) {
         const { data: appts } = await this.supabase
@@ -549,6 +568,18 @@ export class PerfilPaciente implements OnInit {
       });
     }
     return [];
+  }
+
+  get displayedFoodEntries() {
+    if (this.selectedDate !== null) {
+      return this.foodDiaryEntries.filter(e => {
+        const d = new Date(e.diary_date + 'T12:00:00');
+        return d.getDate() === this.selectedDate &&
+          d.getMonth() === this.currentDate.getMonth() &&
+          d.getFullYear() === this.year;
+      });
+    }
+    return this.foodDiaryEntries.slice(0, 3);
   }
 
   goBack() {

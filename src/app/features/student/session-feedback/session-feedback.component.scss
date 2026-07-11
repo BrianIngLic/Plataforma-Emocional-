@@ -5,6 +5,11 @@
   min-height: calc(100vh - 120px);
   padding: 2rem;
   background-color: var(--bg-main, #0f172a);
+
+  @media (max-width: 600px) {
+    padding: 0.5rem; /* Menos padding lateral en móviles */
+    min-height: calc(100vh - 80px);
+  }
 }
 
 .card-glass {
@@ -69,7 +74,8 @@
   overflow: hidden;
 
   @media (max-width: 600px) {
-    padding: 1.5rem;
+    padding: 2.25rem 0.75rem 1.5rem 0.75rem; /* Ajustado para móviles */
+    border-radius: 16px;
   }
 
   .back-btn {
@@ -85,6 +91,12 @@
     font-size: 0.9rem;
     cursor: pointer;
     transition: color 0.2s ease;
+
+    @media (max-width: 600px) {
+      top: 0.75rem;
+      left: 0.75rem;
+      font-size: 0.8rem;
+    }
 
     &:hover {
       color: var(--text-primary, #f8fafc);
@@ -105,17 +117,31 @@
   padding-bottom: 1.5rem;
   margin-bottom: 2rem;
 
+  @media (max-width: 600px) {
+    margin-top: 1.25rem;
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+  }
+
   h2 {
     font-size: 1.6rem;
     font-weight: 700;
     color: var(--text-primary, #f8fafc);
     margin: 0 0 0.5rem 0;
+
+    @media (max-width: 600px) {
+      font-size: 1.2rem;
+    }
   }
 
   .prof-label {
     font-size: 0.95rem;
     color: var(--text-secondary, #94a3b8);
     margin: 0;
+
+    @media (max-width: 600px) {
+      font-size: 0.85rem;
+    }
 
     strong {
       color: #a855f7;
@@ -205,12 +231,20 @@
       color: var(--text-primary, #f8fafc);
       margin: 0 0 0.5rem 0;
       line-height: 1.4;
+
+      @media (max-width: 600px) {
+        font-size: 1.15rem;
+      }
     }
 
     .sub-label {
       font-size: 0.9rem;
       color: var(--text-secondary, #94a3b8);
       margin: 0;
+
+      @media (max-width: 600px) {
+        font-size: 0.8rem;
+      }
     }
   }
 

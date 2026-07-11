@@ -82,7 +82,7 @@
   <div class="panel alerts-panel">
     <div class="panel-header border-b">
       <div class="title"><mat-icon class="text-amber">notifications_active</mat-icon> Alertas y Notificaciones</div>
-      <a class="view-all">Marcar todo leído <mat-icon>chevron_right</mat-icon></a>
+      <a class="view-all" (click)="markAllAlertsRead()" style="cursor: pointer;">Marcar todo leído <mat-icon>chevron_right</mat-icon></a>
     </div>
     <div class="panel-list">
       <div class="list-item alert-item" *ngFor="let a of alerts" [ngClass]="{'bg-critical': a.level === 'critical'}">

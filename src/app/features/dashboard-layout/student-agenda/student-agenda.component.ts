@@ -400,6 +400,19 @@ export class StudentAgendaComponent implements OnInit {
       this.showFeedback('error', 'Error de Conexión', 'Ocurrió un error: ' + error.message);
       this.loading = false;
     } else {
+      // Notificar al personal médico insertando una notificación en la base de datos
+      try {
+        const studentName = user.name || 'Estudiante';
+        await this.supabase.from('professional_notifications').insert({
+          professional_id: this.assignedProfessionalId,
+          student_id: user.id,
+          event_type: 'appointment_booked',
+          message: `El paciente ${studentName} ha agendado una cita para el ${this.formatSpanishDate(dateStr)} a las ${slotTime.substring(0,5)}.`
+        });
+      } catch (e) {
+        console.warn('No se pudo insertar la notificación para el médico:', e);
+      }
+
       this.showFeedback('success', '¡Cita Confirmada!', `Tu reserva con el ${this.professionalRoleTitle.toLowerCase()} ha sido guardada exitosamente.`);
       this.selectedDateStr.set(null);
       this.loadAvailability();

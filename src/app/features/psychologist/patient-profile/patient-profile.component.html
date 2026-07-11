@@ -361,7 +361,24 @@
                <span class="date">{{entry.date}}</span>
                <span class="mood"><mat-icon [ngClass]="entry.moodColor">{{entry.moodIcon}}</mat-icon> {{entry.mood}}</span>
              </div>
-             <p class="content">"{{entry.content}}"</p>
+             <div class="content" [innerHTML]="entry.content"></div>
+           </div>
+        </div>
+
+        <!-- Historial del Diario Alimentario Personal (Automonitoreo) -->
+        <div class="diary-list-header" style="margin-top: 1.5rem; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 8px; color: #10b981;" *ngIf="displayedFoodEntries.length > 0">
+          <mat-icon style="font-size: 18px; width: 18px; height: 18px;">restaurant</mat-icon>
+          <h4 style="margin: 0; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Diario Alimentario Personal</h4>
+        </div>
+        <div class="diary-list" *ngIf="displayedFoodEntries.length > 0">
+           <div class="diary-item" *ngFor="let meal of displayedFoodEntries" style="border-left: 4px solid #10b981;">
+             <div class="diary-header" style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
+               <span class="date">Comida a las {{meal.meal_time.substring(0,5)}} ({{meal.diary_date | date:'dd/MM/yyyy'}})</span>
+               <span class="mood" style="color: #10b981; font-size: 12px; font-weight: 600;">
+                 Antes: {{meal.mood_before}} → Después: {{meal.mood_after}}
+               </span>
+             </div>
+             <div class="content" [innerHTML]="meal.what_i_ate" style="margin-top: 5px; font-size: 13px; color: var(--text-secondary);"></div>
            </div>
         </div>
       </section>

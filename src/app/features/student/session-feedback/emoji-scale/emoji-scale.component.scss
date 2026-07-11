@@ -53,11 +53,11 @@
   align-items: center;
   gap: 1rem;
   padding: 1rem 0;
-  flex-wrap: wrap;
+  flex-wrap: nowrap; /* Evita que los emojis se rompan en múltiples líneas */
 
   @media (max-width: 600px) {
-    justify-content: center;
-    gap: 1.5rem;
+    justify-content: space-between;
+    gap: 0.35rem;
   }
 }
 
@@ -76,8 +76,18 @@
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
   @media (max-width: 600px) {
-    min-width: 80px;
-    padding: 1rem 0.75rem;
+    min-width: 48px;
+    padding: 0.75rem 0.25rem;
+    gap: 0.4rem;
+    
+    .emoji-char {
+      font-size: 1.7rem !important; /* Disminuye el tamaño del emoji */
+    }
+    
+    .emoji-label {
+      font-size: 0.62rem !important; /* Disminuye el tamaño de la etiqueta */
+      white-space: nowrap; /* Evita saltos de línea feos */
+    }
   }
 
   .emoji-char {

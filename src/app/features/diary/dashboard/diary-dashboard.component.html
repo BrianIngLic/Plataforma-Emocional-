@@ -32,7 +32,7 @@
     <button class="tab-btn" [class.active]="activeTab === 'breathe'" (click)="activeTab = 'breathe'">
       <mat-icon>self_improvement</mat-icon> Espacio de Respiración
     </button>
-    <button class="tab-btn" [class.active]="activeTab === 'badges'" (click)="activeTab = 'badges'">
+    <button class="tab-btn" *ngIf="activeTab === 'badges'" [class.active]="true">
       <mat-icon>workspace_premium</mat-icon> Mis Logros Emocionales
     </button>
   </div>
@@ -58,7 +58,9 @@
           <div class="day-name">Dom</div>
           <div class="calendar-day empty" *ngFor="let blank of blankDays"></div>
           <div class="calendar-day" *ngFor="let day of calendarDays"
-               [ngClass]="{'has-entry': getMoodForDay(day) !== null}">
+               [ngClass]="{'has-entry': getMoodForDay(day) !== null, 'selected': selectedDay === day}"
+               (click)="selectDate(day)"
+               style="cursor: pointer;">
             <span class="date">{{ day }}</span>
             <span class="mood-indicator" *ngIf="getMoodForDay(day)">{{ getMoodForDay(day) }}</span>
           </div>
@@ -67,8 +69,8 @@
         <hr class="section-divider" />
 
         <div class="history-list">
-          <h3>Historial Reciente</h3>
-          <div class="history-card" *ngFor="let entry of entries()">
+          <h3>{{ selectedDay ? 'Entrada del ' + selectedDay + ' de ' + monthName : 'Historial Reciente' }}</h3>
+          <div class="history-card" *ngFor="let entry of displayedEntries">
             <div class="card-header">
               <span class="date">{{ entry.date | date:'dd/MM/yyyy HH:mm' }}</span>
               <div class="moods">
@@ -76,7 +78,10 @@
                 <span *ngIf="entry.sleepHours" class="sleep-chip">🌙 {{ entry.sleepHours }}h sueño</span>
               </div>
             </div>
-            <p class="content">{{ entry.content }}</p>
+            <div class="content" [innerHTML]="entry.content"></div>
+          </div>
+          <div *ngIf="displayedEntries.length === 0" style="padding: 1.5rem 0; text-align: center; color: var(--text-secondary); font-size: 13px;">
+            No hay entradas registradas para este día.
           </div>
         </div>
       </section>
@@ -148,7 +153,7 @@
               <mat-icon>restaurant</mat-icon>
               <div>
                 <h2>Registro de Comidas</h2>
-                <p>Una entrada por cada vez que comas</p>
+                <p>{{ selectedDay ? 'Comidas del ' + selectedDay + ' de ' + monthName : 'Una entrada por cada vez que comas hoy' }}</p>
               </div>
             </div>
             <button class="add-food-btn" (click)="openFoodForm()" *ngIf="!showFoodForm">
@@ -201,7 +206,7 @@
           <!-- Estado vacío -->
           <div class="food-empty" *ngIf="foodEntries().length === 0 && !showFoodForm">
             <span class="empty-icon">🍽️</span>
-            <p>Aún no hay registros de comidas hoy.</p>
+            <p>{{ selectedDay ? 'No hay registros de comidas para este día.' : 'Aún no hay registros de comidas hoy.' }}</p>
             <small>Añade tu primera entrada cuando comas.</small>
           </div>
 
@@ -322,26 +327,8 @@
     </div>
 
     <!-- ══════ VISTA 3: LOGROS ══════ -->
-    <div class="badges-container" *ngIf="activeTab === 'badges'">
-      <div class="badges-header">
-        <h2>Insignias de Autocuidado</h2>
-        <p>En Amati no hay fallas ni presiones. Cada paso que das hacia tu bienestar es digno de celebrarse.</p>
-      </div>
-      <div class="badges-grid">
-        <div class="badge-card" *ngFor="let b of badges" [class.unlocked]="b.unlocked">
-          <div class="badge-icon-wrapper">
-            <span class="badge-emoji">{{ b.icon }}</span>
-            <div class="lock-overlay" *ngIf="!b.unlocked"><mat-icon>lock</mat-icon></div>
-          </div>
-          <div class="badge-info">
-            <h3>{{ b.title }}</h3>
-            <p>{{ b.desc }}</p>
-            <span class="status-badge" [class.achieved]="b.unlocked">
-              {{ b.unlocked ? '✨ ¡Conseguido!' : '🔒 Por descubrir' }}
-            </span>
-          </div>
-        </div>
-      </div>
+    <div class="badges-container-wrapper" *ngIf="activeTab === 'badges'" style="padding: 1.5rem; background: var(--bg-card); border-radius: 20px; border: 1px solid var(--border-color);">
+      <app-achievements-dashboard></app-achievements-dashboard>
     </div>
 
   </div>

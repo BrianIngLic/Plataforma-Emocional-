@@ -1,12 +1,14 @@
 import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { QuillModule } from 'ngx-quill';
 import { DiaryService, FoodDiaryEntry } from '../../../core/services/diary.service';
 import { FeedbackModalComponent } from '../../../shared/components/feedback-modal/feedback-modal.component';
+import { AchievementsDashboardComponent } from '../../gamification/achievements-dashboard/achievements-dashboard.component';
 
 /** Opciones de estado emocional compartidas (diario emocional + alimentario) */
 const MOOD_OPTIONS = [
@@ -45,7 +47,8 @@ const QUILL_MODULES = {
     MatButtonModule,
     MatIconModule,
     MatDialogModule,
-    QuillModule
+    QuillModule,
+    AchievementsDashboardComponent
   ],
   templateUrl: './diary-dashboard.component.html',
   styleUrls: ['./diary-dashboard.component.scss']
@@ -53,6 +56,7 @@ const QUILL_MODULES = {
 export class DiaryDashboardComponent implements OnInit {
   diaryService = inject(DiaryService);
   dialog       = inject(MatDialog);
+  private route = inject(ActivatedRoute);
 
   entries    = this.diaryService.entries;
   foodEntries = this.diaryService.foodEntries;
@@ -92,6 +96,7 @@ export class DiaryDashboardComponent implements OnInit {
   year         = 0;
   calendarDays: number[] = [];
   blankDays:    number[] = [];
+  selectedDay:  number | null = null;
 
   // ─── Estado: formulario de nueva entrada alimentaria ─────────────
   showFoodForm     = false;
@@ -109,6 +114,14 @@ export class DiaryDashboardComponent implements OnInit {
   ngOnInit() {
     this.generateCalendar();
     this.diaryService.loadFoodEntries();
+    this.diaryService.loadEntries();
+
+    // Activar pestaña de logros si viene en queryParams
+    this.route.queryParams.subscribe(params => {
+      if (params['tab'] === 'badges') {
+        this.activeTab = 'badges';
+      }
+    });
   }
 
   // ════════════════════════════════════════════════════════════════
@@ -228,7 +241,7 @@ export class DiaryDashboardComponent implements OnInit {
     if (!this.isFoodFormValid()) return;
 
     this.isSavingFood = true;
-    const today = new Date().toISOString().split('T')[0];
+    const targetDate = this.diaryService.activeDate();
 
     if (this.editingFoodId) {
       await this.diaryService.updateFoodEntry(this.editingFoodId, {
@@ -239,7 +252,7 @@ export class DiaryDashboardComponent implements OnInit {
       });
     } else {
       await this.diaryService.saveFoodEntry({
-        diary_date:  today,
+        diary_date:  targetDate,
         meal_time:   this.newMealTime,
         mood_before: this.newMoodBefore,
         what_i_ate:  this.newWhatIAte,
@@ -312,5 +325,33 @@ export class DiaryDashboardComponent implements OnInit {
       return d.getDate() === day && d.getMonth() === this.currentDate.getMonth() && d.getFullYear() === this.year;
     });
     return entry?.moods?.[0]?.split(' ')[0] ?? null;
+  }
+
+  async selectDate(day: number) {
+    if (this.selectedDay === day) {
+      this.selectedDay = null;
+      // Por defecto, recargar comidas de hoy
+      this.diaryService.activeDate.set(new Date().toISOString().split('T')[0]);
+      await this.diaryService.loadFoodEntries();
+    } else {
+      this.selectedDay = day;
+      const monthStr = String(this.currentDate.getMonth() + 1).padStart(2, '0');
+      const dayStr = String(day).padStart(2, '0');
+      const dateStr = `${this.year}-${monthStr}-${dayStr}`;
+      this.diaryService.activeDate.set(dateStr);
+      await this.diaryService.loadFoodEntries();
+    }
+  }
+
+  get displayedEntries() {
+    if (this.selectedDay !== null) {
+      return this.entries().filter(e => {
+        const d = new Date(e.date);
+        return d.getDate() === this.selectedDay &&
+          d.getMonth() === this.currentDate.getMonth() &&
+          d.getFullYear() === this.year;
+      });
+    }
+    return this.entries();
   }
 }

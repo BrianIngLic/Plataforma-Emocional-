@@ -136,43 +136,4 @@
     <router-outlet></router-outlet>
   </main>
 
-  <!-- ═══════════════════════════════════════════
-       PANEL DE LOGROS — slide-over desde el sidebar
-  ════════════════════════════════════════════════ -->
-  <!-- Backdrop -->
-  <div class="achievements-backdrop"
-       *ngIf="showAchievementsPanel"
-       (click)="toggleAchievementsPanel()">
-  </div>
-
-  <!-- Panel deslizante -->
-  <aside class="achievements-panel" [class.open]="showAchievementsPanel">
-    <!-- Header del panel -->
-    <div class="achievements-panel-header">
-      <div class="panel-user-info">
-        <div class="panel-avatar"
-             [style.background-image]="currentUser?.avatar_url ? 'url(' + currentUser!.avatar_url + ')' : ''"
-             [style.background-size]="'cover'"
-             [style.background-position]="'center'">
-          <mat-icon *ngIf="!currentUser?.avatar_url">person</mat-icon>
-        </div>
-        <div>
-          <h3>{{ currentUser?.name || 'Estudiante' }}</h3>
-          <p>
-            <mat-icon>local_fire_department</mat-icon>
-            {{ gamificationService.currentStreak() }} días de racha &bull;
-            Nivel {{ currentLevel() }}
-          </p>
-        </div>
-      </div>
-      <button class="panel-close-btn" (click)="toggleAchievementsPanel()">
-        <mat-icon>close</mat-icon>
-      </button>
-    </div>
-
-    <!-- Contenido: barra XP + logros -->
-    <div class="achievements-panel-body">
-      <app-achievements-dashboard></app-achievements-dashboard>
-    </div>
-  </aside>
 </div>

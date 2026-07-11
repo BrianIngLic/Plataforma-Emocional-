@@ -62,10 +62,10 @@ export class SessionFeedbackComponent implements OnInit {
         return;
       }
 
-      // 2. Obtener detalles de la cita para professionalId y professionalName
+      // 2. Obtener detalles de la cita para professionalId de manera desacoplada (evita errores de FK/Schema Cache)
       const { data: appointment, error } = await this.supabaseService.supabase
         .from('appointments')
-        .select('professional_id, professional:users!appointments_professional_id_fkey(profiles(first_name, last_name))')
+        .select('professional_id')
         .eq('id', this.appointmentId)
         .single();
 
@@ -76,9 +76,22 @@ export class SessionFeedbackComponent implements OnInit {
       }
 
       this.professionalId = appointment.professional_id;
-      const professional = Array.isArray(appointment.professional) ? appointment.professional[0] : appointment.professional;
-      const profile = Array.isArray(professional?.profiles) ? professional.profiles[0] : professional?.profiles;
-      this.professionalName = [profile?.first_name, profile?.last_name].filter(Boolean).join(' ').trim() || 'tu especialista';
+
+      if (this.professionalId) {
+        // Consultar el perfil del profesional directamente en la tabla profiles
+        const { data: profile } = await this.supabaseService.supabase
+          .from('profiles')
+          .select('first_name, last_name')
+          .eq('id', this.professionalId)
+          .single();
+
+        if (profile) {
+          this.professionalName = [profile.first_name, profile.last_name]
+            .filter(Boolean)
+            .join(' ')
+            .trim() || 'tu especialista';
+        }
+      }
       this.isLoading.set(false);
     } catch (err) {
       console.error('Error en onboarding de feedback:', err);

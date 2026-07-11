@@ -7,7 +7,6 @@ import { ChatService } from '../../core/services/chat.service';
 import { EmergencyNotificationService } from '../../core/services/emergency-notification.service';
 import { SessionEvaluationService, PendingEvaluationItem } from '../../core/services/session-evaluation.service';
 import { GamificationService } from '../../core/services/gamification.service';
-import { AchievementsDashboardComponent } from '../gamification/achievements-dashboard/achievements-dashboard.component';
 import { filter } from 'rxjs/operators';
 
 @Component({
@@ -18,8 +17,7 @@ import { filter } from 'rxjs/operators';
     RouterOutlet,
     RouterLink,
     RouterLinkActive,
-    MatIconModule,
-    AchievementsDashboardComponent
+    MatIconModule
   ],
   templateUrl: './dashboard-layout.component.html',
   styleUrls: ['./dashboard-layout.component.scss']
@@ -77,8 +75,7 @@ export class DashboardLayoutComponent implements OnInit {
 
   openAchievements() {
     this.showProfileMenu = false;
-    this.showAchievementsPanel = true;
-    this.gamificationService.loadGamificationData();
+    this.router.navigate(['/dashboard/diary'], { queryParams: { tab: 'badges' } });
   }
 
   toggleAchievementsPanel() {

@@ -1,7 +1,8 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { MatIconModule } from '@angular/material/icon';
 import { AuthService } from '../../../core/services/auth.service';
 
 /**
@@ -11,7 +12,7 @@ import { AuthService } from '../../../core/services/auth.service';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink, MatIconModule],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
@@ -24,6 +25,17 @@ export class LoginComponent implements OnInit {
   errorMessage: string = '';
   showPassword = false;
   showInactivityModal = false;
+  showEtymology = false;
+
+  toggleEtymology(event: MouseEvent) {
+    event.stopPropagation();
+    this.showEtymology = !this.showEtymology;
+  }
+
+  @HostListener('document:click')
+  onDocumentClick() {
+    this.showEtymology = false;
+  }
 
   ngOnInit() {
     if (sessionStorage.getItem('inactivity_logout') === 'true') {

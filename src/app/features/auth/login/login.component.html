@@ -6,9 +6,42 @@
       <div class="brand">
         <div class="logo" style="display: flex; align-items: center; gap: 10px;">
           <img src="/amati-logo.svg" alt="Amati Logo" style="width: 48px; height: 48px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));" />
-          <div class="brand-text" style="display: flex; flex-direction: column;">
+          <div class="brand-text" style="display: flex; flex-direction: column; position: relative;">
             <h1>Amati</h1>
-            <span>Bienestar emocional</span>
+            <span class="subtitle">Bienestar emocional</span>
+            <button type="button" class="etymology-trigger" (click)="toggleEtymology($event)">
+              <mat-icon style="font-size: 14px; width: 14px; height: 14px;">info</mat-icon>
+              ¿Qué significa Amati?
+            </button>
+
+            <!-- Popover de Etimología -->
+            <div class="etymology-popup" *ngIf="showEtymology" (click)="$event.stopPropagation()">
+              <div class="popup-header">
+                <h3>El origen de Amati</h3>
+                <button type="button" class="close-btn" (click)="toggleEtymology($event)">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </div>
+              <div class="popup-body">
+                <div class="etymology-section">
+                  <div class="section-title">
+                    <span class="origin-flag">🇲🇽</span>
+                    <h4>Náhuatl</h4>
+                  </div>
+                  <p>Se traduce generalmente como <strong>"disfrutar"</strong> (gozar o deleitarse), o como <strong>"gustar"</strong> (tener el gusto por algo). También se utiliza de manera interrogativa como <em>"quién sabe"</em> (para expresar duda).</p>
+                </div>
+
+                <div class="etymology-divider"></div>
+
+                <div class="etymology-section">
+                  <div class="section-title">
+                    <span class="origin-flag">🇮🇹</span>
+                    <h4>Italiano</h4>
+                  </div>
+                  <p>Es la forma imperativa del verbo <em>amare</em> (ámate / quiérete): <strong>"Ámate a ti mismo"</strong>. También es el plural masculino de "amados" o "queridos".</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

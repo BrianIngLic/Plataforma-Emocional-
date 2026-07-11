@@ -50,9 +50,158 @@
     font-size: 1.2rem;
     font-weight: 700;
   }
-  .brand-text span {
+  .brand-text span.subtitle {
     font-size: 0.8rem;
     color: var(--text-sidebar-muted);
+  }
+}
+
+.etymology-trigger {
+  background: rgba(139, 92, 246, 0.1);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  color: #a78bfa;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.3rem 0.65rem;
+  border-radius: 99px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-top: 0.4rem;
+  width: fit-content;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+
+  mat-icon {
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+    color: #a78bfa;
+  }
+
+  &:hover {
+    background: rgba(139, 92, 246, 0.2);
+    border-color: rgba(139, 92, 246, 0.5);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.15);
+  }
+}
+
+.etymology-popup {
+  position: absolute;
+  top: 105%;
+  left: 0;
+  width: 320px;
+  background: rgba(15, 23, 42, 0.85) !important;
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+  padding: 1.25rem;
+  z-index: 100;
+  animation: popupSlideDown 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+
+  .popup-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+
+    h3 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #f8fafc;
+      margin: 0;
+    }
+
+    .close-btn {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      cursor: pointer;
+      padding: 0.1rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+
+      mat-icon {
+        font-size: 16px;
+        width: 16px;
+        height: 16px;
+      }
+
+      &:hover {
+        color: #f8fafc;
+        background: rgba(255, 255, 255, 0.05);
+      }
+    }
+  }
+
+  .popup-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .etymology-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+
+      .origin-flag {
+        font-size: 1rem;
+      }
+
+      h4 {
+        font-size: 0.8rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: #e2e8f0;
+        margin: 0;
+      }
+    }
+
+    p {
+      font-size: 0.8rem;
+      line-height: 1.45;
+      color: #94a3b8;
+      margin: 0;
+
+      strong {
+        color: #f8fafc;
+      }
+      em {
+        font-style: italic;
+        color: #cbd5e1;
+      }
+    }
+  }
+
+  .etymology-divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.05);
+    margin: 0.25rem 0;
+  }
+}
+
+@keyframes popupSlideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
   }
 }
 

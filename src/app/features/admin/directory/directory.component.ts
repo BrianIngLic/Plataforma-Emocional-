@@ -228,7 +228,8 @@ export class DirectoryComponent implements OnInit {
       .select(`
         id,
         matricula,
-        profiles (first_name, last_name, faculty, celular, avatar_url),
+        mobile_phone,
+        profiles (first_name, last_name, faculty, avatar_url),
         student_clinical_records!student_id (
           primary_psychologist_id,
           primary_nutritionist_id
@@ -251,7 +252,7 @@ export class DirectoryComponent implements OnInit {
           matricula: u.matricula || '',
           name: `${p?.first_name || ''} ${p?.last_name || ''}`.trim() || 'Alumno sin nombre',
           faculty: p?.faculty || 'Desconocida',
-          celular: p?.celular || '',
+          celular: u.mobile_phone || '',
           avatar_url: p?.avatar_url || '',
           status: ps?.status || 'active',
           self_diagnosis: ps?.self_diagnosis || 'Sin especificar',
@@ -776,11 +777,11 @@ export class DirectoryComponent implements OnInit {
         student:users!student_id (
           id,
           matricula,
+          mobile_phone,
           profiles (
             first_name,
             last_name,
-            faculty,
-            celular
+            faculty
           )
         )
       `)
@@ -794,6 +795,10 @@ export class DirectoryComponent implements OnInit {
         const student = d.student;
         if (student) {
           student.email = student.matricula ? `${student.matricula}@ep.buap.mx` : '';
+          const p = Array.isArray(student.profiles) ? student.profiles[0] : student.profiles;
+          if (p) {
+            p.celular = student.mobile_phone || '';
+          }
         }
         return student;
       }).filter(Boolean);
@@ -806,11 +811,11 @@ export class DirectoryComponent implements OnInit {
       .select(`
         id,
         matricula,
+        mobile_phone,
         profiles (
           first_name,
           last_name,
-          faculty,
-          celular
+          faculty
         )
       `)
       .eq('role_id', 2);
@@ -821,6 +826,10 @@ export class DirectoryComponent implements OnInit {
     } else {
       this.availableStudents = (data || []).map((student: any) => {
         student.email = student.matricula ? `${student.matricula}@ep.buap.mx` : '';
+        const p = Array.isArray(student.profiles) ? student.profiles[0] : student.profiles;
+        if (p) {
+          p.celular = student.mobile_phone || '';
+        }
         return student;
       });
     }

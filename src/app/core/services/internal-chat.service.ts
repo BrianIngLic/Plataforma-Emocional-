@@ -46,8 +46,7 @@ export class InternalChatService {
           profiles (
             first_name,
             last_name,
-            avatar_url,
-            celular
+            avatar_url
           )
         )
       `)
@@ -67,7 +66,7 @@ export class InternalChatService {
       const firstName = studentProfile?.first_name || '';
       const lastName = studentProfile?.last_name || '';
       const avatarUrl = studentProfile?.avatar_url || '';
-      const phone = item.student?.mobile_phone || studentProfile?.celular || '';
+      const phone = item.student?.mobile_phone || '';
 
       return {
         id: item.id,

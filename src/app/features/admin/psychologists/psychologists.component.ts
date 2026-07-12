@@ -538,11 +538,11 @@ export class PsychologistsComponent implements OnInit {
         student:users!student_id (
           id,
           matricula,
+          mobile_phone,
           profiles (
             first_name,
             last_name,
-            faculty,
-            celular
+            faculty
           )
         )
       `)
@@ -556,6 +556,10 @@ export class PsychologistsComponent implements OnInit {
         const student = d.student;
         if (student) {
           student.email = student.matricula ? `${student.matricula}@ep.buap.mx` : '';
+          const p = Array.isArray(student.profiles) ? student.profiles[0] : student.profiles;
+          if (p) {
+            p.celular = student.mobile_phone || '';
+          }
         }
         return student;
       }).filter(Boolean);
@@ -568,11 +572,11 @@ export class PsychologistsComponent implements OnInit {
       .select(`
         id,
         matricula,
+        mobile_phone,
         profiles (
           first_name,
           last_name,
-          faculty,
-          celular
+          faculty
         )
       `)
       .eq('role_id', 2);
@@ -583,6 +587,10 @@ export class PsychologistsComponent implements OnInit {
     } else {
       this.availableStudents = (data || []).map((student: any) => {
         student.email = student.matricula ? `${student.matricula}@ep.buap.mx` : '';
+        const p = Array.isArray(student.profiles) ? student.profiles[0] : student.profiles;
+        if (p) {
+          p.celular = student.mobile_phone || '';
+        }
         return student;
       });
     }

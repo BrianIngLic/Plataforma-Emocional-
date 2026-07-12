@@ -58,8 +58,8 @@ export class AdminSkill8Service {
         const { data: fallbackUsers, error: fbErr } = await this.supabase
           .from('users')
           .select(`
-            id, role_id, matricula,
-            profiles (first_name, last_name, faculty, celular),
+            id, role_id, matricula, mobile_phone,
+            profiles (first_name, last_name, faculty),
             health_professional_settings (capacity, location, modality)
           `)
           .in('role_id', [3, 4]);
@@ -80,7 +80,7 @@ export class AdminSkill8Service {
             last_name: p?.last_name || '',
             email: `${u.matricula || u.id.slice(0, 8)}@ep.buap.mx`,
             faculty: p?.faculty || '',
-            celular: p?.celular || '',
+            celular: u.mobile_phone || '',
             capacity: h?.capacity || 40,
             location: h?.location || 'Consultorio Virtual',
             modality: h?.modality || 'virtual'

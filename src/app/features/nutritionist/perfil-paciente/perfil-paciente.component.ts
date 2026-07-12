@@ -208,7 +208,7 @@ export class PerfilPaciente implements OnInit {
       // 1. Obtener usuario + perfil + expediente clínico
       const { data: userData, error: userError } = await this.supabase
         .from('users')
-        .select('id, matricula, mobile_phone, profiles(first_name, last_name, avatar_url, faculty, antecedentes_familiares, celular), student_clinical_records!student_clinical_records_student_id_fkey(known_conditions, additional_notes)')
+        .select('id, matricula, mobile_phone, profiles(first_name, last_name, avatar_url, faculty, antecedentes_familiares), student_clinical_records!student_clinical_records_student_id_fkey(known_conditions, additional_notes)')
         .eq('id', id)
         .single();
 
@@ -237,7 +237,7 @@ export class PerfilPaciente implements OnInit {
                 nombre: `${p?.first_name || 'Paciente'} ${p?.last_name || 'Sin Nombre'}`,
                 unidad_academica: p?.faculty || 'BUAP',
                 programa_educativo: 'Pendiente de registrar',
-                celular: p?.celular || userData?.mobile_phone || 'Sin registrar',
+                celular: userData?.mobile_phone || 'Sin registrar',
                 correo: 'sin_registrar@buap.mx',
                 antecedentes_familiares: p?.antecedentes_familiares || 'Sin registrar',
                 sexo: 'Sin registrar',
@@ -277,7 +277,7 @@ export class PerfilPaciente implements OnInit {
             nombre: `${p?.first_name || 'Paciente'} ${p?.last_name || 'Sin Nombre'}`,
             unidad_academica: p?.faculty || 'BUAP',
             programa_educativo: 'Pendiente de registrar',
-            celular: p?.celular || userData?.mobile_phone || 'Sin registrar',
+            celular: userData?.mobile_phone || 'Sin registrar',
             correo: 'sin_registrar@buap.mx',
             antecedentes_familiares: p?.antecedentes_familiares || 'Sin registrar',
             sexo: 'Sin registrar',
@@ -304,7 +304,7 @@ export class PerfilPaciente implements OnInit {
           avatarUrl: p?.avatar_url || '',
           avatar: p?.avatar_url || '',
           antecedentes_familiares: this.generalData?.antecedentes_familiares || p?.antecedentes_familiares || '',
-          celular: p?.celular || userData?.mobile_phone || this.generalData?.celular || ''
+          celular: userData?.mobile_phone || this.generalData?.celular || ''
         };
       }
 

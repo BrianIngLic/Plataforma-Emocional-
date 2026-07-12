@@ -172,7 +172,7 @@ export class PatientProfileComponent implements OnInit {
       // 1. Fetch user + profile + clinical record
       const { data: userData, error: userError } = await this.supabase
         .from('users')
-        .select('id, mobile_phone, profiles(first_name, last_name, avatar_url, antecedentes_familiares, celular), student_clinical_records!student_clinical_records_student_id_fkey(known_conditions, additional_notes)')
+        .select('id, mobile_phone, profiles(first_name, last_name, avatar_url, antecedentes_familiares), student_clinical_records!student_clinical_records_student_id_fkey(known_conditions, additional_notes)')
         .eq('id', id)
         .single();
 
@@ -223,7 +223,7 @@ export class PatientProfileComponent implements OnInit {
           riskLevel: (this.eat26Result && this.eat26Result.hasRisk) ? "Alto" : (conditions && conditions.length > 0 ? "Moderado" : "Bajo"),
           notes: notes,
           antecedentes_familiares: antecedentesFamiliares,
-          celular: p?.celular || userData?.mobile_phone || ''
+          celular: userData?.mobile_phone || ''
         };
       }
 

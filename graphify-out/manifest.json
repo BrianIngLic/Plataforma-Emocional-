@@ -80,8 +80,8 @@
     "semantic_hash": ""
   },
   "src/app/core/services/auth.service.ts": {
-    "mtime": 1783838772.252369,
-    "ast_hash": "848feeb38f56a22e9d110bfe92a070cd",
+    "mtime": 1783882063.953968,
+    "ast_hash": "a7b939e65fc9daf436ca6224f82dadb3",
     "semantic_hash": ""
   },
   "src/app/core/services/chat.service.ts": {
@@ -150,8 +150,8 @@
     "semantic_hash": ""
   },
   "src/app/features/admin/psychologists/psychologists.component.ts": {
-    "mtime": 1783668250.8223286,
-    "ast_hash": "fd836f7e11e8d918e67fe71771ae209e",
+    "mtime": 1783882103.7946055,
+    "ast_hash": "a1d6f92cda7452032e281b96cb6e7aad",
     "semantic_hash": ""
   },
   "src/app/features/admin/reports/reports.component.ts": {
@@ -165,8 +165,8 @@
     "semantic_hash": ""
   },
   "src/app/features/admin/services/admin-stats.service.ts": {
-    "mtime": 1783668250.8291962,
-    "ast_hash": "1490363c56f63c693785a267e4ee9a2f",
+    "mtime": 1783882086.8073454,
+    "ast_hash": "1e3687f065c9e27143882134460668d9",
     "semantic_hash": ""
   },
   "src/app/features/alimentary/alimentary-dashboard/alimentary-dashboard.component.ts": {
@@ -240,8 +240,8 @@
     "semantic_hash": ""
   },
   "src/app/features/psychologist/clinical-note/clinical-note.component.ts": {
-    "mtime": 1783668250.8881853,
-    "ast_hash": "4da9d2e09b18e04148e562c628de7b2d",
+    "mtime": 1783882247.1149318,
+    "ast_hash": "01712a4062965d55cf0e4066c75c8718",
     "semantic_hash": ""
   },
   "src/app/features/psychologist/dashboard/dashboard.component.ts": {
@@ -250,8 +250,8 @@
     "semantic_hash": "b29381fde22297a402e92bd8ee8e620a"
   },
   "src/app/features/psychologist/patient-profile/patient-profile.component.ts": {
-    "mtime": 1783839591.868871,
-    "ast_hash": "aba30472f4aef93c2239e4196c81f9c8",
+    "mtime": 1783882253.7480555,
+    "ast_hash": "b13ff8da9a72fb946a02b778854c7f46",
     "semantic_hash": ""
   },
   "src/app/features/psychologist/patients/patients.component.ts": {
@@ -565,8 +565,8 @@
     "semantic_hash": ""
   },
   "src/app/features/nutritionist/perfil-paciente/perfil-paciente.component.ts": {
-    "mtime": 1783839594.2742512,
-    "ast_hash": "bc9f51f122e5d361cdc9cba19ab5114a",
+    "mtime": 1783882143.1126127,
+    "ast_hash": "bbeb441a64ecdcff289cd43e1a2a1181",
     "semantic_hash": ""
   },
   "src/app/features/nutritionist/settings/settings.component.ts": {
@@ -655,8 +655,8 @@
     "semantic_hash": ""
   },
   "src/app/features/admin/services/admin-skill8.service.ts": {
-    "mtime": 1782770666.6677687,
-    "ast_hash": "c5fd696f00763796f5357678204fec1e",
+    "mtime": 1783882080.675706,
+    "ast_hash": "add4d69d8063d0946e131539feb69327",
     "semantic_hash": ""
   },
   "src/app/core/services/session-evaluation.service.ts": {
@@ -735,8 +735,8 @@
     "semantic_hash": ""
   },
   "src/app/core/services/internal-chat.service.ts": {
-    "mtime": 1783843580.527325,
-    "ast_hash": "a3d5de037e05c1d6b1b3bf2d84ddc9c6",
+    "mtime": 1783882051.7301831,
+    "ast_hash": "047edfa7b207f1ecb15fbcf1646e9500",
     "semantic_hash": ""
   },
   "src/app/features/health-professional/command-center-chat/command-center-chat.component.ts": {
@@ -745,8 +745,8 @@
     "semantic_hash": ""
   },
   "supabase/functions/meta-whatsapp/index.ts": {
-    "mtime": 1783841059.3493903,
-    "ast_hash": "7a74af3db4a6352517bd87bce132328a",
+    "mtime": 1783882026.905707,
+    "ast_hash": "3f0a07073ab1d324a58eb5e5253a0a4a",
     "semantic_hash": ""
   },
   "src/app/features/health-professional/command-center-chat/command-center-chat.component.html": {
@@ -865,8 +865,8 @@
     "semantic_hash": ""
   },
   "src/app/features/nutritionist/consulta/consulta.component.ts": {
-    "mtime": 1783668250.8691032,
-    "ast_hash": "19d5ff8dec4f5281adce1c6b7f80a857",
+    "mtime": 1783882109.730036,
+    "ast_hash": "ba5a7def68af006c0f5775a7a0420f49",
     "semantic_hash": ""
   },
   "src/app/features/nutritionist/consulta/consulta.types.ts": {
@@ -1085,8 +1085,8 @@
     "semantic_hash": ""
   },
   "src/app/features/admin/directory/directory.component.ts": {
-    "mtime": 1783668250.8100536,
-    "ast_hash": "5f3aa9f97216a35cdf1c1930d45cca17",
+    "mtime": 1783882097.4869967,
+    "ast_hash": "31ff559f46cbe241cfc796766bac24e4",
     "semantic_hash": ""
   },
   "src/app/features/admin/directory/directory.component.html": {
@@ -1115,8 +1115,8 @@
     "semantic_hash": ""
   },
   "src/app/core/services/arco.service.ts": {
-    "mtime": 1783836684.258236,
-    "ast_hash": "6c970294285ecb594086b4afd434515e",
+    "mtime": 1783882068.312874,
+    "ast_hash": "8c8e8d26dca5651e7c1ef7deaf08054e",
     "semantic_hash": ""
   },
   "src/app/features/admin/arco-requests/arco-requests.component.ts": {

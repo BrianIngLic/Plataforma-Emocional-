@@ -252,7 +252,7 @@ export class ArcoService {
           last_name: profile.last_name,
           faculty: profile.faculty,
           programa_educativo: profile.programa_educativo,
-          celular: profile.celular,
+          celular: user.mobile_phone || '',
           antecedentes_familiares: profile.antecedentes_familiares,
           sexo: profile.sexo,
           fecha_nacimiento: profile.fecha_nacimiento,

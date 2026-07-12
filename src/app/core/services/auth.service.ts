@@ -8,7 +8,7 @@ import { AuditService } from './audit.service';
   providedIn: 'root'
 })
 export class AuthService {
-  public currentUser = signal<{ matricula: string, role: string, id: string, name: string, faculty?: string, requires_password_change?: boolean, avatar_url?: string } | null>(null);
+  public currentUser = signal<{ matricula: string, role: string, id: string, name: string, faculty?: string, requires_password_change?: boolean, avatar_url?: string, mobile_phone?: string } | null>(null);
   public isLoggedIn = signal<boolean>(false);
 
   public get isHealthProfessional(): boolean {
@@ -127,7 +127,7 @@ export class AuthService {
     // Query 1: datos base del usuario
     const { data: userData, error: userError } = await this.supabaseService.supabase
       .from('users')
-      .select('matricula, role_id, requires_password_change')
+      .select('matricula, role_id, requires_password_change, mobile_phone')
       .eq('id', userId)
       .single();
 
@@ -182,7 +182,8 @@ export class AuthService {
       name: fullName || 'Usuario',
       faculty: profileData?.faculty || '',
       requires_password_change: userData.requires_password_change === true,
-      avatar_url: profileData?.avatar_url || ''
+      avatar_url: profileData?.avatar_url || '',
+      mobile_phone: userData.mobile_phone || ''
     });
     this.isLoggedIn.set(true);
     // ponytail: Registrar actividad inicial al cargar perfil exitoso
@@ -277,7 +278,8 @@ export class AuthService {
         id: userId,
         matricula: matricula,
         role_id: 2, // 2 = Estudiante
-        requires_password_change: false
+        requires_password_change: false,
+        mobile_phone: profileData?.celular ?? null
       });
       if (userError) console.error('Error insertando user:', userError.message);
 
@@ -289,7 +291,6 @@ export class AuthService {
         last_name: lastName,
         faculty: faculty,
         programa_educativo: profileData?.programa_educativo ?? null,
-        celular: profileData?.celular ?? null,
         antecedentes_familiares: profileData?.antecedentes_familiares ?? null,
         sexo: profileData?.sexo ?? null,
         fecha_nacimiento: profileData?.fecha_nacimiento ?? null

@@ -83,27 +83,16 @@ serve(async (req: Request) => {
           ];
           
           const uniqueFormats = Array.from(new Set(formats.filter(f => f.length > 0)));
-          const orFilterCelular = uniqueFormats.map(f => `celular.eq.${f}`).join(',');
           const orFilterMobile = uniqueFormats.map(f => `mobile_phone.eq.${f}`).join(',');
           
-          // Buscar en profiles (celular) o users (mobile_phone)
-          const { data: profileData, error: profileError } = await supabase
-            .from('profiles')
-            .select('user_id, first_name, last_name')
-            .or(orFilterCelular)
+          // Buscar directamente en users (mobile_phone)
+          const { data: userData } = await supabase
+            .from('users')
+            .select('id')
+            .or(orFilterMobile)
             .maybeSingle();
 
-          let userId = profileData?.user_id;
-
-          if (!userId) {
-            // Reintentar buscando en la tabla users
-            const { data: userData } = await supabase
-              .from('users')
-              .select('id')
-              .or(orFilterMobile)
-              .maybeSingle();
-            userId = userData?.id;
-          }
+          const userId = userData?.id;
 
           if (userId) {
             // Estudiante encontrado. Obtener o crear la conversación.

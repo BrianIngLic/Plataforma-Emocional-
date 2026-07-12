@@ -735,8 +735,8 @@
     "semantic_hash": ""
   },
   "src/app/core/services/internal-chat.service.ts": {
-    "mtime": 1783840087.5766244,
-    "ast_hash": "047edfa7b207f1ecb15fbcf1646e9500",
+    "mtime": 1783843580.527325,
+    "ast_hash": "a3d5de037e05c1d6b1b3bf2d84ddc9c6",
     "semantic_hash": ""
   },
   "src/app/features/health-professional/command-center-chat/command-center-chat.component.ts": {
@@ -1157,6 +1157,11 @@
   "scratch/register_student_test.js": {
     "mtime": 1783843019.285592,
     "ast_hash": "2abde069e46f23b27521ab3c3e98ace1",
+    "semantic_hash": ""
+  },
+  "scratch/test_query.js": {
+    "mtime": 1783843526.270068,
+    "ast_hash": "9d1e68613c9f6312081e827fe6ed1032",
     "semantic_hash": ""
   }
 }

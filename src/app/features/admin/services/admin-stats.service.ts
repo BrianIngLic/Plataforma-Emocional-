@@ -189,8 +189,8 @@ export class AdminStatsService {
       const { data: fallbackUsers, error: fbErr } = await supabase
         .from('users')
         .select(`
-          id, role_id, matricula,
-          profiles (first_name, last_name, faculty, celular, avatar_url),
+          id, role_id, matricula, mobile_phone,
+          profiles (first_name, last_name, faculty, avatar_url),
           health_professional_settings (capacity, location, modality)
         `)
         .in('role_id', [3, 4]);
@@ -211,7 +211,7 @@ export class AdminStatsService {
           last_name: p?.last_name || '',
           email: `${u.matricula || u.id.slice(0, 8)}@ep.buap.mx`, // fallback email
           faculty: p?.faculty || '',
-          celular: p?.celular || '',
+          celular: u.mobile_phone || '',
           capacity: h?.capacity || 40,
           location: h?.location || 'Consultorio Virtual',
           modality: h?.modality || 'virtual',

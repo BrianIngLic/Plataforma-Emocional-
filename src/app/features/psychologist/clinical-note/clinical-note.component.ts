@@ -324,7 +324,7 @@ export class ClinicalNoteComponent implements OnInit {
       if (this.appointment && this.appointment.student_id) {
         const { data: pData, error: pError } = await this.supabase
           .from('users')
-          .select('id, matricula, profiles(first_name, last_name, faculty, antecedentes_familiares), student_clinical_records!student_clinical_records_student_id_fkey(additional_notes)')
+          .select('id, matricula, mobile_phone, profiles(first_name, last_name, faculty, antecedentes_familiares), student_clinical_records!student_clinical_records_student_id_fkey(additional_notes)')
           .eq('id', this.appointment.student_id)
           .single();
           
@@ -336,7 +336,7 @@ export class ClinicalNoteComponent implements OnInit {
           
           let matricula = pData.matricula || 'N/A';
           let faculty = profile?.faculty || 'N/A';
-          let celular = 'N/A';
+          let celular = pData.mobile_phone || 'N/A';
           let sexo = 'N/A';
           let fechaNacimiento = 'N/A';
           let edad = 'N/A';
@@ -347,7 +347,7 @@ export class ClinicalNoteComponent implements OnInit {
               const decrypted = this.crypto.decrypt(recordObj.additional_notes);
               const parsed = JSON.parse(decrypted);
               const gen = parsed.general_data || {};
-              celular = gen.celular || 'N/A';
+              celular = gen.celular || pData.mobile_phone || 'N/A';
               sexo = gen.sexo || 'N/A';
               fechaNacimiento = gen.fecha_nacimiento || 'N/A';
               edad = gen.edad ? `${gen.edad} años` : 'N/A';

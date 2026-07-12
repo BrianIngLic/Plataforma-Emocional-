@@ -9,11 +9,19 @@ import { FeedbackModalComponent } from '../../../shared/components/feedback-moda
 import { FacultyService, Faculty } from '../../../core/services/faculty.service';
 import { SupabaseService } from '../../../core/services/supabase.service';
 import { ProfileAvatarComponent } from '../../../shared/components/profile-avatar/profile-avatar.component';
+import { ArcoSettingsComponent } from '../../../shared/components/arco-settings/arco-settings.component';
 
 @Component({
   selector: 'app-health-professional-settings',
   standalone: true,
-  imports: [CommonModule, FormsModule, MatIconModule, MatDialogModule, ProfileAvatarComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    MatIconModule,
+    MatDialogModule,
+    ProfileAvatarComponent,
+    ArcoSettingsComponent
+  ],
   templateUrl: './settings.component.html',
   styleUrls: ['./settings.component.scss']
 })
@@ -24,7 +32,7 @@ export class HealthProfessionalSettingsComponent implements OnInit {
   supabaseService = inject(SupabaseService);
   dialog = inject(MatDialog);
 
-  activeTab: 'perfil' | 'agenda' = 'perfil';
+  activeTab: 'perfil' | 'agenda' | 'arco' = 'perfil';
   faculties: Faculty[] = [];
   selectedFaculty: string = '';
 
@@ -70,7 +78,7 @@ export class HealthProfessionalSettingsComponent implements OnInit {
     return this.exceptions.filter(e => e.exception_date >= this.today);
   }
 
-  setTab(tab: 'perfil' | 'agenda') {
+  setTab(tab: 'perfil' | 'agenda' | 'arco') {
     this.activeTab = tab;
   }
 

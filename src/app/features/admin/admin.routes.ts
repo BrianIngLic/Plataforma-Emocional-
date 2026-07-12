@@ -41,6 +41,10 @@ export const ADMIN_ROUTES: Routes = [
         loadComponent: () => import('./admin-settings/admin-settings.component').then(m => m.AdminSettingsComponent)
       },
       {
+        path: 'arco-requests',
+        loadComponent: () => import('./arco-requests/arco-requests.component').then(m => m.ArcoRequestsComponent)
+      },
+      {
         path: 'institutional-branding',
         loadComponent: () => import('./institutional-settings/institutional-settings.component').then(m => m.InstitutionalSettingsComponent)
       },

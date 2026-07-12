@@ -1,0 +1,177 @@
+<div class="arco-container">
+  <div class="arco-header">
+    <h2><mat-icon>security</mat-icon> Derechos ARCO y Privacidad</h2>
+    <p class="subtitle">Gestiona de forma transparente el Acceso, Rectificación, Cancelación y Oposición de tus datos personales.</p>
+  </div>
+
+  <mat-spinner *ngIf="loadingSettings()" diameter="40" class="loading-spinner"></mat-spinner>
+
+  <div *ngIf="!loadingSettings()" class="arco-card">
+    <!-- Mensajes de Estado -->
+    <div *ngIf="successMessage()" class="alert-message success">
+      <mat-icon>check_circle</mat-icon>
+      <span>{{ successMessage() }}</span>
+    </div>
+    <div *ngIf="errorMessage()" class="alert-message error">
+      <mat-icon>error</mat-icon>
+      <span>{{ errorMessage() }}</span>
+    </div>
+
+    <mat-tab-group animationDuration="300ms">
+      <!-- PESTAÑA 1: ACCESO Y RECTIFICACIÓN -->
+      <mat-tab>
+        <ng-template matTabLabel>
+          <mat-icon>download</mat-icon> Acceso y Rectificación
+        </ng-template>
+        <div class="tab-content">
+          <div class="arco-section">
+            <h3><mat-icon>file_download</mat-icon> Derecho de Acceso</h3>
+            <p>Tienes derecho a conocer qué datos personales tenemos tuyos, para qué los utilizamos y las condiciones del uso que les damos.</p>
+            
+            <div class="action-box">
+              <div class="action-desc">
+                <strong>Descarga tus datos personales</strong>
+                <span>Genera un archivo JSON con toda tu información de perfil, diario emocional, expedientes clínicos y citas.</span>
+              </div>
+              <button mat-flat-button color="primary" (click)="downloadMyData()" [disabled]="exportingData()">
+                <mat-spinner *ngIf="exportingData()" diameter="20" color="accent"></mat-spinner>
+                <mat-icon *ngIf="!exportingData()">download</mat-icon>
+                {{ exportingData() ? 'Exportando...' : 'Descargar mis Datos' }}
+              </button>
+            </div>
+          </div>
+
+          <div class="arco-section border-top">
+            <h3><mat-icon>edit_note</mat-icon> Derecho de Rectificación</h3>
+            <p>Es tu derecho solicitar la corrección de tu información personal en caso de que esté desactualizada, sea inexacta o esté incompleta.</p>
+            <div class="info-alert">
+              <mat-icon>info</mat-icon>
+              <span>Para rectificar datos básicos de tu cuenta, puedes hacerlo editando tu perfil directamente en los campos editables superiores de esta pantalla de configuración. Para rectificaciones de matrícula o datos oficiales, por favor envía una solicitud formal en la pestaña "Nueva Solicitud".</span>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+
+      <!-- PESTAÑA 2: OPOSICIÓN (PRIVACIDAD) -->
+      <mat-tab>
+        <ng-template matTabLabel>
+          <mat-icon>block</mat-icon> Oposición
+        </ng-template>
+        <div class="tab-content">
+          <div class="arco-section">
+            <h3><mat-icon>visibility_off</mat-icon> Derecho de Oposición y Consentimiento</h3>
+            <p>Puedes oponerte al uso de tus datos personales para fines específicos o restringir con quién se comparte tu información clínica y estadística.</p>
+
+            <div class="toggle-list">
+              <div class="toggle-item" *ngIf="userRole() === 'Estudiante'">
+                <div class="toggle-info">
+                  <strong>Compartir Expediente Clínico</strong>
+                  <span>Permite que tus especialistas asignados (Psicólogo y Nutriólogo) tengan acceso a tu ficha clínica de Amati para darte seguimiento.</span>
+                </div>
+                <mat-slide-toggle 
+                  [(ngModel)]="shareClinicalData" 
+                  (change)="onPrivacyChange()"
+                  color="primary">
+                </mat-slide-toggle>
+              </div>
+
+              <div class="toggle-item">
+                <div class="toggle-info">
+                  <strong>Uso de Estadísticas Anonimizadas</strong>
+                  <span>Permite que la institución use tus datos de forma completamente anonimizada para reportes de salud estudiantil colectivos y de mejora.</span>
+                </div>
+                <mat-slide-toggle 
+                  [(ngModel)]="useAnonymousStats" 
+                  (change)="onPrivacyChange()"
+                  color="primary">
+                </mat-slide-toggle>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+
+      <!-- PESTAÑA 3: SOLICITUDES ARCO (CANCELACIÓN Y FORMALES) -->
+      <mat-tab>
+        <ng-template matTabLabel>
+          <mat-icon>history_edu</mat-icon> Historial y Solicitudes
+        </ng-template>
+        <div class="tab-content split-layout">
+          <!-- Formulario de Solicitudes -->
+          <div class="form-container">
+            <h3><mat-icon>border_color</mat-icon> Nueva Solicitud ARCO</h3>
+            <p>Utiliza este canal formal para solicitar la cancelación (eliminación de tu cuenta y purga del expediente) o rectificaciones administrativas.</p>
+
+            <form [formGroup]="arcoForm" (ngSubmit)="onSubmitRequest()" class="arco-form">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Tipo de Derecho a ejercer</mat-label>
+                <select matNativeControl formControlName="type">
+                  <option value="Cancellation">Cancelación (Eliminación de cuenta)</option>
+                  <option value="Rectification">Rectificación (Cambio de datos oficiales)</option>
+                  <option value="Opposition">Oposición (Límites de tratamiento)</option>
+                </select>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Detalle de tu solicitud</mat-label>
+                <textarea 
+                  matInput 
+                  rows="4" 
+                  formControlName="details"
+                  placeholder="Describe detalladamente los motivos y qué datos solicitas rectificar, oponer u eliminar por completo."></textarea>
+                <mat-hint>Mínimo 15 caracteres. Detalla tu justificación.</mat-hint>
+                <mat-error *ngIf="arcoForm.get('details')?.hasError('required')">El detalle es obligatorio.</mat-error>
+                <mat-error *ngIf="arcoForm.get('details')?.hasError('minlength')">Debe tener al menos 15 caracteres.</mat-error>
+              </mat-form-field>
+
+              <button 
+                mat-flat-button 
+                color="primary" 
+                type="submit" 
+                class="btn-submit"
+                [disabled]="arcoForm.invalid || submittingRequest()">
+                <mat-spinner *ngIf="submittingRequest()" diameter="20"></mat-spinner>
+                Enviar Solicitud ARCO
+              </button>
+            </form>
+          </div>
+
+          <!-- Historial de Solicitudes -->
+          <div class="history-container">
+            <h3><mat-icon>assignment</mat-icon> Tus Solicitudes Previas</h3>
+            <p>Estatus de las solicitudes de protección de datos personales.</p>
+
+            <div *ngIf="myRequests().length === 0" class="empty-history">
+              <mat-icon>inbox</mat-icon>
+              <span>No has realizado ninguna solicitud ARCO.</span>
+            </div>
+
+            <div *ngIf="myRequests().length > 0" class="requests-list">
+              <div *ngFor="let req of myRequests()" class="request-item">
+                <div class="request-item-header">
+                  <span class="request-badge" [ngClass]="req.request_type.toLowerCase()">
+                    {{ req.request_type === 'Cancellation' ? 'Cancelación' : req.request_type === 'Rectification' ? 'Rectificación' : req.request_type }}
+                  </span>
+                  <span class="request-date">{{ req.created_at | date:'dd/MM/yyyy HH:mm' }}</span>
+                </div>
+                <p class="request-details">"{{ req.details }}"</p>
+                
+                <div class="status-footer">
+                  <div class="status-indicator" [ngClass]="req.status?.toLowerCase()">
+                    <span class="dot"></span>
+                    <span>
+                      {{ req.status === 'Pending' ? 'Pendiente de Revisión' : req.status === 'Approved' ? 'Aprobada' : req.status === 'Rejected' ? 'Rechazada' : 'Completada' }}
+                    </span>
+                  </div>
+                  <div *ngIf="req.resolution_notes" class="resolution-box">
+                    <strong>Respuesta del Admin:</strong> {{ req.resolution_notes }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+</div>

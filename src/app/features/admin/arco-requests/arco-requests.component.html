@@ -1,0 +1,150 @@
+<div class="admin-arco-container">
+  <div class="admin-arco-header">
+    <h2><mat-icon>privacy_tip</mat-icon> Gestión de Solicitudes ARCO</h2>
+    <p class="subtitle">Audita, responde y gestiona las solicitudes de Acceso, Rectificación, Cancelación y Oposición de datos personales.</p>
+  </div>
+
+  <mat-spinner *ngIf="loading()" diameter="45" class="loading-spinner"></mat-spinner>
+
+  <div *ngIf="!loading()" class="admin-arco-grid">
+    <!-- Listado de Solicitudes -->
+    <div class="list-column card">
+      <div class="card-header">
+        <h3>Solicitudes Recibidas</h3>
+        <span class="count-badge">{{ requests().length }} totales</span>
+      </div>
+
+      <div *ngIf="requests().length === 0" class="empty-state">
+        <mat-icon>done_all</mat-icon>
+        <p>No hay solicitudes ARCO pendientes o registradas en el sistema.</p>
+      </div>
+
+      <div *ngIf="requests().length > 0" class="requests-list">
+        <div 
+          *ngFor="let req of requests()" 
+          class="request-item" 
+          [class.active]="selectedRequest()?.id === req.id"
+          (click)="selectRequest(req)">
+          
+          <div class="request-item-header">
+            <span class="request-badge" [ngClass]="req.request_type.toLowerCase()">
+              {{ req.request_type === 'Cancellation' ? 'Cancelación' : req.request_type === 'Rectification' ? 'Rectificación' : req.request_type }}
+            </span>
+            <span class="request-date">{{ req.created_at | date:'dd/MM/yyyy HH:mm' }}</span>
+          </div>
+
+          <div class="user-meta">
+            <strong>{{ req.user_email }}</strong>
+            <small>Matrícula: {{ req.user_matricula }}</small>
+          </div>
+
+          <p class="excerpt">"{{ req.details.substring(0, 80) }}{{ req.details.length > 80 ? '...' : '' }}"</p>
+
+          <div class="request-item-footer">
+            <span class="status-badge" [ngClass]="req.status?.toLowerCase()">
+              {{ req.status === 'Pending' ? 'Pendiente' : req.status === 'Approved' ? 'Aprobada' : req.status === 'Rejected' ? 'Rechazada' : 'Completada' }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Columna de Detalle / Resolución -->
+    <div class="detail-column card">
+      <!-- Si no hay seleccionada -->
+      <div *ngIf="!selectedRequest()" class="no-selection">
+        <mat-icon>mark_email_read</mat-icon>
+        <h3>Selecciona una solicitud</h3>
+        <p>Haz clic en cualquier solicitud de la lista izquierda para ver los detalles, auditar la información del usuario y registrar la resolución legal.</p>
+      </div>
+
+      <!-- Detalle de Solicitud -->
+      <div *ngIf="selectedRequest()" class="detail-content">
+        <div class="detail-header">
+          <div class="detail-title-wrapper">
+            <span class="request-badge large" [ngClass]="selectedRequest()!.request_type.toLowerCase()">
+              {{ selectedRequest()!.request_type === 'Cancellation' ? 'Cancelación' : selectedRequest()!.request_type === 'Rectification' ? 'Rectificación' : selectedRequest()!.request_type }}
+            </span>
+            <h3>Detalle de la Solicitud</h3>
+          </div>
+          <span class="date">{{ selectedRequest()!.created_at | date:'medium' }}</span>
+        </div>
+
+        <div class="user-card">
+          <div class="avatar-circle">
+            <mat-icon>account_circle</mat-icon>
+          </div>
+          <div class="user-info-text">
+            <strong>{{ selectedRequest()!.user_email }}</strong>
+            <span>Matrícula: {{ selectedRequest()!.user_matricula }}</span>
+            <span class="uid">User ID: {{ selectedRequest()!.user_id }}</span>
+          </div>
+        </div>
+
+        <div class="section-box">
+          <h4>Detalles de la Petición</h4>
+          <p class="details-text">"{{ selectedRequest()!.details }}"</p>
+        </div>
+
+        <!-- Historial / Estado -->
+        <div class="section-box">
+          <h4>Estado de Resolución</h4>
+          <div class="status-banner" [ngClass]="selectedRequest()!.status?.toLowerCase()">
+            <mat-icon>{{ selectedRequest()!.status === 'Pending' ? 'schedule' : selectedRequest()!.status === 'Completed' ? 'check_circle' : 'cancel' }}</mat-icon>
+            <strong>
+              {{ selectedRequest()!.status === 'Pending' ? 'Pendiente de Atención' : selectedRequest()!.status === 'Approved' ? 'Aprobada' : selectedRequest()!.status === 'Rejected' ? 'Rechazada' : 'Completada' }}
+            </strong>
+          </div>
+        </div>
+
+        <!-- Respuestas / Acciones -->
+        <div class="resolution-section border-top">
+          <!-- Si está Resuelta -->
+          <div *ngIf="selectedRequest()!.status !== 'Pending'" class="resolved-info">
+            <div class="resolution-metadata">
+              <span><strong>Resuelto el:</strong> {{ selectedRequest()!.resolved_at | date:'medium' }}</span>
+            </div>
+            <div class="resolution-notes-box">
+              <strong>Notas de la Resolución:</strong>
+              <p>{{ selectedRequest()!.resolution_notes }}</p>
+            </div>
+          </div>
+
+          <!-- Si está Pendiente (Formulario de Resolución) -->
+          <div *ngIf="selectedRequest()!.status === 'Pending'" class="resolution-form">
+            <h4>Registrar Acción y Resolución Legal</h4>
+            <p class="hint">Al resolver, se guardará el registro auditable y el estudiante podrá ver las notas explicativas en su cuenta.</p>
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Notas de Resolución / Justificación Legal</mat-label>
+              <textarea 
+                matInput 
+                rows="4" 
+                [(ngModel)]="resolutionNotes" 
+                placeholder="Ej: Se desactivó la cuenta e inició el periodo de conservación temporal conforme a la NOM-004-SSA3-2012 por seguridad médica."></textarea>
+            </mat-form-field>
+
+            <div class="actions-row">
+              <button 
+                mat-stroked-button 
+                color="warn" 
+                (click)="processRequest('Rejected')"
+                [disabled]="submitting()">
+                Rechazar Petición
+              </button>
+              
+              <button 
+                mat-flat-button 
+                color="primary" 
+                (click)="processRequest('Completed')"
+                [disabled]="submitting()">
+                <mat-spinner *ngIf="submitting()" diameter="20" color="accent"></mat-spinner>
+                Marcar como Completada
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

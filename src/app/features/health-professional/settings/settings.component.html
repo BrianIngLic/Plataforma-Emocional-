@@ -11,6 +11,9 @@
     <button class="tab-btn" [class.active]="activeTab === 'agenda'" (click)="setTab('agenda')">
       <mat-icon>event</mat-icon> Citas y Horarios
     </button>
+    <button class="tab-btn" [class.active]="activeTab === 'arco'" (click)="setTab('arco')">
+      <mat-icon>security</mat-icon> Privacidad y ARCO
+    </button>
   </div>
 
   <!-- Pestaña de Perfil -->
@@ -200,5 +203,10 @@
       </div>
 
     </div>
+  </div>
+
+  <!-- Pestaña de Privacidad y Derechos ARCO -->
+  <div class="tab-content animate-fade-in" *ngIf="activeTab === 'arco'">
+    <app-arco-settings></app-arco-settings>
   </div>
 </div>

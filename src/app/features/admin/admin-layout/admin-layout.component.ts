@@ -27,6 +27,7 @@ export class AdminLayoutComponent {
     { label: 'Chat WhatsApp', sub: 'WhatsApp Bidireccional', icon: 'chat', path: './whatsapp-chat' },
     { label: 'Configuración de Nota', sub: 'Campos consulta nutrición', icon: 'settings_suggest', path: './nutritionist-fields' },
     { label: 'Imagen Institucional', sub: 'Sello y marca de agua', icon: 'branding_watermark', path: './institutional-branding' },
+    { label: 'Solicitudes ARCO', sub: 'Control de privacidad', icon: 'security', path: './arco-requests' },
     { label: 'Alertas', sub: 'Notificaciones del sistema', icon: 'notifications', path: './alerts', badge: 5 }
   ];
 

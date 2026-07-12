@@ -9,11 +9,20 @@ import { FacultyService, Faculty } from '../../../core/services/faculty.service'
 import { SupabaseService } from '../../../core/services/supabase.service';
 import { FeedbackModalComponent } from '../../../shared/components/feedback-modal/feedback-modal.component';
 import { ProfileAvatarComponent } from '../../../shared/components/profile-avatar/profile-avatar.component';
+import { ArcoSettingsComponent } from '../../../shared/components/arco-settings/arco-settings.component';
 
 @Component({
   selector: 'app-student-settings',
   standalone: true,
-  imports: [CommonModule, FormsModule, MatIconModule, MatButtonModule, MatDialogModule, ProfileAvatarComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    MatIconModule,
+    MatButtonModule,
+    MatDialogModule,
+    ProfileAvatarComponent,
+    ArcoSettingsComponent
+  ],
   templateUrl: './student-settings.component.html',
   styleUrls: ['./student-settings.component.scss']
 })

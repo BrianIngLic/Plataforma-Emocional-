@@ -21,6 +21,10 @@ El sistema está compuesto por un Frontend Angular, un Backend PostgREST (Postgr
 - Crear módulos Angular de login y registro.
 - Módulo de Recuperación de Contraseña (Forgot / Reset Password).
 - En el registro del estudiante, incluir el paso para contestar el cuestionario de afecciones conocidas (Depresión, Ansiedad, etc.) que se enlazará con la IA.
+- **Seguridad y Persistencia de Sesión (NOM-024 / HIPAA)**:
+  - Cierre automático de sesión tras 15 minutos de inactividad del usuario (rastreado mediante interacción del DOM y validado con timestamp en `localStorage` ante suspensión del sistema).
+  - Cierre forzado de sesión al cerrar pestaña o navegador (detectado al comprobar la pérdida de la llave simétrica E2EE `e2ee_session_key` de `sessionStorage`).
+  - Registro de auditoría del evento `SESSION_TIMEOUT` en `audit_logs` ante cierres automáticos.
 
 ### Skill 3: Amati Chat (Estudiante)
 - Vista en modo oscuro.

@@ -172,7 +172,7 @@ export class PatientProfileComponent implements OnInit {
       // 1. Fetch user + profile + clinical record
       const { data: userData, error: userError } = await this.supabase
         .from('users')
-        .select('id, profiles(first_name, last_name, avatar_url, antecedentes_familiares), student_clinical_records!student_clinical_records_student_id_fkey(known_conditions, additional_notes)')
+        .select('id, mobile_phone, profiles(first_name, last_name, avatar_url, antecedentes_familiares, celular), student_clinical_records!student_clinical_records_student_id_fkey(known_conditions, additional_notes)')
         .eq('id', id)
         .single();
 
@@ -222,7 +222,8 @@ export class PatientProfileComponent implements OnInit {
           state: (this.eat26Result && this.eat26Result.hasRisk) ? "Critical" : "Active",
           riskLevel: (this.eat26Result && this.eat26Result.hasRisk) ? "Alto" : (conditions && conditions.length > 0 ? "Moderado" : "Bajo"),
           notes: notes,
-          antecedentes_familiares: antecedentesFamiliares
+          antecedentes_familiares: antecedentesFamiliares,
+          celular: p?.celular || userData?.mobile_phone || ''
         };
       }
 
@@ -590,5 +591,21 @@ export class PatientProfileComponent implements OnInit {
     } finally {
       this.isAssigningAchievement = false;
     }
+  }
+
+  // ponytail: clean phone number for whatsapp link
+  getCleanPhoneNumber(phone: string): string {
+    if (!phone) return '';
+    let clean = phone.replace(/\D/g, '');
+    if (clean.length === 10) {
+      clean = '52' + clean;
+    }
+    return clean;
+  }
+
+  // ponytail: redirect to internal whatsapp chat with query param
+  navigateToWhatsApp() {
+    if (!this.patient?.id) return;
+    this.router.navigate(['/psychologist/whatsapp-chat'], { queryParams: { studentId: this.patient.id } });
   }
 }

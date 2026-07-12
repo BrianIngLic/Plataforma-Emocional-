@@ -213,4 +213,45 @@ export class InternalChatService {
       )
       .subscribe();
   }
+
+  // ponytail: get or create internal meta conversation for a student
+  async getOrCreateConversation(studentId: string): Promise<Conversation | null> {
+    const { data, error } = await this.supabase
+      .from('internal_meta_conversations')
+      .select('id')
+      .eq('student_id', studentId)
+      .maybeSingle();
+
+    if (error) {
+      console.error('Error fetching conversation:', error);
+      return null;
+    }
+
+    if (!data) {
+      const { data: newConvo, error: insertError } = await this.supabase
+        .from('internal_meta_conversations')
+        .insert({ student_id: studentId })
+        .select()
+        .single();
+
+      if (insertError || !newConvo) {
+        console.error('Error creating conversation:', insertError);
+        return null;
+      }
+      return {
+        id: newConvo.id,
+        student_id: studentId,
+        student_name: 'Cargando...',
+        student_phone: '',
+        avatar_url: '',
+        urgency_score: 0,
+        last_message: '',
+        last_message_date: new Date().toISOString(),
+        unread_count: 0
+      };
+    }
+
+    const list = await this.getConversations();
+    return list.find(c => c.student_id === studentId) || null;
+  }
 }

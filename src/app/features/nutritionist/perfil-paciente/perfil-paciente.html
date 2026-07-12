@@ -54,14 +54,23 @@
       <!-- PESTAÑA 1: EXPEDIENTE CLÍNICO -->
       <div *ngIf="activeTab === 'expediente'" class="tab-pane">
         <!-- PDF Download Buttons -->
-        <div style="display: flex; justify-content: flex-end; gap: 1rem; margin-bottom: 1.25rem;">
-          <button (click)="downloadPDF()" class="pdf-btn" style="display: inline-flex; align-items: center; gap: 0.5rem; background: #0ea5e9; color: white; border: none; padding: 0.65rem 1.25rem; border-radius: 10px; font-weight: bold; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 6px rgba(14, 165, 233, 0.15);">
-            <mat-icon>picture_as_pdf</mat-icon> Descargar Expediente Nutricional
-          </button>
+        <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 0.5rem; margin-bottom: 1.25rem;">
+          <div style="display: flex; gap: 1rem;">
+            <button (click)="downloadPDF()" class="pdf-btn" style="display: inline-flex; align-items: center; gap: 0.5rem; background: #0ea5e9; color: white; border: none; padding: 0.65rem 1.25rem; border-radius: 10px; font-weight: bold; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 6px rgba(14, 165, 233, 0.15);">
+              <mat-icon>picture_as_pdf</mat-icon> Descargar Expediente Nutricional
+            </button>
+            
+            <button (click)="exportPatientDossier()" [disabled]="isExporting" style="display: inline-flex; align-items: center; gap: 0.5rem; background: #1e3a8a; color: white; border: none; padding: 0.65rem 1.25rem; border-radius: 10px; font-weight: bold; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 6px rgba(30, 58, 138, 0.15);">
+              <mat-icon>{{ isExporting ? 'hourglass_empty' : 'analytics' }}</mat-icon> 
+              {{ isExporting ? 'Generando...' : '📥 Descargar expediente' }}
+            </button>
+          </div>
           
-          <button (click)="exportPatientDossier()" [disabled]="isExporting" style="display: inline-flex; align-items: center; gap: 0.5rem; background: #1e3a8a; color: white; border: none; padding: 0.65rem 1.25rem; border-radius: 10px; font-weight: bold; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 6px rgba(30, 58, 138, 0.15);">
-            <mat-icon>{{ isExporting ? 'hourglass_empty' : 'analytics' }}</mat-icon> 
-            {{ isExporting ? 'Generando...' : '📥 Exportar Dossier Completo' }}
+          <button *ngIf="patient.celular && patient.celular !== 'Sin registrar'" (click)="navigateToWhatsApp()" class="btn btn-whatsapp" style="display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; background: #25d366; border: none; padding: 0.65rem 1.25rem; border-radius: 10px; color: white; cursor: pointer; font-weight: bold; transition: all 0.2s; box-shadow: 0 4px 6px rgba(37, 211, 102, 0.15); width: 220px; box-sizing: border-box;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
+              <path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.949h.004c4.368 0 7.926-3.558 7.93-7.93a7.9 7.9 0 0 0-2.327-5.601zM8.004 14.542a6.6 6.6 0 0 1-3.363-.927l-.24-.143-2.5 1.04.66-2.42-.157-.251a6.6 6.6 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.929 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.69-4.86c-.2-.1-1.185-.584-1.366-.649-.18-.064-.312-.1-.443.1-.13.2-.5.63-.614.757-.115.127-.23.14-.43.04-.2-.1-.843-.311-1.607-.994-.594-.53-1.002-1.185-1.118-1.383-.116-.2-.012-.307.087-.406.09-.09.2-.23.3-.35.1-.117.13-.2.2-.33.07-.13.03-.25-.02-.35-.05-.1-.443-1.06-.607-1.46-.159-.387-.32-.33-.443-.335-.112-.005-.24-.008-.369-.008a.72.72 0 0 0-.522.24c-.18.2-.686.67-.686 1.637s.7 1.902.8 2.03c.1.127 1.374 2.1 3.329 2.94.465.2 1.026.31 1.385.344.36.031.686.01.944-.027.288-.04 1.185-.484 1.352-.953.167-.468.167-.869.117-.953-.05-.084-.18-.13-.38-.23"/>
+            </svg>
+            <span>WhatsApp</span>
           </button>
         </div>
 

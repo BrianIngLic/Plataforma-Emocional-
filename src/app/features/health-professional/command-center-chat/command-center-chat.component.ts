@@ -61,7 +61,15 @@ private route = inject(ActivatedRoute); private router = inject(Router);
     // Auto-select conversation if studentId query param is present
     const studentId = this.route.snapshot.queryParamMap.get('studentId');
     if (studentId) {
-      const convo = this.conversations().find(c => c.student_id === studentId);
+      let convo = this.conversations().find(c => c.student_id === studentId);
+      if (!convo) {
+        // ponytail: create conversation on the fly if not exists
+        const created = await this.chatService.getOrCreateConversation(studentId);
+        if (created) {
+          await this.loadConversations();
+          convo = this.conversations().find(c => c.student_id === studentId);
+        }
+      }
       if (convo) {
         this.selectConversation(convo);
       }

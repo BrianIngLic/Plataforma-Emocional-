@@ -19,6 +19,7 @@ export class AuthService {
   private auditService = inject(AuditService);
   private inactivityTimeout: any;
   private readonly TIMEOUT_MS = 15 * 60 * 1000; // 15 minutos (NOM-024 / HIPAA)
+  private readonly LAST_ACTIVITY_KEY = 'last_activity_timestamp';
 
   constructor(
     private supabaseService: SupabaseService,
@@ -45,19 +46,45 @@ export class AuthService {
   private resetInactivityTimer() {
     if (!this.isLoggedIn()) return;
 
+    const lastActivity = localStorage.getItem(this.LAST_ACTIVITY_KEY);
+    const now = Date.now();
+
+    if (lastActivity) {
+      const elapsed = now - parseInt(lastActivity, 10);
+      if (elapsed > this.TIMEOUT_MS) {
+        console.warn('⏱️ [AuthService] Inactividad detectada tras verificación de tiempo. Cierre de sesión automático.');
+        this.handleInactivityLogout();
+        return;
+      }
+    }
+
+    // ponytail: Registrar última actividad en localStorage
+    localStorage.setItem(this.LAST_ACTIVITY_KEY, now.toString());
+
     if (this.inactivityTimeout) {
       clearTimeout(this.inactivityTimeout);
     }
 
-    this.inactivityTimeout = setTimeout(async () => {
+    this.inactivityTimeout = setTimeout(() => {
       console.warn('⏱️ [AuthService] Sesión expirada por inactividad (15 minutos). Cierre de sesión automático.');
-      const user = this.currentUser();
-      if (user) {
-        await this.auditService.logEvent('SESSION_TIMEOUT', `Cierre de sesión automático por inactividad (15 mins) para el rol ${user.role}.`, user.id);
-      }
-      sessionStorage.setItem('inactivity_logout', 'true');
-      await this.logout();
+      this.handleInactivityLogout();
     }, this.TIMEOUT_MS);
+  }
+
+  /**
+   * Maneja el flujo de cierre de sesión por inactividad.
+   */
+  private async handleInactivityLogout() {
+    const user = this.currentUser();
+    if (user) {
+      try {
+        await this.auditService.logEvent('SESSION_TIMEOUT', `Cierre de sesión automático por inactividad (15 mins) para el rol ${user.role}.`, user.id);
+      } catch (e) {
+        console.error('Error al registrar evento de auditoría:', e);
+      }
+    }
+    sessionStorage.setItem('inactivity_logout', 'true');
+    await this.logout();
   }
 
   public async checkSession(): Promise<boolean> {
@@ -66,8 +93,28 @@ export class AuthService {
       return true;
     }
 
+    // ponytail: Verificar si la inactividad guardada ya expiró
+    const lastActivity = localStorage.getItem(this.LAST_ACTIVITY_KEY);
+    if (lastActivity) {
+      const elapsed = Date.now() - parseInt(lastActivity, 10);
+      if (elapsed > this.TIMEOUT_MS) {
+        console.warn('⏱️ [AuthService] Sesión expirada por inactividad previa en localStorage.');
+        localStorage.removeItem(this.LAST_ACTIVITY_KEY);
+        await this.logout();
+        return false;
+      }
+    }
+
     const { data: { session } } = await this.supabaseService.supabase.auth.getSession();
     if (session) {
+      // ponytail: Cerrar sesión si no hay llave E2EE (detecta cierre de pestaña/navegador)
+      const hasE2eeKey = sessionStorage.getItem('e2ee_session_key');
+      if (!hasE2eeKey) {
+        console.warn('🔒 [AuthService] Llave E2EE perdida (cierre de navegador/pestaña). Cerrando sesión.');
+        await this.logout();
+        return false;
+      }
+
       await this.loadUserProfile(session.user.id);
       return true;
     }
@@ -138,6 +185,9 @@ export class AuthService {
       avatar_url: profileData?.avatar_url || ''
     });
     this.isLoggedIn.set(true);
+    // ponytail: Registrar actividad inicial al cargar perfil exitoso
+    localStorage.setItem(this.LAST_ACTIVITY_KEY, Date.now().toString());
+    this.resetInactivityTimer();
   }
 
   async login(email: string, pass: string): Promise<boolean> {
@@ -287,6 +337,9 @@ export class AuthService {
 
     });
     this.isLoggedIn.set(true);
+    // ponytail: Registrar actividad inicial al activar sesión simulada
+    localStorage.setItem(this.LAST_ACTIVITY_KEY, Date.now().toString());
+    this.resetInactivityTimer();
   }
 
   async requestPasswordReset(email: string): Promise<boolean> {
@@ -346,6 +399,10 @@ export class AuthService {
   }
 
   async logout(): Promise<void> {
+    if (this.inactivityTimeout) {
+      clearTimeout(this.inactivityTimeout);
+    }
+    localStorage.removeItem(this.LAST_ACTIVITY_KEY);
     await this.supabaseService.supabase.auth.signOut();
     this.cryptoService.clearKey();
     this.currentUser.set(null);

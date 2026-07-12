@@ -326,7 +326,7 @@ CREATE TABLE public.whatsapp_routing_sessions (
 CREATE TABLE public.audit_logs (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id UUID REFERENCES public.users(id) ON DELETE SET NULL,
-    event_type VARCHAR(50) NOT NULL, -- 'UNAUTHORIZED_ACCESS', 'LOGIN_FAILED', 'SESSION_TIMEOUT'
+    event_type VARCHAR(50) NOT NULL, -- 'UNAUTHORIZED_ACCESS', 'LOGIN_FAILED', 'SESSION_TIMEOUT' (15 mins inactividad / cierre de pestaña)
     description TEXT NOT NULL,
     ip_address VARCHAR(45),
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP

@@ -250,8 +250,8 @@
     "semantic_hash": "b29381fde22297a402e92bd8ee8e620a"
   },
   "src/app/features/psychologist/patient-profile/patient-profile.component.ts": {
-    "mtime": 1783839476.504966,
-    "ast_hash": "46683777a1ff36828e105433ddbbbe4f",
+    "mtime": 1783839591.868871,
+    "ast_hash": "aba30472f4aef93c2239e4196c81f9c8",
     "semantic_hash": ""
   },
   "src/app/features/psychologist/patients/patients.component.ts": {
@@ -445,8 +445,8 @@
     "semantic_hash": "a70cf8f9800814f3488ae124af135091"
   },
   "src/app/features/psychologist/patient-profile/patient-profile.component.html": {
-    "mtime": 1783839484.0016544,
-    "ast_hash": "f527e5f6f6f0758fec5ec253172d8bff",
+    "mtime": 1783839614.4804158,
+    "ast_hash": "c1f6058657ef4cf7b12c34106805f484",
     "semantic_hash": ""
   },
   "src/app/features/psychologist/patients/patients.component.html": {
@@ -565,8 +565,8 @@
     "semantic_hash": ""
   },
   "src/app/features/nutritionist/perfil-paciente/perfil-paciente.component.ts": {
-    "mtime": 1783839479.294625,
-    "ast_hash": "ceb41ad5b819498a8198fa04583f5d22",
+    "mtime": 1783839594.2742512,
+    "ast_hash": "bc9f51f122e5d361cdc9cba19ab5114a",
     "semantic_hash": ""
   },
   "src/app/features/nutritionist/settings/settings.component.ts": {
@@ -615,8 +615,8 @@
     "semantic_hash": ""
   },
   "src/app/features/nutritionist/perfil-paciente/perfil-paciente.html": {
-    "mtime": 1783839489.9245055,
-    "ast_hash": "fd1526a14196fd13bd394fbe8d6f2dd3",
+    "mtime": 1783839618.8661053,
+    "ast_hash": "c6b977a4e6912dbb4ae4dc8a1fc58958",
     "semantic_hash": ""
   },
   "src/app/features/nutritionist/settings/settings.component.html": {
@@ -735,13 +735,13 @@
     "semantic_hash": ""
   },
   "src/app/core/services/internal-chat.service.ts": {
-    "mtime": 1783668250.789382,
-    "ast_hash": "dea90dc65b5de8d93adfddc30e68545a",
+    "mtime": 1783839587.4217968,
+    "ast_hash": "f743fedc8718c20ac9ee8bd929fc96eb",
     "semantic_hash": ""
   },
   "src/app/features/health-professional/command-center-chat/command-center-chat.component.ts": {
-    "mtime": 1783668250.857059,
-    "ast_hash": "8fdd2fba9b79b580d26e4b0a0ae03356",
+    "mtime": 1783839589.34739,
+    "ast_hash": "d9c5d30d0f99d66f2f7c479dfc625bec",
     "semantic_hash": ""
   },
   "supabase/functions/meta-whatsapp/index.ts": {

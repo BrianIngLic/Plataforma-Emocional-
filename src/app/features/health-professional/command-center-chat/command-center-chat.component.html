@@ -55,17 +55,7 @@
           <mat-icon *ngIf="!selectedChat()?.avatar_url" class="header-avatar-fallback">person</mat-icon>
           <div class="details">
             <h3>{{ selectedChat()?.student_name }}</h3>
-            <span class="status-indicator">
-              <span class="dot green"></span> WhatsApp API Activo
-            </span>
           </div>
-        </div>
-
-        <div class="header-actions">
-          <a [routerLink]="['../../patients', selectedChat()?.student_id]" class="visor-btn">
-            <mat-icon>person_search</mat-icon>
-            <span>Visor Clínico Integral</span>
-          </a>
         </div>
       </div>
 

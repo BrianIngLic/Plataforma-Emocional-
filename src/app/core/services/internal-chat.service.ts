@@ -34,7 +34,22 @@ export class InternalChatService {
   async getConversations(): Promise<Conversation[]> {
     const { data, error } = await this.supabase
       .from('internal_meta_conversations')
-      .select('id, student_id, urgency_score, last_message, last_message_date, unread_count')
+      .select(`
+        id,
+        student_id,
+        urgency_score,
+        last_message,
+        last_message_date,
+        unread_count,
+        student:student_id (
+          mobile_phone,
+          profiles (
+            first_name,
+            last_name,
+            avatar_url
+          )
+        )
+      `)
       .order('last_message_date', { ascending: false });
 
     if (error) {
@@ -45,7 +60,9 @@ export class InternalChatService {
     if (!data) return [];
 
     return data.map((item: any) => {
-      const studentProfile = item.student?.profiles;
+      const studentProfile = Array.isArray(item.student?.profiles) 
+        ? item.student.profiles[0] 
+        : item.student?.profiles;
       const firstName = studentProfile?.first_name || '';
       const lastName = studentProfile?.last_name || '';
       const avatarUrl = studentProfile?.avatar_url || '';

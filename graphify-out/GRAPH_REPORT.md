@@ -1,16 +1,16 @@
 # Graph Report - Plataforma-Emocional-  (2026-07-12)
 
 ## Corpus Check
-- 174 files · ~155,163 words
+- 174 files · ~155,158 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1582 nodes · 2253 edges · 146 communities (77 shown, 69 thin omitted)
+- 1582 nodes · 2253 edges · 146 communities (76 shown, 70 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 22 edges (avg confidence: 0.89)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `1a4da08e`
+- Built from commit: `811fe5a6`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -184,7 +184,7 @@
 - **Student Emotional Assistance and Care Flow** — dashboard_layout_dashboard_layout_component_student_sidebar, dashboard_dashboard_component_chat_view, dashboard_diary_dashboard_component_therapeutic_refuge, student_agenda_student_agenda_component_appointment_scheduler [INFERRED 0.85]
 - **Psychologist Clinical Command Center and Triage Flow** — psychologist_layout_psychologist_layout_component_psychologist_sidebar, dashboard_dashboard_component_psychologist_triage_view, patients_patients_component_patient_directory, agenda_agenda_component_clinical_timeline, patient_profile_patient_profile_component_clinical_expedient_view [INFERRED 0.85]
 
-## Communities (146 total, 69 thin omitted)
+## Communities (146 total, 70 thin omitted)
 
 ### Community 0 - "Community 0"
 Cohesion: 0.22
@@ -238,10 +238,6 @@ Nodes (5): ai-integrator, AgendaComponent Template, OverviewComponent Template, 
 Cohesion: 0.40
 Nodes (5): AdminLayoutComponent Template, FacultiesComponent Template, PsychologistsComponent Template, ReportsComponent Template, Skill 8: Módulo de Administración
 
-### Community 30 - "System Reports View"
-Cohesion: 0.32
-Nodes (3): Appointment, AdminExceptionsService, Holiday
-
 ### Community 43 - "Project README Overview"
 Cohesion: 0.25
 Nodes (7): Additional Resources, Building, Code scaffolding, Development server, PlataformaEmocional, Running end-to-end tests, Running unit tests
@@ -255,8 +251,8 @@ Cohesion: 0.29
 Nodes (6): 1. Ciberseguridad y Privacidad como Pilar Absoluto, 2. La Especificación es la Ley, 3. Prioridad Clínica y Responsabilidad, 4. Diseño y UX (User Experience), 5. Prácticas de Desarrollo y Documentación, Constitución del Ecosistema de Asistencia Emocional
 
 ### Community 59 - "Community 59"
-Cohesion: 0.13
-Nodes (10): AdminFaculty, DetailedStats, FeedbackModalComponent, FeedbackModalData, TimeBlock, WorkingDay, WorkingDaysMap, Campus (+2 more)
+Cohesion: 0.12
+Nodes (9): Appointment, AdminFaculty, DetailedStats, FeedbackModalComponent, FeedbackModalData, ChartDataPoint, Campus, Faculty (+1 more)
 
 ### Community 63 - "Community 63"
 Cohesion: 0.12
@@ -264,11 +260,11 @@ Nodes (15): 1. Visión General de la Arquitectura, 2.1.1. Modelo de Datos Relaci
 
 ### Community 67 - "Community 67"
 Cohesion: 0.12
-Nodes (8): SpecialistItem, StudentItem, HealthProfessionalItem, HealthProfessionalRegistrationPayload, PatientAssignmentPayload, AdminStatsService, ChartDataPoint, DossierExportService
+Nodes (7): SpecialistItem, StudentItem, HealthProfessionalItem, HealthProfessionalRegistrationPayload, PatientAssignmentPayload, AdminStatsService, DossierExportService
 
 ### Community 68 - "Community 68"
-Cohesion: 0.15
-Nodes (7): environment, CampoFormulario, Psychologist, ChatMessage, CryptoService, DiaryEntry, SupabaseService
+Cohesion: 0.17
+Nodes (5): environment, CampoFormulario, Psychologist, CryptoService, SupabaseService
 
 ### Community 70 - "Community 70"
 Cohesion: 0.50
@@ -279,8 +275,8 @@ Cohesion: 0.08
 Nodes (25): 1.1. Principios Visuales y Tokens de Diseño, 1. Filosofía de Diseño y Sistema Visual (Design System & Aesthetics), 2.1. Objetivo UX y Mecánicas Estilo Duolingo, 2.2. Arquitectura de Interfaces y Maquetación, 2.3. Especificación de Estructura Angular (Código Base Standalone), 2. Especificación UX/UI 1: Sistema de Logros y Gamificación (Estilo Duolingo), 3.1. Objetivo UX y Diseño Arquitectónico Bidireccional, 3.2. Estructura de Interfaz (Split View de 2 Columnas) (+17 more)
 
 ### Community 72 - "Community 72"
-Cohesion: 0.17
-Nodes (3): AdminSettingsComponent, ProfileAvatarComponent, ProfileService
+Cohesion: 0.16
+Nodes (4): AdminSettingsComponent, ProfileAvatarComponent, WorkingDaysMap, ProfileService
 
 ### Community 74 - "Community 74"
 Cohesion: 0.26
@@ -288,7 +284,7 @@ Nodes (3): ArcoRequest, PrivacySettings, AuditService
 
 ### Community 75 - "Community 75"
 Cohesion: 0.12
-Nodes (8): EmergencyModalData, AgendaService, EmergencyChangeRequest, WebPushSubscriptionPayload, WhatsAppRoutingSession, CalendarDay, CalendarDay, CalendarDay
+Nodes (10): EmergencyModalData, AgendaService, TimeBlock, WorkingDay, EmergencyChangeRequest, WebPushSubscriptionPayload, WhatsAppRoutingSession, CalendarDay (+2 more)
 
 ### Community 78 - "Community 78"
 Cohesion: 0.14
@@ -427,8 +423,8 @@ Cohesion: 0.50
 Nodes (3): assetGroups, index, $schema
 
 ### Community 136 - "Community 136"
-Cohesion: 0.17
-Nodes (7): GamificationService, UserStreak, PendingEvaluationItem, ProfessionalEvaluationSummary, SessionEvaluation, SessionEvaluationPayload, StreakBadgeComponent
+Cohesion: 0.14
+Nodes (9): ChatMessage, DiaryEntry, GamificationService, UserStreak, PendingEvaluationItem, ProfessionalEvaluationSummary, SessionEvaluation, SessionEvaluationPayload (+1 more)
 
 ### Community 137 - "Community 137"
 Cohesion: 0.22
@@ -453,7 +449,7 @@ Nodes (5): extract-i18n, test, builder, architect, builder
 ## Knowledge Gaps
 - **391 isolated node(s):** `$schema`, `version`, `newProjectRoot`, `projectType`, `style` (+386 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **69 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **70 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_

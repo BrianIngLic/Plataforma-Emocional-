@@ -735,8 +735,8 @@
     "semantic_hash": ""
   },
   "src/app/core/services/internal-chat.service.ts": {
-    "mtime": 1783839587.4217968,
-    "ast_hash": "f743fedc8718c20ac9ee8bd929fc96eb",
+    "mtime": 1783840087.5766244,
+    "ast_hash": "047edfa7b207f1ecb15fbcf1646e9500",
     "semantic_hash": ""
   },
   "src/app/features/health-professional/command-center-chat/command-center-chat.component.ts": {
@@ -750,8 +750,8 @@
     "semantic_hash": ""
   },
   "src/app/features/health-professional/command-center-chat/command-center-chat.component.html": {
-    "mtime": 1783668250.854062,
-    "ast_hash": "9343839e340c750189d79189a7444887",
+    "mtime": 1783840083.2850087,
+    "ast_hash": "1bf11c467fc3408c0d1f05af528b0d25",
     "semantic_hash": ""
   },
   "src/app/features/admin/faculties/faculty-detail/faculty-detail.component.ts": {

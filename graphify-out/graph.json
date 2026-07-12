@@ -2724,7 +2724,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_agenda_service",
-      "community": 59,
+      "community": 75,
       "norm_label": "agenda.service.ts"
     },
     {
@@ -2734,7 +2734,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "services_agenda_service_timeblock",
-      "community": 59,
+      "community": 75,
       "norm_label": "timeblock"
     },
     {
@@ -2744,7 +2744,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "services_agenda_service_workingday",
-      "community": 59,
+      "community": 75,
       "norm_label": "workingday"
     },
     {
@@ -2754,7 +2754,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "services_agenda_service_workingdaysmap",
-      "community": 59,
+      "community": 72,
       "norm_label": "workingdaysmap"
     },
     {
@@ -3204,7 +3204,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_chat_service",
-      "community": 68,
+      "community": 136,
       "norm_label": "chat.service.ts"
     },
     {
@@ -3214,7 +3214,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "services_chat_service_chatmessage",
-      "community": 68,
+      "community": 136,
       "norm_label": "chatmessage"
     },
     {
@@ -3464,7 +3464,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_diary_service",
-      "community": 68,
+      "community": 136,
       "norm_label": "diary.service.ts"
     },
     {
@@ -3474,7 +3474,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "services_diary_service_diaryentry",
-      "community": 68,
+      "community": 136,
       "norm_label": "diaryentry"
     },
     {
@@ -4061,7 +4061,7 @@
       "label": ".getMessages()",
       "file_type": "code",
       "source_file": "src/app/core/services/internal-chat.service.ts",
-      "source_location": "L68",
+      "source_location": "L85",
       "_origin": "ast",
       "id": "services_internal_chat_service_internalchatservice_getmessages",
       "community": 78,
@@ -4071,7 +4071,7 @@
       "label": ".sendMessage()",
       "file_type": "code",
       "source_file": "src/app/core/services/internal-chat.service.ts",
-      "source_location": "L87",
+      "source_location": "L104",
       "_origin": "ast",
       "id": "services_internal_chat_service_internalchatservice_sendmessage",
       "community": 78,
@@ -4081,7 +4081,7 @@
       "label": ".markAsRead()",
       "file_type": "code",
       "source_file": "src/app/core/services/internal-chat.service.ts",
-      "source_location": "L182",
+      "source_location": "L199",
       "_origin": "ast",
       "id": "services_internal_chat_service_internalchatservice_markasread",
       "community": 78,
@@ -4091,7 +4091,7 @@
       "label": ".subscribeToMessages()",
       "file_type": "code",
       "source_file": "src/app/core/services/internal-chat.service.ts",
-      "source_location": "L195",
+      "source_location": "L212",
       "_origin": "ast",
       "id": "services_internal_chat_service_internalchatservice_subscribetomessages",
       "community": 78,
@@ -4101,7 +4101,7 @@
       "label": ".getOrCreateConversation()",
       "file_type": "code",
       "source_file": "src/app/core/services/internal-chat.service.ts",
-      "source_location": "L218",
+      "source_location": "L235",
       "_origin": "ast",
       "id": "services_internal_chat_service_internalchatservice_getorcreateconversation",
       "community": 78,
@@ -4594,7 +4594,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_features_admin_agenda_agenda_component_ts_agenda_agenda_component",
-      "community": 30,
+      "community": 59,
       "norm_label": "agenda.component.ts"
     },
     {
@@ -4604,7 +4604,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "agenda_agenda_component_appointment",
-      "community": 30,
+      "community": 59,
       "norm_label": "appointment"
     },
     {
@@ -7294,7 +7294,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_admin_stats_service",
-      "community": 67,
+      "community": 59,
       "norm_label": "admin-stats.service.ts"
     },
     {
@@ -7314,7 +7314,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "services_admin_stats_service_chartdatapoint",
-      "community": 67,
+      "community": 59,
       "norm_label": "chartdatapoint"
     },
     {
@@ -9464,7 +9464,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_features_health_professional_settings_settings_component_ts_settings_settings_component",
-      "community": 59,
+      "community": 72,
       "norm_label": "settings.component.ts"
     },
     {
@@ -11534,7 +11534,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_features_psychologist_settings_settings_component_ts_settings_settings_component",
-      "community": 59,
+      "community": 72,
       "norm_label": "settings.component.ts"
     },
     {
@@ -23931,9 +23931,9 @@
       "source_file": "src/app/core/services/internal-chat.service.ts",
       "source_location": "L218",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "services_internal_chat_service_internalchatservice",
-      "target": "services_internal_chat_service_internalchatservice_getorcreateconversation",
-      "confidence_score": 1.0
+      "target": "services_internal_chat_service_internalchatservice_getorcreateconversation"
     },
     {
       "relation": "method",
@@ -23972,9 +23972,9 @@
       "source_file": "src/app/core/services/internal-chat.service.ts",
       "source_location": "L254",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "services_internal_chat_service_internalchatservice_getorcreateconversation",
-      "target": "services_internal_chat_service_internalchatservice_getconversations",
-      "confidence_score": 1.0
+      "target": "services_internal_chat_service_internalchatservice_getconversations"
     },
     {
       "relation": "imports_from",
@@ -34027,9 +34027,9 @@
       "source_file": "src/app/features/nutritionist/perfil-paciente/perfil-paciente.component.ts",
       "source_location": "L906",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "perfil_paciente_perfil_paciente_component_perfilpaciente",
-      "target": "perfil_paciente_perfil_paciente_component_perfilpaciente_navigatetowhatsapp",
-      "confidence_score": 1.0
+      "target": "perfil_paciente_perfil_paciente_component_perfilpaciente_navigatetowhatsapp"
     },
     {
       "relation": "method",
@@ -34985,9 +34985,9 @@
       "source_file": "src/app/features/psychologist/patient-profile/patient-profile.component.ts",
       "source_location": "L607",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "patient_profile_patient_profile_component_patientprofilecomponent",
-      "target": "patient_profile_patient_profile_component_patientprofilecomponent_navigatetowhatsapp",
-      "confidence_score": 1.0
+      "target": "patient_profile_patient_profile_component_patientprofilecomponent_navigatetowhatsapp"
     },
     {
       "relation": "method",
@@ -39462,5 +39462,5 @@
       "source_file": "src/app/features/psychologist/psychologist-layout/psychologist-layout.component.html"
     }
   ],
-  "built_at_commit": "1a4da08e18c4f4c57eda71dcf1a66fad08056909"
+  "built_at_commit": "811fe5a616290283fbd6a79d06993c9aa9539efc"
 }

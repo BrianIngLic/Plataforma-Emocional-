@@ -6,9 +6,9 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-const META_ACCESS_TOKEN = Deno.env.get('META_WA_ACCESS_TOKEN') || '';
-const META_PHONE_NUMBER_ID = Deno.env.get('META_WA_PHONE_NUMBER_ID') || '';
-const META_VERIFY_TOKEN = Deno.env.get('META_WA_VERIFY_TOKEN') || '';
+const META_ACCESS_TOKEN = Deno.env.get('META_WA_ACCESS_TOKEN') || Deno.env.get('META_ACCESS_TOKEN') || '';
+const META_PHONE_NUMBER_ID = Deno.env.get('META_WA_PHONE_NUMBER_ID') || Deno.env.get('META_PHONE_NUMBER_ID') || '';
+const META_VERIFY_TOKEN = Deno.env.get('META_WA_VERIFY_TOKEN') || Deno.env.get('META_VERIFY_TOKEN') || 'mySuperSecretVerifyToken123';
 
 const supabaseUrl = Deno.env.get('SUPABASE_URL') || '';
 const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || '';
@@ -28,6 +28,7 @@ serve(async (req: Request) => {
     const mode = url.searchParams.get("hub.mode");
     const token = url.searchParams.get("hub.verify_token");
     const challenge = url.searchParams.get("hub.challenge");
+    console.log(`hub.verify_token received: "${token}" | expected: "${META_VERIFY_TOKEN}"`);
 
     if (mode === "subscribe" && token === META_VERIFY_TOKEN) {
       console.log("✅ Webhook verificado correctamente con Meta");
@@ -69,12 +70,27 @@ serve(async (req: Request) => {
 
           // Buscar al estudiante en base de datos. Comparamos con prefijo del país desinfectado.
           const cleanedPhone = waId.replace(/\D/g, ''); // Solo dígitos
+          const last10Digits = cleanedPhone.slice(-10);
+          
+          const formats = [
+            last10Digits,
+            `52${last10Digits}`,
+            `+52${last10Digits}`,
+            `521${last10Digits}`,
+            `+521${last10Digits}`,
+            cleanedPhone,
+            `+${cleanedPhone}`
+          ];
+          
+          const uniqueFormats = Array.from(new Set(formats.filter(f => f.length > 0)));
+          const orFilterCelular = uniqueFormats.map(f => `celular.eq.${f}`).join(',');
+          const orFilterMobile = uniqueFormats.map(f => `mobile_phone.eq.${f}`).join(',');
           
           // Buscar en profiles (celular) o users (mobile_phone)
           const { data: profileData, error: profileError } = await supabase
             .from('profiles')
             .select('user_id, first_name, last_name')
-            .or(`celular.eq.${cleanedPhone},celular.eq.+${cleanedPhone}`)
+            .or(orFilterCelular)
             .maybeSingle();
 
           let userId = profileData?.user_id;
@@ -84,7 +100,7 @@ serve(async (req: Request) => {
             const { data: userData } = await supabase
               .from('users')
               .select('id')
-              .or(`mobile_phone.eq.${cleanedPhone},mobile_phone.eq.+${cleanedPhone}`)
+              .or(orFilterMobile)
               .maybeSingle();
             userId = userData?.id;
           }

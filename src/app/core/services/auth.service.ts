@@ -179,45 +179,10 @@ export class AuthService {
    *  - Sin confirmación de email: signUp devuelve error 'User already registered'
    */
   async checkEmailAvailable(email: string): Promise<{ available: boolean; error?: string }> {
-    try {
-      const { data, error } = await this.supabaseService.supabase.auth.signUp({
-        email,
-        password: `_check_${Date.now()}_tmp`
-      });
-
-      // Caso 1: Error explícito de email duplicado (confirmación deshabilitada)
-      if (error) {
-        const msg = error.message?.toLowerCase() || '';
-        if (
-          msg.includes('already registered') ||
-          msg.includes('already been registered') ||
-          msg.includes('user already exists') ||
-          msg.includes('email address is already taken')
-        ) {
-          return { available: false, error: 'Este correo electrónico ya está registrado.' };
-        }
-        // Otros errores (red, etc.) — dejamos pasar
-        return { available: true };
-      }
-
-      // Caso 2: signUp exitoso pero con identities vacías (email confirmation activo)
-      // Supabase no revela si el email existe por seguridad, pero identities: [] lo indica
-      if (data?.user && (data.user.identities?.length ?? 1) === 0) {
-        // El correo ya existía. Limpiamos el usuario zombie recien creado si es posible.
-        return { available: false, error: 'Este correo electrónico ya está registrado.' };
-      }
-
-      // Caso 3: Se creó un usuario temporal — hay que borrarlo para no dejar registros huérfanos.
-      // Hacemos sign out inmediato para que no quede sesión abierta.
-      if (data?.session) {
-        await this.supabaseService.supabase.auth.signOut();
-      }
-
-      return { available: true };
-    } catch {
-      // Error de red — asumimos disponible para no bloquear el formulario
-      return { available: true };
-    }
+    // Retornamos true inmediatamente para evitar realizar registros temporales de prueba
+    // en Supabase Auth que impidan el registro definitivo posterior. La verificación real
+    // se realiza durante el signUp definitivo en el submit final del formulario.
+    return { available: true };
   }
 
   async register(
@@ -246,13 +211,13 @@ export class AuthService {
 
       if (authError || !authData.user) {
         if (authError?.message?.includes('Failed to fetch') || authError?.message?.includes('Network request failed')) {
-           console.warn('⚠️ MODO OFFLINE ACTIVADO: Supabase no detectado. Registro simulado.');
+           console.warn('⚠️ MODO OFFLINE ACTIVADO: Registro simulado.');
            this.cryptoService.deriveKey(pass, email);
            this.activateMockSession(matricula, faculty);
            return 'mock-user-id-123';
         }
         console.error('Error en registro auth:', authError?.message);
-        return null;
+        throw authError || new Error('Error al registrar usuario en Supabase Auth.');
       }
 
       const userId = authData.user.id;
@@ -284,11 +249,15 @@ export class AuthService {
       this.cryptoService.deriveKey(pass, email);
       await this.loadUserProfile(userId);
       return userId;
-    } catch (e) {
-      console.warn('⚠️ MODO OFFLINE ACTIVADO: Registro simulado por excepción de red.');
-      this.cryptoService.deriveKey(pass, email);
-      this.activateMockSession(matricula, faculty);
-      return 'mock-user-id-123';
+    } catch (e: any) {
+      const msg = e?.message?.toLowerCase() || '';
+      if (msg.includes('failed to fetch') || msg.includes('network request failed')) {
+        console.warn('⚠️ MODO OFFLINE ACTIVADO: Registro simulado por excepción de red.');
+        this.cryptoService.deriveKey(pass, email);
+        this.activateMockSession(matricula, faculty);
+        return 'mock-user-id-123';
+      }
+      throw e;
     }
   }
 

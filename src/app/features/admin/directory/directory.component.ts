@@ -67,6 +67,7 @@ export class DirectoryComponent implements OnInit {
   students: StudentItem[] = [];
   specialists: SpecialistItem[] = [];
   faculties: string[] = [];
+  loading = true;
 
   // Directory UI States
   searchQuery = '';
@@ -219,6 +220,7 @@ export class DirectoryComponent implements OnInit {
   }
 
   async loadData() {
+    this.loading = true;
     // 1. Fetch Specialists
     this.specialists = await this.adminStats.getPsychologistsWithStats();
 
@@ -263,6 +265,7 @@ export class DirectoryComponent implements OnInit {
         };
       });
     }
+    this.loading = false;
   }
 
   // Get filtered lists of specialists

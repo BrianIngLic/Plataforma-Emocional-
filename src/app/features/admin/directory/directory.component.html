@@ -1,7 +1,18 @@
 <div class="directory-container">
 
-  <!-- Top Search & Action Bar (Hidden when viewing specialist details) -->
-  <div class="top-bar-panel" *ngIf="!selectedPsychologist">
+  <!-- Amati Loading Animation -->
+  <div *ngIf="loading" class="amati-loading-container">
+    <div class="amati-loader-wrapper">
+      <div class="spinner-ring"></div>
+      <img src="/amati-logo.svg" alt="Amati Logo" class="amati-logo-pulse" />
+    </div>
+    <h3 class="loading-title">Cargando directorio...</h3>
+    <p class="loading-subtitle">Accediendo a los expedientes y registros del alumnado</p>
+  </div>
+
+  <ng-container *ngIf="!loading">
+    <!-- Top Search & Action Bar (Hidden when viewing specialist details) -->
+    <div class="top-bar-panel" *ngIf="!selectedPsychologist">
     <div class="search-box">
       <mat-icon>search</mat-icon>
       <input type="text" 
@@ -752,4 +763,5 @@
     </div>
   </div>
 
+  </ng-container>
 </div>

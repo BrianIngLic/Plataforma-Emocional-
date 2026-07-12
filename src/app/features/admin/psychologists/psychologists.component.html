@@ -1,5 +1,16 @@
 <div class="psych-container">
 
+  <!-- Amati Loading Animation -->
+  <div *ngIf="loading" class="amati-loading-container">
+    <div class="amati-loader-wrapper">
+      <div class="spinner-ring"></div>
+      <img src="/amati-logo.svg" alt="Amati Logo" class="amati-logo-pulse" />
+    </div>
+    <h3 class="loading-title">Cargando personal clínico...</h3>
+    <p class="loading-subtitle">Accediendo al directorio de psicólogos y nutriólogos registrados</p>
+  </div>
+
+  <ng-container *ngIf="!loading">
   <!-- Roster Panel (Se oculta al seleccionar uno) -->
   <ng-container *ngIf="!selectedPsychologist">
   <!-- Overview Stats Filters -->
@@ -668,4 +679,5 @@
     </div>
   </div>
 
-  </div>
+  </ng-container>
+</div>

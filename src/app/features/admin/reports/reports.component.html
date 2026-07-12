@@ -47,12 +47,14 @@
   <!-- Page Content View based on Selected Tab -->
   <div class="report-content-body">
     
-    <!-- Spinner de Carga -->
-    <div class="loading-overlay" *ngIf="isLoading">
-      <div class="spinner-wrapper">
+    <!-- Amati Loading Animation -->
+    <div *ngIf="isLoading" class="amati-loading-container">
+      <div class="amati-loader-wrapper">
         <div class="spinner-ring"></div>
-        <p class="font-mono">Consultando base de datos...</p>
+        <img src="/amati-logo.svg" alt="Amati Logo" class="amati-logo-pulse" />
       </div>
+      <h3 class="loading-title">Cargando reportes...</h3>
+      <p class="loading-subtitle">Consultando bases de datos y generando métricas operativas</p>
     </div>
 
     <ng-container *ngIf="!isLoading">

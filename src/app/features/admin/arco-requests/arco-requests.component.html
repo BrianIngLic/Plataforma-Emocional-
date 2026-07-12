@@ -4,7 +4,15 @@
     <p class="subtitle">Audita, responde y gestiona las solicitudes de Acceso, Rectificación, Cancelación y Oposición de datos personales.</p>
   </div>
 
-  <mat-spinner *ngIf="loading()" diameter="45" class="loading-spinner"></mat-spinner>
+  <!-- Amati Loading Animation -->
+  <div *ngIf="loading()" class="amati-loading-container">
+    <div class="amati-loader-wrapper">
+      <div class="spinner-ring"></div>
+      <img src="/amati-logo.svg" alt="Amati Logo" class="amati-logo-pulse" />
+    </div>
+    <h3 class="loading-title">Cargando solicitudes ARCO...</h3>
+    <p class="loading-subtitle">Accediendo a las solicitudes de derechos de datos personales</p>
+  </div>
 
   <div *ngIf="!loading()" class="admin-arco-grid">
     <!-- Listado de Solicitudes -->

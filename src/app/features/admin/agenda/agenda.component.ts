@@ -29,6 +29,7 @@ interface Appointment {
 export class AgendaComponent implements OnInit {
 
   days = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
+  loading = true;
   hours = ['07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00'];
 
   private adminStats = inject(AdminStatsService);
@@ -149,6 +150,7 @@ export class AgendaComponent implements OnInit {
   }
 
   async ngOnInit() {
+    this.loading = true;
     const curYear = new Date().getFullYear();
     for (let y = curYear - 5; y <= curYear + 5; y++) {
       this.yearsList.push(y);
@@ -158,6 +160,7 @@ export class AgendaComponent implements OnInit {
 
     await this.loadAppointments();
     this.calculateMetrics();
+    this.loading = false;
   }
 
   setCurrentDayAsActive() {

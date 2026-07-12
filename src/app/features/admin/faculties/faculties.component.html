@@ -1,303 +1,313 @@
 <div class="faculties-container">
 
-  <!-- Header Actions -->
-  <div class="header-strip" style="display: flex; justify-content: space-between; align-items: center;">
-    <div style="display: flex; gap: 16px; align-items: center;">
-      <div class="sort-selector">
-        <span class="sort-label">Ordenar por:</span>
-        <button 
-          *ngFor="let option of ['demand', 'patients', 'name', 'campus_name']" 
-          (click)="sortBy = option"
-          [class.active]="sortBy === option"
-          class="sort-btn"
-        >
-          <mat-icon>swap_vert</mat-icon>
-          <span class="capitalize">{{ option === 'demand' ? 'Demanda' : option === 'patients' ? 'Pacientes' : option === 'campus_name' ? 'Campus' : 'Nombre' }}</span>
-        </button>
-      </div>
-
-      <button 
-        *ngIf="compareIds.length >= 2" 
-        (click)="openCompare()" 
-        class="compare-action-btn"
-      >
-        <mat-icon>compare_arrows</mat-icon>
-        <span>Comparar {{ compareIds.length }} Facultades</span>
-      </button>
+  <!-- Amati Loading Animation -->
+  <div *ngIf="loading" class="amati-loading-container">
+    <div class="amati-loader-wrapper">
+      <div class="spinner-ring"></div>
+      <img src="/amati-logo.svg" alt="Amati Logo" class="amati-logo-pulse" />
     </div>
-
-    <!-- Botón de Nueva Facultad -->
-    <button 
-      (click)="openAddModal()" 
-      class="add-action-btn"
-      style="display: flex; align-items: center; gap: 8px; background: #3b82f6; color: white; border: none; padding: 8px 16px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: background 0.2s;"
-    >
-      <mat-icon>add</mat-icon>
-      <span>Nueva Facultad</span>
-    </button>
+    <h3 class="loading-title">Cargando facultades...</h3>
+    <p class="loading-subtitle">Accediendo al estado operativo y académico de las unidades de la red</p>
   </div>
 
-  <!-- Filters Bar -->
-  <div class="filters-bar" style="display: flex; gap: 16px; align-items: center; background: var(--bg-card, #1e293b); padding: 12px 20px; border-radius: 12px; border: 1px solid var(--border-color, rgba(255, 255, 255, 0.06)); margin-bottom: 0.25rem; flex-wrap: wrap;">
-    <!-- Search Input -->
-    <div style="display: flex; align-items: center; gap: 8px; flex: 1; min-width: 200px; background: var(--bg-hover, rgba(255, 255, 255, 0.03)); border: 1px solid var(--border-color, rgba(255, 255, 255, 0.1)); padding: 6px 12px; border-radius: 8px;">
-      <mat-icon style="color: var(--text-secondary, #94a3b8); font-size: 18px; width: 18px; height: 18px; line-height: 18px; display: inline-flex; align-items: center; justify-content: center;">search</mat-icon>
-      <input type="text" [(ngModel)]="filterSearch" placeholder="Buscar por facultad..." style="background: transparent; border: none; outline: none; color: var(--text-primary, #f8fafc); font-size: 0.85rem; width: 100%;" />
-    </div>
-
-    <!-- Campus Dropdown -->
-    <div style="display: flex; align-items: center; gap: 8px;">
-      <span style="font-size: 0.75rem; color: var(--text-secondary, #94a3b8); font-family: monospace;">Campus:</span>
-      <select [(ngModel)]="filterCampusId" style="padding: 6px 12px; border-radius: 8px; border: 1px solid var(--border-color, rgba(255, 255, 255, 0.1)); background: var(--bg-hover, rgba(255, 255, 255, 0.05)); color: var(--text-primary, #f8fafc); font-size: 0.8rem; outline: none; height: 34px;">
-        <option value="" style="background: #1e293b; color: #f8fafc;">Todos los campus</option>
-        <option *ngFor="let c of campuses" [value]="c.id" style="background: #1e293b; color: #f8fafc;">{{ c.name }}</option>
-      </select>
-    </div>
-
-    <!-- Demand Dropdown -->
-    <div style="display: flex; align-items: center; gap: 8px;">
-      <span style="font-size: 0.75rem; color: var(--text-secondary, #94a3b8); font-family: monospace;">Demanda:</span>
-      <select [(ngModel)]="filterDemand" style="padding: 6px 12px; border-radius: 8px; border: 1px solid var(--border-color, rgba(255, 255, 255, 0.1)); background: var(--bg-hover, rgba(255, 255, 255, 0.05)); color: var(--text-primary, #f8fafc); font-size: 0.8rem; outline: none; height: 34px;">
-        <option value="" style="background: #1e293b; color: #f8fafc;">Todos los niveles</option>
-        <option value="Critical" style="background: #1e293b; color: #f87171;">Critical (Crítica)</option>
-        <option value="High" style="background: #1e293b; color: #fbbf24;">High (Alta)</option>
-        <option value="Moderate" style="background: #1e293b; color: #60a5fa;">Moderate (Moderada)</option>
-        <option value="Low" style="background: #1e293b; color: #34d399;">Low (Baja)</option>
-      </select>
-    </div>
-  </div>
-
-  <!-- Saturation Warning Banner -->
-  <div class="warning-banner" *ngIf="hasCriticalFaculties">
-    <div class="warning-icon">
-      <mat-icon>warning</mat-icon>
-    </div>
-    <div class="warning-text">
-      <h4>Saturación Crítica Detectada</h4>
-      <p>
-        Las siguientes facultades se encuentran en niveles críticos de capacidad: 
-        <strong>{{ criticalFacultiesListString }}</strong>. 
-        Se recomienda reasignación inmediata de recursos.
-      </p>
-    </div>
-  </div>
-
-  <!-- Faculty Cards List -->
-  <div class="panel">
-    <div class="panel-header">
-      <div class="panel-title-wrapper">
-        <mat-icon class="title-icon blue">business</mat-icon>
-        <span class="panel-title">Lista de Facultades Académicas</span>
-      </div>
-      <span class="panel-sub">
-        {{ compareIds.length > 0 ? compareIds.length + ' seleccionadas para comparar' : 'Selecciona hasta 4 para comparar' }}
-      </span>
-    </div>
-
-    <!-- Encabezado de Columnas para Evitar Textos Repetitivos -->
-    <div class="faculties-list-header">
-      <div class="header-col select-col">
-        <span>Comparar</span>
-      </div>
-      <div class="header-col identity-col">
-        <mat-icon>apartment</mat-icon>
-        <span>Facultad / Unidad Académica</span>
-      </div>
-      <div class="header-col patients-col">
-        <mat-icon>people</mat-icon>
-        <span>Pacientes / Capacidad</span>
-      </div>
-      <div class="header-col specialists-col">
-        <mat-icon>psychology</mat-icon>
-        <span>Especialistas</span>
-      </div>
-      <div class="header-col occupancy-col">
-        <mat-icon>trending_up</mat-icon>
-        <span>Ocupación</span>
-      </div>
-      <div class="header-col alert-col">
-        <mat-icon>warning</mat-icon>
-        <span>Semáforo / Alertas</span>
-      </div>
-      <div class="header-col action-col">
-        <span>Acciones</span>
-      </div>
-    </div>
-
-    <div class="faculties-list">
-      <div 
-        class="faculty-row" 
-        *ngFor="let f of sortedFaculties"
-        [class.selected]="isCompared(f.id)"
-      >
-        <!-- Compare Selector Checkbox -->
-        <div class="select-cell">
+  <ng-container *ngIf="!loading">
+    <!-- Header Actions -->
+    <div class="header-strip" style="display: flex; justify-content: space-between; align-items: center;">
+      <div style="display: flex; gap: 16px; align-items: center;">
+        <div class="sort-selector">
+          <span class="sort-label">Ordenar por:</span>
           <button 
-            class="checkbox-btn" 
-            (click)="toggleCompare(f.id)"
-            [class.checked]="isCompared(f.id)"
+            *ngFor="let option of ['demand', 'patients', 'name', 'campus_name']" 
+            (click)="sortBy = option"
+            [class.active]="sortBy === option"
+            class="sort-btn"
           >
-            <mat-icon *ngIf="isCompared(f.id)">check</mat-icon>
+            <mat-icon>swap_vert</mat-icon>
+            <span class="capitalize">{{ option === 'demand' ? 'Demanda' : option === 'patients' ? 'Pacientes' : option === 'campus_name' ? 'Campus' : 'Nombre' }}</span>
           </button>
         </div>
 
-        <!-- Faculty Name, Campus Subtitle & Dynamic Icon -->
-        <div class="faculty-identity" [title]="'Campus: ' + (f.campus_name || 'No definido')">
-          <mat-icon class="faculty-icon" [ngClass]="getCampusClass(f.campus_name)">
-            {{ getCampusIcon(f.campus_name) }}
-          </mat-icon>
-          <div class="name-container">
-            <span class="faculty-name">{{ f.name }}</span>
-            <span class="campus-sub">{{ f.campus_name || 'Sin Campus' }}</span>
-          </div>
-        </div>
-
-        <!-- Patients Ratio -->
-        <div class="metric-block patients-ratio">
-          <mat-icon>people</mat-icon>
-          <span class="ratio-value">{{ f.patients }}</span>
-          <span class="ratio-divider">/</span>
-          <span class="ratio-total">{{ f.capacity }}</span>
-        </div>
-
-        <!-- Psychologists Count -->
-        <div class="metric-block psychologists-count">
-          <mat-icon>psychology</mat-icon>
-          <span class="bold">{{ f.psychologists }}</span>
-        </div>
-
-        <!-- Capacity Bar -->
-        <div class="occupancy-bar-wrapper">
-          <div class="bar-bg">
-            <div class="bar-fill" [style.width]="getPct(f) + '%'" [ngClass]="getOccupancyColor(getPct(f))"></div>
-          </div>
-          <span class="bar-pct" [style.color]="getOccupancyColorText(getPct(f))">{{ getPct(f) }}%</span>
-        </div>
-
-        <!-- Chips -->
-        <div class="badge-group">
-          <span class="badge" [ngClass]="getDemandClass(f.demand)">{{ translateDemand(f.demand) }}</span>
-          <span class="badge" [ngClass]="getRiskClass(f.risk)">Riesgo {{ translateRisk(f.risk) }}</span>
-        </div>
-
-        <!-- View Detail Button -->
-        <button class="details-link-btn" (click)="viewDetail(f)">
-          <span>Detalles</span>
-          <mat-icon>chevron_right</mat-icon>
-        </button>
-      </div>
-    </div>
-  </div>
-
-
-
-  <!-- Compare Modal -->
-  <div class="modal-overlay" *ngIf="showCompareModal" (click)="closeCompare()">
-    <div class="modal-card compare-modal" (click)="$event.stopPropagation()">
-      <div class="modal-header">
-        <div class="modal-title-wrapper">
+        <button 
+          *ngIf="compareIds.length >= 2" 
+          (click)="openCompare()" 
+          class="compare-action-btn"
+        >
           <mat-icon>compare_arrows</mat-icon>
-          <h3>Comparador de Facultades</h3>
-        </div>
-        <button class="modal-close-btn" (click)="closeCompare()">
-          <mat-icon>close</mat-icon>
+          <span>Comparar {{ compareIds.length }} Facultades</span>
         </button>
       </div>
 
-      <div class="modal-body overflow-x">
-        <table class="compare-table">
-          <thead>
-            <tr>
-              <th>Indicador</th>
-              <th *ngFor="let comp of getComparedFaculties()">{{ comp.name }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="row-label">Pacientes Activos</td>
-              <td *ngFor="let comp of getComparedFaculties()">{{ comp.patients }}</td>
-            </tr>
-            <tr>
-              <td class="row-label">Capacidad Total</td>
-              <td *ngFor="let comp of getComparedFaculties()">{{ comp.capacity }}</td>
-            </tr>
-            <tr>
-              <td class="row-label">Ocupación</td>
-              <td *ngFor="let comp of getComparedFaculties()" [style.color]="getOccupancyColorText(getPct(comp))" class="bold">
-                {{ getPct(comp) }}%
-              </td>
-            </tr>
-            <tr>
-              <td class="row-label">Psicólogos</td>
-              <td *ngFor="let comp of getComparedFaculties()">{{ comp.psychologists }}</td>
-            </tr>
-            <tr>
-              <td class="row-label">Demanda</td>
-              <td *ngFor="let comp of getComparedFaculties()">
-                <span class="badge inline" [ngClass]="getDemandClass(comp.demand)">{{ translateDemand(comp.demand) }}</span>
-              </td>
-            </tr>
-            <tr>
-              <td class="row-label">Riesgo Promedio</td>
-              <td *ngFor="let comp of getComparedFaculties()">
-                <span class="badge inline" [ngClass]="getRiskClass(comp.risk)">{{ translateRisk(comp.risk) }}</span>
-              </td>
-            </tr>
-            <tr>
-              <td class="row-label">Deserción</td>
-              <td *ngFor="let comp of getComparedFaculties()" class="red-text">{{ comp.dropoutRate }}%</td>
-            </tr>
-            <tr>
-              <td class="row-label">Nuevos (Mes)</td>
-              <td *ngFor="let comp of getComparedFaculties()" class="green-text">+{{ comp.newThisMonth }}</td>
-            </tr>
-          </tbody>
-        </table>
+      <!-- Botón de Nueva Facultad -->
+      <button 
+        (click)="openAddModal()" 
+        class="add-action-btn"
+        style="display: flex; align-items: center; gap: 8px; background: #3b82f6; color: white; border: none; padding: 8px 16px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: background 0.2s;"
+      >
+        <mat-icon>add</mat-icon>
+        <span>Nueva Facultad</span>
+      </button>
+    </div>
+
+    <!-- Filters Bar -->
+    <div class="filters-bar" style="display: flex; gap: 16px; align-items: center; background: var(--bg-card, #1e293b); padding: 12px 20px; border-radius: 12px; border: 1px solid var(--border-color, rgba(255, 255, 255, 0.06)); margin-bottom: 0.25rem; flex-wrap: wrap;">
+      <!-- Search Input -->
+      <div style="display: flex; align-items: center; gap: 8px; flex: 1; min-width: 200px; background: var(--bg-hover, rgba(255, 255, 255, 0.03)); border: 1px solid var(--border-color, rgba(255, 255, 255, 0.1)); padding: 6px 12px; border-radius: 8px;">
+        <mat-icon style="color: var(--text-secondary, #94a3b8); font-size: 18px; width: 18px; height: 18px; line-height: 18px; display: inline-flex; align-items: center; justify-content: center;">search</mat-icon>
+        <input type="text" [(ngModel)]="filterSearch" placeholder="Buscar por facultad..." style="background: transparent; border: none; outline: none; color: var(--text-primary, #f8fafc); font-size: 0.85rem; width: 100%;" />
+      </div>
+
+      <!-- Campus Dropdown -->
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="font-size: 0.75rem; color: var(--text-secondary, #94a3b8); font-family: monospace;">Campus:</span>
+        <select [(ngModel)]="filterCampusId" style="padding: 6px 12px; border-radius: 8px; border: 1px solid var(--border-color, rgba(255, 255, 255, 0.1)); background: var(--bg-hover, rgba(255, 255, 255, 0.05)); color: var(--text-primary, #f8fafc); font-size: 0.8rem; outline: none; height: 34px;">
+          <option value="" style="background: #1e293b; color: #f8fafc;">Todos los campus</option>
+          <option *ngFor="let c of campuses" [value]="c.id" style="background: #1e293b; color: #f8fafc;">{{ c.name }}</option>
+        </select>
+      </div>
+
+      <!-- Demand Dropdown -->
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="font-size: 0.75rem; color: var(--text-secondary, #94a3b8); font-family: monospace;">Demanda:</span>
+        <select [(ngModel)]="filterDemand" style="padding: 6px 12px; border-radius: 8px; border: 1px solid var(--border-color, rgba(255, 255, 255, 0.1)); background: var(--bg-hover, rgba(255, 255, 255, 0.05)); color: var(--text-primary, #f8fafc); font-size: 0.8rem; outline: none; height: 34px;">
+          <option value="" style="background: #1e293b; color: #f8fafc;">Todos los niveles</option>
+          <option value="Critical" style="background: #1e293b; color: #f87171;">Critical (Crítica)</option>
+          <option value="High" style="background: #1e293b; color: #fbbf24;">High (Alta)</option>
+          <option value="Moderate" style="background: #1e293b; color: #60a5fa;">Moderate (Moderada)</option>
+          <option value="Low" style="background: #1e293b; color: #34d399;">Low (Baja)</option>
+        </select>
       </div>
     </div>
-  </div>
 
-  <!-- Add Faculty Modal -->
-  <div class="modal-overlay" *ngIf="showAddModal" (click)="closeAddModal()">
-    <div class="modal-card form-modal" (click)="$event.stopPropagation()" style="width: 450px; max-width: 90vw;">
-      <div class="modal-header">
-        <div class="modal-title-wrapper">
-          <mat-icon class="text-blue">domain_add</mat-icon>
-          <h3>Registrar Nueva Facultad</h3>
+    <!-- Saturation Warning Banner -->
+    <div class="warning-banner" *ngIf="hasCriticalFaculties">
+      <div class="warning-icon">
+        <mat-icon>warning</mat-icon>
+      </div>
+      <div class="warning-text">
+        <h4>Saturación Crítica Detectada</h4>
+        <p>
+          Las siguientes facultades se encuentran en niveles críticos de capacidad: 
+          <strong>{{ criticalFacultiesListString }}</strong>. 
+          Se recomienda reasignación inmediata de recursos.
+        </p>
+      </div>
+    </div>
+
+    <!-- Faculty Cards List -->
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title-wrapper">
+          <mat-icon class="title-icon blue">business</mat-icon>
+          <span class="panel-title">Lista de Facultades Académicas</span>
         </div>
-        <button class="modal-close-btn" (click)="closeAddModal()">
-          <mat-icon>close</mat-icon>
-        </button>
+        <span class="panel-sub">
+          {{ compareIds.length > 0 ? compareIds.length + ' seleccionadas para comparar' : 'Selecciona hasta 4 para comparar' }}
+        </span>
       </div>
 
-      <div class="modal-body" style="padding-top: 1rem;">
-        <div style="display: flex; flex-direction: column; gap: 16px;">
-          <div style="display: flex; flex-direction: column; gap: 6px;">
-            <label style="font-size: 0.85rem; font-weight: 600; color: var(--text-secondary, #94a3b8);">Nombre de la Facultad *</label>
-            <input type="text" [(ngModel)]="newFacultyName" placeholder="Ej. Facultad de Arquitectura" style="padding: 10px; border-radius: 8px; border: 1px solid var(--border-color, rgba(255, 255, 255, 0.12)); background: var(--bg-hover, rgba(255, 255, 255, 0.05)); color: var(--text-primary, #f8fafc); outline: none;" />
-          </div>
-          <div style="display: flex; flex-direction: column; gap: 6px;">
-            <label style="font-size: 0.85rem; font-weight: 600; color: var(--text-secondary, #94a3b8);">Campus / Ubicación *</label>
-            <select [(ngModel)]="newFacultyCampusId" style="padding: 10px; border-radius: 8px; border: 1px solid var(--border-color, rgba(255, 255, 255, 0.12)); background: var(--bg-hover, rgba(255, 255, 255, 0.05)); color: var(--text-primary, #f8fafc); outline: none;">
-              <option value="" disabled selected style="background: #1e293b; color: #94a3b8;">Selecciona un campus</option>
-              <option *ngFor="let c of campuses" [value]="c.id" style="background: #1e293b; color: #f8fafc;">{{ c.name }}</option>
-            </select>
-          </div>
-          <div style="display: flex; flex-direction: column; gap: 6px;">
-            <label style="font-size: 0.85rem; font-weight: 600; color: var(--text-secondary, #94a3b8);">Enlace al Recorrido Virtual (Opcional)</label>
-            <input type="text" [(ngModel)]="newFacultyVirtualTourUrl" placeholder="Ej. https://tour360.buap.mx/fcc" style="padding: 10px; border-radius: 8px; border: 1px solid var(--border-color, rgba(255, 255, 255, 0.12)); background: var(--bg-hover, rgba(255, 255, 255, 0.05)); color: var(--text-primary, #f8fafc); outline: none;" />
-          </div>
+      <!-- Encabezado de Columnas para Evitar Textos Repetitivos -->
+      <div class="faculties-list-header">
+        <div class="header-col select-col">
+          <span>Comparar</span>
+        </div>
+        <div class="header-col identity-col">
+          <mat-icon>apartment</mat-icon>
+          <span>Facultad / Unidad Académica</span>
+        </div>
+        <div class="header-col patients-col">
+          <mat-icon>people</mat-icon>
+          <span>Pacientes / Capacidad</span>
+        </div>
+        <div class="header-col specialists-col">
+          <mat-icon>psychology</mat-icon>
+          <span>Especialistas</span>
+        </div>
+        <div class="header-col occupancy-col">
+          <mat-icon>trending_up</mat-icon>
+          <span>Ocupación</span>
+        </div>
+        <div class="header-col alert-col">
+          <mat-icon>warning</mat-icon>
+          <span>Semáforo / Alertas</span>
+        </div>
+        <div class="header-col action-col">
+          <span>Acciones</span>
+        </div>
+      </div>
 
-          <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 10px;">
-            <button (click)="closeAddModal()" [disabled]="isSubmitting" style="padding: 8px 16px; border: 1px solid var(--border-color, rgba(255, 255, 255, 0.12)); background: transparent; border-radius: 6px; cursor: pointer; color: var(--text-secondary, #94a3b8); font-weight: 600;">Cancelar</button>
-            <button (click)="addFaculty()" [disabled]="isSubmitting || !newFacultyName || newFacultyCampusId === ''" style="padding: 8px 16px; border: none; background: #3b82f6; color: white; border-radius: 6px; cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 6px;">
-              <span *ngIf="isSubmitting" class="spinner"></span>
-              {{ isSubmitting ? 'Registrando...' : 'Guardar Facultad' }}
+      <div class="faculties-list">
+        <div 
+          class="faculty-row" 
+          *ngFor="let f of sortedFaculties"
+          [class.selected]="isCompared(f.id)"
+        >
+          <!-- Compare Selector Checkbox -->
+          <div class="select-cell">
+            <button 
+              class="checkbox-btn" 
+              (click)="toggleCompare(f.id)"
+              [class.checked]="isCompared(f.id)"
+            >
+              <mat-icon *ngIf="isCompared(f.id)">check</mat-icon>
             </button>
           </div>
+
+          <!-- Faculty Name, Campus Subtitle & Dynamic Icon -->
+          <div class="faculty-identity" [title]="'Campus: ' + (f.campus_name || 'No definido')">
+            <mat-icon class="faculty-icon" [ngClass]="getCampusClass(f.campus_name)">
+              {{ getCampusIcon(f.campus_name) }}
+            </mat-icon>
+            <div class="name-container">
+              <span class="faculty-name">{{ f.name }}</span>
+              <span class="campus-sub">{{ f.campus_name || 'Sin Campus' }}</span>
+            </div>
+          </div>
+
+          <!-- Patients Ratio -->
+          <div class="metric-block patients-ratio">
+            <mat-icon>people</mat-icon>
+            <span class="ratio-value">{{ f.patients }}</span>
+            <span class="ratio-divider">/</span>
+            <span class="ratio-total">{{ f.capacity }}</span>
+          </div>
+
+          <!-- Psychologists Count -->
+          <div class="metric-block psychologists-count">
+            <mat-icon>psychology</mat-icon>
+            <span class="bold">{{ f.psychologists }}</span>
+          </div>
+
+          <!-- Capacity Bar -->
+          <div class="occupancy-bar-wrapper">
+            <div class="bar-bg">
+              <div class="bar-fill" [style.width]="getPct(f) + '%'" [ngClass]="getOccupancyColor(getPct(f))"></div>
+            </div>
+            <span class="bar-pct" [style.color]="getOccupancyColorText(getPct(f))">{{ getPct(f) }}%</span>
+          </div>
+
+          <!-- Chips -->
+          <div class="badge-group">
+            <span class="badge" [ngClass]="getDemandClass(f.demand)">{{ translateDemand(f.demand) }}</span>
+            <span class="badge" [ngClass]="getRiskClass(f.risk)">Riesgo {{ translateRisk(f.risk) }}</span>
+          </div>
+
+          <!-- View Detail Button -->
+          <button class="details-link-btn" (click)="viewDetail(f)">
+            <span>Detalles</span>
+            <mat-icon>chevron_right</mat-icon>
+          </button>
         </div>
       </div>
     </div>
-  </div>
+
+    <!-- Compare Modal -->
+    <div class="modal-overlay" *ngIf="showCompareModal" (click)="closeCompare()">
+      <div class="modal-card compare-modal" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <div class="modal-title-wrapper">
+            <mat-icon>compare_arrows</mat-icon>
+            <h3>Comparador de Facultades</h3>
+          </div>
+          <button class="modal-close-btn" (click)="closeCompare()">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+
+        <div class="modal-body overflow-x">
+          <table class="compare-table">
+            <thead>
+              <tr>
+                <th>Indicador</th>
+                <th *ngFor="let comp of getComparedFaculties()">{{ comp.name }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="row-label">Pacientes Activos</td>
+                <td *ngFor="let comp of getComparedFaculties()">{{ comp.patients }}</td>
+              </tr>
+              <tr>
+                <td class="row-label">Capacidad Total</td>
+                <td *ngFor="let comp of getComparedFaculties()">{{ comp.capacity }}</td>
+              </tr>
+              <tr>
+                <td class="row-label">Ocupación</td>
+                <td *ngFor="let comp of getComparedFaculties()" [style.color]="getOccupancyColorText(getPct(comp))" class="bold">
+                  {{ getPct(comp) }}%
+                </td>
+              </tr>
+              <tr>
+                <td class="row-label">Psicólogos</td>
+                <td *ngFor="let comp of getComparedFaculties()">{{ comp.psychologists }}</td>
+              </tr>
+              <tr>
+                <td class="row-label">Demanda</td>
+                <td *ngFor="let comp of getComparedFaculties()">
+                  <span class="badge inline" [ngClass]="getDemandClass(comp.demand)">{{ translateDemand(comp.demand) }}</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="row-label">Riesgo Promedio</td>
+                <td *ngFor="let comp of getComparedFaculties()">
+                  <span class="badge inline" [ngClass]="getRiskClass(comp.risk)">{{ translateRisk(comp.risk) }}</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="row-label">Deserción</td>
+                <td *ngFor="let comp of getComparedFaculties()" class="red-text">{{ comp.dropoutRate }}%</td>
+              </tr>
+              <tr>
+                <td class="row-label">Nuevos (Mes)</td>
+                <td *ngFor="let comp of getComparedFaculties()" class="green-text">+{{ comp.newThisMonth }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add Faculty Modal -->
+    <div class="modal-overlay" *ngIf="showAddModal" (click)="closeAddModal()">
+      <div class="modal-card form-modal" (click)="$event.stopPropagation()" style="width: 450px; max-width: 90vw;">
+        <div class="modal-header">
+          <div class="modal-title-wrapper">
+            <mat-icon class="text-blue">domain_add</mat-icon>
+            <h3>Registrar Nueva Facultad</h3>
+          </div>
+          <button class="modal-close-btn" (click)="closeAddModal()">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+
+        <div class="modal-body" style="padding-top: 1rem;">
+          <div style="display: flex; flex-direction: column; gap: 16px;">
+            <div style="display: flex; flex-direction: column; gap: 6px;">
+              <label style="font-size: 0.85rem; font-weight: 600; color: var(--text-secondary, #94a3b8);">Nombre de la Facultad *</label>
+              <input type="text" [(ngModel)]="newFacultyName" placeholder="Ej. Facultad de Arquitectura" style="padding: 10px; border-radius: 8px; border: 1px solid var(--border-color, rgba(255, 255, 255, 0.12)); background: var(--bg-hover, rgba(255, 255, 255, 0.05)); color: var(--text-primary, #f8fafc); outline: none;" />
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 6px;">
+              <label style="font-size: 0.85rem; font-weight: 600; color: var(--text-secondary, #94a3b8);">Campus / Ubicación *</label>
+              <select [(ngModel)]="newFacultyCampusId" style="padding: 10px; border-radius: 8px; border: 1px solid var(--border-color, rgba(255, 255, 255, 0.12)); background: var(--bg-hover, rgba(255, 255, 255, 0.05)); color: var(--text-primary, #f8fafc); outline: none;">
+                <option value="" disabled selected style="background: #1e293b; color: #94a3b8;">Selecciona un campus</option>
+                <option *ngFor="let c of campuses" [value]="c.id" style="background: #1e293b; color: #f8fafc;">{{ c.name }}</option>
+              </select>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 6px;">
+              <label style="font-size: 0.85rem; font-weight: 600; color: var(--text-secondary, #94a3b8);">Enlace al Recorrido Virtual (Opcional)</label>
+              <input type="text" [(ngModel)]="newFacultyVirtualTourUrl" placeholder="Ej. https://tour360.buap.mx/fcc" style="padding: 10px; border-radius: 8px; border: 1px solid var(--border-color, rgba(255, 255, 255, 0.12)); background: var(--bg-hover, rgba(255, 255, 255, 0.05)); color: var(--text-primary, #f8fafc); outline: none;" />
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 10px;">
+              <button (click)="closeAddModal()" [disabled]="isSubmitting" style="padding: 8px 16px; border: 1px solid var(--border-color, rgba(255, 255, 255, 0.12)); background: transparent; border-radius: 6px; cursor: pointer; color: var(--text-secondary, #94a3b8); font-weight: 600;">Cancelar</button>
+              <button (click)="addFaculty()" [disabled]="isSubmitting || !newFacultyName || newFacultyCampusId === ''" style="padding: 8px 16px; border: none; background: #3b82f6; color: white; border-radius: 6px; cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 6px;">
+                <span *ngIf="isSubmitting" class="spinner"></span>
+                {{ isSubmitting ? 'Registrando...' : 'Guardar Facultad' }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
 
 </div>

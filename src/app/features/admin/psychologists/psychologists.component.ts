@@ -49,6 +49,7 @@ export class PsychologistsComponent implements OnInit {
   dossierExport = inject(DossierExportService);
 
   psychologists: Psychologist[] = [];
+  loading = true;
 
   // Patient Management State
   assignedPatients: any[] = [];
@@ -141,9 +142,11 @@ export class PsychologistsComponent implements OnInit {
   };
 
   async ngOnInit() {
+    this.loading = true;
     this.initForm();
     await this.loadFaculties();
     this.psychologists = await this.adminStats.getPsychologistsWithStats();
+    this.loading = false;
     
     // Initialize scroll position
     setTimeout(() => {

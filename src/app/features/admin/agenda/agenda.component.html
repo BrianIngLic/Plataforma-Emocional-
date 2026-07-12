@@ -1,5 +1,17 @@
 <div class="agenda-container">
 
+  <!-- Amati Loading Animation -->
+  <div *ngIf="loading" class="amati-loading-container">
+    <div class="amati-loader-wrapper">
+      <div class="spinner-ring"></div>
+      <img src="/amati-logo.svg" alt="Amati Logo" class="amati-logo-pulse" />
+    </div>
+    <h3 class="loading-title">Cargando agenda global...</h3>
+    <p class="loading-subtitle">Accediendo a las citas y excepciones institucionales</p>
+  </div>
+
+  <ng-container *ngIf="!loading">
+
   <!-- Action Bar -->
   <div class="action-bar" style="display: flex; justify-content: flex-end; align-items: center; margin-bottom: 20px; gap: 16px;">
     <!-- Toggle Group (Semana / Día) -->
@@ -272,6 +284,7 @@
 
   </div>
 
+  </ng-container>
 </div>
 
 <!-- Modal Bloquear Día Manual -->

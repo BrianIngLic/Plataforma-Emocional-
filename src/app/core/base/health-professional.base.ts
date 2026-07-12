@@ -51,9 +51,7 @@ export abstract class HealthProfessionalBase {
   get filteredGlobalPatients() {
     const term = this.globalSearchTerm.toLowerCase();
     let global = this.allPatients.filter(p => !p.isAssigned);
-    if (this.professionalFaculty) {
-      global = global.filter(p => p.faculty && p.faculty.toLowerCase().trim() === this.professionalFaculty!.toLowerCase().trim());
-    }
+    // ponytail: Permitir búsqueda global de estudiantes sin importar la facultad del especialista
     return global.filter(p => 
       `${p.firstName} ${p.lastName}`.toLowerCase().includes(term) ||
       (p.matricula && p.matricula.toLowerCase().includes(term))

@@ -39,7 +39,12 @@
                   <mat-icon *ngIf="!patient.avatarUrl">person</mat-icon>
                 </div>
                 <div class="patient-info">
-                  <span class="name">{{patient.firstName}} {{patient.lastName}}</span>
+                  <span class="name">
+                    {{patient.firstName}} {{patient.lastName}}
+                    <span class="outside-badge" *ngIf="patient.faculty && professionalFaculty && patient.faculty.toLowerCase().trim() !== professionalFaculty.toLowerCase().trim()">
+                      Fuera de facultad
+                    </span>
+                  </span>
                   <span class="id">ID: {{patient.id}}</span>
                 </div>
               </div>
@@ -89,7 +94,12 @@
             <mat-icon *ngIf="!patient.avatarUrl">person</mat-icon>
           </div>
           <div class="info">
-            <span class="name">{{patient.firstName}} {{patient.lastName}}</span>
+            <span class="name">
+              {{patient.firstName}} {{patient.lastName}}
+              <span class="outside-badge" *ngIf="patient.faculty && professionalFaculty && patient.faculty.toLowerCase().trim() !== professionalFaculty.toLowerCase().trim()">
+                Fuera de facultad
+              </span>
+            </span>
             <span class="mat">Matrícula: {{patient.matricula || 'No registrada'}}</span>
           </div>
           <button class="btn btn-primary btn-sm" (click)="assignPatient(patient.id)">

@@ -505,8 +505,8 @@
     "semantic_hash": ""
   },
   "src/app/core/base/health-professional.base.ts": {
-    "mtime": 1783668250.783398,
-    "ast_hash": "eb5cc8e8c13b88f5f3aadc15b722962a",
+    "mtime": 1783843244.8600376,
+    "ast_hash": "82f2b60fb1ee0e69659a66c8cf2e661b",
     "semantic_hash": ""
   },
   "src/app/core/services/emergency-notification.service.ts": {
@@ -585,8 +585,8 @@
     "semantic_hash": ""
   },
   "src/app/features/health-professional/patients/patients.component.html": {
-    "mtime": 1782432608.6236606,
-    "ast_hash": "d9c08669b96b616f7dca66f4b2612b2f",
+    "mtime": 1783843319.3458605,
+    "ast_hash": "a223e0d6a6907f4bbda890965078d5a3",
     "semantic_hash": ""
   },
   "src/app/features/health-professional/settings/settings.component.html": {
@@ -735,8 +735,8 @@
     "semantic_hash": ""
   },
   "src/app/core/services/internal-chat.service.ts": {
-    "mtime": 1783839587.4217968,
-    "ast_hash": "f743fedc8718c20ac9ee8bd929fc96eb",
+    "mtime": 1783840087.5766244,
+    "ast_hash": "047edfa7b207f1ecb15fbcf1646e9500",
     "semantic_hash": ""
   },
   "src/app/features/health-professional/command-center-chat/command-center-chat.component.ts": {
@@ -745,13 +745,13 @@
     "semantic_hash": ""
   },
   "supabase/functions/meta-whatsapp/index.ts": {
-    "mtime": 1782844948.4993324,
-    "ast_hash": "1e8f1e5fc14b273912bf1d9bfa087c83",
+    "mtime": 1783841059.3493903,
+    "ast_hash": "7a74af3db4a6352517bd87bce132328a",
     "semantic_hash": ""
   },
   "src/app/features/health-professional/command-center-chat/command-center-chat.component.html": {
-    "mtime": 1783668250.854062,
-    "ast_hash": "9343839e340c750189d79189a7444887",
+    "mtime": 1783840083.2850087,
+    "ast_hash": "1bf11c467fc3408c0d1f05af528b0d25",
     "semantic_hash": ""
   },
   "src/app/features/admin/faculties/faculty-detail/faculty-detail.component.ts": {
@@ -1137,6 +1137,26 @@
   "src/app/shared/components/arco-settings/arco-settings.component.html": {
     "mtime": 1783836684.305437,
     "ast_hash": "640c373de21aa882107fcd202aae8c6e",
+    "semantic_hash": ""
+  },
+  "scratch/check_faculties.js": {
+    "mtime": 1783843151.271353,
+    "ast_hash": "8eeb5090cdc2510ccfb49dcbd4e79a20",
+    "semantic_hash": ""
+  },
+  "scratch/check_fk.js": {
+    "mtime": 1783843107.4935863,
+    "ast_hash": "f978ce3bfbc13a417237ef68b1b02671",
+    "semantic_hash": ""
+  },
+  "scratch/check_students.js": {
+    "mtime": 1783843047.4886332,
+    "ast_hash": "94ef5ae193515a2bc2bdf21e7edc7c07",
+    "semantic_hash": ""
+  },
+  "scratch/register_student_test.js": {
+    "mtime": 1783843019.285592,
+    "ast_hash": "2abde069e46f23b27521ab3c3e98ace1",
     "semantic_hash": ""
   }
 }

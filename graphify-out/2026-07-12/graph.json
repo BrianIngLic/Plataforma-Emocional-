@@ -104,7 +104,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "agents_skills_caveman_compress_scripts_benchmark_py_scripts_benchmark",
-      "community": 1,
+      "community": 87,
       "norm_label": "benchmark.py"
     },
     {
@@ -114,7 +114,7 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "agents_skills_caveman_compress_scripts_benchmark_py_scripts_benchmark_count_tokens",
-      "community": 1,
+      "community": 87,
       "norm_label": "count_tokens()"
     },
     {
@@ -124,7 +124,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "agents_skills_caveman_compress_scripts_benchmark_py_scripts_benchmark_benchmark_pair",
-      "community": 1,
+      "community": 87,
       "norm_label": "benchmark_pair()"
     },
     {
@@ -134,7 +134,7 @@
       "source_location": "",
       "_origin": "ast",
       "id": "path",
-      "community": 1,
+      "community": 89,
       "norm_label": "path"
     },
     {
@@ -144,7 +144,7 @@
       "source_location": "L37",
       "_origin": "ast",
       "id": "agents_skills_caveman_compress_scripts_benchmark_py_scripts_benchmark_print_table",
-      "community": 1,
+      "community": 87,
       "norm_label": "print_table()"
     },
     {
@@ -154,7 +154,7 @@
       "source_location": "L44",
       "_origin": "ast",
       "id": "agents_skills_caveman_compress_scripts_benchmark_py_scripts_benchmark_main",
-      "community": 1,
+      "community": 87,
       "norm_label": "main()"
     },
     {
@@ -194,7 +194,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "agents_skills_caveman_compress_scripts_compress_py_scripts_compress",
-      "community": 1,
+      "community": 30,
       "norm_label": "compress.py"
     },
     {
@@ -204,7 +204,7 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "agents_skills_caveman_compress_scripts_compress_py_scripts_compress_split_frontmatter",
-      "community": 1,
+      "community": 30,
       "norm_label": "split_frontmatter()"
     },
     {
@@ -214,7 +214,7 @@
       "source_location": "L69",
       "_origin": "ast",
       "id": "agents_skills_caveman_compress_scripts_compress_py_scripts_compress_backup_dir_for",
-      "community": 1,
+      "community": 30,
       "norm_label": "backup_dir_for()"
     },
     {
@@ -224,7 +224,7 @@
       "source_location": "L93",
       "_origin": "ast",
       "id": "agents_skills_caveman_compress_scripts_compress_py_scripts_compress_is_sensitive_path",
-      "community": 1,
+      "community": 30,
       "norm_label": "is_sensitive_path()"
     },
     {
@@ -234,7 +234,7 @@
       "source_location": "L106",
       "_origin": "ast",
       "id": "agents_skills_caveman_compress_scripts_compress_py_scripts_compress_strip_llm_wrapper",
-      "community": 1,
+      "community": 30,
       "norm_label": "strip_llm_wrapper()"
     },
     {
@@ -244,7 +244,7 @@
       "source_location": "L122",
       "_origin": "ast",
       "id": "agents_skills_caveman_compress_scripts_compress_py_scripts_compress_call_claude",
-      "community": 1,
+      "community": 30,
       "norm_label": "call_claude()"
     },
     {
@@ -254,7 +254,7 @@
       "source_location": "L171",
       "_origin": "ast",
       "id": "agents_skills_caveman_compress_scripts_compress_py_scripts_compress_build_compress_prompt",
-      "community": 1,
+      "community": 30,
       "norm_label": "build_compress_prompt()"
     },
     {
@@ -264,7 +264,7 @@
       "source_location": "L190",
       "_origin": "ast",
       "id": "agents_skills_caveman_compress_scripts_compress_py_scripts_compress_build_fix_prompt",
-      "community": 1,
+      "community": 30,
       "norm_label": "build_fix_prompt()"
     },
     {
@@ -274,7 +274,7 @@
       "source_location": "L222",
       "_origin": "ast",
       "id": "agents_skills_caveman_compress_scripts_compress_py_scripts_compress_compress_file",
-      "community": 1,
+      "community": 30,
       "norm_label": "compress_file()"
     },
     {
@@ -284,7 +284,7 @@
       "source_location": "L29",
       "_origin": "ast",
       "id": "agents_skills_caveman_compress_scripts_compress_py_scripts_compress_rationale_29",
-      "community": 1,
+      "community": 30,
       "norm_label": "split yaml frontmatter from body. returns (frontmatter, body).      memory fil"
     },
     {
@@ -294,7 +294,7 @@
       "source_location": "L70",
       "_origin": "ast",
       "id": "agents_skills_caveman_compress_scripts_compress_py_scripts_compress_rationale_70",
-      "community": 1,
+      "community": 30,
       "norm_label": "resolve the out-of-tree backup directory for a given source file.      backups"
     },
     {
@@ -304,7 +304,7 @@
       "source_location": "L94",
       "_origin": "ast",
       "id": "agents_skills_caveman_compress_scripts_compress_py_scripts_compress_rationale_94",
-      "community": 1,
+      "community": 30,
       "norm_label": "heuristic denylist for files that must never be shipped to a third-party api."
     },
     {
@@ -314,7 +314,7 @@
       "source_location": "L107",
       "_origin": "ast",
       "id": "agents_skills_caveman_compress_scripts_compress_py_scripts_compress_rationale_107",
-      "community": 1,
+      "community": 30,
       "norm_label": "strip outer ```markdown ... ``` fence when it wraps the entire output."
     },
     {
@@ -324,7 +324,7 @@
       "source_location": "L123",
       "_origin": "ast",
       "id": "agents_skills_caveman_compress_scripts_compress_py_scripts_compress_rationale_123",
-      "community": 1,
+      "community": 30,
       "norm_label": "send a prompt to claude.      prefers the anthropic sdk when anthropic_api_key"
     },
     {
@@ -334,7 +334,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "agents_skills_caveman_compress_scripts_detect_py_scripts_detect",
-      "community": 1,
+      "community": 84,
       "norm_label": "detect.py"
     },
     {
@@ -344,7 +344,7 @@
       "source_location": "L42",
       "_origin": "ast",
       "id": "agents_skills_caveman_compress_scripts_detect_py_scripts_detect_is_code_line",
-      "community": 1,
+      "community": 84,
       "norm_label": "_is_code_line()"
     },
     {
@@ -354,7 +354,7 @@
       "source_location": "L47",
       "_origin": "ast",
       "id": "agents_skills_caveman_compress_scripts_detect_py_scripts_detect_is_json_content",
-      "community": 1,
+      "community": 84,
       "norm_label": "_is_json_content()"
     },
     {
@@ -364,7 +364,7 @@
       "source_location": "L56",
       "_origin": "ast",
       "id": "agents_skills_caveman_compress_scripts_detect_py_scripts_detect_is_yaml_content",
-      "community": 1,
+      "community": 84,
       "norm_label": "_is_yaml_content()"
     },
     {
@@ -374,7 +374,7 @@
       "source_location": "L72",
       "_origin": "ast",
       "id": "agents_skills_caveman_compress_scripts_detect_py_scripts_detect_detect_file_type",
-      "community": 1,
+      "community": 84,
       "norm_label": "detect_file_type()"
     },
     {
@@ -384,7 +384,7 @@
       "source_location": "L118",
       "_origin": "ast",
       "id": "agents_skills_caveman_compress_scripts_detect_py_scripts_detect_should_compress",
-      "community": 1,
+      "community": 84,
       "norm_label": "should_compress()"
     },
     {
@@ -394,7 +394,7 @@
       "source_location": "L43",
       "_origin": "ast",
       "id": "agents_skills_caveman_compress_scripts_detect_py_scripts_detect_rationale_43",
-      "community": 1,
+      "community": 84,
       "norm_label": "check if a line looks like code."
     },
     {
@@ -404,7 +404,7 @@
       "source_location": "L48",
       "_origin": "ast",
       "id": "agents_skills_caveman_compress_scripts_detect_py_scripts_detect_rationale_48",
-      "community": 1,
+      "community": 84,
       "norm_label": "check if content is valid json."
     },
     {
@@ -414,7 +414,7 @@
       "source_location": "L57",
       "_origin": "ast",
       "id": "agents_skills_caveman_compress_scripts_detect_py_scripts_detect_rationale_57",
-      "community": 1,
+      "community": 84,
       "norm_label": "heuristic: check if content looks like yaml."
     },
     {
@@ -424,7 +424,7 @@
       "source_location": "L73",
       "_origin": "ast",
       "id": "agents_skills_caveman_compress_scripts_detect_py_scripts_detect_rationale_73",
-      "community": 1,
+      "community": 84,
       "norm_label": "classify a file as 'natural_language', 'code', 'config', or 'unknown'.      re"
     },
     {
@@ -434,7 +434,7 @@
       "source_location": "L119",
       "_origin": "ast",
       "id": "agents_skills_caveman_compress_scripts_detect_py_scripts_detect_rationale_119",
-      "community": 1,
+      "community": 84,
       "norm_label": "return true if the file is natural language and should be compressed."
     },
     {
@@ -674,7 +674,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "agent_skills_caveman_compress_scripts_benchmark_py_scripts_benchmark",
-      "community": 1,
+      "community": 85,
       "norm_label": "benchmark.py"
     },
     {
@@ -684,7 +684,7 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "agent_skills_caveman_compress_scripts_benchmark_py_scripts_benchmark_count_tokens",
-      "community": 1,
+      "community": 85,
       "norm_label": "count_tokens()"
     },
     {
@@ -694,7 +694,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "agent_skills_caveman_compress_scripts_benchmark_py_scripts_benchmark_benchmark_pair",
-      "community": 1,
+      "community": 85,
       "norm_label": "benchmark_pair()"
     },
     {
@@ -704,7 +704,7 @@
       "source_location": "L37",
       "_origin": "ast",
       "id": "agent_skills_caveman_compress_scripts_benchmark_py_scripts_benchmark_print_table",
-      "community": 1,
+      "community": 85,
       "norm_label": "print_table()"
     },
     {
@@ -714,7 +714,7 @@
       "source_location": "L44",
       "_origin": "ast",
       "id": "agent_skills_caveman_compress_scripts_benchmark_py_scripts_benchmark_main",
-      "community": 1,
+      "community": 85,
       "norm_label": "main()"
     },
     {
@@ -894,7 +894,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "agent_skills_caveman_compress_scripts_detect_py_scripts_detect",
-      "community": 1,
+      "community": 81,
       "norm_label": "detect.py"
     },
     {
@@ -904,7 +904,7 @@
       "source_location": "L42",
       "_origin": "ast",
       "id": "agent_skills_caveman_compress_scripts_detect_py_scripts_detect_is_code_line",
-      "community": 1,
+      "community": 81,
       "norm_label": "_is_code_line()"
     },
     {
@@ -914,7 +914,7 @@
       "source_location": "L47",
       "_origin": "ast",
       "id": "agent_skills_caveman_compress_scripts_detect_py_scripts_detect_is_json_content",
-      "community": 1,
+      "community": 81,
       "norm_label": "_is_json_content()"
     },
     {
@@ -924,7 +924,7 @@
       "source_location": "L56",
       "_origin": "ast",
       "id": "agent_skills_caveman_compress_scripts_detect_py_scripts_detect_is_yaml_content",
-      "community": 1,
+      "community": 81,
       "norm_label": "_is_yaml_content()"
     },
     {
@@ -934,7 +934,7 @@
       "source_location": "L72",
       "_origin": "ast",
       "id": "agent_skills_caveman_compress_scripts_detect_py_scripts_detect_detect_file_type",
-      "community": 1,
+      "community": 81,
       "norm_label": "detect_file_type()"
     },
     {
@@ -944,7 +944,7 @@
       "source_location": "L118",
       "_origin": "ast",
       "id": "agent_skills_caveman_compress_scripts_detect_py_scripts_detect_should_compress",
-      "community": 1,
+      "community": 81,
       "norm_label": "should_compress()"
     },
     {
@@ -954,7 +954,7 @@
       "source_location": "L43",
       "_origin": "ast",
       "id": "agent_skills_caveman_compress_scripts_detect_py_scripts_detect_rationale_43",
-      "community": 1,
+      "community": 81,
       "norm_label": "check if a line looks like code."
     },
     {
@@ -964,7 +964,7 @@
       "source_location": "L48",
       "_origin": "ast",
       "id": "agent_skills_caveman_compress_scripts_detect_py_scripts_detect_rationale_48",
-      "community": 1,
+      "community": 81,
       "norm_label": "check if content is valid json."
     },
     {
@@ -974,7 +974,7 @@
       "source_location": "L57",
       "_origin": "ast",
       "id": "agent_skills_caveman_compress_scripts_detect_py_scripts_detect_rationale_57",
-      "community": 1,
+      "community": 81,
       "norm_label": "heuristic: check if content looks like yaml."
     },
     {
@@ -984,7 +984,7 @@
       "source_location": "L73",
       "_origin": "ast",
       "id": "agent_skills_caveman_compress_scripts_detect_py_scripts_detect_rationale_73",
-      "community": 1,
+      "community": 81,
       "norm_label": "classify a file as 'natural_language', 'code', 'config', or 'unknown'.      re"
     },
     {
@@ -994,7 +994,7 @@
       "source_location": "L119",
       "_origin": "ast",
       "id": "agent_skills_caveman_compress_scripts_detect_py_scripts_detect_rationale_119",
-      "community": 1,
+      "community": 81,
       "norm_label": "return true if the file is natural language and should be compressed."
     },
     {
@@ -2268,6 +2268,166 @@
       "norm_label": "typescript"
     },
     {
+      "label": "check_faculties.js",
+      "file_type": "code",
+      "source_file": "scratch/check_faculties.js",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "scratch_check_faculties",
+      "community": 131,
+      "norm_label": "check_faculties.js"
+    },
+    {
+      "label": "{ createClient }",
+      "file_type": "code",
+      "source_file": "scratch/check_faculties.js",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "scratch_check_faculties_createclient",
+      "community": 131,
+      "norm_label": "{ createclient }"
+    },
+    {
+      "label": "supabase",
+      "file_type": "code",
+      "source_file": "scratch/check_faculties.js",
+      "source_location": "L6",
+      "_origin": "ast",
+      "id": "scratch_check_faculties_supabase",
+      "community": 131,
+      "norm_label": "supabase"
+    },
+    {
+      "label": "run()",
+      "file_type": "code",
+      "source_file": "scratch/check_faculties.js",
+      "source_location": "L8",
+      "_origin": "ast",
+      "id": "scratch_check_faculties_run",
+      "community": 131,
+      "norm_label": "run()"
+    },
+    {
+      "label": "check_fk.js",
+      "file_type": "code",
+      "source_file": "scratch/check_fk.js",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "scratch_check_fk",
+      "community": 133,
+      "norm_label": "check_fk.js"
+    },
+    {
+      "label": "{ createClient }",
+      "file_type": "code",
+      "source_file": "scratch/check_fk.js",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "scratch_check_fk_createclient",
+      "community": 133,
+      "norm_label": "{ createclient }"
+    },
+    {
+      "label": "supabase",
+      "file_type": "code",
+      "source_file": "scratch/check_fk.js",
+      "source_location": "L6",
+      "_origin": "ast",
+      "id": "scratch_check_fk_supabase",
+      "community": 133,
+      "norm_label": "supabase"
+    },
+    {
+      "label": "run()",
+      "file_type": "code",
+      "source_file": "scratch/check_fk.js",
+      "source_location": "L8",
+      "_origin": "ast",
+      "id": "scratch_check_fk_run",
+      "community": 133,
+      "norm_label": "run()"
+    },
+    {
+      "label": "check_students.js",
+      "file_type": "code",
+      "source_file": "scratch/check_students.js",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "scratch_check_students",
+      "community": 135,
+      "norm_label": "check_students.js"
+    },
+    {
+      "label": "{ createClient }",
+      "file_type": "code",
+      "source_file": "scratch/check_students.js",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "scratch_check_students_createclient",
+      "community": 135,
+      "norm_label": "{ createclient }"
+    },
+    {
+      "label": "supabase",
+      "file_type": "code",
+      "source_file": "scratch/check_students.js",
+      "source_location": "L6",
+      "_origin": "ast",
+      "id": "scratch_check_students_supabase",
+      "community": 135,
+      "norm_label": "supabase"
+    },
+    {
+      "label": "run()",
+      "file_type": "code",
+      "source_file": "scratch/check_students.js",
+      "source_location": "L8",
+      "_origin": "ast",
+      "id": "scratch_check_students_run",
+      "community": 135,
+      "norm_label": "run()"
+    },
+    {
+      "label": "register_student_test.js",
+      "file_type": "code",
+      "source_file": "scratch/register_student_test.js",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "scratch_register_student_test",
+      "community": 138,
+      "norm_label": "register_student_test.js"
+    },
+    {
+      "label": "{ createClient }",
+      "file_type": "code",
+      "source_file": "scratch/register_student_test.js",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "scratch_register_student_test_createclient",
+      "community": 138,
+      "norm_label": "{ createclient }"
+    },
+    {
+      "label": "supabase",
+      "file_type": "code",
+      "source_file": "scratch/register_student_test.js",
+      "source_location": "L6",
+      "_origin": "ast",
+      "id": "scratch_register_student_test_supabase",
+      "community": 138,
+      "norm_label": "supabase"
+    },
+    {
+      "label": "run()",
+      "file_type": "code",
+      "source_file": "scratch/register_student_test.js",
+      "source_location": "L8",
+      "_origin": "ast",
+      "id": "scratch_register_student_test_run",
+      "community": 138,
+      "norm_label": "run()"
+    },
+    {
       "label": "test_join.js",
       "file_type": "code",
       "source_file": "scratch/test_join.js",
@@ -2571,7 +2731,7 @@
       "label": ".isFutureOrToday()",
       "file_type": "code",
       "source_file": "src/app/core/base/health-professional.base.ts",
-      "source_location": "L63",
+      "source_location": "L61",
       "_origin": "ast",
       "id": "base_health_professional_base_healthprofessionalbase_isfutureortoday",
       "community": 45,
@@ -2581,7 +2741,7 @@
       "label": ".isActiveAppointmentStatus()",
       "file_type": "code",
       "source_file": "src/app/core/base/health-professional.base.ts",
-      "source_location": "L69",
+      "source_location": "L67",
       "_origin": "ast",
       "id": "base_health_professional_base_healthprofessionalbase_isactiveappointmentstatus",
       "community": 45,
@@ -2591,7 +2751,7 @@
       "label": ".getDateKey()",
       "file_type": "code",
       "source_file": "src/app/core/base/health-professional.base.ts",
-      "source_location": "L73",
+      "source_location": "L71",
       "_origin": "ast",
       "id": "base_health_professional_base_healthprofessionalbase_getdatekey",
       "community": 45,
@@ -2601,7 +2761,7 @@
       "label": ".compareDateKeys()",
       "file_type": "code",
       "source_file": "src/app/core/base/health-professional.base.ts",
-      "source_location": "L78",
+      "source_location": "L76",
       "_origin": "ast",
       "id": "base_health_professional_base_healthprofessionalbase_comparedatekeys",
       "community": 45,
@@ -2611,7 +2771,7 @@
       "label": ".formatSessionDate()",
       "file_type": "code",
       "source_file": "src/app/core/base/health-professional.base.ts",
-      "source_location": "L82",
+      "source_location": "L80",
       "_origin": "ast",
       "id": "base_health_professional_base_healthprofessionalbase_formatsessiondate",
       "community": 45,
@@ -2621,7 +2781,7 @@
       "label": ".getPatientSessions()",
       "file_type": "code",
       "source_file": "src/app/core/base/health-professional.base.ts",
-      "source_location": "L87",
+      "source_location": "L85",
       "_origin": "ast",
       "id": "base_health_professional_base_healthprofessionalbase_getpatientsessions",
       "community": 45,
@@ -2631,7 +2791,7 @@
       "label": ".loadPatientsBase()",
       "file_type": "code",
       "source_file": "src/app/core/base/health-professional.base.ts",
-      "source_location": "L105",
+      "source_location": "L103",
       "_origin": "ast",
       "id": "base_health_professional_base_healthprofessionalbase_loadpatientsbase",
       "community": 45,
@@ -2641,7 +2801,7 @@
       "label": ".assignPatientBase()",
       "file_type": "code",
       "source_file": "src/app/core/base/health-professional.base.ts",
-      "source_location": "L196",
+      "source_location": "L194",
       "_origin": "ast",
       "id": "base_health_professional_base_healthprofessionalbase_assignpatientbase",
       "community": 45,
@@ -2651,7 +2811,7 @@
       "label": ".viewProfileBase()",
       "file_type": "code",
       "source_file": "src/app/core/base/health-professional.base.ts",
-      "source_location": "L232",
+      "source_location": "L230",
       "_origin": "ast",
       "id": "base_health_professional_base_healthprofessionalbase_viewprofilebase",
       "community": 45,
@@ -3594,7 +3754,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "services_dossier_export_service_dossierexportservice",
-      "community": 67,
+      "community": 148,
       "norm_label": "dossierexportservice"
     },
     {
@@ -3604,7 +3764,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "services_dossier_export_service_dossierexportservice_getbase64imagefromurl",
-      "community": 67,
+      "community": 148,
       "norm_label": ".getbase64imagefromurl()"
     },
     {
@@ -3614,7 +3774,7 @@
       "source_location": "L39",
       "_origin": "ast",
       "id": "services_dossier_export_service_dossierexportservice_convertimagetowhite",
-      "community": 67,
+      "community": 148,
       "norm_label": ".convertimagetowhite()"
     },
     {
@@ -3624,7 +3784,7 @@
       "source_location": "L80",
       "_origin": "ast",
       "id": "services_dossier_export_service_dossierexportservice_convertimagetowatermark",
-      "community": 67,
+      "community": 148,
       "norm_label": ".convertimagetowatermark()"
     },
     {
@@ -3634,7 +3794,7 @@
       "source_location": "L118",
       "_origin": "ast",
       "id": "services_dossier_export_service_dossierexportservice_generatehmac",
-      "community": 67,
+      "community": 148,
       "norm_label": ".generatehmac()"
     },
     {
@@ -3644,7 +3804,7 @@
       "source_location": "L138",
       "_origin": "ast",
       "id": "services_dossier_export_service_dossierexportservice_getdossierdata",
-      "community": 67,
+      "community": 148,
       "norm_label": ".getdossierdata()"
     },
     {
@@ -3654,7 +3814,7 @@
       "source_location": "L369",
       "_origin": "ast",
       "id": "services_dossier_export_service_dossierexportservice_exportdossier",
-      "community": 67,
+      "community": 148,
       "norm_label": ".exportdossier()"
     },
     {
@@ -3924,7 +4084,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_gamification_service",
-      "community": 136,
+      "community": 68,
       "norm_label": "gamification.service.ts"
     },
     {
@@ -3934,7 +4094,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "services_gamification_service_userstreak",
-      "community": 136,
+      "community": 68,
       "norm_label": "userstreak"
     },
     {
@@ -4061,7 +4221,7 @@
       "label": ".getMessages()",
       "file_type": "code",
       "source_file": "src/app/core/services/internal-chat.service.ts",
-      "source_location": "L68",
+      "source_location": "L85",
       "_origin": "ast",
       "id": "services_internal_chat_service_internalchatservice_getmessages",
       "community": 78,
@@ -4071,7 +4231,7 @@
       "label": ".sendMessage()",
       "file_type": "code",
       "source_file": "src/app/core/services/internal-chat.service.ts",
-      "source_location": "L87",
+      "source_location": "L104",
       "_origin": "ast",
       "id": "services_internal_chat_service_internalchatservice_sendmessage",
       "community": 78,
@@ -4081,7 +4241,7 @@
       "label": ".markAsRead()",
       "file_type": "code",
       "source_file": "src/app/core/services/internal-chat.service.ts",
-      "source_location": "L182",
+      "source_location": "L199",
       "_origin": "ast",
       "id": "services_internal_chat_service_internalchatservice_markasread",
       "community": 78,
@@ -4091,7 +4251,7 @@
       "label": ".subscribeToMessages()",
       "file_type": "code",
       "source_file": "src/app/core/services/internal-chat.service.ts",
-      "source_location": "L195",
+      "source_location": "L212",
       "_origin": "ast",
       "id": "services_internal_chat_service_internalchatservice_subscribetomessages",
       "community": 78,
@@ -4101,7 +4261,7 @@
       "label": ".getOrCreateConversation()",
       "file_type": "code",
       "source_file": "src/app/core/services/internal-chat.service.ts",
-      "source_location": "L218",
+      "source_location": "L235",
       "_origin": "ast",
       "id": "services_internal_chat_service_internalchatservice_getorcreateconversation",
       "community": 78,
@@ -4114,7 +4274,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "nutrition_calendario_service",
-      "community": 88,
+      "community": 130,
       "norm_label": "calendario.service.ts"
     },
     {
@@ -4124,7 +4284,7 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "nutrition_calendario_service_registroayersnapshot",
-      "community": 88,
+      "community": 130,
       "norm_label": "registroayersnapshot"
     },
     {
@@ -4134,7 +4294,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "nutrition_calendario_service_calendarioservice",
-      "community": 88,
+      "community": 130,
       "norm_label": "calendarioservice"
     },
     {
@@ -4144,7 +4304,7 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "nutrition_calendario_service_calendarioservice_obtenerregistroayer",
-      "community": 88,
+      "community": 130,
       "norm_label": ".obtenerregistroayer()"
     },
     {
@@ -4484,7 +4644,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "admin_layout_admin_layout_component",
-      "community": 18,
+      "community": 74,
       "norm_label": "admin-layout.component.ts"
     },
     {
@@ -4594,7 +4754,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_features_admin_agenda_agenda_component_ts_agenda_agenda_component",
-      "community": 30,
+      "community": 67,
       "norm_label": "agenda.component.ts"
     },
     {
@@ -4604,7 +4764,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "agenda_agenda_component_appointment",
-      "community": 30,
+      "community": 67,
       "norm_label": "appointment"
     },
     {
@@ -6534,7 +6694,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_features_admin_patients_patients_component_ts_patients_patients_component",
-      "community": 67,
+      "community": 148,
       "norm_label": "patients.component.ts"
     },
     {
@@ -7114,7 +7274,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_admin_exceptions_service",
-      "community": 30,
+      "community": 67,
       "norm_label": "admin-exceptions.service.ts"
     },
     {
@@ -7124,7 +7284,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "services_admin_exceptions_service_holiday",
-      "community": 30,
+      "community": 67,
       "norm_label": "holiday"
     },
     {
@@ -7134,7 +7294,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "services_admin_exceptions_service_adminexceptionsservice",
-      "community": 30,
+      "community": 67,
       "norm_label": "adminexceptionsservice"
     },
     {
@@ -7144,7 +7304,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "services_admin_exceptions_service_adminexceptionsservice_getmexicoholidays",
-      "community": 30,
+      "community": 67,
       "norm_label": ".getmexicoholidays()"
     },
     {
@@ -7154,7 +7314,7 @@
       "source_location": "L36",
       "_origin": "ast",
       "id": "services_admin_exceptions_service_adminexceptionsservice_importholidaystosupabase",
-      "community": 30,
+      "community": 67,
       "norm_label": ".importholidaystosupabase()"
     },
     {
@@ -7164,7 +7324,7 @@
       "source_location": "L77",
       "_origin": "ast",
       "id": "services_admin_exceptions_service_adminexceptionsservice_addexception",
-      "community": 30,
+      "community": 67,
       "norm_label": ".addexception()"
     },
     {
@@ -7204,7 +7364,7 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "services_admin_skill8_service_healthprofessionalitem",
-      "community": 67,
+      "community": 148,
       "norm_label": "healthprofessionalitem"
     },
     {
@@ -7214,7 +7374,7 @@
       "source_location": "L43",
       "_origin": "ast",
       "id": "services_admin_skill8_service_adminskill8service",
-      "community": 149,
+      "community": 148,
       "norm_label": "adminskill8service"
     },
     {
@@ -7224,7 +7384,7 @@
       "source_location": "L51",
       "_origin": "ast",
       "id": "services_admin_skill8_service_adminskill8service_gethealthprofessionals",
-      "community": 149,
+      "community": 148,
       "norm_label": ".gethealthprofessionals()"
     },
     {
@@ -7234,7 +7394,7 @@
       "source_location": "L102",
       "_origin": "ast",
       "id": "services_admin_skill8_service_adminskill8service_registerhealthprofessional",
-      "community": 149,
+      "community": 148,
       "norm_label": ".registerhealthprofessional()"
     },
     {
@@ -7244,7 +7404,7 @@
       "source_location": "L140",
       "_origin": "ast",
       "id": "services_admin_skill8_service_adminskill8service_assignpatienttoprofessionals",
-      "community": 149,
+      "community": 148,
       "norm_label": ".assignpatienttoprofessionals()"
     },
     {
@@ -7254,7 +7414,7 @@
       "source_location": "L169",
       "_origin": "ast",
       "id": "services_admin_skill8_service_adminskill8service_uploadinstitutionalasset",
-      "community": 149,
+      "community": 148,
       "norm_label": ".uploadinstitutionalasset()"
     },
     {
@@ -7264,7 +7424,7 @@
       "source_location": "L199",
       "_origin": "ast",
       "id": "services_admin_skill8_service_adminskill8service_getinstitutionalasseturl",
-      "community": 149,
+      "community": 148,
       "norm_label": ".getinstitutionalasseturl()"
     },
     {
@@ -7274,7 +7434,7 @@
       "source_location": "L210",
       "_origin": "ast",
       "id": "services_admin_skill8_service_adminskill8service_listinstitutionalassets",
-      "community": 149,
+      "community": 148,
       "norm_label": ".listinstitutionalassets()"
     },
     {
@@ -7284,7 +7444,7 @@
       "source_location": "L236",
       "_origin": "ast",
       "id": "services_admin_skill8_service_adminskill8service_getorphanedstudents",
-      "community": 149,
+      "community": 148,
       "norm_label": ".getorphanedstudents()"
     },
     {
@@ -7874,7 +8034,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_features_chat_dashboard_dashboard_component_ts_dashboard_dashboard_component",
-      "community": 136,
+      "community": 68,
       "norm_label": "dashboard.component.ts"
     },
     {
@@ -9294,7 +9454,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_features_health_professional_dashboard_dashboard_component_ts_dashboard_dashboard_component",
-      "community": 68,
+      "community": 74,
       "norm_label": "dashboard.component.ts"
     },
     {
@@ -9774,7 +9934,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "consulta_consulta_component",
-      "community": 68,
+      "community": 130,
       "norm_label": "consulta.component.ts"
     },
     {
@@ -10154,7 +10314,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "nutritionist_layout_nutritionist_layout_component",
-      "community": 18,
+      "community": 74,
       "norm_label": "nutritionist-layout.component.ts"
     },
     {
@@ -11674,7 +11834,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "emoji_scale_emoji_scale_component",
-      "community": 81,
+      "community": 136,
       "norm_label": "emoji-scale.component.ts"
     },
     {
@@ -11684,7 +11844,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "emoji_scale_emoji_scale_component_emojiscalecomponent",
-      "community": 81,
+      "community": 136,
       "norm_label": "emojiscalecomponent"
     },
     {
@@ -11694,7 +11854,7 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "emoji_scale_emoji_scale_component_emojiscalecomponent_selectemoji",
-      "community": 81,
+      "community": 136,
       "norm_label": ".selectemoji()"
     },
     {
@@ -11704,7 +11864,7 @@
       "source_location": "L36",
       "_origin": "ast",
       "id": "emoji_scale_emoji_scale_component_emojiscalecomponent_getprogresswidth",
-      "community": 81,
+      "community": 136,
       "norm_label": ".getprogresswidth()"
     },
     {
@@ -11714,7 +11874,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "session_feedback_session_feedback_component",
-      "community": 81,
+      "community": 136,
       "norm_label": "session-feedback.component.ts"
     },
     {
@@ -19155,6 +19315,126 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "scratch/check_faculties.js",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "scratch_check_faculties",
+      "target": "scratch_check_faculties_createclient",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scratch/check_faculties.js",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "scratch_check_faculties",
+      "target": "scratch_check_faculties_run",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scratch/check_faculties.js",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "scratch_check_faculties",
+      "target": "scratch_check_faculties_supabase",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scratch/check_fk.js",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "scratch_check_fk",
+      "target": "scratch_check_fk_createclient",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scratch/check_fk.js",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "scratch_check_fk",
+      "target": "scratch_check_fk_run",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scratch/check_fk.js",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "scratch_check_fk",
+      "target": "scratch_check_fk_supabase",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scratch/check_students.js",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "scratch_check_students",
+      "target": "scratch_check_students_createclient",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scratch/check_students.js",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "scratch_check_students",
+      "target": "scratch_check_students_run",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scratch/check_students.js",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "scratch_check_students",
+      "target": "scratch_check_students_supabase",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scratch/register_student_test.js",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "scratch_register_student_test",
+      "target": "scratch_register_student_test_createclient",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scratch/register_student_test.js",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "scratch_register_student_test",
+      "target": "scratch_register_student_test_run",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scratch/register_student_test.js",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "scratch_register_student_test",
+      "target": "scratch_register_student_test_supabase",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "scratch/test_join.js",
       "source_location": "L1",
       "weight": 1.0,
@@ -23931,9 +24211,9 @@
       "source_file": "src/app/core/services/internal-chat.service.ts",
       "source_location": "L218",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "services_internal_chat_service_internalchatservice",
-      "target": "services_internal_chat_service_internalchatservice_getorcreateconversation",
-      "confidence_score": 1.0
+      "target": "services_internal_chat_service_internalchatservice_getorcreateconversation"
     },
     {
       "relation": "method",
@@ -23972,9 +24252,9 @@
       "source_file": "src/app/core/services/internal-chat.service.ts",
       "source_location": "L254",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "services_internal_chat_service_internalchatservice_getorcreateconversation",
-      "target": "services_internal_chat_service_internalchatservice_getconversations",
-      "confidence_score": 1.0
+      "target": "services_internal_chat_service_internalchatservice_getconversations"
     },
     {
       "relation": "imports_from",
@@ -34027,9 +34307,9 @@
       "source_file": "src/app/features/nutritionist/perfil-paciente/perfil-paciente.component.ts",
       "source_location": "L906",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "perfil_paciente_perfil_paciente_component_perfilpaciente",
-      "target": "perfil_paciente_perfil_paciente_component_perfilpaciente_navigatetowhatsapp",
-      "confidence_score": 1.0
+      "target": "perfil_paciente_perfil_paciente_component_perfilpaciente_navigatetowhatsapp"
     },
     {
       "relation": "method",
@@ -34985,9 +35265,9 @@
       "source_file": "src/app/features/psychologist/patient-profile/patient-profile.component.ts",
       "source_location": "L607",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "patient_profile_patient_profile_component_patientprofilecomponent",
-      "target": "patient_profile_patient_profile_component_patientprofilecomponent_navigatetowhatsapp",
-      "confidence_score": 1.0
+      "target": "patient_profile_patient_profile_component_patientprofilecomponent_navigatetowhatsapp"
     },
     {
       "relation": "method",
@@ -39462,5 +39742,5 @@
       "source_file": "src/app/features/psychologist/psychologist-layout/psychologist-layout.component.html"
     }
   ],
-  "built_at_commit": "1a4da08e18c4f4c57eda71dcf1a66fad08056909"
+  "built_at_commit": "73d4dd95bdd7c2573d1a8179e585abc18e5a0f7f"
 }

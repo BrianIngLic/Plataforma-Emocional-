@@ -6,17 +6,15 @@ const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 async function run() {
-  const { data, error } = await supabase
-    .from('food_diary_entries')
-    .select('*');
-
-  if (error) {
-    console.error('Error:', error);
-    return;
+  const tables = ['food_diary_entries', 'food_diary', 'diario_alimentario', 'diario_alimenticio', 'nutrition_logs', 'diary_entries'];
+  for (const table of tables) {
+    try {
+      const { data, error } = await supabase.from(table).select('*').limit(5);
+      console.log(`Table: ${table} | Error: ${error ? error.message : 'None'} | Data:`, data);
+    } catch (e) {
+      console.log(`Table: ${table} | Exception:`, e.message);
+    }
   }
-
-  console.log('Food diary entries raw data:');
-  console.log(JSON.stringify(data, null, 2));
 }
 
 run();

@@ -342,7 +342,7 @@
           <button mat-button *ngIf="selectedDate !== null" (click)="selectDate(selectedDate)">Ver Todo</button>
         </div>
 
-        <div class="empty-state" *ngIf="displayedDiaryEntries.length === 0 && displayedSessions.length === 0" style="padding: 2rem; text-align: center; color: var(--text-secondary);">
+        <div class="empty-state" *ngIf="displayedDiaryEntries.length === 0 && displayedSessions.length === 0 && displayedFoodEntries.length === 0" style="padding: 2rem; text-align: center; color: var(--text-secondary);">
           <mat-icon style="font-size: 48px; width: 48px; height: 48px; opacity: 0.5; margin-bottom: 1rem;">event_busy</mat-icon>
           <p style="font-size: 1.1rem; font-weight: 500;">Ningún registro</p>
           <p style="font-size: 0.9rem; opacity: 0.8;">El paciente no tiene entradas ni sesiones para esta fecha.</p>

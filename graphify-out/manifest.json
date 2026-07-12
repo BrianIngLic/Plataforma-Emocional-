@@ -20,8 +20,8 @@
     "semantic_hash": ""
   },
   "db/schema.sql": {
-    "mtime": 1783838970.39269,
-    "ast_hash": "a78809c93528d29ad8cc7ef018ce85db",
+    "mtime": 1783885096.6728835,
+    "ast_hash": "e573aba63cfe33c72e25ff0a3825e624",
     "semantic_hash": ""
   },
   "package.json": {
@@ -100,8 +100,8 @@
     "semantic_hash": ""
   },
   "src/app/core/services/diary.service.ts": {
-    "mtime": 1783668250.7843826,
-    "ast_hash": "b2ea0289ee18342069f764992c96a766",
+    "mtime": 1783885077.1087222,
+    "ast_hash": "87e3c468c6d9ce1f5d1b9787ebe67c73",
     "semantic_hash": ""
   },
   "src/app/core/services/faculty.service.ts": {
@@ -445,8 +445,8 @@
     "semantic_hash": "a70cf8f9800814f3488ae124af135091"
   },
   "src/app/features/psychologist/patient-profile/patient-profile.component.html": {
-    "mtime": 1783839614.4804158,
-    "ast_hash": "c1f6058657ef4cf7b12c34106805f484",
+    "mtime": 1783885785.7918868,
+    "ast_hash": "10a356ff48b1af4241ce05cd3f6d45d7",
     "semantic_hash": ""
   },
   "src/app/features/psychologist/patients/patients.component.html": {
@@ -865,8 +865,8 @@
     "semantic_hash": ""
   },
   "src/app/features/nutritionist/consulta/consulta.component.ts": {
-    "mtime": 1783882109.730036,
-    "ast_hash": "ba5a7def68af006c0f5775a7a0420f49",
+    "mtime": 1783885268.8847864,
+    "ast_hash": "6d073ebc46c918868b4b2321e17f3c5e",
     "semantic_hash": ""
   },
   "src/app/features/nutritionist/consulta/consulta.types.ts": {
@@ -1025,8 +1025,8 @@
     "semantic_hash": ""
   },
   "src/app/features/nutritionist/consulta/consulta.component.html": {
-    "mtime": 1783668250.8661184,
-    "ast_hash": "32e7a703358f6eebeb5c351e8b968f05",
+    "mtime": 1783885672.972567,
+    "ast_hash": "40573297b71fc0dbff8e75616042c952",
     "semantic_hash": ""
   },
   "src/app/features/admin/nutritionist-fields/nutritionist-fields.component.ts": {
@@ -1160,8 +1160,18 @@
     "semantic_hash": ""
   },
   "scratch/test_query.js": {
-    "mtime": 1783843526.270068,
-    "ast_hash": "9d1e68613c9f6312081e827fe6ed1032",
+    "mtime": 1783884928.7478375,
+    "ast_hash": "b6706bc25da6b5bbe0bc1af0f909f9d5",
+    "semantic_hash": ""
+  },
+  "db/migration_food_diary_rls.sql": {
+    "mtime": 1783885085.4240315,
+    "ast_hash": "477c39a4d28d16d6122c901021eb68d6",
+    "semantic_hash": ""
+  },
+  "scratch/list_tables.js": {
+    "mtime": 1783885006.992313,
+    "ast_hash": "788a3d983b71d4271847a8d7fddde716",
     "semantic_hash": ""
   }
 }

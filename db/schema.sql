@@ -283,11 +283,18 @@ CREATE TABLE public.food_diary_entries (
 
 ALTER TABLE public.food_diary_entries ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY "food_diary_own"
+CREATE POLICY "food_diary_access"
     ON public.food_diary_entries
     FOR ALL
-    USING  (auth.uid() = student_id)
-    WITH CHECK (auth.uid() = student_id);
+    TO authenticated
+    USING (
+        student_id = auth.uid()
+        OR public.get_auth_role() IN (1, 3, 4)
+    )
+    WITH CHECK (
+        student_id = auth.uid()
+        OR public.get_auth_role() = 1
+    );
 
 CREATE INDEX idx_food_diary_student_date
     ON public.food_diary_entries(student_id, diary_date DESC);
@@ -471,9 +478,18 @@ CREATE POLICY message_own_data ON public.messages FOR ALL USING (
 );
 
 -- Diario
-CREATE POLICY diary_own ON public.diary_entries
-FOR ALL USING (student_id = auth.uid())
-WITH CHECK (student_id = auth.uid());
+CREATE POLICY "diary_access"
+    ON public.diary_entries
+    FOR ALL
+    TO authenticated
+    USING (
+        student_id = auth.uid()
+        OR public.get_auth_role() IN (1, 3, 4)
+    )
+    WITH CHECK (
+        student_id = auth.uid()
+        OR public.get_auth_role() = 1
+    );
 
 -- Políticas para Personal de la Salud (Psicólogos y Nutricionistas):
 -- 1. El personal de la salud puede ver la tabla pública de usuarios si estos son estudiantes (role_id = 2)

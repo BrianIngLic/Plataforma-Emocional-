@@ -20,8 +20,8 @@
     "semantic_hash": ""
   },
   "db/schema.sql": {
-    "mtime": 1783838970.39269,
-    "ast_hash": "a78809c93528d29ad8cc7ef018ce85db",
+    "mtime": 1783885096.6728835,
+    "ast_hash": "e573aba63cfe33c72e25ff0a3825e624",
     "semantic_hash": ""
   },
   "package.json": {
@@ -100,8 +100,8 @@
     "semantic_hash": ""
   },
   "src/app/core/services/diary.service.ts": {
-    "mtime": 1783668250.7843826,
-    "ast_hash": "b2ea0289ee18342069f764992c96a766",
+    "mtime": 1783885077.1087222,
+    "ast_hash": "87e3c468c6d9ce1f5d1b9787ebe67c73",
     "semantic_hash": ""
   },
   "src/app/core/services/faculty.service.ts": {
@@ -130,8 +130,8 @@
     "semantic_hash": ""
   },
   "src/app/features/admin/agenda/agenda.component.ts": {
-    "mtime": 1783668250.8040695,
-    "ast_hash": "c2c1ccdc23e0ee2e490292ab1f338bf9",
+    "mtime": 1783883413.3263366,
+    "ast_hash": "7627b32a4e5d5f338ae0842c66e1acc4",
     "semantic_hash": ""
   },
   "src/app/features/admin/faculties/faculties.component.ts": {
@@ -150,8 +150,8 @@
     "semantic_hash": ""
   },
   "src/app/features/admin/psychologists/psychologists.component.ts": {
-    "mtime": 1783882103.7946055,
-    "ast_hash": "a1d6f92cda7452032e281b96cb6e7aad",
+    "mtime": 1783883367.394651,
+    "ast_hash": "f0569286d53d72a5393c54dd9abe715e",
     "semantic_hash": ""
   },
   "src/app/features/admin/reports/reports.component.ts": {
@@ -375,19 +375,19 @@
     "semantic_hash": ""
   },
   "src/app/features/admin/agenda/agenda.component.html": {
-    "mtime": 1783668250.8010538,
-    "ast_hash": "2206f538e3390513d09bae4a0c632e7d",
+    "mtime": 1783883456.3320813,
+    "ast_hash": "5df7bba562358749bd86ccb34d69112b",
     "semantic_hash": ""
   },
   "src/app/features/admin/faculties/faculties.component.html": {
-    "mtime": 1782856212.5800147,
-    "ast_hash": "8412f999057dd39b44bdd4b349f3c88a",
+    "mtime": 1783883399.182459,
+    "ast_hash": "97570d141987ec45ac317dc21bd04a14",
     "semantic_hash": ""
   },
   "src/app/features/admin/overview/overview.component.html": {
-    "mtime": 1782025438.757483,
-    "ast_hash": "d621f0051976f74bb261c962e1fbd363",
-    "semantic_hash": "d621f0051976f74bb261c962e1fbd363"
+    "mtime": 1783883312.0978594,
+    "ast_hash": "db978183ebddf1e115ec53ec556df298",
+    "semantic_hash": ""
   },
   "src/app/features/admin/patients/patients.component.html": {
     "mtime": 1782775777.2202446,
@@ -395,13 +395,13 @@
     "semantic_hash": ""
   },
   "src/app/features/admin/psychologists/psychologists.component.html": {
-    "mtime": 1783668250.8193293,
-    "ast_hash": "c35106a8b317733bb1d00646242a2476",
+    "mtime": 1783883374.036626,
+    "ast_hash": "8d37dbc62b4749ab218e5fd441287d7e",
     "semantic_hash": ""
   },
   "src/app/features/admin/reports/reports.component.html": {
-    "mtime": 1783668250.8243454,
-    "ast_hash": "46e08b54828e5099ec6ba44ce338cba3",
+    "mtime": 1783883378.1962905,
+    "ast_hash": "d86f820fd5b96072c8b2d9907cfe246e",
     "semantic_hash": ""
   },
   "src/app/features/auth/login/login.component.html": {
@@ -865,8 +865,8 @@
     "semantic_hash": ""
   },
   "src/app/features/nutritionist/consulta/consulta.component.ts": {
-    "mtime": 1783882109.730036,
-    "ast_hash": "ba5a7def68af006c0f5775a7a0420f49",
+    "mtime": 1783885174.810501,
+    "ast_hash": "6979d56c6ef7fb136c8bb59fe6e04d2b",
     "semantic_hash": ""
   },
   "src/app/features/nutritionist/consulta/consulta.types.ts": {
@@ -1025,8 +1025,8 @@
     "semantic_hash": ""
   },
   "src/app/features/nutritionist/consulta/consulta.component.html": {
-    "mtime": 1783668250.8661184,
-    "ast_hash": "32e7a703358f6eebeb5c351e8b968f05",
+    "mtime": 1783884495.3920205,
+    "ast_hash": "ae84ea8f7305a714bea4a1c06cb00d54",
     "semantic_hash": ""
   },
   "src/app/features/admin/nutritionist-fields/nutritionist-fields.component.ts": {
@@ -1085,13 +1085,13 @@
     "semantic_hash": ""
   },
   "src/app/features/admin/directory/directory.component.ts": {
-    "mtime": 1783882097.4869967,
-    "ast_hash": "31ff559f46cbe241cfc796766bac24e4",
+    "mtime": 1783883319.8525548,
+    "ast_hash": "a7619319045cc6965f7cfd53af156e71",
     "semantic_hash": ""
   },
   "src/app/features/admin/directory/directory.component.html": {
-    "mtime": 1783668250.8060553,
-    "ast_hash": "3500cf553a3349b635bb31b3363fb323",
+    "mtime": 1783883359.2293618,
+    "ast_hash": "344757100284b83795b5ad95a7444e71",
     "semantic_hash": ""
   },
   "scratch/test_join.js": {
@@ -1130,8 +1130,8 @@
     "semantic_hash": ""
   },
   "src/app/features/admin/arco-requests/arco-requests.component.html": {
-    "mtime": 1783836684.2688081,
-    "ast_hash": "eae3f41b2179677f29c03ceede3bac45",
+    "mtime": 1783883382.0332062,
+    "ast_hash": "3e06795b34ec8863d33efeb59aa3f353",
     "semantic_hash": ""
   },
   "src/app/shared/components/arco-settings/arco-settings.component.html": {
@@ -1160,8 +1160,18 @@
     "semantic_hash": ""
   },
   "scratch/test_query.js": {
-    "mtime": 1783843526.270068,
-    "ast_hash": "9d1e68613c9f6312081e827fe6ed1032",
+    "mtime": 1783884928.7478375,
+    "ast_hash": "b6706bc25da6b5bbe0bc1af0f909f9d5",
+    "semantic_hash": ""
+  },
+  "db/migration_food_diary_rls.sql": {
+    "mtime": 1783885085.4240315,
+    "ast_hash": "477c39a4d28d16d6122c901021eb68d6",
+    "semantic_hash": ""
+  },
+  "scratch/list_tables.js": {
+    "mtime": 1783885006.992313,
+    "ast_hash": "788a3d983b71d4271847a8d7fddde716",
     "semantic_hash": ""
   }
 }

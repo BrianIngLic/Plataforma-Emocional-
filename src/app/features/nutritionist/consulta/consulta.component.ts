@@ -3,7 +3,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { FormArray, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FeedbackModalComponent } from '../../../shared/components/feedback-modal/feedback-modal.component';
 import { NutricionService, CampoFormulario, ConsultaNutricionRow, NuevaConsultaNutricionPayload } from '../../../core/services/nutrition/nutricion.service';
 import { CalendarioService, RegistroAyerSnapshot } from '../../../core/services/nutrition/calendario.service';
@@ -43,7 +43,8 @@ export class ConsultaComponent implements OnInit {
   }
 
   form: FormGroup<any> = this.fb.group({
-    calorias_totales: new FormControl<number | null>(0, { nonNullable: false, validators: [Validators.min(0)] })
+    calorias_totales: new FormControl<number | null>(0, { nonNullable: false, validators: [Validators.min(0)] }),
+    recordatorio_24h: this.fb.array([])
   }) as FormGroup<any>;
 
   pacienteId = '';
@@ -125,14 +126,18 @@ export class ConsultaComponent implements OnInit {
         if (recordObj && recordObj.additional_notes) {
           try {
             const decrypted = this.crypto.decrypt(recordObj.additional_notes);
-            const parsed = JSON.parse(decrypted);
-            const gen = parsed.general_data || {};
-            celular = gen.celular || pData.mobile_phone || 'N/A';
-            sexo = gen.sexo || 'N/A';
-            fechaNacimiento = gen.fecha_nacimiento || 'N/A';
-            edad = gen.edad ? `${gen.edad} años` : 'N/A';
-            if (gen.antecedentes_familiares) {
-              antecedentesFamiliares = gen.antecedentes_familiares;
+            if (decrypted && !decrypted.startsWith('U2FsdGVkX1')) {
+              const parsed = JSON.parse(decrypted);
+              const gen = parsed.general_data || {};
+              celular = gen.celular || pData.mobile_phone || 'N/A';
+              sexo = gen.sexo || 'N/A';
+              fechaNacimiento = gen.fecha_nacimiento || 'N/A';
+              edad = gen.edad ? `${gen.edad} años` : 'N/A';
+              if (gen.antecedentes_familiares) {
+                antecedentesFamiliares = gen.antecedentes_familiares;
+              }
+            } else {
+              console.warn('loadPatientData: No se pudo descifrar la nota clínica (llave E2EE no disponible).');
             }
           } catch(e) {
             console.warn('Error decrypting notes for general data:', e);
@@ -174,17 +179,8 @@ export class ConsultaComponent implements OnInit {
     try {
       let fetchedCampos = await this.nutricionService.obtenerCamposFormulario();
 
-      // Ensure antecedentes_familiares is defined in fields catalog
-      if (!fetchedCampos.some(c => c.clave === 'antecedentes_familiares')) {
-        fetchedCampos.push({
-          id: 'manual-antecedentes',
-          bloque: 'Bloque 1 - Datos Específicos',
-          clave: 'antecedentes_familiares',
-          etiqueta: 'Antecedentes Clínicos Familiares',
-          tipo_campo: 'rich-text',
-          activo: true
-        });
-      }
+      // ponytail: Removed manual injection of antecedentes_familiares to avoid duplication with shared field panel
+
 
       // Ensure comentarios_clinicos is defined in fields catalog
       if (!fetchedCampos.some(c => c.clave === 'comentarios_clinicos')) {
@@ -216,6 +212,7 @@ export class ConsultaComponent implements OnInit {
       if (existingConsulta) {
         this.ultimaConsulta = existingConsulta;
         this.patchFromLastConsultation(existingConsulta);
+        await this.loadRecordatorio24h(existingConsulta);
         const de = existingConsulta.datos_especificos || {};
         if (de['firma_digital']) {
           this.isSigned = true;
@@ -232,6 +229,7 @@ export class ConsultaComponent implements OnInit {
         if (this.ultimaConsulta) {
           this.patchFromLastConsultation(this.ultimaConsulta);
         }
+        await this.loadRecordatorio24h(null);
       }
 
       const grouped = this.nutricionService.agruparCamposPorBloque(this.campos);
@@ -412,7 +410,13 @@ export class ConsultaComponent implements OnInit {
 
   async guardarConsulta() {
     if (!this.isSigned) {
-      alert('La nota de consulta debe estar firmada electrónicamente con META SEAL antes de poder guardarse como final.');
+      this.dialog.open(SimpleDialogComponent, {
+        data: {
+          type: 'warning',
+          title: 'Firma Requerida',
+          message: 'La nota de consulta debe estar firmada digitalmente antes de poder guardarse como final.'
+        }
+      });
       return;
     }
 
@@ -424,10 +428,10 @@ export class ConsultaComponent implements OnInit {
     this.saving = true;
 
     try {
-      const registroAyer = await this.calendarioService.obtenerRegistroAyer(this.pacienteId);
-      this.snapshotAyer = registroAyer;
-
       const valores = this.form.getRawValue();
+      const recordatorioVal = valores['recordatorio_24h'] || [];
+      this.snapshotAyer = recordatorioVal;
+
       const datosEspecificos: Record<string, unknown> = {};
       const consumoSemanal: Record<string, unknown> = {};
 
@@ -461,7 +465,7 @@ export class ConsultaComponent implements OnInit {
         calorias_totales: Number(valores.calorias_totales || 0),
         datos_especificos: datosEspecificos,
         consumo_semanal: consumoSemanal,
-        recordatorio_24h: registroAyer,
+        recordatorio_24h: recordatorioVal,
         appointment_id: this.sessionId || null
       };
 
@@ -478,11 +482,25 @@ export class ConsultaComponent implements OnInit {
           .eq('id', this.sessionId);
       }
 
-      alert('Consulta nutricional guardada con éxito.');
-      this.router.navigate(['/nutritionist/pacientes', this.pacienteId]);
+      const dialogRef = this.dialog.open(SimpleDialogComponent, {
+        data: {
+          type: 'success',
+          title: 'Consulta Guardada',
+          message: 'Consulta nutricional guardada con éxito.'
+        }
+      });
+      dialogRef.afterClosed().subscribe(() => {
+        this.router.navigate(['/nutritionist/pacientes', this.pacienteId]);
+      });
     } catch (error) {
       console.error('Error guardando consulta nutricional:', error);
-      alert('No se pudo guardar la consulta.');
+      this.dialog.open(SimpleDialogComponent, {
+        data: {
+          type: 'error',
+          title: 'Error al Guardar',
+          message: 'No se pudo guardar la consulta nutricional. Intente nuevamente.'
+        }
+      });
     } finally {
       this.saving = false;
     }
@@ -625,8 +643,140 @@ export class ConsultaComponent implements OnInit {
     this.router.navigate(['/nutritionist/pacientes', this.pacienteId]);
   }
 
+  // ponytail: Added methods to load and manage the editable 24h recall from patient's food diary
+  get recordatorio24hArray(): FormArray {
+    return this.form.get('recordatorio_24h') as FormArray;
+  }
+
+  agregarFilaRecordatorio() {
+    const todayStr = new Date().toISOString().split('T')[0];
+    this.recordatorio24hArray.push(this.fb.group({
+      diary_date: [todayStr],
+      meal_time: ['12:00'],
+      what_i_ate: [''],
+      mood_before: [''],
+      mood_after: ['']
+    }));
+  }
+
+  eliminarFilaRecordatorio(index: number) {
+    this.recordatorio24hArray.removeAt(index);
+  }
+
+  stripHtml(html: string): string {
+    if (!html) return '';
+    return html.replace(/<[^>]*>/g, ' ').replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim();
+  }
+
+  private async loadRecordatorio24h(existingConsulta?: ConsultaNutricionRow | null) {
+    const arr = this.recordatorio24hArray;
+    while (arr.length) arr.removeAt(0);
+
+    if (existingConsulta && existingConsulta.recordatorio_24h) {
+      const records = existingConsulta.recordatorio_24h;
+      if (Array.isArray(records)) {
+        for (const item of records) {
+          arr.push(this.fb.group({
+            diary_date: [item.diary_date || ''],
+            meal_time: [item.meal_time || ''],
+            what_i_ate: [item.what_i_ate || ''],
+            mood_before: [item.mood_before || ''],
+            mood_after: [item.mood_after || '']
+          }));
+        }
+        return;
+      }
+    }
+
+    try {
+      const yesterdayStr = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+      const todayStr = new Date().toISOString().split('T')[0];
+
+      console.log('loadRecordatorio24h: Paciente ID =', this.pacienteId);
+      console.log('loadRecordatorio24h: Rango de fechas =', yesterdayStr, 'a', todayStr);
+
+      const { data: diaryEntries, error } = await this.supabaseService.supabase
+        .from('food_diary_entries')
+        .select('diary_date, meal_time, what_i_ate, mood_before, mood_after')
+        .eq('student_id', this.pacienteId)
+        .gte('diary_date', yesterdayStr)
+        .lte('diary_date', todayStr)
+        .order('diary_date', { ascending: false })
+        .order('meal_time', { ascending: true });
+
+      console.log('loadRecordatorio24h: Query con fechas - Result =', diaryEntries, 'Error =', error);
+
+      if (error) throw error;
+
+      if (diaryEntries && diaryEntries.length > 0) {
+        for (const item of diaryEntries) {
+          arr.push(this.fb.group({
+            diary_date: [item.diary_date || ''],
+            meal_time: [item.meal_time ? item.meal_time.substring(0, 5) : ''],
+            what_i_ate: [this.stripHtml(item.what_i_ate || '')],
+            mood_before: [item.mood_before || ''],
+            mood_after: [item.mood_after || '']
+          }));
+        }
+      } else {
+        // Test query without date filter to see if it is a date issue or RLS
+        const { data: allEntries, error: allErr } = await this.supabaseService.supabase
+          .from('food_diary_entries')
+          .select('diary_date, meal_time, what_i_ate, mood_before, mood_after')
+          .eq('student_id', this.pacienteId)
+          .limit(5);
+
+        console.log('loadRecordatorio24h: Query SIN filtro fechas - Result =', allEntries, 'Error =', allErr);
+
+        if (allEntries && allEntries.length > 0) {
+          console.warn('loadRecordatorio24h: Cargando sin filtro de fechas debido a disparidad de zonas horarias.');
+          for (const item of allEntries) {
+            arr.push(this.fb.group({
+              diary_date: [item.diary_date || ''],
+              meal_time: [item.meal_time ? item.meal_time.substring(0, 5) : ''],
+              what_i_ate: [this.stripHtml(item.what_i_ate || '')],
+              mood_before: [item.mood_before || ''],
+              mood_after: [item.mood_after || '']
+            }));
+          }
+        } else {
+          this.agregarFilaRecordatorio();
+        }
+      }
+    } catch (err) {
+      console.error('Error fetching food diary entries:', err);
+      this.agregarFilaRecordatorio();
+    }
+  }
+
   private esBloqueDos(bloque: string): boolean {
     const value = (bloque || '').toLowerCase();
     return value.includes('2') || value.includes('semanal') || value.includes('consumo');
+  }
+}
+
+@Component({
+  selector: 'app-simple-dialog',
+  template: `
+    <div style="padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem; max-width: 380px; background: var(--bg-card); color: var(--text-primary);">
+      <div style="display: flex; align-items: center; gap: 0.6rem;" [style.color]="data.type === 'error' ? '#ef4444' : data.type === 'warning' ? '#f59e0b' : '#10b981'">
+        <mat-icon style="font-size: 28px; width: 28px; height: 28px;">{{ data.type === 'error' ? 'error' : data.type === 'warning' ? 'warning' : 'check_circle' }}</mat-icon>
+        <h3 style="margin: 0; font-size: 1.2rem; font-weight: 700; color: var(--text-primary);">{{ data.title }}</h3>
+      </div>
+      <p style="margin: 0; font-size: 0.95rem; color: var(--text-secondary); line-height: 1.4;">{{ data.message }}</p>
+      <div style="display: flex; justify-content: flex-end; margin-top: 0.5rem;">
+        <button (click)="close()" [style.background]="data.type === 'error' ? '#ef4444' : data.type === 'warning' ? '#f59e0b' : '#10b981'" style="color: white; border: none; border-radius: 8px; padding: 0.55rem 1.35rem; font-weight: 700; cursor: pointer; transition: opacity 0.2s;" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">Aceptar</button>
+      </div>
+    </div>
+  `,
+  standalone: true,
+  imports: [MatIconModule]
+})
+export class SimpleDialogComponent {
+  private dialogRef = inject(MatDialogRef<SimpleDialogComponent>);
+  public data = inject(MAT_DIALOG_DATA);
+
+  close() {
+    this.dialogRef.close();
   }
 }

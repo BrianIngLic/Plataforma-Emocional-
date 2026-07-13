@@ -55,9 +55,9 @@
           <div class="day-name">Dom</div>
           <div class="calendar-day empty" *ngFor="let blank of blankDays"></div>
           <div class="calendar-day" *ngFor="let day of calendarDays"
-               [ngClass]="{'has-entry': getMoodForDay(day) !== null, 'selected': selectedDay === day}"
-               (click)="selectDate(day)"
-               style="cursor: pointer;">
+               [ngClass]="{'has-entry': getMoodForDay(day) !== null, 'selected': selectedDay === day, 'future-day': isFutureDay(day)}"
+               (click)="!isFutureDay(day) && selectDate(day)"
+               [style.cursor]="isFutureDay(day) ? 'not-allowed' : 'pointer'">
             <span class="date">{{ day }}</span>
             <span class="mood-indicator" *ngIf="getMoodForDay(day)">{{ getMoodForDay(day) }}</span>
           </div>

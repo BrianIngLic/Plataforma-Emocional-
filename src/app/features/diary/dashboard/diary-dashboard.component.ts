@@ -338,6 +338,14 @@ export class DiaryDashboardComponent implements OnInit {
     this.calendarDays = Array.from({ length: lastDay.getDate() }, (_, i) => i + 1);
   }
 
+  isFutureDay(day: number): boolean {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const checkDate = new Date(this.year, this.currentDate.getMonth(), day);
+    checkDate.setHours(0, 0, 0, 0);
+    return checkDate.getTime() > today.getTime();
+  }
+
   getMoodForDay(day: number): string | null {
     const entry = this.entries().find(e => {
       const d = new Date(e.date);
@@ -347,6 +355,8 @@ export class DiaryDashboardComponent implements OnInit {
   }
 
   async selectDate(day: number) {
+    if (this.isFutureDay(day)) return;
+
     if (this.selectedDay === day) {
       this.selectedDay = null;
       // Por defecto, recargar comidas de hoy

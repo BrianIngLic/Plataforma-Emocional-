@@ -31,7 +31,7 @@ import { CryptoService } from '../../../core/services/crypto.service';
           <div class="logo-area" style="display: flex; align-items: center; gap: 0.75rem;">
             <img *ngIf="institutionalLogoUrl" [src]="institutionalLogoUrl" alt="Logo Institucional" style="max-height: 54px; max-width: 130px; object-fit: contain;" />
             <div>
-              <div class="doc-title" style="font-size: 1.25rem; font-weight: 700; color: var(--text-primary); letter-spacing: 0.5px; margin-bottom: 0.25rem;">NOTA DE EVOLUCIÓN CLÍNICA</div>
+              <div class="doc-title" style="font-size: 1.25rem; font-weight: 700; color: var(--text-primary); letter-spacing: 0.5px; margin-bottom: 0.25rem;">{{ mode === 'discharge' ? 'NOTA DE ALTA Y CIERRE CLÍNICO' : 'NOTA DE EVOLUCIÓN CLÍNICA' }}</div>
               <div style="font-size: 0.9rem; color: #64748b; font-weight: 500;">Expediente Clínico del Estudiante</div>
             </div>
           </div>
@@ -148,8 +148,7 @@ import { CryptoService } from '../../../core/services/crypto.service';
               </quill-editor>
             </div>
           </div>
-
-          <!-- Redactor de Notas Clínicas (Quill) -->
+             <!-- Redactor de Notas Clínicas (Quill) -->
           <div class="editor-section">
             <h3 class="section-title">Evolución y Notas de la Sesión</h3>
             <quill-editor 
@@ -161,22 +160,22 @@ import { CryptoService } from '../../../core/services/crypto.service';
             </quill-editor>
           </div>
 
-          <!-- Firma Electrónica META SEAL -->
+          <!-- Firma Electrónica -->
           <div class="panel signature-panel" style="margin-top: 1.5rem; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.5rem;">
             <div class="panel-header" style="display: flex; align-items: center; gap: 0.5rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem; margin-bottom: 1rem;">
               <h3 class="section-title" style="display: flex; align-items: center; gap: 0.5rem; margin: 0; font-size: 1.15rem; font-weight: 700; color: var(--text-primary);">
-                <mat-icon style="color: #0ea5e9;">verified_user</mat-icon> Firma Electrónica Autorizada (META SEAL)
+                <mat-icon style="color: #0ea5e9;">verified_user</mat-icon> {{ mode === 'discharge' ? 'Firma Electrónica Autorizada' : 'Firma Electrónica Autorizada (META SEAL)' }}
               </h3>
             </div>
 
             <div style="display: flex; flex-direction: column; gap: 1rem;">
               <p style="color: var(--text-secondary); font-size: 0.85rem; margin: 0;">
-                Al firmar esta nota clínica, se generará un sello digital seguro que certificará la autenticidad y el estado del expediente en la fecha actual. Una vez firmada, el contenido de la nota y los antecedentes familiares quedarán bloqueados (snapshot) y no podrán modificarse.
+                Al firmar esta nota clínica, se generará una firma digital que certificará la autenticidad y el estado del expediente en la fecha actual. Una vez firmada, el contenido de la nota y los antecedentes familiares quedarán bloqueados (snapshot) y no podrán modificarse.
               </p>
 
               <div *ngIf="!isSigned" style="display: flex; align-items: center; gap: 1rem;">
                 <button type="button" (click)="signWithMetaSeal()" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 0.5rem; border: none; border-radius: 10px; padding: 0.75rem 1.5rem; font-weight: 700; cursor: pointer; background: #0ea5e9; color: white; transition: all 0.2s; box-shadow: 0 4px 6px rgba(14, 165, 233, 0.15);">
-                  <mat-icon>fingerprint</mat-icon> Firmar con META SEAL
+                  <mat-icon>fingerprint</mat-icon> {{ mode === 'discharge' ? 'Firmar Nota' : 'Firmar con META SEAL' }}
                 </button>
                 <span style="color: var(--text-secondary); font-size: 0.85rem; font-style: italic;">Nota pendiente de firma digital.</span>
               </div>
@@ -190,7 +189,7 @@ import { CryptoService } from '../../../core/services/crypto.service';
                       Firmado por: <strong>{{ signatureName }}</strong> el {{ signatureDate | date:'dd/MM/yyyy HH:mm:ss' }}
                     </p>
                     <p style="margin: 0.2rem 0 0; color: var(--text-secondary); font-family: monospace; font-size: 0.7rem; word-break: break-all;">
-                      Sello: <span style="color: #10b981;">{{ signatureSeal }}</span>
+                      {{ mode === 'discharge' ? 'Código de Verificación' : 'Sello' }}: <span style="color: #10b981;">{{ signatureSeal }}</span>
                     </p>
                   </div>
                 </div>
@@ -204,14 +203,14 @@ import { CryptoService } from '../../../core/services/crypto.service';
 
         <!-- Botones de Acción (Pie de página) -->
         <div class="sheet-footer" *ngIf="!isReadOnly && !loading">
-          <button class="btn btn-secondary" (click)="markNoShow()" [disabled]="loading">
+          <button *ngIf="mode !== 'discharge'" class="btn btn-secondary" (click)="markNoShow()" [disabled]="loading">
             <mat-icon>person_off</mat-icon> Marcar Inasistencia
           </button>
           
-          <div class="right-actions">
+          <div class="right-actions" style="margin-left: auto;">
             <button class="btn btn-text" (click)="goBack()">Cancelar</button>
             <button class="btn btn-primary" (click)="saveNote()" [disabled]="loading || !notesContent.trim()">
-              <mat-icon>save</mat-icon> Guardar y Finalizar Cita
+              <mat-icon>save</mat-icon> {{ mode === 'discharge' ? 'Finalizar Alta' : 'Guardar y Finalizar Cita' }}
             </button>
           </div>
         </div>
@@ -241,6 +240,7 @@ export class ClinicalNoteComponent implements OnInit {
   patient: any = null;
   loading = true;
   isReadOnly = false;
+  mode: string | null = null;
 
   currentDate = new Date();
   institutionalLogoUrl: string | null = null;
@@ -280,6 +280,7 @@ export class ClinicalNoteComponent implements OnInit {
 
   async ngOnInit() {
     this.appointmentId = this.route.snapshot.paramMap.get('id') || '';
+    this.mode = this.route.snapshot.queryParamMap.get('mode') || null;
     if (this.appointmentId) {
       await this.loadData();
     }
@@ -302,14 +303,14 @@ export class ClinicalNoteComponent implements OnInit {
         this.isReadOnly = true;
         this.notesContent = this.appointment.notes || '';
         
-        if (this.notesContent && this.notesContent.includes('META-SEAL-SECURE-SIGNATURE-SHA256')) {
+        if (this.notesContent && (this.notesContent.includes('META-SEAL-SECURE-SIGNATURE-SHA256') || this.notesContent.includes('Firma Digital Autorizada:'))) {
           this.isSigned = true;
           const nameMatch = this.notesContent.match(/Firmado por:<\/strong> ([^e\n<]+)/);
           const dateMatch = this.notesContent.match(/en fecha ([^<]+)/);
-          const sealMatch = this.notesContent.match(/META-SEAL-SECURE-SIGNATURE-SHA256: ([A-Z0-9-]+)/);
+          const sealMatch = this.notesContent.match(/(?:META-SEAL-SECURE-SIGNATURE-SHA256|Firma Digital Autorizada): ([A-Z0-9-]+)/);
 
           this.signatureName = nameMatch ? nameMatch[1].trim() : 'Especialista';
-          this.signatureSeal = sealMatch ? `META-SEAL-SECURE-SIGNATURE-SHA256: ${sealMatch[1].trim()}` : '';
+          this.signatureSeal = sealMatch ? `${sealMatch[0].trim()}` : '';
           this.signatureDate = dateMatch ? new Date() : new Date();
 
           // Extract snapshotted family history content
@@ -318,6 +319,8 @@ export class ClinicalNoteComponent implements OnInit {
             this.antecedentesContent = antMatch[1].trim();
           }
         }
+      } else if (this.mode === 'discharge') {
+        this.notesContent = '<p><strong>Nota de Alta / Cierre de Tratamiento:</strong> </p><p></p>';
       }
 
       // Fetch Patient (User -> profiles)
@@ -402,7 +405,7 @@ export class ClinicalNoteComponent implements OnInit {
 
   async saveNote() {
     if (!this.isSigned) {
-      alert('La nota clínica debe estar firmada electrónicamente con META SEAL antes de poder guardarse como final.');
+      alert(this.mode === 'discharge' ? 'La nota de alta debe estar firmada electrónicamente antes de poder guardarse como final.' : 'La nota clínica debe estar firmada electrónicamente con META SEAL antes de poder guardarse como final.');
       return;
     }
 
@@ -410,7 +413,13 @@ export class ClinicalNoteComponent implements OnInit {
 
     // Append signature and snapshot to notesContent HTML
     const formattedDate = this.signatureDate ? this.signatureDate.toLocaleString() : new Date().toLocaleString();
-    const signatureHtml = `
+    const signatureHtml = this.mode === 'discharge' ? `
+      <div class="signature-block" style="margin-top: 2rem; border-top: 2px dashed #dc2626; padding-top: 1rem; color: #334155;">
+        <p><strong>Firmado Electrónicamente:</strong></p>
+        <p><strong>Código de Verificación:</strong> <span style="font-family: monospace; color: #16a34a;">${this.signatureSeal}</span></p>
+        <p><strong>Firmado por:</strong> ${this.signatureName} en fecha ${formattedDate}</p>
+      </div>
+    ` : `
       <div class="meta-seal-signature-block" style="margin-top: 2rem; border-top: 2px dashed #0ea5e9; padding-top: 1rem; color: #334155;">
         <p><strong>Firmado Electrónicamente con META SEAL:</strong></p>
         <p><strong>Sello Digital:</strong> <span style="font-family: monospace; color: #10b981;">${this.signatureSeal}</span></p>
@@ -429,6 +438,37 @@ export class ClinicalNoteComponent implements OnInit {
       .update({ status: 'completed', notes: finalNotes })
       .eq('id', this.appointmentId);
       
+    if (!error && this.mode === 'discharge') {
+      try {
+        const { data: { user } } = await this.supabase.auth.getUser();
+        if (user) {
+          const { data: userData } = await this.supabase
+            .from('users')
+            .select('role_id')
+            .eq('id', user.id)
+            .single();
+
+          const updatePayload: any = {};
+          if (userData?.role_id === 3) {
+            updatePayload.primary_psychologist_id = null;
+          } else if (userData?.role_id === 4) {
+            updatePayload.primary_nutritionist_id = null;
+          }
+
+          const { error: disassociateError } = await this.supabase
+            .from('student_clinical_records')
+            .update(updatePayload)
+            .eq('student_id', this.patient.student_id);
+
+          if (disassociateError) {
+            console.error('Error desvinculando especialista:', disassociateError);
+          }
+        }
+      } catch (disError) {
+        console.error('Error al desasociar:', disError);
+      }
+    }
+
     this.loading = false;
     if (error) {
       console.error(error);
@@ -449,21 +489,37 @@ export class ClinicalNoteComponent implements OnInit {
         .eq('user_id', user.id)
         .single();
 
+      let titlePrefix = 'Psic.';
+      const { data: userRole } = await this.supabase
+        .from('users')
+        .select('role_id')
+        .eq('id', user.id)
+        .single();
+        
+      if (userRole && userRole.role_id === 4) {
+        titlePrefix = 'Nutr.';
+      }
+
       const name = profProfile 
-        ? `Psic. ${profProfile.first_name} ${profProfile.last_name}` 
-        : `Psicólogo (ID: ${user.id.substring(0,8)})`;
+        ? `${titlePrefix} ${profProfile.first_name} ${profProfile.last_name}` 
+        : `Especialista (ID: ${user.id.substring(0,8)})`;
 
       this.signatureName = name;
       this.signatureDate = new Date();
       
-      const rawString = `${user.id}-${this.patient?.student_id}-${this.signatureDate.toISOString()}-META-SEAL-SECURE`;
+      const rawString = `${user.id}-${this.patient?.student_id}-${this.signatureDate.toISOString()}-SECURE`;
       let hash = 0;
       for (let i = 0; i < rawString.length; i++) {
         hash = (hash << 5) - hash + rawString.charCodeAt(i);
         hash |= 0;
       }
       const hexHash = Math.abs(hash).toString(16).toUpperCase().padStart(8, '0');
-      this.signatureSeal = `META-SEAL-SECURE-SIGNATURE-SHA256: ${hexHash}-${this.patient?.student_id?.substring(0, 8).toUpperCase()}`;
+
+      if (this.mode === 'discharge') {
+        this.signatureSeal = `${hexHash}-${this.patient?.student_id?.substring(0, 8).toUpperCase()}`;
+      } else {
+        this.signatureSeal = `META-SEAL-SECURE-SIGNATURE-SHA256: ${hexHash}-${this.patient?.student_id?.substring(0, 8).toUpperCase()}`;
+      }
 
       this.isSigned = true;
       this.isEditingAntecedentes = false;

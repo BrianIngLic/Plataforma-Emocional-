@@ -27,6 +27,7 @@ export class OverviewComponent implements OnInit {
   ];
 
   patientsByFaculty: { faculty: string, patients: number, color: string }[] = [];
+  virtualQueueByFaculty: { faculty: string, psychologists: number, nutritionists: number }[] = [];
 
   occupancyByPsychologist = [
     { name: 'Cargando datos...', patients: 0, capacity: 1, pct: 0 }
@@ -134,6 +135,9 @@ export class OverviewComponent implements OnInit {
         borderRadius: 4
       }]
     };
+
+    // Obtener datos de la fila de espera virtual
+    this.virtualQueueByFaculty = await this.adminStats.getVirtualQueueByFaculty();
 
     this.loading = false;
   }

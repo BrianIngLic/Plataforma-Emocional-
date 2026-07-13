@@ -240,6 +240,20 @@
       box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
       transform: scale(1.08);
     }
+    &.future-day {
+      opacity: 0.35;
+      pointer-events: none;
+      background: transparent !important;
+      color: var(--text-secondary) !important;
+      border: none !important;
+      box-shadow: none !important;
+
+      &:hover {
+        transform: none !important;
+        box-shadow: none !important;
+        background: transparent !important;
+      }
+    }
     
     .mood-indicator {
       font-size: 12px;

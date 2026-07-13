@@ -27,11 +27,12 @@ CREATE TABLE public.achievements (
     category_id UUID REFERENCES public.achievement_categories(id) ON DELETE CASCADE,
     title VARCHAR(255) NOT NULL,
     description TEXT NOT NULL,
-    points INTEGER DEFAULT 10,
-    badge_url TEXT,
-    criteria_type VARCHAR(50), -- Ej. 'SESSIONS_ATTENDED', 'DIARY_ENTRIES', 'STREAK', 'CUSTOM_GOAL'
-    criteria_value INTEGER DEFAULT 1, -- Cantidad requerida para desbloquear el logro
-    is_active BOOLEAN DEFAULT TRUE,
+    xp_value INTEGER DEFAULT 10,
+    badge_image_url TEXT,
+    requirement_type VARCHAR(50), -- Ej. 'SESSIONS_ATTENDED', 'DIARY_ENTRIES', 'STREAK', 'CUSTOM_GOAL'
+    requirement_value INTEGER DEFAULT 1, -- Cantidad requerida para desbloquear el logro
+    creator_role VARCHAR(50),
+    creator_id UUID,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
@@ -41,13 +42,15 @@ CREATE TABLE public.user_achievements (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
     achievement_id UUID NOT NULL REFERENCES public.achievements(id) ON DELETE CASCADE,
-    earned_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()),
-    progress INTEGER DEFAULT 0, -- Progreso actual hacia el criteria_value
+    unlocked_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()),
+    progress INTEGER DEFAULT 0, -- Progreso actual hacia el requirement_value
     is_completed BOOLEAN DEFAULT FALSE,
+    earned_at TIMESTAMP WITH TIME ZONE,
     awarded_by UUID REFERENCES public.users(id) ON DELETE SET NULL, -- Clínico/Admin que lo otorgó (si fue manual)
     notes TEXT, -- Notas de felicitación o contexto clínico
     UNIQUE(user_id, achievement_id)
 );
+
 
 -- =========================================================================================
 -- 2. CHAT INTERNO ADMINISTRATIVO/MÉDICO Y WEBHOOKS (META WHATSAPP INTEGRATION)

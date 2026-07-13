@@ -55,9 +55,9 @@
           <div class="day-name">Dom</div>
           <div class="calendar-day empty" *ngFor="let blank of blankDays"></div>
           <div class="calendar-day" *ngFor="let day of calendarDays"
-               [ngClass]="{'has-entry': getMoodForDay(day) !== null, 'selected': selectedDay === day}"
-               (click)="selectDate(day)"
-               style="cursor: pointer;">
+               [ngClass]="{'has-entry': getMoodForDay(day) !== null, 'selected': selectedDay === day, 'future-day': isFutureDay(day)}"
+               (click)="!isFutureDay(day) && selectDate(day)"
+               [style.cursor]="isFutureDay(day) ? 'not-allowed' : 'pointer'">
             <span class="date">{{ day }}</span>
             <span class="mood-indicator" *ngIf="getMoodForDay(day)">{{ getMoodForDay(day) }}</span>
           </div>
@@ -68,12 +68,18 @@
         <div class="history-list">
           <h3>{{ selectedDay ? 'Entrada del ' + selectedDay + ' de ' + monthName : 'Historial Reciente' }}</h3>
           <div class="history-card" *ngFor="let entry of displayedEntries">
-            <div class="card-header">
+            <div class="card-header" style="position: relative;">
               <span class="date">{{ entry.date | date:'dd/MM/yyyy HH:mm' }}</span>
-              <div class="moods">
+              <div class="moods" style="margin-right: 32px;">
                 <span *ngFor="let mood of entry.moods" class="mood-chip">{{ mood }}</span>
                 <span *ngIf="entry.sleepHours" class="sleep-chip">🌙 {{ entry.sleepHours }}h sueño</span>
               </div>
+              <button class="action-btn edit" 
+                      (click)="editDiaryEntry(entry)" 
+                      title="Editar diario emocional" 
+                      style="position: absolute; right: 0; top: 50%; transform: translateY(-50%); background: transparent; border: none; color: var(--text-secondary); cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 4px; border-radius: 4px; transition: background 0.2s;">
+                <mat-icon style="font-size: 18px; width: 18px; height: 18px;">edit</mat-icon>
+              </button>
             </div>
             <div class="content" [innerHTML]="entry.content"></div>
           </div>
@@ -94,7 +100,7 @@
             <mat-icon>favorite</mat-icon>
             <span>Estado Emocional del Día</span>
           </div>
-          <h2>¿Cómo te sientes hoy?</h2>
+          <h2>{{ editingDiaryId() ? 'Editar Entrada de Diario' : '¿Cómo te sientes hoy?' }}</h2>
           <p class="subtitle">Selecciona las emociones que mejor te describen en este momento (puedes marcar varias).</p>
 
           <div class="mood-tracker">
@@ -133,9 +139,14 @@
               <mat-icon>lock</mat-icon>
               <span>Tu diario es privado y analizado por IA. Solo en alto riesgo se alertará a tu psicólogo para cuidarte.</span>
             </p>
-            <button mat-flat-button color="primary" class="save-btn" (click)="saveDiary()">
-              Guardar Entrada Emocional
-            </button>
+            <div style="display: flex; gap: 12px;">
+              <button *ngIf="editingDiaryId()" mat-stroked-button color="warn" (click)="cancelDiaryEdit()">
+                Cancelar Edición
+              </button>
+              <button mat-flat-button color="primary" class="save-btn" (click)="saveDiary()">
+                {{ editingDiaryId() ? 'Actualizar Entrada Emocional' : 'Guardar Entrada Emocional' }}
+              </button>
+            </div>
           </div>
         </div>
 

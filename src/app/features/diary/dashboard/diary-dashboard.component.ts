@@ -68,6 +68,7 @@ export class DiaryDashboardComponent implements OnInit {
   selectedMoods: string[] = [];
   selectedSleep: number | null = null;
   diaryContent = '';
+  editingDiaryId = signal<string | null>(null);
 
   // ─── Estado: UI general ───────────────────────────────────────────
   streakDays = 5;
@@ -167,17 +168,44 @@ export class DiaryDashboardComponent implements OnInit {
     }
   }
 
+  editDiaryEntry(entry: any) {
+    this.editingDiaryId.set(entry.id);
+    this.diaryContent = entry.content;
+    this.selectedMoods = [...entry.moods];
+    this.selectedSleep = entry.sleepHours;
+    setTimeout(() => {
+      document.querySelector('.editor-container')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
+  }
+
+  cancelDiaryEdit() {
+    this.editingDiaryId.set(null);
+    this.diaryContent = '';
+    this.selectedMoods = [];
+    this.selectedSleep = null;
+  }
+
   async saveDiary() {
     if (this.diaryContent.trim() && (this.selectedMoods.length > 0 || this.selectedSleep !== null)) {
-      await this.diaryService.saveEntry(this.diaryContent, this.selectedMoods, this.selectedSleep);
+      const diaryId = this.editingDiaryId();
+      if (diaryId) {
+        await this.diaryService.updateEntry(diaryId, this.diaryContent, this.selectedMoods, this.selectedSleep);
+        this.editingDiaryId.set(null);
+        this.dialog.open(FeedbackModalComponent, {
+          width: '420px',
+          data: { type: 'success', title: '¡Entrada Actualizada!', message: '🌸 Tu entrada de diario emocional ha sido actualizada exitosamente.', btnText: 'Aceptar' }
+        });
+      } else {
+        await this.diaryService.saveEntry(this.diaryContent, this.selectedMoods, this.selectedSleep);
+        this.streakDays++;
+        this.dialog.open(FeedbackModalComponent, {
+          width: '420px',
+          data: { type: 'success', title: '¡Entrada Guardada!', message: '🌸 Gracias por dedicarte este momento de compasión y reflexión. Tu racha se ha fortalecido.', btnText: 'Aceptar' }
+        });
+      }
       this.diaryContent  = '';
       this.selectedMoods = [];
       this.selectedSleep = null;
-      this.streakDays++;
-      this.dialog.open(FeedbackModalComponent, {
-        width: '420px',
-        data: { type: 'success', title: '¡Entrada Guardada!', message: '🌸 Gracias por dedicarte este momento de compasión y reflexión. Tu racha se ha fortalecido.', btnText: 'Aceptar' }
-      });
     } else {
       this.dialog.open(FeedbackModalComponent, {
         width: '420px',
@@ -310,6 +338,14 @@ export class DiaryDashboardComponent implements OnInit {
     this.calendarDays = Array.from({ length: lastDay.getDate() }, (_, i) => i + 1);
   }
 
+  isFutureDay(day: number): boolean {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const checkDate = new Date(this.year, this.currentDate.getMonth(), day);
+    checkDate.setHours(0, 0, 0, 0);
+    return checkDate.getTime() > today.getTime();
+  }
+
   getMoodForDay(day: number): string | null {
     const entry = this.entries().find(e => {
       const d = new Date(e.date);
@@ -319,6 +355,8 @@ export class DiaryDashboardComponent implements OnInit {
   }
 
   async selectDate(day: number) {
+    if (this.isFutureDay(day)) return;
+
     if (this.selectedDay === day) {
       this.selectedDay = null;
       // Por defecto, recargar comidas de hoy

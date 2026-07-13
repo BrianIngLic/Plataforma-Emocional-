@@ -716,10 +716,16 @@ export class ConsultaComponent implements OnInit {
 
       if (diaryEntries && diaryEntries.length > 0) {
         for (const item of diaryEntries) {
+          let decryptedWhat = '';
+          try {
+            decryptedWhat = this.crypto.decrypt(item.what_i_ate || '');
+          } catch(e) {
+            decryptedWhat = item.what_i_ate || '';
+          }
           arr.push(this.fb.group({
             diary_date: [item.diary_date || ''],
             meal_time: [item.meal_time ? item.meal_time.substring(0, 5) : ''],
-            what_i_ate: [this.stripHtml(item.what_i_ate || '')],
+            what_i_ate: [this.stripHtml(decryptedWhat)],
             mood_before: [item.mood_before || ''],
             mood_after: [item.mood_after || '']
           }));
@@ -737,10 +743,16 @@ export class ConsultaComponent implements OnInit {
         if (allEntries && allEntries.length > 0) {
           console.warn('loadRecordatorio24h: Cargando sin filtro de fechas debido a disparidad de zonas horarias.');
           for (const item of allEntries) {
+            let decryptedWhat = '';
+            try {
+              decryptedWhat = this.crypto.decrypt(item.what_i_ate || '');
+            } catch(e) {
+              decryptedWhat = item.what_i_ate || '';
+            }
             arr.push(this.fb.group({
               diary_date: [item.diary_date || ''],
               meal_time: [item.meal_time ? item.meal_time.substring(0, 5) : ''],
-              what_i_ate: [this.stripHtml(item.what_i_ate || '')],
+              what_i_ate: [this.stripHtml(decryptedWhat)],
               mood_before: [item.mood_before || ''],
               mood_after: [item.mood_after || '']
             }));

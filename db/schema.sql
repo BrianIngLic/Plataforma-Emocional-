@@ -1018,11 +1018,12 @@ CREATE TABLE IF NOT EXISTS public.achievements (
     category_id UUID REFERENCES public.achievement_categories(id) ON DELETE CASCADE,
     title VARCHAR(255) NOT NULL,
     description TEXT NOT NULL,
-    points INTEGER DEFAULT 10,
-    badge_url TEXT,
-    criteria_type VARCHAR(50), -- Ej. 'diary', 'streak', 'nutrition', 'amati', 'appointment', 'clinical'
-    criteria_value INTEGER DEFAULT 1, -- Cantidad requerida para desbloquear el logro
-    is_active BOOLEAN DEFAULT TRUE,
+    xp_value INTEGER DEFAULT 10,
+    badge_image_url TEXT,
+    requirement_type VARCHAR(50), -- Ej. 'diary', 'streak', 'nutrition', 'amati', 'appointment', 'clinical'
+    requirement_value INTEGER DEFAULT 1, -- Cantidad requerida para desbloquear el logro
+    creator_role VARCHAR(50),
+    creator_id UUID,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
@@ -1032,12 +1033,208 @@ CREATE TABLE IF NOT EXISTS public.user_achievements (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
     achievement_id UUID NOT NULL REFERENCES public.achievements(id) ON DELETE CASCADE,
-    earned_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()),
-    progress INTEGER DEFAULT 0, -- Progreso actual hacia el criteria_value
+    unlocked_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()),
+    progress INTEGER DEFAULT 0, -- Progreso actual hacia el requirement_value
     is_completed BOOLEAN DEFAULT FALSE,
+    earned_at TIMESTAMP WITH TIME ZONE,
     awarded_by UUID REFERENCES public.users(id) ON DELETE SET NULL, -- Clínico/Admin que lo otorgó (si fue manual)
     notes TEXT, -- Notas de felicitación o contexto clínico
     UNIQUE(user_id, achievement_id)
+);
+
+-- 4. Tabla de Rachas y XP de Usuarios (Streak Engine)
+CREATE TABLE IF NOT EXISTS public.user_streaks (
+    user_id UUID PRIMARY KEY REFERENCES public.users(id) ON DELETE CASCADE,
+    current_streak INTEGER DEFAULT 0 NOT NULL,
+    best_streak INTEGER DEFAULT 0 NOT NULL,
+    last_activity_date DATE DEFAULT CURRENT_DATE NOT NULL,
+    total_xp INTEGER DEFAULT 0 NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- 5. Habilitar RLS en tablas de logros
+ALTER TABLE public.achievement_categories ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.achievements ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.user_achievements ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.user_streaks ENABLE ROW LEVEL SECURITY;
+
+-- 6. Índices para Alto Rendimiento
+CREATE INDEX IF NOT EXISTS idx_achievements_category ON public.achievements(category_id);
+CREATE INDEX IF NOT EXISTS idx_user_achievements_user ON public.user_achievements(user_id);
+CREATE INDEX IF NOT EXISTS idx_user_achievements_achievement ON public.user_achievements(achievement_id);
+
+-- 7. Políticas de Seguridad RLS para Logros
+CREATE POLICY achievement_categories_select ON public.achievement_categories
+    FOR SELECT TO authenticated USING (true);
+
+CREATE POLICY achievement_categories_modify ON public.achievement_categories
+    FOR ALL TO authenticated USING (public.get_auth_role() IN (1, 3, 4));
+
+CREATE POLICY achievements_select ON public.achievements
+    FOR SELECT TO authenticated USING (true);
+
+CREATE POLICY achievements_modify ON public.achievements
+    FOR ALL TO authenticated USING (public.get_auth_role() IN (1, 3, 4));
+
+CREATE POLICY user_achievements_select ON public.user_achievements
+    FOR SELECT TO authenticated USING (user_id = auth.uid() OR public.get_auth_role() IN (1, 3, 4));
+
+CREATE POLICY user_achievements_modify ON public.user_achievements
+    FOR ALL TO authenticated USING (public.get_auth_role() IN (1, 3, 4));
+
+CREATE POLICY user_streaks_select ON public.user_streaks
+    FOR SELECT TO authenticated USING (user_id = auth.uid() OR public.get_auth_role() IN (1, 3, 4));
+
+CREATE POLICY user_streaks_modify ON public.user_streaks
+    FOR ALL TO authenticated USING (true);
+
+
+-- =========================================================================================
+-- EVALUACIONES DE SESIÓN Y ALIANZA TERAPÉUTICA (RUPTURAS)
+-- =========================================================================================
+
+-- 1. Tabla de Evaluaciones de Sesión
+CREATE TABLE IF NOT EXISTS public.session_evaluations (
+  id                        UUID          PRIMARY KEY DEFAULT gen_random_uuid(),
+  appointment_id            UUID          NOT NULL REFERENCES public.appointments(id) ON DELETE CASCADE,
+  patient_id                UUID          NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+  professional_id           UUID          NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+  q1_global               DECIMAL(2,1)  NOT NULL CHECK (q1_global  BETWEEN 1.0 AND 5.0),
+  q2_bond                 DECIMAL(2,1)  NOT NULL CHECK (q2_bond    BETWEEN 1.0 AND 5.0),
+  q3_goals                DECIMAL(2,1)  NOT NULL CHECK (q3_goals   BETWEEN 1.0 AND 5.0),
+  q4_impact               DECIMAL(2,1)  NOT NULL CHECK (q4_impact  BETWEEN 1.0 AND 5.0),
+  q5_comment              TEXT,
+  score_global            DECIMAL(2,1)  GENERATED ALWAYS AS (
+    ROUND(
+      (q1_global * 0.20 + q2_bond * 0.30 + q3_goals * 0.25 + q4_impact * 0.25)::numeric,
+      1
+    )
+  ) STORED,
+  rupture_flag            TEXT          NOT NULL DEFAULT 'pending' CHECK (rupture_flag IN ('critical', 'decline', 'healthy', 'pending')),
+  is_visible_to_professional BOOLEAN   NOT NULL DEFAULT TRUE,
+  created_at              TIMESTAMPTZ   NOT NULL DEFAULT NOW(),
+  CONSTRAINT session_evaluations_appointment_id_unique UNIQUE (appointment_id)
+);
+
+-- 2. Índices de Alto Rendimiento para Evaluaciones
+CREATE INDEX IF NOT EXISTS idx_session_evaluations_patient_id ON public.session_evaluations (patient_id);
+CREATE INDEX IF NOT EXISTS idx_session_evaluations_professional_id ON public.session_evaluations (professional_id);
+CREATE INDEX IF NOT EXISTS idx_session_evaluations_created_at ON public.session_evaluations (created_at DESC);
+
+-- 3. Habilitar RLS en Evaluaciones
+ALTER TABLE public.session_evaluations ENABLE ROW LEVEL SECURITY;
+
+-- 4. Políticas de Seguridad RLS para Evaluaciones
+CREATE POLICY se_patient_insert ON public.session_evaluations
+  FOR INSERT TO authenticated WITH CHECK (patient_id = auth.uid());
+
+CREATE POLICY se_patient_select ON public.session_evaluations
+  FOR SELECT TO authenticated USING (patient_id = auth.uid());
+
+CREATE POLICY se_professional_select ON public.session_evaluations
+  FOR SELECT TO authenticated USING (professional_id = auth.uid() AND is_visible_to_professional = TRUE);
+
+CREATE POLICY se_admin_select ON public.session_evaluations
+  FOR SELECT TO authenticated USING (public.get_auth_role() = 1);
+
+-- 5. Función compute_rupture_flag
+CREATE OR REPLACE FUNCTION public.compute_rupture_flag(
+  p_q1_global    DECIMAL(2,1),
+  p_q2_bond      DECIMAL(2,1),
+  p_q3_goals     DECIMAL(2,1),
+  p_q4_impact    DECIMAL(2,1),
+  p_score_global DECIMAL(2,1)
+)
+RETURNS TEXT
+LANGUAGE plpgsql
+IMMUTABLE
+SECURITY INVOKER
+AS $$
+DECLARE
+  v_has_critical_dimension BOOLEAN;
+  v_all_dimensions_healthy BOOLEAN;
+END;
+$$;
+
+-- Implementación interna de la lógica de ruptura terapéutica
+CREATE OR REPLACE FUNCTION public.compute_rupture_flag(
+  p_q1_global    DECIMAL(2,1),
+  p_q2_bond      DECIMAL(2,1),
+  p_q3_goals     DECIMAL(2,1),
+  p_q4_impact    DECIMAL(2,1),
+  p_score_global DECIMAL(2,1)
+)
+RETURNS TEXT
+LANGUAGE plpgsql
+IMMUTABLE
+SECURITY INVOKER
+AS $$
+DECLARE
+  v_has_critical_dimension BOOLEAN;
+  v_all_dimensions_healthy BOOLEAN;
+BEGIN
+  v_has_critical_dimension := (
+    p_q1_global <= 2.0 OR
+    p_q2_bond   <= 2.0 OR
+    p_q3_goals  <= 2.0 OR
+    p_q4_impact <= 2.0
+  );
+
+  v_all_dimensions_healthy := (
+    p_q1_global >= 3.0 AND
+    p_q2_bond   >= 3.0 AND
+    p_q3_goals  >= 3.0 AND
+    p_q4_impact >= 3.0
+  );
+
+  IF v_has_critical_dimension OR p_score_global < 3.5 THEN
+    RETURN 'critical';
+  END IF;
+
+  IF p_score_global >= 4.0 AND v_all_dimensions_healthy THEN
+    RETURN 'healthy';
+  END IF;
+
+  RETURN 'decline';
+END;
+$$;
+
+-- 6. Función de Trigger trg_set_rupture_flag
+CREATE OR REPLACE FUNCTION public.fn_set_rupture_flag()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+SECURITY INVOKER
+AS $$
+DECLARE
+  v_score_global DECIMAL(2,1);
+BEGIN
+  v_score_global := ROUND(
+    (
+      NEW.q1_global * 0.20 +
+      NEW.q2_bond   * 0.30 +
+      NEW.q3_goals  * 0.25 +
+      NEW.q4_impact * 0.25
+    )::numeric,
+    1
+  );
+
+  NEW.rupture_flag := public.compute_rupture_flag(
+    NEW.q1_global,
+    NEW.q2_bond,
+    NEW.q3_goals,
+    NEW.q4_impact,
+    v_score_global
+  );
+
+  RETURN NEW;
+END;
+$$;
+
+-- 7. Registro de Trigger en session_evaluations
+CREATE TRIGGER trg_set_rupture_flag
+  BEFORE INSERT
+  ON public.session_evaluations
 );
 
 -- 4. Tabla de Rachas y XP de Usuarios (Streak Engine)
@@ -1244,123 +1441,135 @@ CREATE OR REPLACE FUNCTION public.update_user_activity_streak(
     p_user_id UUID,
     p_category TEXT -- 'diary', 'nutrition', 'amati', 'appointment'
 )
-RETURNS JSON
+RETURNS JSONB
 LANGUAGE plpgsql
 SECURITY DEFINER
+SET search_path = public
 AS $$
 DECLARE
-    v_current_date DATE := CURRENT_DATE;
-    v_streak_record RECORD;
-    v_xp_earned INTEGER := 10; -- XP base por registrar actividad diaria
-    v_streak_incremented BOOLEAN := FALSE;
-    v_unlocked_achievements JSONB := '[]'::jsonb;
-    v_ach_record RECORD;
-    v_current_progress INTEGER;
+  v_streak        user_streaks%ROWTYPE;
+  v_today         date := current_date;
+  v_new_streak    int := 1;
+  v_xp_gain       int := 10;
+  v_unlocked      jsonb := '[]'::jsonb;
+  v_ach           record;
+  v_count         int;
 BEGIN
-    -- 1. Verificar o insertar registro de racha en user_streaks
-    SELECT * INTO v_streak_record FROM public.user_streaks WHERE user_id = p_user_id;
-    
-    IF NOT FOUND THEN
-        INSERT INTO public.user_streaks (user_id, current_streak, best_streak, last_activity_date, total_xp)
-        VALUES (p_user_id, 1, 1, v_current_date, v_xp_earned)
-        RETURNING * INTO v_streak_record;
-        v_streak_incremented := TRUE;
+  -- ─── 1. Obtener o crear la racha del usuario ───────────────────────────
+  SELECT * INTO v_streak
+  FROM user_streaks
+  WHERE user_id = p_user_id;
+
+  IF NOT FOUND THEN
+    INSERT INTO user_streaks (user_id, current_streak, best_streak, last_activity_date, total_xp)
+    VALUES (p_user_id, 1, 1, v_today, v_xp_gain)
+    RETURNING * INTO v_streak;
+  ELSE
+    IF v_streak.last_activity_date = v_today THEN
+      v_new_streak := v_streak.current_streak;  -- Ya registró hoy
+    ELSIF v_streak.last_activity_date = v_today - INTERVAL '1 day' THEN
+      v_new_streak := v_streak.current_streak + 1;  -- Consecutivo
     ELSE
-        -- Evaluar la racha comparando la fecha de última actividad
-        IF v_streak_record.last_activity_date = v_current_date THEN
-            -- Ya hizo actividad hoy, no incrementamos racha pero sí acumulamos XP base por actividad
-            UPDATE public.user_streaks
-            SET total_xp = total_xp + v_xp_earned,
-                updated_at = NOW()
-            WHERE user_id = p_user_id
-            RETURNING * INTO v_streak_record;
-        ELSIF v_streak_record.last_activity_date = (v_current_date - 1) THEN
-            -- Actividad ayer: racha se incrementa
-            v_streak_incremented := TRUE;
-            UPDATE public.user_streaks
-            SET current_streak = current_streak + 1,
-                best_streak = GREATEST(best_streak, current_streak + 1),
-                last_activity_date = v_current_date,
-                total_xp = total_xp + v_xp_earned + 10, -- Bono extra +10 XP por mantener racha
-                updated_at = NOW()
-            WHERE user_id = p_user_id
-            RETURNING * INTO v_streak_record;
-        ELSE
-            -- Actividad más antigua: racha se reinicia a 1
-            v_streak_incremented := TRUE;
-            UPDATE public.user_streaks
-            SET current_streak = 1,
-                last_activity_date = v_current_date,
-                total_xp = total_xp + v_xp_earned,
-                updated_at = NOW()
-            WHERE user_id = p_user_id
-            RETURNING * INTO v_streak_record;
-        END IF;
+      v_new_streak := 1;  -- Racha rota
     END IF;
 
-    -- 2. Actualizar progreso y evaluar logros del catálogo aplicables
-    FOR v_ach_record IN 
-        SELECT a.id, a.title, a.points, a.criteria_type, a.criteria_value 
-        FROM public.achievements a
-        WHERE a.is_active = TRUE 
-          AND (a.criteria_type = p_category OR a.criteria_type = 'streak')
-    LOOP
-        -- Calcular progreso actual del alumno para este tipo de requisito
-        IF v_ach_record.criteria_type = 'streak' THEN
-            v_current_progress := v_streak_record.current_streak;
-        ELSIF v_ach_record.criteria_type = 'diary' THEN
-            SELECT count(*)::integer INTO v_current_progress FROM public.diary_entries WHERE student_id = p_user_id;
-        ELSIF v_ach_record.criteria_type = 'nutrition' THEN
-            SELECT count(DISTINCT diary_date)::integer INTO v_current_progress FROM public.food_diary_entries WHERE student_id = p_user_id;
-        ELSIF v_ach_record.criteria_type = 'amati' THEN
-            SELECT count(*)::integer INTO v_current_progress FROM public.chats WHERE student_id = p_user_id;
-        ELSIF v_ach_record.criteria_type = 'appointment' THEN
-            SELECT count(CASE WHEN status = 'completed' THEN 1 END)::integer INTO v_current_progress FROM public.appointments WHERE student_id = p_user_id;
-        ELSE
-            v_current_progress := 0;
-        END IF;
+    UPDATE user_streaks
+    SET
+      current_streak     = v_new_streak,
+      best_streak        = GREATEST(best_streak, v_new_streak),
+      last_activity_date = v_today,
+      total_xp           = total_xp + v_xp_gain
+    WHERE user_id = p_user_id
+    RETURNING * INTO v_streak;
+  END IF;
 
-        -- Registrar o actualizar el progreso en user_achievements
-        INSERT INTO public.user_achievements (user_id, achievement_id, progress, is_completed, earned_at)
-        VALUES (p_user_id, v_ach_record.id, LEAST(v_current_progress, v_ach_record.criteria_value), 
-                v_current_progress >= v_ach_record.criteria_value, 
-                CASE WHEN v_current_progress >= v_ach_record.criteria_value THEN NOW() ELSE NULL END)
-        ON CONFLICT (user_id, achievement_id) DO UPDATE
-        SET progress = LEAST(EXCLUDED.progress, v_ach_record.criteria_value),
-            is_completed = CASE WHEN v_current_progress >= v_ach_record.criteria_value THEN TRUE ELSE public.user_achievements.is_completed END,
-            earned_at = CASE WHEN v_current_progress >= v_ach_record.criteria_value AND public.user_achievements.is_completed = FALSE THEN NOW() ELSE public.user_achievements.earned_at END;
+  -- ─── 2. Evaluar logros de esta categoría ──────────────────────────────
+  FOR v_ach IN
+    SELECT a.id, a.title, a.xp_value, a.requirement_type, a.requirement_value
+    FROM achievements a
+    WHERE a.requirement_type = p_category
+      AND NOT EXISTS (
+        SELECT 1 FROM user_achievements ua
+        WHERE ua.achievement_id = a.id
+          AND ua.user_id = p_user_id
+          AND ua.is_completed = true
+      )
+  LOOP
+    v_count := 0;
 
-        -- Si el logro se acaba de desbloquear en esta ejecución, sumamos su XP de recompensa
-        IF v_current_progress >= v_ach_record.criteria_value THEN
-            -- Verificar si se completó en la ventana de los últimos 5 segundos (nueva consecución)
-            IF EXISTS (
-                SELECT 1 FROM public.user_achievements 
-                WHERE user_id = p_user_id AND achievement_id = v_ach_record.id AND is_completed = TRUE AND earned_at >= NOW() - INTERVAL '5 seconds'
-            ) THEN
-                -- Sumar XP del logro al total del usuario
-                UPDATE public.user_streaks
-                SET total_xp = total_xp + v_ach_record.points
-                WHERE user_id = p_user_id;
-                
-                -- Agregar a la lista de logros desbloqueados devueltos
-                v_unlocked_achievements := v_unlocked_achievements || jsonb_build_object(
-                    'id', v_ach_record.id,
-                    'title', v_ach_record.title,
-                    'xp_reward', v_ach_record.points
-                );
-            END IF;
-        END IF;
-    END LOOP;
+    CASE v_ach.requirement_type
+      WHEN 'diary' THEN
+        SELECT COUNT(*) INTO v_count
+        FROM diary_entries WHERE student_id = p_user_id;
 
-    -- Obtener estado final actualizado de la racha y XP
-    SELECT * INTO v_streak_record FROM public.user_streaks WHERE user_id = p_user_id;
+      WHEN 'nutrition' THEN
+        SELECT COUNT(*) INTO v_count
+        FROM food_diary_entries WHERE student_id = p_user_id;
 
-    RETURN json_build_object(
-        'success', true,
-        'current_streak', v_streak_record.current_streak,
-        'best_streak', v_streak_record.best_streak,
-        'total_xp', v_streak_record.total_xp,
-        'unlocked_achievements', v_unlocked_achievements
-    );
+      WHEN 'streak' THEN
+        v_count := v_streak.current_streak;
+
+      WHEN 'amati' THEN
+        SELECT COUNT(*) INTO v_count
+        FROM chats WHERE student_id = p_user_id;
+
+      WHEN 'appointment' THEN
+        SELECT COUNT(*) INTO v_count
+        FROM appointments
+        WHERE student_id = p_user_id AND status = 'completed';
+
+      ELSE
+        v_count := 0;
+    END CASE;
+
+    IF v_count >= v_ach.requirement_value THEN
+      -- Desbloquear logro
+      INSERT INTO user_achievements (user_id, achievement_id, progress, is_completed, earned_at)
+      VALUES (p_user_id, v_ach.id, v_count, true, now())
+      ON CONFLICT (user_id, achievement_id) DO UPDATE
+        SET progress     = EXCLUDED.progress,
+            is_completed = true,
+            earned_at    = COALESCE(user_achievements.earned_at, now())
+      WHERE user_achievements.is_completed = false;
+
+      -- Si se desbloqueó recién (was false, now true)
+      IF FOUND THEN
+        v_unlocked := v_unlocked || jsonb_build_object(
+          'id',       v_ach.id,
+          'title',    v_ach.title,
+          'xp_value', v_ach.xp_value
+        );
+        UPDATE user_streaks
+        SET total_xp = total_xp + v_ach.xp_value
+        WHERE user_id = p_user_id;
+      END IF;
+    ELSE
+      -- Solo actualizar progreso
+      INSERT INTO user_achievements (user_id, achievement_id, progress, is_completed)
+      VALUES (p_user_id, v_ach.id, v_count, false)
+      ON CONFLICT (user_id, achievement_id) DO UPDATE
+        SET progress = GREATEST(user_achievements.progress, EXCLUDED.progress)
+      WHERE user_achievements.is_completed = false;
+    END IF;
+  END LOOP;
+
+  -- ─── 3. Leer estado actualizado ───────────────────────────────────────
+  SELECT * INTO v_streak FROM user_streaks WHERE user_id = p_user_id;
+
+  RETURN jsonb_build_object(
+    'current_streak',        v_streak.current_streak,
+    'best_streak',           v_streak.best_streak,
+    'total_xp',              v_streak.total_xp,
+    'unlocked_achievements', v_unlocked
+  );
+
+EXCEPTION WHEN OTHERS THEN
+  RAISE WARNING '[update_user_activity_streak] %: %', SQLERRM, SQLSTATE;
+  RETURN jsonb_build_object(
+    'error',                 SQLERRM,
+    'current_streak',        0,
+    'total_xp',              0,
+    'unlocked_achievements', '[]'::jsonb
+  );
 END;
 $$;

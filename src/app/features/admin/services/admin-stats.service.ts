@@ -733,5 +733,36 @@ export class AdminStatsService {
       return { facultyReport: [], psychReport: [], periodReport: [] };
     }
   }
+
+  async getVirtualQueueByFaculty(): Promise<{ faculty: string, psychologists: number, nutritionists: number }[]> {
+    const supabase = this.supabaseService.supabase;
+    try {
+      const { data, error } = await supabase
+        .from('virtual_queue')
+        .select('faculty, specialty');
+        
+      if (error || !data) return [];
+      
+      const counts: Record<string, { psychologists: number, nutritionists: number }> = {};
+      data.forEach(item => {
+        const fac = item.faculty || 'Desconocida';
+        if (!counts[fac]) counts[fac] = { psychologists: 0, nutritionists: 0 };
+        if (item.specialty === 'psychologist') {
+          counts[fac].psychologists++;
+        } else if (item.specialty === 'nutritionist') {
+          counts[fac].nutritionists++;
+        }
+      });
+      
+      return Object.entries(counts).map(([faculty, item]) => ({
+        faculty,
+        psychologists: item.psychologists,
+        nutritionists: item.nutritionists
+      })).sort((a, b) => (b.psychologists + b.nutritionists) - (a.psychologists + a.nutritionists));
+    } catch (e) {
+      console.warn('Error fetching virtual queue:', e);
+      return [];
+    }
+  }
 }
 

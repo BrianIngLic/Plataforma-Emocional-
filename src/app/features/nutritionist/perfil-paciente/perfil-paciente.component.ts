@@ -4,11 +4,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { FormsModule } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { SupabaseService } from '../../../core/services/supabase.service';
 import { CryptoService } from '../../../core/services/crypto.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { DossierExportService } from '../../../core/services/dossier-export.service';
 import { GamificationService } from '../../../core/services/gamification.service';
+import { FeedbackModalComponent } from '../../../shared/components/feedback-modal/feedback-modal.component';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartConfiguration, ChartOptions } from 'chart.js';
 import { jsPDF } from 'jspdf';
@@ -26,6 +28,7 @@ export class PerfilPaciente implements OnInit {
   authService = inject(AuthService);
   dossierExport = inject(DossierExportService);
   gamificationService = inject(GamificationService);
+  dialog = inject(MatDialog);
 
   patient: any = null;
   diaryEntries: any[] = [];
@@ -906,5 +909,59 @@ export class PerfilPaciente implements OnInit {
   navigateToWhatsApp() {
     if (!this.patient?.id) return;
     this.router.navigate(['/nutritionist/whatsapp-chat'], { queryParams: { studentId: this.patient.id } });
+  }
+
+  async iniciarAltaPaciente() {
+    if (!this.patient?.id || !this.currentUserId) return;
+
+    const dialogRef = this.dialog.open(FeedbackModalComponent, {
+      width: '420px',
+      data: {
+        type: 'confirm',
+        title: 'Confirmar Alta de Paciente',
+        message: '¿Estás seguro de que deseas iniciar el proceso de alta para este paciente? Se creará una sesión de cierre dedicada para redactar y firmar la nota.',
+        btnText: 'Sí, continuar',
+        cancelBtnText: 'Cancelar'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(async (result) => {
+      if (result) {
+        try {
+          const now = new Date();
+          const scheduledDate = now.toISOString().split('T')[0];
+          const startTime = now.toTimeString().split(' ')[0];
+          const endTime = new Date(now.getTime() + 50 * 60 * 1000).toTimeString().split(' ')[0];
+
+          const { data: newAppt, error } = await this.supabase
+            .from('appointments')
+            .insert({
+              student_id: this.patient.id,
+              professional_id: this.currentUserId,
+              scheduled_date: scheduledDate,
+              start_time: startTime,
+              end_time: endTime,
+              status: 'scheduled'
+            })
+            .select('id')
+            .single();
+
+          if (error) {
+            console.error('Error al crear cita de alta:', error);
+            alert('No se pudo crear la cita de cierre: ' + error.message);
+            return;
+          }
+
+          if (newAppt) {
+            this.router.navigate(['/nutritionist/clinical-note', newAppt.id], {
+              queryParams: { mode: 'discharge' }
+            });
+          }
+        } catch (err) {
+          console.error('Error en iniciarAltaPaciente:', err);
+          alert('Ocurrió un error inesperado.');
+        }
+      }
+    });
   }
 }

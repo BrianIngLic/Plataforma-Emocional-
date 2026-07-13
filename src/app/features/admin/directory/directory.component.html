@@ -43,10 +43,10 @@
       <div class="notion-horizontal-filters">
         <!-- Filter 1: Asignación -->
         <div class="notion-filter-item">
-          <button type="button" class="filter-pill" (click)="toggleFilterDropdown('assignment', $event)" [class.active]="filterNoPsychologist || filterNoNutritionist">
+          <button type="button" class="filter-pill" (click)="toggleFilterDropdown('assignment', $event)" [class.active]="filterNoPsychologist || filterNoNutritionist || filterVirtualQueue">
             <mat-icon class="pill-icon">assignment_ind</mat-icon>
             <span>Asignación</span>
-            <span class="active-indicator" *ngIf="filterNoPsychologist || filterNoNutritionist"></span>
+            <span class="active-indicator" *ngIf="filterNoPsychologist || filterNoNutritionist || filterVirtualQueue"></span>
             <mat-icon class="chevron-icon">expand_more</mat-icon>
           </button>
           <div class="filter-dropdown-menu" *ngIf="activeFilterDropdown === 'assignment'" (click)="$event.stopPropagation()">
@@ -59,6 +59,11 @@
               <input type="checkbox" [(ngModel)]="filterNoNutritionist" />
               <span class="checkbox-box"></span>
               <span class="label-text">Sin Nutriólogo</span>
+            </label>
+            <label class="dropdown-checkbox" style="border-top: 1px dashed var(--border-color); margin-top: 0.5rem; padding-top: 0.5rem;">
+              <input type="checkbox" [(ngModel)]="filterVirtualQueue" />
+              <span class="checkbox-box"></span>
+              <span class="label-text" style="color: #ef4444; font-weight: 600;">En Fila Virtual</span>
             </label>
           </div>
         </div>
@@ -188,14 +193,14 @@
               </td>
               <!-- Psychologist assignment (shown as text label) -->
               <td>
-                <span class="specialist-label" [class.unassigned]="!student.primaryPsychologistId">
-                  {{ getSpecialistName(student.primaryPsychologistId) }}
+                <span class="specialist-label" [class.unassigned]="!student.primaryPsychologistId" [style.color]="student.inPsychologistQueue ? '#ef4444' : ''" [style.fontWeight]="student.inPsychologistQueue ? '700' : ''">
+                  {{ student.inPsychologistQueue ? 'En Fila Virtual' : getSpecialistName(student.primaryPsychologistId) }}
                 </span>
               </td>
               <!-- Nutritionist assignment (shown as text label) -->
               <td>
-                <span class="specialist-label" [class.unassigned]="!student.primaryNutritionistId">
-                  {{ getSpecialistName(student.primaryNutritionistId) }}
+                <span class="specialist-label" [class.unassigned]="!student.primaryNutritionistId" [style.color]="student.inNutritionistQueue ? '#ef4444' : ''" [style.fontWeight]="student.inNutritionistQueue ? '700' : ''">
+                  {{ student.inNutritionistQueue ? 'En Fila Virtual' : getSpecialistName(student.primaryNutritionistId) }}
                 </span>
               </td>
               <!-- Actions -->

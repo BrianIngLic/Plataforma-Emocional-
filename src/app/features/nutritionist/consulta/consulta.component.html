@@ -38,8 +38,8 @@
         <div class="date-area" style="text-align: right;">
           <p style="margin: 0.15rem 0; font-size: 0.9rem;"><strong>Fecha de Emisión:</strong> {{ currentDate | date:'dd - MM - yyyy' }}</p>
           <p style="margin: 0.15rem 0; font-size: 0.9rem;"><strong>Estatus:</strong> 
-            <span class="status-badge" style="background: #fef08a; color: #854d0e; padding: 0.2rem 0.6rem; border-radius: 999px; font-size: 0.8rem; font-weight: 600;">
-              Borrador
+            <span class="status-badge" [ngStyle]="{'background': isSigned ? '#bbf7d0' : '#fef08a', 'color': isSigned ? '#166534' : '#854d0e'}" style="padding: 0.2rem 0.6rem; border-radius: 999px; font-size: 0.8rem; font-weight: 600;">
+              {{ isSigned ? 'Finalizada' : 'Borrador' }}
             </span>
           </p>
         </div>

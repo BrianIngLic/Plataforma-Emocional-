@@ -65,6 +65,64 @@
         </div>
       </div>
     </div>
+
+    <!-- Asignación de Especialista -->
+    <div class="card settings-card" *ngIf="!hasPsychologist || !hasNutritionist || inPsychologistQueue || inNutritionistQueue">
+      <div class="card-header">
+        <h3><mat-icon>assignment_ind</mat-icon> Asignación de Especialista</h3>
+        <p>Si no tienes un especialista asignado, puedes solicitarlo aquí. Buscaremos disponibilidad en tu facultad.</p>
+      </div>
+      
+      <div class="card-body" style="display: flex; flex-direction: column; gap: 1.25rem;">
+        
+        <!-- Psicología -->
+        <div style="border: 1px solid var(--border-color); border-radius: 10px; padding: 1rem; display: flex; justify-content: space-between; align-items: center; background: var(--bg-hover, rgba(0,0,0,0.01));">
+          <div>
+            <div style="font-weight: 700; color: var(--text-primary); font-size: 0.95rem; margin-bottom: 0.25rem; display: flex; align-items: center; gap: 0.4rem;">
+              <mat-icon style="color: #6366f1;">psychology</mat-icon> Área de Psicología
+            </div>
+            <div style="font-size: 0.8rem; color: var(--text-secondary);">
+              {{ hasPsychologist ? 'Psicólogo asignado' : (inPsychologistQueue ? 'En fila de espera virtual' : 'Sin psicólogo asignado') }}
+            </div>
+          </div>
+          <div>
+            <span *ngIf="hasPsychologist" style="color: #10b981; font-weight: 600; font-size: 0.85rem; display: flex; align-items: center; gap: 0.25rem;">
+              <mat-icon style="font-size: 18px; width: 18px; height: 18px;">check_circle</mat-icon> Asignado
+            </span>
+            <span *ngIf="!hasPsychologist && inPsychologistQueue" style="color: #f59e0b; font-weight: 600; font-size: 0.85rem; display: flex; align-items: center; gap: 0.25rem;">
+              <mat-icon style="font-size: 18px; width: 18px; height: 18px;">hourglass_empty</mat-icon> En Espera
+            </span>
+            <button *ngIf="!hasPsychologist && !inPsychologistQueue" mat-flat-button color="primary" (click)="solicitarEspecialista('psychologist')" [disabled]="isSaving" style="font-size: 0.8rem; font-weight: 700; border-radius: 8px;">
+              Solicitar Psicólogo
+            </button>
+          </div>
+        </div>
+
+        <!-- Nutrición -->
+        <div style="border: 1px solid var(--border-color); border-radius: 10px; padding: 1rem; display: flex; justify-content: space-between; align-items: center; background: var(--bg-hover, rgba(0,0,0,0.01));">
+          <div>
+            <div style="font-weight: 700; color: var(--text-primary); font-size: 0.95rem; margin-bottom: 0.25rem; display: flex; align-items: center; gap: 0.4rem;">
+              <mat-icon style="color: #10b981;">restaurant</mat-icon> Área de Nutrición
+            </div>
+            <div style="font-size: 0.8rem; color: var(--text-secondary);">
+              {{ hasNutritionist ? 'Nutriólogo asignado' : (inNutritionistQueue ? 'En fila de espera virtual' : 'Sin nutriólogo asignado') }}
+            </div>
+          </div>
+          <div>
+            <span *ngIf="hasNutritionist" style="color: #10b981; font-weight: 600; font-size: 0.85rem; display: flex; align-items: center; gap: 0.25rem;">
+              <mat-icon style="font-size: 18px; width: 18px; height: 18px;">check_circle</mat-icon> Asignado
+            </span>
+            <span *ngIf="!hasNutritionist && inNutritionistQueue" style="color: #f59e0b; font-weight: 600; font-size: 0.85rem; display: flex; align-items: center; gap: 0.25rem;">
+              <mat-icon style="font-size: 18px; width: 18px; height: 18px;">hourglass_empty</mat-icon> En Espera
+            </span>
+            <button *ngIf="!hasNutritionist && !inNutritionistQueue" mat-flat-button color="primary" (click)="solicitarEspecialista('nutritionist')" [disabled]="isSaving" style="font-size: 0.8rem; font-weight: 700; border-radius: 8px;">
+              Solicitar Nutriólogo
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
   </div>
 
   <!-- Gestión de Derechos ARCO y Privacidad -->

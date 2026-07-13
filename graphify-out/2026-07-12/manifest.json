@@ -90,8 +90,8 @@
     "semantic_hash": "e5f3475d29274e29bf694f9ff8b0f090"
   },
   "src/app/core/services/clinical.service.ts": {
-    "mtime": 1783836684.261281,
-    "ast_hash": "54d9bc0d9f2bef2f3a42b59dcb2d5278",
+    "mtime": 1783910201.6012702,
+    "ast_hash": "e8d0bd7cc0e6f6ffe24ab4b077b186c0",
     "semantic_hash": ""
   },
   "src/app/core/services/crypto.service.ts": {
@@ -140,9 +140,9 @@
     "semantic_hash": ""
   },
   "src/app/features/admin/overview/overview.component.ts": {
-    "mtime": 1782029087.9542127,
-    "ast_hash": "e7aa3604b66e3bd46ec2d71151ab48cb",
-    "semantic_hash": "e7aa3604b66e3bd46ec2d71151ab48cb"
+    "mtime": 1783910224.2796452,
+    "ast_hash": "68c633cbcda676bd26e984ea74f8b7b3",
+    "semantic_hash": ""
   },
   "src/app/features/admin/patients/patients.component.ts": {
     "mtime": 1782775773.823426,
@@ -165,8 +165,8 @@
     "semantic_hash": ""
   },
   "src/app/features/admin/services/admin-stats.service.ts": {
-    "mtime": 1783882086.8073454,
-    "ast_hash": "1e3687f065c9e27143882134460668d9",
+    "mtime": 1783910215.6598454,
+    "ast_hash": "9ca13530243bec9d081162e3d44f247d",
     "semantic_hash": ""
   },
   "src/app/features/alimentary/alimentary-dashboard/alimentary-dashboard.component.ts": {
@@ -240,8 +240,8 @@
     "semantic_hash": ""
   },
   "src/app/features/psychologist/clinical-note/clinical-note.component.ts": {
-    "mtime": 1783882247.1149318,
-    "ast_hash": "01712a4062965d55cf0e4066c75c8718",
+    "mtime": 1783909068.156739,
+    "ast_hash": "4f1f7736c7a222233b4ce89a0eedcc9f",
     "semantic_hash": ""
   },
   "src/app/features/psychologist/dashboard/dashboard.component.ts": {
@@ -250,8 +250,8 @@
     "semantic_hash": "b29381fde22297a402e92bd8ee8e620a"
   },
   "src/app/features/psychologist/patient-profile/patient-profile.component.ts": {
-    "mtime": 1783882253.7480555,
-    "ast_hash": "b13ff8da9a72fb946a02b778854c7f46",
+    "mtime": 1783909426.6853797,
+    "ast_hash": "37d37d6781171137fe43a2f08ede047e",
     "semantic_hash": ""
   },
   "src/app/features/psychologist/patients/patients.component.ts": {
@@ -385,8 +385,8 @@
     "semantic_hash": ""
   },
   "src/app/features/admin/overview/overview.component.html": {
-    "mtime": 1783883312.0978594,
-    "ast_hash": "db978183ebddf1e115ec53ec556df298",
+    "mtime": 1783910231.7053585,
+    "ast_hash": "d107545a9a2151592db9592e67492476",
     "semantic_hash": ""
   },
   "src/app/features/admin/patients/patients.component.html": {
@@ -445,8 +445,8 @@
     "semantic_hash": "a70cf8f9800814f3488ae124af135091"
   },
   "src/app/features/psychologist/patient-profile/patient-profile.component.html": {
-    "mtime": 1783839614.4804158,
-    "ast_hash": "c1f6058657ef4cf7b12c34106805f484",
+    "mtime": 1783908714.0696986,
+    "ast_hash": "b751c7c9c4697b37d3cf8474636d42ae",
     "semantic_hash": ""
   },
   "src/app/features/psychologist/patients/patients.component.html": {
@@ -480,7 +480,7 @@
     "semantic_hash": ""
   },
   "task.md": {
-    "mtime": 1783668250.9230814,
+    "mtime": 1783908736.3824513,
     "ast_hash": "163904362fa23caaf7b1431a55a246f9",
     "semantic_hash": ""
   },
@@ -555,8 +555,8 @@
     "semantic_hash": ""
   },
   "src/app/features/nutritionist/nutritionist.routes.ts": {
-    "mtime": 1783668250.8746302,
-    "ast_hash": "bba6b982021e24212f0bd1502104334f",
+    "mtime": 1783908708.294988,
+    "ast_hash": "db405a4dfcfd2f30bead6109da95e43d",
     "semantic_hash": ""
   },
   "src/app/features/nutritionist/pacientes/pacientes.component.ts": {
@@ -565,8 +565,8 @@
     "semantic_hash": ""
   },
   "src/app/features/nutritionist/perfil-paciente/perfil-paciente.component.ts": {
-    "mtime": 1783882143.1126127,
-    "ast_hash": "bbeb441a64ecdcff289cd43e1a2a1181",
+    "mtime": 1783909437.4685526,
+    "ast_hash": "90282c80248dc2e0e2788d6ebf679ac9",
     "semantic_hash": ""
   },
   "src/app/features/nutritionist/settings/settings.component.ts": {
@@ -865,8 +865,8 @@
     "semantic_hash": ""
   },
   "src/app/features/nutritionist/consulta/consulta.component.ts": {
-    "mtime": 1783885174.810501,
-    "ast_hash": "6979d56c6ef7fb136c8bb59fe6e04d2b",
+    "mtime": 1783885901.4234579,
+    "ast_hash": "99db5c106c8876403e190ea023a91ad8",
     "semantic_hash": ""
   },
   "src/app/features/nutritionist/consulta/consulta.types.ts": {
@@ -1025,8 +1025,8 @@
     "semantic_hash": ""
   },
   "src/app/features/nutritionist/consulta/consulta.component.html": {
-    "mtime": 1783884495.3920205,
-    "ast_hash": "ae84ea8f7305a714bea4a1c06cb00d54",
+    "mtime": 1783909784.5331955,
+    "ast_hash": "f899588898b221671cfd69287e3ec955",
     "semantic_hash": ""
   },
   "src/app/features/admin/nutritionist-fields/nutritionist-fields.component.ts": {
@@ -1085,13 +1085,13 @@
     "semantic_hash": ""
   },
   "src/app/features/admin/directory/directory.component.ts": {
-    "mtime": 1783883319.8525548,
-    "ast_hash": "a7619319045cc6965f7cfd53af156e71",
+    "mtime": 1783910385.5091417,
+    "ast_hash": "faef63d42725118829931e80bf4f7a45",
     "semantic_hash": ""
   },
   "src/app/features/admin/directory/directory.component.html": {
-    "mtime": 1783883359.2293618,
-    "ast_hash": "344757100284b83795b5ad95a7444e71",
+    "mtime": 1783910401.1696217,
+    "ast_hash": "33c81d4fea9965fd6b2379d803b75761",
     "semantic_hash": ""
   },
   "scratch/test_join.js": {
@@ -1172,6 +1172,11 @@
   "scratch/list_tables.js": {
     "mtime": 1783885006.992313,
     "ast_hash": "788a3d983b71d4271847a8d7fddde716",
+    "semantic_hash": ""
+  },
+  "db/migration_virtual_queue.sql": {
+    "mtime": 1783910192.4888172,
+    "ast_hash": "6c33eaa145b6b0c6cfd3665a8100293c",
     "semantic_hash": ""
   }
 }

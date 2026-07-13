@@ -25,6 +25,8 @@ interface StudentItem {
   primaryNutritionistId: string | null;
   hasPsychologist: boolean;
   hasNutritionist: boolean;
+  inPsychologistQueue?: boolean;
+  inNutritionistQueue?: boolean;
 }
 
 interface SpecialistItem {
@@ -76,6 +78,7 @@ export class DirectoryComponent implements OnInit {
   // Notion-like Checkbox filters
   filterNoPsychologist = false;
   filterNoNutritionist = false;
+  filterVirtualQueue = false;
   selectedFaculties = new Set<string>();
   selectedStatuses = new Set<string>(['active']); // Default to active
 
@@ -224,7 +227,21 @@ export class DirectoryComponent implements OnInit {
     // 1. Fetch Specialists
     this.specialists = await this.adminStats.getPsychologistsWithStats();
 
-    // 2. Fetch All Students (including clinical records and status)
+    // 2. Fetch Virtual Queue data
+    const { data: queueData } = await this.supabase
+      .from('virtual_queue')
+      .select('student_id, specialty');
+
+    const psychQueueSet = new Set<string>();
+    const nutriQueueSet = new Set<string>();
+    if (queueData) {
+      queueData.forEach((q: any) => {
+        if (q.specialty === 'psychologist') psychQueueSet.add(q.student_id);
+        if (q.specialty === 'nutritionist') nutriQueueSet.add(q.student_id);
+      });
+    }
+
+    // 3. Fetch All Students (including clinical records and status)
     const { data: studentsData, error: studentError } = await this.supabase
       .from('users')
       .select(`
@@ -261,7 +278,9 @@ export class DirectoryComponent implements OnInit {
           primaryPsychologistId: rec?.primary_psychologist_id || null,
           primaryNutritionistId: rec?.primary_nutritionist_id || null,
           hasPsychologist: !!rec?.primary_psychologist_id,
-          hasNutritionist: !!rec?.primary_nutritionist_id
+          hasNutritionist: !!rec?.primary_nutritionist_id,
+          inPsychologistQueue: psychQueueSet.has(u.id),
+          inNutritionistQueue: nutriQueueSet.has(u.id)
         };
       });
     }
@@ -358,6 +377,7 @@ export class DirectoryComponent implements OnInit {
       // 2. Notion assignment filters
       if (this.filterNoPsychologist && student.hasPsychologist) return false;
       if (this.filterNoNutritionist && student.hasNutritionist) return false;
+      if (this.filterVirtualQueue && !student.inPsychologistQueue && !student.inNutritionistQueue) return false;
 
       // 3. Faculty filter
       if (this.selectedFaculties.size > 0 && !this.selectedFaculties.has(student.faculty)) return false;
@@ -415,6 +435,7 @@ export class DirectoryComponent implements OnInit {
   clearFilters() {
     this.filterNoPsychologist = false;
     this.filterNoNutritionist = false;
+    this.filterVirtualQueue = false;
     this.selectedFaculties.clear();
     this.selectedStatuses = new Set<string>(['active']);
     this.searchQuery = '';
@@ -437,6 +458,7 @@ export class DirectoryComponent implements OnInit {
   hasActiveFilters(): boolean {
     return this.filterNoPsychologist || 
            this.filterNoNutritionist || 
+           this.filterVirtualQueue || 
            this.selectedFaculties.size > 0 || 
            !this.selectedStatuses.has('active') || 
            this.selectedStatuses.size > 1 || 

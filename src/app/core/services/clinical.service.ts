@@ -12,19 +12,57 @@ export class ClinicalService {
   private authService = inject(AuthService);
 
   /**
-   * Obtiene el profesional de la salud de un rol específico con menor carga de estudiantes asignados.
+   * Obtiene el profesional de la salud de un rol específico con menor carga de estudiantes asignados y dentro de la misma facultad, respetando el límite de capacidad.
    */
-  async getSpecialistWithLeastLoad(roleId: 3 | 4): Promise<string | null> {
+  async getSpecialistWithLeastLoad(roleId: 3 | 4, studentId: string): Promise<string | null> {
     try {
+      // 1. Obtener la facultad del estudiante
+      const { data: studentProfile } = await this.supabaseService.supabase
+        .from('profiles')
+        .select('faculty')
+        .eq('user_id', studentId)
+        .maybeSingle();
+
+      const studentFaculty = studentProfile?.faculty;
+
+      // Buscar el ID de la facultad correspondiente al nombre
+      let facultyId: number | null = null;
+      if (studentFaculty) {
+        const { data: fac } = await this.supabaseService.supabase
+          .from('faculties')
+          .select('id')
+          .eq('name', studentFaculty)
+          .maybeSingle();
+        if (fac) {
+          facultyId = Number(fac.id);
+        }
+      }
+
+      // 2. Obtener especialistas de ese rol con sus configuraciones y facultades
       const { data: specialists, error: specError } = await this.supabaseService.supabase
         .from('users')
-        .select('id')
+        .select('id, profiles(faculty), health_professional_settings(capacity, faculty_id)')
         .eq('role_id', roleId);
 
       if (specError || !specialists || specialists.length === 0) {
         return null;
       }
 
+      // Filtrar especialistas que pertenezcan a la facultad del estudiante
+      const facultySpecs = specialists.filter((s: any) => {
+        const p = Array.isArray(s.profiles) ? s.profiles[0] : s.profiles;
+        const h = Array.isArray(s.health_professional_settings) ? s.health_professional_settings[0] : s.health_professional_settings;
+        
+        const matchesId = h && h.faculty_id && facultyId && h.faculty_id === facultyId;
+        const matchesName = p && p.faculty && studentFaculty && p.faculty.toLowerCase() === studentFaculty.toLowerCase();
+        return matchesId || matchesName;
+      });
+
+      if (facultySpecs.length === 0) {
+        return null;
+      }
+
+      // 3. Obtener la carga de pacientes asignados a cada especialista
       const field = roleId === 3 ? 'primary_psychologist_id' : 'primary_nutritionist_id';
       const { data: records, error: recError } = await this.supabaseService.supabase
         .from('student_clinical_records')
@@ -32,7 +70,7 @@ export class ClinicalService {
         .not(field, 'is', null);
 
       const loadMap: { [key: string]: number } = {};
-      specialists.forEach(s => loadMap[s.id] = 0);
+      facultySpecs.forEach(s => loadMap[s.id] = 0);
 
       if (!recError && records) {
         records.forEach((r: any) => {
@@ -43,14 +81,20 @@ export class ClinicalService {
         });
       }
 
+      // 4. Seleccionar el especialista de menor carga que no haya superado su capacidad
       let leastLoadedId: string | null = null;
       let minLoad = Infinity;
 
-      for (const spec of specialists) {
+      for (const spec of facultySpecs) {
+        const h = Array.isArray(spec.health_professional_settings) ? spec.health_professional_settings[0] : spec.health_professional_settings;
+        const capacity = h?.capacity ?? 35;
         const load = loadMap[spec.id];
-        if (load < minLoad) {
-          minLoad = load;
-          leastLoadedId = spec.id;
+
+        if (load < capacity) {
+          if (load < minLoad) {
+            minLoad = load;
+            leastLoadedId = spec.id;
+          }
         }
       }
 
@@ -64,6 +108,7 @@ export class ClinicalService {
   /**
    * Envía el formulario clínico a Supabase cifrando las notas (todo el JSON de respuestas)
    * y asigna opcionalmente los especialistas de menor carga de forma automática.
+   * Si están saturados, se inserta al estudiante en la fila virtual.
    */
   async submitClinicalRecords(
     matricula: string, 
@@ -82,8 +127,8 @@ export class ClinicalService {
     let primaryNutritionistId: string | null = null;
 
     if (assignmentMethod === 'auto') {
-      primaryPsychologistId = await this.getSpecialistWithLeastLoad(3);
-      primaryNutritionistId = await this.getSpecialistWithLeastLoad(4);
+      primaryPsychologistId = await this.getSpecialistWithLeastLoad(3, user.id);
+      primaryNutritionistId = await this.getSpecialistWithLeastLoad(4, user.id);
     }
 
     try {
@@ -105,6 +150,35 @@ export class ClinicalService {
         }
         console.error('Error insertando clinical records:', error.message);
         return false;
+      }
+
+      // Si no se asignaron especialistas por saturación, abrir fila de espera virtual
+      const { data: prof } = await this.supabaseService.supabase
+        .from('profiles')
+        .select('faculty')
+        .eq('user_id', user.id)
+        .maybeSingle();
+      const studentFaculty = prof?.faculty || 'Desconocida';
+
+      if (assignmentMethod === 'auto') {
+        if (!primaryPsychologistId) {
+          await this.supabaseService.supabase
+            .from('virtual_queue')
+            .insert({
+              student_id: user.id,
+              specialty: 'psychologist',
+              faculty: studentFaculty
+            });
+        }
+        if (!primaryNutritionistId) {
+          await this.supabaseService.supabase
+            .from('virtual_queue')
+            .insert({
+              student_id: user.id,
+              specialty: 'nutritionist',
+              faculty: studentFaculty
+            });
+        }
       }
       
       return true;

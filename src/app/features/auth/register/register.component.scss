@@ -83,6 +83,25 @@
   .mdc-floating-label {
     color: var(--text-secondary) !important;
   }
+
+  // Soporte adaptativo de color para radio buttons y checkboxes (mdc labels)
+  .mdc-label {
+    color: var(--text-primary) !important;
+  }
+
+  .mat-mdc-radio-button {
+    --mdc-radio-selected-focus-icon-color: #6366f1;
+    --mdc-radio-selected-hover-icon-color: #6366f1;
+    --mdc-radio-selected-icon-color: #6366f1;
+    --mdc-radio-selected-pressed-icon-color: #6366f1;
+  }
+
+  .mat-mdc-checkbox {
+    --mdc-checkbox-selected-focus-icon-color: #6366f1;
+    --mdc-checkbox-selected-hover-icon-color: #6366f1;
+    --mdc-checkbox-selected-icon-color: #6366f1;
+    --mdc-checkbox-selected-pressed-icon-color: #6366f1;
+  }
 }
 
 .step-form {

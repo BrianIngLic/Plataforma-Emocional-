@@ -480,6 +480,12 @@ export class ConsultaComponent implements OnInit {
             notes: `<p><strong>Consulta Nutricional Finalizada.</strong></p><p>Sello de firma: ${this.signatureSeal}</p>` 
           })
           .eq('id', this.sessionId);
+
+        // Registrar el logro de cita completada para el estudiante
+        await this.supabaseService.supabase.rpc('update_user_activity_streak', {
+          p_user_id: this.pacienteId,
+          p_category: 'appointment'
+        });
       }
 
       const dialogRef = this.dialog.open(SimpleDialogComponent, {

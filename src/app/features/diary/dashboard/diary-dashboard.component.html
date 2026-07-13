@@ -32,9 +32,6 @@
     <button class="tab-btn" [class.active]="activeTab === 'breathe'" (click)="activeTab = 'breathe'">
       <mat-icon>self_improvement</mat-icon> Espacio de Respiración
     </button>
-    <button class="tab-btn" *ngIf="activeTab === 'badges'" [class.active]="true">
-      <mat-icon>workspace_premium</mat-icon> Mis Logros Emocionales
-    </button>
   </div>
 
   <!-- ═══════════════════════════════════════════
@@ -324,11 +321,6 @@
           <div class="inst-step"><span>3</span> Mantén el aire cuando el círculo brille, y exhala al contraerse.</div>
         </div>
       </div>
-    </div>
-
-    <!-- ══════ VISTA 3: LOGROS ══════ -->
-    <div class="badges-container-wrapper" *ngIf="activeTab === 'badges'" style="padding: 1.5rem; background: var(--bg-card); border-radius: 20px; border: 1px solid var(--border-color);">
-      <app-achievements-dashboard></app-achievements-dashboard>
     </div>
 
   </div>

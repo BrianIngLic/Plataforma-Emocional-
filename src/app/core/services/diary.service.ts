@@ -181,10 +181,18 @@ export class DiaryService {
         mood_after: data.mood_after,
         created_at: data.created_at
       };
-      // Insertar ordenado por hora
+      // Insertar ordenado por hora y actualizar señal reactiva
       this.foodEntriesSignal.update(entries =>
         [...entries, newEntry].sort((a, b) => a.meal_time.localeCompare(b.meal_time))
       );
+
+      // Registrar la actividad de nutrición para los logros
+      this.gamificationService.registerActivity('nutrition').then(res => {
+        if (res?.unlocked_achievements?.length > 0) {
+          console.log('🏆 ¡Logros desbloqueados (Nutrición)!', res.unlocked_achievements);
+        }
+      });
+
       return newEntry;
     } else {
       console.error('Error guardando entrada alimentaria:', error?.message);

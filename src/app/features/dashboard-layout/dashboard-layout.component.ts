@@ -75,7 +75,7 @@ export class DashboardLayoutComponent implements OnInit {
 
   openAchievements() {
     this.showProfileMenu = false;
-    this.router.navigate(['/dashboard/diary'], { queryParams: { tab: 'badges' } });
+    this.router.navigate(['/dashboard/achievements']);
   }
 
   toggleAchievementsPanel() {

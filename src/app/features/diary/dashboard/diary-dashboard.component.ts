@@ -8,7 +8,6 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { QuillModule } from 'ngx-quill';
 import { DiaryService, FoodDiaryEntry } from '../../../core/services/diary.service';
 import { FeedbackModalComponent } from '../../../shared/components/feedback-modal/feedback-modal.component';
-import { AchievementsDashboardComponent } from '../../gamification/achievements-dashboard/achievements-dashboard.component';
 
 /** Opciones de estado emocional compartidas (diario emocional + alimentario) */
 const MOOD_OPTIONS = [
@@ -47,8 +46,7 @@ const QUILL_MODULES = {
     MatButtonModule,
     MatIconModule,
     MatDialogModule,
-    QuillModule,
-    AchievementsDashboardComponent
+    QuillModule
   ],
   templateUrl: './diary-dashboard.component.html',
   styleUrls: ['./diary-dashboard.component.scss']
@@ -74,7 +72,7 @@ export class DiaryDashboardComponent implements OnInit {
   // ─── Estado: UI general ───────────────────────────────────────────
   streakDays = 5;
   streakShieldActive = true;
-  activeTab: 'write' | 'breathe' | 'badges' = 'write';
+  activeTab: 'write' | 'breathe' = 'write';
 
   badges = [
     { id: 'explore',     icon: '🌿', title: 'Explorador Emocional',   desc: 'Registraste tus emociones en el diario con honestidad.',          unlocked: true  },
@@ -115,13 +113,6 @@ export class DiaryDashboardComponent implements OnInit {
     this.generateCalendar();
     this.diaryService.loadFoodEntries();
     this.diaryService.loadEntries();
-
-    // Activar pestaña de logros si viene en queryParams
-    this.route.queryParams.subscribe(params => {
-      if (params['tab'] === 'badges') {
-        this.activeTab = 'badges';
-      }
-    });
   }
 
   // ════════════════════════════════════════════════════════════════

@@ -429,6 +429,14 @@ export class ClinicalNoteComponent implements OnInit {
       .update({ status: 'completed', notes: finalNotes })
       .eq('id', this.appointmentId);
       
+    if (!error) {
+      // Registrar el logro de cita completada para el estudiante
+      await this.supabase.rpc('update_user_activity_streak', {
+        p_user_id: this.patient.student_id,
+        p_category: 'appointment'
+      });
+    }
+      
     this.loading = false;
     if (error) {
       console.error(error);

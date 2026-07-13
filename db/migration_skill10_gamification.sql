@@ -143,7 +143,7 @@ BEGIN
         ELSIF v_ach_record.criteria_type = 'diary' THEN
             SELECT count(*)::integer INTO v_current_progress FROM public.diary_entries WHERE student_id = p_user_id;
         ELSIF v_ach_record.criteria_type = 'nutrition' THEN
-            SELECT count(*)::integer INTO v_current_progress FROM public.nutrition_logs WHERE student_id = p_user_id;
+            SELECT count(DISTINCT diary_date)::integer INTO v_current_progress FROM public.food_diary_entries WHERE student_id = p_user_id;
         ELSIF v_ach_record.criteria_type = 'amati' THEN
             SELECT count(*)::integer INTO v_current_progress FROM public.chats WHERE student_id = p_user_id;
         ELSIF v_ach_record.criteria_type = 'appointment' THEN

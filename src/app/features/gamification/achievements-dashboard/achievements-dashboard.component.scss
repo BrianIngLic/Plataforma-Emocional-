@@ -6,18 +6,16 @@
   max-width: 1200px;
   margin: 0 auto;
   font-family: 'Inter', system-ui, sans-serif;
-  color: #1e293b;
+  color: var(--text-primary);
   box-sizing: border-box;
 }
 
 // Glassmorphism Base
 .glass-card {
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.6);
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
   border-radius: 24px;
-  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
 }
 
 // Banner de Cabecera
@@ -42,10 +40,10 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background: #f1f5f9; // gris si está inactiva
-      color: #94a3b8;
+      background: var(--input-bg); // gris si está inactiva
+      color: var(--text-secondary);
       border-radius: 18px;
-      border: 1px solid #cbd5e1;
+      border: 1px solid var(--border-color);
       transition: all 0.5s ease;
 
       .flame-icon {
@@ -71,11 +69,11 @@
         margin: 0;
         font-size: 1.5rem;
         font-weight: 800;
-        color: #0f172a;
+        color: var(--text-primary);
       }
       .subtitle {
         font-size: 0.85rem;
-        color: #64748b;
+        color: var(--text-secondary);
         font-weight: 500;
         display: block;
         margin-top: 2px;
@@ -98,7 +96,7 @@
       font-size: 0.9rem;
 
       .level-title {
-        color: #1e293b;
+        color: var(--text-primary);
         font-weight: 800;
       }
       .xp-count {
@@ -111,7 +109,7 @@
       border-radius: 5px;
       overflow: hidden;
       --mdc-linear-progress-active-indicator-color: linear-gradient(90deg, #8b5cf6 0%, #a78bfa 100%);
-      --mdc-linear-progress-track-color: #e2e8f0;
+      --mdc-linear-progress-track-color: var(--input-bg);
     }
   }
 }
@@ -127,14 +125,14 @@
     font-weight: 600;
     font-size: 0.85rem;
     padding: 6px 16px;
-    border-color: rgba(226, 232, 240, 0.8);
-    background: rgba(255, 255, 255, 0.4);
-    color: #475569;
+    border-color: var(--border-color);
+    background: var(--input-bg);
+    color: var(--text-secondary);
     transition: all 0.2s ease;
 
     &:hover {
-      background: rgba(255, 255, 255, 0.8);
-      color: #0f172a;
+      background: var(--bg-card);
+      color: var(--text-primary);
     }
 
     &.active {
@@ -148,7 +146,7 @@
 
 // Títulos de sección
 .section-title {
-  border-bottom: 2px solid rgba(226, 232, 240, 0.6);
+  border-bottom: 2px solid var(--border-color);
   padding-bottom: 8px;
   margin-top: 10px;
   
@@ -156,7 +154,7 @@
     margin: 0;
     font-size: 1.25rem;
     font-weight: 800;
-    color: #0f172a;
+    color: var(--text-primary);
   }
 }
 
@@ -201,7 +199,7 @@
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    border: 1px solid rgba(226, 232, 240, 0.8);
+    border: 1px solid var(--border-color);
     position: relative;
     overflow: hidden;
 
@@ -243,19 +241,19 @@
         margin: 0;
         font-size: 1.05rem;
         font-weight: 800;
-        color: #0f172a;
+        color: var(--text-primary);
         line-height: 1.25;
       }
 
       .xp-badge {
         font-size: 0.75rem;
         font-weight: 800;
-        background: #f1f5f9;
-        color: #64748b;
+        background: var(--input-bg);
+        color: var(--text-secondary);
         padding: 4px 8px;
         border-radius: 8px;
         white-space: nowrap;
-        border: 1px solid #cbd5e1;
+        border: 1px solid var(--border-color);
 
         &.unlocked {
           background: rgba(139, 92, 246, 0.1);
@@ -268,7 +266,7 @@
     .description {
       margin: 8px 0 16px 0;
       font-size: 0.82rem;
-      color: #475569;
+      color: var(--text-secondary);
       line-height: 1.45;
       font-weight: 500;
     }
@@ -282,7 +280,7 @@
       .progress-bar-bg {
         flex: 1;
         height: 6px;
-        background: #e2e8f0;
+        background: var(--input-bg);
         border-radius: 3px;
         overflow: hidden;
 
@@ -295,7 +293,7 @@
       .progress-text {
         font-size: 0.75rem;
         font-weight: 700;
-        color: #475569;
+        color: var(--text-secondary);
       }
     }
 

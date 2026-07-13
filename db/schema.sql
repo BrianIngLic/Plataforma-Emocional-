@@ -927,4 +927,440 @@ CREATE POLICY campuses_admin_all ON public.campuses
 CREATE POLICY health_prof_settings_admin_all ON public.health_professional_settings
     FOR ALL TO authenticated USING (public.get_auth_role() = 1);
 
+-- =========================================================================================
+-- DERECHOS ARCO (ACCESO, RECTIFICACIÓN, CANCELACIÓN Y OPOSICIÓN)
+-- =========================================================================================
 
+-- 1. Tabla para registrar solicitudes formales de Derechos ARCO (Rectificación y Cancelación)
+CREATE TABLE IF NOT EXISTS public.arco_requests (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+    request_type VARCHAR(20) NOT NULL CHECK (request_type IN ('Access', 'Rectification', 'Cancellation', 'Opposition')),
+    details TEXT NOT NULL,
+    status VARCHAR(20) DEFAULT 'Pending' CHECK (status IN ('Pending', 'Approved', 'Rejected', 'Completed')),
+    resolution_notes TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    resolved_at TIMESTAMP WITH TIME ZONE
+);
+
+-- 2. Tabla para preferencias de privacidad de Oposición (Derecho de Oposición)
+CREATE TABLE IF NOT EXISTS public.user_privacy_settings (
+    user_id UUID PRIMARY KEY REFERENCES public.users(id) ON DELETE CASCADE,
+    share_clinical_data BOOLEAN DEFAULT TRUE, -- Oposición a compartir expediente con especialistas asignados
+    use_anonymous_stats BOOLEAN DEFAULT TRUE, -- Oposición a uso de datos estadísticos anonimizados
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 3. Habilitar RLS en ambas tablas
+ALTER TABLE public.arco_requests ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.user_privacy_settings ENABLE ROW LEVEL SECURITY;
+
+-- 4. Políticas RLS para arco_requests
+CREATE POLICY "Los usuarios pueden ver sus propias solicitudes" 
+    ON public.arco_requests FOR SELECT USING (auth.uid() = user_id);
+
+CREATE POLICY "Los usuarios pueden insertar sus propias solicitudes" 
+    ON public.arco_requests FOR INSERT WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "Solo administradores pueden gestionar solicitudes" 
+    ON public.arco_requests FOR ALL USING (
+        EXISTS (
+            SELECT 1 FROM public.users 
+            WHERE public.users.id = auth.uid() AND public.users.role_id = 1
+        )
+    );
+
+-- 5. Políticas RLS para user_privacy_settings
+CREATE POLICY "Los usuarios pueden gestionar sus preferencias de privacidad" 
+    ON public.user_privacy_settings FOR ALL USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "Solo administradores pueden ver todas las preferencias" 
+    ON public.user_privacy_settings FOR SELECT USING (
+        EXISTS (
+            SELECT 1 FROM public.users 
+            WHERE public.users.id = auth.uid() AND public.users.role_id = 1
+        )
+    );
+
+-- 6. Trigger para crear configuración de privacidad por defecto al insertar un nuevo usuario
+CREATE OR REPLACE FUNCTION public.handle_new_user_privacy()
+RETURNS TRIGGER AS $$
+BEGIN
+    INSERT INTO public.user_privacy_settings (user_id)
+    VALUES (NEW.id)
+    ON CONFLICT (user_id) DO NOTHING;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+CREATE TRIGGER on_auth_user_created_privacy
+    AFTER INSERT ON public.users
+    FOR EACH ROW EXECUTE FUNCTION public.handle_new_user_privacy();
+
+-- =========================================================================================
+-- SISTEMA DE LOGROS, GAMIFICACIÓN Y RACHAS
+-- =========================================================================================
+
+-- 1. Tabla de Categorías de Logros
+CREATE TABLE IF NOT EXISTS public.achievement_categories (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    name VARCHAR(100) NOT NULL UNIQUE,
+    description TEXT,
+    icon_url TEXT,
+    display_order INTEGER DEFAULT 0,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- 2. Tabla de Logros (Catálogo de medallas y metas)
+CREATE TABLE IF NOT EXISTS public.achievements (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    category_id UUID REFERENCES public.achievement_categories(id) ON DELETE CASCADE,
+    title VARCHAR(255) NOT NULL,
+    description TEXT NOT NULL,
+    points INTEGER DEFAULT 10,
+    badge_url TEXT,
+    criteria_type VARCHAR(50), -- Ej. 'diary', 'streak', 'nutrition', 'amati', 'appointment', 'clinical'
+    criteria_value INTEGER DEFAULT 1, -- Cantidad requerida para desbloquear el logro
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- 3. Tabla de Logros de Usuarios (Seguimiento del progreso y medallas obtenidas)
+CREATE TABLE IF NOT EXISTS public.user_achievements (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+    achievement_id UUID NOT NULL REFERENCES public.achievements(id) ON DELETE CASCADE,
+    earned_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()),
+    progress INTEGER DEFAULT 0, -- Progreso actual hacia el criteria_value
+    is_completed BOOLEAN DEFAULT FALSE,
+    awarded_by UUID REFERENCES public.users(id) ON DELETE SET NULL, -- Clínico/Admin que lo otorgó (si fue manual)
+    notes TEXT, -- Notas de felicitación o contexto clínico
+    UNIQUE(user_id, achievement_id)
+);
+
+-- 4. Tabla de Rachas y XP de Usuarios (Streak Engine)
+CREATE TABLE IF NOT EXISTS public.user_streaks (
+    user_id UUID PRIMARY KEY REFERENCES public.users(id) ON DELETE CASCADE,
+    current_streak INTEGER DEFAULT 0 NOT NULL,
+    best_streak INTEGER DEFAULT 0 NOT NULL,
+    last_activity_date DATE DEFAULT CURRENT_DATE NOT NULL,
+    total_xp INTEGER DEFAULT 0 NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- 5. Habilitar RLS en tablas de logros
+ALTER TABLE public.achievement_categories ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.achievements ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.user_achievements ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.user_streaks ENABLE ROW LEVEL SECURITY;
+
+-- 6. Índices para Alto Rendimiento
+CREATE INDEX IF NOT EXISTS idx_achievements_category ON public.achievements(category_id);
+CREATE INDEX IF NOT EXISTS idx_user_achievements_user ON public.user_achievements(user_id);
+CREATE INDEX IF NOT EXISTS idx_user_achievements_achievement ON public.user_achievements(achievement_id);
+
+-- 7. Políticas de Seguridad RLS para Logros
+CREATE POLICY achievement_categories_select ON public.achievement_categories
+    FOR SELECT TO authenticated USING (true);
+
+CREATE POLICY achievement_categories_modify ON public.achievement_categories
+    FOR ALL TO authenticated USING (public.get_auth_role() IN (1, 3, 4));
+
+CREATE POLICY achievements_select ON public.achievements
+    FOR SELECT TO authenticated USING (true);
+
+CREATE POLICY achievements_modify ON public.achievements
+    FOR ALL TO authenticated USING (public.get_auth_role() IN (1, 3, 4));
+
+CREATE POLICY user_achievements_select ON public.user_achievements
+    FOR SELECT TO authenticated USING (user_id = auth.uid() OR public.get_auth_role() IN (1, 3, 4));
+
+CREATE POLICY user_achievements_modify ON public.user_achievements
+    FOR ALL TO authenticated USING (public.get_auth_role() IN (1, 3, 4));
+
+CREATE POLICY user_streaks_select ON public.user_streaks
+    FOR SELECT TO authenticated USING (user_id = auth.uid() OR public.get_auth_role() IN (1, 3, 4));
+
+CREATE POLICY user_streaks_modify ON public.user_streaks
+    FOR ALL TO authenticated USING (true);
+
+
+-- =========================================================================================
+-- EVALUACIONES DE SESIÓN Y ALIANZA TERAPÉUTICA (RUPTURAS)
+-- =========================================================================================
+
+-- 1. Tabla de Evaluaciones de Sesión
+CREATE TABLE IF NOT EXISTS public.session_evaluations (
+  id                        UUID          PRIMARY KEY DEFAULT gen_random_uuid(),
+  appointment_id            UUID          NOT NULL REFERENCES public.appointments(id) ON DELETE CASCADE,
+  patient_id                UUID          NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+  professional_id           UUID          NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+  q1_global               DECIMAL(2,1)  NOT NULL CHECK (q1_global  BETWEEN 1.0 AND 5.0),
+  q2_bond                 DECIMAL(2,1)  NOT NULL CHECK (q2_bond    BETWEEN 1.0 AND 5.0),
+  q3_goals                DECIMAL(2,1)  NOT NULL CHECK (q3_goals   BETWEEN 1.0 AND 5.0),
+  q4_impact               DECIMAL(2,1)  NOT NULL CHECK (q4_impact  BETWEEN 1.0 AND 5.0),
+  q5_comment              TEXT,
+  score_global            DECIMAL(2,1)  GENERATED ALWAYS AS (
+    ROUND(
+      (q1_global * 0.20 + q2_bond * 0.30 + q3_goals * 0.25 + q4_impact * 0.25)::numeric,
+      1
+    )
+  ) STORED,
+  rupture_flag            TEXT          NOT NULL DEFAULT 'pending' CHECK (rupture_flag IN ('critical', 'decline', 'healthy', 'pending')),
+  is_visible_to_professional BOOLEAN   NOT NULL DEFAULT TRUE,
+  created_at              TIMESTAMPTZ   NOT NULL DEFAULT NOW(),
+  CONSTRAINT session_evaluations_appointment_id_unique UNIQUE (appointment_id)
+);
+
+-- 2. Índices de Alto Rendimiento para Evaluaciones
+CREATE INDEX IF NOT EXISTS idx_session_evaluations_patient_id ON public.session_evaluations (patient_id);
+CREATE INDEX IF NOT EXISTS idx_session_evaluations_professional_id ON public.session_evaluations (professional_id);
+CREATE INDEX IF NOT EXISTS idx_session_evaluations_created_at ON public.session_evaluations (created_at DESC);
+
+-- 3. Habilitar RLS en Evaluaciones
+ALTER TABLE public.session_evaluations ENABLE ROW LEVEL SECURITY;
+
+-- 4. Políticas de Seguridad RLS para Evaluaciones
+CREATE POLICY se_patient_insert ON public.session_evaluations
+  FOR INSERT TO authenticated WITH CHECK (patient_id = auth.uid());
+
+CREATE POLICY se_patient_select ON public.session_evaluations
+  FOR SELECT TO authenticated USING (patient_id = auth.uid());
+
+CREATE POLICY se_professional_select ON public.session_evaluations
+  FOR SELECT TO authenticated USING (professional_id = auth.uid() AND is_visible_to_professional = TRUE);
+
+CREATE POLICY se_admin_select ON public.session_evaluations
+  FOR SELECT TO authenticated USING (public.get_auth_role() = 1);
+
+-- 5. Función compute_rupture_flag
+CREATE OR REPLACE FUNCTION public.compute_rupture_flag(
+  p_q1_global    DECIMAL(2,1),
+  p_q2_bond      DECIMAL(2,1),
+  p_q3_goals     DECIMAL(2,1),
+  p_q4_impact    DECIMAL(2,1),
+  p_score_global DECIMAL(2,1)
+)
+RETURNS TEXT
+LANGUAGE plpgsql
+IMMUTABLE
+SECURITY INVOKER
+AS $$
+DECLARE
+  v_has_critical_dimension BOOLEAN;
+  v_all_dimensions_healthy BOOLEAN;
+END;
+$$;
+
+-- Implementación interna de la lógica de ruptura terapéutica
+CREATE OR REPLACE FUNCTION public.compute_rupture_flag(
+  p_q1_global    DECIMAL(2,1),
+  p_q2_bond      DECIMAL(2,1),
+  p_q3_goals     DECIMAL(2,1),
+  p_q4_impact    DECIMAL(2,1),
+  p_score_global DECIMAL(2,1)
+)
+RETURNS TEXT
+LANGUAGE plpgsql
+IMMUTABLE
+SECURITY INVOKER
+AS $$
+DECLARE
+  v_has_critical_dimension BOOLEAN;
+  v_all_dimensions_healthy BOOLEAN;
+BEGIN
+  v_has_critical_dimension := (
+    p_q1_global <= 2.0 OR
+    p_q2_bond   <= 2.0 OR
+    p_q3_goals  <= 2.0 OR
+    p_q4_impact <= 2.0
+  );
+
+  v_all_dimensions_healthy := (
+    p_q1_global >= 3.0 AND
+    p_q2_bond   >= 3.0 AND
+    p_q3_goals  >= 3.0 AND
+    p_q4_impact >= 3.0
+  );
+
+  IF v_has_critical_dimension OR p_score_global < 3.5 THEN
+    RETURN 'critical';
+  END IF;
+
+  IF p_score_global >= 4.0 AND v_all_dimensions_healthy THEN
+    RETURN 'healthy';
+  END IF;
+
+  RETURN 'decline';
+END;
+$$;
+
+-- 6. Función de Trigger trg_set_rupture_flag
+CREATE OR REPLACE FUNCTION public.fn_set_rupture_flag()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+SECURITY INVOKER
+AS $$
+DECLARE
+  v_score_global DECIMAL(2,1);
+BEGIN
+  v_score_global := ROUND(
+    (
+      NEW.q1_global * 0.20 +
+      NEW.q2_bond   * 0.30 +
+      NEW.q3_goals  * 0.25 +
+      NEW.q4_impact * 0.25
+    )::numeric,
+    1
+  );
+
+  NEW.rupture_flag := public.compute_rupture_flag(
+    NEW.q1_global,
+    NEW.q2_bond,
+    NEW.q3_goals,
+    NEW.q4_impact,
+    v_score_global
+  );
+
+  RETURN NEW;
+END;
+$$;
+
+-- 7. Registro de Trigger en session_evaluations
+CREATE TRIGGER trg_set_rupture_flag
+  BEFORE INSERT
+  ON public.session_evaluations
+  FOR EACH ROW
+  EXECUTE FUNCTION public.fn_set_rupture_flag();
+
+
+-- =========================================================================================
+-- MOTOR DE RACHAS: FUNCIÓN PostgreSQL ALMACENADA (STREAK ENGINE)
+-- =========================================================================================
+CREATE OR REPLACE FUNCTION public.update_user_activity_streak(
+    p_user_id UUID,
+    p_category TEXT -- 'diary', 'nutrition', 'amati', 'appointment'
+)
+RETURNS JSON
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+DECLARE
+    v_current_date DATE := CURRENT_DATE;
+    v_streak_record RECORD;
+    v_xp_earned INTEGER := 10; -- XP base por registrar actividad diaria
+    v_streak_incremented BOOLEAN := FALSE;
+    v_unlocked_achievements JSONB := '[]'::jsonb;
+    v_ach_record RECORD;
+    v_current_progress INTEGER;
+BEGIN
+    -- 1. Verificar o insertar registro de racha en user_streaks
+    SELECT * INTO v_streak_record FROM public.user_streaks WHERE user_id = p_user_id;
+    
+    IF NOT FOUND THEN
+        INSERT INTO public.user_streaks (user_id, current_streak, best_streak, last_activity_date, total_xp)
+        VALUES (p_user_id, 1, 1, v_current_date, v_xp_earned)
+        RETURNING * INTO v_streak_record;
+        v_streak_incremented := TRUE;
+    ELSE
+        -- Evaluar la racha comparando la fecha de última actividad
+        IF v_streak_record.last_activity_date = v_current_date THEN
+            -- Ya hizo actividad hoy, no incrementamos racha pero sí acumulamos XP base por actividad
+            UPDATE public.user_streaks
+            SET total_xp = total_xp + v_xp_earned,
+                updated_at = NOW()
+            WHERE user_id = p_user_id
+            RETURNING * INTO v_streak_record;
+        ELSIF v_streak_record.last_activity_date = (v_current_date - 1) THEN
+            -- Actividad ayer: racha se incrementa
+            v_streak_incremented := TRUE;
+            UPDATE public.user_streaks
+            SET current_streak = current_streak + 1,
+                best_streak = GREATEST(best_streak, current_streak + 1),
+                last_activity_date = v_current_date,
+                total_xp = total_xp + v_xp_earned + 10, -- Bono extra +10 XP por mantener racha
+                updated_at = NOW()
+            WHERE user_id = p_user_id
+            RETURNING * INTO v_streak_record;
+        ELSE
+            -- Actividad más antigua: racha se reinicia a 1
+            v_streak_incremented := TRUE;
+            UPDATE public.user_streaks
+            SET current_streak = 1,
+                last_activity_date = v_current_date,
+                total_xp = total_xp + v_xp_earned,
+                updated_at = NOW()
+            WHERE user_id = p_user_id
+            RETURNING * INTO v_streak_record;
+        END IF;
+    END IF;
+
+    -- 2. Actualizar progreso y evaluar logros del catálogo aplicables
+    FOR v_ach_record IN 
+        SELECT a.id, a.title, a.points, a.criteria_type, a.criteria_value 
+        FROM public.achievements a
+        WHERE a.is_active = TRUE 
+          AND (a.criteria_type = p_category OR a.criteria_type = 'streak')
+    LOOP
+        -- Calcular progreso actual del alumno para este tipo de requisito
+        IF v_ach_record.criteria_type = 'streak' THEN
+            v_current_progress := v_streak_record.current_streak;
+        ELSIF v_ach_record.criteria_type = 'diary' THEN
+            SELECT count(*)::integer INTO v_current_progress FROM public.diary_entries WHERE student_id = p_user_id;
+        ELSIF v_ach_record.criteria_type = 'nutrition' THEN
+            SELECT count(DISTINCT diary_date)::integer INTO v_current_progress FROM public.food_diary_entries WHERE student_id = p_user_id;
+        ELSIF v_ach_record.criteria_type = 'amati' THEN
+            SELECT count(*)::integer INTO v_current_progress FROM public.chats WHERE student_id = p_user_id;
+        ELSIF v_ach_record.criteria_type = 'appointment' THEN
+            SELECT count(CASE WHEN status = 'completed' THEN 1 END)::integer INTO v_current_progress FROM public.appointments WHERE student_id = p_user_id;
+        ELSE
+            v_current_progress := 0;
+        END IF;
+
+        -- Registrar o actualizar el progreso en user_achievements
+        INSERT INTO public.user_achievements (user_id, achievement_id, progress, is_completed, earned_at)
+        VALUES (p_user_id, v_ach_record.id, LEAST(v_current_progress, v_ach_record.criteria_value), 
+                v_current_progress >= v_ach_record.criteria_value, 
+                CASE WHEN v_current_progress >= v_ach_record.criteria_value THEN NOW() ELSE NULL END)
+        ON CONFLICT (user_id, achievement_id) DO UPDATE
+        SET progress = LEAST(EXCLUDED.progress, v_ach_record.criteria_value),
+            is_completed = CASE WHEN v_current_progress >= v_ach_record.criteria_value THEN TRUE ELSE public.user_achievements.is_completed END,
+            earned_at = CASE WHEN v_current_progress >= v_ach_record.criteria_value AND public.user_achievements.is_completed = FALSE THEN NOW() ELSE public.user_achievements.earned_at END;
+
+        -- Si el logro se acaba de desbloquear en esta ejecución, sumamos su XP de recompensa
+        IF v_current_progress >= v_ach_record.criteria_value THEN
+            -- Verificar si se completó en la ventana de los últimos 5 segundos (nueva consecución)
+            IF EXISTS (
+                SELECT 1 FROM public.user_achievements 
+                WHERE user_id = p_user_id AND achievement_id = v_ach_record.id AND is_completed = TRUE AND earned_at >= NOW() - INTERVAL '5 seconds'
+            ) THEN
+                -- Sumar XP del logro al total del usuario
+                UPDATE public.user_streaks
+                SET total_xp = total_xp + v_ach_record.points
+                WHERE user_id = p_user_id;
+                
+                -- Agregar a la lista de logros desbloqueados devueltos
+                v_unlocked_achievements := v_unlocked_achievements || jsonb_build_object(
+                    'id', v_ach_record.id,
+                    'title', v_ach_record.title,
+                    'xp_reward', v_ach_record.points
+                );
+            END IF;
+        END IF;
+    END LOOP;
+
+    -- Obtener estado final actualizado de la racha y XP
+    SELECT * INTO v_streak_record FROM public.user_streaks WHERE user_id = p_user_id;
+
+    RETURN json_build_object(
+        'success', true,
+        'current_streak', v_streak_record.current_streak,
+        'best_streak', v_streak_record.best_streak,
+        'total_xp', v_streak_record.total_xp,
+        'unlocked_achievements', v_unlocked_achievements
+    );
+END;
+$$;

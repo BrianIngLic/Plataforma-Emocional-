@@ -262,3 +262,105 @@ body.modal-open {
   100% { transform: scale(0.95); filter: drop-shadow(0 0 8px rgba(139, 92, 246, 0.3)); }
 }
 
+/* ==========================================================================
+   ACHIEVEMENT UNLOCKED TOAST NOTIFICATION
+   ========================================================================== */
+.achievement-toast-container {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  pointer-events: none;
+}
+
+.achievement-toast {
+  pointer-events: auto;
+  min-width: 320px;
+  max-width: 400px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  transform: translateX(120%);
+  transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease;
+  opacity: 0;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 6px;
+    height: 100%;
+    background: linear-gradient(to bottom, #fbbf24, #d97706); /* Gold gradient */
+  }
+
+  &.active {
+    transform: translateX(0);
+    opacity: 1;
+  }
+
+  &.fade-out {
+    transform: translateY(-20px) scale(0.95);
+    opacity: 0;
+  }
+
+  .toast-icon-wrapper {
+    background: rgba(245, 158, 11, 0.12);
+    border-radius: 12px;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    animation: bounceIcon 1s ease infinite alternate;
+  }
+
+  .toast-body {
+    flex: 1;
+
+    .toast-subtitle {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #d97706;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+
+    .toast-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin: 0;
+      line-height: 1.3;
+    }
+
+    .toast-xp {
+      font-size: 0.8rem;
+      color: #10b981;
+      font-weight: 700;
+      margin-top: 4px;
+      display: flex;
+      align-items: center;
+      gap: 2px;
+    }
+  }
+}
+
+@keyframes bounceIcon {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-3px); }
+}
+
+

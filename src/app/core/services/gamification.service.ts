@@ -100,6 +100,15 @@ export class GamificationService {
 
       const list: Achievement[] = (globalAchievements ?? []).map((ach: any) => {
         const ua = unlockedMap.get(ach.id);
+        // Compatibilidad con ambos schemas:
+        // Schema viejo: solo tiene unlocked_at
+        // Schema nuevo: tiene is_completed, earned_at, progress, notes
+        const isCompleted = ua
+          ? (ua.is_completed !== undefined ? ua.is_completed : !!ua.unlocked_at)
+          : false;
+        const earnedAt = ua
+          ? (ua.earned_at || ua.unlocked_at || null)
+          : null;
         return {
           id:             ach.id              || '',
           title:         ach.title            || 'Logro',
@@ -108,10 +117,10 @@ export class GamificationService {
           badge_url:     ach.badge_image_url  || 'medal',
           criteria_type: ach.requirement_type || 'general',
           criteria_value: ach.requirement_value ?? 1,
-          progress:      ua ? ua.progress      : 0,
-          is_completed:  ua ? ua.is_completed  : false,
-          earned_at:     ua ? ua.earned_at     : null,
-          notes:         ua ? ua.notes         : null
+          progress:      ua ? (ua.progress ?? (isCompleted ? 1 : 0)) : 0,
+          is_completed:  isCompleted,
+          earned_at:     earnedAt,
+          notes:         ua ? ua.notes        : null
         };
       });
 
@@ -119,6 +128,49 @@ export class GamificationService {
     } catch (err) {
       console.error('❌ Error al cargar datos de gamificación:', err);
     }
+  }
+
+  /**
+   * Muestra un toast premium y animado en pantalla al cumplir un logro.
+   */
+  private showAchievementToast(title: string, xpReward: number) {
+    let container = document.getElementById('achievement-toast-container');
+    if (!container) {
+      container = document.createElement('div');
+      container.id = 'achievement-toast-container';
+      container.className = 'achievement-toast-container';
+      document.body.appendChild(container);
+    }
+
+    const toast = document.createElement('div');
+    toast.className = 'achievement-toast';
+    toast.innerHTML = `
+      <div class="toast-icon-wrapper">🏆</div>
+      <div class="toast-body">
+        <div class="toast-subtitle">¡Logro Desbloqueado!</div>
+        <h4 class="toast-title">${title}</h4>
+        <div class="toast-xp">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 2px;"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <span>+${xpReward} XP</span>
+        </div>
+      </div>
+    `;
+
+    container.appendChild(toast);
+
+    // Activar animación de entrada
+    setTimeout(() => toast.classList.add('active'), 50);
+
+    // Remover automáticamente después de 5 segundos
+    setTimeout(() => {
+      toast.classList.add('fade-out');
+      setTimeout(() => {
+        toast.remove();
+        if (container && container.childNodes.length === 0) {
+          container.remove();
+        }
+      }, 500);
+    }, 5000);
   }
 
   /**
@@ -141,6 +193,14 @@ export class GamificationService {
 
       // Recargar datos para actualizar la UI reactivamente
       await this.loadGamificationData();
+
+      // Si hay logros recién desbloqueados, mostrar notificaciones
+      if (data && data.unlocked_achievements && Array.isArray(data.unlocked_achievements)) {
+        data.unlocked_achievements.forEach((ach: any) => {
+          const xp = ach.xp_value || ach.xp_reward || 10;
+          this.showAchievementToast(ach.title, xp);
+        });
+      }
 
       // Devolver logros desbloqueados en esta interacción para alertas visuales
       return data;
@@ -205,6 +265,7 @@ export class GamificationService {
           progress: 1,
           is_completed: true,
           earned_at: new Date().toISOString(),
+          unlocked_at: new Date().toISOString(),
           awarded_by: professional.id,
           notes: notes
         });

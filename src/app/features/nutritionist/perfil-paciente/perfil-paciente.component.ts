@@ -345,7 +345,18 @@ export class PerfilPaciente implements OnInit {
           .order('meal_time', { ascending: true });
 
         if (foodData && !foodError) {
-          this.foodDiaryEntries = foodData;
+          this.foodDiaryEntries = foodData.map((entry: any) => {
+            let decWhat = '';
+            try {
+              decWhat = this.crypto.decrypt(entry.what_i_ate || '');
+            } catch(e) {
+              decWhat = entry.what_i_ate || '';
+            }
+            return {
+              ...entry,
+              what_i_ate: decWhat
+            };
+          });
         } else if (foodError) {
           console.error('Error fetching food diary entries:', foodError);
         }

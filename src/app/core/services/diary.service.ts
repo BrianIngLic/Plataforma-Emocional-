@@ -120,7 +120,47 @@ export class DiaryService {
         console.warn('ALERTA CLÍNICA: Entrada marcada con alto riesgo.');
       }
     }
-  }
+   }
+
+   async updateEntry(id: string, content: string, moods: string[], sleepHours: number | null = null) {
+     const user = this.authService.currentUser();
+     if (!user) return;
+
+     const lowerContent = content.toLowerCase();
+     const highRiskWords = ['morir', 'suicidio', 'no vale la pena', 'acabar con todo', 'no quiero vivir'];
+     const isHighRisk = highRiskWords.some(word => lowerContent.includes(word));
+
+     const encryptedContent = this.cryptoService.encrypt(content);
+
+     const { data, error } = await this.supabaseService.supabase
+       .from('diary_entries')
+       .update({
+         content: encryptedContent,
+         moods: moods,
+         sleep_hours: sleepHours,
+         high_risk: isHighRisk
+       })
+       .eq('id', id)
+       .eq('student_id', user.id)
+       .select()
+       .single();
+
+     if (error) {
+       console.error('[DiaryService] Error actualizando entrada del diario:', error.message);
+       return;
+     }
+
+     // Actualizar la señal reactiva con el contenido plano (descifrado) en memoria
+     this.entriesSignal.update(entries =>
+       entries.map(e => e.id === id ? {
+         ...e,
+         content: content,
+         moods: moods,
+         sleepHours: sleepHours,
+         highRisk: isHighRisk
+       } : e)
+     );
+   }
 
   // ════════════════════════════════════════════════════════════════════
   // DIARIO ALIMENTARIO
@@ -140,15 +180,23 @@ export class DiaryService {
       .order('meal_time', { ascending: true });
 
     if (data && !error) {
-      this.foodEntriesSignal.set(data.map(row => ({
-        id: row.id,
-        diary_date: row.diary_date,
-        meal_time: row.meal_time,
-        mood_before: row.mood_before,
-        what_i_ate: row.what_i_ate,
-        mood_after: row.mood_after,
-        created_at: row.created_at
-      })));
+      this.foodEntriesSignal.set(data.map(row => {
+        let decryptedWhat = '';
+        try {
+          decryptedWhat = this.cryptoService.decrypt(row.what_i_ate);
+        } catch (e) {
+          decryptedWhat = row.what_i_ate; // Fallback si no está cifrado
+        }
+        return {
+          id: row.id,
+          diary_date: row.diary_date,
+          meal_time: row.meal_time,
+          mood_before: row.mood_before,
+          what_i_ate: decryptedWhat,
+          mood_after: row.mood_after,
+          created_at: row.created_at
+        };
+      }));
     } else if (error) {
       console.error('Error cargando entradas alimentarias:', error.message);
     }
@@ -158,6 +206,8 @@ export class DiaryService {
     const user = this.authService.currentUser();
     if (!user) return null;
 
+    const encryptedWhat = this.cryptoService.encrypt(entry.what_i_ate);
+
     const { data, error } = await this.supabaseService.supabase
       .from('food_diary_entries')
       .insert({
@@ -165,7 +215,7 @@ export class DiaryService {
         diary_date: entry.diary_date,
         meal_time: entry.meal_time,
         mood_before: entry.mood_before,
-        what_i_ate: entry.what_i_ate,
+        what_i_ate: encryptedWhat,
         mood_after: entry.mood_after
       })
       .select()
@@ -177,7 +227,7 @@ export class DiaryService {
         diary_date: data.diary_date,
         meal_time: data.meal_time,
         mood_before: data.mood_before,
-        what_i_ate: data.what_i_ate,
+        what_i_ate: entry.what_i_ate, // Conservar plano en memoria para la interfaz
         mood_after: data.mood_after,
         created_at: data.created_at
       };
@@ -201,15 +251,20 @@ export class DiaryService {
   }
 
   async updateFoodEntry(id: string, patch: Partial<Pick<FoodDiaryEntry, 'meal_time' | 'mood_before' | 'what_i_ate' | 'mood_after'>>) {
+    const patchCopy = { ...patch };
+    if (patchCopy.what_i_ate !== undefined) {
+      patchCopy.what_i_ate = this.cryptoService.encrypt(patchCopy.what_i_ate);
+    }
+
     const { error } = await this.supabaseService.supabase
       .from('food_diary_entries')
-      .update({ ...patch, updated_at: new Date().toISOString() })
+      .update({ ...patchCopy, updated_at: new Date().toISOString() })
       .eq('id', id);
 
     if (!error) {
       this.foodEntriesSignal.update(entries =>
         entries
-          .map(e => e.id === id ? { ...e, ...patch } : e)
+          .map(e => e.id === id ? { ...e, ...patch } : e) // Mantener plano en memoria
           .sort((a, b) => a.meal_time.localeCompare(b.meal_time))
       );
       return true;

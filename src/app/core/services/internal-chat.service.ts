@@ -144,7 +144,7 @@ export class InternalChatService {
         console.log(`📱 Enviando mensaje WhatsApp a ${studentPhone} via Edge Function...`);
 
         const { data: fnResult, error: fnError } = await this.supabase.functions.invoke(
-          'meta-whatsapp-outbound',
+          'meta-whatsapp',
           {
             method: 'POST',
             body: {

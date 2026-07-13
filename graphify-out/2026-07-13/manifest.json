@@ -510,8 +510,8 @@
     "semantic_hash": ""
   },
   "src/app/core/services/emergency-notification.service.ts": {
-    "mtime": 1783668250.7873898,
-    "ast_hash": "9802e1312a88244bcaccfc4c14cd57e7",
+    "mtime": 1783911998.7693472,
+    "ast_hash": "ab2648ba837b7f7c483716dc868741dd",
     "semantic_hash": ""
   },
   "src/app/features/health-professional/agenda/agenda.component.ts": {
@@ -735,8 +735,8 @@
     "semantic_hash": ""
   },
   "src/app/core/services/internal-chat.service.ts": {
-    "mtime": 1783882051.7301831,
-    "ast_hash": "047edfa7b207f1ecb15fbcf1646e9500",
+    "mtime": 1783911997.0227137,
+    "ast_hash": "3c1ca009e71cdf82710c2ee07d2ba2f7",
     "semantic_hash": ""
   },
   "src/app/features/health-professional/command-center-chat/command-center-chat.component.ts": {
@@ -745,8 +745,8 @@
     "semantic_hash": ""
   },
   "supabase/functions/meta-whatsapp/index.ts": {
-    "mtime": 1783882026.905707,
-    "ast_hash": "3f0a07073ab1d324a58eb5e5253a0a4a",
+    "mtime": 1783911986.1690078,
+    "ast_hash": "f4832e89f9bbcf41ddd38c3f28728fda",
     "semantic_hash": ""
   },
   "src/app/features/health-professional/command-center-chat/command-center-chat.component.html": {
@@ -762,11 +762,6 @@
   "src/app/features/admin/faculties/faculty-detail/faculty-detail.component.html": {
     "mtime": 1782852503.0329745,
     "ast_hash": "9b54e5646b452244da07478b53dc3382",
-    "semantic_hash": ""
-  },
-  "supabase/functions/meta-whatsapp-outbound/index.ts": {
-    "mtime": 1783668250.9200945,
-    "ast_hash": "5d868c072c7c776e59fdf514dfb64642",
     "semantic_hash": ""
   },
   "supabase/functions/wa-keepalive/index.ts": {

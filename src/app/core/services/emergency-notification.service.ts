@@ -198,7 +198,7 @@ export class EmergencyNotificationService {
         };
 
         // Invoke Edge Function to send WhatsApp message
-        const { data: fnResult, error: fnError } = await this.supabase.functions.invoke('meta-whatsapp-outbound', {
+        const { data: fnResult, error: fnError } = await this.supabase.functions.invoke('meta-whatsapp', {
           method: 'POST',
           body: payload
         });

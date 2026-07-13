@@ -86,13 +86,13 @@ serve(async (req: Request) => {
           const orFilterMobile = uniqueFormats.map(f => `mobile_phone.eq.${f}`).join(',');
           
           // Buscar directamente en users (mobile_phone)
-          const { data: userData } = await supabase
+          const { data: usersData } = await supabase
             .from('users')
             .select('id')
             .or(orFilterMobile)
-            .maybeSingle();
+            .limit(1);
 
-          const userId = userData?.id;
+          const userId = usersData && usersData.length > 0 ? usersData[0].id : null;
 
           if (userId) {
             // Estudiante encontrado. Obtener o crear la conversación.
@@ -163,8 +163,76 @@ serve(async (req: Request) => {
         });
       }
 
-      // 3. FLUJO SALIENTE (Desde el Trigger de la BD/Outbound)
-      // Se detecta que se insertó un registro con sender_type = 'professional' y status = 'pending'
+      // 3. FLUJO SALIENTE
+
+      // A. Caso Outbound Directo (Llamada HTTP desde Angular/Cliente)
+      if (payload.phone || (payload.messaging_product && payload.to)) {
+        let to: string;
+        let metaPayload: Record<string, unknown>;
+
+        if (payload.messaging_product && payload.to) {
+          to = payload.to;
+          metaPayload = payload;
+          console.log(`📱 [Directo] Formato C (Meta API directo): destinatario ${to}`);
+        } else if (payload.phone && payload.template) {
+          to = payload.phone;
+          metaPayload = {
+            messaging_product: "whatsapp",
+            to,
+            type: "template",
+            template: payload.template,
+          };
+          console.log(`📱 [Directo] Formato B (template): destinatario ${to}`);
+        } else if (payload.phone && payload.message) {
+          to = payload.phone;
+          metaPayload = {
+            messaging_product: "whatsapp",
+            to,
+            type: "text",
+            text: { body: payload.message },
+          };
+          console.log(`📱 [Directo] Formato A (texto): destinatario ${to}`);
+        } else {
+          return new Response(
+            JSON.stringify({ error: "Payload inválido. Envía { phone, message } o { phone, template } o la estructura completa de Meta API." }),
+            { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+          );
+        }
+
+        const cleanedPhone = to.replace(/\D/g, '');
+        if (metaPayload.to) {
+          metaPayload.to = cleanedPhone;
+        }
+
+        const endpoint = `https://graph.facebook.com/v19.0/${META_PHONE_NUMBER_ID}/messages`;
+        console.log(`🚀 Llamando a Meta Cloud API (Directo): ${endpoint}`);
+
+        const resp = await fetch(endpoint, {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${META_ACCESS_TOKEN}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(metaPayload),
+        });
+
+        const result = await resp.json();
+        console.log(`📊 Meta API response (${resp.status}):`, JSON.stringify(result));
+
+        if (!resp.ok) {
+          return new Response(
+            JSON.stringify({ error: result }),
+            { status: resp.status, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+          );
+        }
+
+        return new Response(
+          JSON.stringify({ success: true, data: result }),
+          { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
+
+      // B. Caso Outbound por Trigger (Desde la Base de Datos)
       const record = payload.record || payload;
 
       if (record && record.sender_type === 'professional' && record.status === 'pending') {
@@ -181,28 +249,19 @@ serve(async (req: Request) => {
         if (conv) {
           const studentId = conv.student_id;
 
-          // B. Obtener teléfono del estudiante
-          const { data: profile } = await supabase
-            .from('profiles')
-            .select('celular')
-            .eq('user_id', studentId)
+          // B. Obtener teléfono del estudiante directamente de users (mobile_phone)
+          const { data: user } = await supabase
+            .from('users')
+            .select('mobile_phone')
+            .eq('id', studentId)
             .single();
 
-          let phone = profile?.celular;
-
-          if (!phone) {
-            const { data: user } = await supabase
-              .from('users')
-              .select('mobile_phone')
-              .eq('id', studentId)
-              .single();
-            phone = user?.mobile_phone;
-          }
+          let phone = user?.mobile_phone;
 
           if (phone) {
             // Limpiar el teléfono para dejar solo dígitos
             const cleanedPhone = phone.replace(/\D/g, '');
-            console.log(`✉️ Enviando WhatsApp saliente a: ${cleanedPhone}...`);
+            console.log(`✉️ Enviando WhatsApp saliente (Trigger) a: ${cleanedPhone}...`);
 
             // Preparar el cuerpo de la petición según si es mensaje de texto o plantilla
             let bodyPayload: any;
@@ -234,8 +293,8 @@ serve(async (req: Request) => {
               };
             }
 
-            // Realizar llamada HTTP a Meta Cloud API
-            const metaResponse = await fetch(`https://graph.facebook.com/v18.0/${META_PHONE_NUMBER_ID}/messages`, {
+            // Realizar llamada HTTP a Meta Cloud API v19.0
+            const metaResponse = await fetch(`https://graph.facebook.com/v19.0/${META_PHONE_NUMBER_ID}/messages`, {
               method: 'POST',
               headers: {
                 'Authorization': `Bearer ${META_ACCESS_TOKEN}`,
@@ -248,7 +307,7 @@ serve(async (req: Request) => {
 
             if (metaResponse.ok && metaResult.messages?.[0]?.id) {
               const waMessageId = metaResult.messages[0].id;
-              console.log(`✅ WhatsApp enviado con éxito a Meta. Message ID: ${waMessageId}`);
+              console.log(`✅ WhatsApp enviado con éxito a Meta (Trigger). Message ID: ${waMessageId}`);
 
               // Actualizar el estado en base de datos
               await supabase
@@ -270,7 +329,7 @@ serve(async (req: Request) => {
 
             } else {
               const errMsg = metaResult.error?.message || 'Error desconocido al invocar la API de Meta';
-              console.error(`❌ Fallo al enviar mensaje vía Meta API:`, metaResult);
+              console.error(`❌ Fallo al enviar mensaje vía Meta API (Trigger):`, metaResult);
 
               await supabase
                 .from('internal_meta_chats')

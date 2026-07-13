@@ -134,7 +134,7 @@
       "source_location": "",
       "_origin": "ast",
       "id": "path",
-      "community": 149,
+      "community": 89,
       "norm_label": "path"
     },
     {
@@ -1204,7 +1204,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "angular",
-      "community": 141,
+      "community": 0,
       "norm_label": "angular.json"
     },
     {
@@ -1214,7 +1214,7 @@
       "source_location": "L2",
       "_origin": "ast",
       "id": "angular_schema",
-      "community": 141,
+      "community": 0,
       "norm_label": "$schema"
     },
     {
@@ -1224,7 +1224,7 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "angular_version",
-      "community": 141,
+      "community": 0,
       "norm_label": "version"
     },
     {
@@ -1234,7 +1234,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "angular_newprojectroot",
-      "community": 141,
+      "community": 0,
       "norm_label": "newprojectroot"
     },
     {
@@ -1244,7 +1244,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "angular_projects",
-      "community": 141,
+      "community": 0,
       "norm_label": "projects"
     },
     {
@@ -1254,7 +1254,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "angular_projects_plataforma_emocional",
-      "community": 137,
+      "community": 0,
       "norm_label": "plataforma_emocional"
     },
     {
@@ -1264,7 +1264,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "angular_plataforma_emocional_projecttype",
-      "community": 137,
+      "community": 0,
       "norm_label": "projecttype"
     },
     {
@@ -1274,7 +1274,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "angular_plataforma_emocional_schematics",
-      "community": 137,
+      "community": 0,
       "norm_label": "schematics"
     },
     {
@@ -1284,7 +1284,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "angular_schematics_schematics_angular_component",
-      "community": 137,
+      "community": 0,
       "norm_label": "@schematics/angular:component"
     },
     {
@@ -1294,7 +1294,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "angular_schematics_angular_component_style",
-      "community": 137,
+      "community": 0,
       "norm_label": "style"
     },
     {
@@ -1304,7 +1304,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "angular_plataforma_emocional_root",
-      "community": 137,
+      "community": 0,
       "norm_label": "root"
     },
     {
@@ -1314,7 +1314,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "angular_plataforma_emocional_sourceroot",
-      "community": 137,
+      "community": 0,
       "norm_label": "sourceroot"
     },
     {
@@ -1324,7 +1324,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "angular_plataforma_emocional_prefix",
-      "community": 137,
+      "community": 0,
       "norm_label": "prefix"
     },
     {
@@ -1334,7 +1334,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "angular_plataforma_emocional_architect",
-      "community": 163,
+      "community": 0,
       "norm_label": "architect"
     },
     {
@@ -1364,7 +1364,7 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "angular_build_options",
-      "community": 130,
+      "community": 0,
       "norm_label": "options"
     },
     {
@@ -1374,7 +1374,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "angular_options_browser",
-      "community": 130,
+      "community": 0,
       "norm_label": "browser"
     },
     {
@@ -1384,7 +1384,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "angular_options_polyfills",
-      "community": 130,
+      "community": 0,
       "norm_label": "polyfills"
     },
     {
@@ -1394,7 +1394,7 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "angular_options_tsconfig",
-      "community": 130,
+      "community": 0,
       "norm_label": "tsconfig"
     },
     {
@@ -1404,7 +1404,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "angular_options_inlinestylelanguage",
-      "community": 130,
+      "community": 0,
       "norm_label": "inlinestylelanguage"
     },
     {
@@ -1414,7 +1414,7 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "angular_options_assets",
-      "community": 130,
+      "community": 0,
       "norm_label": "assets"
     },
     {
@@ -1424,7 +1424,7 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "angular_options_styles",
-      "community": 130,
+      "community": 0,
       "norm_label": "styles"
     },
     {
@@ -1444,7 +1444,7 @@
       "source_location": "L37",
       "_origin": "ast",
       "id": "angular_configurations_production",
-      "community": 70,
+      "community": 0,
       "norm_label": "production"
     },
     {
@@ -1454,7 +1454,7 @@
       "source_location": "L38",
       "_origin": "ast",
       "id": "angular_production_budgets",
-      "community": 70,
+      "community": 0,
       "norm_label": "budgets"
     },
     {
@@ -1464,7 +1464,7 @@
       "source_location": "L50",
       "_origin": "ast",
       "id": "angular_production_outputhashing",
-      "community": 70,
+      "community": 0,
       "norm_label": "outputhashing"
     },
     {
@@ -1474,7 +1474,7 @@
       "source_location": "L51",
       "_origin": "ast",
       "id": "angular_production_serviceworker",
-      "community": 70,
+      "community": 0,
       "norm_label": "serviceworker"
     },
     {
@@ -1534,7 +1534,7 @@
       "source_location": "L61",
       "_origin": "ast",
       "id": "angular_architect_serve",
-      "community": 70,
+      "community": 0,
       "norm_label": "serve"
     },
     {
@@ -1544,7 +1544,7 @@
       "source_location": "L62",
       "_origin": "ast",
       "id": "angular_serve_builder",
-      "community": 70,
+      "community": 0,
       "norm_label": "builder"
     },
     {
@@ -1554,7 +1554,7 @@
       "source_location": "L63",
       "_origin": "ast",
       "id": "angular_serve_configurations",
-      "community": 70,
+      "community": 0,
       "norm_label": "configurations"
     },
     {
@@ -1564,7 +1564,7 @@
       "source_location": "L65",
       "_origin": "ast",
       "id": "angular_production_buildtarget",
-      "community": 70,
+      "community": 0,
       "norm_label": "buildtarget"
     },
     {
@@ -1584,7 +1584,7 @@
       "source_location": "L71",
       "_origin": "ast",
       "id": "angular_serve_defaultconfiguration",
-      "community": 70,
+      "community": 0,
       "norm_label": "defaultconfiguration"
     },
     {
@@ -1594,7 +1594,7 @@
       "source_location": "L73",
       "_origin": "ast",
       "id": "angular_architect_extract_i18n",
-      "community": 163,
+      "community": 0,
       "norm_label": "extract-i18n"
     },
     {
@@ -1604,7 +1604,7 @@
       "source_location": "L74",
       "_origin": "ast",
       "id": "angular_extract_i18n_builder",
-      "community": 163,
+      "community": 0,
       "norm_label": "builder"
     },
     {
@@ -1614,7 +1614,7 @@
       "source_location": "L76",
       "_origin": "ast",
       "id": "angular_architect_test",
-      "community": 163,
+      "community": 0,
       "norm_label": "test"
     },
     {
@@ -1624,7 +1624,7 @@
       "source_location": "L77",
       "_origin": "ast",
       "id": "angular_test_builder",
-      "community": 163,
+      "community": 0,
       "norm_label": "builder"
     },
     {
@@ -1634,7 +1634,7 @@
       "source_location": "L78",
       "_origin": "ast",
       "id": "angular_test_options",
-      "community": 130,
+      "community": 0,
       "norm_label": "options"
     },
     {
@@ -1704,7 +1704,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "package",
-      "community": 2,
+      "community": 137,
       "norm_label": "package.json"
     },
     {
@@ -1714,7 +1714,7 @@
       "source_location": "L2",
       "_origin": "ast",
       "id": "package_name",
-      "community": 2,
+      "community": 137,
       "norm_label": "name"
     },
     {
@@ -1724,7 +1724,7 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "package_version",
-      "community": 2,
+      "community": 137,
       "norm_label": "version"
     },
     {
@@ -1734,7 +1734,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "package_scripts",
-      "community": 2,
+      "community": 142,
       "norm_label": "scripts"
     },
     {
@@ -1744,7 +1744,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "package_scripts_ng",
-      "community": 2,
+      "community": 142,
       "norm_label": "ng"
     },
     {
@@ -1754,7 +1754,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "package_scripts_start",
-      "community": 2,
+      "community": 142,
       "norm_label": "start"
     },
     {
@@ -1764,7 +1764,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "package_scripts_build",
-      "community": 2,
+      "community": 142,
       "norm_label": "build"
     },
     {
@@ -1774,7 +1774,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "package_scripts_watch",
-      "community": 2,
+      "community": 142,
       "norm_label": "watch"
     },
     {
@@ -1784,7 +1784,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "package_scripts_test",
-      "community": 2,
+      "community": 142,
       "norm_label": "test"
     },
     {
@@ -1794,7 +1794,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "package_prettier",
-      "community": 2,
+      "community": 137,
       "norm_label": "prettier"
     },
     {
@@ -1804,7 +1804,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "package_prettier_printwidth",
-      "community": 2,
+      "community": 137,
       "norm_label": "printwidth"
     },
     {
@@ -1814,7 +1814,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "package_prettier_singlequote",
-      "community": 2,
+      "community": 137,
       "norm_label": "singlequote"
     },
     {
@@ -1824,7 +1824,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "package_prettier_overrides",
-      "community": 2,
+      "community": 137,
       "norm_label": "overrides"
     },
     {
@@ -1834,7 +1834,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "package_private",
-      "community": 2,
+      "community": 137,
       "norm_label": "private"
     },
     {
@@ -2348,126 +2348,6 @@
       "norm_label": "run()"
     },
     {
-      "label": "check_schema.js",
-      "file_type": "code",
-      "source_file": "scratch/check_schema.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "scratch_check_schema",
-      "community": 150,
-      "norm_label": "check_schema.js"
-    },
-    {
-      "label": "fs",
-      "file_type": "code",
-      "source_file": "scratch/check_schema.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "scratch_check_schema_fs",
-      "community": 150,
-      "norm_label": "fs"
-    },
-    {
-      "label": "path",
-      "file_type": "code",
-      "source_file": "scratch/check_schema.js",
-      "source_location": "L2",
-      "_origin": "ast",
-      "id": "scratch_check_schema_path",
-      "community": 150,
-      "norm_label": "path"
-    },
-    {
-      "label": "schemaPath",
-      "file_type": "code",
-      "source_file": "scratch/check_schema.js",
-      "source_location": "L4",
-      "_origin": "ast",
-      "id": "scratch_check_schema_schemapath",
-      "community": 150,
-      "norm_label": "schemapath"
-    },
-    {
-      "label": "schemaContent",
-      "file_type": "code",
-      "source_file": "scratch/check_schema.js",
-      "source_location": "L5",
-      "_origin": "ast",
-      "id": "scratch_check_schema_schemacontent",
-      "community": 150,
-      "norm_label": "schemacontent"
-    },
-    {
-      "label": "tablesToFind",
-      "file_type": "code",
-      "source_file": "scratch/check_schema.js",
-      "source_location": "L7",
-      "_origin": "ast",
-      "id": "scratch_check_schema_tablestofind",
-      "community": 150,
-      "norm_label": "tablestofind"
-    },
-    {
-      "label": "check_schema_tables.js",
-      "file_type": "code",
-      "source_file": "scratch/check_schema_tables.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "scratch_check_schema_tables",
-      "community": 151,
-      "norm_label": "check_schema_tables.js"
-    },
-    {
-      "label": "fs",
-      "file_type": "code",
-      "source_file": "scratch/check_schema_tables.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "scratch_check_schema_tables_fs",
-      "community": 151,
-      "norm_label": "fs"
-    },
-    {
-      "label": "path",
-      "file_type": "code",
-      "source_file": "scratch/check_schema_tables.js",
-      "source_location": "L2",
-      "_origin": "ast",
-      "id": "scratch_check_schema_tables_path",
-      "community": 151,
-      "norm_label": "path"
-    },
-    {
-      "label": "schemaPath",
-      "file_type": "code",
-      "source_file": "scratch/check_schema_tables.js",
-      "source_location": "L4",
-      "_origin": "ast",
-      "id": "scratch_check_schema_tables_schemapath",
-      "community": 151,
-      "norm_label": "schemapath"
-    },
-    {
-      "label": "content",
-      "file_type": "code",
-      "source_file": "scratch/check_schema_tables.js",
-      "source_location": "L5",
-      "_origin": "ast",
-      "id": "scratch_check_schema_tables_content",
-      "community": 151,
-      "norm_label": "content"
-    },
-    {
-      "label": "lines",
-      "file_type": "code",
-      "source_file": "scratch/check_schema_tables.js",
-      "source_location": "L7",
-      "_origin": "ast",
-      "id": "scratch_check_schema_tables_lines",
-      "community": 151,
-      "norm_label": "lines"
-    },
-    {
       "label": "check_students.js",
       "file_type": "code",
       "source_file": "scratch/check_students.js",
@@ -2506,276 +2386,6 @@
       "id": "scratch_check_students_run",
       "community": 135,
       "norm_label": "run()"
-    },
-    {
-      "label": "find_activity_registration.js",
-      "file_type": "code",
-      "source_file": "scratch/find_activity_registration.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "scratch_find_activity_registration",
-      "community": 166,
-      "norm_label": "find_activity_registration.js"
-    },
-    {
-      "label": "fs",
-      "file_type": "code",
-      "source_file": "scratch/find_activity_registration.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "scratch_find_activity_registration_fs",
-      "community": 166,
-      "norm_label": "fs"
-    },
-    {
-      "label": "path",
-      "file_type": "code",
-      "source_file": "scratch/find_activity_registration.js",
-      "source_location": "L2",
-      "_origin": "ast",
-      "id": "scratch_find_activity_registration_path",
-      "community": 166,
-      "norm_label": "path"
-    },
-    {
-      "label": "searchDir()",
-      "file_type": "code",
-      "source_file": "scratch/find_activity_registration.js",
-      "source_location": "L4",
-      "_origin": "ast",
-      "id": "scratch_find_activity_registration_searchdir",
-      "community": 166,
-      "norm_label": "searchdir()"
-    },
-    {
-      "label": "find_appointments.js",
-      "file_type": "code",
-      "source_file": "scratch/find_appointments.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "scratch_find_appointments",
-      "community": 149,
-      "norm_label": "find_appointments.js"
-    },
-    {
-      "label": "fs",
-      "file_type": "code",
-      "source_file": "scratch/find_appointments.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "scratch_find_appointments_fs",
-      "community": 149,
-      "norm_label": "fs"
-    },
-    {
-      "label": "path",
-      "file_type": "code",
-      "source_file": "scratch/find_appointments.js",
-      "source_location": "L2",
-      "_origin": "ast",
-      "id": "scratch_find_appointments_path",
-      "community": 149,
-      "norm_label": "path"
-    },
-    {
-      "label": "searchDir()",
-      "file_type": "code",
-      "source_file": "scratch/find_appointments.js",
-      "source_location": "L4",
-      "_origin": "ast",
-      "id": "scratch_find_appointments_searchdir",
-      "community": 149,
-      "norm_label": "searchdir()"
-    },
-    {
-      "label": "find_db_connection.js",
-      "file_type": "code",
-      "source_file": "scratch/find_db_connection.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "scratch_find_db_connection",
-      "community": 167,
-      "norm_label": "find_db_connection.js"
-    },
-    {
-      "label": "fs",
-      "file_type": "code",
-      "source_file": "scratch/find_db_connection.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "scratch_find_db_connection_fs",
-      "community": 167,
-      "norm_label": "fs"
-    },
-    {
-      "label": "path",
-      "file_type": "code",
-      "source_file": "scratch/find_db_connection.js",
-      "source_location": "L2",
-      "_origin": "ast",
-      "id": "scratch_find_db_connection_path",
-      "community": 167,
-      "norm_label": "path"
-    },
-    {
-      "label": "searchDir()",
-      "file_type": "code",
-      "source_file": "scratch/find_db_connection.js",
-      "source_location": "L4",
-      "_origin": "ast",
-      "id": "scratch_find_db_connection_searchdir",
-      "community": 167,
-      "norm_label": "searchdir()"
-    },
-    {
-      "label": "find_sql_streak.js",
-      "file_type": "code",
-      "source_file": "scratch/find_sql_streak.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "scratch_find_sql_streak",
-      "community": 168,
-      "norm_label": "find_sql_streak.js"
-    },
-    {
-      "label": "fs",
-      "file_type": "code",
-      "source_file": "scratch/find_sql_streak.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "scratch_find_sql_streak_fs",
-      "community": 168,
-      "norm_label": "fs"
-    },
-    {
-      "label": "path",
-      "file_type": "code",
-      "source_file": "scratch/find_sql_streak.js",
-      "source_location": "L2",
-      "_origin": "ast",
-      "id": "scratch_find_sql_streak_path",
-      "community": 168,
-      "norm_label": "path"
-    },
-    {
-      "label": "searchDir()",
-      "file_type": "code",
-      "source_file": "scratch/find_sql_streak.js",
-      "source_location": "L4",
-      "_origin": "ast",
-      "id": "scratch_find_sql_streak_searchdir",
-      "community": 168,
-      "norm_label": "searchdir()"
-    },
-    {
-      "label": "find_streak_functions.js",
-      "file_type": "code",
-      "source_file": "scratch/find_streak_functions.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "scratch_find_streak_functions",
-      "community": 152,
-      "norm_label": "find_streak_functions.js"
-    },
-    {
-      "label": "fs",
-      "file_type": "code",
-      "source_file": "scratch/find_streak_functions.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "scratch_find_streak_functions_fs",
-      "community": 152,
-      "norm_label": "fs"
-    },
-    {
-      "label": "path",
-      "file_type": "code",
-      "source_file": "scratch/find_streak_functions.js",
-      "source_location": "L2",
-      "_origin": "ast",
-      "id": "scratch_find_streak_functions_path",
-      "community": 152,
-      "norm_label": "path"
-    },
-    {
-      "label": "schemaPath",
-      "file_type": "code",
-      "source_file": "scratch/find_streak_functions.js",
-      "source_location": "L4",
-      "_origin": "ast",
-      "id": "scratch_find_streak_functions_schemapath",
-      "community": 152,
-      "norm_label": "schemapath"
-    },
-    {
-      "label": "content",
-      "file_type": "code",
-      "source_file": "scratch/find_streak_functions.js",
-      "source_location": "L5",
-      "_origin": "ast",
-      "id": "scratch_find_streak_functions_content",
-      "community": 152,
-      "norm_label": "content"
-    },
-    {
-      "label": "lines",
-      "file_type": "code",
-      "source_file": "scratch/find_streak_functions.js",
-      "source_location": "L7",
-      "_origin": "ast",
-      "id": "scratch_find_streak_functions_lines",
-      "community": 152,
-      "norm_label": "lines"
-    },
-    {
-      "label": "find_tables.js",
-      "file_type": "code",
-      "source_file": "scratch/find_tables.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "scratch_find_tables",
-      "community": 164,
-      "norm_label": "find_tables.js"
-    },
-    {
-      "label": "fs",
-      "file_type": "code",
-      "source_file": "scratch/find_tables.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "scratch_find_tables_fs",
-      "community": 164,
-      "norm_label": "fs"
-    },
-    {
-      "label": "path",
-      "file_type": "code",
-      "source_file": "scratch/find_tables.js",
-      "source_location": "L2",
-      "_origin": "ast",
-      "id": "scratch_find_tables_path",
-      "community": 164,
-      "norm_label": "path"
-    },
-    {
-      "label": "dbDir",
-      "file_type": "code",
-      "source_file": "scratch/find_tables.js",
-      "source_location": "L4",
-      "_origin": "ast",
-      "id": "scratch_find_tables_dbdir",
-      "community": 164,
-      "norm_label": "dbdir"
-    },
-    {
-      "label": "files",
-      "file_type": "code",
-      "source_file": "scratch/find_tables.js",
-      "source_location": "L5",
-      "_origin": "ast",
-      "id": "scratch_find_tables_files",
-      "community": 164,
-      "norm_label": "files"
     },
     {
       "label": "list_tables.js",
@@ -2818,306 +2428,6 @@
       "norm_label": "run()"
     },
     {
-      "label": "read_chats_def.js",
-      "file_type": "code",
-      "source_file": "scratch/read_chats_def.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "scratch_read_chats_def",
-      "community": 153,
-      "norm_label": "read_chats_def.js"
-    },
-    {
-      "label": "fs",
-      "file_type": "code",
-      "source_file": "scratch/read_chats_def.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "scratch_read_chats_def_fs",
-      "community": 153,
-      "norm_label": "fs"
-    },
-    {
-      "label": "path",
-      "file_type": "code",
-      "source_file": "scratch/read_chats_def.js",
-      "source_location": "L2",
-      "_origin": "ast",
-      "id": "scratch_read_chats_def_path",
-      "community": 153,
-      "norm_label": "path"
-    },
-    {
-      "label": "schemaPath",
-      "file_type": "code",
-      "source_file": "scratch/read_chats_def.js",
-      "source_location": "L4",
-      "_origin": "ast",
-      "id": "scratch_read_chats_def_schemapath",
-      "community": 153,
-      "norm_label": "schemapath"
-    },
-    {
-      "label": "content",
-      "file_type": "code",
-      "source_file": "scratch/read_chats_def.js",
-      "source_location": "L5",
-      "_origin": "ast",
-      "id": "scratch_read_chats_def_content",
-      "community": 153,
-      "norm_label": "content"
-    },
-    {
-      "label": "lines",
-      "file_type": "code",
-      "source_file": "scratch/read_chats_def.js",
-      "source_location": "L7",
-      "_origin": "ast",
-      "id": "scratch_read_chats_def_lines",
-      "community": 153,
-      "norm_label": "lines"
-    },
-    {
-      "label": "read_migration_connection.js",
-      "file_type": "code",
-      "source_file": "scratch/read_migration_connection.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "scratch_read_migration_connection",
-      "community": 154,
-      "norm_label": "read_migration_connection.js"
-    },
-    {
-      "label": "fs",
-      "file_type": "code",
-      "source_file": "scratch/read_migration_connection.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "scratch_read_migration_connection_fs",
-      "community": 154,
-      "norm_label": "fs"
-    },
-    {
-      "label": "path",
-      "file_type": "code",
-      "source_file": "scratch/read_migration_connection.js",
-      "source_location": "L2",
-      "_origin": "ast",
-      "id": "scratch_read_migration_connection_path",
-      "community": 154,
-      "norm_label": "path"
-    },
-    {
-      "label": "filePath",
-      "file_type": "code",
-      "source_file": "scratch/read_migration_connection.js",
-      "source_location": "L4",
-      "_origin": "ast",
-      "id": "scratch_read_migration_connection_filepath",
-      "community": 154,
-      "norm_label": "filepath"
-    },
-    {
-      "label": "content",
-      "file_type": "code",
-      "source_file": "scratch/read_migration_connection.js",
-      "source_location": "L5",
-      "_origin": "ast",
-      "id": "scratch_read_migration_connection_content",
-      "community": 154,
-      "norm_label": "content"
-    },
-    {
-      "label": "lines",
-      "file_type": "code",
-      "source_file": "scratch/read_migration_connection.js",
-      "source_location": "L7",
-      "_origin": "ast",
-      "id": "scratch_read_migration_connection_lines",
-      "community": 154,
-      "norm_label": "lines"
-    },
-    {
-      "label": "read_nutrition_tables.js",
-      "file_type": "code",
-      "source_file": "scratch/read_nutrition_tables.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "scratch_read_nutrition_tables",
-      "community": 155,
-      "norm_label": "read_nutrition_tables.js"
-    },
-    {
-      "label": "fs",
-      "file_type": "code",
-      "source_file": "scratch/read_nutrition_tables.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "scratch_read_nutrition_tables_fs",
-      "community": 155,
-      "norm_label": "fs"
-    },
-    {
-      "label": "path",
-      "file_type": "code",
-      "source_file": "scratch/read_nutrition_tables.js",
-      "source_location": "L2",
-      "_origin": "ast",
-      "id": "scratch_read_nutrition_tables_path",
-      "community": 155,
-      "norm_label": "path"
-    },
-    {
-      "label": "schemaPath",
-      "file_type": "code",
-      "source_file": "scratch/read_nutrition_tables.js",
-      "source_location": "L4",
-      "_origin": "ast",
-      "id": "scratch_read_nutrition_tables_schemapath",
-      "community": 155,
-      "norm_label": "schemapath"
-    },
-    {
-      "label": "content",
-      "file_type": "code",
-      "source_file": "scratch/read_nutrition_tables.js",
-      "source_location": "L5",
-      "_origin": "ast",
-      "id": "scratch_read_nutrition_tables_content",
-      "community": 155,
-      "norm_label": "content"
-    },
-    {
-      "label": "lines",
-      "file_type": "code",
-      "source_file": "scratch/read_nutrition_tables.js",
-      "source_location": "L7",
-      "_origin": "ast",
-      "id": "scratch_read_nutrition_tables_lines",
-      "community": 155,
-      "norm_label": "lines"
-    },
-    {
-      "label": "read_schema_achievements.js",
-      "file_type": "code",
-      "source_file": "scratch/read_schema_achievements.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "scratch_read_schema_achievements",
-      "community": 159,
-      "norm_label": "read_schema_achievements.js"
-    },
-    {
-      "label": "fs",
-      "file_type": "code",
-      "source_file": "scratch/read_schema_achievements.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "scratch_read_schema_achievements_fs",
-      "community": 159,
-      "norm_label": "fs"
-    },
-    {
-      "label": "path",
-      "file_type": "code",
-      "source_file": "scratch/read_schema_achievements.js",
-      "source_location": "L2",
-      "_origin": "ast",
-      "id": "scratch_read_schema_achievements_path",
-      "community": 159,
-      "norm_label": "path"
-    },
-    {
-      "label": "schemaPath",
-      "file_type": "code",
-      "source_file": "scratch/read_schema_achievements.js",
-      "source_location": "L4",
-      "_origin": "ast",
-      "id": "scratch_read_schema_achievements_schemapath",
-      "community": 159,
-      "norm_label": "schemapath"
-    },
-    {
-      "label": "content",
-      "file_type": "code",
-      "source_file": "scratch/read_schema_achievements.js",
-      "source_location": "L5",
-      "_origin": "ast",
-      "id": "scratch_read_schema_achievements_content",
-      "community": 159,
-      "norm_label": "content"
-    },
-    {
-      "label": "lines",
-      "file_type": "code",
-      "source_file": "scratch/read_schema_achievements.js",
-      "source_location": "L7",
-      "_origin": "ast",
-      "id": "scratch_read_schema_achievements_lines",
-      "community": 159,
-      "norm_label": "lines"
-    },
-    {
-      "label": "read_schema_function.js",
-      "file_type": "code",
-      "source_file": "scratch/read_schema_function.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "scratch_read_schema_function",
-      "community": 160,
-      "norm_label": "read_schema_function.js"
-    },
-    {
-      "label": "fs",
-      "file_type": "code",
-      "source_file": "scratch/read_schema_function.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "scratch_read_schema_function_fs",
-      "community": 160,
-      "norm_label": "fs"
-    },
-    {
-      "label": "path",
-      "file_type": "code",
-      "source_file": "scratch/read_schema_function.js",
-      "source_location": "L2",
-      "_origin": "ast",
-      "id": "scratch_read_schema_function_path",
-      "community": 160,
-      "norm_label": "path"
-    },
-    {
-      "label": "schemaPath",
-      "file_type": "code",
-      "source_file": "scratch/read_schema_function.js",
-      "source_location": "L4",
-      "_origin": "ast",
-      "id": "scratch_read_schema_function_schemapath",
-      "community": 160,
-      "norm_label": "schemapath"
-    },
-    {
-      "label": "content",
-      "file_type": "code",
-      "source_file": "scratch/read_schema_function.js",
-      "source_location": "L5",
-      "_origin": "ast",
-      "id": "scratch_read_schema_function_content",
-      "community": 160,
-      "norm_label": "content"
-    },
-    {
-      "label": "lines",
-      "file_type": "code",
-      "source_file": "scratch/read_schema_function.js",
-      "source_location": "L7",
-      "_origin": "ast",
-      "id": "scratch_read_schema_function_lines",
-      "community": 160,
-      "norm_label": "lines"
-    },
-    {
       "label": "register_student_test.js",
       "file_type": "code",
       "source_file": "scratch/register_student_test.js",
@@ -3156,66 +2466,6 @@
       "id": "scratch_register_student_test_run",
       "community": 138,
       "norm_label": "run()"
-    },
-    {
-      "label": "search_schema_simple.js",
-      "file_type": "code",
-      "source_file": "scratch/search_schema_simple.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "scratch_search_schema_simple",
-      "community": 161,
-      "norm_label": "search_schema_simple.js"
-    },
-    {
-      "label": "fs",
-      "file_type": "code",
-      "source_file": "scratch/search_schema_simple.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "scratch_search_schema_simple_fs",
-      "community": 161,
-      "norm_label": "fs"
-    },
-    {
-      "label": "path",
-      "file_type": "code",
-      "source_file": "scratch/search_schema_simple.js",
-      "source_location": "L2",
-      "_origin": "ast",
-      "id": "scratch_search_schema_simple_path",
-      "community": 161,
-      "norm_label": "path"
-    },
-    {
-      "label": "schemaPath",
-      "file_type": "code",
-      "source_file": "scratch/search_schema_simple.js",
-      "source_location": "L4",
-      "_origin": "ast",
-      "id": "scratch_search_schema_simple_schemapath",
-      "community": 161,
-      "norm_label": "schemapath"
-    },
-    {
-      "label": "content",
-      "file_type": "code",
-      "source_file": "scratch/search_schema_simple.js",
-      "source_location": "L5",
-      "_origin": "ast",
-      "id": "scratch_search_schema_simple_content",
-      "community": 161,
-      "norm_label": "content"
-    },
-    {
-      "label": "lines",
-      "file_type": "code",
-      "source_file": "scratch/search_schema_simple.js",
-      "source_location": "L7",
-      "_origin": "ast",
-      "id": "scratch_search_schema_simple_lines",
-      "community": 161,
-      "norm_label": "lines"
     },
     {
       "label": "test_join.js",
@@ -3263,7 +2513,7 @@
       "source_file": "scratch/test_query.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "scratch_test_query_js_scratch_test_query",
+      "id": "scratch_test_query",
       "community": 87,
       "norm_label": "test_query.js"
     },
@@ -3281,81 +2531,21 @@
       "label": "supabase",
       "file_type": "code",
       "source_file": "scratch/test_query.js",
-      "source_location": "L5",
+      "source_location": "L6",
       "_origin": "ast",
-      "id": "scratch_test_query_js_scratch_test_query_supabase",
+      "id": "scratch_test_query_supabase",
       "community": 87,
       "norm_label": "supabase"
     },
     {
-      "label": "test()",
+      "label": "run()",
       "file_type": "code",
       "source_file": "scratch/test_query.js",
-      "source_location": "L7",
-      "_origin": "ast",
-      "id": "scratch_test_query_test",
-      "community": 87,
-      "norm_label": "test()"
-    },
-    {
-      "label": "test_query.ts",
-      "file_type": "code",
-      "source_file": "scratch/test_query.ts",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "scratch_test_query_ts_scratch_test_query",
-      "community": 162,
-      "norm_label": "test_query.ts"
-    },
-    {
-      "label": "supabase",
-      "file_type": "code",
-      "source_file": "scratch/test_query.ts",
-      "source_location": "L5",
-      "_origin": "ast",
-      "id": "scratch_test_query_ts_scratch_test_query_supabase",
-      "community": 162,
-      "norm_label": "supabase"
-    },
-    {
-      "label": "last10Digits",
-      "file_type": "code",
-      "source_file": "scratch/test_query.ts",
       "source_location": "L8",
       "_origin": "ast",
-      "id": "scratch_test_query_last10digits",
-      "community": 162,
-      "norm_label": "last10digits"
-    },
-    {
-      "label": "formats",
-      "file_type": "code",
-      "source_file": "scratch/test_query.ts",
-      "source_location": "L10",
-      "_origin": "ast",
-      "id": "scratch_test_query_formats",
-      "community": 162,
-      "norm_label": "formats"
-    },
-    {
-      "label": "uniqueFormats",
-      "file_type": "code",
-      "source_file": "scratch/test_query.ts",
-      "source_location": "L20",
-      "_origin": "ast",
-      "id": "scratch_test_query_uniqueformats",
-      "community": 162,
-      "norm_label": "uniqueformats"
-    },
-    {
-      "label": "orFilterMobile",
-      "file_type": "code",
-      "source_file": "scratch/test_query.ts",
-      "source_location": "L21",
-      "_origin": "ast",
-      "id": "scratch_test_query_orfiltermobile",
-      "community": 162,
-      "norm_label": "orfiltermobile"
+      "id": "scratch_test_query_run",
+      "community": 87,
+      "norm_label": "run()"
     },
     {
       "label": "test_reports.js",
@@ -3524,7 +2714,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "base_health_professional_base",
-      "community": 18,
+      "community": 68,
       "norm_label": "health-professional.base.ts"
     },
     {
@@ -3734,7 +2924,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "guards_role_guard",
-      "community": 18,
+      "community": 130,
       "norm_label": "role.guard.ts"
     },
     {
@@ -3934,7 +3124,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_arco_service",
-      "community": 18,
+      "community": 130,
       "norm_label": "arco.service.ts"
     },
     {
@@ -3944,7 +3134,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "services_arco_service_privacysettings",
-      "community": 18,
+      "community": 130,
       "norm_label": "privacysettings"
     },
     {
@@ -3954,7 +3144,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "services_arco_service_arcorequest",
-      "community": 18,
+      "community": 130,
       "norm_label": "arcorequest"
     },
     {
@@ -4044,7 +3234,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_audit_service",
-      "community": 18,
+      "community": 130,
       "norm_label": "audit.service.ts"
     },
     {
@@ -4054,7 +3244,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "services_audit_service_auditservice",
-      "community": 18,
+      "community": 130,
       "norm_label": "auditservice"
     },
     {
@@ -4064,7 +3254,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "services_audit_service_auditservice_logevent",
-      "community": 18,
+      "community": 130,
       "norm_label": ".logevent()"
     },
     {
@@ -4074,7 +3264,7 @@
       "source_location": "L40",
       "_origin": "ast",
       "id": "services_audit_service_auditservice_logunauthorizedaccess",
-      "community": 18,
+      "community": 130,
       "norm_label": ".logunauthorizedaccess()"
     },
     {
@@ -4084,7 +3274,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_auth_service",
-      "community": 18,
+      "community": 130,
       "norm_label": "auth.service.ts"
     },
     {
@@ -4454,7 +3644,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "services_crypto_service_cryptoservice",
-      "community": 68,
+      "community": 151,
       "norm_label": "cryptoservice"
     },
     {
@@ -4464,7 +3654,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "services_crypto_service_cryptoservice_derivekey",
-      "community": 68,
+      "community": 151,
       "norm_label": ".derivekey()"
     },
     {
@@ -4474,7 +3664,7 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "services_crypto_service_cryptoservice_clearkey",
-      "community": 68,
+      "community": 151,
       "norm_label": ".clearkey()"
     },
     {
@@ -4484,7 +3674,7 @@
       "source_location": "L39",
       "_origin": "ast",
       "id": "services_crypto_service_cryptoservice_getkey",
-      "community": 68,
+      "community": 151,
       "norm_label": ".getkey()"
     },
     {
@@ -4494,7 +3684,7 @@
       "source_location": "L53",
       "_origin": "ast",
       "id": "services_crypto_service_cryptoservice_encrypt",
-      "community": 68,
+      "community": 151,
       "norm_label": ".encrypt()"
     },
     {
@@ -4504,7 +3694,7 @@
       "source_location": "L61",
       "_origin": "ast",
       "id": "services_crypto_service_cryptoservice_decrypt",
-      "community": 68,
+      "community": 151,
       "norm_label": ".decrypt()"
     },
     {
@@ -4514,7 +3704,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_diary_service",
-      "community": 68,
+      "community": 136,
       "norm_label": "diary.service.ts"
     },
     {
@@ -4524,7 +3714,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "services_diary_service_diaryentry",
-      "community": 68,
+      "community": 136,
       "norm_label": "diaryentry"
     },
     {
@@ -4601,7 +3791,7 @@
       "label": ".updateFoodEntry()",
       "file_type": "code",
       "source_file": "src/app/core/services/diary.service.ts",
-      "source_location": "L203",
+      "source_location": "L195",
       "_origin": "ast",
       "id": "services_diary_service_diaryservice_updatefoodentry",
       "community": 17,
@@ -4611,7 +3801,7 @@
       "label": ".deleteFoodEntry()",
       "file_type": "code",
       "source_file": "src/app/core/services/diary.service.ts",
-      "source_location": "L221",
+      "source_location": "L213",
       "_origin": "ast",
       "id": "services_diary_service_diaryservice_deletefoodentry",
       "community": 17,
@@ -4621,7 +3811,7 @@
       "label": ".stripHtml()",
       "file_type": "code",
       "source_file": "src/app/core/services/diary.service.ts",
-      "source_location": "L236",
+      "source_location": "L228",
       "_origin": "ast",
       "id": "services_diary_service_diaryservice_striphtml",
       "community": 17,
@@ -4714,7 +3904,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_emergency_notification_service",
-      "community": 18,
+      "community": 148,
       "norm_label": "emergency-notification.service.ts"
     },
     {
@@ -4724,7 +3914,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "services_emergency_notification_service_emergencychangerequest",
-      "community": 18,
+      "community": 148,
       "norm_label": "emergencychangerequest"
     },
     {
@@ -4734,7 +3924,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "services_emergency_notification_service_webpushsubscriptionpayload",
-      "community": 18,
+      "community": 148,
       "norm_label": "webpushsubscriptionpayload"
     },
     {
@@ -4744,7 +3934,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "services_emergency_notification_service_whatsapproutingsession",
-      "community": 18,
+      "community": 148,
       "norm_label": "whatsapproutingsession"
     },
     {
@@ -5164,7 +4354,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "nutrition_calendario_service",
-      "community": 88,
+      "community": 151,
       "norm_label": "calendario.service.ts"
     },
     {
@@ -5174,7 +4364,7 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "nutrition_calendario_service_registroayersnapshot",
-      "community": 88,
+      "community": 151,
       "norm_label": "registroayersnapshot"
     },
     {
@@ -5184,7 +4374,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "nutrition_calendario_service_calendarioservice",
-      "community": 88,
+      "community": 151,
       "norm_label": "calendarioservice"
     },
     {
@@ -5194,7 +4384,7 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "nutrition_calendario_service_calendarioservice_obtenerregistroayer",
-      "community": 88,
+      "community": 151,
       "norm_label": ".obtenerregistroayer()"
     },
     {
@@ -5204,7 +4394,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "nutrition_nutricion_service",
-      "community": 88,
+      "community": 151,
       "norm_label": "nutricion.service.ts"
     },
     {
@@ -5214,7 +4404,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "nutrition_nutricion_service_campoformulariotipo",
-      "community": 88,
+      "community": 151,
       "norm_label": "campoformulariotipo"
     },
     {
@@ -5244,7 +4434,7 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "nutrition_nutricion_service_nuevaconsultanutricionpayload",
-      "community": 88,
+      "community": 151,
       "norm_label": "nuevaconsultanutricionpayload"
     },
     {
@@ -5254,7 +4444,7 @@
       "source_location": "L39",
       "_origin": "ast",
       "id": "nutrition_nutricion_service_nutricionservice",
-      "community": 88,
+      "community": 140,
       "norm_label": "nutricionservice"
     },
     {
@@ -5264,7 +4454,7 @@
       "source_location": "L42",
       "_origin": "ast",
       "id": "nutrition_nutricion_service_nutricionservice_obtenercamposformulario",
-      "community": 88,
+      "community": 140,
       "norm_label": ".obtenercamposformulario()"
     },
     {
@@ -5274,7 +4464,7 @@
       "source_location": "L57",
       "_origin": "ast",
       "id": "nutrition_nutricion_service_nutricionservice_obtenerultimaconsulta",
-      "community": 88,
+      "community": 140,
       "norm_label": ".obtenerultimaconsulta()"
     },
     {
@@ -5284,7 +4474,7 @@
       "source_location": "L73",
       "_origin": "ast",
       "id": "nutrition_nutricion_service_nutricionservice_crearconsulta",
-      "community": 88,
+      "community": 140,
       "norm_label": ".crearconsulta()"
     },
     {
@@ -5294,7 +4484,7 @@
       "source_location": "L87",
       "_origin": "ast",
       "id": "nutrition_nutricion_service_nutricionservice_agruparcamposporbloque",
-      "community": 88,
+      "community": 140,
       "norm_label": ".agruparcamposporbloque()"
     },
     {
@@ -5304,7 +4494,7 @@
       "source_location": "L93",
       "_origin": "ast",
       "id": "nutrition_nutricion_service_nutricionservice_esbloquedos",
-      "community": 88,
+      "community": 140,
       "norm_label": ".esbloquedos()"
     },
     {
@@ -5314,7 +4504,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_profile_service",
-      "community": 165,
+      "community": 72,
       "norm_label": "profile.service.ts"
     },
     {
@@ -5324,7 +4514,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "services_profile_service_profileservice",
-      "community": 165,
+      "community": 72,
       "norm_label": "profileservice"
     },
     {
@@ -5334,7 +4524,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "services_profile_service_profileservice_uploadavatar",
-      "community": 165,
+      "community": 72,
       "norm_label": ".uploadavatar()"
     },
     {
@@ -5344,7 +4534,7 @@
       "source_location": "L39",
       "_origin": "ast",
       "id": "services_profile_service_profileservice_updateavatarurl",
-      "community": 165,
+      "community": 72,
       "norm_label": ".updateavatarurl()"
     },
     {
@@ -5354,7 +4544,7 @@
       "source_location": "L55",
       "_origin": "ast",
       "id": "services_profile_service_profileservice_generatedicebearavatar",
-      "community": 165,
+      "community": 72,
       "norm_label": ".generatedicebearavatar()"
     },
     {
@@ -5534,7 +4724,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "admin_layout_admin_layout_component",
-      "community": 18,
+      "community": 130,
       "norm_label": "admin-layout.component.ts"
     },
     {
@@ -6004,7 +5194,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "arco_requests_arco_requests_component",
-      "community": 18,
+      "community": 130,
       "norm_label": "arco-requests.component.ts"
     },
     {
@@ -6064,7 +5254,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "directory_directory_component",
-      "community": 81,
+      "community": 68,
       "norm_label": "directory.component.ts"
     },
     {
@@ -6074,7 +5264,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "directory_directory_component_studentitem",
-      "community": 81,
+      "community": 68,
       "norm_label": "studentitem"
     },
     {
@@ -6084,7 +5274,7 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "directory_directory_component_specialistitem",
-      "community": 81,
+      "community": 68,
       "norm_label": "specialistitem"
     },
     {
@@ -7594,7 +6784,7 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "src_app_features_admin_patients_patients_component_ts_patients_patients_component_patientscomponent",
-      "community": 140,
+      "community": 81,
       "norm_label": "patientscomponent"
     },
     {
@@ -7604,7 +6794,7 @@
       "source_location": "L108",
       "_origin": "ast",
       "id": "src_app_features_admin_patients_patients_component_ts_patients_patients_component_patientscomponent_constructor",
-      "community": 140,
+      "community": 81,
       "norm_label": ".constructor()"
     },
     {
@@ -7614,7 +6804,7 @@
       "source_location": "L110",
       "_origin": "ast",
       "id": "src_app_features_admin_patients_patients_component_ts_patients_patients_component_patientscomponent_ngoninit",
-      "community": 140,
+      "community": 81,
       "norm_label": ".ngoninit()"
     },
     {
@@ -7624,7 +6814,7 @@
       "source_location": "L130",
       "_origin": "ast",
       "id": "patients_patients_component_patientscomponent_loadorphanedstudents",
-      "community": 140,
+      "community": 81,
       "norm_label": ".loadorphanedstudents()"
     },
     {
@@ -7634,7 +6824,7 @@
       "source_location": "L141",
       "_origin": "ast",
       "id": "patients_patients_component_patientscomponent_assignprofessional",
-      "community": 140,
+      "community": 81,
       "norm_label": ".assignprofessional()"
     },
     {
@@ -7644,7 +6834,7 @@
       "source_location": "L166",
       "_origin": "ast",
       "id": "patients_patients_component_patientscomponent_getavailableprofessionals",
-      "community": 140,
+      "community": 81,
       "norm_label": ".getavailableprofessionals()"
     },
     {
@@ -7654,7 +6844,7 @@
       "source_location": "L171",
       "_origin": "ast",
       "id": "patients_patients_component_patientscomponent_updatecharts",
-      "community": 140,
+      "community": 81,
       "norm_label": ".updatecharts()"
     },
     {
@@ -7664,7 +6854,7 @@
       "source_location": "L205",
       "_origin": "ast",
       "id": "patients_patients_component_patientscomponent_exportpatientdossier",
-      "community": 140,
+      "community": 81,
       "norm_label": ".exportpatientdossier()"
     },
     {
@@ -8104,7 +7294,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "reports_reports_component",
-      "community": 148,
+      "community": 84,
       "norm_label": "reports.component.ts"
     },
     {
@@ -8114,7 +7304,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "reports_reports_component_reportscomponent",
-      "community": 148,
+      "community": 84,
       "norm_label": "reportscomponent"
     },
     {
@@ -8124,7 +7314,7 @@
       "source_location": "L165",
       "_origin": "ast",
       "id": "reports_reports_component_reportscomponent_constructor",
-      "community": 148,
+      "community": 84,
       "norm_label": ".constructor()"
     },
     {
@@ -8134,7 +7324,7 @@
       "source_location": "L167",
       "_origin": "ast",
       "id": "reports_reports_component_reportscomponent_ngoninit",
-      "community": 148,
+      "community": 84,
       "norm_label": ".ngoninit()"
     },
     {
@@ -8144,7 +7334,7 @@
       "source_location": "L171",
       "_origin": "ast",
       "id": "reports_reports_component_reportscomponent_loadreports",
-      "community": 148,
+      "community": 84,
       "norm_label": ".loadreports()"
     },
     {
@@ -8154,7 +7344,7 @@
       "source_location": "L193",
       "_origin": "ast",
       "id": "reports_reports_component_reportscomponent_updatecharts",
-      "community": 148,
+      "community": 84,
       "norm_label": ".updatecharts()"
     },
     {
@@ -8224,7 +7414,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_admin_skill8_service",
-      "community": 81,
+      "community": 68,
       "norm_label": "admin-skill8.service.ts"
     },
     {
@@ -8234,7 +7424,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "services_admin_skill8_service_healthprofessionalregistrationpayload",
-      "community": 81,
+      "community": 68,
       "norm_label": "healthprofessionalregistrationpayload"
     },
     {
@@ -8244,7 +7434,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "services_admin_skill8_service_patientassignmentpayload",
-      "community": 81,
+      "community": 68,
       "norm_label": "patientassignmentpayload"
     },
     {
@@ -8264,7 +7454,7 @@
       "source_location": "L43",
       "_origin": "ast",
       "id": "services_admin_skill8_service_adminskill8service",
-      "community": 142,
+      "community": 81,
       "norm_label": "adminskill8service"
     },
     {
@@ -8274,7 +7464,7 @@
       "source_location": "L51",
       "_origin": "ast",
       "id": "services_admin_skill8_service_adminskill8service_gethealthprofessionals",
-      "community": 142,
+      "community": 81,
       "norm_label": ".gethealthprofessionals()"
     },
     {
@@ -8284,7 +7474,7 @@
       "source_location": "L102",
       "_origin": "ast",
       "id": "services_admin_skill8_service_adminskill8service_registerhealthprofessional",
-      "community": 142,
+      "community": 81,
       "norm_label": ".registerhealthprofessional()"
     },
     {
@@ -8294,7 +7484,7 @@
       "source_location": "L140",
       "_origin": "ast",
       "id": "services_admin_skill8_service_adminskill8service_assignpatienttoprofessionals",
-      "community": 142,
+      "community": 81,
       "norm_label": ".assignpatienttoprofessionals()"
     },
     {
@@ -8304,7 +7494,7 @@
       "source_location": "L169",
       "_origin": "ast",
       "id": "services_admin_skill8_service_adminskill8service_uploadinstitutionalasset",
-      "community": 142,
+      "community": 81,
       "norm_label": ".uploadinstitutionalasset()"
     },
     {
@@ -8314,7 +7504,7 @@
       "source_location": "L199",
       "_origin": "ast",
       "id": "services_admin_skill8_service_adminskill8service_getinstitutionalasseturl",
-      "community": 142,
+      "community": 81,
       "norm_label": ".getinstitutionalasseturl()"
     },
     {
@@ -8324,7 +7514,7 @@
       "source_location": "L210",
       "_origin": "ast",
       "id": "services_admin_skill8_service_adminskill8service_listinstitutionalassets",
-      "community": 142,
+      "community": 81,
       "norm_label": ".listinstitutionalassets()"
     },
     {
@@ -8334,7 +7524,7 @@
       "source_location": "L236",
       "_origin": "ast",
       "id": "services_admin_skill8_service_adminskill8service_getorphanedstudents",
-      "community": 142,
+      "community": 81,
       "norm_label": ".getorphanedstudents()"
     },
     {
@@ -8374,7 +7564,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "services_admin_stats_service_adminstatsservice",
-      "community": 81,
+      "community": 84,
       "norm_label": "adminstatsservice"
     },
     {
@@ -8384,7 +7574,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "services_admin_stats_service_adminstatsservice_getoverviewmetrics",
-      "community": 81,
+      "community": 84,
       "norm_label": ".getoverviewmetrics()"
     },
     {
@@ -8394,7 +7584,7 @@
       "source_location": "L72",
       "_origin": "ast",
       "id": "services_admin_stats_service_adminstatsservice_getpatientsbyfaculty",
-      "community": 81,
+      "community": 84,
       "norm_label": ".getpatientsbyfaculty()"
     },
     {
@@ -8404,7 +7594,7 @@
       "source_location": "L110",
       "_origin": "ast",
       "id": "services_admin_stats_service_adminstatsservice_getfacultieswithstats",
-      "community": 81,
+      "community": 84,
       "norm_label": ".getfacultieswithstats()"
     },
     {
@@ -8414,7 +7604,7 @@
       "source_location": "L181",
       "_origin": "ast",
       "id": "services_admin_stats_service_adminstatsservice_getpsychologistswithstats",
-      "community": 81,
+      "community": 84,
       "norm_label": ".getpsychologistswithstats()"
     },
     {
@@ -8424,7 +7614,7 @@
       "source_location": "L326",
       "_origin": "ast",
       "id": "services_admin_stats_service_adminstatsservice_getpatientstats",
-      "community": 81,
+      "community": 84,
       "norm_label": ".getpatientstats()"
     },
     {
@@ -8434,7 +7624,7 @@
       "source_location": "L416",
       "_origin": "ast",
       "id": "services_admin_stats_service_adminstatsservice_getagendaappointments",
-      "community": 81,
+      "community": 84,
       "norm_label": ".getagendaappointments()"
     },
     {
@@ -8444,7 +7634,7 @@
       "source_location": "L481",
       "_origin": "ast",
       "id": "services_admin_stats_service_adminstatsservice_getreportsdata",
-      "community": 81,
+      "community": 84,
       "norm_label": ".getreportsdata()"
     },
     {
@@ -8454,7 +7644,7 @@
       "source_location": "L737",
       "_origin": "ast",
       "id": "services_admin_stats_service_adminstatsservice_getvirtualqueuebyfaculty",
-      "community": 81,
+      "community": 84,
       "norm_label": ".getvirtualqueuebyfaculty()"
     },
     {
@@ -8684,7 +7874,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "login_login_component",
-      "community": 18,
+      "community": 130,
       "norm_label": "login.component.ts"
     },
     {
@@ -9561,7 +8751,7 @@
       "label": "MOOD_OPTIONS",
       "file_type": "code",
       "source_file": "src/app/features/diary/dashboard/diary-dashboard.component.ts",
-      "source_location": "L13",
+      "source_location": "L14",
       "_origin": "ast",
       "id": "dashboard_diary_dashboard_component_mood_options",
       "community": 17,
@@ -9571,7 +8761,7 @@
       "label": "SLEEP_OPTIONS",
       "file_type": "code",
       "source_file": "src/app/features/diary/dashboard/diary-dashboard.component.ts",
-      "source_location": "L25",
+      "source_location": "L26",
       "_origin": "ast",
       "id": "dashboard_diary_dashboard_component_sleep_options",
       "community": 17,
@@ -9581,7 +8771,7 @@
       "label": "QUILL_MODULES",
       "file_type": "code",
       "source_file": "src/app/features/diary/dashboard/diary-dashboard.component.ts",
-      "source_location": "L32",
+      "source_location": "L33",
       "_origin": "ast",
       "id": "dashboard_diary_dashboard_component_quill_modules",
       "community": 17,
@@ -9591,7 +8781,7 @@
       "label": "DiaryDashboardComponent",
       "file_type": "code",
       "source_file": "src/app/features/diary/dashboard/diary-dashboard.component.ts",
-      "source_location": "L54",
+      "source_location": "L56",
       "_origin": "ast",
       "id": "dashboard_diary_dashboard_component_diarydashboardcomponent",
       "community": 17,
@@ -9601,7 +8791,7 @@
       "label": ".ngOnInit()",
       "file_type": "code",
       "source_file": "src/app/features/diary/dashboard/diary-dashboard.component.ts",
-      "source_location": "L112",
+      "source_location": "L114",
       "_origin": "ast",
       "id": "dashboard_diary_dashboard_component_diarydashboardcomponent_ngoninit",
       "community": 17,
@@ -9611,7 +8801,7 @@
       "label": ".getCurrentTime()",
       "file_type": "code",
       "source_file": "src/app/features/diary/dashboard/diary-dashboard.component.ts",
-      "source_location": "L121",
+      "source_location": "L130",
       "_origin": "ast",
       "id": "dashboard_diary_dashboard_component_diarydashboardcomponent_getcurrenttime",
       "community": 17,
@@ -9621,7 +8811,7 @@
       "label": ".stripHtml()",
       "file_type": "code",
       "source_file": "src/app/features/diary/dashboard/diary-dashboard.component.ts",
-      "source_location": "L126",
+      "source_location": "L135",
       "_origin": "ast",
       "id": "dashboard_diary_dashboard_component_diarydashboardcomponent_striphtml",
       "community": 17,
@@ -9631,7 +8821,7 @@
       "label": ".dynamicAffirmation()",
       "file_type": "code",
       "source_file": "src/app/features/diary/dashboard/diary-dashboard.component.ts",
-      "source_location": "L133",
+      "source_location": "L142",
       "_origin": "ast",
       "id": "dashboard_diary_dashboard_component_diarydashboardcomponent_dynamicaffirmation",
       "community": 17,
@@ -9641,7 +8831,7 @@
       "label": ".toggleMood()",
       "file_type": "code",
       "source_file": "src/app/features/diary/dashboard/diary-dashboard.component.ts",
-      "source_location": "L148",
+      "source_location": "L157",
       "_origin": "ast",
       "id": "dashboard_diary_dashboard_component_diarydashboardcomponent_togglemood",
       "community": 17,
@@ -9651,7 +8841,7 @@
       "label": ".selectSleep()",
       "file_type": "code",
       "source_file": "src/app/features/diary/dashboard/diary-dashboard.component.ts",
-      "source_location": "L162",
+      "source_location": "L171",
       "_origin": "ast",
       "id": "dashboard_diary_dashboard_component_diarydashboardcomponent_selectsleep",
       "community": 17,
@@ -9661,7 +8851,7 @@
       "label": ".saveDiary()",
       "file_type": "code",
       "source_file": "src/app/features/diary/dashboard/diary-dashboard.component.ts",
-      "source_location": "L170",
+      "source_location": "L179",
       "_origin": "ast",
       "id": "dashboard_diary_dashboard_component_diarydashboardcomponent_savediary",
       "community": 17,
@@ -9671,7 +8861,7 @@
       "label": ".openFoodForm()",
       "file_type": "code",
       "source_file": "src/app/features/diary/dashboard/diary-dashboard.component.ts",
-      "source_location": "L193",
+      "source_location": "L202",
       "_origin": "ast",
       "id": "dashboard_diary_dashboard_component_diarydashboardcomponent_openfoodform",
       "community": 17,
@@ -9681,7 +8871,7 @@
       "label": ".editFoodEntry()",
       "file_type": "code",
       "source_file": "src/app/features/diary/dashboard/diary-dashboard.component.ts",
-      "source_location": "L202",
+      "source_location": "L211",
       "_origin": "ast",
       "id": "dashboard_diary_dashboard_component_diarydashboardcomponent_editfoodentry",
       "community": 17,
@@ -9691,7 +8881,7 @@
       "label": ".cancelFoodForm()",
       "file_type": "code",
       "source_file": "src/app/features/diary/dashboard/diary-dashboard.component.ts",
-      "source_location": "L213",
+      "source_location": "L222",
       "_origin": "ast",
       "id": "dashboard_diary_dashboard_component_diarydashboardcomponent_cancelfoodform",
       "community": 17,
@@ -9701,7 +8891,7 @@
       "label": ".isFoodFormValid()",
       "file_type": "code",
       "source_file": "src/app/features/diary/dashboard/diary-dashboard.component.ts",
-      "source_location": "L222",
+      "source_location": "L231",
       "_origin": "ast",
       "id": "dashboard_diary_dashboard_component_diarydashboardcomponent_isfoodformvalid",
       "community": 17,
@@ -9711,7 +8901,7 @@
       "label": ".saveFoodEntry()",
       "file_type": "code",
       "source_file": "src/app/features/diary/dashboard/diary-dashboard.component.ts",
-      "source_location": "L231",
+      "source_location": "L240",
       "_origin": "ast",
       "id": "dashboard_diary_dashboard_component_diarydashboardcomponent_savefoodentry",
       "community": 17,
@@ -9721,7 +8911,7 @@
       "label": ".deleteFoodEntry()",
       "file_type": "code",
       "source_file": "src/app/features/diary/dashboard/diary-dashboard.component.ts",
-      "source_location": "L258",
+      "source_location": "L267",
       "_origin": "ast",
       "id": "dashboard_diary_dashboard_component_diarydashboardcomponent_deletefoodentry",
       "community": 17,
@@ -9731,7 +8921,7 @@
       "label": ".startBreathing()",
       "file_type": "code",
       "source_file": "src/app/features/diary/dashboard/diary-dashboard.component.ts",
-      "source_location": "L265",
+      "source_location": "L274",
       "_origin": "ast",
       "id": "dashboard_diary_dashboard_component_diarydashboardcomponent_startbreathing",
       "community": 17,
@@ -9741,7 +8931,7 @@
       "label": ".runBreatheCycle()",
       "file_type": "code",
       "source_file": "src/app/features/diary/dashboard/diary-dashboard.component.ts",
-      "source_location": "L274",
+      "source_location": "L283",
       "_origin": "ast",
       "id": "dashboard_diary_dashboard_component_diarydashboardcomponent_runbreathecycle",
       "community": 17,
@@ -9751,7 +8941,7 @@
       "label": ".stopBreathing()",
       "file_type": "code",
       "source_file": "src/app/features/diary/dashboard/diary-dashboard.component.ts",
-      "source_location": "L289",
+      "source_location": "L298",
       "_origin": "ast",
       "id": "dashboard_diary_dashboard_component_diarydashboardcomponent_stopbreathing",
       "community": 17,
@@ -9761,7 +8951,7 @@
       "label": ".generateCalendar()",
       "file_type": "code",
       "source_file": "src/app/features/diary/dashboard/diary-dashboard.component.ts",
-      "source_location": "L299",
+      "source_location": "L308",
       "_origin": "ast",
       "id": "dashboard_diary_dashboard_component_diarydashboardcomponent_generatecalendar",
       "community": 17,
@@ -9771,7 +8961,7 @@
       "label": ".getMoodForDay()",
       "file_type": "code",
       "source_file": "src/app/features/diary/dashboard/diary-dashboard.component.ts",
-      "source_location": "L313",
+      "source_location": "L322",
       "_origin": "ast",
       "id": "dashboard_diary_dashboard_component_diarydashboardcomponent_getmoodforday",
       "community": 17,
@@ -9781,7 +8971,7 @@
       "label": ".selectDate()",
       "file_type": "code",
       "source_file": "src/app/features/diary/dashboard/diary-dashboard.component.ts",
-      "source_location": "L321",
+      "source_location": "L330",
       "_origin": "ast",
       "id": "dashboard_diary_dashboard_component_diarydashboardcomponent_selectdate",
       "community": 17,
@@ -9791,7 +8981,7 @@
       "label": ".displayedEntries()",
       "file_type": "code",
       "source_file": "src/app/features/diary/dashboard/diary-dashboard.component.ts",
-      "source_location": "L337",
+      "source_location": "L346",
       "_origin": "ast",
       "id": "dashboard_diary_dashboard_component_diarydashboardcomponent_displayedentries",
       "community": 17,
@@ -10354,7 +9544,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_features_health_professional_dashboard_dashboard_component_ts_dashboard_dashboard_component",
-      "community": 18,
+      "community": 68,
       "norm_label": "dashboard.component.ts"
     },
     {
@@ -10834,7 +10024,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "consulta_consulta_component",
-      "community": 88,
+      "community": 151,
       "norm_label": "consulta.component.ts"
     },
     {
@@ -11061,7 +10251,7 @@
       "label": ".signWithMetaSeal()",
       "file_type": "code",
       "source_file": "src/app/features/nutritionist/consulta/consulta.component.ts",
-      "source_location": "L515",
+      "source_location": "L509",
       "_origin": "ast",
       "id": "consulta_consulta_component_consultacomponent_signwithmetaseal",
       "community": 88,
@@ -11071,7 +10261,7 @@
       "label": ".unsignMetaSeal()",
       "file_type": "code",
       "source_file": "src/app/features/nutritionist/consulta/consulta.component.ts",
-      "source_location": "L551",
+      "source_location": "L545",
       "_origin": "ast",
       "id": "consulta_consulta_component_consultacomponent_unsignmetaseal",
       "community": 88,
@@ -11081,7 +10271,7 @@
       "label": ".markNoShow()",
       "file_type": "code",
       "source_file": "src/app/features/nutritionist/consulta/consulta.component.ts",
-      "source_location": "L561",
+      "source_location": "L555",
       "_origin": "ast",
       "id": "consulta_consulta_component_consultacomponent_marknoshow",
       "community": 88,
@@ -11091,7 +10281,7 @@
       "label": ".toggleEditAntecedentes()",
       "file_type": "code",
       "source_file": "src/app/features/nutritionist/consulta/consulta.component.ts",
-      "source_location": "L584",
+      "source_location": "L578",
       "_origin": "ast",
       "id": "consulta_consulta_component_consultacomponent_toggleeditantecedentes",
       "community": 88,
@@ -11101,7 +10291,7 @@
       "label": ".cancelEditAntecedentes()",
       "file_type": "code",
       "source_file": "src/app/features/nutritionist/consulta/consulta.component.ts",
-      "source_location": "L588",
+      "source_location": "L582",
       "_origin": "ast",
       "id": "consulta_consulta_component_consultacomponent_canceleditantecedentes",
       "community": 88,
@@ -11111,7 +10301,7 @@
       "label": ".guardarAntecedentes()",
       "file_type": "code",
       "source_file": "src/app/features/nutritionist/consulta/consulta.component.ts",
-      "source_location": "L593",
+      "source_location": "L587",
       "_origin": "ast",
       "id": "consulta_consulta_component_consultacomponent_guardarantecedentes",
       "community": 88,
@@ -11121,7 +10311,7 @@
       "label": ".cancelar()",
       "file_type": "code",
       "source_file": "src/app/features/nutritionist/consulta/consulta.component.ts",
-      "source_location": "L648",
+      "source_location": "L642",
       "_origin": "ast",
       "id": "consulta_consulta_component_consultacomponent_cancelar",
       "community": 88,
@@ -11131,7 +10321,7 @@
       "label": ".recordatorio24hArray()",
       "file_type": "code",
       "source_file": "src/app/features/nutritionist/consulta/consulta.component.ts",
-      "source_location": "L653",
+      "source_location": "L647",
       "_origin": "ast",
       "id": "consulta_consulta_component_consultacomponent_recordatorio24harray",
       "community": 88,
@@ -11141,7 +10331,7 @@
       "label": ".agregarFilaRecordatorio()",
       "file_type": "code",
       "source_file": "src/app/features/nutritionist/consulta/consulta.component.ts",
-      "source_location": "L657",
+      "source_location": "L651",
       "_origin": "ast",
       "id": "consulta_consulta_component_consultacomponent_agregarfilarecordatorio",
       "community": 88,
@@ -11151,7 +10341,7 @@
       "label": ".eliminarFilaRecordatorio()",
       "file_type": "code",
       "source_file": "src/app/features/nutritionist/consulta/consulta.component.ts",
-      "source_location": "L668",
+      "source_location": "L662",
       "_origin": "ast",
       "id": "consulta_consulta_component_consultacomponent_eliminarfilarecordatorio",
       "community": 88,
@@ -11161,7 +10351,7 @@
       "label": ".stripHtml()",
       "file_type": "code",
       "source_file": "src/app/features/nutritionist/consulta/consulta.component.ts",
-      "source_location": "L672",
+      "source_location": "L666",
       "_origin": "ast",
       "id": "consulta_consulta_component_consultacomponent_striphtml",
       "community": 88,
@@ -11171,7 +10361,7 @@
       "label": ".loadRecordatorio24h()",
       "file_type": "code",
       "source_file": "src/app/features/nutritionist/consulta/consulta.component.ts",
-      "source_location": "L677",
+      "source_location": "L671",
       "_origin": "ast",
       "id": "consulta_consulta_component_consultacomponent_loadrecordatorio24h",
       "community": 88,
@@ -11181,7 +10371,7 @@
       "label": ".esBloqueDos()",
       "file_type": "code",
       "source_file": "src/app/features/nutritionist/consulta/consulta.component.ts",
-      "source_location": "L758",
+      "source_location": "L752",
       "_origin": "ast",
       "id": "consulta_consulta_component_consultacomponent_esbloquedos",
       "community": 88,
@@ -11191,20 +10381,20 @@
       "label": "SimpleDialogComponent",
       "file_type": "code",
       "source_file": "src/app/features/nutritionist/consulta/consulta.component.ts",
-      "source_location": "L781",
+      "source_location": "L775",
       "_origin": "ast",
       "id": "consulta_consulta_component_simpledialogcomponent",
-      "community": 88,
+      "community": 151,
       "norm_label": "simpledialogcomponent"
     },
     {
       "label": ".close()",
       "file_type": "code",
       "source_file": "src/app/features/nutritionist/consulta/consulta.component.ts",
-      "source_location": "L785",
+      "source_location": "L779",
       "_origin": "ast",
       "id": "consulta_consulta_component_simpledialogcomponent_close",
-      "community": 88,
+      "community": 151,
       "norm_label": ".close()"
     },
     {
@@ -11284,7 +10474,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "nutritionist_layout_nutritionist_layout_component",
-      "community": 18,
+      "community": 130,
       "norm_label": "nutritionist-layout.component.ts"
     },
     {
@@ -11364,7 +10554,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "pacientes_pacientes_component",
-      "community": 18,
+      "community": 68,
       "norm_label": "pacientes.component.ts"
     },
     {
@@ -12054,7 +11244,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "clinical_note_clinical_note_component",
-      "community": 68,
+      "community": 59,
       "norm_label": "clinical-note.component.ts"
     },
     {
@@ -12111,7 +11301,7 @@
       "label": ".signWithMetaSeal()",
       "file_type": "code",
       "source_file": "src/app/features/psychologist/clinical-note/clinical-note.component.ts",
-      "source_location": "L458",
+      "source_location": "L481",
       "_origin": "ast",
       "id": "clinical_note_clinical_note_component_clinicalnotecomponent_signwithmetaseal",
       "community": 27,
@@ -12121,7 +11311,7 @@
       "label": ".unsignMetaSeal()",
       "file_type": "code",
       "source_file": "src/app/features/psychologist/clinical-note/clinical-note.component.ts",
-      "source_location": "L509",
+      "source_location": "L532",
       "_origin": "ast",
       "id": "clinical_note_clinical_note_component_clinicalnotecomponent_unsignmetaseal",
       "community": 27,
@@ -12131,7 +11321,7 @@
       "label": ".markNoShow()",
       "file_type": "code",
       "source_file": "src/app/features/psychologist/clinical-note/clinical-note.component.ts",
-      "source_location": "L516",
+      "source_location": "L539",
       "_origin": "ast",
       "id": "clinical_note_clinical_note_component_clinicalnotecomponent_marknoshow",
       "community": 27,
@@ -12141,7 +11331,7 @@
       "label": ".toggleEditAntecedentes()",
       "file_type": "code",
       "source_file": "src/app/features/psychologist/clinical-note/clinical-note.component.ts",
-      "source_location": "L534",
+      "source_location": "L557",
       "_origin": "ast",
       "id": "clinical_note_clinical_note_component_clinicalnotecomponent_toggleeditantecedentes",
       "community": 27,
@@ -12151,7 +11341,7 @@
       "label": ".cancelEditAntecedentes()",
       "file_type": "code",
       "source_file": "src/app/features/psychologist/clinical-note/clinical-note.component.ts",
-      "source_location": "L538",
+      "source_location": "L561",
       "_origin": "ast",
       "id": "clinical_note_clinical_note_component_clinicalnotecomponent_canceleditantecedentes",
       "community": 27,
@@ -12161,7 +11351,7 @@
       "label": ".guardarAntecedentes()",
       "file_type": "code",
       "source_file": "src/app/features/psychologist/clinical-note/clinical-note.component.ts",
-      "source_location": "L543",
+      "source_location": "L566",
       "_origin": "ast",
       "id": "clinical_note_clinical_note_component_clinicalnotecomponent_guardarantecedentes",
       "community": 27,
@@ -12171,7 +11361,7 @@
       "label": ".goBack()",
       "file_type": "code",
       "source_file": "src/app/features/psychologist/clinical-note/clinical-note.component.ts",
-      "source_location": "L598",
+      "source_location": "L621",
       "_origin": "ast",
       "id": "clinical_note_clinical_note_component_clinicalnotecomponent_goback",
       "community": 27,
@@ -12484,7 +11674,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_features_psychologist_patients_patients_component_ts_patients_patients_component",
-      "community": 18,
+      "community": 68,
       "norm_label": "patients.component.ts"
     },
     {
@@ -12604,7 +11794,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "psychologist_layout_psychologist_layout_component",
-      "community": 18,
+      "community": 130,
       "norm_label": "psychologist-layout.component.ts"
     },
     {
@@ -13014,7 +12204,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "arco_settings_arco_settings_component",
-      "community": 18,
+      "community": 130,
       "norm_label": "arco-settings.component.ts"
     },
     {
@@ -13024,7 +12214,7 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "arco_settings_arco_settings_component_arcosettingscomponent",
-      "community": 72,
+      "community": 70,
       "norm_label": "arcosettingscomponent"
     },
     {
@@ -13034,7 +12224,7 @@
       "source_location": "L59",
       "_origin": "ast",
       "id": "arco_settings_arco_settings_component_arcosettingscomponent_ngoninit",
-      "community": 72,
+      "community": 70,
       "norm_label": ".ngoninit()"
     },
     {
@@ -13044,7 +12234,7 @@
       "source_location": "L67",
       "_origin": "ast",
       "id": "arco_settings_arco_settings_component_arcosettingscomponent_loadprivacyandrequests",
-      "community": 72,
+      "community": 70,
       "norm_label": ".loadprivacyandrequests()"
     },
     {
@@ -13054,7 +12244,7 @@
       "source_location": "L84",
       "_origin": "ast",
       "id": "arco_settings_arco_settings_component_arcosettingscomponent_onprivacychange",
-      "community": 72,
+      "community": 70,
       "norm_label": ".onprivacychange()"
     },
     {
@@ -13064,7 +12254,7 @@
       "source_location": "L99",
       "_origin": "ast",
       "id": "arco_settings_arco_settings_component_arcosettingscomponent_downloadmydata",
-      "community": 72,
+      "community": 70,
       "norm_label": ".downloadmydata()"
     },
     {
@@ -13074,7 +12264,7 @@
       "source_location": "L105",
       "_origin": "ast",
       "id": "arco_settings_arco_settings_component_arcosettingscomponent_onsubmitrequest",
-      "community": 72,
+      "community": 70,
       "norm_label": ".onsubmitrequest()"
     },
     {
@@ -13084,7 +12274,7 @@
       "source_location": "L129",
       "_origin": "ast",
       "id": "arco_settings_arco_settings_component_arcosettingscomponent_showsuccess",
-      "community": 72,
+      "community": 70,
       "norm_label": ".showsuccess()"
     },
     {
@@ -13094,7 +12284,7 @@
       "source_location": "L134",
       "_origin": "ast",
       "id": "arco_settings_arco_settings_component_arcosettingscomponent_showerror",
-      "community": 72,
+      "community": 70,
       "norm_label": ".showerror()"
     },
     {
@@ -13164,7 +12354,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "profile_avatar_profile_avatar_component",
-      "community": 59,
+      "community": 72,
       "norm_label": "profile-avatar.component.ts"
     },
     {
@@ -17440,160 +16630,6 @@
       "target": "path"
     },
     {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/check_schema.js",
-      "source_location": "L2",
-      "weight": 1.0,
-      "source": "scratch_check_schema",
-      "target": "path",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/check_schema_tables.js",
-      "source_location": "L2",
-      "weight": 1.0,
-      "source": "scratch_check_schema_tables",
-      "target": "path",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/find_activity_registration.js",
-      "source_location": "L2",
-      "weight": 1.0,
-      "source": "scratch_find_activity_registration",
-      "target": "path",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/find_appointments.js",
-      "source_location": "L2",
-      "weight": 1.0,
-      "source": "scratch_find_appointments",
-      "target": "path",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/find_db_connection.js",
-      "source_location": "L2",
-      "weight": 1.0,
-      "source": "scratch_find_db_connection",
-      "target": "path",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/find_sql_streak.js",
-      "source_location": "L2",
-      "weight": 1.0,
-      "source": "scratch_find_sql_streak",
-      "target": "path",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/find_streak_functions.js",
-      "source_location": "L2",
-      "weight": 1.0,
-      "source": "scratch_find_streak_functions",
-      "target": "path",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/find_tables.js",
-      "source_location": "L2",
-      "weight": 1.0,
-      "source": "scratch_find_tables",
-      "target": "path",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/read_chats_def.js",
-      "source_location": "L2",
-      "weight": 1.0,
-      "source": "scratch_read_chats_def",
-      "target": "path",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/read_migration_connection.js",
-      "source_location": "L2",
-      "weight": 1.0,
-      "source": "scratch_read_migration_connection",
-      "target": "path",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/read_nutrition_tables.js",
-      "source_location": "L2",
-      "weight": 1.0,
-      "source": "scratch_read_nutrition_tables",
-      "target": "path",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/read_schema_achievements.js",
-      "source_location": "L2",
-      "weight": 1.0,
-      "source": "scratch_read_schema_achievements",
-      "target": "path",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/read_schema_function.js",
-      "source_location": "L2",
-      "weight": 1.0,
-      "source": "scratch_read_schema_function",
-      "target": "path",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/search_schema_simple.js",
-      "source_location": "L2",
-      "weight": 1.0,
-      "source": "scratch_search_schema_simple",
-      "target": "path",
-      "confidence_score": 1.0
-    },
-    {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
@@ -20499,106 +19535,6 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "scratch/check_schema.js",
-      "source_location": "L1",
-      "weight": 1.0,
-      "source": "scratch_check_schema",
-      "target": "scratch_check_schema_fs",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/check_schema.js",
-      "source_location": "L2",
-      "weight": 1.0,
-      "source": "scratch_check_schema",
-      "target": "scratch_check_schema_path",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/check_schema.js",
-      "source_location": "L5",
-      "weight": 1.0,
-      "source": "scratch_check_schema",
-      "target": "scratch_check_schema_schemacontent",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/check_schema.js",
-      "source_location": "L4",
-      "weight": 1.0,
-      "source": "scratch_check_schema",
-      "target": "scratch_check_schema_schemapath",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/check_schema.js",
-      "source_location": "L7",
-      "weight": 1.0,
-      "source": "scratch_check_schema",
-      "target": "scratch_check_schema_tablestofind",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/check_schema_tables.js",
-      "source_location": "L5",
-      "weight": 1.0,
-      "source": "scratch_check_schema_tables",
-      "target": "scratch_check_schema_tables_content",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/check_schema_tables.js",
-      "source_location": "L1",
-      "weight": 1.0,
-      "source": "scratch_check_schema_tables",
-      "target": "scratch_check_schema_tables_fs",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/check_schema_tables.js",
-      "source_location": "L7",
-      "weight": 1.0,
-      "source": "scratch_check_schema_tables",
-      "target": "scratch_check_schema_tables_lines",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/check_schema_tables.js",
-      "source_location": "L2",
-      "weight": 1.0,
-      "source": "scratch_check_schema_tables",
-      "target": "scratch_check_schema_tables_path",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/check_schema_tables.js",
-      "source_location": "L4",
-      "weight": 1.0,
-      "source": "scratch_check_schema_tables",
-      "target": "scratch_check_schema_tables_schemapath",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
       "source_file": "scratch/check_students.js",
       "source_location": "L1",
       "weight": 1.0,
@@ -20625,216 +19561,6 @@
       "confidence_score": 1.0,
       "source": "scratch_check_students",
       "target": "scratch_check_students_supabase"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/find_activity_registration.js",
-      "source_location": "L1",
-      "weight": 1.0,
-      "source": "scratch_find_activity_registration",
-      "target": "scratch_find_activity_registration_fs",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/find_activity_registration.js",
-      "source_location": "L2",
-      "weight": 1.0,
-      "source": "scratch_find_activity_registration",
-      "target": "scratch_find_activity_registration_path",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/find_activity_registration.js",
-      "source_location": "L4",
-      "weight": 1.0,
-      "source": "scratch_find_activity_registration",
-      "target": "scratch_find_activity_registration_searchdir",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/find_appointments.js",
-      "source_location": "L1",
-      "weight": 1.0,
-      "source": "scratch_find_appointments",
-      "target": "scratch_find_appointments_fs",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/find_appointments.js",
-      "source_location": "L2",
-      "weight": 1.0,
-      "source": "scratch_find_appointments",
-      "target": "scratch_find_appointments_path",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/find_appointments.js",
-      "source_location": "L4",
-      "weight": 1.0,
-      "source": "scratch_find_appointments",
-      "target": "scratch_find_appointments_searchdir",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/find_db_connection.js",
-      "source_location": "L1",
-      "weight": 1.0,
-      "source": "scratch_find_db_connection",
-      "target": "scratch_find_db_connection_fs",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/find_db_connection.js",
-      "source_location": "L2",
-      "weight": 1.0,
-      "source": "scratch_find_db_connection",
-      "target": "scratch_find_db_connection_path",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/find_db_connection.js",
-      "source_location": "L4",
-      "weight": 1.0,
-      "source": "scratch_find_db_connection",
-      "target": "scratch_find_db_connection_searchdir",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/find_sql_streak.js",
-      "source_location": "L1",
-      "weight": 1.0,
-      "source": "scratch_find_sql_streak",
-      "target": "scratch_find_sql_streak_fs",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/find_sql_streak.js",
-      "source_location": "L2",
-      "weight": 1.0,
-      "source": "scratch_find_sql_streak",
-      "target": "scratch_find_sql_streak_path",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/find_sql_streak.js",
-      "source_location": "L4",
-      "weight": 1.0,
-      "source": "scratch_find_sql_streak",
-      "target": "scratch_find_sql_streak_searchdir",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/find_streak_functions.js",
-      "source_location": "L5",
-      "weight": 1.0,
-      "source": "scratch_find_streak_functions",
-      "target": "scratch_find_streak_functions_content",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/find_streak_functions.js",
-      "source_location": "L1",
-      "weight": 1.0,
-      "source": "scratch_find_streak_functions",
-      "target": "scratch_find_streak_functions_fs",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/find_streak_functions.js",
-      "source_location": "L7",
-      "weight": 1.0,
-      "source": "scratch_find_streak_functions",
-      "target": "scratch_find_streak_functions_lines",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/find_streak_functions.js",
-      "source_location": "L2",
-      "weight": 1.0,
-      "source": "scratch_find_streak_functions",
-      "target": "scratch_find_streak_functions_path",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/find_streak_functions.js",
-      "source_location": "L4",
-      "weight": 1.0,
-      "source": "scratch_find_streak_functions",
-      "target": "scratch_find_streak_functions_schemapath",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/find_tables.js",
-      "source_location": "L4",
-      "weight": 1.0,
-      "source": "scratch_find_tables",
-      "target": "scratch_find_tables_dbdir",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/find_tables.js",
-      "source_location": "L5",
-      "weight": 1.0,
-      "source": "scratch_find_tables",
-      "target": "scratch_find_tables_files",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/find_tables.js",
-      "source_location": "L1",
-      "weight": 1.0,
-      "source": "scratch_find_tables",
-      "target": "scratch_find_tables_fs",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/find_tables.js",
-      "source_location": "L2",
-      "weight": 1.0,
-      "source": "scratch_find_tables",
-      "target": "scratch_find_tables_path",
-      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -20869,256 +19595,6 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "scratch/read_chats_def.js",
-      "source_location": "L5",
-      "weight": 1.0,
-      "source": "scratch_read_chats_def",
-      "target": "scratch_read_chats_def_content",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/read_chats_def.js",
-      "source_location": "L1",
-      "weight": 1.0,
-      "source": "scratch_read_chats_def",
-      "target": "scratch_read_chats_def_fs",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/read_chats_def.js",
-      "source_location": "L7",
-      "weight": 1.0,
-      "source": "scratch_read_chats_def",
-      "target": "scratch_read_chats_def_lines",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/read_chats_def.js",
-      "source_location": "L2",
-      "weight": 1.0,
-      "source": "scratch_read_chats_def",
-      "target": "scratch_read_chats_def_path",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/read_chats_def.js",
-      "source_location": "L4",
-      "weight": 1.0,
-      "source": "scratch_read_chats_def",
-      "target": "scratch_read_chats_def_schemapath",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/read_migration_connection.js",
-      "source_location": "L5",
-      "weight": 1.0,
-      "source": "scratch_read_migration_connection",
-      "target": "scratch_read_migration_connection_content",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/read_migration_connection.js",
-      "source_location": "L4",
-      "weight": 1.0,
-      "source": "scratch_read_migration_connection",
-      "target": "scratch_read_migration_connection_filepath",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/read_migration_connection.js",
-      "source_location": "L1",
-      "weight": 1.0,
-      "source": "scratch_read_migration_connection",
-      "target": "scratch_read_migration_connection_fs",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/read_migration_connection.js",
-      "source_location": "L7",
-      "weight": 1.0,
-      "source": "scratch_read_migration_connection",
-      "target": "scratch_read_migration_connection_lines",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/read_migration_connection.js",
-      "source_location": "L2",
-      "weight": 1.0,
-      "source": "scratch_read_migration_connection",
-      "target": "scratch_read_migration_connection_path",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/read_nutrition_tables.js",
-      "source_location": "L5",
-      "weight": 1.0,
-      "source": "scratch_read_nutrition_tables",
-      "target": "scratch_read_nutrition_tables_content",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/read_nutrition_tables.js",
-      "source_location": "L1",
-      "weight": 1.0,
-      "source": "scratch_read_nutrition_tables",
-      "target": "scratch_read_nutrition_tables_fs",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/read_nutrition_tables.js",
-      "source_location": "L7",
-      "weight": 1.0,
-      "source": "scratch_read_nutrition_tables",
-      "target": "scratch_read_nutrition_tables_lines",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/read_nutrition_tables.js",
-      "source_location": "L2",
-      "weight": 1.0,
-      "source": "scratch_read_nutrition_tables",
-      "target": "scratch_read_nutrition_tables_path",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/read_nutrition_tables.js",
-      "source_location": "L4",
-      "weight": 1.0,
-      "source": "scratch_read_nutrition_tables",
-      "target": "scratch_read_nutrition_tables_schemapath",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/read_schema_achievements.js",
-      "source_location": "L5",
-      "weight": 1.0,
-      "source": "scratch_read_schema_achievements",
-      "target": "scratch_read_schema_achievements_content",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/read_schema_achievements.js",
-      "source_location": "L1",
-      "weight": 1.0,
-      "source": "scratch_read_schema_achievements",
-      "target": "scratch_read_schema_achievements_fs",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/read_schema_achievements.js",
-      "source_location": "L7",
-      "weight": 1.0,
-      "source": "scratch_read_schema_achievements",
-      "target": "scratch_read_schema_achievements_lines",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/read_schema_achievements.js",
-      "source_location": "L2",
-      "weight": 1.0,
-      "source": "scratch_read_schema_achievements",
-      "target": "scratch_read_schema_achievements_path",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/read_schema_achievements.js",
-      "source_location": "L4",
-      "weight": 1.0,
-      "source": "scratch_read_schema_achievements",
-      "target": "scratch_read_schema_achievements_schemapath",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/read_schema_function.js",
-      "source_location": "L5",
-      "weight": 1.0,
-      "source": "scratch_read_schema_function",
-      "target": "scratch_read_schema_function_content",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/read_schema_function.js",
-      "source_location": "L1",
-      "weight": 1.0,
-      "source": "scratch_read_schema_function",
-      "target": "scratch_read_schema_function_fs",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/read_schema_function.js",
-      "source_location": "L7",
-      "weight": 1.0,
-      "source": "scratch_read_schema_function",
-      "target": "scratch_read_schema_function_lines",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/read_schema_function.js",
-      "source_location": "L2",
-      "weight": 1.0,
-      "source": "scratch_read_schema_function",
-      "target": "scratch_read_schema_function_path",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/read_schema_function.js",
-      "source_location": "L4",
-      "weight": 1.0,
-      "source": "scratch_read_schema_function",
-      "target": "scratch_read_schema_function_schemapath",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
       "source_file": "scratch/register_student_test.js",
       "source_location": "L1",
       "weight": 1.0,
@@ -21145,56 +19621,6 @@
       "confidence_score": 1.0,
       "source": "scratch_register_student_test",
       "target": "scratch_register_student_test_supabase"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/search_schema_simple.js",
-      "source_location": "L5",
-      "weight": 1.0,
-      "source": "scratch_search_schema_simple",
-      "target": "scratch_search_schema_simple_content",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/search_schema_simple.js",
-      "source_location": "L1",
-      "weight": 1.0,
-      "source": "scratch_search_schema_simple",
-      "target": "scratch_search_schema_simple_fs",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/search_schema_simple.js",
-      "source_location": "L7",
-      "weight": 1.0,
-      "source": "scratch_search_schema_simple",
-      "target": "scratch_search_schema_simple_lines",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/search_schema_simple.js",
-      "source_location": "L2",
-      "weight": 1.0,
-      "source": "scratch_search_schema_simple",
-      "target": "scratch_search_schema_simple_path",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/search_schema_simple.js",
-      "source_location": "L4",
-      "weight": 1.0,
-      "source": "scratch_search_schema_simple",
-      "target": "scratch_search_schema_simple_schemapath",
-      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -21232,79 +19658,29 @@
       "source_file": "scratch/test_query.js",
       "source_location": "L1",
       "weight": 1.0,
-      "source": "scratch_test_query_js_scratch_test_query",
-      "target": "scratch_test_query_createclient",
-      "confidence_score": 1.0
+      "confidence_score": 1.0,
+      "source": "scratch_test_query",
+      "target": "scratch_test_query_createclient"
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "scratch/test_query.js",
-      "source_location": "L5",
-      "weight": 1.0,
-      "source": "scratch_test_query_js_scratch_test_query",
-      "target": "scratch_test_query_js_scratch_test_query_supabase",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/test_query.js",
-      "source_location": "L7",
-      "weight": 1.0,
-      "source": "scratch_test_query_js_scratch_test_query",
-      "target": "scratch_test_query_test",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/test_query.ts",
-      "source_location": "L10",
-      "weight": 1.0,
-      "source": "scratch_test_query_ts_scratch_test_query",
-      "target": "scratch_test_query_formats",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/test_query.ts",
       "source_location": "L8",
       "weight": 1.0,
-      "source": "scratch_test_query_ts_scratch_test_query",
-      "target": "scratch_test_query_last10digits",
-      "confidence_score": 1.0
+      "confidence_score": 1.0,
+      "source": "scratch_test_query",
+      "target": "scratch_test_query_run"
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "scratch/test_query.ts",
-      "source_location": "L21",
+      "source_file": "scratch/test_query.js",
+      "source_location": "L6",
       "weight": 1.0,
-      "source": "scratch_test_query_ts_scratch_test_query",
-      "target": "scratch_test_query_orfiltermobile",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/test_query.ts",
-      "source_location": "L5",
-      "weight": 1.0,
-      "source": "scratch_test_query_ts_scratch_test_query",
-      "target": "scratch_test_query_ts_scratch_test_query_supabase",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/test_query.ts",
-      "source_location": "L20",
-      "weight": 1.0,
-      "source": "scratch_test_query_ts_scratch_test_query",
-      "target": "scratch_test_query_uniqueformats",
-      "confidence_score": 1.0
+      "confidence_score": 1.0,
+      "source": "scratch_test_query",
+      "target": "scratch_test_query_supabase"
     },
     {
       "relation": "contains",
@@ -41830,5 +40206,5 @@
       "source_file": "src/app/features/psychologist/psychologist-layout/psychologist-layout.component.html"
     }
   ],
-  "built_at_commit": "993335eb6b40416fe1792568c8bfa8531cac6c8c"
+  "built_at_commit": "02cdb42e0dbb1693d50de9caa7ccd89c3198776b"
 }

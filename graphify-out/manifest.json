@@ -20,8 +20,8 @@
     "semantic_hash": ""
   },
   "db/schema.sql": {
-    "mtime": 1783885096.6728835,
-    "ast_hash": "e573aba63cfe33c72e25ff0a3825e624",
+    "mtime": 1783915602.2743392,
+    "ast_hash": "0bd1d8dcc9084b2bfa75619c9f0eb775",
     "semantic_hash": ""
   },
   "package.json": {
@@ -100,8 +100,8 @@
     "semantic_hash": ""
   },
   "src/app/core/services/diary.service.ts": {
-    "mtime": 1783885077.1087222,
-    "ast_hash": "87e3c468c6d9ce1f5d1b9787ebe67c73",
+    "mtime": 1783915602.2871056,
+    "ast_hash": "f137ad648d67f6e4034563a9cda7a80b",
     "semantic_hash": ""
   },
   "src/app/core/services/faculty.service.ts": {
@@ -205,8 +205,8 @@
     "semantic_hash": ""
   },
   "src/app/features/dashboard-layout/dashboard-layout.component.ts": {
-    "mtime": 1783836684.2799466,
-    "ast_hash": "efa2642fd5bc054c542bd388a8c4f708",
+    "mtime": 1783915602.2921035,
+    "ast_hash": "04a81c36184d7aeb1c829694a35e7327",
     "semantic_hash": ""
   },
   "src/app/features/dashboard-layout/dashboard.routes.ts": {
@@ -225,8 +225,8 @@
     "semantic_hash": ""
   },
   "src/app/features/diary/dashboard/diary-dashboard.component.ts": {
-    "mtime": 1783836684.2858572,
-    "ast_hash": "3a1cda81059d6f5be2572062f64d817c",
+    "mtime": 1783915602.2951186,
+    "ast_hash": "17cf400fc979247c6e0e9986e46078a1",
     "semantic_hash": ""
   },
   "src/app/features/diary/diary.routes.ts": {
@@ -240,8 +240,8 @@
     "semantic_hash": ""
   },
   "src/app/features/psychologist/clinical-note/clinical-note.component.ts": {
-    "mtime": 1783909068.156739,
-    "ast_hash": "4f1f7736c7a222233b4ce89a0eedcc9f",
+    "mtime": 1783915602.3000329,
+    "ast_hash": "675e546d01b365d9b1b3f85d1f9357db",
     "semantic_hash": ""
   },
   "src/app/features/psychologist/dashboard/dashboard.component.ts": {
@@ -430,8 +430,8 @@
     "semantic_hash": ""
   },
   "src/app/features/diary/dashboard/diary-dashboard.component.html": {
-    "mtime": 1783836684.2829444,
-    "ast_hash": "e68f3e4daa74f895ffae4d0aaba1a631",
+    "mtime": 1783915602.2941203,
+    "ast_hash": "a32f21a326584e88aae4dabb5c495c1c",
     "semantic_hash": ""
   },
   "src/app/features/psychologist/agenda/agenda.component.html": {
@@ -510,8 +510,8 @@
     "semantic_hash": ""
   },
   "src/app/core/services/emergency-notification.service.ts": {
-    "mtime": 1783668250.7873898,
-    "ast_hash": "9802e1312a88244bcaccfc4c14cd57e7",
+    "mtime": 1783911998.7693472,
+    "ast_hash": "ab2648ba837b7f7c483716dc868741dd",
     "semantic_hash": ""
   },
   "src/app/features/health-professional/agenda/agenda.component.ts": {
@@ -715,8 +715,8 @@
     "semantic_hash": ""
   },
   "db/migration_skill10_gamification.sql": {
-    "mtime": 1782804530.312817,
-    "ast_hash": "914cce0527097354bfa837d55030c9a5",
+    "mtime": 1783915602.271358,
+    "ast_hash": "17f1cfebe31d77df5973f8c250a75cdd",
     "semantic_hash": ""
   },
   "src/app/core/services/gamification.service.ts": {
@@ -735,8 +735,8 @@
     "semantic_hash": ""
   },
   "src/app/core/services/internal-chat.service.ts": {
-    "mtime": 1783882051.7301831,
-    "ast_hash": "047edfa7b207f1ecb15fbcf1646e9500",
+    "mtime": 1783911997.0227137,
+    "ast_hash": "3c1ca009e71cdf82710c2ee07d2ba2f7",
     "semantic_hash": ""
   },
   "src/app/features/health-professional/command-center-chat/command-center-chat.component.ts": {
@@ -745,8 +745,8 @@
     "semantic_hash": ""
   },
   "supabase/functions/meta-whatsapp/index.ts": {
-    "mtime": 1783882026.905707,
-    "ast_hash": "3f0a07073ab1d324a58eb5e5253a0a4a",
+    "mtime": 1783913051.069299,
+    "ast_hash": "89018f458286bafa12221cac4338c485",
     "semantic_hash": ""
   },
   "src/app/features/health-professional/command-center-chat/command-center-chat.component.html": {
@@ -762,11 +762,6 @@
   "src/app/features/admin/faculties/faculty-detail/faculty-detail.component.html": {
     "mtime": 1782852503.0329745,
     "ast_hash": "9b54e5646b452244da07478b53dc3382",
-    "semantic_hash": ""
-  },
-  "supabase/functions/meta-whatsapp-outbound/index.ts": {
-    "mtime": 1783668250.9200945,
-    "ast_hash": "5d868c072c7c776e59fdf514dfb64642",
     "semantic_hash": ""
   },
   "supabase/functions/wa-keepalive/index.ts": {
@@ -865,8 +860,8 @@
     "semantic_hash": ""
   },
   "src/app/features/nutritionist/consulta/consulta.component.ts": {
-    "mtime": 1783885901.4234579,
-    "ast_hash": "99db5c106c8876403e190ea023a91ad8",
+    "mtime": 1783915602.299004,
+    "ast_hash": "16f4eedcdd6f0297a99ff7da06f6c204",
     "semantic_hash": ""
   },
   "src/app/features/nutritionist/consulta/consulta.types.ts": {
@@ -1160,8 +1155,8 @@
     "semantic_hash": ""
   },
   "scratch/test_query.js": {
-    "mtime": 1783884928.7478375,
-    "ast_hash": "b6706bc25da6b5bbe0bc1af0f909f9d5",
+    "mtime": 1783913006.313769,
+    "ast_hash": "fbcd661b4f61e2b2fec842ba0188fdf0",
     "semantic_hash": ""
   },
   "db/migration_food_diary_rls.sql": {
@@ -1177,6 +1172,81 @@
   "db/migration_virtual_queue.sql": {
     "mtime": 1783910192.4888172,
     "ast_hash": "6c33eaa145b6b0c6cfd3665a8100293c",
+    "semantic_hash": ""
+  },
+  "scratch/check_schema.js": {
+    "mtime": 1783915602.2758098,
+    "ast_hash": "f1fd7bc328708fefb7e4be0f37018813",
+    "semantic_hash": ""
+  },
+  "scratch/check_schema_tables.js": {
+    "mtime": 1783915602.2768245,
+    "ast_hash": "5c4870db9212ea802ea9fd4811cb2837",
+    "semantic_hash": ""
+  },
+  "scratch/find_activity_registration.js": {
+    "mtime": 1783915602.2768245,
+    "ast_hash": "2f390c19dc0347c6ab42eedd2a93a3bb",
+    "semantic_hash": ""
+  },
+  "scratch/find_appointments.js": {
+    "mtime": 1783915602.2780142,
+    "ast_hash": "49320f249f1ee9f913dd7b5d62b4cca8",
+    "semantic_hash": ""
+  },
+  "scratch/find_db_connection.js": {
+    "mtime": 1783915602.2780142,
+    "ast_hash": "6f72da36f717b26a0efbdc7f8b41fac0",
+    "semantic_hash": ""
+  },
+  "scratch/find_sql_streak.js": {
+    "mtime": 1783915602.2790294,
+    "ast_hash": "40016523d9362439ba65fe3da917efe7",
+    "semantic_hash": ""
+  },
+  "scratch/find_streak_functions.js": {
+    "mtime": 1783915602.280028,
+    "ast_hash": "b2a0c7bfc245b00b140d55f8a5d2e411",
+    "semantic_hash": ""
+  },
+  "scratch/find_tables.js": {
+    "mtime": 1783915602.280028,
+    "ast_hash": "f478f917afdf74b85c48366981d8042e",
+    "semantic_hash": ""
+  },
+  "scratch/read_chats_def.js": {
+    "mtime": 1783915602.2812824,
+    "ast_hash": "c4ea4671a33310cb04a0ad3f5b0fc57d",
+    "semantic_hash": ""
+  },
+  "scratch/read_migration_connection.js": {
+    "mtime": 1783915602.2812824,
+    "ast_hash": "3801809cd4f5f6b0a31a72f21288b7c3",
+    "semantic_hash": ""
+  },
+  "scratch/read_nutrition_tables.js": {
+    "mtime": 1783915602.282299,
+    "ast_hash": "35f74667d4f8acfb21084c2918b04037",
+    "semantic_hash": ""
+  },
+  "scratch/read_schema_achievements.js": {
+    "mtime": 1783915602.2836409,
+    "ast_hash": "6a04fba6d47a5d20a27d926b40b660ae",
+    "semantic_hash": ""
+  },
+  "scratch/read_schema_function.js": {
+    "mtime": 1783915602.2836409,
+    "ast_hash": "b62d23e33d36f2450d561df81d566729",
+    "semantic_hash": ""
+  },
+  "scratch/search_schema_simple.js": {
+    "mtime": 1783915602.285216,
+    "ast_hash": "eb683b39620f2f7233d7d70657567810",
+    "semantic_hash": ""
+  },
+  "scratch/test_query.ts": {
+    "mtime": 1783913000.0830765,
+    "ast_hash": "a245ee6ee113a85135f9970f1e787632",
     "semantic_hash": ""
   }
 }

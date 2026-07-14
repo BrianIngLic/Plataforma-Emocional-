@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet, RouterLink, RouterLinkActive, Router, NavigationEnd } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
@@ -17,9 +17,22 @@ export class PsychologistLayoutComponent implements OnInit {
   router = inject(Router);
 
   isSidebarCollapsed = false;
+  showProfileMenu = false;
 
   get currentUser() {
     return this.authService.currentUser();
+  }
+
+  @HostListener('document:click')
+  onDocumentClick() {
+    if (this.showProfileMenu) {
+      this.showProfileMenu = false;
+    }
+  }
+
+  toggleProfileMenu(event: Event) {
+    event.stopPropagation();
+    this.showProfileMenu = !this.showProfileMenu;
   }
 
   isMobile() {
@@ -34,6 +47,7 @@ export class PsychologistLayoutComponent implements OnInit {
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe(() => {
+      this.showProfileMenu = false;
       if (this.isMobile()) {
         this.isSidebarCollapsed = true;
       }

@@ -20,8 +20,8 @@
     "semantic_hash": ""
   },
   "db/schema.sql": {
-    "mtime": 1783885096.6728835,
-    "ast_hash": "e573aba63cfe33c72e25ff0a3825e624",
+    "mtime": 1783968424.7911468,
+    "ast_hash": "68536dee8d85417b5869b1addbb80db5",
     "semantic_hash": ""
   },
   "package.json": {
@@ -100,8 +100,8 @@
     "semantic_hash": ""
   },
   "src/app/core/services/diary.service.ts": {
-    "mtime": 1783885077.1087222,
-    "ast_hash": "87e3c468c6d9ce1f5d1b9787ebe67c73",
+    "mtime": 1783968424.8156698,
+    "ast_hash": "7ea289379eb9618d73f81842281e7d62",
     "semantic_hash": ""
   },
   "src/app/core/services/faculty.service.ts": {
@@ -205,8 +205,8 @@
     "semantic_hash": ""
   },
   "src/app/features/dashboard-layout/dashboard-layout.component.ts": {
-    "mtime": 1783836684.2799466,
-    "ast_hash": "efa2642fd5bc054c542bd388a8c4f708",
+    "mtime": 1783915602.2921035,
+    "ast_hash": "04a81c36184d7aeb1c829694a35e7327",
     "semantic_hash": ""
   },
   "src/app/features/dashboard-layout/dashboard.routes.ts": {
@@ -225,8 +225,8 @@
     "semantic_hash": ""
   },
   "src/app/features/diary/dashboard/diary-dashboard.component.ts": {
-    "mtime": 1783836684.2858572,
-    "ast_hash": "3a1cda81059d6f5be2572062f64d817c",
+    "mtime": 1783968424.8296688,
+    "ast_hash": "a5bac2003e62f4c6588d3856bd7e92c9",
     "semantic_hash": ""
   },
   "src/app/features/diary/diary.routes.ts": {
@@ -240,8 +240,8 @@
     "semantic_hash": ""
   },
   "src/app/features/psychologist/clinical-note/clinical-note.component.ts": {
-    "mtime": 1783909068.156739,
-    "ast_hash": "4f1f7736c7a222233b4ce89a0eedcc9f",
+    "mtime": 1783915602.3000329,
+    "ast_hash": "675e546d01b365d9b1b3f85d1f9357db",
     "semantic_hash": ""
   },
   "src/app/features/psychologist/dashboard/dashboard.component.ts": {
@@ -250,8 +250,8 @@
     "semantic_hash": "b29381fde22297a402e92bd8ee8e620a"
   },
   "src/app/features/psychologist/patient-profile/patient-profile.component.ts": {
-    "mtime": 1783909426.6853797,
-    "ast_hash": "37d37d6781171137fe43a2f08ede047e",
+    "mtime": 1783968424.8376658,
+    "ast_hash": "d7ee8cc01612ce7f728f48d09d714166",
     "semantic_hash": ""
   },
   "src/app/features/psychologist/patients/patients.component.ts": {
@@ -430,8 +430,8 @@
     "semantic_hash": ""
   },
   "src/app/features/diary/dashboard/diary-dashboard.component.html": {
-    "mtime": 1783836684.2829444,
-    "ast_hash": "e68f3e4daa74f895ffae4d0aaba1a631",
+    "mtime": 1783968424.8256686,
+    "ast_hash": "902a659149f1479a068961e33086ed72",
     "semantic_hash": ""
   },
   "src/app/features/psychologist/agenda/agenda.component.html": {
@@ -565,8 +565,8 @@
     "semantic_hash": ""
   },
   "src/app/features/nutritionist/perfil-paciente/perfil-paciente.component.ts": {
-    "mtime": 1783909437.4685526,
-    "ast_hash": "90282c80248dc2e0e2788d6ebf679ac9",
+    "mtime": 1783968424.8356817,
+    "ast_hash": "727135be852a1d71fca31c8ffa967824",
     "semantic_hash": ""
   },
   "src/app/features/nutritionist/settings/settings.component.ts": {
@@ -640,8 +640,8 @@
     "semantic_hash": ""
   },
   "db/migration_achievements_whatsapp_internal.sql": {
-    "mtime": 1782758292.1656864,
-    "ast_hash": "d7b7fc06346c7189f91110b126845d36",
+    "mtime": 1783968424.7861483,
+    "ast_hash": "26e936eb763411db37b6c2045cb3c520",
     "semantic_hash": ""
   },
   "SPEC_UX_UI_SDD.md": {
@@ -690,8 +690,8 @@
     "semantic_hash": ""
   },
   "src/app/core/services/dossier-export.service.ts": {
-    "mtime": 1783668250.785404,
-    "ast_hash": "be4ca2b0e7e3ec4584c4b3f61c7b3260",
+    "mtime": 1783968424.8166697,
+    "ast_hash": "b2f732e303532400b43ebea643d3aeb2",
     "semantic_hash": ""
   },
   "src/app/features/student/session-feedback/emoji-scale/emoji-scale.component.ts": {
@@ -715,13 +715,13 @@
     "semantic_hash": ""
   },
   "db/migration_skill10_gamification.sql": {
-    "mtime": 1782804530.312817,
-    "ast_hash": "914cce0527097354bfa837d55030c9a5",
+    "mtime": 1783968424.7881606,
+    "ast_hash": "d63a2672e0317edd3d96309bddddffad",
     "semantic_hash": ""
   },
   "src/app/core/services/gamification.service.ts": {
-    "mtime": 1783668250.7883828,
-    "ast_hash": "b115aae51f1fa821afd3d1de58d87f80",
+    "mtime": 1783968424.8186827,
+    "ast_hash": "8e5d3de6d7dce67f2e56411ffc93c4ac",
     "semantic_hash": ""
   },
   "src/app/features/gamification/achievements-dashboard/achievements-dashboard.component.ts": {
@@ -745,13 +745,13 @@
     "semantic_hash": ""
   },
   "supabase/functions/meta-whatsapp/index.ts": {
-    "mtime": 1783911986.1690078,
-    "ast_hash": "f4832e89f9bbcf41ddd38c3f28728fda",
+    "mtime": 1783966796.2152247,
+    "ast_hash": "89018f458286bafa12221cac4338c485",
     "semantic_hash": ""
   },
   "src/app/features/health-professional/command-center-chat/command-center-chat.component.html": {
-    "mtime": 1783840083.2850087,
-    "ast_hash": "1bf11c467fc3408c0d1f05af528b0d25",
+    "mtime": 1784000920.4508774,
+    "ast_hash": "c34dd82e276b401a30c1b7c3641eb3d0",
     "semantic_hash": ""
   },
   "src/app/features/admin/faculties/faculty-detail/faculty-detail.component.ts": {
@@ -860,8 +860,8 @@
     "semantic_hash": ""
   },
   "src/app/features/nutritionist/consulta/consulta.component.ts": {
-    "mtime": 1783885901.4234579,
-    "ast_hash": "99db5c106c8876403e190ea023a91ad8",
+    "mtime": 1783968424.8336704,
+    "ast_hash": "da757928f6ff67e0177787d12a6c59ce",
     "semantic_hash": ""
   },
   "src/app/features/nutritionist/consulta/consulta.types.ts": {
@@ -1154,11 +1154,6 @@
     "ast_hash": "2abde069e46f23b27521ab3c3e98ace1",
     "semantic_hash": ""
   },
-  "scratch/test_query.js": {
-    "mtime": 1783884928.7478375,
-    "ast_hash": "b6706bc25da6b5bbe0bc1af0f909f9d5",
-    "semantic_hash": ""
-  },
   "db/migration_food_diary_rls.sql": {
     "mtime": 1783885085.4240315,
     "ast_hash": "477c39a4d28d16d6122c901021eb68d6",
@@ -1172,6 +1167,176 @@
   "db/migration_virtual_queue.sql": {
     "mtime": 1783910192.4888172,
     "ast_hash": "6c33eaa145b6b0c6cfd3665a8100293c",
+    "semantic_hash": ""
+  },
+  "scratch/check_schema.js": {
+    "mtime": 1783915602.2758098,
+    "ast_hash": "f1fd7bc328708fefb7e4be0f37018813",
+    "semantic_hash": ""
+  },
+  "scratch/check_schema_tables.js": {
+    "mtime": 1783915602.2768245,
+    "ast_hash": "5c4870db9212ea802ea9fd4811cb2837",
+    "semantic_hash": ""
+  },
+  "scratch/find_activity_registration.js": {
+    "mtime": 1783915602.2768245,
+    "ast_hash": "2f390c19dc0347c6ab42eedd2a93a3bb",
+    "semantic_hash": ""
+  },
+  "scratch/find_appointments.js": {
+    "mtime": 1783915602.2780142,
+    "ast_hash": "49320f249f1ee9f913dd7b5d62b4cca8",
+    "semantic_hash": ""
+  },
+  "scratch/find_db_connection.js": {
+    "mtime": 1783915602.2780142,
+    "ast_hash": "6f72da36f717b26a0efbdc7f8b41fac0",
+    "semantic_hash": ""
+  },
+  "scratch/find_sql_streak.js": {
+    "mtime": 1783915602.2790294,
+    "ast_hash": "40016523d9362439ba65fe3da917efe7",
+    "semantic_hash": ""
+  },
+  "scratch/find_streak_functions.js": {
+    "mtime": 1783915602.280028,
+    "ast_hash": "b2a0c7bfc245b00b140d55f8a5d2e411",
+    "semantic_hash": ""
+  },
+  "scratch/find_tables.js": {
+    "mtime": 1783915602.280028,
+    "ast_hash": "f478f917afdf74b85c48366981d8042e",
+    "semantic_hash": ""
+  },
+  "scratch/read_chats_def.js": {
+    "mtime": 1783915602.2812824,
+    "ast_hash": "c4ea4671a33310cb04a0ad3f5b0fc57d",
+    "semantic_hash": ""
+  },
+  "scratch/read_migration_connection.js": {
+    "mtime": 1783915602.2812824,
+    "ast_hash": "3801809cd4f5f6b0a31a72f21288b7c3",
+    "semantic_hash": ""
+  },
+  "scratch/read_nutrition_tables.js": {
+    "mtime": 1783915602.282299,
+    "ast_hash": "35f74667d4f8acfb21084c2918b04037",
+    "semantic_hash": ""
+  },
+  "scratch/read_schema_achievements.js": {
+    "mtime": 1783915602.2836409,
+    "ast_hash": "6a04fba6d47a5d20a27d926b40b660ae",
+    "semantic_hash": ""
+  },
+  "scratch/read_schema_function.js": {
+    "mtime": 1783915602.2836409,
+    "ast_hash": "b62d23e33d36f2450d561df81d566729",
+    "semantic_hash": ""
+  },
+  "scratch/search_schema_simple.js": {
+    "mtime": 1783915602.285216,
+    "ast_hash": "eb683b39620f2f7233d7d70657567810",
+    "semantic_hash": ""
+  },
+  "scratch/check_achievements_columns.js": {
+    "mtime": 1783968424.7921515,
+    "ast_hash": "1f29c2bac050ac0ae2e23f411e752b65",
+    "semantic_hash": ""
+  },
+  "scratch/check_constraints.js": {
+    "mtime": 1783968424.7941806,
+    "ast_hash": "e0c36c919d24662abe19b7d1a2d888de",
+    "semantic_hash": ""
+  },
+  "scratch/check_subscriptions.js": {
+    "mtime": 1783967136.9669409,
+    "ast_hash": "948c1b1e352c04c35b9b7239559b8251",
+    "semantic_hash": ""
+  },
+  "scratch/find_achievements_files.js": {
+    "mtime": 1783968424.7941806,
+    "ast_hash": "cc0c72ed046add67da80b2a98fd19f5e",
+    "semantic_hash": ""
+  },
+  "scratch/find_achievements_routes.js": {
+    "mtime": 1783968424.795146,
+    "ast_hash": "51fc6244afa010e54e05f82359a50a80",
+    "semantic_hash": ""
+  },
+  "scratch/find_achievements_table.js": {
+    "mtime": 1783968424.7961488,
+    "ast_hash": "7f5f06665fa86f46faa7184bdc48c1f7",
+    "semantic_hash": ""
+  },
+  "scratch/find_food_diary_queries.js": {
+    "mtime": 1783968424.797658,
+    "ast_hash": "64883cef0a3e453f2a84f64ca3d52230",
+    "semantic_hash": ""
+  },
+  "scratch/fix_achievements_rpc.sql": {
+    "mtime": 1783968424.798668,
+    "ast_hash": "a99190b4570936826cbc678fd58331fc",
+    "semantic_hash": ""
+  },
+  "scratch/inspect_gamification.js": {
+    "mtime": 1783968424.7996902,
+    "ast_hash": "4db6e0e7dfd1c07f7c3f4e051c4146b4",
+    "semantic_hash": ""
+  },
+  "scratch/inspect_tables.js": {
+    "mtime": 1783968424.8016655,
+    "ast_hash": "8985b7814fc381535c440ecd913b8fd0",
+    "semantic_hash": ""
+  },
+  "scratch/read_achievements_schema.js": {
+    "mtime": 1783968424.8026886,
+    "ast_hash": "447a52e3df460fa65c6dc80132d18c56",
+    "semantic_hash": ""
+  },
+  "scratch/read_user_achievements_schema.js": {
+    "mtime": 1783968424.8036683,
+    "ast_hash": "0898bed2bec264868b209d1a2d836026",
+    "semantic_hash": ""
+  },
+  "scratch/search_rpc_in_schema.js": {
+    "mtime": 1783968424.804685,
+    "ast_hash": "98a5ab8bc24a3eeb1537bf8be31c8c58",
+    "semantic_hash": ""
+  },
+  "scratch/search_user_achievements_migration.js": {
+    "mtime": 1783968424.8056707,
+    "ast_hash": "d1eb1d9da5470c71fe85c72a8ba067e4",
+    "semantic_hash": ""
+  },
+  "scratch/search_user_achievements_schema.js": {
+    "mtime": 1783968424.806689,
+    "ast_hash": "9ad15de57d53cc4fbe9fc45e149b6509",
+    "semantic_hash": ""
+  },
+  "scratch/test_achievements.js": {
+    "mtime": 1783968424.8076808,
+    "ast_hash": "bb066dc1b980bcd6f178b9d6d6732676",
+    "semantic_hash": ""
+  },
+  "scratch/test_achievements2.js": {
+    "mtime": 1783968424.809667,
+    "ast_hash": "ccf7a3b8da088843c35175327b7c8061",
+    "semantic_hash": ""
+  },
+  "scratch/test_achievements3.js": {
+    "mtime": 1783968424.811666,
+    "ast_hash": "96507eb9283a9c03073116cafa939d6e",
+    "semantic_hash": ""
+  },
+  "scratch/test_achievements4.js": {
+    "mtime": 1783968424.81267,
+    "ast_hash": "6d5432142039dabfa0e33cc790ba6238",
+    "semantic_hash": ""
+  },
+  "scratch/test_rpc.js": {
+    "mtime": 1783968424.8136694,
+    "ast_hash": "99dcadb3047dde56af54d0cccc258b89",
     "semantic_hash": ""
   }
 }

@@ -1,8 +1,9 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterOutlet, RouterLink, RouterLinkActive, Router } from '@angular/router';
+import { RouterOutlet, RouterLink, RouterLinkActive, Router, NavigationEnd } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { AuthService } from '../../../core/services/auth.service';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-admin-layout',
@@ -12,11 +13,12 @@ import { AuthService } from '../../../core/services/auth.service';
   styleUrls: ['./admin-layout.component.scss']
 })
 
-export class AdminLayoutComponent {
+export class AdminLayoutComponent implements OnInit {
   authService = inject(AuthService);
   router = inject(Router);
 
   isSidebarCollapsed = false;
+  showProfileMenu = false;
 
   navItems = [
     { label: 'Panorama General', sub: 'Métricas de ocupación', icon: 'dashboard', path: './overview' },
@@ -42,6 +44,26 @@ export class AdminLayoutComponent {
       month: 'long',
       day: 'numeric'
     });
+  }
+
+  ngOnInit() {
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe(() => {
+      this.showProfileMenu = false;
+    });
+  }
+
+  @HostListener('document:click')
+  onDocumentClick() {
+    if (this.showProfileMenu) {
+      this.showProfileMenu = false;
+    }
+  }
+
+  toggleProfileMenu(event: Event) {
+    event.stopPropagation();
+    this.showProfileMenu = !this.showProfileMenu;
   }
 
   toggleSidebar() {

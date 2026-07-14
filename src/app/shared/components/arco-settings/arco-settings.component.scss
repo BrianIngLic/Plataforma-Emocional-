@@ -405,3 +405,105 @@
     border: 1px solid rgba(239, 68, 68, 0.25);
   }
 }
+
+/* Danger Zone styling */
+.danger-zone-section {
+  border-top: 1px solid var(--border-color);
+  margin-top: 3rem;
+  padding-top: 2rem;
+
+  .danger-header {
+    margin-bottom: 1.5rem;
+
+    h3 {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0 0 0.4rem 0;
+      font-size: 1.25rem;
+      color: #ef4444;
+
+      mat-icon {
+        color: #ef4444;
+      }
+    }
+
+    p {
+      margin: 0;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+  }
+
+  .danger-box {
+    background: rgba(239, 68, 68, 0.03);
+    border: 1px dashed rgba(239, 68, 68, 0.3);
+    border-radius: 12px;
+    padding: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1.5rem;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: rgba(239, 68, 68, 0.05);
+      border-color: rgba(239, 68, 68, 0.5);
+    }
+
+    @media (max-width: 600px) {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1.25rem;
+    }
+
+    .danger-desc {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+
+      strong {
+        color: var(--text-primary);
+        font-size: 1.05rem;
+        font-weight: 600;
+      }
+
+      span {
+        color: var(--text-secondary);
+        font-size: 0.85rem;
+        line-height: 1.5;
+      }
+    }
+
+    .btn-danger {
+      background: #ef4444;
+      color: white;
+      border: none;
+      font-weight: 600;
+      padding: 0.6rem 1.5rem;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+      outline: none;
+
+      &:hover {
+        background: #dc2626;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.35);
+      }
+
+      &:active {
+        transform: translateY(0);
+      }
+
+      @media (max-width: 600px) {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+  }
+}

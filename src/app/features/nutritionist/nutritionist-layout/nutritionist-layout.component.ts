@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { inject } from '@angular/core';
-import { Router, RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
+import { Router, RouterOutlet, RouterLink, RouterLinkActive, NavigationEnd } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
+import { filter } from 'rxjs/operators';
 import {
   trigger,
   transition,
@@ -45,15 +46,40 @@ import {
     ])
   ]
 })
-export class NutritionistLayout {
+export class NutritionistLayout implements OnInit {
   authService = inject(AuthService);
   router = inject(Router);
 
   isSidebarCollapsed = false;
+  showProfileMenu = false;
   currentAnimation: any;
 
   get currentUser() {
     return this.authService.currentUser();
+  }
+
+  isMobile() {
+    return typeof window !== 'undefined' && window.innerWidth < 768;
+  }
+
+  ngOnInit() {
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe(() => {
+      this.showProfileMenu = false;
+    });
+  }
+
+  @HostListener('document:click')
+  onDocumentClick() {
+    if (this.showProfileMenu) {
+      this.showProfileMenu = false;
+    }
+  }
+
+  toggleProfileMenu(event: Event) {
+    event.stopPropagation();
+    this.showProfileMenu = !this.showProfileMenu;
   }
 
   toggleSidebar() {

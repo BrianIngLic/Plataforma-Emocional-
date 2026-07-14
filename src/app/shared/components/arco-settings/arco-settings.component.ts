@@ -7,8 +7,10 @@ import { MatInputModule } from '@angular/material/input';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { ArcoService, PrivacySettings, ArcoRequest } from '../../../core/services/arco.service';
 import { AuthService } from '../../../core/services/auth.service';
+import { FeedbackModalComponent } from '../feedback-modal/feedback-modal.component';
 
 @Component({
   selector: 'app-arco-settings',
@@ -22,7 +24,8 @@ import { AuthService } from '../../../core/services/auth.service';
     MatInputModule,
     MatTabsModule,
     MatIconModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatDialogModule
   ],
   templateUrl: './arco-settings.component.html',
   styleUrl: './arco-settings.component.scss'
@@ -31,6 +34,7 @@ export class ArcoSettingsComponent implements OnInit {
   private arcoService = inject(ArcoService);
   private authService = inject(AuthService);
   private fb = inject(FormBuilder);
+  private dialog = inject(MatDialog);
 
   userRole = signal<string>('Estudiante');
 
@@ -134,5 +138,39 @@ export class ArcoSettingsComponent implements OnInit {
   private showError(msg: string) {
     this.errorMessage.set(msg);
     setTimeout(() => this.errorMessage.set(null), 5000);
+  }
+
+  confirmDeleteAccount() {
+    const dialogRef = this.dialog.open(FeedbackModalComponent, {
+      width: '420px',
+      data: {
+        type: 'confirm',
+        title: '⚠️ Eliminar Cuenta',
+        message: '¿Estás seguro que deseas eliminar tu cuenta permanentemente? Esta acción borrará todo tu historial, diario emocional y datos clínicos de forma irreversible.',
+        btnText: 'Sí, eliminar cuenta',
+        cancelBtnText: 'Cancelar'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(async (result) => {
+      if (result) {
+        this.loadingSettings.set(true);
+        const success = await this.arcoService.deleteUserAccount();
+        this.loadingSettings.set(false);
+        if (!success) {
+          this.showError('Ocurrió un error al intentar eliminar la cuenta. Inténtalo más tarde.');
+        } else {
+          this.dialog.open(FeedbackModalComponent, {
+            width: '400px',
+            data: {
+              type: 'success',
+              title: 'Cuenta Eliminada',
+              message: 'Tu cuenta ha sido eliminada exitosamente. Se han purgado todos tus datos personales.',
+              btnText: 'Entendido'
+            }
+          });
+        }
+      }
+    });
   }
 }

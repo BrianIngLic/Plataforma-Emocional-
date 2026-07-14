@@ -36,8 +36,6 @@ export class StudentSettingsComponent implements OnInit {
 
   faculties: Faculty[] = [];
   selectedFaculty: string = '';
-  firstName: string = '';
-  lastName: string = '';
   isSaving = false;
 
   hasPsychologist = false;
@@ -54,10 +52,6 @@ export class StudentSettingsComponent implements OnInit {
     const user = this.currentUser;
     if (user) {
       if (user.faculty) this.selectedFaculty = user.faculty;
-      // Separar el nombre completo en nombre y apellido
-      const parts = (user.name && user.name !== 'Usuario') ? user.name.split(' ') : [];
-      this.firstName = parts[0] || '';
-      this.lastName = parts.slice(1).join(' ') || '';
 
       // Cargar estatus de especialistas y fila virtual
       const { data: rec } = await this.supabaseService.supabase
@@ -174,14 +168,14 @@ export class StudentSettingsComponent implements OnInit {
   }
 
   confirmSave() {
-    if (!this.selectedFaculty && !this.firstName && !this.lastName) return;
+    if (!this.selectedFaculty) return;
 
     const dialogRef = this.dialog.open(FeedbackModalComponent, {
       width: '400px',
       data: {
         type: 'confirm',
         title: 'Confirmar Cambio',
-        message: '¿Estás seguro que deseas guardar los cambios en tu perfil?',
+        message: '¿Estás seguro que deseas guardar los cambios en tu facultad académica?',
         btnText: 'Sí, guardar',
         cancelBtnText: 'Cancelar'
       }
@@ -200,9 +194,7 @@ export class StudentSettingsComponent implements OnInit {
 
     if (user && user.id) {
       const updatePayload: any = {};
-      if (this.selectedFaculty) updatePayload.faculty    = this.selectedFaculty;
-      if (this.firstName !== undefined) updatePayload.first_name = this.firstName.trim();
-      if (this.lastName  !== undefined) updatePayload.last_name  = this.lastName.trim();
+      if (this.selectedFaculty) updatePayload.faculty = this.selectedFaculty;
 
       const { error } = await this.supabaseService.supabase
         .from('profiles')
@@ -212,16 +204,14 @@ export class StudentSettingsComponent implements OnInit {
       this.isSaving = false;
 
       if (!error) {
-        const fullName = `${this.firstName.trim()} ${this.lastName.trim()}`.trim();
         this.authService.currentUser.set({
           ...user,
-          faculty: this.selectedFaculty || user.faculty,
-          name: fullName || user.name
+          faculty: this.selectedFaculty || user.faculty
         });
 
         this.dialog.open(FeedbackModalComponent, {
           width: '400px',
-          data: { type: 'success', title: 'Perfil Guardado', message: 'Tus datos han sido actualizados correctamente.' }
+          data: { type: 'success', title: 'Datos Guardados', message: 'Tus datos académicos han sido actualizados correctamente.' }
         });
       } else {
         this.dialog.open(FeedbackModalComponent, {

@@ -45,6 +45,14 @@ export class ArcoService {
         .maybeSingle();
 
       if (error) {
+        if (error.message.includes('Could not find the table') || error.message.includes('relation "user_privacy_settings" does not exist')) {
+          console.warn('[ArcoService] La tabla user_privacy_settings no está desplegada en Supabase. Usando fallback en memoria.');
+          return {
+            user_id: user.id,
+            share_clinical_data: true,
+            use_anonymous_stats: true
+          };
+        }
         console.error('Error al obtener preferencias de privacidad:', error.message);
         return null;
       }
@@ -94,6 +102,10 @@ export class ArcoService {
         });
 
       if (error) {
+        if (error.message.includes('Could not find the table') || error.message.includes('relation "user_privacy_settings" does not exist')) {
+          console.warn('[ArcoService] Upsert ignorado: La tabla user_privacy_settings no existe en la base de datos.');
+          return true;
+        }
         console.error('Error al actualizar preferencias de privacidad:', error.message);
         return false;
       }
@@ -334,6 +346,47 @@ export class ArcoService {
     } catch (e) {
       console.error('Error al exportar datos personales:', e);
       alert('Ocurrió un error al descargar tu reporte de datos personales.');
+    }
+  }
+
+  /**
+   * Elimina la cuenta de usuario de forma permanente.
+   */
+  async deleteUserAccount(): Promise<boolean> {
+    const user = this.authService.currentUser();
+    if (!user?.id) return false;
+
+    try {
+      // 1. Eliminar de user_privacy_settings
+      await this.supabaseService.supabase
+        .from('user_privacy_settings')
+        .delete()
+        .eq('user_id', user.id);
+
+      // 2. Eliminar de user_streaks
+      await this.supabaseService.supabase
+        .from('user_streaks')
+        .delete()
+        .eq('user_id', user.id);
+
+      // 3. Eliminar de profiles
+      await this.supabaseService.supabase
+        .from('profiles')
+        .delete()
+        .eq('user_id', user.id);
+
+      // 4. Eliminar de users
+      await this.supabaseService.supabase
+        .from('users')
+        .delete()
+        .eq('id', user.id);
+
+      // 5. Cerrar sesión
+      this.authService.logout();
+      return true;
+    } catch (e) {
+      console.error('Error al eliminar cuenta:', e);
+      return false;
     }
   }
 }

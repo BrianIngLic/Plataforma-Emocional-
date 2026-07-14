@@ -1,30 +1,222 @@
-<div class="avatar-manager">
-  <div class="avatar-preview">
-    <div class="avatar-circle">
-      <img *ngIf="currentAvatarUrl" [src]="currentAvatarUrl" alt="Avatar del usuario" />
-      <span *ngIf="!currentAvatarUrl" class="initial">{{ userInitial }}</span>
-      
-      <div class="loading-overlay" *ngIf="isUploading">
-        <mat-icon class="spinner">autorenew</mat-icon>
+<div class="profile-settings-wrapper">
+  <!-- Cabecera estilo Perfil de Facebook -->
+  <div class="profile-header-banner">
+    <!-- Foto de portada con gradiente moderno -->
+    <div class="cover-photo"></div>
+    
+    <!-- Contenido del perfil superpuesto -->
+    <div class="profile-header-info">
+      <div class="avatar-preview-wrapper">
+        <div class="avatar-circle">
+          <img *ngIf="currentAvatarUrl" [src]="currentAvatarUrl" alt="Avatar del usuario" />
+          <span *ngIf="!currentAvatarUrl" class="initial">{{ userInitial }}</span>
+          
+          <div class="loading-overlay" *ngIf="isUploading">
+            <mat-icon class="spinner">autorenew</mat-icon>
+          </div>
+        </div>
+        <!-- Botón flotante para subir foto -->
+        <input type="file" #fileInput (change)="onFileSelected($event)" accept="image/*" style="display: none;">
+        <button class="avatar-upload-btn" (click)="fileInput.click()" [disabled]="isUploading" title="Subir Foto">
+          <mat-icon>photo_camera</mat-icon>
+        </button>
+      </div>
+
+      <div class="user-meta-details">
+        <h2 class="profile-fullname">{{ firstName || userName }} {{ lastName }}</h2>
+        
+        <div class="meta-row">
+          <div class="profile-role-badge">
+            <mat-icon>{{ currentUser?.role === 'Estudiante' ? 'school' : (currentUser?.role === 'Admin' ? 'admin_panel_settings' : 'psychology') }}</mat-icon>
+            <span>{{ currentUser?.role }}</span>
+          </div>
+
+          <!-- Racha y Nivel rápidos en la cabecera (Solo Estudiantes) -->
+          <div class="header-stat-badge" *ngIf="currentUser?.role === 'Estudiante'">
+            <span class="emoji">👑</span>
+            <span>Nivel {{ currentLevel() }}</span>
+          </div>
+
+          <div class="header-stat-badge streak" *ngIf="currentUser?.role === 'Estudiante' && gamificationService.currentStreak() > 0">
+            <span class="emoji">🔥</span>
+            <span>Racha de {{ gamificationService.currentStreak() }} días</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Acciones de Avatar en la cabecera -->
+      <div class="avatar-header-actions">
+        <button class="btn btn-secondary" (click)="generateDiceBear()" [disabled]="isUploading">
+          <mat-icon>casino</mat-icon> Generar Avatar
+        </button>
       </div>
     </div>
   </div>
 
-  <div class="avatar-actions">
-    <h3>Foto de Perfil</h3>
-    <p>Sube tu propia foto o genera un avatar ilustrado automáticamente.</p>
-    
-    <div class="button-group">
-      <!-- Input oculto para archivo -->
-      <input type="file" #fileInput (change)="onFileSelected($event)" accept="image/*" style="display: none;">
-      
-      <button class="btn-primary" (click)="fileInput.click()" [disabled]="isUploading">
-        <mat-icon>upload</mat-icon> Subir Foto
-      </button>
+  <!-- Tarjeta Principal de Configuración y Formularios -->
+  <div class="profile-card">
 
-      <button class="btn-secondary" (click)="generateDiceBear()" [disabled]="isUploading">
-        <mat-icon>casino</mat-icon> Generar Avatar
-      </button>
+    <!-- Sección de Logros (Solo Estudiantes) -->
+    <div class="achievements-section" *ngIf="currentUser?.role === 'Estudiante'">
+      <div class="section-header">
+        <h3><mat-icon style="color: #f59e0b;">emoji_events</mat-icon> Mis Logros</h3>
+        <p>Tu progreso de nivel, XP y rachas acumuladas de participación.</p>
+      </div>
+
+      <div class="achievements-grid">
+        <!-- Tarjeta de Nivel y XP -->
+        <div class="achievement-card level-card">
+          <div class="card-icon">👑</div>
+          <div class="card-info">
+            <span class="value">Nivel {{ currentLevel() }}</span>
+            <span class="label">{{ gamificationService.totalXp() }} XP acumulados</span>
+          </div>
+          <!-- Barra de progreso al siguiente nivel -->
+          <div class="level-progress-bar">
+            <div class="progress-fill" [style.width.%]="(gamificationService.totalXp() % 500) / 5"></div>
+          </div>
+          <span class="xp-remaining">{{ 500 - (gamificationService.totalXp() % 500) }} XP para Nivel {{ currentLevel() + 1 }}</span>
+        </div>
+
+        <!-- Tarjeta de Racha Actual -->
+        <div class="achievement-card streak-card">
+          <div class="card-icon">🔥</div>
+          <div class="card-info">
+            <span class="value">{{ gamificationService.currentStreak() }} días</span>
+            <span class="label">Racha de actividad</span>
+          </div>
+        </div>
+
+        <!-- Tarjeta de Racha Récord -->
+        <div class="achievement-card record-card">
+          <div class="card-icon">⚡</div>
+          <div class="card-info">
+            <span class="value">{{ gamificationService.bestStreak() }} días</span>
+            <span class="label">Tu mejor racha</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Insignias obtenidas -->
+      <div class="badges-mini-list" *ngIf="gamificationService.achievementsList().length > 0">
+        <h4>Mis Insignias</h4>
+        <div class="badges-row">
+          <div class="badge-item" *ngFor="let ach of gamificationService.achievementsList()" [class.locked]="!ach.is_completed" [title]="ach.description">
+            <div class="badge-icon-wrapper">
+              <span class="badge-emoji">{{ ach.badge_url === 'medal' ? '🏅' : (ach.badge_url === 'verified' ? '✅' : '🏆') }}</span>
+            </div>
+            <div class="badge-text">
+              <span class="badge-title">{{ ach.title }}</span>
+              <span class="badge-status">{{ ach.is_completed ? 'Desbloqueado' : 'Bloqueado' }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <hr class="section-divider">
     </div>
+
+    <!-- Sección de Datos Personales -->
+    <div class="form-section">
+      <div class="section-header">
+        <h3><mat-icon>person</mat-icon> Datos Personales</h3>
+        <p>Actualiza tu nombre completo, teléfono y sexo para contacto y citas.</p>
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Nombre(s) *</label>
+          <input
+            type="text"
+            class="styled-input"
+            [(ngModel)]="firstName"
+            placeholder="Ej. María"
+          />
+        </div>
+        
+        <div class="form-group">
+          <label>Apellido(s) *</label>
+          <input
+            type="text"
+            class="styled-input"
+            [(ngModel)]="lastName"
+            placeholder="Ej. García López"
+          />
+        </div>
+
+        <div class="form-group">
+          <label>Teléfono Celular</label>
+          <input
+            type="tel"
+            class="styled-input"
+            [(ngModel)]="celular"
+            placeholder="Ej. 2221234567"
+          />
+        </div>
+
+        <div class="form-group">
+          <label>Sexo</label>
+          <select [(ngModel)]="sexo" class="styled-select">
+            <option value="">No especificado</option>
+            <option value="Masculino">Masculino</option>
+            <option value="Femenino">Femenino</option>
+            <option value="Otro">Otro</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button class="btn btn-primary" (click)="confirmSaveProfile()" [disabled]="isSaving || isUploading">
+          <mat-icon>save</mat-icon>
+          {{ isSaving ? 'Guardando...' : 'Guardar Datos Personales' }}
+        </button>
+      </div>
+    </div>
+
+    <hr class="section-divider">
+
+    <!-- Sección de Seguridad -->
+    <div class="form-section">
+      <div class="section-header">
+        <h3><mat-icon>lock</mat-icon> Cambiar Contraseña</h3>
+        <p>Actualiza tu contraseña periódicamente para mantener tu cuenta segura.</p>
+      </div>
+
+      <form (submit)="$event.preventDefault(); confirmUpdatePassword()">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Nueva Contraseña</label>
+            <input
+              type="password"
+              class="styled-input"
+              [(ngModel)]="newPassword"
+              name="newPassword"
+              placeholder="Mínimo 6 caracteres"
+              autocomplete="new-password"
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Confirmar Nueva Contraseña</label>
+            <input
+              type="password"
+              class="styled-input"
+              [(ngModel)]="confirmPassword"
+              name="confirmPassword"
+              placeholder="Repite la contraseña"
+              autocomplete="new-password"
+            />
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-secondary danger-action" [disabled]="isChangingPassword || !newPassword">
+            <mat-icon>vpn_key</mat-icon>
+            {{ isChangingPassword ? 'Actualizando...' : 'Actualizar Contraseña' }}
+          </button>
+        </div>
+      </form>
+    </div>
+
   </div>
 </div>

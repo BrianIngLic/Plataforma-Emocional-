@@ -37,20 +37,33 @@
     </div>
 
     <div class="sidebar-footer">
-      <div class="user-profile" *ngIf="currentUser" [routerLink]="['./settings']" style="cursor: pointer;" title="Configuración de Perfil">
-        <div class="avatar" [style.background-image]="currentUser.avatar_url ? 'url(' + currentUser.avatar_url + ')' : ''" [style.background-size]="'cover'" [style.background-position]="'center'">
-          <mat-icon *ngIf="!currentUser.avatar_url">admin_panel_settings</mat-icon>
-        </div>
-        <div class="user-info">
-          <span class="name">{{ currentUser.name | titlecase }}</span>
-          <span class="role">Administrador</span>
-        </div>
-      </div>
+      <!-- Menú contextual del perfil -->
+      <div class="profile-menu-wrapper" *ngIf="currentUser">
 
-      <button class="logout-btn" (click)="logout()">
-        <mat-icon>logout</mat-icon>
-        <span class="nav-text">Cerrar sesión</span>
-      </button>
+        <!-- Popup con la opción de Cerrar Sesión -->
+        <div class="profile-popup" *ngIf="showProfileMenu">
+          <div class="profile-popup-item logout" (click)="logout()">
+            <mat-icon>logout</mat-icon>
+            <span>Cerrar sesión</span>
+          </div>
+        </div>
+
+        <!-- Tarjeta del perfil -->
+        <div class="user-profile" [routerLink]="['./settings']" style="cursor: pointer;" title="Mi Perfil">
+          <div class="avatar" [style.background-image]="currentUser.avatar_url ? 'url(' + currentUser.avatar_url + ')' : ''" [style.background-size]="'cover'" [style.background-position]="'center'">
+            <mat-icon *ngIf="!currentUser.avatar_url">admin_panel_settings</mat-icon>
+          </div>
+          <div class="user-info">
+            <span class="name">{{ currentUser.name | titlecase }}</span>
+            <span class="role">Administrador</span>
+          </div>
+          <!-- Botón de flecha para desplegar el popup de cerrar sesión -->
+          <button class="chevron-btn" (click)="toggleProfileMenu($event)" title="Opciones de cuenta">
+            <mat-icon class="profile-chevron" [class.rotated]="showProfileMenu">expand_less</mat-icon>
+          </button>
+        </div>
+
+      </div>
     </div>
   </aside>
 

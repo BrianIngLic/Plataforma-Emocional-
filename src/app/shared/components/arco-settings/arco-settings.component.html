@@ -18,10 +18,10 @@
     </div>
 
     <mat-tab-group animationDuration="300ms">
-      <!-- PESTAÑA 1: ACCESO Y RECTIFICACIÓN -->
+      <!-- PESTAÑA 1: ACCESO A DATOS -->
       <mat-tab>
         <ng-template matTabLabel>
-          <mat-icon>download</mat-icon> Acceso y Rectificación
+          <mat-icon>download</mat-icon> Acceso a mis Datos
         </ng-template>
         <div class="tab-content">
           <div class="arco-section">
@@ -38,15 +38,6 @@
                 <mat-icon *ngIf="!exportingData()">download</mat-icon>
                 {{ exportingData() ? 'Exportando...' : 'Descargar mis Datos' }}
               </button>
-            </div>
-          </div>
-
-          <div class="arco-section border-top">
-            <h3><mat-icon>edit_note</mat-icon> Derecho de Rectificación</h3>
-            <p>Es tu derecho solicitar la corrección de tu información personal en caso de que esté desactualizada, sea inexacta o esté incompleta.</p>
-            <div class="info-alert">
-              <mat-icon>info</mat-icon>
-              <span>Para rectificar datos básicos de tu cuenta, puedes hacerlo editando tu perfil directamente en los campos editables superiores de esta pantalla de configuración. Para rectificaciones de matrícula o datos oficiales, por favor envía una solicitud formal en la pestaña "Nueva Solicitud".</span>
             </div>
           </div>
         </div>
@@ -173,5 +164,23 @@
         </div>
       </mat-tab>
     </mat-tab-group>
+
+    <!-- Zona de Peligro (Eliminar Cuenta) -->
+    <div class="danger-zone-section">
+      <div class="danger-header">
+        <h3><mat-icon>warning</mat-icon> Zona de Peligro</h3>
+        <p>Acciones críticas e irreversibles sobre tu cuenta de Amati.</p>
+      </div>
+      
+      <div class="danger-box">
+        <div class="danger-desc">
+          <strong>Eliminar Cuenta Permanentemente</strong>
+          <span>Esta acción borrará definitivamente tu cuenta, tu diario emocional, tus citas y tus expedientes clínicos de forma irreversible.</span>
+        </div>
+        <button class="btn-danger" (click)="confirmDeleteAccount()">
+          <mat-icon>delete_forever</mat-icon> Eliminar Cuenta
+        </button>
+      </div>
+    </div>
   </div>
 </div>

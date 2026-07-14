@@ -88,11 +88,7 @@
         </div>
       </div>
 
-      <!-- Alerta de Cumplimiento NOM-024 / HIPAA -->
-      <div class="compliance-banner">
-        <mat-icon>privacy_tip</mat-icon>
-        <span><strong>Aviso NOM-024 e HIPAA:</strong> Por la seguridad del paciente, mantenga esta comunicación estrictamente en el ámbito operativo (citas, seguimiento). No incluya Información Personal de Salud (PHI) ni diagnósticos clínicos detallados.</span>
-      </div>
+
 
       <!-- Advertencia: sin teléfono registrado -->
       <div class="no-phone-banner" *ngIf="noPhoneWarning()">
@@ -133,6 +129,12 @@
             <mat-icon *ngIf="isSending()" class="spin">sync</mat-icon>
           </button>
         </div>
+      </div>
+
+      <!-- Alerta de Cumplimiento NOM-024 / HIPAA -->
+      <div class="compliance-banner">
+        <mat-icon>privacy_tip</mat-icon>
+        <span><strong>Aviso NOM-024 e HIPAA:</strong> Por la seguridad del paciente, mantenga esta comunicación estrictamente en el ámbito operativo (citas, seguimiento). No incluya Información Personal de Salud (PHI) ni diagnósticos clínicos detallados.</span>
       </div>
     </ng-container>
 

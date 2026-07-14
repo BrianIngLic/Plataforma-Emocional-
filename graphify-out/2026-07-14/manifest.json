@@ -120,8 +120,8 @@
     "semantic_hash": "d19284c6d222f3dfc8838de4eda95f5d"
   },
   "src/app/features/admin/admin-layout/admin-layout.component.ts": {
-    "mtime": 1784012003.6975808,
-    "ast_hash": "c7b217ebdd674a7ebebbc638716c8a65",
+    "mtime": 1783836684.2632585,
+    "ast_hash": "1f26cc2d0522531cd558f5b6b517c03f",
     "semantic_hash": ""
   },
   "src/app/features/admin/admin.routes.ts": {
@@ -260,8 +260,8 @@
     "semantic_hash": ""
   },
   "src/app/features/psychologist/psychologist-layout/psychologist-layout.component.ts": {
-    "mtime": 1784011993.35428,
-    "ast_hash": "f74eca495677b6088c66dbcd407a51c6",
+    "mtime": 1783668250.9025478,
+    "ast_hash": "4ef52a581791e2debd11a240beebefb2",
     "semantic_hash": ""
   },
   "src/app/features/psychologist/psychologist.routes.ts": {
@@ -370,8 +370,8 @@
     "semantic_hash": ""
   },
   "src/app/features/admin/admin-layout/admin-layout.component.html": {
-    "mtime": 1784012015.7646787,
-    "ast_hash": "33df81f8f24325e5fe7ec4464bc23bc0",
+    "mtime": 1784010858.0842893,
+    "ast_hash": "cf46add4ccc2b21e01e890d07cbe671a",
     "semantic_hash": ""
   },
   "src/app/features/admin/agenda/agenda.component.html": {
@@ -455,8 +455,8 @@
     "semantic_hash": ""
   },
   "src/app/features/psychologist/psychologist-layout/psychologist-layout.component.html": {
-    "mtime": 1784012007.768895,
-    "ast_hash": "fa4afe9b27aadc73c415730bf2f23288",
+    "mtime": 1784010854.7712939,
+    "ast_hash": "c11d9b55564a8da07dc5f896a303abbb",
     "semantic_hash": ""
   },
   "src/app/features/psychologist/settings/settings.component.html": {
@@ -550,8 +550,8 @@
     "semantic_hash": ""
   },
   "src/app/features/nutritionist/nutritionist-layout/nutritionist-layout.component.ts": {
-    "mtime": 1784011997.0224266,
-    "ast_hash": "dec8c3fd70b548499198439d4802c79d",
+    "mtime": 1782435163.2936826,
+    "ast_hash": "97c7c13cb222035bd93fcd8635dfdff8",
     "semantic_hash": ""
   },
   "src/app/features/nutritionist/nutritionist.routes.ts": {
@@ -605,8 +605,8 @@
     "semantic_hash": ""
   },
   "src/app/features/nutritionist/nutritionist-layout/nutritionist-layout.html": {
-    "mtime": 1784012012.058368,
-    "ast_hash": "bf9e5098f081f65e12d259c0ebfc1708",
+    "mtime": 1784011229.2438762,
+    "ast_hash": "10ca80024a9562ef78bd9d555ce4928e",
     "semantic_hash": ""
   },
   "src/app/features/nutritionist/pacientes/pacientes.html": {
@@ -620,8 +620,8 @@
     "semantic_hash": ""
   },
   "src/app/features/nutritionist/settings/settings.component.html": {
-    "mtime": 1784012093.324753,
-    "ast_hash": "c315ba2308cd2ac6a1694a9b6b38649e",
+    "mtime": 1782432337.0978446,
+    "ast_hash": "4746e6396ab479fc983379b188e7c24e",
     "semantic_hash": ""
   },
   "src/custom-service-worker.js": {

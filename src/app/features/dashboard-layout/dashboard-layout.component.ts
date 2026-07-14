@@ -56,7 +56,7 @@ export class DashboardLayoutComponent implements OnInit {
     return this.currentUser?.role === 'psychologist';
   }
 
-  /** Cierra el menú si el clic fue fuera del wrapper */
+  /** Cierra el menú al hacer clic fuera */
   @HostListener('document:click')
   onDocumentClick() {
     if (this.showProfileMenu) {
@@ -65,17 +65,8 @@ export class DashboardLayoutComponent implements OnInit {
   }
 
   toggleProfileMenu(event: Event) {
-    event.stopPropagation(); // Evita que dispare onDocumentClick inmediatamente
+    event.stopPropagation(); // Evita navegar a la configuración
     this.showProfileMenu = !this.showProfileMenu;
-  }
-
-  closeProfileMenu() {
-    this.showProfileMenu = false;
-  }
-
-  openAchievements() {
-    this.showProfileMenu = false;
-    this.router.navigate(['/dashboard/achievements']);
   }
 
   toggleAchievementsPanel() {

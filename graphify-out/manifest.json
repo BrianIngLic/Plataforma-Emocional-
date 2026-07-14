@@ -80,8 +80,8 @@
     "semantic_hash": ""
   },
   "src/app/core/services/auth.service.ts": {
-    "mtime": 1783882063.953968,
-    "ast_hash": "a7b939e65fc9daf436ca6224f82dadb3",
+    "mtime": 1784053294.3398442,
+    "ast_hash": "1040efab27958b39a72417d013e4e026",
     "semantic_hash": ""
   },
   "src/app/core/services/chat.service.ts": {
@@ -185,13 +185,13 @@
     "semantic_hash": "b4a95a288955a4cfe9a21b695558cf02"
   },
   "src/app/features/auth/login/login.component.ts": {
-    "mtime": 1783836684.2748039,
-    "ast_hash": "c0da0a22918d4157cbdae24b5882918c",
+    "mtime": 1784053310.8979807,
+    "ast_hash": "9e2aa2bc5b44f136c2030cbf1322c8ac",
     "semantic_hash": ""
   },
   "src/app/features/auth/register/register.component.ts": {
-    "mtime": 1783836684.2779472,
-    "ast_hash": "ee66d324aaded875a3e45261d1f60549",
+    "mtime": 1784053353.2234423,
+    "ast_hash": "ab14ea7f9175f9d13edc4c3a65aa49eb",
     "semantic_hash": ""
   },
   "src/app/features/chat/chat.routes.ts": {
@@ -250,8 +250,8 @@
     "semantic_hash": "b29381fde22297a402e92bd8ee8e620a"
   },
   "src/app/features/psychologist/patient-profile/patient-profile.component.ts": {
-    "mtime": 1783968424.8376658,
-    "ast_hash": "d7ee8cc01612ce7f728f48d09d714166",
+    "mtime": 1784058070.760028,
+    "ast_hash": "005d122a682ca28520985f13668be0b3",
     "semantic_hash": ""
   },
   "src/app/features/psychologist/patients/patients.component.ts": {
@@ -275,8 +275,8 @@
     "semantic_hash": ""
   },
   "src/app/features/student/settings/student-settings.component.ts": {
-    "mtime": 1784010594.4462304,
-    "ast_hash": "471c7ff69f8102d8b4c19df485e11c18",
+    "mtime": 1784058156.193395,
+    "ast_hash": "066b4e4c0d9405e038e2c4cd1220f02f",
     "semantic_hash": ""
   },
   "src/app/shared/components/feedback-modal/feedback-modal.component.ts": {
@@ -290,14 +290,14 @@
     "semantic_hash": ""
   },
   "src/environments/environment.development.ts": {
-    "mtime": 1781800770.7082987,
-    "ast_hash": "4135d41dfc485d5b293434fd887e5ff8",
-    "semantic_hash": "4135d41dfc485d5b293434fd887e5ff8"
+    "mtime": 1784053282.0474782,
+    "ast_hash": "04d5f30973f70061617194076cb1052b",
+    "semantic_hash": ""
   },
   "src/environments/environment.ts": {
-    "mtime": 1781800362.798386,
-    "ast_hash": "a953bb0551bae77f3ec8378028e3070b",
-    "semantic_hash": "a953bb0551bae77f3ec8378028e3070b"
+    "mtime": 1784053279.810176,
+    "ast_hash": "1359047de7cfaf154d9348d54eeb9830",
+    "semantic_hash": ""
   },
   "src/main.ts": {
     "mtime": 1783668250.9115639,
@@ -405,13 +405,13 @@
     "semantic_hash": ""
   },
   "src/app/features/auth/login/login.component.html": {
-    "mtime": 1783836684.2718215,
-    "ast_hash": "bb08ef7280d76417ec2d747936cb27f8",
+    "mtime": 1784053317.172723,
+    "ast_hash": "0a18836e42d281b0fddac622156eae22",
     "semantic_hash": ""
   },
   "src/app/features/auth/register/register.component.html": {
-    "mtime": 1783836684.2759306,
-    "ast_hash": "e9b38277d4d2325d5ea5633913d68154",
+    "mtime": 1784053359.653353,
+    "ast_hash": "c698babc82aa551ff6f8766a5273bf22",
     "semantic_hash": ""
   },
   "src/app/features/chat/dashboard/dashboard.component.html": {
@@ -445,8 +445,8 @@
     "semantic_hash": "a70cf8f9800814f3488ae124af135091"
   },
   "src/app/features/psychologist/patient-profile/patient-profile.component.html": {
-    "mtime": 1783908714.0696986,
-    "ast_hash": "b751c7c9c4697b37d3cf8474636d42ae",
+    "mtime": 1784058087.4996927,
+    "ast_hash": "04265e50e9c3ecb38f7c170edc67c88f",
     "semantic_hash": ""
   },
   "src/app/features/psychologist/patients/patients.component.html": {
@@ -465,8 +465,8 @@
     "semantic_hash": ""
   },
   "src/app/features/student/settings/student-settings.component.html": {
-    "mtime": 1784010588.8232248,
-    "ast_hash": "557344974558b539cb6afbd7681f4423",
+    "mtime": 1784058043.4606905,
+    "ast_hash": "daf9d21757c0a0c1d8e4bb269e58edbd",
     "semantic_hash": ""
   },
   "src/app/shared/components/profile-avatar/profile-avatar.component.html": {
@@ -475,12 +475,12 @@
     "semantic_hash": ""
   },
   "src/index.html": {
-    "mtime": 1783668250.9105475,
-    "ast_hash": "bf7168a60c31d68516b7ff1c985d2fe0",
+    "mtime": 1784053287.1053443,
+    "ast_hash": "79690a6917cd2417aac13f61ac6347ff",
     "semantic_hash": ""
   },
   "task.md": {
-    "mtime": 1783908736.3824513,
+    "mtime": 1784042929.0822241,
     "ast_hash": "163904362fa23caaf7b1431a55a246f9",
     "semantic_hash": ""
   },
@@ -565,8 +565,8 @@
     "semantic_hash": ""
   },
   "src/app/features/nutritionist/perfil-paciente/perfil-paciente.component.ts": {
-    "mtime": 1783968424.8356817,
-    "ast_hash": "727135be852a1d71fca31c8ffa967824",
+    "mtime": 1784058189.6183743,
+    "ast_hash": "c053e2389757a257fc55bd2d0750fc41",
     "semantic_hash": ""
   },
   "src/app/features/nutritionist/settings/settings.component.ts": {
@@ -1337,6 +1337,11 @@
   "scratch/test_rpc.js": {
     "mtime": 1783968424.8136694,
     "ast_hash": "99dcadb3047dde56af54d0cccc258b89",
+    "semantic_hash": ""
+  },
+  "db/migration_student_profile_restructure.sql": {
+    "mtime": 1784058002.655618,
+    "ast_hash": "e119f5f12238a762308f6f9a17347d7f",
     "semantic_hash": ""
   }
 }

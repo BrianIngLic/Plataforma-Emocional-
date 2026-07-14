@@ -42,13 +42,15 @@ export class PatientProfileComponent implements OnInit {
   patientStreak: any = { current_streak: 0, best_streak: 0, total_xp: 0 };
   patientAchievements: any[] = [];
 
-  // Formulario de Logro Clínico Manual
   newAchTitle = '';
   newAchDesc = '';
-  newAchPoints = 100;
-  newAchIcon = 'verified';
+  newAchPoints = 0;
+  newAchIcon = '';
   newAchNotes = '';
   isAssigningAchievement = false;
+
+  // ponytail: nodo seleccionado en árbol familiar
+  selectedTreeNode: string | null = 'yo';
 
   sessionHistory: any[] = [];
 
@@ -179,7 +181,7 @@ export class PatientProfileComponent implements OnInit {
       // 1. Fetch user + profile + clinical record
       const { data: userData, error: userError } = await this.supabase
         .from('users')
-        .select('id, mobile_phone, profiles(first_name, last_name, avatar_url, antecedentes_familiares), student_clinical_records!student_clinical_records_student_id_fkey(known_conditions, additional_notes)')
+        .select('id, mobile_phone, profiles(first_name, last_name, avatar_url, antecedentes_familiares, expediente_completo), student_clinical_records!student_clinical_records_student_id_fkey(known_conditions, additional_notes)')
         .eq('id', id)
         .single();
 
@@ -230,7 +232,8 @@ export class PatientProfileComponent implements OnInit {
           riskLevel: (this.eat26Result && this.eat26Result.hasRisk) ? "Alto" : (conditions && conditions.length > 0 ? "Moderado" : "Bajo"),
           notes: notes,
           antecedentes_familiares: antecedentesFamiliares,
-          celular: userData?.mobile_phone || ''
+          celular: userData?.mobile_phone || '',
+          expediente_completo: p?.expediente_completo || null
         };
       }
 
@@ -573,8 +576,8 @@ export class PatientProfileComponent implements OnInit {
   }
 
   async assignClinicalAchievement() {
-    if (!this.patient?.id || !this.newAchTitle.trim() || !this.newAchDesc.trim()) {
-      alert('Por favor completa el título y la descripción de la meta.');
+    if (!this.patient?.id || !this.newAchTitle.trim() || !this.newAchDesc.trim() || !this.newAchPoints || !this.newAchIcon) {
+      alert('Por favor completa todos los campos de la meta (incluyendo puntos e icono).');
       return;
     }
 
@@ -595,8 +598,8 @@ export class PatientProfileComponent implements OnInit {
         this.newAchTitle = '';
         this.newAchDesc = '';
         this.newAchNotes = '';
-        this.newAchPoints = 100;
-        this.newAchIcon = 'verified';
+        this.newAchPoints = 0;
+        this.newAchIcon = '';
         
         // Recargar datos
         await this.loadPatientData(this.patient.id);
@@ -679,5 +682,40 @@ export class PatientProfileComponent implements OnInit {
         }
       }
     });
+  }
+
+  // ponytail: Métodos auxiliares para árbol familiar del paciente
+  isNodeComplete(node: string): boolean {
+    const exp = this.patient?.expediente_completo;
+    if (!exp) return false;
+    
+    if (node === 'yo') {
+      return !!(exp.contacto?.telefono && exp.contacto?.fecha_nacimiento && exp.personal?.estado_civil && exp.personal?.sexo);
+    }
+    if (node === 'padre') {
+      const f = exp.historia_familiar?.padre;
+      if (!f) return false;
+      return f.estado === 'ausente' || f.estado === 'finado' || !!(f.edad && f.ocupacion && f.tipo_relacion);
+    }
+    if (node === 'madre') {
+      const m = exp.historia_familiar?.madre;
+      if (!m) return false;
+      return m.estado === 'ausente' || m.estado === 'finado' || !!(m.edad && m.ocupacion && m.tipo_relacion);
+    }
+    if (node === 'hermanos') {
+      const h = exp.historia_familiar?.hermanos;
+      if (!h) return false;
+      return !h.tiene || !!(h.cantidad && h.tipo_relacion);
+    }
+    if (node === 'pareja') {
+      const p = exp.historia_familiar?.pareja;
+      if (!p) return false;
+      return !p.tiene || !!(p.edad && p.ocupacion && p.tipo_relacion);
+    }
+    return false;
+  }
+
+  selectTreeNode(node: string) {
+    this.selectedTreeNode = node;
   }
 }

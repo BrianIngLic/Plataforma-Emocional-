@@ -139,11 +139,16 @@
           <a routerLink="/auth/forgot-password">¿Olvidaste tu contraseña?</a>
         </div>
 
+        <!-- Contenedor del CAPTCHA de Cloudflare Turnstile -->
+        <div class="turnstile-wrapper">
+          <div id="turnstile-container"></div>
+        </div>
+
         <div *ngIf="errorMessage" class="error-alert">
           {{ errorMessage }}
         </div>
 
-        <button type="submit" class="btn-primary" [disabled]="!loginForm.valid">
+        <button type="submit" class="btn-primary" [disabled]="!loginForm.valid || (isCaptchaRequired && !turnstileToken)">
           Entrar &rarr;
         </button>
 

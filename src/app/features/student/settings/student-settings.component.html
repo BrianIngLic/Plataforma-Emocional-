@@ -1,103 +1,902 @@
-<div class="settings-container">
+<div class="settings-container animate-fade-in-up">
   <div class="header-row">
-    <h2><mat-icon>settings</mat-icon> Configuración de Perfil</h2>
-    <p>Ajusta tus datos académicos y personales.</p>
+    <h2><mat-icon>account_circle</mat-icon> Expediente y Perfil del Estudiante</h2>
+    <p>Completa tu expediente clínico y de contacto para una mejor atención personalizada.</p>
   </div>
 
-  <div class="settings-grid">
-    
-    <div class="avatar-wrapper" style="margin-bottom: 2rem; width: 100%; max-width: 100%; box-sizing: border-box;">
-      <app-profile-avatar></app-profile-avatar>
+  <!-- BANNER DE GAMIFICACIÓN: ESTATUS DEL EXPEDIENTE -->
+  <div class="card gamification-card animate-scale-in">
+    <div class="gamification-header">
+      <div class="title-section">
+        <h3>
+          <mat-icon class="gold-icon">military_tech</mat-icon>
+          Completitud de Expediente
+        </h3>
+        <p>Completa tus datos personales y familiares para desbloquear logros clínicos.</p>
+      </div>
+      <div class="xp-badge" [class.xp-glowing]="getCompletionPercentage() === 100">
+        <mat-icon>star</mat-icon>
+        <span>+150 XP</span>
+      </div>
     </div>
-
-
-
-    <!-- Datos Académicos -->
-    <div class="card settings-card">
-      <div class="card-header">
-        <h3><mat-icon>school</mat-icon> Datos Académicos</h3>
-        <p>Tu facultad determina qué especialistas tienes disponibles para agendar citas.</p>
+    
+    <div class="gamification-body">
+      <div class="progress-wrapper">
+        <div class="progress-bar-container">
+          <div class="progress-bar-fill" [style.width.%]="getCompletionPercentage()"></div>
+        </div>
+        <span class="progress-percentage">{{ getCompletionPercentage() }}%</span>
       </div>
       
-      <div class="card-body">
-        <div class="form-group">
-          <label>Facultad a la que perteneces</label>
-          <select [(ngModel)]="selectedFaculty" class="styled-select">
-            <option value="" disabled>Selecciona tu facultad</option>
-            <option *ngFor="let f of faculties" [value]="f.name">{{ f.name }}</option>
-          </select>
+      <div class="chest-box" [class.unlocked]="getCompletionPercentage() === 100">
+        <span class="chest-icon">{{ getCompletionPercentage() === 100 ? '🎁' : '🔒' }}</span>
+        <span class="chest-label">
+          {{ getCompletionPercentage() === 100 ? '¡Expediente al 100%! Logro "Historiador Familiar" Desbloqueado.' : 'Completa el 100% para reclamar la recompensa de XP.' }}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- PESTAÑAS DE NAVEGACIÓN (TABS) -->
+  <div class="tabs-nav">
+    <button class="tab-btn" [class.active]="activeTab === 'general'" (click)="activeTab = 'general'">
+      <mat-icon>person</mat-icon>
+      <span>Datos Personales</span>
+    </button>
+    <button class="tab-btn" [class.active]="activeTab === 'family_tree'" (click)="activeTab = 'family_tree'">
+      <mat-icon>account_tree</mat-icon>
+      <span>Árbol Genealógico</span>
+    </button>
+    <button class="tab-btn" [class.active]="activeTab === 'family_details'" (click)="activeTab = 'family_details'">
+      <mat-icon>people</mat-icon>
+      <span>Historial Familiar</span>
+    </button>
+    <button class="tab-btn" [class.active]="activeTab === 'emergency'" (click)="activeTab = 'emergency'">
+      <mat-icon>emergency</mat-icon>
+      <span>Contactos de Emergencia</span>
+    </button>
+    <button class="tab-btn" [class.active]="activeTab === 'security'" (click)="activeTab = 'security'">
+      <mat-icon>shield</mat-icon>
+      <span>Seguridad y Cuenta</span>
+    </button>
+  </div>
+
+  <!-- CONTENIDO DE LAS PESTAÑAS -->
+  <div class="tab-content">
+    
+    <!-- PESTAÑA 1: DATOS PERSONALES Y ACADÉMICOS -->
+    <div class="tab-pane" *ngIf="activeTab === 'general'">
+      <div class="avatar-section card settings-card" style="margin-bottom: 1.5rem;">
+        <app-profile-avatar></app-profile-avatar>
+      </div>
+
+      <div class="card settings-card">
+        <div class="card-header">
+          <h3><mat-icon>contact_phone</mat-icon> Información de Contacto</h3>
+          <p>Datos principales para comunicación directa.</p>
+        </div>
+        <div class="card-body">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Nombre Completo</label>
+              <input type="text" [(ngModel)]="expediente.contacto.nombre" class="styled-input" placeholder="Nombre completo">
+            </div>
+            <div class="form-group">
+              <label>Matrícula</label>
+              <input type="text" [(ngModel)]="expediente.contacto.matricula" class="styled-input" readonly style="opacity: 0.7;">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Correo Electrónico</label>
+              <input type="email" [(ngModel)]="expediente.contacto.correo" class="styled-input" readonly style="opacity: 0.7;">
+            </div>
+            <div class="form-group">
+              <label>Número de Teléfono</label>
+              <input type="text" [(ngModel)]="expediente.contacto.telefono" class="styled-input" placeholder="Ej. 2221234567">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Fecha de Nacimiento</label>
+              <input type="date" [(ngModel)]="expediente.contacto.fecha_nacimiento" class="styled-input">
+            </div>
+            <div class="form-group">
+              <label>Sexo</label>
+              <select [(ngModel)]="expediente.personal.sexo" class="styled-select">
+                <option value="">Selecciona una opción</option>
+                <option value="Femenino">Femenino</option>
+                <option value="Masculino">Masculino</option>
+                <option value="Otro">Otro</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DATOS ACADÉMICOS -->
+      <div class="card settings-card" style="margin-top: 1.5rem;">
+        <div class="card-header">
+          <h3><mat-icon>school</mat-icon> Información Académica</h3>
+          <p>Tu unidad determina qué especialistas están disponibles para asignación.</p>
+        </div>
+        <div class="card-body">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Unidad Académica (Facultad)</label>
+              <select [(ngModel)]="expediente.academico.unidad_academica" class="styled-select">
+                <option value="">Selecciona una opción</option>
+                <option *ngFor="let f of faculties" [value]="f.name">{{ f.name }}</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Programa Educativo (Carrera)</label>
+              <input type="text" [(ngModel)]="expediente.academico.programa_educativo" class="styled-input" placeholder="Ej. Lic. en Psicología">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Semestre</label>
+              <select [(ngModel)]="expediente.academico.semestre" class="styled-select">
+                <option value="">Selecciona una opción</option>
+                <option *ngFor="let sem of [1,2,3,4,5,6,7,8,9,10,11,12]" [value]="sem">{{ sem }}° Semestre</option>
+              </select>
+            </div>
+            <div class="form-group" style="justify-content: center; align-items: flex-start; padding-top: 1.5rem;">
+              <!-- ponytail: toggle de foráneo para mostrar domicilio dinámico -->
+              <label class="toggle-container" style="display: flex; align-items: center; gap: 10px; cursor: pointer; user-select: none;">
+                <input type="checkbox" [(ngModel)]="isForaneo" style="width: 20px; height: 20px; accent-color: var(--accent-purple);">
+                <span style="font-weight: 500;">¿Eres alumno foráneo?</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DOMICILIO DINÁMICO (LOCAL Y ORIGEN SI ES FORÁNEO) -->
+      <div class="card settings-card" style="margin-top: 1.5rem;">
+        <div class="card-header">
+          <h3><mat-icon>home</mat-icon> Domicilio Actual (Local)</h3>
+          <p>Tu dirección residencial actual durante el periodo escolar.</p>
+        </div>
+        <div class="card-body">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Estado</label>
+              <input type="text" [(ngModel)]="expediente.academico.domicilio_actual.estado" class="styled-input">
+            </div>
+            <div class="form-group">
+              <label>Municipio</label>
+              <input type="text" [(ngModel)]="expediente.academico.domicilio_actual.municipio" class="styled-input">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Colonia</label>
+              <input type="text" [(ngModel)]="expediente.academico.domicilio_actual.colonia" class="styled-input">
+            </div>
+            <div class="form-group">
+              <label>Calle y Número</label>
+              <input type="text" [(ngModel)]="expediente.academico.domicilio_actual.calle" class="styled-input" placeholder="Calle y número exterior/interior">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>¿Con quién vives actualmente?</label>
+              <select [(ngModel)]="expediente.academico.domicilio_actual.con_quien_vive" class="styled-select">
+                <option value="">Selecciona una opción</option>
+                <option value="Solo">Solo/a</option>
+                <option value="Padres">Con mis Padres</option>
+                <option value="Familiares">Con otros Familiares</option>
+                <option value="Roomies">Con Roomies (Compañeros)</option>
+                <option value="Pareja">Con mi Pareja</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DOMICILIO DE ORIGEN (SOLO SI ES FORÁNEO) -->
+      <div class="card settings-card animate-scale-in" style="margin-top: 1.5rem;" *ngIf="isForaneo">
+        <div class="card-header" style="border-bottom: 1px solid rgba(139, 92, 246, 0.2); background: rgba(139, 92, 246, 0.02);">
+          <h3 style="color: var(--accent-purple);"><mat-icon>explore</mat-icon> Domicilio de Origen</h3>
+          <p>Tu dirección de origen permanente (tierra natal).</p>
+        </div>
+        <div class="card-body">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Estado</label>
+              <input type="text" [(ngModel)]="expediente.academico.domicilio_origin.estado" class="styled-input" placeholder="Ej. Veracruz">
+            </div>
+            <div class="form-group">
+              <label>Municipio</label>
+              <input type="text" [(ngModel)]="expediente.academico.domicilio_origin.municipio" class="styled-input" placeholder="Ej. Xalapa">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Colonia</label>
+              <input type="text" [(ngModel)]="expediente.academico.domicilio_origin.colonia" class="styled-input">
+            </div>
+            <div class="form-group">
+              <label>Calle y Número</label>
+              <input type="text" [(ngModel)]="expediente.academico.domicilio_origin.calle" class="styled-input">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button mat-flat-button color="primary" (click)="confirmSave()" [disabled]="isSaving" class="btn-primary">
+          <mat-icon>save</mat-icon> Guardar Perfil
+        </button>
+      </div>
+    </div>
+
+    <!-- PESTAÑA 2: ÁRBOL GENEALÓGICO INTERACTIVO -->
+    <div class="tab-pane" *ngIf="activeTab === 'family_tree'">
+      <div class="card settings-card">
+        <div class="card-header">
+          <h3><mat-icon>account_tree</mat-icon> Mi Árbol Genealógico</h3>
+          <p>Haz clic sobre cada miembro de tu árbol familiar para rellenar su información de expediente. Completa los anillos de progreso.</p>
+        </div>
+        <div class="card-body" style="padding: 2rem 1rem; overflow-x: auto; background: var(--input-bg);">
+          
+          <!-- CONTENEDOR VISUAL DEL ÁRBOL -->
+          <div class="tree-visualization">
+            
+            <!-- Nivel 1: Padres -->
+            <div class="tree-level parents-level">
+              <!-- Padre -->
+              <div class="tree-node" 
+                   [class.selected]="selectedTreeNode === 'padre'" 
+                   [class.completed]="isNodeComplete('padre')" 
+                   (click)="selectTreeNode('padre')">
+                <div class="avatar-ring">
+                  <span class="node-emoji">👨</span>
+                  <div class="completion-dot" *ngIf="isNodeComplete('padre')">✓</div>
+                </div>
+                <span class="node-label">Padre</span>
+                <span class="node-sublabel">
+                  {{ expediente.historia_familiar.padre.estado === 'finado' ? 'Finado' : (expediente.historia_familiar.padre.ocupacion || 'Sin configurar') }}
+                </span>
+              </div>
+
+              <!-- Conexión Horizontal de Padres -->
+              <div class="tree-line horizontal-parents"></div>
+
+              <!-- Madre -->
+              <div class="tree-node" 
+                   [class.selected]="selectedTreeNode === 'madre'" 
+                   [class.completed]="isNodeComplete('madre')" 
+                   (click)="selectTreeNode('madre')">
+                <div class="avatar-ring">
+                  <span class="node-emoji">👩</span>
+                  <div class="completion-dot" *ngIf="isNodeComplete('madre')">✓</div>
+                </div>
+                <span class="node-label">Madre</span>
+                <span class="node-sublabel">
+                  {{ expediente.historia_familiar.madre.estado === 'finado' ? 'Finada' : (expediente.historia_familiar.madre.ocupacion || 'Sin configurar') }}
+                </span>
+              </div>
+            </div>
+
+            <!-- Líneas de Conexión Vertical de Padres a Yo -->
+            <div class="tree-connector-middle">
+              <div class="vertical-drop"></div>
+              <div class="horizontal-bridge"></div>
+              <div class="vertical-drop-split-left"></div>
+              <div class="vertical-drop-split-center"></div>
+              <div class="vertical-drop-split-right"></div>
+            </div>
+
+            <!-- Nivel 2: Paciente (Yo), Hermanos, Pareja -->
+            <div class="tree-level children-level">
+              <!-- Hermanos -->
+              <div class="tree-node" 
+                   [class.selected]="selectedTreeNode === 'hermanos'" 
+                   [class.completed]="isNodeComplete('hermanos')" 
+                   (click)="selectTreeNode('hermanos')">
+                <div class="avatar-ring">
+                  <span class="node-emoji">👦</span>
+                  <div class="completion-dot" *ngIf="isNodeComplete('hermanos')">✓</div>
+                </div>
+                <span class="node-label">Hermanos</span>
+                <span class="node-sublabel">
+                  {{ expediente.historia_familiar.hermanos.tiene ? (expediente.historia_familiar.hermanos.cantidad + ' hermanos') : 'Sin hermanos' }}
+                </span>
+              </div>
+
+              <!-- Yo -->
+              <div class="tree-node patient-node" 
+                   [class.selected]="selectedTreeNode === 'yo'" 
+                   [class.completed]="isNodeComplete('yo')" 
+                   (click)="selectTreeNode('yo')">
+                <div class="avatar-ring gold-ring">
+                  <span class="node-emoji">🎓</span>
+                  <div class="completion-dot" *ngIf="isNodeComplete('yo')">✓</div>
+                </div>
+                <span class="node-label">Yo (Paciente)</span>
+                <span class="node-sublabel">{{ expediente.contacto.nombre || 'Completar' }}</span>
+              </div>
+
+              <!-- Pareja -->
+              <div class="tree-node" 
+                   [class.selected]="selectedTreeNode === 'pareja'" 
+                   [class.completed]="isNodeComplete('pareja')" 
+                   (click)="selectTreeNode('pareja')">
+                <div class="avatar-ring">
+                  <span class="node-emoji">❤️</span>
+                  <div class="completion-dot" *ngIf="isNodeComplete('pareja')">✓</div>
+                </div>
+                <span class="node-label">Pareja</span>
+                <span class="node-sublabel">
+                  {{ expediente.historia_familiar.pareja.tiene ? (expediente.historia_familiar.pareja.tiempo_relacion || 'Configurado') : 'Sin pareja' }}
+                </span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- EDITOR EN CALIENTE DEL MIEMBRO SELECCIONADO EN EL ÁRBOL -->
+      <div class="card settings-card node-editor-box animate-scale-in" style="margin-top: 1.5rem;" *ngIf="selectedTreeNode">
+        
+        <!-- EDITOR DE PADRE -->
+        <div *ngIf="selectedTreeNode === 'padre'">
+          <div class="editor-header">
+            <h4>👨 Configurar Expediente del Padre</h4>
+            <span class="badge" [class.badge-success]="isNodeComplete('padre')">
+              {{ isNodeComplete('padre') ? '✓ Completo' : 'Incompleto' }}
+            </span>
+          </div>
+          <div class="editor-body">
+            <div class="form-row">
+              <div class="form-group">
+                <label>Estatus de Presencia</label>
+                <select [(ngModel)]="expediente.historia_familiar.padre.estado" class="styled-select">
+                  <option value="">Selecciona una opción</option>
+                  <option value="presente">Presente</option>
+                  <option value="ausente">Ausente</option>
+                  <option value="finado">Finado</option>
+                </select>
+              </div>
+              <div class="form-group" *ngIf="expediente.historia_familiar.padre.estado !== 'finado'">
+                <label>Edad</label>
+                <input type="number" [(ngModel)]="expediente.historia_familiar.padre.edad" class="styled-input" placeholder="Ej. 52">
+              </div>
+            </div>
+            <div class="form-row" *ngIf="expediente.historia_familiar.padre.estado !== 'finado'">
+              <div class="form-group">
+                <label>Ocupación</label>
+                <input type="text" [(ngModel)]="expediente.historia_familiar.padre.ocupacion" class="styled-input" placeholder="Ej. Ingeniero">
+              </div>
+              <div class="form-group">
+                <label>Antecedentes de Trastorno Psiquiátrico</label>
+                <select [(ngModel)]="expediente.historia_familiar.padre.antecedentes_psiquiatricos" class="styled-select">
+                  <option value="">Selecciona una opción</option>
+                  <option value="si">Sí</option>
+                  <option value="no">No</option>
+                  <option value="no_se">No sé</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row" *ngIf="expediente.historia_familiar.padre.estado !== 'finado'">
+              <div class="form-group">
+                <label>Enfermedad Crónica Degenerativa</label>
+                <input type="text" [(ngModel)]="expediente.historia_familiar.padre.enfermedad_cronica" class="styled-input" placeholder="Ej. Diabetes, Hipertensión, o 'Ninguno'">
+              </div>
+              <div class="form-group">
+                <label>Tipo de Relación</label>
+                <select [(ngModel)]="expediente.historia_familiar.padre.tipo_relacion" class="styled-select">
+                  <option value="">Selecciona una opción</option>
+                  <option value="Buena">Buena / Armónica</option>
+                  <option value="Regular">Regular / Distante</option>
+                  <option value="Conflictiva">Conflictiva</option>
+                  <option value="Nula">Nula / Sin contacto</option>
+                </select>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div class="actions">
-          <button mat-flat-button color="primary" (click)="confirmSave()" [disabled]="isSaving" class="btn-primary">
-            <mat-icon style="margin-right: 8px;">save</mat-icon>
-            {{ isSaving ? 'Guardando...' : 'Guardar Cambios' }}
+        <!-- EDITOR DE MADRE -->
+        <div *ngIf="selectedTreeNode === 'madre'">
+          <div class="editor-header">
+            <h4>👩 Configurar Expediente de la Madre</h4>
+            <span class="badge" [class.badge-success]="isNodeComplete('madre')">
+              {{ isNodeComplete('madre') ? '✓ Completo' : 'Incompleto' }}
+            </span>
+          </div>
+          <div class="editor-body">
+            <div class="form-row">
+              <div class="form-group">
+                <label>Estatus de Presencia</label>
+                <select [(ngModel)]="expediente.historia_familiar.madre.estado" class="styled-select">
+                  <option value="">Selecciona una opción</option>
+                  <option value="presente">Presente</option>
+                  <option value="ausente">Ausente</option>
+                  <option value="finado">Finado</option>
+                </select>
+              </div>
+              <div class="form-group" *ngIf="expediente.historia_familiar.madre.estado !== 'finado'">
+                <label>Edad</label>
+                <input type="number" [(ngModel)]="expediente.historia_familiar.madre.edad" class="styled-input" placeholder="Ej. 49">
+              </div>
+            </div>
+            <div class="form-row" *ngIf="expediente.historia_familiar.madre.estado !== 'finado'">
+              <div class="form-group">
+                <label>Ocupación</label>
+                <input type="text" [(ngModel)]="expediente.historia_familiar.madre.ocupacion" class="styled-input" placeholder="Ej. Docente">
+              </div>
+              <div class="form-group">
+                <label>Antecedentes de Trastorno Psiquiátrico</label>
+                <select [(ngModel)]="expediente.historia_familiar.madre.antecedentes_psiquiatricos" class="styled-select">
+                  <option value="">Selecciona una opción</option>
+                  <option value="si">Sí</option>
+                  <option value="no">No</option>
+                  <option value="no_se">No sé</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row" *ngIf="expediente.historia_familiar.madre.estado !== 'finado'">
+              <div class="form-group">
+                <label>Enfermedad Crónica Degenerativa</label>
+                <input type="text" [(ngModel)]="expediente.historia_familiar.madre.enfermedad_cronica" class="styled-input" placeholder="Ej. Artritis, o 'Ninguno'">
+              </div>
+              <div class="form-group">
+                <label>Tipo de Relación</label>
+                <select [(ngModel)]="expediente.historia_familiar.madre.tipo_relacion" class="styled-select">
+                  <option value="">Selecciona una opción</option>
+                  <option value="Buena">Buena / Armónica</option>
+                  <option value="Regular">Regular / Distante</option>
+                  <option value="Conflictiva">Conflictiva</option>
+                  <option value="Nula">Nula / Sin contacto</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- EDITOR DE HERMANOS -->
+        <div *ngIf="selectedTreeNode === 'hermanos'">
+          <div class="editor-header">
+            <h4>👦 Configurar Relación con Hermanos</h4>
+            <span class="badge" [class.badge-success]="isNodeComplete('hermanos')">
+              {{ isNodeComplete('hermanos') ? '✓ Completo' : 'Incompleto' }}
+            </span>
+          </div>
+          <div class="editor-body">
+            <div class="form-row">
+              <div class="form-group">
+                <label>¿Tienes hermanos?</label>
+                <select [(ngModel)]="expediente.historia_familiar.hermanos.tiene" class="styled-select">
+                  <option value="">Selecciona una opción</option>
+                  <option [ngValue]="true">Sí, tengo hermanos</option>
+                  <option [ngValue]="false">No, soy hijo único</option>
+                </select>
+              </div>
+              <div class="form-group" *ngIf="expediente.historia_familiar.hermanos.tiene">
+                <label>¿Cuántos hermanos tienes?</label>
+                <input type="number" [(ngModel)]="expediente.historia_familiar.hermanos.cantidad" class="styled-input" placeholder="Ej. 2">
+              </div>
+            </div>
+            <div class="form-row" *ngIf="expediente.historia_familiar.hermanos.tiene">
+              <div class="form-group">
+                <label>¿Qué número de hijo eres tú?</label>
+                <input type="number" [(ngModel)]="expediente.historia_familiar.hermanos.numero_hijo" class="styled-input" placeholder="Ej. 1 (Primogénito)">
+              </div>
+              <div class="form-group">
+                <label>Tipo de Relación con ellos</label>
+                <select [(ngModel)]="expediente.historia_familiar.hermanos.tipo_relacion" class="styled-select">
+                  <option value="">Selecciona una opción</option>
+                  <option value="Buena">Buena / Cercana</option>
+                  <option value="Regular">Regular / Distante</option>
+                  <option value="Conflictiva">Conflictiva</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- EDITOR DE PACIENTE (YO) -->
+        <div *ngIf="selectedTreeNode === 'yo'">
+          <div class="editor-header">
+            <h4>🎓 Datos de Estado Civil (Paciente)</h4>
+            <span class="badge" [class.badge-success]="isNodeComplete('yo')">
+              {{ isNodeComplete('yo') ? '✓ Completo' : 'Incompleto' }}
+            </span>
+          </div>
+          <div class="editor-body">
+            <div class="form-row">
+              <div class="form-group">
+                <label>Estado Civil</label>
+                <select [(ngModel)]="expediente.personal.estado_civil" class="styled-select">
+                  <option value="">Selecciona una opción</option>
+                  <option value="Soltero/a">Soltero/a</option>
+                  <option value="Casado/a">Casado/a</option>
+                  <option value="Divorciado/a">Divorciado/a</option>
+                  <option value="Viudo/a">Viudo/a</option>
+                  <option value="Unión Libre">Unión Libre</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Unidad Académica Actual</label>
+                <input type="text" [(ngModel)]="expediente.academico.unidad_academica" class="styled-input" readonly style="opacity: 0.7;">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- EDITOR DE PAREJA -->
+        <div *ngIf="selectedTreeNode === 'pareja'">
+          <div class="editor-header">
+            <h4>❤️ Configurar Relación de Pareja</h4>
+            <span class="badge" [class.badge-success]="isNodeComplete('pareja')">
+              {{ isNodeComplete('pareja') ? '✓ Completo' : 'Incompleto' }}
+            </span>
+          </div>
+          <div class="editor-body">
+            <div class="form-row">
+              <div class="form-group">
+                <label>¿Tienes pareja actualmente?</label>
+                <select [(ngModel)]="expediente.historia_familiar.pareja.tiene" class="styled-select">
+                  <option value="">Selecciona una opción</option>
+                  <option [ngValue]="true">Sí</option>
+                  <option [ngValue]="false">No</option>
+                </select>
+              </div>
+              <div class="form-group" *ngIf="expediente.historia_familiar.pareja.tiene">
+                <label>Género de tu pareja</label>
+                <input type="text" [(ngModel)]="expediente.historia_familiar.pareja.genero" class="styled-input" placeholder="Ej. Femenino, Masculino, No binario">
+              </div>
+            </div>
+            <div class="form-row" *ngIf="expediente.historia_familiar.pareja.tiene">
+              <div class="form-group">
+                <label>Edad de tu pareja</label>
+                <input type="number" [(ngModel)]="expediente.historia_familiar.pareja.edad" class="styled-input">
+              </div>
+              <div class="form-group">
+                <label>Ocupación de tu pareja</label>
+                <input type="text" [(ngModel)]="expediente.historia_familiar.pareja.ocupacion" class="styled-input">
+              </div>
+            </div>
+            <div class="form-row" *ngIf="expediente.historia_familiar.pareja.tiene">
+              <div class="form-group">
+                <label>Tiempo de Relación (Meses / Años)</label>
+                <input type="text" [(ngModel)]="expediente.historia_familiar.pareja.tiempo_relacion" class="styled-input" placeholder="Ej. 1 año y 3 meses">
+              </div>
+              <div class="form-group">
+                <label>¿Cómo consideras que es su relación?</label>
+                <select [(ngModel)]="expediente.historia_familiar.pareja.tipo_relacion" class="styled-select">
+                  <option value="">Selecciona una opción</option>
+                  <option value="Buena">Buena / Estable</option>
+                  <option value="Regular">Regular / Con altibajos</option>
+                  <option value="Conflictiva">Conflictiva / Tóxica</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="actions" style="margin-top: 1.5rem;">
+        <button mat-flat-button color="primary" (click)="confirmSave()" [disabled]="isSaving" class="btn-primary">
+          <mat-icon>save</mat-icon> Guardar Cambios del Árbol
+        </button>
+      </div>
+    </div>
+
+    <!-- PESTAÑA 3: HISTORIAL FAMILIAR DETALLADO -->
+    <div class="tab-pane" *ngIf="activeTab === 'family_details'">
+      <div class="card settings-card">
+        <div class="card-header">
+          <h3><mat-icon>supervisor_account</mat-icon> Relación Conyugal de los Padres</h3>
+          <p>Detalles generales sobre el entorno parental de origen.</p>
+        </div>
+        <div class="card-body">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Estado Civil de los Padres</label>
+              <select [(ngModel)]="expediente.historia_familiar.padres_estado_civil" class="styled-select">
+                <option value="">Selecciona una opción</option>
+                <option value="Casados">Casados</option>
+                <option value="Divorciados">Divorciados / Separados</option>
+                <option value="Unión Libre">Unión Libre</option>
+                <option value="Viudez">Viudez</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>¿Cómo se llevan actualmente entre ellos?</label>
+              <select [(ngModel)]="expediente.historia_familiar.padres_relacion" class="styled-select">
+                <option value="">Selecciona una opción</option>
+                <option value="Buena">Buena / Respetuosa</option>
+                <option value="Regular">Regular / Sin comunicación</option>
+                <option value="Conflictiva">Conflictiva / Hostil</option>
+                <option value="Nula">Nula / Distanciados por completo</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ACCESO DIRECTO A DETALLES CLÍNICOS DEL PADRE Y LA MADRE -->
+      <div class="form-row" style="margin-top: 1.5rem;">
+        <!-- Padre -->
+        <div class="card settings-card">
+          <div class="card-header">
+            <h3>👨 Datos Clínicos del Padre</h3>
+          </div>
+          <div class="card-body">
+            <div class="form-group" style="margin-bottom: 1rem;">
+              <label>Estatus</label>
+              <select [(ngModel)]="expediente.historia_familiar.padre.estado" class="styled-select">
+                <option value="">Selecciona una opción</option>
+                <option value="presente">Presente</option>
+                <option value="ausente">Ausente</option>
+                <option value="finado">Finado</option>
+              </select>
+            </div>
+            <div class="form-group" style="margin-bottom: 1rem;" *ngIf="expediente.historia_familiar.padre.estado !== 'finado'">
+              <label>Edad</label>
+              <input type="number" [(ngModel)]="expediente.historia_familiar.padre.edad" class="styled-input">
+            </div>
+            <div class="form-group" style="margin-bottom: 1rem;" *ngIf="expediente.historia_familiar.padre.estado !== 'finado'">
+              <label>Ocupación</label>
+              <input type="text" [(ngModel)]="expediente.historia_familiar.padre.ocupacion" class="styled-input">
+            </div>
+            <div class="form-group" style="margin-bottom: 1rem;">
+              <label>Antecedentes Trastorno Psiquiátrico</label>
+              <select [(ngModel)]="expediente.historia_familiar.padre.antecedentes_psiquiatricos" class="styled-select">
+                <option value="">Selecciona una opción</option>
+                <option value="si">Sí</option>
+                <option value="no">No</option>
+                <option value="no_se">No sé</option>
+              </select>
+            </div>
+            <div class="form-group" style="margin-bottom: 1rem;">
+              <label>Diagnóstico Crónico Degenerativo</label>
+              <input type="text" [(ngModel)]="expediente.historia_familiar.padre.enfermedad_cronica" class="styled-input" placeholder="Ej. Diabetes, o 'Ninguno'">
+            </div>
+          </div>
+        </div>
+
+        <!-- Madre -->
+        <div class="card settings-card">
+          <div class="card-header">
+            <h3>👩 Datos Clínicos de la Madre</h3>
+          </div>
+          <div class="card-body">
+            <div class="form-group" style="margin-bottom: 1rem;">
+              <label>Estatus</label>
+              <select [(ngModel)]="expediente.historia_familiar.madre.estado" class="styled-select">
+                <option value="">Selecciona una opción</option>
+                <option value="presente">Presente</option>
+                <option value="ausente">Ausente</option>
+                <option value="finado">Finado</option>
+              </select>
+            </div>
+            <div class="form-group" style="margin-bottom: 1rem;" *ngIf="expediente.historia_familiar.madre.estado !== 'finado'">
+              <label>Edad</label>
+              <input type="number" [(ngModel)]="expediente.historia_familiar.madre.edad" class="styled-input">
+            </div>
+            <div class="form-group" style="margin-bottom: 1rem;" *ngIf="expediente.historia_familiar.madre.estado !== 'finado'">
+              <label>Ocupación</label>
+              <input type="text" [(ngModel)]="expediente.historia_familiar.madre.ocupacion" class="styled-input">
+            </div>
+            <div class="form-group" style="margin-bottom: 1rem;">
+              <label>Antecedentes Trastorno Psiquiátrico</label>
+              <select [(ngModel)]="expediente.historia_familiar.madre.antecedentes_psiquiatricos" class="styled-select">
+                <option value="">Selecciona una opción</option>
+                <option value="si">Sí</option>
+                <option value="no">No</option>
+                <option value="no_se">No sé</option>
+              </select>
+            </div>
+            <div class="form-group" style="margin-bottom: 1rem;">
+              <label>Diagnóstico Crónico Degenerativo</label>
+              <input type="text" [(ngModel)]="expediente.historia_familiar.madre.enfermedad_cronica" class="styled-input" placeholder="Ej. Hipertensión, o 'Ninguno'">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="actions" style="margin-top: 1.5rem;">
+        <button mat-flat-button color="primary" (click)="confirmSave()" [disabled]="isSaving" class="btn-primary">
+          <mat-icon>save</mat-icon> Guardar Historial Familiar
+        </button>
+      </div>
+    </div>
+
+    <!-- PESTAÑA 4: CONTACTOS DE EMERGENCIA DINÁMICOS -->
+    <div class="tab-pane" *ngIf="activeTab === 'emergency'">
+      <div class="card settings-card">
+        <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+          <div>
+            <h3><mat-icon>contact_phone</mat-icon> Directorio de Contactos de Emergencia</h3>
+            <p>Por seguridad, debes registrar al menos 2 contactos. Puedes agregar hasta 6 contactos dinámicos.</p>
+          </div>
+          <button mat-stroked-button color="accent" (click)="addEmergencyContact()" style="border-radius: 8px;">
+            <mat-icon>add</mat-icon> Agregar Contacto
           </button>
         </div>
-      </div>
-    </div>
-
-    <!-- Asignación de Especialista -->
-    <div class="card settings-card" *ngIf="!hasPsychologist || !hasNutritionist || inPsychologistQueue || inNutritionistQueue">
-      <div class="card-header">
-        <h3><mat-icon>assignment_ind</mat-icon> Asignación de Especialista</h3>
-        <p>Si no tienes un especialista asignado, puedes solicitarlo aquí. Buscaremos disponibilidad en tu facultad.</p>
-      </div>
-      
-      <div class="card-body" style="display: flex; flex-direction: column; gap: 1.25rem;">
         
-        <!-- Psicología -->
-        <div style="border: 1px solid var(--border-color); border-radius: 10px; padding: 1rem; display: flex; justify-content: space-between; align-items: center; background: var(--bg-hover, rgba(0,0,0,0.01));">
-          <div>
-            <div style="font-weight: 700; color: var(--text-primary); font-size: 0.95rem; margin-bottom: 0.25rem; display: flex; align-items: center; gap: 0.4rem;">
-              <mat-icon style="color: #6366f1;">psychology</mat-icon> Área de Psicología
-            </div>
-            <div style="font-size: 0.8rem; color: var(--text-secondary);">
-              {{ hasPsychologist ? 'Psicólogo asignado' : (inPsychologistQueue ? 'En fila de espera virtual' : 'Sin psicólogo asignado') }}
-            </div>
-          </div>
-          <div>
-            <span *ngIf="hasPsychologist" style="color: #10b981; font-weight: 600; font-size: 0.85rem; display: flex; align-items: center; gap: 0.25rem;">
-              <mat-icon style="font-size: 18px; width: 18px; height: 18px;">check_circle</mat-icon> Asignado
-            </span>
-            <span *ngIf="!hasPsychologist && inPsychologistQueue" style="color: #f59e0b; font-weight: 600; font-size: 0.85rem; display: flex; align-items: center; gap: 0.25rem;">
-              <mat-icon style="font-size: 18px; width: 18px; height: 18px;">hourglass_empty</mat-icon> En Espera
-            </span>
-            <button *ngIf="!hasPsychologist && !inPsychologistQueue" mat-flat-button color="primary" (click)="solicitarEspecialista('psychologist')" [disabled]="isSaving" style="font-size: 0.8rem; font-weight: 700; border-radius: 8px;">
-              Solicitar Psicólogo
-            </button>
-          </div>
-        </div>
-
-        <!-- Nutrición -->
-        <div style="border: 1px solid var(--border-color); border-radius: 10px; padding: 1rem; display: flex; justify-content: space-between; align-items: center; background: var(--bg-hover, rgba(0,0,0,0.01));">
-          <div>
-            <div style="font-weight: 700; color: var(--text-primary); font-size: 0.95rem; margin-bottom: 0.25rem; display: flex; align-items: center; gap: 0.4rem;">
-              <mat-icon style="color: #10b981;">restaurant</mat-icon> Área de Nutrición
-            </div>
-            <div style="font-size: 0.8rem; color: var(--text-secondary);">
-              {{ hasNutritionist ? 'Nutriólogo asignado' : (inNutritionistQueue ? 'En fila de espera virtual' : 'Sin nutriólogo asignado') }}
-            </div>
-          </div>
-          <div>
-            <span *ngIf="hasNutritionist" style="color: #10b981; font-weight: 600; font-size: 0.85rem; display: flex; align-items: center; gap: 0.25rem;">
-              <mat-icon style="font-size: 18px; width: 18px; height: 18px;">check_circle</mat-icon> Asignado
-            </span>
-            <span *ngIf="!hasNutritionist && inNutritionistQueue" style="color: #f59e0b; font-weight: 600; font-size: 0.85rem; display: flex; align-items: center; gap: 0.25rem;">
-              <mat-icon style="font-size: 18px; width: 18px; height: 18px;">hourglass_empty</mat-icon> En Espera
-            </span>
-            <button *ngIf="!hasNutritionist && !inNutritionistQueue" mat-flat-button color="primary" (click)="solicitarEspecialista('nutritionist')" [disabled]="isSaving" style="font-size: 0.8rem; font-weight: 700; border-radius: 8px;">
-              Solicitar Nutriólogo
-            </button>
+        <!-- CONTENEDOR DE FILAS DINÁMICAS (ESTILO FOOD TABLE) -->
+        <div class="card-body" style="padding: 1.5rem 0;">
+          <div class="emergency-table-container">
+            <table class="premium-table">
+              <thead>
+                <tr>
+                  <th>N°</th>
+                  <th>Nombre Completo</th>
+                  <th>Parentesco / Relación</th>
+                  <th>Teléfono</th>
+                  <th style="text-align: center; width: 80px;">Acción</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let contact of expediente.contactos_emergencia; let i = index" class="table-row animate-scale-in">
+                  <td class="row-num">{{ i + 1 }}</td>
+                  <td>
+                    <input type="text" [(ngModel)]="contact.nombre" class="styled-input-table" placeholder="Ej. María Pérez">
+                  </td>
+                  <td>
+                    <!-- Predefinir parentesco para contactos 1 y 2 según especificación, libre para el resto -->
+                    <select [(ngModel)]="contact.parentesco" class="styled-select-table" *ngIf="i < 2">
+                      <option value="">Selecciona una opción</option>
+                      <option value="Madre/padre/tutor legal" *ngIf="i === 0">Madre/Padre/Tutor legal</option>
+                      <option value="Pareja/amistad/otros" *ngIf="i === 1">Pareja/Amistad/Otros</option>
+                    </select>
+                    <input type="text" [(ngModel)]="contact.parentesco" class="styled-input-table" placeholder="Parentesco" *ngIf="i >= 2">
+                  </td>
+                  <td>
+                    <input type="text" [(ngModel)]="contact.telefono" class="styled-input-table" placeholder="10 dígitos">
+                  </td>
+                  <td style="text-align: center;">
+                    <button mat-icon-button color="warn" (click)="removeEmergencyContact(i)" [disabled]="expediente.contactos_emergencia.length <= 2">
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
+      </div>
 
+      <div class="actions" style="margin-top: 1.5rem;">
+        <button mat-flat-button color="primary" (click)="confirmSave()" [disabled]="isSaving" class="btn-primary">
+          <mat-icon>save</mat-icon> Guardar Contactos
+        </button>
       </div>
     </div>
-  </div>
 
-  <!-- Gestión de Derechos ARCO y Privacidad -->
-  <div class="arco-wrapper" style="margin-top: 2rem;">
-    <app-arco-settings></app-arco-settings>
+    <!-- PESTAÑA 5: SEGURIDAD Y CONFIGURACIÓN DE CUENTA (CONTRASENA & ARCO) -->
+    <div class="tab-pane" *ngIf="activeTab === 'security'">
+      <!-- Cambiar Contraseña -->
+      <div class="card settings-card">
+        <div class="card-header">
+          <h3><mat-icon>lock</mat-icon> Cambiar Contraseña</h3>
+          <p>Actualiza la contraseña de tu cuenta para mantenerla segura.</p>
+        </div>
+        
+        <div class="card-body">
+          <form (ngSubmit)="changePassword()" autocomplete="off">
+            <div class="form-group" style="margin-bottom: 1rem;">
+              <label>Nueva Contraseña</label>
+              <input type="password" [(ngModel)]="newPassword" name="newPassword" required class="styled-input" placeholder="••••••••">
+            </div>
+
+            <div class="password-requirements" style="margin-bottom: 1.5rem; text-align: left; padding: 0.5rem 1rem; background: rgba(255, 255, 255, 0.02); border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.05);">
+              <p style="font-size: 0.8rem; font-weight: 600; margin: 0 0 0.5rem 0; color: var(--text-secondary);">Requisitos de contraseña:</p>
+              <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.35rem;">
+                <li style="display: flex; align-items: center; gap: 6px; font-size: 0.78rem;" [style.color]="hasMinLength ? '#10b981' : '#94a3b8'">
+                  <svg *ngIf="hasMinLength" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  <svg *ngIf="!hasMinLength" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle></svg>
+                  Mínimo 6 caracteres
+                </li>
+                <li style="display: flex; align-items: center; gap: 6px; font-size: 0.78rem;" [style.color]="hasUppercase ? '#10b981' : '#94a3b8'">
+                  <svg *ngIf="hasUppercase" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  <svg *ngIf="!hasUppercase" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle></svg>
+                  Una letra mayúscula
+                </li>
+                <li style="display: flex; align-items: center; gap: 6px; font-size: 0.78rem;" [style.color]="hasLowercase ? '#10b981' : '#94a3b8'">
+                  <svg *ngIf="hasLowercase" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  <svg *ngIf="!hasLowercase" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle></svg>
+                  Una letra minúscula
+                </li>
+                <li style="display: flex; align-items: center; gap: 6px; font-size: 0.78rem;" [style.color]="hasDigit ? '#10b981' : '#94a3b8'">
+                  <svg *ngIf="hasDigit" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  <svg *ngIf="!hasDigit" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle></svg>
+                  Al menos un dígito
+                </li>
+              </ul>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 2rem;">
+              <label>Confirmar Contraseña</label>
+              <input type="password" [(ngModel)]="confirmPassword" name="confirmPassword" required class="styled-input" placeholder="Repite tu contraseña">
+            </div>
+
+            <div *ngIf="passwordErrorMessage" class="error-alert" style="color: #ef4444; background: rgba(239, 68, 68, 0.1); border-left: 4px solid #ef4444; padding: 0.75rem 1rem; border-radius: 8px; margin-bottom: 1.5rem; font-size: 0.9rem;">
+              {{ passwordErrorMessage }}
+            </div>
+            <div *ngIf="passwordSuccessMessage" class="success-alert" style="color: #10b981; background: rgba(16, 185, 129, 0.1); border-left: 4px solid #10b981; padding: 0.75rem 1rem; border-radius: 8px; margin-bottom: 1.5rem; font-size: 0.9rem;">
+              {{ passwordSuccessMessage }}
+            </div>
+
+            <div class="actions" style="display: flex; justify-content: flex-end;">
+              <button mat-flat-button color="accent" type="submit" [disabled]="isUpdatingPassword || !isPasswordValid || newPassword !== confirmPassword">
+                <mat-icon>lock</mat-icon> Actualizar Contraseña
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Asignación de Especialista -->
+      <div class="card settings-card" style="margin-top: 1.5rem;" *ngIf="!hasPsychologist || !hasNutritionist || inPsychologistQueue || inNutritionistQueue">
+        <div class="card-header">
+          <h3><mat-icon>assignment_ind</mat-icon> Asignación de Especialista</h3>
+          <p>Si no tienes un especialista asignado, puedes solicitarlo aquí. Buscaremos disponibilidad en tu facultad.</p>
+        </div>
+        
+        <div class="card-body" style="display: flex; flex-direction: column; gap: 1.25rem;">
+          <!-- Psicología -->
+          <div style="border: 1px solid var(--border-color); border-radius: 10px; padding: 1rem; display: flex; justify-content: space-between; align-items: center; background: var(--glass-bg);">
+            <div>
+              <div style="font-weight: 700; color: var(--text-primary); font-size: 0.95rem; margin-bottom: 0.25rem; display: flex; align-items: center; gap: 0.4rem;">
+                <mat-icon style="color: #6366f1;">psychology</mat-icon> Área de Psicología
+              </div>
+              <div style="font-size: 0.8rem; color: var(--text-secondary);">
+                {{ hasPsychologist ? 'Psicólogo asignado' : (inPsychologistQueue ? 'En fila de espera virtual' : 'Sin psicólogo asignado') }}
+              </div>
+            </div>
+            <div>
+              <span *ngIf="hasPsychologist" style="color: #10b981; font-weight: 600; font-size: 0.85rem; display: flex; align-items: center; gap: 0.25rem;">
+                <mat-icon>check_circle</mat-icon> Asignado
+              </span>
+              <span *ngIf="!hasPsychologist && inPsychologistQueue" style="color: #f59e0b; font-weight: 600; font-size: 0.85rem; display: flex; align-items: center; gap: 0.25rem;">
+                <mat-icon>hourglass_empty</mat-icon> En Espera
+              </span>
+              <button *ngIf="!hasPsychologist && !inPsychologistQueue" mat-flat-button color="primary" (click)="solicitarEspecialista('psychologist')" [disabled]="isSaving">
+                Solicitar Psicólogo
+              </button>
+            </div>
+          </div>
+
+          <!-- Nutrición -->
+          <div style="border: 1px solid var(--border-color); border-radius: 10px; padding: 1rem; display: flex; justify-content: space-between; align-items: center; background: var(--glass-bg);">
+            <div>
+              <div style="font-weight: 700; color: var(--text-primary); font-size: 0.95rem; margin-bottom: 0.25rem; display: flex; align-items: center; gap: 0.4rem;">
+                <mat-icon style="color: #10b981;">restaurant</mat-icon> Área de Nutrición
+              </div>
+              <div style="font-size: 0.8rem; color: var(--text-secondary);">
+                {{ hasNutritionist ? 'Nutriólogo asignado' : (inNutritionistQueue ? 'En fila de espera virtual' : 'Sin nutriólogo asignado') }}
+              </div>
+            </div>
+            <div>
+              <span *ngIf="hasNutritionist" style="color: #10b981; font-weight: 600; font-size: 0.85rem; display: flex; align-items: center; gap: 0.25rem;">
+                <mat-icon>check_circle</mat-icon> Asignado
+              </span>
+              <span *ngIf="!hasNutritionist && inNutritionistQueue" style="color: #f59e0b; font-weight: 600; font-size: 0.85rem; display: flex; align-items: center; gap: 0.25rem;">
+                <mat-icon>hourglass_empty</mat-icon> En Espera
+              </span>
+              <button *ngIf="!hasNutritionist && !inNutritionistQueue" mat-flat-button color="primary" (click)="solicitarEspecialista('nutritionist')" [disabled]="isSaving">
+                Solicitar Nutriólogo
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Derechos ARCO -->
+      <div class="arco-wrapper" style="margin-top: 1.5rem;">
+        <app-arco-settings></app-arco-settings>
+      </div>
+    </div>
+
   </div>
 </div>

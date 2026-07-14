@@ -23,11 +23,31 @@ export class ForceChangePasswordComponent {
   successMessage = '';
   isSubmitting = false;
 
+  get hasMinLength(): boolean {
+    return this.newPassword.length >= 6;
+  }
+
+  get hasUppercase(): boolean {
+    return /[A-Z]/.test(this.newPassword);
+  }
+
+  get hasLowercase(): boolean {
+    return /[a-z]/.test(this.newPassword);
+  }
+
+  get hasDigit(): boolean {
+    return /\d/.test(this.newPassword);
+  }
+
+  get isValidPassword(): boolean {
+    return this.hasMinLength && this.hasUppercase && this.hasLowercase && this.hasDigit;
+  }
+
   async onChangePassword() {
     this.errorMessage = '';
     
-    if (this.newPassword.length < 6) {
-      this.errorMessage = 'La contraseña debe tener al menos 6 caracteres.';
+    if (!this.isValidPassword) {
+      this.errorMessage = 'La contraseña no cumple con los requisitos mínimos de seguridad.';
       return;
     }
     
@@ -74,7 +94,11 @@ export class ForceChangePasswordComponent {
       }, 1500);
 
     } catch (e: any) {
-      this.errorMessage = e.message || 'Hubo un error al cambiar la contraseña.';
+      if (e.message?.toLowerCase().includes('leaked') || e.message?.toLowerCase().includes('weak_password')) {
+        this.errorMessage = 'Esta contraseña ha sido expuesta en filtraciones de datos públicas. Por seguridad, por favor elige una contraseña diferente.';
+      } else {
+        this.errorMessage = e.message || 'Hubo un error al cambiar la contraseña.';
+      }
     } finally {
       this.isSubmitting = false;
     }

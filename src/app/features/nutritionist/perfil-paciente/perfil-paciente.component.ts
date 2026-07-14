@@ -41,10 +41,13 @@ export class PerfilPaciente implements OnInit {
   patientAchievements: any[] = [];
   newAchTitle = '';
   newAchDesc = '';
-  newAchPoints = 100;
-  newAchIcon = 'verified';
+  newAchPoints = 0;
+  newAchIcon = '';
   newAchNotes = '';
   isAssigningAchievement = false;
+  
+  // ponytail: nodo seleccionado en árbol familiar
+  selectedTreeNode: string | null = 'yo';
 
   public lineChartData: ChartConfiguration<'line'>['data'] = {
     labels: ['Sem 1', 'Sem 2', 'Sem 3', 'Sem 4', 'Sem 5', 'Sem 6', 'Sem 7', 'Sem 8'],
@@ -211,7 +214,7 @@ export class PerfilPaciente implements OnInit {
       // 1. Obtener usuario + perfil + expediente clínico
       const { data: userData, error: userError } = await this.supabase
         .from('users')
-        .select('id, matricula, mobile_phone, profiles(first_name, last_name, avatar_url, faculty, antecedentes_familiares), student_clinical_records!student_clinical_records_student_id_fkey(known_conditions, additional_notes)')
+        .select('id, matricula, mobile_phone, profiles(first_name, last_name, avatar_url, faculty, antecedentes_familiares, expediente_completo), student_clinical_records!student_clinical_records_student_id_fkey(known_conditions, additional_notes)')
         .eq('id', id)
         .single();
 
@@ -289,6 +292,17 @@ export class PerfilPaciente implements OnInit {
           };
         }
 
+        // ponytail: Cargar y descifrar expediente_completo para el nutricionista
+        let decryptedExpediente = null;
+        if (p?.expediente_completo && p.expediente_completo.data) {
+          try {
+            const decrypted = this.crypto.decrypt(p.expediente_completo.data);
+            decryptedExpediente = JSON.parse(decrypted);
+          } catch (err) {
+            console.error('Error al descifrar expediente del paciente:', err);
+          }
+        }
+
         this.patient = {
           id: userData.id,
           firstName: p?.first_name || 'Paciente',
@@ -307,7 +321,8 @@ export class PerfilPaciente implements OnInit {
           avatarUrl: p?.avatar_url || '',
           avatar: p?.avatar_url || '',
           antecedentes_familiares: this.generalData?.antecedentes_familiares || p?.antecedentes_familiares || '',
-          celular: userData?.mobile_phone || this.generalData?.celular || ''
+          celular: userData?.mobile_phone || this.generalData?.celular || '',
+          expediente_completo: decryptedExpediente
         };
       }
 
@@ -871,8 +886,8 @@ export class PerfilPaciente implements OnInit {
   }
 
   async assignClinicalAchievement() {
-    if (!this.patient?.id || !this.newAchTitle.trim() || !this.newAchDesc.trim()) {
-      alert('Por favor completa el título y la descripción de la meta.');
+    if (!this.patient?.id || !this.newAchTitle.trim() || !this.newAchDesc.trim() || !this.newAchPoints || !this.newAchIcon) {
+      alert('Por favor completa todos los campos de la meta (incluyendo puntos e icono).');
       return;
     }
 
@@ -892,8 +907,8 @@ export class PerfilPaciente implements OnInit {
         this.newAchTitle = '';
         this.newAchDesc = '';
         this.newAchNotes = '';
-        this.newAchPoints = 100;
-        this.newAchIcon = 'verified';
+        this.newAchPoints = 0;
+        this.newAchIcon = '';
         await this.loadPatientData(this.patient.id);
       } else {
         alert('Error al asignar la meta clínica.');
@@ -974,5 +989,40 @@ export class PerfilPaciente implements OnInit {
         }
       }
     });
+  }
+
+  // ponytail: Métodos auxiliares para el árbol familiar del paciente
+  isNodeComplete(node: string): boolean {
+    const exp = this.patient?.expediente_completo;
+    if (!exp) return false;
+    
+    if (node === 'yo') {
+      return !!(exp.contacto?.telefono && exp.contacto?.fecha_nacimiento && exp.personal?.estado_civil && exp.personal?.sexo);
+    }
+    if (node === 'padre') {
+      const f = exp.historia_familiar?.padre;
+      if (!f) return false;
+      return f.estado === 'ausente' || f.estado === 'finado' || !!(f.edad && f.ocupacion && f.tipo_relacion);
+    }
+    if (node === 'madre') {
+      const m = exp.historia_familiar?.madre;
+      if (!m) return false;
+      return m.estado === 'ausente' || m.estado === 'finado' || !!(m.edad && m.ocupacion && m.tipo_relacion);
+    }
+    if (node === 'hermanos') {
+      const h = exp.historia_familiar?.hermanos;
+      if (!h) return false;
+      return !h.tiene || !!(h.cantidad && h.tipo_relacion);
+    }
+    if (node === 'pareja') {
+      const p = exp.historia_familiar?.pareja;
+      if (!p) return false;
+      return !p.tiene || !!(p.edad && p.ocupacion && p.tipo_relacion);
+    }
+    return false;
+  }
+
+  selectTreeNode(node: string) {
+    this.selectedTreeNode = node;
   }
 }

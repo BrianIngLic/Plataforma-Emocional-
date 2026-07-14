@@ -366,12 +366,12 @@ export class AuthService {
       });
       if (error) {
         console.error('Error actualizando contraseña:', error.message);
-        return false;
+        throw error;
       }
       return true;
     } catch (e) {
       console.error('Excepción al actualizar contraseña:', e);
-      return false;
+      throw e;
     }
   }
 

@@ -1,9 +1,10 @@
-import { Component, OnInit, inject, HostListener } from '@angular/core';
+import { Component, OnInit, inject, HostListener, AfterViewInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { AuthService } from '../../../core/services/auth.service';
+import { environment } from '../../../../environments/environment';
 
 /**
  * Componente de Login (Standalone)
@@ -16,7 +17,7 @@ import { AuthService } from '../../../core/services/auth.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
   private authService = inject(AuthService);
   private router = inject(Router);
 
@@ -26,6 +27,13 @@ export class LoginComponent implements OnInit {
   showPassword = false;
   showInactivityModal = false;
   showEtymology = false;
+
+  turnstileToken: string = '';
+  turnstileWidgetId: any = null;
+
+  get isCaptchaRequired(): boolean {
+    return !!(window as any).turnstile;
+  }
 
   toggleEtymology(event: MouseEvent) {
     event.stopPropagation();
@@ -42,6 +50,53 @@ export class LoginComponent implements OnInit {
       this.showInactivityModal = true;
       sessionStorage.removeItem('inactivity_logout');
     }
+  }
+
+  ngAfterViewInit() {
+    this.renderTurnstile();
+  }
+
+  ngOnDestroy() {
+    if (this.turnstileWidgetId !== null && (window as any).turnstile) {
+      try {
+        (window as any).turnstile.remove(this.turnstileWidgetId);
+      } catch (e) {
+        console.error('Error removing turnstile widget:', e);
+      }
+    }
+  }
+
+  private renderTurnstile() {
+    const checkTurnstile = setInterval(() => {
+      if ((window as any).turnstile) {
+        clearInterval(checkTurnstile);
+        try {
+          const container = document.getElementById('turnstile-container');
+          if (container) {
+            this.turnstileWidgetId = (window as any).turnstile.render('#turnstile-container', {
+              sitekey: environment.turnstileSiteKey,
+              callback: (token: string) => {
+                this.turnstileToken = token;
+                this.errorMessage = '';
+              },
+              'error-callback': () => {
+                this.turnstileToken = '';
+                this.errorMessage = 'Error de verificación de seguridad. Por favor intenta de nuevo.';
+              },
+              'expired-callback': () => {
+                this.turnstileToken = '';
+                this.errorMessage = 'La verificación de seguridad ha expirado. Por favor resuélvela de nuevo.';
+              }
+            });
+          }
+        } catch (e) {
+          console.error('Turnstile render failed:', e);
+        }
+      }
+    }, 100);
+
+    // Timeout de 10s para limpiar el intervalo si no se carga
+    setTimeout(() => clearInterval(checkTurnstile), 10000);
   }
 
   closeInactivityModal() {
@@ -69,6 +124,11 @@ export class LoginComponent implements OnInit {
 
     if (!this.email || !this.pass) {
       this.errorMessage = 'Por favor ingresa tu correo y contraseña.';
+      return;
+    }
+
+    if ((window as any).turnstile && !this.turnstileToken) {
+      this.errorMessage = 'Por favor completa la verificación de seguridad (CAPTCHA).';
       return;
     }
 

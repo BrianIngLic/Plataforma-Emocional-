@@ -78,7 +78,194 @@
             <div [innerHTML]="patient.antecedentes_familiares" style="margin: 0.25rem 0 0; color: var(--text-primary); font-weight: 500;"></div>
           </div>
         </div>
-      </div>      <!-- Amati AI Insights -->
+      </div>
+
+      <!-- ponytail: Expediente Clínico Completo y Árbol Genealógico -->
+      <div class="card" *ngIf="patient.expediente_completo">
+        <h2 class="card-title"><mat-icon class="text-purple">account_tree</mat-icon> Expediente Estudiantil y Árbol Familiar</h2>
+        <p style="font-size: 0.85rem; color: var(--text-secondary); margin: -0.5rem 0 1.25rem 0;">Vista del genograma e información del núcleo familiar del alumno.</p>
+        
+        <!-- Vista del Árbol (Solo lectura para clínico) -->
+        <div style="background: var(--input-bg); border-radius: 12px; padding: 1.5rem 1rem; overflow-x: auto; margin-bottom: 1.5rem; border: 1px solid var(--border-color);">
+          <div class="tree-visualization" style="min-width: 600px; display: flex; flex-direction: column; align-items: center;">
+            
+            <!-- Padres -->
+            <div style="display: flex; align-items: center; gap: 30px;">
+              <!-- Padre -->
+              <div class="tree-node" [class.completed]="isNodeComplete('padre')" [class.selected]="selectedTreeNode === 'padre'" (click)="selectTreeNode('padre')">
+                <div class="avatar-ring">👨</div>
+                <span class="node-label">Padre</span>
+                <span class="node-sublabel">{{ patient.expediente_completo.historia_familiar?.padre?.estado === 'finado' ? 'Finado' : (patient.expediente_completo.historia_familiar?.padre?.ocupacion || 'Sin datos') }}</span>
+              </div>
+              <div class="horizontal-parents" style="width: 60px; height: 3px; background: var(--border-color);"></div>
+              <!-- Madre -->
+              <div class="tree-node" [class.completed]="isNodeComplete('madre')" [class.selected]="selectedTreeNode === 'madre'" (click)="selectTreeNode('madre')">
+                <div class="avatar-ring">👩</div>
+                <span class="node-label">Madre</span>
+                <span class="node-sublabel">{{ patient.expediente_completo.historia_familiar?.madre?.estado === 'finado' ? 'Finada' : (patient.expediente_completo.historia_familiar?.madre?.ocupacion || 'Sin datos') }}</span>
+              </div>
+            </div>
+
+            <!-- Conectores -->
+            <div class="tree-connector-middle" style="height: 40px; position: relative; width: 100%;">
+              <div style="position: absolute; left: 50%; top: 0; width: 3px; height: 15px; background: var(--border-color); transform: translateX(-50%);"></div>
+              <div style="position: absolute; left: calc(50% - 150px); top: 15px; width: 300px; height: 3px; background: var(--border-color);"></div>
+              <div style="position: absolute; left: calc(50% - 150px); top: 15px; width: 3px; height: 25px; background: var(--border-color);"></div>
+              <div style="position: absolute; left: 50%; top: 15px; width: 3px; height: 25px; background: var(--border-color); transform: translateX(-50%);"></div>
+              <div style="position: absolute; left: calc(50% + 150px); top: 15px; width: 3px; height: 25px; background: var(--border-color);"></div>
+            </div>
+
+            <!-- Nivel 2: Yo, Hermanos, Pareja -->
+            <div style="display: flex; align-items: center; gap: 30px;">
+              <!-- Hermanos -->
+              <div class="tree-node" [class.completed]="isNodeComplete('hermanos')" [class.selected]="selectedTreeNode === 'hermanos'" (click)="selectTreeNode('hermanos')">
+                <div class="avatar-ring">👦</div>
+                <span class="node-label">Hermanos</span>
+                <span class="node-sublabel">{{ patient.expediente_completo.historia_familiar?.hermanos?.tiene ? (patient.expediente_completo.historia_familiar?.hermanos?.cantidad + ' hermanos') : 'Hijo Único' }}</span>
+              </div>
+              <!-- Yo -->
+              <div class="tree-node patient-node" [class.completed]="isNodeComplete('yo')" [class.selected]="selectedTreeNode === 'yo'" (click)="selectTreeNode('yo')">
+                <div class="avatar-ring gold-ring">🎓</div>
+                <span class="node-label">Estudiante</span>
+                <span class="node-sublabel">{{ patient.firstName }}</span>
+              </div>
+              <!-- Pareja -->
+              <div class="tree-node" [class.completed]="isNodeComplete('pareja')" [class.selected]="selectedTreeNode === 'pareja'" (click)="selectTreeNode('pareja')">
+                <div class="avatar-ring">❤️</div>
+                <span class="node-label">Pareja</span>
+                <span class="node-sublabel">{{ patient.expediente_completo.historia_familiar?.pareja?.tiene ? 'Tiene pareja' : 'Sin pareja' }}</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Ficha de Información del Familiar Seleccionado -->
+        <div style="background: rgba(139, 92, 246, 0.02); border: 1.5px solid rgba(139, 92, 246, 0.15); border-radius: 12px; padding: 1.25rem; margin-bottom: 1.5rem;" class="animate-scale-in" *ngIf="selectedTreeNode">
+          <!-- Padre -->
+          <div *ngIf="selectedTreeNode === 'padre' && patient.expediente_completo.historia_familiar?.padre">
+            <h4 style="margin: 0 0 10px 0; color: var(--text-primary); font-size: 0.95rem; font-weight: 700; display: flex; align-items: center; gap: 6px;">
+              👨 Datos del Padre
+            </h4>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; font-size: 0.825rem;">
+              <div><strong style="color: var(--text-secondary);">Estatus:</strong> {{ patient.expediente_completo.historia_familiar.padre.estado | uppercase }}</div>
+              <div *ngIf="patient.expediente_completo.historia_familiar.padre.estado !== 'finado'"><strong style="color: var(--text-secondary);">Edad:</strong> {{ patient.expediente_completo.historia_familiar.padre.edad || 'No especificada' }} años</div>
+              <div *ngIf="patient.expediente_completo.historia_familiar.padre.estado !== 'finado'"><strong style="color: var(--text-secondary);">Ocupación:</strong> {{ patient.expediente_completo.historia_familiar.padre.ocupacion || 'No especificada' }}</div>
+              <div><strong style="color: var(--text-secondary);">Antecedentes Psiquiátricos:</strong> {{ patient.expediente_completo.historia_familiar.padre.antecedentes_psiquiatricos === 'si' ? 'SÍ' : (patient.expediente_completo.historia_familiar.padre.antecedentes_psiquiatricos === 'no' ? 'NO' : 'NO SABE') }}</div>
+              <div><strong style="color: var(--text-secondary);">Enfermedad Crónica:</strong> {{ patient.expediente_completo.historia_familiar.padre.enfermedad_cronica || 'Ninguna registrada' }}</div>
+              <div><strong style="color: var(--text-secondary);">Relación:</strong> {{ patient.expediente_completo.historia_familiar.padre.tipo_relacion || 'No especificada' }}</div>
+            </div>
+          </div>
+          <!-- Madre -->
+          <div *ngIf="selectedTreeNode === 'madre' && patient.expediente_completo.historia_familiar?.madre">
+            <h4 style="margin: 0 0 10px 0; color: var(--text-primary); font-size: 0.95rem; font-weight: 700; display: flex; align-items: center; gap: 6px;">
+              👩 Datos de la Madre
+            </h4>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; font-size: 0.825rem;">
+              <div><strong style="color: var(--text-secondary);">Estatus:</strong> {{ patient.expediente_completo.historia_familiar.madre.estado | uppercase }}</div>
+              <div *ngIf="patient.expediente_completo.historia_familiar.madre.estado !== 'finado'"><strong style="color: var(--text-secondary);">Edad:</strong> {{ patient.expediente_completo.historia_familiar.madre.edad || 'No especificada' }} años</div>
+              <div *ngIf="patient.expediente_completo.historia_familiar.madre.estado !== 'finado'"><strong style="color: var(--text-secondary);">Ocupación:</strong> {{ patient.expediente_completo.historia_familiar.madre.ocupacion || 'No especificada' }}</div>
+              <div><strong style="color: var(--text-secondary);">Antecedentes Psiquiátricos:</strong> {{ patient.expediente_completo.historia_familiar.madre.antecedentes_psiquiatricos === 'si' ? 'SÍ' : (patient.expediente_completo.historia_familiar.madre.antecedentes_psiquiatricos === 'no' ? 'NO' : 'NO SABE') }}</div>
+              <div><strong style="color: var(--text-secondary);">Enfermedad Crónica:</strong> {{ patient.expediente_completo.historia_familiar.madre.enfermedad_cronica || 'Ninguna registrada' }}</div>
+              <div><strong style="color: var(--text-secondary);">Relación:</strong> {{ patient.expediente_completo.historia_familiar.madre.tipo_relacion || 'No especificada' }}</div>
+            </div>
+          </div>
+          <!-- Hermanos -->
+          <div *ngIf="selectedTreeNode === 'hermanos' && patient.expediente_completo.historia_familiar?.hermanos">
+            <h4 style="margin: 0 0 10px 0; color: var(--text-primary); font-size: 0.95rem; font-weight: 700; display: flex; align-items: center; gap: 6px;">
+              👦 Hermanos
+            </h4>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; font-size: 0.825rem;" *ngIf="patient.expediente_completo.historia_familiar.hermanos.tiene">
+              <div><strong style="color: var(--text-secondary);">Cantidad:</strong> {{ patient.expediente_completo.historia_familiar.hermanos.cantidad }} hermano(s)</div>
+              <div><strong style="color: var(--text-secondary);">Número de hijo:</strong> Paciente es el N° {{ patient.expediente_completo.historia_familiar.hermanos.numero_hijo }}</div>
+              <div><strong style="color: var(--text-secondary);">Relación:</strong> {{ patient.expediente_completo.historia_familiar.hermanos.tipo_relacion || 'No especificada' }}</div>
+            </div>
+            <p style="margin: 0; font-size: 0.825rem; font-style: italic; color: var(--text-secondary);" *ngIf="!patient.expediente_completo.historia_familiar.hermanos.tiene">
+              El alumno no tiene hermanos (Hijo único).
+            </p>
+          </div>
+          <!-- Pareja -->
+          <div *ngIf="selectedTreeNode === 'pareja' && patient.expediente_completo.historia_familiar?.pareja">
+            <h4 style="margin: 0 0 10px 0; color: var(--text-primary); font-size: 0.95rem; font-weight: 700; display: flex; align-items: center; gap: 6px;">
+              ❤️ Pareja / Relación Sentimental
+            </h4>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; font-size: 0.825rem;" *ngIf="patient.expediente_completo.historia_familiar.pareja.tiene">
+              <div><strong style="color: var(--text-secondary);">Género:</strong> {{ patient.expediente_completo.historia_familiar.pareja.genero || 'No especificado' }}</div>
+              <div><strong style="color: var(--text-secondary);">Edad:</strong> {{ patient.expediente_completo.historia_familiar.pareja.edad || 'No especificada' }} años</div>
+              <div><strong style="color: var(--text-secondary);">Ocupación:</strong> {{ patient.expediente_completo.historia_familiar.pareja.ocupacion || 'No especificada' }}</div>
+              <div><strong style="color: var(--text-secondary);">Tiempo de relación:</strong> {{ patient.expediente_completo.historia_familiar.pareja.tiempo_relacion || 'No especificado' }}</div>
+              <div><strong style="color: var(--text-secondary);">Calidad de la Relación:</strong> {{ patient.expediente_completo.historia_familiar.pareja.tipo_relacion || 'No especificada' }}</div>
+            </div>
+            <p style="margin: 0; font-size: 0.825rem; font-style: italic; color: var(--text-secondary);" *ngIf="!patient.expediente_completo.historia_familiar.pareja.tiene">
+              El alumno no tiene pareja sentimental actualmente.
+            </p>
+          </div>
+          <!-- Yo (Paciente) -->
+          <div *ngIf="selectedTreeNode === 'yo'">
+            <h4 style="margin: 0 0 10px 0; color: var(--text-primary); font-size: 0.95rem; font-weight: 700; display: flex; align-items: center; gap: 6px;">
+              🎓 Datos del Alumno
+            </h4>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; font-size: 0.825rem;">
+              <div><strong style="color: var(--text-secondary);">Matrícula:</strong> {{ patient.expediente_completo.contacto?.matricula || 'Sin datos' }}</div>
+              <div><strong style="color: var(--text-secondary);">Semestre:</strong> {{ patient.expediente_completo.academico?.semestre || 'Sin datos' }}° Semestre</div>
+              <div><strong style="color: var(--text-secondary);">Estado Civil:</strong> {{ patient.expediente_completo.personal?.estado_civil || 'Sin datos' }}</div>
+              <div><strong style="color: var(--text-secondary);">Sexo:</strong> {{ patient.expediente_completo.personal?.sexo || 'Sin datos' }}</div>
+              <div><strong style="color: var(--text-secondary);">Fecha de Nacimiento:</strong> {{ patient.expediente_completo.contacto?.fecha_nacimiento || 'Sin datos' }}</div>
+              <div><strong style="color: var(--text-secondary);">Teléfono:</strong> {{ patient.expediente_completo.contacto?.telefono || 'Sin datos' }}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Domicilio del Alumno -->
+        <div style="margin-top: 1rem; border-top: 1px solid var(--border-color); padding-top: 1rem;">
+          <h4 style="font-size: 13px; font-weight: 700; color: var(--text-primary); margin: 0 0 8px 0;">📍 Domicilio Residencial</h4>
+          <div style="font-size: 0.85rem; display: flex; flex-direction: column; gap: 6px; color: var(--text-secondary);">
+            <div>
+              <strong>Dirección Actual (Local):</strong> 
+              {{ patient.expediente_completo.academico?.domicilio_actual?.calle || '' }} 
+              #{{ patient.expediente_completo.academico?.domicilio_actual?.numero || '' }}, 
+              Col. {{ patient.expediente_completo.academico?.domicilio_actual?.colonia || '' }}, 
+              {{ patient.expediente_completo.academico?.domicilio_actual?.municipio || '' }}, 
+              {{ patient.expediente_completo.academico?.domicilio_actual?.estado || '' }}
+              (Vive con: {{ patient.expediente_completo.academico?.domicilio_actual?.con_quien_vive || 'Solo' }})
+            </div>
+            <!-- Domicilio de Origen si es foráneo -->
+            <div *ngIf="patient.expediente_completo.academico?.domicilio_origin?.estado" style="padding-top: 4px; border-top: 1px dashed rgba(0,0,0,0.05);">
+              <span style="color: var(--accent-purple); font-weight: 600;">✈️ Domicilio de Origen (Foráneo):</span>
+              {{ patient.expediente_completo.academico.domicilio_origin.calle || '' }} 
+              Col. {{ patient.expediente_completo.academico.domicilio_origin.colonia || '' }}, 
+              {{ patient.expediente_completo.academico.domicilio_origin.municipio || '' }}, 
+              {{ patient.expediente_completo.academico.domicilio_origin.estado || '' }}
+            </div>
+          </div>
+        </div>
+
+        <!-- Contactos de Emergencia -->
+        <div style="margin-top: 1.5rem; border-top: 1px solid var(--border-color); padding-top: 1rem;" *ngIf="patient.expediente_completo.contactos_emergencia && patient.expediente_completo.contactos_emergencia.length > 0">
+          <h4 style="font-size: 13px; font-weight: 700; color: var(--text-primary); margin: 0 0 10px 0;">🚨 Contactos de Emergencia</h4>
+          <table style="width: 100%; border-collapse: collapse; font-size: 0.8rem; text-align: left;">
+            <thead>
+              <tr style="border-bottom: 2px solid var(--border-color); background: rgba(0,0,0,0.02);">
+                <th style="padding: 8px;">N°</th>
+                <th style="padding: 8px;">Nombre Completo</th>
+                <th style="padding: 8px;">Parentesco / Relación</th>
+                <th style="padding: 8px;">Teléfono</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let contact of patient.expediente_completo.contactos_emergencia; let idx = index" style="border-bottom: 1px solid var(--border-color);">
+                <td style="padding: 8px; font-weight: bold; color: var(--text-secondary);">{{ idx + 1 }}</td>
+                <td style="padding: 8px; font-weight: 500;">{{ contact.nombre || 'No registrado' }}</td>
+                <td style="padding: 8px; color: var(--text-secondary);">{{ contact.parentesco || 'No registrado' }}</td>
+                <td style="padding: 8px; font-weight: bold; color: var(--text-primary);">{{ contact.telefono || 'No registrado' }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+
+      <!-- Amati AI Insights -->
       <div class="card ai-card">
         <h2 class="card-title"><mat-icon class="text-purple">smart_toy</mat-icon> Análisis de Amati (IA)</h2>
         <div class="ai-content">
@@ -202,6 +389,7 @@
               <div>
                 <label style="font-size: 11px; font-weight: 600; color: #64748b; display: block; margin-bottom: 4px;">Puntos (XP)</label>
                 <select [(ngModel)]="newAchPoints" style="width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 13px; font-family: inherit; background: white; box-sizing: border-box; height: 35px;">
+                  <option value="0">Selecciona una opción</option>
                   <option [value]="50">50 XP</option>
                   <option [value]="100">100 XP</option>
                   <option [value]="200">200 XP</option>
@@ -215,6 +403,7 @@
               <div>
                 <label style="font-size: 11px; font-weight: 600; color: #64748b; display: block; margin-bottom: 4px;">Icono Visual</label>
                 <select [(ngModel)]="newAchIcon" style="width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 13px; font-family: inherit; background: white; box-sizing: border-box; height: 35px;">
+                  <option value="">Selecciona una opción</option>
                   <option value="directions_walk">🚶 Ejercicio / Paseo</option>
                   <option value="local_drink">💧 Hidratación / Agua</option>
                   <option value="self_improvement">🧘 Meditación / Calma</option>
@@ -226,6 +415,7 @@
               <div>
                 <label style="font-size: 11px; font-weight: 600; color: #64748b; display: block; margin-bottom: 4px;">Periodicidad</label>
                 <select style="width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 13px; font-family: inherit; background: white; box-sizing: border-box; height: 35px;">
+                  <option value="">Selecciona una opción</option>
                   <option>Diario</option>
                   <option>Semanal</option>
                   <option>Única ocasión</option>

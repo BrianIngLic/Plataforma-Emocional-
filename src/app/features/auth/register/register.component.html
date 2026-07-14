@@ -6,7 +6,7 @@
     </div>
 
     <!-- Angular Material Stepper adaptado a nuestro Glassmorphism Theme -->
-    <mat-stepper linear #stepper class="custom-stepper">
+    <mat-stepper linear #stepper class="custom-stepper" (selectionChange)="onStepChange($event)">
       
       <!-- PASO 1: Credenciales -->
       <mat-step [stepControl]="credentialsFormGroup" label="Credenciales">
@@ -54,7 +54,7 @@
             </mat-error>
           </mat-form-field>
 
-          <mat-form-field appearance="outline">
+          <mat-form-field appearance="outline" style="margin-bottom: 0.5rem;">
             <mat-label>Contraseña</mat-label>
             <input
               matInput
@@ -66,10 +66,34 @@
             <mat-error *ngIf="credentialsFormGroup.get('password')?.hasError('required')">
               La contraseña es obligatoria.
             </mat-error>
-            <mat-error *ngIf="credentialsFormGroup.get('password')?.hasError('minlength')">
-              Debe tener al menos 6 caracteres.
-            </mat-error>
           </mat-form-field>
+
+          <!-- Lista interactiva de requisitos de la contraseña -->
+          <div class="password-requirements" style="margin-bottom: 1.5rem; text-align: left; padding: 0.5rem 1rem; background: rgba(255, 255, 255, 0.02); border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.05);">
+            <p style="font-size: 0.8rem; font-weight: 600; margin: 0 0 0.5rem 0; color: var(--text-secondary);">Requisitos de contraseña:</p>
+            <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.35rem;">
+              <li style="display: flex; align-items: center; gap: 6px; font-size: 0.78rem;" [style.color]="hasMinLength ? '#10b981' : '#94a3b8'">
+                <svg *ngIf="hasMinLength" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <svg *ngIf="!hasMinLength" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle></svg>
+                Mínimo 6 caracteres
+              </li>
+              <li style="display: flex; align-items: center; gap: 6px; font-size: 0.78rem;" [style.color]="hasUppercase ? '#10b981' : '#94a3b8'">
+                <svg *ngIf="hasUppercase" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <svg *ngIf="!hasUppercase" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle></svg>
+                Una letra mayúscula
+              </li>
+              <li style="display: flex; align-items: center; gap: 6px; font-size: 0.78rem;" [style.color]="hasLowercase ? '#10b981' : '#94a3b8'">
+                <svg *ngIf="hasLowercase" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <svg *ngIf="!hasLowercase" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle></svg>
+                Una letra minúscula
+              </li>
+              <li style="display: flex; align-items: center; gap: 6px; font-size: 0.78rem;" [style.color]="hasDigit ? '#10b981' : '#94a3b8'">
+                <svg *ngIf="hasDigit" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <svg *ngIf="!hasDigit" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle></svg>
+                Al menos un dígito
+              </li>
+            </ul>
+          </div>
 
           <div class="stepper-actions">
             <button
@@ -245,13 +269,18 @@
             Debes aceptar los términos para continuar.
           </mat-error>
 
+          <!-- CAPTCHA de Cloudflare Turnstile -->
+          <div class="turnstile-wrapper" style="display: flex; justify-content: center; margin: 1.5rem 0; min-height: 65px;">
+            <div id="turnstile-container"></div>
+          </div>
+
           <div class="stepper-actions submit-actions">
             <button mat-button matStepperPrevious [disabled]="isSubmitting">Atrás</button>
             <button 
               mat-flat-button 
               color="accent" 
               (click)="submitRegistration()" 
-              [disabled]="consentFormGroup.invalid || isSubmitting">
+              [disabled]="consentFormGroup.invalid || isSubmitting || (isCaptchaRequired && !turnstileToken)">
               {{ isSubmitting ? 'Creando expediente...' : 'Finalizar Registro' }}
             </button>
           </div>

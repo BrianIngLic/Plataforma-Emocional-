@@ -80,8 +80,8 @@
     "semantic_hash": ""
   },
   "src/app/core/services/auth.service.ts": {
-    "mtime": 1784182616.7685668,
-    "ast_hash": "e3298a5698e64ad65facc65eda000957",
+    "mtime": 1784184188.759018,
+    "ast_hash": "f7339a80aca2e7f25689e309e6da5ba7",
     "semantic_hash": ""
   },
   "src/app/core/services/chat.service.ts": {
@@ -275,8 +275,8 @@
     "semantic_hash": ""
   },
   "src/app/features/student/settings/student-settings.component.ts": {
-    "mtime": 1784183745.9499397,
-    "ast_hash": "63d00a049517b0e6d1bc69abc76b9158",
+    "mtime": 1784185740.375792,
+    "ast_hash": "431a8a1cc579146e4db681d7a8a140bd",
     "semantic_hash": ""
   },
   "src/app/shared/components/feedback-modal/feedback-modal.component.ts": {
@@ -285,8 +285,8 @@
     "semantic_hash": "42f840ebf0df62e18eef81c2ca2f5eb6"
   },
   "src/app/shared/components/profile-avatar/profile-avatar.component.ts": {
-    "mtime": 1784182633.9657102,
-    "ast_hash": "e6c93892096d95d29eef03334549093a",
+    "mtime": 1784184188.7566943,
+    "ast_hash": "13e83957942d191f8ffe8d81d8b607a8",
     "semantic_hash": ""
   },
   "src/environments/environment.development.ts": {
@@ -465,13 +465,13 @@
     "semantic_hash": ""
   },
   "src/app/features/student/settings/student-settings.component.html": {
-    "mtime": 1784183767.0523877,
-    "ast_hash": "c2d580fa3ecd46569350ac865d7e9c43",
+    "mtime": 1784185136.0260515,
+    "ast_hash": "bbcbf0792dacebd7c502b2aff6a1db84",
     "semantic_hash": ""
   },
   "src/app/shared/components/profile-avatar/profile-avatar.component.html": {
-    "mtime": 1784076746.5426931,
-    "ast_hash": "e14d0a248aed1800e5bbac4d44520584",
+    "mtime": 1784184739.728221,
+    "ast_hash": "20ad795d52d520d73806eea7fe897652",
     "semantic_hash": ""
   },
   "src/index.html": {

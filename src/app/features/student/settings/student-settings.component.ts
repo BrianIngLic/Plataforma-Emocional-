@@ -179,17 +179,17 @@ export class StudentSettingsComponent implements OnInit {
       // ponytail: Cargar el expediente completo de la tabla profiles
       const { data: prof, error: profErr } = await this.supabaseService.supabase
         .from('profiles')
-        .select('first_name, last_name, celular, fecha_nacimiento, sexo, faculty, programa_educativo, expediente_completo')
+        .select('first_name, last_name, fecha_nacimiento, sexo, faculty, programa_educativo, expediente_completo')
         .eq('user_id', user.id)
         .maybeSingle();
 
       if (prof) {
         this.firstName = prof.first_name || '';
         this.lastName = prof.last_name || '';
-        this.userCelular = prof.celular || '';
+        this.userCelular = user.mobile_phone || '';
         this.fechaNacimiento = prof.fecha_nacimiento || '';
         this.userSexo = prof.sexo || '';
-        this.userFaculty = prof.faculty || '';
+        this.userFaculty = prof.faculty || user.faculty || '';
         this.userProgramaEducativo = prof.programa_educativo || '';
 
         if (prof.expediente_completo && Object.keys(prof.expediente_completo).length > 0) {
@@ -213,10 +213,10 @@ export class StudentSettingsComponent implements OnInit {
           }
 
           // Forzar sincronización de campos clave por si cambiaron de forma externa
-          this.userCelular = prof.celular || this.userCelular;
+          this.userCelular = user.mobile_phone || this.userCelular;
           this.fechaNacimiento = prof.fecha_nacimiento || this.fechaNacimiento;
           this.userSexo = prof.sexo || this.userSexo;
-          this.userFaculty = prof.faculty || this.userFaculty;
+          this.userFaculty = prof.faculty || user.faculty || this.userFaculty;
           this.userProgramaEducativo = prof.programa_educativo || this.userProgramaEducativo;
 
           // Asegurar mínimo de 2 contactos de emergencia
@@ -643,6 +643,13 @@ export class StudentSettingsComponent implements OnInit {
           .from('profiles')
           .update(updatePayload)
           .eq('user_id', user.id);
+
+      if (!error) {
+        await this.supabaseService.supabase
+            .from('users')
+            .update({ mobile_phone: this.userCelular })
+            .eq('id', user.id);
+      }
 
       this.isSaving = false;
 

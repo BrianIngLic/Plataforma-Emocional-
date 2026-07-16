@@ -275,8 +275,8 @@
     "semantic_hash": ""
   },
   "src/app/features/student/settings/student-settings.component.ts": {
-    "mtime": 1784184859.9602318,
-    "ast_hash": "96d94476030fd5cb8cfee67ed769bba3",
+    "mtime": 1784186094.139825,
+    "ast_hash": "ff161e0837fa25de4533c50944aadae3",
     "semantic_hash": ""
   },
   "src/app/shared/components/feedback-modal/feedback-modal.component.ts": {
@@ -465,8 +465,8 @@
     "semantic_hash": ""
   },
   "src/app/features/student/settings/student-settings.component.html": {
-    "mtime": 1784184990.1204386,
-    "ast_hash": "4c6318faa3bbea339a597102e09925e2",
+    "mtime": 1784185136.0260515,
+    "ast_hash": "bbcbf0792dacebd7c502b2aff6a1db84",
     "semantic_hash": ""
   },
   "src/app/shared/components/profile-avatar/profile-avatar.component.html": {
@@ -1347,6 +1347,11 @@
   "src/app/shared/components/privacy-modal/privacy-modal.component.ts": {
     "mtime": 1784062076.7769163,
     "ast_hash": "bd2bedeb98f0786117a65c0e43a5da1c",
+    "semantic_hash": ""
+  },
+  "scratch/check_db.js": {
+    "mtime": 1784185998.5333242,
+    "ast_hash": "3de170c2e90af43a27e23a5d316a1cde",
     "semantic_hash": ""
   }
 }

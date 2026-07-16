@@ -134,7 +134,7 @@
       "source_location": "",
       "_origin": "ast",
       "id": "path",
-      "community": 147,
+      "community": 149,
       "norm_label": "path"
     },
     {
@@ -2348,6 +2348,46 @@
       "norm_label": "checkuaconstraint()"
     },
     {
+      "label": "check_db.js",
+      "file_type": "code",
+      "source_file": "scratch/check_db.js",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "scratch_check_db",
+      "community": 85,
+      "norm_label": "check_db.js"
+    },
+    {
+      "label": "{ createClient }",
+      "file_type": "code",
+      "source_file": "scratch/check_db.js",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "scratch_check_db_createclient",
+      "community": 85,
+      "norm_label": "{ createclient }"
+    },
+    {
+      "label": "supabase",
+      "file_type": "code",
+      "source_file": "scratch/check_db.js",
+      "source_location": "L6",
+      "_origin": "ast",
+      "id": "scratch_check_db_supabase",
+      "community": 85,
+      "norm_label": "supabase"
+    },
+    {
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "scratch/check_db.js",
+      "source_location": "L8",
+      "_origin": "ast",
+      "id": "scratch_check_db_main",
+      "community": 85,
+      "norm_label": "main()"
+    },
+    {
       "label": "check_faculties.js",
       "file_type": "code",
       "source_file": "scratch/check_faculties.js",
@@ -2634,7 +2674,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "scratch_find_achievements_files",
-      "community": 171,
+      "community": 170,
       "norm_label": "find_achievements_files.js"
     },
     {
@@ -2644,7 +2684,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "scratch_find_achievements_files_fs",
-      "community": 171,
+      "community": 170,
       "norm_label": "fs"
     },
     {
@@ -2654,7 +2694,7 @@
       "source_location": "L2",
       "_origin": "ast",
       "id": "scratch_find_achievements_files_path",
-      "community": 171,
+      "community": 170,
       "norm_label": "path"
     },
     {
@@ -2664,7 +2704,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "scratch_find_achievements_files_searchdir",
-      "community": 171,
+      "community": 170,
       "norm_label": "searchdir()"
     },
     {
@@ -2674,7 +2714,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "scratch_find_achievements_routes",
-      "community": 147,
+      "community": 171,
       "norm_label": "find_achievements_routes.js"
     },
     {
@@ -2684,7 +2724,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "scratch_find_achievements_routes_fs",
-      "community": 147,
+      "community": 171,
       "norm_label": "fs"
     },
     {
@@ -2694,7 +2734,7 @@
       "source_location": "L2",
       "_origin": "ast",
       "id": "scratch_find_achievements_routes_path",
-      "community": 147,
+      "community": 171,
       "norm_label": "path"
     },
     {
@@ -2704,7 +2744,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "scratch_find_achievements_routes_searchdir",
-      "community": 147,
+      "community": 171,
       "norm_label": "searchdir()"
     },
     {
@@ -2754,7 +2794,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "scratch_find_activity_registration",
-      "community": 147,
+      "community": 180,
       "norm_label": "find_activity_registration.js"
     },
     {
@@ -2764,7 +2804,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "scratch_find_activity_registration_fs",
-      "community": 147,
+      "community": 180,
       "norm_label": "fs"
     },
     {
@@ -2774,7 +2814,7 @@
       "source_location": "L2",
       "_origin": "ast",
       "id": "scratch_find_activity_registration_path",
-      "community": 147,
+      "community": 180,
       "norm_label": "path"
     },
     {
@@ -2784,7 +2824,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "scratch_find_activity_registration_searchdir",
-      "community": 147,
+      "community": 180,
       "norm_label": "searchdir()"
     },
     {
@@ -3784,7 +3824,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "scratch_search_user_achievements_migration",
-      "community": 85,
+      "community": 149,
       "norm_label": "search_user_achievements_migration.js"
     },
     {
@@ -3794,7 +3834,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "scratch_search_user_achievements_migration_fs",
-      "community": 85,
+      "community": 149,
       "norm_label": "fs"
     },
     {
@@ -3804,7 +3844,7 @@
       "source_location": "L2",
       "_origin": "ast",
       "id": "scratch_search_user_achievements_migration_path",
-      "community": 85,
+      "community": 149,
       "norm_label": "path"
     },
     {
@@ -3814,7 +3854,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "scratch_search_user_achievements_migration_migrationpath",
-      "community": 85,
+      "community": 149,
       "norm_label": "migrationpath"
     },
     {
@@ -4284,7 +4324,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "base_health_professional_base",
-      "community": 75,
+      "community": 148,
       "norm_label": "health-professional.base.ts"
     },
     {
@@ -4534,7 +4574,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_agenda_service",
-      "community": 75,
+      "community": 59,
       "norm_label": "agenda.service.ts"
     },
     {
@@ -4544,7 +4584,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "services_agenda_service_timeblock",
-      "community": 75,
+      "community": 59,
       "norm_label": "timeblock"
     },
     {
@@ -4554,7 +4594,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "services_agenda_service_workingday",
-      "community": 75,
+      "community": 59,
       "norm_label": "workingday"
     },
     {
@@ -4574,7 +4614,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "services_agenda_service_agendaservice",
-      "community": 170,
+      "community": 59,
       "norm_label": "agendaservice"
     },
     {
@@ -4584,7 +4624,7 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "services_agenda_service_agendaservice_getsettings",
-      "community": 170,
+      "community": 59,
       "norm_label": ".getsettings()"
     },
     {
@@ -4594,7 +4634,7 @@
       "source_location": "L39",
       "_origin": "ast",
       "id": "services_agenda_service_agendaservice_savesettings",
-      "community": 170,
+      "community": 59,
       "norm_label": ".savesettings()"
     },
     {
@@ -4604,7 +4644,7 @@
       "source_location": "L57",
       "_origin": "ast",
       "id": "services_agenda_service_agendaservice_getexceptions",
-      "community": 170,
+      "community": 59,
       "norm_label": ".getexceptions()"
     },
     {
@@ -4614,7 +4654,7 @@
       "source_location": "L68",
       "_origin": "ast",
       "id": "services_agenda_service_agendaservice_addexception",
-      "community": 170,
+      "community": 59,
       "norm_label": ".addexception()"
     },
     {
@@ -4624,7 +4664,7 @@
       "source_location": "L90",
       "_origin": "ast",
       "id": "services_agenda_service_agendaservice_deleteexception",
-      "community": 170,
+      "community": 59,
       "norm_label": ".deleteexception()"
     },
     {
@@ -4634,7 +4674,7 @@
       "source_location": "L101",
       "_origin": "ast",
       "id": "services_agenda_service_agendaservice_getstudentavailableslots",
-      "community": 170,
+      "community": 59,
       "norm_label": ".getstudentavailableslots()"
     },
     {
@@ -4694,7 +4734,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_arco_service",
-      "community": 59,
+      "community": 139,
       "norm_label": "arco.service.ts"
     },
     {
@@ -4704,7 +4744,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "services_arco_service_privacysettings",
-      "community": 59,
+      "community": 139,
       "norm_label": "privacysettings"
     },
     {
@@ -4714,7 +4754,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "services_arco_service_arcorequest",
-      "community": 59,
+      "community": 139,
       "norm_label": "arcorequest"
     },
     {
@@ -4854,7 +4894,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_auth_service",
-      "community": 75,
+      "community": 148,
       "norm_label": "auth.service.ts"
     },
     {
@@ -5034,7 +5074,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_chat_service",
-      "community": 136,
+      "community": 148,
       "norm_label": "chat.service.ts"
     },
     {
@@ -5044,7 +5084,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "services_chat_service_chatmessage",
-      "community": 136,
+      "community": 148,
       "norm_label": "chatmessage"
     },
     {
@@ -5434,7 +5474,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "services_dossier_export_service_dossierexportservice",
-      "community": 148,
+      "community": 81,
       "norm_label": "dossierexportservice"
     },
     {
@@ -5444,7 +5484,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "services_dossier_export_service_dossierexportservice_getbase64imagefromurl",
-      "community": 148,
+      "community": 81,
       "norm_label": ".getbase64imagefromurl()"
     },
     {
@@ -5454,7 +5494,7 @@
       "source_location": "L39",
       "_origin": "ast",
       "id": "services_dossier_export_service_dossierexportservice_convertimagetowhite",
-      "community": 148,
+      "community": 81,
       "norm_label": ".convertimagetowhite()"
     },
     {
@@ -5464,7 +5504,7 @@
       "source_location": "L80",
       "_origin": "ast",
       "id": "services_dossier_export_service_dossierexportservice_convertimagetowatermark",
-      "community": 148,
+      "community": 81,
       "norm_label": ".convertimagetowatermark()"
     },
     {
@@ -5474,7 +5514,7 @@
       "source_location": "L118",
       "_origin": "ast",
       "id": "services_dossier_export_service_dossierexportservice_generatehmac",
-      "community": 148,
+      "community": 81,
       "norm_label": ".generatehmac()"
     },
     {
@@ -5484,7 +5524,7 @@
       "source_location": "L138",
       "_origin": "ast",
       "id": "services_dossier_export_service_dossierexportservice_getdossierdata",
-      "community": 148,
+      "community": 81,
       "norm_label": ".getdossierdata()"
     },
     {
@@ -5494,7 +5534,7 @@
       "source_location": "L388",
       "_origin": "ast",
       "id": "services_dossier_export_service_dossierexportservice_exportdossier",
-      "community": 148,
+      "community": 81,
       "norm_label": ".exportdossier()"
     },
     {
@@ -5504,7 +5544,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_emergency_notification_service",
-      "community": 75,
+      "community": 181,
       "norm_label": "emergency-notification.service.ts"
     },
     {
@@ -5514,7 +5554,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "services_emergency_notification_service_emergencychangerequest",
-      "community": 75,
+      "community": 181,
       "norm_label": "emergencychangerequest"
     },
     {
@@ -5524,7 +5564,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "services_emergency_notification_service_webpushsubscriptionpayload",
-      "community": 75,
+      "community": 181,
       "norm_label": "webpushsubscriptionpayload"
     },
     {
@@ -5534,7 +5574,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "services_emergency_notification_service_whatsapproutingsession",
-      "community": 75,
+      "community": 181,
       "norm_label": "whatsapproutingsession"
     },
     {
@@ -6114,7 +6154,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_profile_service",
-      "community": 75,
+      "community": 139,
       "norm_label": "profile.service.ts"
     },
     {
@@ -6304,7 +6344,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_supabase_service",
-      "community": 75,
+      "community": 148,
       "norm_label": "supabase.service.ts"
     },
     {
@@ -6314,7 +6354,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "services_supabase_service_supabaseservice",
-      "community": 75,
+      "community": 148,
       "norm_label": "supabaseservice"
     },
     {
@@ -6324,7 +6364,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "services_supabase_service_supabaseservice_constructor",
-      "community": 75,
+      "community": 148,
       "norm_label": ".constructor()"
     },
     {
@@ -6334,7 +6374,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "admin_layout_admin_layout_component",
-      "community": 18,
+      "community": 148,
       "norm_label": "admin-layout.component.ts"
     },
     {
@@ -6434,7 +6474,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "admin_settings_admin_settings_component",
-      "community": 59,
+      "community": 139,
       "norm_label": "admin-settings.component.ts"
     },
     {
@@ -6444,7 +6484,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "admin_settings_admin_settings_component_adminsettingscomponent",
-      "community": 59,
+      "community": 139,
       "norm_label": "adminsettingscomponent"
     },
     {
@@ -6474,7 +6514,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_features_admin_agenda_agenda_component_ts_agenda_agenda_component",
-      "community": 75,
+      "community": 130,
       "norm_label": "agenda.component.ts"
     },
     {
@@ -6484,7 +6524,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "agenda_agenda_component_appointment",
-      "community": 75,
+      "community": 130,
       "norm_label": "appointment"
     },
     {
@@ -6834,7 +6874,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "arco_requests_arco_requests_component",
-      "community": 59,
+      "community": 139,
       "norm_label": "arco-requests.component.ts"
     },
     {
@@ -8054,7 +8094,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "institutional_settings_institutional_settings_component",
-      "community": 75,
+      "community": 148,
       "norm_label": "institutional-settings.component.ts"
     },
     {
@@ -8174,7 +8214,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "nutritionist_fields_nutritionist_fields_component",
-      "community": 75,
+      "community": 148,
       "norm_label": "nutritionist-fields.component.ts"
     },
     {
@@ -8184,7 +8224,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "nutritionist_fields_nutritionist_fields_component_campoformulario",
-      "community": 75,
+      "community": 148,
       "norm_label": "campoformulario"
     },
     {
@@ -8994,7 +9034,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_admin_exceptions_service",
-      "community": 75,
+      "community": 130,
       "norm_label": "admin-exceptions.service.ts"
     },
     {
@@ -9004,7 +9044,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "services_admin_exceptions_service_holiday",
-      "community": 75,
+      "community": 130,
       "norm_label": "holiday"
     },
     {
@@ -10284,7 +10324,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "student_agenda_student_agenda_component",
-      "community": 75,
+      "community": 59,
       "norm_label": "student-agenda.component.ts"
     },
     {
@@ -10914,7 +10954,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_features_health_professional_agenda_agenda_component_ts_agenda_agenda_component",
-      "community": 75,
+      "community": 59,
       "norm_label": "agenda.component.ts"
     },
     {
@@ -10924,7 +10964,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "src_app_features_health_professional_agenda_agenda_component_ts_agenda_agenda_component_calendarday",
-      "community": 75,
+      "community": 59,
       "norm_label": "calendarday"
     },
     {
@@ -11134,7 +11174,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "emergency_change_modal_emergency_change_modal_component",
-      "community": 75,
+      "community": 59,
       "norm_label": "emergency-change-modal.component.ts"
     },
     {
@@ -11144,7 +11184,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "emergency_change_modal_emergency_change_modal_component_emergencymodaldata",
-      "community": 75,
+      "community": 59,
       "norm_label": "emergencymodaldata"
     },
     {
@@ -11344,7 +11384,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_features_health_professional_dashboard_dashboard_component_ts_dashboard_dashboard_component",
-      "community": 75,
+      "community": 148,
       "norm_label": "dashboard.component.ts"
     },
     {
@@ -11674,7 +11714,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_features_nutritionist_agenda_agenda_component_ts_agenda_agenda_component",
-      "community": 75,
+      "community": 59,
       "norm_label": "agenda.component.ts"
     },
     {
@@ -11684,7 +11724,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "src_app_features_nutritionist_agenda_agenda_component_ts_agenda_agenda_component_calendarday",
-      "community": 75,
+      "community": 59,
       "norm_label": "calendarday"
     },
     {
@@ -12244,7 +12284,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_features_nutritionist_dashboard_dashboard_component_ts_dashboard_dashboard_component",
-      "community": 75,
+      "community": 148,
       "norm_label": "dashboard.component.ts"
     },
     {
@@ -12304,7 +12344,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "nutritionist_layout_nutritionist_layout_component",
-      "community": 18,
+      "community": 58,
       "norm_label": "nutritionist-layout.component.ts"
     },
     {
@@ -12424,7 +12464,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "pacientes_pacientes_component",
-      "community": 75,
+      "community": 148,
       "norm_label": "pacientes.component.ts"
     },
     {
@@ -12984,7 +13024,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_features_psychologist_agenda_agenda_component_ts_agenda_agenda_component",
-      "community": 75,
+      "community": 59,
       "norm_label": "agenda.component.ts"
     },
     {
@@ -12994,7 +13034,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "src_app_features_psychologist_agenda_agenda_component_ts_agenda_agenda_component_calendarday",
-      "community": 75,
+      "community": 59,
       "norm_label": "calendarday"
     },
     {
@@ -13584,7 +13624,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_features_psychologist_patients_patients_component_ts_patients_patients_component",
-      "community": 75,
+      "community": 148,
       "norm_label": "patients.component.ts"
     },
     {
@@ -13704,7 +13744,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "psychologist_layout_psychologist_layout_component",
-      "community": 18,
+      "community": 148,
       "norm_label": "psychologist-layout.component.ts"
     },
     {
@@ -13954,7 +13994,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "emoji_scale_emoji_scale_component",
-      "community": 180,
+      "community": 136,
       "norm_label": "emoji-scale.component.ts"
     },
     {
@@ -13964,7 +14004,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "emoji_scale_emoji_scale_component_emojiscalecomponent",
-      "community": 180,
+      "community": 136,
       "norm_label": "emojiscalecomponent"
     },
     {
@@ -13974,7 +14014,7 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "emoji_scale_emoji_scale_component_emojiscalecomponent_selectemoji",
-      "community": 180,
+      "community": 136,
       "norm_label": ".selectemoji()"
     },
     {
@@ -13984,7 +14024,7 @@
       "source_location": "L36",
       "_origin": "ast",
       "id": "emoji_scale_emoji_scale_component_emojiscalecomponent_getprogresswidth",
-      "community": 180,
+      "community": 136,
       "norm_label": ".getprogresswidth()"
     },
     {
@@ -13994,7 +14034,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "session_feedback_session_feedback_component",
-      "community": 180,
+      "community": 136,
       "norm_label": "session-feedback.component.ts"
     },
     {
@@ -14064,7 +14104,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "settings_student_settings_component",
-      "community": 59,
+      "community": 148,
       "norm_label": "student-settings.component.ts"
     },
     {
@@ -14191,7 +14231,7 @@
       "label": ".addEmergencyContact()",
       "file_type": "code",
       "source_file": "src/app/features/student/settings/student-settings.component.ts",
-      "source_location": "L368",
+      "source_location": "L372",
       "_origin": "ast",
       "id": "settings_student_settings_component_studentsettingscomponent_addemergencycontact",
       "community": 156,
@@ -14201,7 +14241,7 @@
       "label": ".removeEmergencyContact()",
       "file_type": "code",
       "source_file": "src/app/features/student/settings/student-settings.component.ts",
-      "source_location": "L376",
+      "source_location": "L380",
       "_origin": "ast",
       "id": "settings_student_settings_component_studentsettingscomponent_removeemergencycontact",
       "community": 156,
@@ -14211,7 +14251,7 @@
       "label": ".solicitarEspecialista()",
       "file_type": "code",
       "source_file": "src/app/features/student/settings/student-settings.component.ts",
-      "source_location": "L391",
+      "source_location": "L395",
       "_origin": "ast",
       "id": "settings_student_settings_component_studentsettingscomponent_solicitarespecialista",
       "community": 156,
@@ -14221,7 +14261,7 @@
       "label": ".confirmSave()",
       "file_type": "code",
       "source_file": "src/app/features/student/settings/student-settings.component.ts",
-      "source_location": "L479",
+      "source_location": "L483",
       "_origin": "ast",
       "id": "settings_student_settings_component_studentsettingscomponent_confirmsave",
       "community": 156,
@@ -14231,7 +14271,7 @@
       "label": ".checkAndAwardXp()",
       "file_type": "code",
       "source_file": "src/app/features/student/settings/student-settings.component.ts",
-      "source_location": "L499",
+      "source_location": "L503",
       "_origin": "ast",
       "id": "settings_student_settings_component_studentsettingscomponent_checkandawardxp",
       "community": 156,
@@ -14241,7 +14281,7 @@
       "label": ".showLocalAchievementToast()",
       "file_type": "code",
       "source_file": "src/app/features/student/settings/student-settings.component.ts",
-      "source_location": "L538",
+      "source_location": "L542",
       "_origin": "ast",
       "id": "settings_student_settings_component_studentsettingscomponent_showlocalachievementtoast",
       "community": 156,
@@ -14251,7 +14291,7 @@
       "label": ".performSave()",
       "file_type": "code",
       "source_file": "src/app/features/student/settings/student-settings.component.ts",
-      "source_location": "L575",
+      "source_location": "L579",
       "_origin": "ast",
       "id": "settings_student_settings_component_studentsettingscomponent_performsave",
       "community": 156,
@@ -14261,7 +14301,7 @@
       "label": ".scrollToSection()",
       "file_type": "code",
       "source_file": "src/app/features/student/settings/student-settings.component.ts",
-      "source_location": "L673",
+      "source_location": "L684",
       "_origin": "ast",
       "id": "settings_student_settings_component_studentsettingscomponent_scrolltosection",
       "community": 156,
@@ -14271,7 +14311,7 @@
       "label": ".confirmUpdatePassword()",
       "file_type": "code",
       "source_file": "src/app/features/student/settings/student-settings.component.ts",
-      "source_location": "L680",
+      "source_location": "L691",
       "_origin": "ast",
       "id": "settings_student_settings_component_studentsettingscomponent_confirmupdatepassword",
       "community": 156,
@@ -14281,7 +14321,7 @@
       "label": ".performUpdatePassword()",
       "file_type": "code",
       "source_file": "src/app/features/student/settings/student-settings.component.ts",
-      "source_location": "L708",
+      "source_location": "L719",
       "_origin": "ast",
       "id": "settings_student_settings_component_studentsettingscomponent_performupdatepassword",
       "community": 156,
@@ -14291,7 +14331,7 @@
       "label": ".changePassword()",
       "file_type": "code",
       "source_file": "src/app/features/student/settings/student-settings.component.ts",
-      "source_location": "L735",
+      "source_location": "L746",
       "_origin": "ast",
       "id": "settings_student_settings_component_studentsettingscomponent_changepassword",
       "community": 156,
@@ -14304,7 +14344,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "arco_settings_arco_settings_component",
-      "community": 59,
+      "community": 139,
       "norm_label": "arco-settings.component.ts"
     },
     {
@@ -14494,7 +14534,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "profile_avatar_profile_avatar_component",
-      "community": 59,
+      "community": 139,
       "norm_label": "profile-avatar.component.ts"
     },
     {
@@ -21984,6 +22024,36 @@
       "confidence_score": 1.0,
       "source": "scratch_check_constraints",
       "target": "scratch_check_constraints_supabase"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scratch/check_db.js",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "scratch_check_db",
+      "target": "scratch_check_db_createclient",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scratch/check_db.js",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "scratch_check_db",
+      "target": "scratch_check_db_main",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scratch/check_db.js",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "scratch_check_db",
+      "target": "scratch_check_db_supabase",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -40991,9 +41061,9 @@
       "source_file": "src/app/features/student/settings/student-settings.component.ts",
       "source_location": "L680",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "settings_student_settings_component_studentsettingscomponent",
-      "target": "settings_student_settings_component_studentsettingscomponent_confirmupdatepassword",
-      "confidence_score": 1.0
+      "target": "settings_student_settings_component_studentsettingscomponent_confirmupdatepassword"
     },
     {
       "relation": "method",
@@ -41081,9 +41151,9 @@
       "source_file": "src/app/features/student/settings/student-settings.component.ts",
       "source_location": "L66",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "settings_student_settings_component_studentsettingscomponent",
-      "target": "settings_student_settings_component_studentsettingscomponent_isupdatingpassword",
-      "confidence_score": 1.0
+      "target": "settings_student_settings_component_studentsettingscomponent_isupdatingpassword"
     },
     {
       "relation": "method",
@@ -41111,9 +41181,9 @@
       "source_file": "src/app/features/student/settings/student-settings.component.ts",
       "source_location": "L708",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "settings_student_settings_component_studentsettingscomponent",
-      "target": "settings_student_settings_component_studentsettingscomponent_performupdatepassword",
-      "confidence_score": 1.0
+      "target": "settings_student_settings_component_studentsettingscomponent_performupdatepassword"
     },
     {
       "relation": "method",
@@ -41216,9 +41286,9 @@
       "source_file": "src/app/features/student/settings/student-settings.component.ts",
       "source_location": "L736",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "settings_student_settings_component_studentsettingscomponent_changepassword",
-      "target": "settings_student_settings_component_studentsettingscomponent_confirmupdatepassword",
-      "confidence_score": 1.0
+      "target": "settings_student_settings_component_studentsettingscomponent_confirmupdatepassword"
     },
     {
       "relation": "contains",
@@ -45002,5 +45072,5 @@
       "source_file": "src/app/features/psychologist/psychologist-layout/psychologist-layout.component.html"
     }
   ],
-  "built_at_commit": "7755a5e73a133898d033b70c96740c7cd92f6a32"
+  "built_at_commit": "3325752037884bc7210183aa27cb7ee01cef7873"
 }

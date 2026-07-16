@@ -206,12 +206,12 @@
               🎓 Datos del Alumno
             </h4>
             <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; font-size: 0.825rem;">
-              <div><strong style="color: var(--text-secondary);">Matrícula:</strong> {{ patient.expediente_completo.contacto?.matricula || 'Sin datos' }}</div>
+              <div><strong style="color: var(--text-secondary);">Matrícula:</strong> {{ patient.matricula || 'Sin datos' }}</div>
               <div><strong style="color: var(--text-secondary);">Semestre:</strong> {{ patient.expediente_completo.academico?.semestre || 'Sin datos' }}° Semestre</div>
               <div><strong style="color: var(--text-secondary);">Estado Civil:</strong> {{ patient.expediente_completo.personal?.estado_civil || 'Sin datos' }}</div>
-              <div><strong style="color: var(--text-secondary);">Sexo:</strong> {{ patient.expediente_completo.personal?.sexo || 'Sin datos' }}</div>
-              <div><strong style="color: var(--text-secondary);">Fecha de Nacimiento:</strong> {{ patient.expediente_completo.contacto?.fecha_nacimiento || 'Sin datos' }}</div>
-              <div><strong style="color: var(--text-secondary);">Teléfono:</strong> {{ patient.expediente_completo.contacto?.telefono || 'Sin datos' }}</div>
+              <div><strong style="color: var(--text-secondary);">Sexo:</strong> {{ patient.sexo || 'Sin datos' }}</div>
+              <div><strong style="color: var(--text-secondary);">Fecha de Nacimiento:</strong> {{ patient.fecha_nacimiento || 'Sin datos' }}</div>
+              <div><strong style="color: var(--text-secondary);">Teléfono:</strong> {{ patient.celular || 'Sin datos' }}</div>
             </div>
           </div>
         </div>

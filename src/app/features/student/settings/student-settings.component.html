@@ -37,101 +37,102 @@
     </div>
   </div>
 
-  <!-- PESTAÑAS DE NAVEGACIÓN (TABS) -->
-  <div class="tabs-nav">
-    <button class="tab-btn" [class.active]="activeTab === 'general'" (click)="activeTab = 'general'">
-      <mat-icon>person</mat-icon>
-      <span>Datos Personales</span>
-    </button>
-    <button class="tab-btn" [class.active]="activeTab === 'family_tree'" (click)="activeTab = 'family_tree'">
-      <mat-icon>account_tree</mat-icon>
-      <span>Árbol Genealógico</span>
-    </button>
-    <button class="tab-btn" [class.active]="activeTab === 'family_details'" (click)="activeTab = 'family_details'">
-      <mat-icon>people</mat-icon>
-      <span>Historial Familiar</span>
-    </button>
-    <button class="tab-btn" [class.active]="activeTab === 'emergency'" (click)="activeTab = 'emergency'">
-      <mat-icon>emergency</mat-icon>
-      <span>Contactos de Emergencia</span>
-    </button>
-    <button class="tab-btn" [class.active]="activeTab === 'security'" (click)="activeTab = 'security'">
-      <mat-icon>shield</mat-icon>
-      <span>Seguridad y Cuenta</span>
-    </button>
-  </div>
 
-  <!-- CONTENIDO DE LAS PESTAÑAS -->
-  <div class="tab-content">
+
+  <!-- CONTENIDO DE LAS PESTAÑAS (UNIFICADO EN UNA SOLA PÁGINA) -->
+  <div class="tab-content unified-settings-layout">
     
-    <!-- PESTAÑA 1: DATOS PERSONALES Y ACADÉMICOS -->
-    <div class="tab-pane" *ngIf="activeTab === 'general'">
+    <!-- SECCIÓN 1: DATOS PERSONALES -->
+    <div id="sec-personales" class="settings-section-block">
+      <!-- Tarjeta de Avatar -->
       <div class="avatar-section card settings-card" style="margin-bottom: 1.5rem;">
         <app-profile-avatar></app-profile-avatar>
       </div>
 
+      <!-- Tarjeta de Datos Personales -->
       <div class="card settings-card">
         <div class="card-header">
-          <h3><mat-icon>contact_phone</mat-icon> Información de Contacto</h3>
-          <p>Datos principales para comunicación directa.</p>
+          <h3><mat-icon style="color: var(--accent-purple);">person</mat-icon> Datos Personales</h3>
+          <p>Datos principales para comunicación directa y citas.</p>
         </div>
         <div class="card-body">
           <div class="form-row">
             <div class="form-group">
-              <label>Nombre Completo</label>
-              <input type="text" [(ngModel)]="expediente.contacto.nombre" class="styled-input" placeholder="Nombre completo">
+              <label>Nombre(s) *</label>
+              <input type="text" [(ngModel)]="firstName" class="styled-input" placeholder="Ej. María">
             </div>
+            <div class="form-group">
+              <label>Apellido(s) *</label>
+              <input type="text" [(ngModel)]="lastName" class="styled-input" placeholder="Ej. García López">
+            </div>
+          </div>
+          <div class="form-row">
             <div class="form-group">
               <label>Matrícula</label>
-              <input type="text" [(ngModel)]="expediente.contacto.matricula" class="styled-input" readonly style="opacity: 0.7;">
+              <input type="text" [value]="currentUser?.matricula" class="styled-input" readonly style="opacity: 0.7;">
             </div>
-          </div>
-          <div class="form-row">
             <div class="form-group">
               <label>Correo Electrónico</label>
-              <input type="email" [(ngModel)]="expediente.contacto.correo" class="styled-input" readonly style="opacity: 0.7;">
-            </div>
-            <div class="form-group">
-              <label>Número de Teléfono</label>
-              <input type="text" [(ngModel)]="expediente.contacto.telefono" class="styled-input" placeholder="Ej. 2221234567">
+              <input type="email" [value]="userEmail" class="styled-input" readonly style="opacity: 0.7;">
             </div>
           </div>
           <div class="form-row">
             <div class="form-group">
-              <label>Fecha de Nacimiento</label>
-              <input type="date" [(ngModel)]="expediente.contacto.fecha_nacimiento" class="styled-input">
+              <label>Número de Teléfono Celular *</label>
+              <input type="text" [(ngModel)]="userCelular" class="styled-input" placeholder="Ej. 2221234567">
             </div>
             <div class="form-group">
-              <label>Sexo</label>
-              <select [(ngModel)]="expediente.personal.sexo" class="styled-select">
+              <label>Fecha de Nacimiento *</label>
+              <input type="date" [(ngModel)]="fechaNacimiento" class="styled-input">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Sexo *</label>
+              <select [(ngModel)]="userSexo" class="styled-select">
                 <option value="">Selecciona una opción</option>
                 <option value="Femenino">Femenino</option>
                 <option value="Masculino">Masculino</option>
                 <option value="Otro">Otro</option>
               </select>
             </div>
+            <div class="form-group">
+              <label>Estado Civil *</label>
+              <select [(ngModel)]="expediente.personal.estado_civil" class="styled-select">
+                <option value="">Selecciona una opción</option>
+                <option value="Soltero/a">Soltero/a</option>
+                <option value="Casado/a">Casado/a</option>
+                <option value="Divorciado/a">Divorciado/a</option>
+                <option value="Viudo/a">Viudo/a</option>
+                <option value="Unión Libre">Unión Libre</option>
+              </select>
+            </div>
           </div>
         </div>
+        <div class="actions" style="margin-top: 1.5rem; padding: 0 1.5rem 1.5rem 1.5rem; display: flex; justify-content: flex-end;">
+          <button mat-flat-button color="primary" (click)="confirmSave()" [disabled]="isSaving" class="btn-primary" style="background: #8b5cf6; border-color: #8b5cf6;">
+            <mat-icon>save</mat-icon> Guardar Datos Personales
+          </button>
+        </div>
       </div>
+    </div>
 
-      <!-- DATOS ACADÉMICOS -->
-      <div class="card settings-card" style="margin-top: 1.5rem;">
+    <!-- SECCIÓN 2: INFORMACIÓN ACADÉMICA -->
+    <div id="sec-academica" class="settings-section-block" style="margin-top: 1.5rem;">
+      <div class="card settings-card">
         <div class="card-header">
-          <h3><mat-icon>school</mat-icon> Información Académica</h3>
+          <h3><mat-icon style="color: var(--accent-purple);">school</mat-icon> Información Académica</h3>
           <p>Tu unidad determina qué especialistas están disponibles para asignación.</p>
         </div>
         <div class="card-body">
           <div class="form-row">
             <div class="form-group">
               <label>Unidad Académica (Facultad)</label>
-              <select [(ngModel)]="expediente.academico.unidad_academica" class="styled-select">
-                <option value="">Selecciona una opción</option>
-                <option *ngFor="let f of faculties" [value]="f.name">{{ f.name }}</option>
-              </select>
+              <input type="text" [value]="userFaculty" class="styled-input" readonly style="opacity: 0.7;">
             </div>
             <div class="form-group">
               <label>Programa Educativo (Carrera)</label>
-              <input type="text" [(ngModel)]="expediente.academico.programa_educativo" class="styled-input" placeholder="Ej. Lic. en Psicología">
+              <input type="text" [(ngModel)]="userProgramaEducativo" class="styled-input" placeholder="Ej. Lic. en Psicología">
             </div>
           </div>
           <div class="form-row">
@@ -143,20 +144,27 @@
               </select>
             </div>
             <div class="form-group" style="justify-content: center; align-items: flex-start; padding-top: 1.5rem;">
-              <!-- ponytail: toggle de foráneo para mostrar domicilio dinámico -->
               <label class="toggle-container" style="display: flex; align-items: center; gap: 10px; cursor: pointer; user-select: none;">
-                <input type="checkbox" [(ngModel)]="isForaneo" style="width: 20px; height: 20px; accent-color: var(--accent-purple);">
+                <input type="checkbox" [(ngModel)]="isForaneo" style="width: 20px; height: 20px; accent-color: #8b5cf6;">
                 <span style="font-weight: 500;">¿Eres alumno foráneo?</span>
               </label>
             </div>
           </div>
         </div>
+        <div class="actions" style="margin-top: 1.5rem; padding: 0 1.5rem 1.5rem 1.5rem; display: flex; justify-content: flex-end;">
+          <button mat-flat-button color="primary" (click)="confirmSave()" [disabled]="isSaving" class="btn-primary" style="background: #8b5cf6; border-color: #8b5cf6;">
+            <mat-icon>save</mat-icon> Guardar Información Académica
+          </button>
+        </div>
       </div>
+    </div>
 
+    <!-- SECCIÓN 3: DOMICILIO RESIDENCIAL -->
+    <div id="sec-domicilio" class="settings-section-block" style="margin-top: 1.5rem;">
       <!-- DOMICILIO DINÁMICO (LOCAL Y ORIGEN SI ES FORÁNEO) -->
-      <div class="card settings-card" style="margin-top: 1.5rem;">
+      <div class="card settings-card">
         <div class="card-header">
-          <h3><mat-icon>home</mat-icon> Domicilio Actual (Local)</h3>
+          <h3><mat-icon style="color: var(--accent-purple);">home</mat-icon> Domicilio Actual (Local)</h3>
           <p>Tu dirección residencial actual durante el periodo escolar.</p>
         </div>
         <div class="card-body">
@@ -226,15 +234,15 @@
         </div>
       </div>
 
-      <div class="actions">
-        <button mat-flat-button color="primary" (click)="confirmSave()" [disabled]="isSaving" class="btn-primary">
-          <mat-icon>save</mat-icon> Guardar Perfil
+      <div class="actions" style="margin-top: 1.5rem; display: flex; justify-content: flex-end;">
+        <button mat-flat-button color="primary" (click)="confirmSave()" [disabled]="isSaving" class="btn-primary" style="background: #8b5cf6; border-color: #8b5cf6;">
+          <mat-icon>save</mat-icon> Guardar Domicilio
         </button>
       </div>
     </div>
 
-    <!-- PESTAÑA 2: ÁRBOL GENEALÓGICO INTERACTIVO -->
-    <div class="tab-pane" *ngIf="activeTab === 'family_tree'">
+    <!-- SECCIÓN 4: ÁRBOL GENEALÓGICO INTERACTIVO -->
+    <div id="sec-arbol" class="settings-section-block" style="margin-top: 1.5rem;">
       <div class="card settings-card">
         <div class="card-header">
           <h3><mat-icon>account_tree</mat-icon> Mi Árbol Genealógico</h3>
@@ -309,15 +317,14 @@
 
               <!-- Yo -->
               <div class="tree-node patient-node" 
-                   [class.selected]="selectedTreeNode === 'yo'" 
-                   [class.completed]="isNodeComplete('yo')" 
-                   (click)="selectTreeNode('yo')">
+                   [class.completed]="isNodeComplete('yo')"
+                   style="cursor: default;">
                 <div class="avatar-ring gold-ring">
                   <span class="node-emoji">🎓</span>
                   <div class="completion-dot" *ngIf="isNodeComplete('yo')">✓</div>
                 </div>
                 <span class="node-label">Yo (Paciente)</span>
-                <span class="node-sublabel">{{ expediente.contacto.nombre || 'Completar' }}</span>
+                <span class="node-sublabel">{{ firstName || currentUser?.name || 'Completar' }}</span>
               </div>
 
               <!-- Pareja -->
@@ -341,7 +348,7 @@
       </div>
 
       <!-- EDITOR EN CALIENTE DEL MIEMBRO SELECCIONADO EN EL ÁRBOL -->
-      <div class="card settings-card node-editor-box animate-scale-in" style="margin-top: 1.5rem;" *ngIf="selectedTreeNode">
+      <div class="card settings-card node-editor-box animate-scale-in" style="margin-top: 1.5rem;" *ngIf="selectedTreeNode && selectedTreeNode !== 'yo'">
         
         <!-- EDITOR DE PADRE -->
         <div *ngIf="selectedTreeNode === 'padre'">
@@ -500,34 +507,7 @@
           </div>
         </div>
 
-        <!-- EDITOR DE PACIENTE (YO) -->
-        <div *ngIf="selectedTreeNode === 'yo'">
-          <div class="editor-header">
-            <h4>🎓 Datos de Estado Civil (Paciente)</h4>
-            <span class="badge" [class.badge-success]="isNodeComplete('yo')">
-              {{ isNodeComplete('yo') ? '✓ Completo' : 'Incompleto' }}
-            </span>
-          </div>
-          <div class="editor-body">
-            <div class="form-row">
-              <div class="form-group">
-                <label>Estado Civil</label>
-                <select [(ngModel)]="expediente.personal.estado_civil" class="styled-select">
-                  <option value="">Selecciona una opción</option>
-                  <option value="Soltero/a">Soltero/a</option>
-                  <option value="Casado/a">Casado/a</option>
-                  <option value="Divorciado/a">Divorciado/a</option>
-                  <option value="Viudo/a">Viudo/a</option>
-                  <option value="Unión Libre">Unión Libre</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label>Unidad Académica Actual</label>
-                <input type="text" [(ngModel)]="expediente.academico.unidad_academica" class="styled-input" readonly style="opacity: 0.7;">
-              </div>
-            </div>
-          </div>
-        </div>
+
 
         <!-- EDITOR DE PAREJA -->
         <div *ngIf="selectedTreeNode === 'pareja'">
@@ -589,11 +569,11 @@
       </div>
     </div>
 
-    <!-- PESTAÑA 3: HISTORIAL FAMILIAR DETALLADO -->
-    <div class="tab-pane" *ngIf="activeTab === 'family_details'">
+    <!-- SECCIÓN 5: HISTORIAL FAMILIAR DETALLADO -->
+    <div id="sec-historial" class="settings-section-block" style="margin-top: 1.5rem;">
       <div class="card settings-card">
         <div class="card-header">
-          <h3><mat-icon>supervisor_account</mat-icon> Relación Conyugal de los Padres</h3>
+          <h3><mat-icon style="color: var(--accent-purple);">supervisor_account</mat-icon> Relación Conyugal de los Padres</h3>
           <p>Detalles generales sobre el entorno parental de origen.</p>
         </div>
         <div class="card-body">
@@ -710,12 +690,12 @@
       </div>
     </div>
 
-    <!-- PESTAÑA 4: CONTACTOS DE EMERGENCIA DINÁMICOS -->
-    <div class="tab-pane" *ngIf="activeTab === 'emergency'">
+    <!-- SECCIÓN 6: CONTACTOS DE EMERGENCIA -->
+    <div id="sec-emergencia" class="settings-section-block" style="margin-top: 1.5rem;">
       <div class="card settings-card">
         <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
           <div>
-            <h3><mat-icon>contact_phone</mat-icon> Directorio de Contactos de Emergencia</h3>
+            <h3><mat-icon style="color: var(--accent-purple);">contact_phone</mat-icon> Directorio de Contactos de Emergencia</h3>
             <p>Por seguridad, debes registrar al menos 2 contactos. Puedes agregar hasta 6 contactos dinámicos.</p>
           </div>
           <button mat-stroked-button color="accent" (click)="addEmergencyContact()" style="border-radius: 8px;">
@@ -773,20 +753,25 @@
       </div>
     </div>
 
-    <!-- PESTAÑA 5: SEGURIDAD Y CONFIGURACIÓN DE CUENTA (CONTRASENA & ARCO) -->
-    <div class="tab-pane" *ngIf="activeTab === 'security'">
+    <!-- SECCIÓN 7: SEGURIDAD Y CONFIGURACIÓN DE CUENTA -->
+    <div id="sec-seguridad" class="settings-section-block" style="margin-top: 1.5rem;">
       <!-- Cambiar Contraseña -->
       <div class="card settings-card">
         <div class="card-header">
-          <h3><mat-icon>lock</mat-icon> Cambiar Contraseña</h3>
+          <h3><mat-icon style="color: var(--accent-purple);">lock</mat-icon> Cambiar Contraseña</h3>
           <p>Actualiza la contraseña de tu cuenta para mantenerla segura.</p>
         </div>
         
         <div class="card-body">
           <form (ngSubmit)="changePassword()" autocomplete="off">
             <div class="form-group" style="margin-bottom: 1rem;">
-              <label>Nueva Contraseña</label>
-              <input type="password" [(ngModel)]="newPassword" name="newPassword" required class="styled-input" placeholder="••••••••">
+              <label>Contraseña Actual *</label>
+              <input type="password" [(ngModel)]="currentPassword" name="currentPassword" required class="styled-input" placeholder="••••••••" autocomplete="current-password">
+            </div>
+
+            <div class="form-group" style="margin-bottom: 1rem;">
+              <label>Nueva Contraseña *</label>
+              <input type="password" [(ngModel)]="newPassword" name="newPassword" required class="styled-input" placeholder="••••••••" autocomplete="new-password">
             </div>
 
             <div class="password-requirements" style="margin-bottom: 1.5rem; text-align: left; padding: 0.5rem 1rem; background: rgba(255, 255, 255, 0.02); border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.05);">
@@ -892,8 +877,11 @@
         </div>
       </div>
 
-      <!-- Derechos ARCO -->
-      <div class="arco-wrapper" style="margin-top: 1.5rem;">
+    </div>
+
+    <!-- SECCIÓN 8: DERECHOS ARCO -->
+    <div id="sec-arco" class="settings-section-block" style="margin-top: 1.5rem;">
+      <div class="arco-wrapper">
         <app-arco-settings></app-arco-settings>
       </div>
     </div>

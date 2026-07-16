@@ -42,46 +42,70 @@ export class StudentSettingsComponent implements OnInit {
   selectedFaculty: string = '';
   isSaving = false;
 
+  currentPassword = '';
+  newPassword = '';
+  confirmPassword = '';
+  isChangingPassword = false;
+
   hasPsychologist = false;
   hasNutritionist = false;
   inPsychologistQueue = false;
   inNutritionistQueue = false;
 
-  newPassword = '';
-  confirmPassword = '';
-  passwordErrorMessage = '';
-  passwordSuccessMessage = '';
-  isUpdatingPassword = false;
-
   // ponytail: control de pestañas y toggle de origen
   activeTab = 'general'; // general, family_tree, family_details, emergency, security
   isForaneo = false;
-  selectedTreeNode: string | null = 'yo'; // yo, padre, madre, hermanos, pareja
+  selectedTreeNode: string | null = null; // yo, padre, madre, hermanos, pareja
 
-  // ponytail: Modelo de datos del expediente estructurado en JSONB
+  firstName = '';
+  lastName = '';
+  userEmail = '';
+  passwordErrorMessage = '';
+  passwordSuccessMessage = '';
+
+  get isUpdatingPassword(): boolean {
+    return this.isChangingPassword;
+  }
+
+  get hasMinLength(): boolean {
+    return this.newPassword.length >= 6;
+  }
+  get hasUppercase(): boolean {
+    return /[A-Z]/.test(this.newPassword);
+  }
+  get hasLowercase(): boolean {
+    return /[a-z]/.test(this.newPassword);
+  }
+  get hasDigit(): boolean {
+    return /[0-9]/.test(this.newPassword);
+  }
+  get isPasswordValid(): boolean {
+    return this.hasMinLength && this.hasUppercase && this.hasLowercase && this.hasDigit;
+  }
+
+  // ponytail: Propiedades de solo lectura usadas para evaluar la completitud del expediente
+  userSexo = '';
+  fechaNacimiento = '';
+  userCelular = '';
+
+  // ponytail: Propiedades mapeadas directamente a la base de datos (evitan redundancia en JSONB)
+  userFaculty = '';
+  userProgramaEducativo = '';
+
+  // ponytail: Modelo de datos del expediente estructurado en JSONB (sin campos redundantes)
   expediente = {
-    contacto: {
-      nombre: '',
-      matricula: '',
-      correo: '',
-      telefono: '',
-      fecha_nacimiento: ''
-    },
     personal: {
-      estado_civil: 'Soltero/a',
-      sexo: ''
+      estado_civil: ''
     },
     academico: {
-      semestre: 1,
-      unidad_academica: '',
-      programa_educativo: '',
+      semestre: '' as any,
       domicilio_actual: {
         estado: 'Puebla',
         municipio: 'Puebla',
         colonia: '',
         calle: '',
         numero: '',
-        con_quien_vive: 'Solo'
+        con_quien_vive: ''
       },
       domicilio_origin: {
         estado: '',
@@ -92,42 +116,42 @@ export class StudentSettingsComponent implements OnInit {
       }
     },
     historia_familiar: {
-      padres_estado_civil: 'Casados',
-      padres_relacion: 'Buena',
+      padres_estado_civil: '',
+      padres_relacion: '',
       padre: {
-        estado: 'presente', // presente, ausente, finado
+        estado: '', // presente, ausente, finado
         edad: null as number | null,
         ocupacion: '',
-        antecedentes_psiquiatricos: 'no_se', // si, no, no_se
+        antecedentes_psiquiatricos: '', // si, no, no_se
         enfermedad_cronica: '',
-        tipo_relacion: 'Buena'
+        tipo_relacion: ''
       },
       madre: {
-        estado: 'presente', // presente, ausente, finado
+        estado: '', // presente, ausente, finado
         edad: null as number | null,
         ocupacion: '',
-        antecedentes_psiquiatricos: 'no_se', // si, no, no_se
+        antecedentes_psiquiatricos: '', // si, no, no_se
         enfermedad_cronica: '',
-        tipo_relacion: 'Buena'
+        tipo_relacion: ''
       },
       hermanos: {
-        tiene: false,
+        tiene: '' as any,
         cantidad: 0,
         numero_hijo: 1,
-        tipo_relacion: 'Buena'
+        tipo_relacion: ''
       },
       pareja: {
-        tiene: false,
+        tiene: '' as any,
         genero: '',
         edad: null as number | null,
         ocupacion: '',
         tiempo_relacion: '',
-        tipo_relacion: 'Buena'
+        tipo_relacion: ''
       }
     },
     contactos_emergencia: [
-      { nombre: '', parentesco: 'Madre/padre/tutor legal', telefono: '' },
-      { nombre: '', parentesco: 'Pareja/amistad/otros', telefono: '' }
+      { nombre: '', parentesco: '', telefono: '' },
+      { nombre: '', parentesco: '', telefono: '' }
     ] as any[]
   };
 
@@ -135,64 +159,7 @@ export class StudentSettingsComponent implements OnInit {
     return this.authService.currentUser();
   }
 
-  get passwordValue(): string {
-    return this.newPassword;
-  }
 
-  get hasMinLength(): boolean {
-    return this.newPassword.length >= 6;
-  }
-
-  get hasUppercase(): boolean {
-    return /[A-Z]/.test(this.newPassword);
-  }
-
-  get hasLowercase(): boolean {
-    return /[a-z]/.test(this.newPassword);
-  }
-
-  get hasDigit(): boolean {
-    return /\d/.test(this.newPassword);
-  }
-
-  get isPasswordValid(): boolean {
-    return this.hasMinLength && this.hasUppercase && this.hasLowercase && this.hasDigit;
-  }
-
-  async changePassword() {
-    if (!this.isPasswordValid || this.newPassword !== this.confirmPassword) {
-      return;
-    }
-
-    this.isUpdatingPassword = true;
-    this.passwordErrorMessage = '';
-    this.passwordSuccessMessage = '';
-
-    try {
-      const success = await this.authService.updatePassword(this.newPassword);
-      this.isUpdatingPassword = false;
-
-      if (success) {
-        this.passwordSuccessMessage = '¡Contraseña actualizada con éxito!';
-        this.newPassword = '';
-        this.confirmPassword = '';
-        
-        this.dialog.open(FeedbackModalComponent, {
-          width: '400px',
-          data: { type: 'success', title: 'Contraseña Actualizada', message: 'Tu contraseña ha sido cambiada correctamente.' }
-        });
-      } else {
-        this.passwordErrorMessage = 'No se pudo actualizar la contraseña. Inténtalo de nuevo.';
-      }
-    } catch (e: any) {
-      this.isUpdatingPassword = false;
-      if (e.message?.toLowerCase().includes('leaked') || e.message?.toLowerCase().includes('weak_password')) {
-        this.passwordErrorMessage = 'Esta contraseña ha sido expuesta en filtraciones de datos públicas. Por seguridad, por favor elige una contraseña diferente.';
-      } else {
-        this.passwordErrorMessage = e.message || 'Hubo un error al actualizar la contraseña.';
-      }
-    }
-  }
 
   async ngOnInit() {
     this.faculties = await this.facultyService.getFaculties();
@@ -204,24 +171,26 @@ export class StudentSettingsComponent implements OnInit {
       try {
         const { data: { user: authUser } } = await this.supabaseService.supabase.auth.getUser();
         if (authUser) {
-          this.expediente.contacto.correo = authUser.email || '';
+          this.userEmail = authUser.email || '';
         }
       } catch (err) {
-        console.warn('No se pudo cargar el correo de auth:', err);
+        console.warn('Error al cargar correo de auth:', err);
       }
-
       // ponytail: Cargar el expediente completo de la tabla profiles
       const { data: prof, error: profErr } = await this.supabaseService.supabase
         .from('profiles')
-        .select('first_name, last_name, celular, fecha_nacimiento, sexo, expediente_completo')
+        .select('first_name, last_name, celular, fecha_nacimiento, sexo, faculty, programa_educativo, expediente_completo')
         .eq('user_id', user.id)
         .maybeSingle();
 
       if (prof) {
-        this.expediente.contacto.nombre = `${prof.first_name || ''} ${prof.last_name || ''}`.trim() || user.name;
-        this.expediente.contacto.telefono = prof.celular || '';
-        this.expediente.contacto.fecha_nacimiento = prof.fecha_nacimiento || '';
-        this.expediente.personal.sexo = prof.sexo || '';
+        this.firstName = prof.first_name || '';
+        this.lastName = prof.last_name || '';
+        this.userCelular = prof.celular || '';
+        this.fechaNacimiento = prof.fecha_nacimiento || '';
+        this.userSexo = prof.sexo || '';
+        this.userFaculty = prof.faculty || '';
+        this.userProgramaEducativo = prof.programa_educativo || '';
 
         if (prof.expediente_completo && Object.keys(prof.expediente_completo).length > 0) {
           let decryptedData = null;
@@ -244,24 +213,22 @@ export class StudentSettingsComponent implements OnInit {
           }
 
           // Forzar sincronización de campos clave por si cambiaron de forma externa
-          this.expediente.contacto.nombre = `${prof.first_name || ''} ${prof.last_name || ''}`.trim() || this.expediente.contacto.nombre;
-          this.expediente.contacto.telefono = prof.celular || this.expediente.contacto.telefono;
-          this.expediente.contacto.fecha_nacimiento = prof.fecha_nacimiento || this.expediente.contacto.fecha_nacimiento;
-          this.expediente.personal.sexo = prof.sexo || this.expediente.personal.sexo;
+          this.userCelular = prof.celular || this.userCelular;
+          this.fechaNacimiento = prof.fecha_nacimiento || this.fechaNacimiento;
+          this.userSexo = prof.sexo || this.userSexo;
+          this.userFaculty = prof.faculty || this.userFaculty;
+          this.userProgramaEducativo = prof.programa_educativo || this.userProgramaEducativo;
 
           // Asegurar mínimo de 2 contactos de emergencia
           if (!this.expediente.contactos_emergencia || this.expediente.contactos_emergencia.length < 2) {
             this.expediente.contactos_emergencia = [
-              { nombre: '', parentesco: 'Madre/padre/tutor legal', telefono: '' },
-              { nombre: '', parentesco: 'Pareja/amistad/otros', telefono: '' }
+              { nombre: '', parentesco: '', telefono: '' },
+              { nombre: '', parentesco: '', telefono: '' }
             ];
           }
 
           // Cargar el switch de foráneo
           this.isForaneo = !!(this.expediente.academico.domicilio_origin && this.expediente.academico.domicilio_origin.estado);
-        } else {
-          this.expediente.contacto.matricula = user.matricula;
-          this.expediente.academico.unidad_academica = user.faculty || '';
         }
       }
 
@@ -298,16 +265,16 @@ export class StudentSettingsComponent implements OnInit {
 
     // Contacto y Personal (4 campos)
     totalPoints += 4;
-    if (this.expediente.contacto.telefono) earnedPoints++;
-    if (this.expediente.contacto.fecha_nacimiento) earnedPoints++;
+    if (this.userCelular) earnedPoints++;
+    if (this.fechaNacimiento) earnedPoints++;
     if (this.expediente.personal.estado_civil) earnedPoints++;
-    if (this.expediente.personal.sexo) earnedPoints++;
+    if (this.userSexo) earnedPoints++;
 
     // Académico (3 campos)
     totalPoints += 3;
     if (this.expediente.academico.semestre) earnedPoints++;
-    if (this.expediente.academico.unidad_academica) earnedPoints++;
-    if (this.expediente.academico.programa_educativo) earnedPoints++;
+    if (this.userFaculty) earnedPoints++;
+    if (this.userProgramaEducativo) earnedPoints++;
 
     // Domicilio actual (4 campos)
     totalPoints += 4;
@@ -372,7 +339,7 @@ export class StudentSettingsComponent implements OnInit {
   // ponytail: Verifica si un nodo del árbol familiar está completo en datos
   isNodeComplete(node: string): boolean {
     if (node === 'yo') {
-      return !!(this.expediente.contacto.telefono && this.expediente.contacto.fecha_nacimiento && this.expediente.personal.estado_civil && this.expediente.personal.sexo);
+      return !!(this.userCelular && this.fechaNacimiento && this.expediente.personal.estado_civil && this.userSexo);
     }
     if (node === 'padre') {
       const f = this.expediente.historia_familiar.padre;
@@ -394,6 +361,10 @@ export class StudentSettingsComponent implements OnInit {
   }
 
   selectTreeNode(node: string) {
+    if (node === 'yo') {
+      this.selectedTreeNode = null;
+      return;
+    }
     this.selectedTreeNode = node;
   }
 
@@ -611,8 +582,7 @@ export class StudentSettingsComponent implements OnInit {
 
     if (user && user.id) {
       // ponytail: Validar que no se guarde con la opción por defecto en combos obligatorios
-      if (!this.expediente.personal.sexo || 
-          !this.expediente.academico.unidad_academica || 
+      if (!this.userFaculty || 
           !this.expediente.academico.semestre || 
           !this.expediente.academico.domicilio_actual.con_quien_vive || 
           !this.expediente.personal.estado_civil) {
@@ -623,7 +593,7 @@ export class StudentSettingsComponent implements OnInit {
           data: { 
             type: 'error', 
             title: 'Selección Inválida', 
-            message: 'Por favor, selecciona una opción válida en todos los menús desplegables obligatorios (Sexo, Unidad Académica, Semestre, Con quién vives y Estado Civil).' 
+            message: 'Por favor, selecciona una opción válida en todos los menús desplegables obligatorios (Unidad Académica, Semestre, Con quién vives y Estado Civil).' 
           }
         });
         return;
@@ -644,12 +614,6 @@ export class StudentSettingsComponent implements OnInit {
         }
       }
 
-      // Separar nombre y apellido para no corromper campos antiguos
-      const nameVal = this.expediente.contacto.nombre || user.name;
-      const spaceIdx = nameVal.indexOf(' ');
-      const firstName = spaceIdx !== -1 ? nameVal.substring(0, spaceIdx) : nameVal;
-      const lastName = spaceIdx !== -1 ? nameVal.substring(spaceIdx + 1) : '';
-
       // Si no es foráneo, limpiar domicilio de origen en el payload
       if (!this.isForaneo) {
         this.expediente.academico.domicilio_origin = {
@@ -665,19 +629,20 @@ export class StudentSettingsComponent implements OnInit {
       const encryptedText = this.cryptoService.encrypt(plainTextJson);
 
       const updatePayload: any = {
-        first_name: firstName,
-        last_name: lastName,
-        faculty: this.expediente.academico.unidad_academica || this.selectedFaculty,
-        celular: this.expediente.contacto.telefono,
-        fecha_nacimiento: this.expediente.contacto.fecha_nacimiento || null,
-        sexo: this.expediente.personal.sexo,
+        first_name: this.firstName,
+        last_name: this.lastName,
+        faculty: this.userFaculty || this.selectedFaculty,
+        programa_educativo: this.userProgramaEducativo || null,
+        celular: this.userCelular,
+        fecha_nacimiento: this.fechaNacimiento || null,
+        sexo: this.userSexo,
         expediente_completo: { data: encryptedText }
       };
 
       const { error } = await this.supabaseService.supabase
-        .from('profiles')
-        .update(updatePayload)
-        .eq('user_id', user.id);
+          .from('profiles')
+          .update(updatePayload)
+          .eq('user_id', user.id);
 
       this.isSaving = false;
 
@@ -685,9 +650,9 @@ export class StudentSettingsComponent implements OnInit {
         // Actualizar datos del currentUser signal
         this.authService.currentUser.set({
           ...user,
-          name: nameVal,
-          faculty: this.expediente.academico.unidad_academica || user.faculty,
-          mobile_phone: this.expediente.contacto.telefono
+          name: `${this.firstName} ${this.lastName}`.trim() || user.name,
+          faculty: this.userFaculty || user.faculty,
+          mobile_phone: this.userCelular
         });
 
         // Intentar otorgar XP si cumple 100% de completado
@@ -706,5 +671,72 @@ export class StudentSettingsComponent implements OnInit {
     } else {
       this.isSaving = false;
     }
+  }
+
+  // ponytail: Desplazamiento suave para la guía Notion-style
+  scrollToSection(id: string) {
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+
+  confirmUpdatePassword() {
+    if (!this.newPassword || this.newPassword.length < 6) {
+      alert('La nueva contraseña debe tener al menos 6 caracteres.');
+      return;
+    }
+    if (this.newPassword !== this.confirmPassword) {
+      alert('Las contraseñas nuevas no coinciden.');
+      return;
+    }
+
+    const dialogRef = this.dialog.open(FeedbackModalComponent, {
+      width: '400px',
+      data: {
+        type: 'confirm',
+        title: 'Confirmar Cambio de Contraseña',
+        message: '¿Estás seguro que deseas actualizar tu contraseña?',
+        btnText: 'Actualizar',
+        cancelBtnText: 'Cancelar'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(async (result) => {
+      if (result) {
+        await this.performUpdatePassword();
+      }
+    });
+  }
+
+  async performUpdatePassword() {
+    this.isChangingPassword = true;
+    try {
+      const success = await this.authService.updatePasswordWithVerification(this.currentPassword, this.newPassword);
+      if (success) {
+        this.currentPassword = '';
+        this.newPassword = '';
+        this.confirmPassword = '';
+        this.dialog.open(FeedbackModalComponent, {
+          width: '400px',
+          data: {
+            type: 'success',
+            title: 'Contraseña Actualizada',
+            message: 'Tu contraseña ha sido actualizada exitosamente.'
+          }
+        });
+      } else {
+        alert('No se pudo actualizar la contraseña. Verifica tu contraseña actual.');
+      }
+    } catch (e: any) {
+      console.error(e);
+      alert(e.message || 'Error al cambiar la contraseña.');
+    } finally {
+      this.isChangingPassword = false;
+    }
+  }
+
+  changePassword() {
+    this.confirmUpdatePassword();
   }
 }

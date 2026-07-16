@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, computed } from '@angular/core';
+import { Component, inject, OnInit, computed, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
@@ -9,6 +9,7 @@ import { AuthService } from '../../../core/services/auth.service';
 import { SupabaseService } from '../../../core/services/supabase.service';
 import { FeedbackModalComponent } from '../../../shared/components/feedback-modal/feedback-modal.component';
 import { GamificationService } from '../../../core/services/gamification.service';
+import { CryptoService } from '../../../core/services/crypto.service';
 
 @Component({
   selector: 'app-profile-avatar',
@@ -24,10 +25,13 @@ import { GamificationService } from '../../../core/services/gamification.service
   styleUrls: ['./profile-avatar.component.scss']
 })
 export class ProfileAvatarComponent implements OnInit {
+  @Output() foraneoChange = new EventEmitter<boolean>();
+
   profileService = inject(ProfileService);
   authService = inject(AuthService);
   supabaseService = inject(SupabaseService);
   gamificationService = inject(GamificationService);
+  cryptoService = inject(CryptoService);
   dialog = inject(MatDialog);
 
   currentAvatarUrl: string = '';
@@ -38,9 +42,22 @@ export class ProfileAvatarComponent implements OnInit {
   lastName: string = '';
   celular: string = '';
   sexo: string = '';
+  matricula: string = '';
+  correo: string = '';
+  fechaNacimiento: string = '';
+  estadoCivil: string = '';
 
+  faculty: string = '';
+  programaEducativo: string = '';
+  semestre: string = '';
+  isForaneo = false;
+  expedienteCompletoObj: any = null;
+
+  currentPassword = '';
   newPassword = '';
   confirmPassword = '';
+  passwordErrorMessage = '';
+  passwordSuccessMessage = '';
 
   isSaving = false;
   isChangingPassword = false;
@@ -56,6 +73,7 @@ export class ProfileAvatarComponent implements OnInit {
     if (user) {
       this.userName = user.name || '';
       this.currentAvatarUrl = user.avatar_url || '';
+      this.matricula = user.matricula || '';
 
       // Cargar datos de gamificación si es Estudiante
       if (user.role === 'Estudiante') {
@@ -66,10 +84,20 @@ export class ProfileAvatarComponent implements OnInit {
         }
       }
 
+      // Cargar correo electrónico del auth
+      try {
+        const { data: { user: authUser } } = await this.supabaseService.supabase.auth.getUser();
+        if (authUser) {
+          this.correo = authUser.email || '';
+        }
+      } catch (err) {
+        console.warn('No se pudo cargar el correo de auth:', err);
+      }
+
       try {
         const { data: profile } = await this.supabaseService.supabase
           .from('profiles')
-          .select('first_name, last_name, sexo')
+          .select('first_name, last_name, sexo, fecha_nacimiento, faculty, programa_educativo, expediente_completo')
           .eq('user_id', user.id)
           .maybeSingle();
 
@@ -77,6 +105,31 @@ export class ProfileAvatarComponent implements OnInit {
           this.firstName = profile.first_name || '';
           this.lastName = profile.last_name || '';
           this.sexo = profile.sexo || '';
+          this.fechaNacimiento = profile.fecha_nacimiento || '';
+          this.faculty = profile.faculty || '';
+          this.programaEducativo = profile.programa_educativo || '';
+          this.expedienteCompletoObj = profile.expediente_completo || null;
+
+          if (profile.expediente_completo) {
+            let decryptedData = null;
+            if (profile.expediente_completo.data) {
+              try {
+                const decryptedText = this.cryptoService.decrypt(profile.expediente_completo.data);
+                decryptedData = JSON.parse(decryptedText);
+              } catch (err) {
+                console.error('Error descifrando expediente en componente avatar:', err);
+              }
+            } else {
+              decryptedData = profile.expediente_completo;
+            }
+
+            if (decryptedData) {
+              this.semestre = decryptedData.academico?.semestre || '';
+              this.isForaneo = !!(decryptedData.academico?.domicilio_origin && decryptedData.academico.domicilio_origin.estado);
+              this.estadoCivil = decryptedData.personal?.estado_civil || '';
+              this.foraneoChange.emit(this.isForaneo);
+            }
+          }
         }
 
         const { data: userData } = await this.supabaseService.supabase
@@ -204,14 +257,65 @@ export class ProfileAvatarComponent implements OnInit {
 
     this.isSaving = true;
     try {
+      let encryptedPayload: any = null;
+      if (user.role === 'Estudiante') {
+        let decryptedData: any = {};
+        if (this.expedienteCompletoObj) {
+          if (this.expedienteCompletoObj.data) {
+            try {
+              const decryptedText = this.cryptoService.decrypt(this.expedienteCompletoObj.data);
+              decryptedData = JSON.parse(decryptedText);
+            } catch (err) {
+              console.error('Error descifrando expediente en guardar avatar:', err);
+            }
+          } else {
+            decryptedData = this.expedienteCompletoObj;
+          }
+        }
+
+        if (!decryptedData.personal) {
+          decryptedData.personal = {};
+        }
+        decryptedData.personal.estado_civil = this.estadoCivil || '';
+
+        if (!decryptedData.academico) {
+          decryptedData.academico = {};
+        }
+
+        decryptedData.academico.semestre = this.semestre || '';
+
+        if (!this.isForaneo) {
+          decryptedData.academico.domicilio_origin = {
+            estado: '',
+            municipio: '',
+            colonia: '',
+            calle: '',
+            numero: ''
+          };
+        }
+
+        const plainTextJson = JSON.stringify(decryptedData);
+        const encryptedText = this.cryptoService.encrypt(plainTextJson);
+        encryptedPayload = { data: encryptedText };
+      }
+
       // 1. Update profiles table
+      const profileUpdatePayload: any = {
+        first_name: this.firstName,
+        last_name: this.lastName,
+        sexo: this.sexo,
+        fecha_nacimiento: this.fechaNacimiento || null,
+        faculty: this.faculty,
+        programa_educativo: this.programaEducativo
+      };
+
+      if (encryptedPayload) {
+        profileUpdatePayload.expediente_completo = encryptedPayload;
+      }
+
       const { error: profileError } = await this.supabaseService.supabase
         .from('profiles')
-        .update({
-          first_name: this.firstName,
-          last_name: this.lastName,
-          sexo: this.sexo
-        })
+        .update(profileUpdatePayload)
         .eq('user_id', user.id);
 
       if (profileError) throw profileError;
@@ -230,9 +334,15 @@ export class ProfileAvatarComponent implements OnInit {
       this.authService.currentUser.set({
         ...user,
         name: fullName || 'Usuario',
-        mobile_phone: this.celular.trim() || undefined
+        mobile_phone: this.celular.trim() || undefined,
+        faculty: this.faculty || undefined
       });
       this.userName = fullName;
+
+      // Actualizar la referencia local para evitar discrepancias
+      if (encryptedPayload) {
+        this.expedienteCompletoObj = encryptedPayload;
+      }
 
       this.showFeedback('success', 'Perfil Guardado', 'Tus datos de perfil han sido actualizados correctamente.');
     } catch (e) {
@@ -244,6 +354,11 @@ export class ProfileAvatarComponent implements OnInit {
   }
 
   confirmUpdatePassword() {
+    if (!this.currentPassword) {
+      this.showFeedback('error', 'Contraseña Requerida', 'Por favor ingresa tu contraseña actual.');
+      return;
+    }
+
     if (!this.newPassword || this.newPassword.length < 6) {
       this.showFeedback('error', 'Contraseña Inválida', 'La contraseña debe tener al menos 6 caracteres.');
       return;
@@ -275,17 +390,18 @@ export class ProfileAvatarComponent implements OnInit {
   async performUpdatePassword() {
     this.isChangingPassword = true;
     try {
-      const success = await this.authService.updatePassword(this.newPassword);
+      const success = await this.authService.updatePasswordWithVerification(this.currentPassword, this.newPassword);
       if (success) {
+        this.currentPassword = '';
         this.newPassword = '';
         this.confirmPassword = '';
         this.showFeedback('success', 'Contraseña Actualizada', 'Tu contraseña ha sido actualizada exitosamente.');
       } else {
         this.showFeedback('error', 'Error', 'No se pudo actualizar la contraseña.');
       }
-    } catch (e) {
+    } catch (e: any) {
       console.error(e);
-      this.showFeedback('error', 'Error', 'Error de conexión al cambiar la contraseña.');
+      this.showFeedback('error', 'Error', e.message || 'Error de conexión al cambiar la contraseña.');
     } finally {
       this.isChangingPassword = false;
     }
@@ -296,5 +412,10 @@ export class ProfileAvatarComponent implements OnInit {
       width: '400px',
       data: { type, title, message }
     });
+  }
+
+  onForaneoChange(val: boolean) {
+    this.isForaneo = val;
+    this.foraneoChange.emit(val);
   }
 }

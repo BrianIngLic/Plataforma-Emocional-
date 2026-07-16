@@ -181,7 +181,7 @@ export class PatientProfileComponent implements OnInit {
       // 1. Fetch user + profile + clinical record
       const { data: userData, error: userError } = await this.supabase
         .from('users')
-        .select('id, mobile_phone, profiles(first_name, last_name, avatar_url, antecedentes_familiares, expediente_completo), student_clinical_records!student_clinical_records_student_id_fkey(known_conditions, additional_notes)')
+        .select('id, matricula, mobile_phone, profiles(first_name, last_name, avatar_url, antecedentes_familiares, sexo, fecha_nacimiento, faculty, programa_educativo, celular, expediente_completo), student_clinical_records!student_clinical_records_student_id_fkey(known_conditions, additional_notes)')
         .eq('id', id)
         .single();
 
@@ -216,13 +216,25 @@ export class PatientProfileComponent implements OnInit {
           notes = "Sin notas clínicas adicionales guardadas en el expediente.";
         }
 
+        let calculatedAge = 22;
+        if (p?.fecha_nacimiento) {
+          const birthDate = new Date(p.fecha_nacimiento);
+          const today = new Date();
+          let age = today.getFullYear() - birthDate.getFullYear();
+          const m = today.getMonth() - birthDate.getMonth();
+          if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+              age--;
+          }
+          calculatedAge = age;
+        }
+
         this.patient = {
           id: userData.id,
           firstName: p?.first_name || 'Paciente',
           lastName: p?.last_name || 'Sin Nombre',
           avatarUrl: p?.avatar_url || '',
-          age: 22,
-          gender: "Estudiante BUAP",
+          age: calculatedAge,
+          gender: p?.sexo || 'Estudiante BUAP',
           diagnosis: conditions && conditions.length > 0 ? conditions.join(' + ') : "Evaluación Pendiente",
           treatmentPlan: "TCC + Monitoreo con Amati",
           medications: ["Ninguno registrado"],
@@ -232,7 +244,12 @@ export class PatientProfileComponent implements OnInit {
           riskLevel: (this.eat26Result && this.eat26Result.hasRisk) ? "Alto" : (conditions && conditions.length > 0 ? "Moderado" : "Bajo"),
           notes: notes,
           antecedentes_familiares: antecedentesFamiliares,
-          celular: userData?.mobile_phone || '',
+          celular: userData?.mobile_phone || p?.celular || '',
+          matricula: userData?.matricula || '',
+          fecha_nacimiento: p?.fecha_nacimiento || '',
+          faculty: p?.faculty || '',
+          programa_educativo: p?.programa_educativo || '',
+          sexo: p?.sexo || '',
           expediente_completo: p?.expediente_completo || null
         };
       }
@@ -690,7 +707,7 @@ export class PatientProfileComponent implements OnInit {
     if (!exp) return false;
     
     if (node === 'yo') {
-      return !!(exp.contacto?.telefono && exp.contacto?.fecha_nacimiento && exp.personal?.estado_civil && exp.personal?.sexo);
+      return !!(this.patient?.celular && this.patient?.fecha_nacimiento && exp.personal?.estado_civil && this.patient?.sexo);
     }
     if (node === 'padre') {
       const f = exp.historia_familiar?.padre;

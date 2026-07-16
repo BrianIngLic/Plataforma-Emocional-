@@ -375,6 +375,24 @@ export class AuthService {
     }
   }
 
+  async updatePasswordWithVerification(currentPass: string, newPass: string): Promise<boolean> {
+    // 1. Obtener email del usuario actual autenticado
+    const { data: { user: authUser } } = await this.supabaseService.supabase.auth.getUser();
+    if (!authUser || !authUser.email) {
+      throw new Error('No se pudo verificar el usuario actual.');
+    }
+    // 2. Verificar la contraseña actual intentando hacer login
+    const { error: signInError } = await this.supabaseService.supabase.auth.signInWithPassword({
+      email: authUser.email,
+      password: currentPass
+    });
+    if (signInError) {
+      throw new Error('La contraseña actual es incorrecta.');
+    }
+    // 3. Si es correcta, actualizar a la nueva contraseña
+    return this.updatePassword(newPass);
+  }
+
   public async updateUserAvatar(avatarUrl: string): Promise<boolean> {
     const user = this.currentUser();
     if (!user) return false;

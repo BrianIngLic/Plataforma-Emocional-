@@ -141,8 +141,10 @@ export class DossierExportService {
       .from('users')
       .select(`
         id, 
+        matricula,
+        mobile_phone,
         role_id, 
-        profiles(first_name, last_name), 
+        profiles(first_name, last_name, faculty, programa_educativo, celular, fecha_nacimiento, sexo), 
         student_clinical_records!student_clinical_records_student_id_fkey(
           known_conditions, 
           additional_notes,
@@ -161,10 +163,16 @@ export class DossierExportService {
     // Aplanar student para mantener compatibilidad con exportDossier
     const student = {
       id: studentAny.id,
+      matricula: studentAny.matricula || '',
       role_id: studentAny.role_id,
       first_name: profile?.first_name || 'Paciente',
       last_name: profile?.last_name || '',
       email: '', // No disponible en tablas públicas por HIPAA/Zero-Trust
+      celular: studentAny.mobile_phone || profile?.celular || '',
+      faculty: profile?.faculty || '',
+      programa_educativo: profile?.programa_educativo || '',
+      fecha_nacimiento: profile?.fecha_nacimiento || '',
+      sexo: profile?.sexo || '',
       student_clinical_records: studentAny.student_clinical_records
     };
 
@@ -505,15 +513,17 @@ export class DossierExportService {
     y += 5;
 
     doc.setFillColor(248, 250, 252);
-    doc.rect(15, y, pageWidth - 30, 32, 'F');
-    doc.rect(15, y, pageWidth - 30, 32, 'S');
+    doc.rect(15, y, pageWidth - 30, 48, 'F');
+    doc.rect(15, y, pageWidth - 30, 48, 'S');
 
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(8.5);
     doc.text(`Paciente: ${patientName}`, 18, y + 5);
-    doc.text(`Matrícula/ID: ${data.student.id}`, 18, y + 10);
-    doc.text(`Especialistas Tratantes: Psic. ${data.psychologistName || 'No asignado'} | Nut. ${data.nutritionistName || 'No asignado'}`, 18, y + 15);
-    doc.text(`Condiciones: ${data.student.student_clinical_records?.known_conditions?.join(', ') || 'Ninguna registrada'}`, 18, y + 20);
+    doc.text(`Matrícula: ${data.student.matricula || 'No registrada'} | ID: ${data.student.id}`, 18, y + 10);
+    doc.text(`Facultad: ${data.student.faculty || 'No registrada'} | Carrera: ${data.student.programa_educativo || 'No registrada'}`, 18, y + 15);
+    doc.text(`Teléfono: ${data.student.celular || 'No registrado'} | Sexo: ${data.student.sexo || 'No especificado'} | Fecha Nacimiento: ${data.student.fecha_nacimiento || 'No registrada'}`, 18, y + 20);
+    doc.text(`Especialistas Tratantes: Psic. ${data.psychologistName || 'No asignado'} | Nut. ${data.nutritionistName || 'No asignado'}`, 18, y + 25);
+    doc.text(`Condiciones: ${data.student.student_clinical_records?.known_conditions?.join(', ') || 'Ninguna registrada'}`, 18, y + 30);
 
     let antecedentes = 'Ninguno registrado';
     const notesJson = data.student.student_clinical_records?.additional_notes;
@@ -527,10 +537,10 @@ export class DossierExportService {
       } catch(e) {}
     }
     const cleanAntecedentes = antecedentes.replace(/<[^>]*>/g, ' ').replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim();
-    doc.text(`Antecedentes Familiares: ${cleanAntecedentes}`, 18, y + 25);
-    doc.text(`Sello HMAC: ${metaSealHash.substring(0, 32)}...`, 18, y + 30);
+    doc.text(`Antecedentes Familiares: ${cleanAntecedentes}`, 18, y + 35);
+    doc.text(`Sello HMAC: ${metaSealHash.substring(0, 32)}...`, 18, y + 42);
 
-    y += 42;
+    y += 58;
 
     // Validador de cambio de página
     const checkPageBreak = (neededHeight: number) => {

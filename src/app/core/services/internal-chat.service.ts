@@ -23,6 +23,7 @@ export interface Conversation {
   last_message: string;
   last_message_date: string;
   unread_count: number;
+  professional_id?: string;
 }
 
 @Injectable({
@@ -37,6 +38,7 @@ export class InternalChatService {
       .select(`
         id,
         student_id,
+        professional_id,
         urgency_score,
         last_message,
         last_message_date,
@@ -71,6 +73,7 @@ export class InternalChatService {
       return {
         id: item.id,
         student_id: item.student_id,
+        professional_id: item.professional_id,
         student_name: `${firstName} ${lastName}`.trim() || 'Estudiante',
         student_phone: phone,
         avatar_url: avatarUrl,
@@ -232,11 +235,19 @@ export class InternalChatService {
   }
 
   // ponytail: get or create internal meta conversation for a student
-  async getOrCreateConversation(studentId: string): Promise<Conversation | null> {
+  async getOrCreateConversation(studentId: string, professionalId?: string): Promise<Conversation | null> {
+    let profId = professionalId;
+    if (!profId) {
+      const { data: { user } } = await this.supabase.auth.getUser();
+      profId = user?.id;
+    }
+    if (!profId) return null;
+
     const { data, error } = await this.supabase
       .from('internal_meta_conversations')
       .select('id')
       .eq('student_id', studentId)
+      .eq('professional_id', profId)
       .maybeSingle();
 
     if (error) {
@@ -247,7 +258,7 @@ export class InternalChatService {
     if (!data) {
       const { data: newConvo, error: insertError } = await this.supabase
         .from('internal_meta_conversations')
-        .insert({ student_id: studentId })
+        .insert({ student_id: studentId, professional_id: profId })
         .select()
         .single();
 
@@ -258,6 +269,7 @@ export class InternalChatService {
       return {
         id: newConvo.id,
         student_id: studentId,
+        professional_id: profId,
         student_name: 'Cargando...',
         student_phone: '',
         avatar_url: '',
@@ -269,6 +281,6 @@ export class InternalChatService {
     }
 
     const list = await this.getConversations();
-    return list.find(c => c.student_id === studentId) || null;
+    return list.find(c => c.student_id === studentId && c.professional_id === profId) || null;
   }
 }

@@ -209,11 +209,12 @@ export class EmergencyNotificationService {
           console.log('✅ Edge Function meta-whatsapp-outbound response:', fnResult);
 
           // ----------- INSERTAR REGISTRO DE CHAT Y CONVERSACIÓN -----------
-          // 1️⃣ Verificar o crear la conversación interna para este estudiante
+          // 1️⃣ Verificar o crear la conversación interna para este estudiante y este profesional
           const { data: existingConv, error: convErr } = await this.supabase
             .from('internal_meta_conversations')
             .select('id')
             .eq('student_id', studentId)
+            .eq('professional_id', professionalId)
             .maybeSingle();
           let conversationId: string | undefined;
           if (convErr) {
@@ -226,6 +227,7 @@ export class EmergencyNotificationService {
               .from('internal_meta_conversations')
               .insert({
                 student_id: studentId,
+                professional_id: professionalId,
                 last_message: mensajeWhatsApp,
                 last_message_date: new Date().toISOString(),
                 unread_count: 0

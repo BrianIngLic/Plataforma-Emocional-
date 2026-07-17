@@ -64,10 +64,11 @@ private route = inject(ActivatedRoute); private router = inject(Router);
       let convo = this.conversations().find(c => c.student_id === studentId);
       if (!convo) {
         // ponytail: create conversation on the fly if not exists
-        const created = await this.chatService.getOrCreateConversation(studentId);
+        const currentUserId = this.authService.currentUser()?.id;
+        const created = await this.chatService.getOrCreateConversation(studentId, currentUserId);
         if (created) {
           await this.loadConversations();
-          convo = this.conversations().find(c => c.student_id === studentId);
+          convo = this.conversations().find(c => c.student_id === studentId && (!currentUserId || c.professional_id === currentUserId));
         }
       }
       if (convo) {

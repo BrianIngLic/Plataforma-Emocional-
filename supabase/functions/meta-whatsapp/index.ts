@@ -95,49 +95,152 @@ serve(async (req: Request) => {
           const userId = usersData && usersData.length > 0 ? usersData[0].id : null;
 
           if (userId) {
-            // Estudiante encontrado. Obtener o crear la conversación.
-            let { data: conversation } = await supabase
-              .from('internal_meta_conversations')
-              .select('id')
+            // Estudiante encontrado.
+            console.log(`🔍 Buscando destinatario profesional para el estudiante ID: ${userId} (Modelo 3+1)`);
+            let targetProfessionalId: string | null = null;
+
+            // 1. (3 - Active Session): Buscar sesión de enrutamiento activa
+            const { data: activeSession, error: sessionErr } = await supabase
+              .from('whatsapp_routing_sessions')
+              .select('professional_id')
               .eq('student_id', userId)
+              .eq('session_status', 'active')
+              .order('last_message_at', { ascending: false })
+              .limit(1)
               .maybeSingle();
 
-            if (!conversation) {
-              const { data: newConv, error: newConvErr } = await supabase
-                .from('internal_meta_conversations')
-                .insert({
-                  student_id: userId,
-                  last_message: bodyText,
-                  last_message_date: new Date().toISOString(),
-                  unread_count: 1
-                })
-                .select('id')
-                .single();
-              conversation = newConv;
-              if (newConvErr) throw newConvErr;
-            } else {
-              // Incrementar contador y actualizar último mensaje
-              await supabase
-                .from('internal_meta_conversations')
-                .update({
-                  last_message: bodyText,
-                  last_message_date: new Date().toISOString(),
-                  unread_count: 1 // o incrementar en DB/Trigger
-                })
-                .eq('id', conversation.id);
+            if (sessionErr) {
+              console.warn('⚠️ Error consultando sesión activa:', sessionErr.message);
             }
 
-            // Insertar el mensaje en el historial
-            await supabase.from('internal_meta_chats').insert({
-              conversation_id: conversation.id,
-              sender_type: 'student',
-              sender_name: senderName,
-              message_content: bodyText,
-              whatsapp_message_id: messageId,
-              status: 'read'
-            });
+            if (activeSession?.professional_id) {
+              targetProfessionalId = activeSession.professional_id;
+              console.log(`🟢 [Ruteo 3]: Sesión activa detectada. Destinatario: ${targetProfessionalId}`);
+            } else {
+              // 2. (1 - Last Writer): Buscar último profesional que le escribió a este estudiante
+              const { data: convos } = await supabase
+                .from('internal_meta_conversations')
+                .select('id, professional_id')
+                .eq('student_id', userId);
 
-            console.log(`✅ Mensaje enrutado con éxito a la conversación del estudiante ID: ${userId}`);
+              if (convos && convos.length > 0) {
+                const convoIds = convos.map((c) => c.id);
+                const { data: lastMsg } = await supabase
+                  .from('internal_meta_chats')
+                  .select('conversation_id')
+                  .eq('sender_type', 'professional')
+                  .in('conversation_id', convoIds)
+                  .order('created_at', { ascending: false })
+                  .limit(1)
+                  .maybeSingle();
+
+                if (lastMsg) {
+                  const matchingConvo = convos.find((c) => c.id === lastMsg.conversation_id);
+                  if (matchingConvo) {
+                    targetProfessionalId = matchingConvo.professional_id;
+                    console.log(`🟡 [Ruteo 1]: Último profesional emisor detectado. Destinatario: ${targetProfessionalId}`);
+                  }
+                }
+              }
+            }
+
+            // 3. (0 - Fallback Clínico): Si no hay anterior, consultar expediente clínico
+            if (!targetProfessionalId) {
+              const { data: clinicalRecord } = await supabase
+                .from('student_clinical_records')
+                .select('primary_psychologist_id, primary_nutritionist_id')
+                .eq('student_id', userId)
+                .maybeSingle();
+
+              if (clinicalRecord?.primary_psychologist_id) {
+                targetProfessionalId = clinicalRecord.primary_psychologist_id;
+                console.log(`🔵 [Ruteo 0]: Asignando a psicólogo primario: ${targetProfessionalId}`);
+              } else if (clinicalRecord?.primary_nutritionist_id) {
+                targetProfessionalId = clinicalRecord.primary_nutritionist_id;
+                console.log(`🔵 [Ruteo 0]: Asignando a nutriólogo primario: ${targetProfessionalId}`);
+              } else {
+                // Último recurso: Obtener cualquier psicólogo activo (role_id = 3)
+                const { data: anyProfessional } = await supabase
+                  .from('users')
+                  .select('id')
+                  .eq('role_id', 3)
+                  .limit(1)
+                  .maybeSingle();
+
+                if (anyProfessional) {
+                  targetProfessionalId = anyProfessional.id;
+                  console.log(`🔴 [Ruteo Fallback]: Asignando a psicólogo genérico: ${targetProfessionalId}`);
+                }
+              }
+            }
+
+            if (targetProfessionalId) {
+              // Obtener o crear la conversación para este par estudiante-profesional
+              let { data: conversation, error: getConvErr } = await supabase
+                .from('internal_meta_conversations')
+                .select('id')
+                .eq('student_id', userId)
+                .eq('professional_id', targetProfessionalId)
+                .maybeSingle();
+
+              if (getConvErr) {
+                console.error('❌ Error consultando conversación:', getConvErr.message);
+              }
+
+              if (!conversation) {
+                const { data: newConv, error: newConvErr } = await supabase
+                  .from('internal_meta_conversations')
+                  .insert({
+                    student_id: userId,
+                    professional_id: targetProfessionalId,
+                    last_message: bodyText,
+                    last_message_date: new Date().toISOString(),
+                    unread_count: 1
+                  })
+                  .select('id')
+                  .single();
+
+                if (newConvErr) {
+                  console.error('❌ Error creando conversación:', newConvErr.message);
+                  throw newConvErr;
+                }
+                conversation = newConv;
+              } else {
+                // Incrementar contador y actualizar último mensaje
+                const { error: updConvErr } = await supabase
+                  .from('internal_meta_conversations')
+                  .update({
+                    last_message: bodyText,
+                    last_message_date: new Date().toISOString(),
+                    unread_count: 1 // o incrementar en DB/Trigger
+                  })
+                  .eq('id', conversation.id);
+
+                if (updConvErr) {
+                  console.error('❌ Error actualizando conversación:', updConvErr.message);
+                }
+              }
+
+              // Insertar el mensaje en el historial
+              const { error: insertChatErr } = await supabase
+                .from('internal_meta_chats')
+                .insert({
+                  conversation_id: conversation.id,
+                  sender_type: 'student',
+                  sender_name: senderName,
+                  message_content: bodyText,
+                  whatsapp_message_id: messageId,
+                  status: 'read'
+                });
+
+              if (insertChatErr) {
+                console.error('❌ Error insertando chat:', insertChatErr.message);
+              }
+
+              console.log(`✅ Mensaje enrutado con éxito a la conversación con profesional ID: ${targetProfessionalId}`);
+            } else {
+              console.warn(`⚠️ No se pudo determinar un profesional de la salud de destino para el estudiante ID: ${userId}`);
+            }
           } else {
             console.warn(`⚠️ Teléfono no registrado en la base de datos: ${cleanedPhone}`);
           }

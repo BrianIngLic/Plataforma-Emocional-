@@ -838,16 +838,17 @@ CREATE POLICY inst_settings_update ON public.institutional_settings FOR UPDATE U
 -- CHAT INTERNO META WHATSAPP (SKILL 11)
 -- =========================================================================================
 
--- Tabla de Conversaciones de Chat Interno conectada a WhatsApp (Consolidación)
 CREATE TABLE public.internal_meta_conversations (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    student_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE UNIQUE,
+    student_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+    professional_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
     urgency_score DECIMAL(3,2) DEFAULT 0.00,
     last_message TEXT,
     last_message_date TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()),
     unread_count INTEGER DEFAULT 0,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
+    CONSTRAINT uniq_student_professional UNIQUE (student_id, professional_id)
 );
 
 -- Tabla de Historial de Mensajes de WhatsApp (Bidireccional)
@@ -889,17 +890,35 @@ ALTER TABLE public.webhook_logs ENABLE ROW LEVEL SECURITY;
 -- Políticas de Seguridad
 -- Lectura y gestión de conversaciones: Solo Admins (1) y Clínicos (3, 4)
 CREATE POLICY internal_meta_conv_select ON public.internal_meta_conversations
-    FOR SELECT TO authenticated USING (public.get_auth_role() IN (1, 3, 4));
+    FOR SELECT TO authenticated USING (
+        public.get_auth_role() = 1 OR
+        professional_id = auth.uid()
+    );
 
 CREATE POLICY internal_meta_conv_all ON public.internal_meta_conversations
-    FOR ALL TO authenticated USING (public.get_auth_role() IN (1, 3, 4));
+    FOR ALL TO authenticated USING (
+        public.get_auth_role() = 1 OR
+        professional_id = auth.uid()
+    );
 
 -- Lectura y gestión de chats: Solo Admins (1) y Clínicos (3, 4)
 CREATE POLICY internal_meta_chats_select ON public.internal_meta_chats
-    FOR SELECT TO authenticated USING (public.get_auth_role() IN (1, 3, 4));
+    FOR SELECT TO authenticated USING (
+        public.get_auth_role() = 1 OR
+        EXISTS (
+            SELECT 1 FROM public.internal_meta_conversations c
+            WHERE c.id = conversation_id AND c.professional_id = auth.uid()
+        )
+    );
 
 CREATE POLICY internal_meta_chats_all ON public.internal_meta_chats
-    FOR ALL TO authenticated USING (public.get_auth_role() IN (1, 3, 4));
+    FOR ALL TO authenticated USING (
+        public.get_auth_role() = 1 OR
+        EXISTS (
+            SELECT 1 FROM public.internal_meta_conversations c
+            WHERE c.id = conversation_id AND c.professional_id = auth.uid()
+        )
+    );
 
 -- Webhooks: Inserción para servicio, consulta para Admin
 CREATE POLICY webhook_logs_insert ON public.webhook_logs

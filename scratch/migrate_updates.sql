@@ -1,0 +1,18 @@
+UPDATE public.chats SET title = $migration$Ғ'9Af[s*$migration$ WHERE id = 'c3551edd-5a5c-49e9-92bf-84e47cbaf201';
+UPDATE public.chats SET title = $migration$Sesión del 7/3/2026$migration$ WHERE id = '3140e18c-1e59-4968-ba56-2d3f66d6cef2';
+UPDATE public.chats SET title = $migration$Nueva Conversación$migration$ WHERE id = '37e66601-f675-41c5-9f7c-deb3bc5dcf9b';
+UPDATE public.messages SET content = $migration$hola$migration$ WHERE id = 'a227530b-78a9-4566-9b83-caffb630cefd';
+UPDATE public.messages SET content = $migration$He leído lo que me comentas sobre "hola...". Es válido sentirse así. ¿Qué más pasó?$migration$ WHERE id = 'a7c7a836-4722-4469-b9c1-8d461d9783e1';
+UPDATE public.messages SET content = $migration$me encantan las tetas$migration$ WHERE id = '987c7bd4-76fe-455f-8fad-5565273e4884';
+UPDATE public.messages SET content = $migration$He leído lo que me comentas sobre "me encantan las teta...". Es válido sentirse así. ¿Qué más pasó?$migration$ WHERE id = 'cd6ecb6d-af04-48a0-9dee-84ab628f69e1';
+UPDATE public.messages SET content = $migration$nada$migration$ WHERE id = 'ea75b02c-1ab0-4f90-977e-bdd82a05eb51';
+UPDATE public.messages SET content = $migration$He leído lo que me comentas sobre "nada...". Es válido sentirse así. ¿Qué más pasó?$migration$ WHERE id = 'ce0e30e9-eaa6-4346-b251-92e8e715978d';
+UPDATE public.messages SET content = $migration$¿Cómo manejo la ansiedad ahora?$migration$ WHERE id = '46798bd1-0d2b-45f9-b1ab-16b39b478a6d';
+UPDATE public.messages SET content = $migration$He leído lo que me comentas sobre "¿Cómo manejo la ansi...". Es válido sentirse así. ¿Qué más pasó?$migration$ WHERE id = '5aef4ec9-f740-4ea7-a47a-1679583d01b9';
+UPDATE public.messages SET content = $migration$c$migration$ WHERE id = '36deec04-ed71-43ba-bac5-55b5d0933833';
+UPDATE public.messages SET content = $migration$Y7r^/AZ$migration$ WHERE id = '59cf9964-7a9e-496a-81dc-2eb6cce591a0';
+UPDATE public.messages SET content = $migration$;$migration$ WHERE id = '90db2ad7-3686-423b-b745-c5c9c1bc40fe';
+UPDATE public.messages SET content = $migration$0&9#n$migration$ WHERE id = '55a28f24-daf1-4ff0-96a4-6d859465e6c5';
+UPDATE public.messages SET content = $migration$,$migration$ WHERE id = 'f123973d-3785-486c-a5df-be8683933db0';
+UPDATE public.student_clinical_records SET additional_notes = $migration${}$migration$ WHERE id = '963c3cdb-aba5-45fe-a2f2-bc027837a763';
+UPDATE public.student_clinical_records SET additional_notes = $migration$jEͅM$migration$ WHERE id = 'c197b62b-c8f9-47d4-9901-1cebad3cfdf3';

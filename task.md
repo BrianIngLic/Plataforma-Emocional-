@@ -346,3 +346,17 @@
 - `[x]` Directorio de Pacientes (`patients.component.scss`): padding superior seguro y límite de `90vw` en el ancho de `.modal-content`.
 - `[x]` Verificación de compilación exitosa (`npm run build`).
 
+---
+
+## Skill 16: Cifrado en Servidor y Rotación de Llaves (Fase actual: Ejecutada)
+- `[x]` Configurar pgcrypto y crear tabla `encryption_keys` en Supabase.
+- `[x]` Crear funciones de cifrado y descifrado seguro en PostgreSQL.
+- `[x]` Implementar vistas transparentes de base de datos con `security_invoker = on`.
+- `[x]` Crear triggers `INSTEAD OF` para re-enrutar e interceptar operaciones de escritura.
+- `[x]` Desplegar y ejecutar Edge Function `sync-secrets` para sincronizar la llave secreta `Primary`.
+- `[x]` Simplificar `CryptoService` de Angular a no-ops sin afectar la compilación.
+- `[x]` Remover `encryptionKey` expuesta en los archivos de configuración de entornos (`environment.ts`).
+- `[x]` Actualizar la Especificación Maestra (`spec.md`) de ambos proyectos.
+- `[x]` Registrar procedimientos y logs de auditoría para rotación de llaves.
+
+

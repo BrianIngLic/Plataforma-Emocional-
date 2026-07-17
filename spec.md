@@ -5,6 +5,11 @@ Este documento sirve como la fuente de verdad técnica para la construcción del
 ## Arquitectura General
 El sistema está compuesto por un Frontend Angular, un Backend PostgREST (PostgreSQL), y un Núcleo de IA (FastAPI + LLM). 
 
+### Capa de Cifrado (Cifrado en Servidor - Caso B)
+- **Cifrado Transparente en Base de Datos:** Las columnas sensibles de las tablas base (mensajes, diario, records clínicos, etc.) se cifran automáticamente en PostgreSQL utilizando la extensión `pgcrypto` (`pgp_sym_encrypt`).
+- **Vistas y Triggers:** La base de datos expone vistas transparentes con `security_invoker = on` que descifran los datos en consultas `SELECT` (`pgp_sym_decrypt`) y disparadores `INSTEAD OF` que cifran la información al insertar o actualizar.
+- **Almacén y Rotación de Llaves:** Las llaves de cifrado se administran en `public.encryption_keys` (protegida por RLS). La función `rotate_encryption_keys` permite al Administrador cambiar la llave de todo el historial y re-encriptar los datos existentes en lote.
+
 ### Comunicación Front <-> IA
 - Angular enviará peticiones POST a `/api/v1/chat` en el núcleo FastAPI.
 - El núcleo responderá con el texto generado y un `urgency_score` (0.0 a 1.0).

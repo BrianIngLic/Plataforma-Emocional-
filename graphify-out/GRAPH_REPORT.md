@@ -1,16 +1,16 @@
 # Graph Report - Plataforma-Emocional-  (2026-07-16)
 
 ## Corpus Check
-- 217 files · ~177,898 words
+- 217 files · ~178,043 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1838 nodes · 2550 edges · 191 communities (96 shown, 95 thin omitted)
+- 1838 nodes · 2550 edges · 191 communities (95 shown, 96 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 24 edges (avg confidence: 0.89)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `33257520`
+- Built from commit: `a4bbea21`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -229,7 +229,7 @@
 - **Student Emotional Assistance and Care Flow** — dashboard_layout_dashboard_layout_component_student_sidebar, dashboard_dashboard_component_chat_view, dashboard_diary_dashboard_component_therapeutic_refuge, student_agenda_student_agenda_component_appointment_scheduler [INFERRED 0.85]
 - **Psychologist Clinical Command Center and Triage Flow** — psychologist_layout_psychologist_layout_component_psychologist_sidebar, dashboard_dashboard_component_psychologist_triage_view, patients_patients_component_patient_directory, agenda_agenda_component_clinical_timeline, patient_profile_patient_profile_component_clinical_expedient_view [INFERRED 0.85]
 
-## Communities (191 total, 95 thin omitted)
+## Communities (191 total, 96 thin omitted)
 
 ### Community 0 - "Community 0"
 Cohesion: 0.22
@@ -473,7 +473,7 @@ Nodes (3): assetGroups, index, $schema
 
 ### Community 136 - "Community 136"
 Cohesion: 0.12
-Nodes (8): EmojiScaleComponent, GamificationService, UserStreak, PendingEvaluationItem, ProfessionalEvaluationSummary, SessionEvaluation, SessionEvaluationPayload, StreakBadgeComponent
+Nodes (10): EmergencyChangeRequest, WebPushSubscriptionPayload, WhatsAppRoutingSession, GamificationService, UserStreak, PendingEvaluationItem, ProfessionalEvaluationSummary, SessionEvaluation (+2 more)
 
 ### Community 137 - "Community 137"
 Cohesion: 0.25
@@ -567,14 +567,10 @@ Nodes (3): https, makeRequest(), run()
 Cohesion: 0.40
 Nodes (5): extract-i18n, test, builder, architect, builder
 
-### Community 181 - "Community 181"
-Cohesion: 0.50
-Nodes (3): EmergencyChangeRequest, WebPushSubscriptionPayload, WhatsAppRoutingSession
-
 ## Knowledge Gaps
 - **509 isolated node(s):** `$schema`, `version`, `newProjectRoot`, `projectType`, `style` (+504 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **95 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **96 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_

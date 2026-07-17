@@ -80,8 +80,8 @@
     "semantic_hash": ""
   },
   "src/app/core/services/auth.service.ts": {
-    "mtime": 1784184188.759018,
-    "ast_hash": "f7339a80aca2e7f25689e309e6da5ba7",
+    "mtime": 1784266973.4862459,
+    "ast_hash": "9adc711304c6200aeb0fca3060e08e93",
     "semantic_hash": ""
   },
   "src/app/core/services/chat.service.ts": {
@@ -185,13 +185,13 @@
     "semantic_hash": "b4a95a288955a4cfe9a21b695558cf02"
   },
   "src/app/features/auth/login/login.component.ts": {
-    "mtime": 1784053310.8979807,
-    "ast_hash": "9e2aa2bc5b44f136c2030cbf1322c8ac",
+    "mtime": 1784267084.0096433,
+    "ast_hash": "8c6630c1de5436c7cbac07ca6747c9e9",
     "semantic_hash": ""
   },
   "src/app/features/auth/register/register.component.ts": {
-    "mtime": 1784053353.2234423,
-    "ast_hash": "ab14ea7f9175f9d13edc4c3a65aa49eb",
+    "mtime": 1784267090.6720893,
+    "ast_hash": "0c6fb90942eff31e8ef53c8b43aedfc4",
     "semantic_hash": ""
   },
   "src/app/features/chat/chat.routes.ts": {

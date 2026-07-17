@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, HostListener, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, inject, HostListener, AfterViewInit, OnDestroy, NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -20,6 +20,7 @@ import { environment } from '../../../../environments/environment';
 export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
   private authService = inject(AuthService);
   private router = inject(Router);
+  private ngZone = inject(NgZone);
 
   email: string = '';
   pass: string = '';
@@ -67,36 +68,44 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private renderTurnstile() {
-    const checkTurnstile = setInterval(() => {
-      if ((window as any).turnstile) {
-        clearInterval(checkTurnstile);
-        try {
-          const container = document.getElementById('turnstile-container');
-          if (container) {
-            this.turnstileWidgetId = (window as any).turnstile.render('#turnstile-container', {
-              sitekey: environment.turnstileSiteKey,
-              callback: (token: string) => {
-                this.turnstileToken = token;
-                this.errorMessage = '';
-              },
-              'error-callback': () => {
-                this.turnstileToken = '';
-                this.errorMessage = 'Error de verificación de seguridad. Por favor intenta de nuevo.';
-              },
-              'expired-callback': () => {
-                this.turnstileToken = '';
-                this.errorMessage = 'La verificación de seguridad ha expirado. Por favor resuélvela de nuevo.';
-              }
-            });
+    this.ngZone.runOutsideAngular(() => {
+      const checkTurnstile = setInterval(() => {
+        if ((window as any).turnstile) {
+          clearInterval(checkTurnstile);
+          try {
+            const container = document.getElementById('turnstile-container');
+            if (container) {
+              this.turnstileWidgetId = (window as any).turnstile.render('#turnstile-container', {
+                sitekey: environment.turnstileSiteKey,
+                callback: (token: string) => {
+                  this.ngZone.run(() => {
+                    this.turnstileToken = token;
+                    this.errorMessage = '';
+                  });
+                },
+                'error-callback': () => {
+                  this.ngZone.run(() => {
+                    this.turnstileToken = '';
+                    this.errorMessage = 'Error de verificación de seguridad. Por favor intenta de nuevo.';
+                  });
+                },
+                'expired-callback': () => {
+                  this.ngZone.run(() => {
+                    this.turnstileToken = '';
+                    this.errorMessage = 'La verificación de seguridad ha expirado. Por favor resuélvela de nuevo.';
+                  });
+                }
+              });
+            }
+          } catch (e) {
+            console.error('Turnstile render failed:', e);
           }
-        } catch (e) {
-          console.error('Turnstile render failed:', e);
         }
-      }
-    }, 100);
+      }, 100);
 
-    // Timeout de 10s para limpiar el intervalo si no se carga
-    setTimeout(() => clearInterval(checkTurnstile), 10000);
+      // Timeout de 10s para limpiar el intervalo si no se carga
+      setTimeout(() => clearInterval(checkTurnstile), 10000);
+    });
   }
 
   closeInactivityModal() {
@@ -142,7 +151,7 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
       return;
     }
 
-    const success = await this.authService.login(this.email, this.pass);
+    const success = await this.authService.login(this.email, this.pass, this.turnstileToken);
     
     if (success) {
       const user = this.authService.currentUser();
@@ -164,6 +173,14 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
       this.email = '';
       this.pass = '';
       this.errorMessage = 'Correo o contraseña incorrectos.';
+      if ((window as any).turnstile && this.turnstileWidgetId !== null) {
+        try {
+          (window as any).turnstile.reset(this.turnstileWidgetId);
+          this.turnstileToken = '';
+        } catch (e) {
+          console.error('Error resetting Turnstile:', e);
+        }
+      }
     }
   }
 }

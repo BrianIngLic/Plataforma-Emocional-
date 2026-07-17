@@ -80,8 +80,8 @@
     "semantic_hash": ""
   },
   "src/app/core/services/auth.service.ts": {
-    "mtime": 1784184188.759018,
-    "ast_hash": "f7339a80aca2e7f25689e309e6da5ba7",
+    "mtime": 1784266973.4862459,
+    "ast_hash": "9adc711304c6200aeb0fca3060e08e93",
     "semantic_hash": ""
   },
   "src/app/core/services/chat.service.ts": {
@@ -185,13 +185,13 @@
     "semantic_hash": "b4a95a288955a4cfe9a21b695558cf02"
   },
   "src/app/features/auth/login/login.component.ts": {
-    "mtime": 1784053310.8979807,
-    "ast_hash": "9e2aa2bc5b44f136c2030cbf1322c8ac",
+    "mtime": 1784266976.562694,
+    "ast_hash": "ddf77b38be5397041b77f6cd91bf646b",
     "semantic_hash": ""
   },
   "src/app/features/auth/register/register.component.ts": {
-    "mtime": 1784053353.2234423,
-    "ast_hash": "ab14ea7f9175f9d13edc4c3a65aa49eb",
+    "mtime": 1784266982.867011,
+    "ast_hash": "28930e38fb1dcdc49216c943cd9ff6bd",
     "semantic_hash": ""
   },
   "src/app/features/chat/chat.routes.ts": {
@@ -275,8 +275,8 @@
     "semantic_hash": ""
   },
   "src/app/features/student/settings/student-settings.component.ts": {
-    "mtime": 1784185740.375792,
-    "ast_hash": "431a8a1cc579146e4db681d7a8a140bd",
+    "mtime": 1784186094.139825,
+    "ast_hash": "ff161e0837fa25de4533c50944aadae3",
     "semantic_hash": ""
   },
   "src/app/shared/components/feedback-modal/feedback-modal.component.ts": {
@@ -1347,6 +1347,11 @@
   "src/app/shared/components/privacy-modal/privacy-modal.component.ts": {
     "mtime": 1784062076.7769163,
     "ast_hash": "bd2bedeb98f0786117a65c0e43a5da1c",
+    "semantic_hash": ""
+  },
+  "scratch/check_db.js": {
+    "mtime": 1784185998.5333242,
+    "ast_hash": "3de170c2e90af43a27e23a5d316a1cde",
     "semantic_hash": ""
   }
 }

@@ -191,11 +191,12 @@ export class AuthService {
     this.resetInactivityTimer();
   }
 
-  async login(email: string, pass: string): Promise<boolean> {
+  async login(email: string, pass: string, captchaToken?: string): Promise<boolean> {
     try {
       const { data, error } = await this.supabaseService.supabase.auth.signInWithPassword({
         email,
-        password: pass
+        password: pass,
+        options: captchaToken ? { captchaToken } : undefined
       });
 
       if (error || !data.session) {
@@ -250,14 +251,16 @@ export class AuthService {
       sexo?: string;
       fecha_nacimiento?: string;
       edad?: number;
-    }
+    },
+    captchaToken?: string
   ): Promise<string | null> {
     
     try {
       // 1. Sign up en Supabase Auth
       const { data: authData, error: authError } = await this.supabaseService.supabase.auth.signUp({
         email,
-        password: pass
+        password: pass,
+        options: captchaToken ? { captchaToken } : undefined
       });
 
       if (authError || !authData.user) {

@@ -1,6 +1,6 @@
 export const environment = {
   production: false,
   supabaseUrl: 'https://vatuxmvzdhdgqttbvrny.supabase.co', // URL base correcta
-  supabaseKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZhdHV4bXZ6ZGhkZ3F0dGJ2cm55Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE3MDg3NjMsImV4cCI6MjA5NzI4NDc2M30.Vw5dP1a6X_D872ohFas09ewfJmH63F-yCIS4lF66-8o', // Anon Key
+  supabaseKey: 'sb_publishable_8Rvvd38UrVrVjrbiE2x7Nw_39D2QG_e', // Anon Key
   turnstileSiteKey: '0x4AAAAAAD1gtiZRxX6GXXPN'
 };

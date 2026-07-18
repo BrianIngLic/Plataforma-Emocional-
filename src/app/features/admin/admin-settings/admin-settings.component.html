@@ -8,6 +8,25 @@
     <div style="margin-bottom: 2rem;">
       <app-profile-avatar></app-profile-avatar>
     </div>
+
+    <div class="security-card">
+      <div class="card-header-inner">
+        <h3><mat-icon>fingerprint</mat-icon> Seguridad de Acceso (Passkeys)</h3>
+        <p>Registra dispositivos biométricos o llaves de seguridad físicas (FIDO2/WebAuthn) para este navegador. A partir de ese momento, no requerirás contraseña.</p>
+      </div>
+      <div class="card-body">
+        <button 
+          (click)="onRegisterPasskey()" 
+          [disabled]="isLoading" 
+          class="register-passkey-btn"
+        >
+          <mat-icon>security</mat-icon>
+          <span>{{ isLoading ? 'Registrando dispositivo...' : 'Registrar este dispositivo' }}</span>
+        </button>
+        <p *ngIf="successMessage" class="success-feedback">{{ successMessage }}</p>
+        <p *ngIf="errorMessage" class="error-feedback">{{ errorMessage }}</p>
+      </div>
+    </div>
   </div>
 
   <!-- Gestión de Derechos ARCO y Privacidad -->

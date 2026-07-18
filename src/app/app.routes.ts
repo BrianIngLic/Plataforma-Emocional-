@@ -8,6 +8,15 @@ export const routes: Routes = [
     loadChildren: () => import('./features/auth/auth.routes').then(m => m.AUTH_ROUTES)
   },
   {
+    path: 'sistema',
+    children: [
+      {
+        path: 'acceso',
+        loadComponent: () => import('./features/admin-access/admin-access.component').then(m => m.AdminAccessComponent)
+      }
+    ]
+  },
+  {
     path: 'dashboard',
     loadChildren: () => import('./features/dashboard-layout/dashboard.routes').then(m => m.DASHBOARD_ROUTES),
     canActivate: [authGuard, roleGuard],

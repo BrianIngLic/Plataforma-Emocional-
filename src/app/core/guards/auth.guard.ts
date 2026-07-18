@@ -14,6 +14,26 @@ export const authGuard: CanActivateFn = async (route, state) => {
   
   if (hasSession) {
     const user = authService.currentUser();
+    
+    // Si es Administrador, validar obligatoriedad de Passkeys (AMR contiene webauthn/passkey/hw)
+    if (user?.role === 'Admin') {
+      const amr = await authService.getSessionAmr();
+      console.log('[Security Guard] AMR claims raw:', amr);
+      const methods = amr.map((item: any) => {
+        if (typeof item === 'object' && item !== null && 'method' in item) {
+          return item.method;
+        }
+        return String(item);
+      });
+      console.log('[Security Guard] AMR parsed methods:', methods);
+      const hasPasskey = methods.includes('webauthn') || methods.includes('passkey') || methods.includes('hw');
+      if (!hasPasskey) {
+        console.warn('[Security Guard] Admin ingresó sin Passkey (AMR inválido). Cerrando sesión.');
+        await authService.logout('/sistema/acceso');
+        return false;
+      }
+    }
+
     if (user?.requires_password_change) {
       router.navigate(['/auth/force-change']);
       return false;

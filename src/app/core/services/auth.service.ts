@@ -28,6 +28,21 @@ export class AuthService {
   ) {
     this.checkSession();
     this.initInactivityTracker();
+
+    // Escuchar cambios de sesión de forma reactiva (NOM-024 / OAuth / Magic Links / Passkeys)
+    this.supabaseService.supabase.auth.onAuthStateChange(async (event, session) => {
+      console.log(`[AuthService] Evento de autenticación detectado: ${event}`);
+      if (session) {
+        // Evitar recargar si ya está cargado el mismo usuario
+        const current = this.currentUser();
+        if (!current || current.id !== session.user.id) {
+          await this.loadUserProfile(session.user.id);
+        }
+      } else {
+        this.currentUser.set(null);
+        this.isLoggedIn.set(false);
+      }
+    });
   }
 
   /**
@@ -124,6 +139,11 @@ export class AuthService {
   private async loadUserProfile(userId: string) {
     console.log(`[DEBUG] Autenticado con ID de Supabase: ${userId}`);
 
+    // Garantizar que la llave E2EE esté en sessionStorage (evita logout falso por redirecciones/passkeys)
+    if (!sessionStorage.getItem('e2ee_session_key')) {
+      sessionStorage.setItem('e2ee_session_key', 'E2EE_ACTIVE_' + Math.random().toString(36).substring(2));
+    }
+
     // Query 1: datos base del usuario
     const { data: userData, error: userError } = await this.supabaseService.supabase
       .from('users')
@@ -193,6 +213,18 @@ export class AuthService {
 
   async login(email: string, pass: string, captchaToken?: string): Promise<boolean> {
     try {
+      // 1. Verificar si el usuario requiere Passkeys (Jefatura/Admin)
+      const { data: authMethodData, error: methodError } = await this.supabaseService.supabase
+        .rpc('check_user_auth_method', { p_email: email });
+
+      if (!methodError && authMethodData) {
+        const { role_id, passkey_only } = authMethodData as { role_id?: number; passkey_only?: boolean };
+        if (role_id === 1 || passkey_only) {
+          console.error('[AuthService] Intento de login con contraseña para cuenta protegida por Passkey.');
+          return false;
+        }
+      }
+
       const { data, error } = await this.supabaseService.supabase.auth.signInWithPassword({
         email,
         password: pass,
@@ -220,6 +252,119 @@ export class AuthService {
       return true;
     }
   }
+
+  async loginWithPasskey(email: string, captchaToken?: string): Promise<boolean> {
+    try {
+      const { data, error } = await this.supabaseService.supabase.auth.signInWithPasskey({
+        options: captchaToken ? { captchaToken } : undefined
+      });
+      if (error || !data.session) {
+        console.error('[AuthService] Error en login de Passkey:', error?.message);
+        return false;
+      }
+
+      const userEmail = data.session.user.email;
+      if (userEmail && email.toLowerCase().trim() !== userEmail.toLowerCase().trim()) {
+        console.error('[AuthService] El correo autenticado no coincide con el identificador ingresado.');
+        await this.logout();
+        return false;
+      }
+
+      const userId = data.session.user.id;
+
+      // Consultar rol en public.users
+      const { data: userData, error: userError } = await this.supabaseService.supabase
+        .from('users')
+        .select('role_id')
+        .eq('id', userId)
+        .single();
+
+      if (userError || !userData || userData.role_id !== 1) {
+        console.error('[AuthService] Acceso denegado: el usuario no es administrador.');
+        await this.logout();
+        return false;
+      }
+
+      await this.loadUserProfile(userId);
+      return true;
+    } catch (e) {
+      console.error('[AuthService] Excepción en loginWithPasskey:', e);
+      return false;
+    }
+  }
+
+  async sendMagicLink(email: string, captchaToken?: string): Promise<boolean> {
+    try {
+      const { error } = await this.supabaseService.supabase.auth.signInWithOtp({
+        email,
+        options: {
+          shouldCreateUser: false,
+          emailRedirectTo: window.location.origin + '/sistema/acceso?mode=register',
+          captchaToken: captchaToken || undefined
+        }
+      });
+      if (error) {
+        console.error('[AuthService] Error enviando Magic Link:', error.message);
+        return false;
+      }
+      return true;
+    } catch (e) {
+      console.error('[AuthService] Excepción en sendMagicLink:', e);
+      return false;
+    }
+  }
+
+  async registerPasskey(): Promise<void> {
+    const user = this.currentUser();
+    if (!user || user.role !== 'Admin') {
+      throw new Error('Solo los administradores pueden registrar una Passkey.');
+    }
+
+    const { error } = await this.supabaseService.supabase.auth.registerPasskey();
+    if (error) {
+      console.error('[AuthService] Error registrando Passkey:', error.message);
+      throw error;
+    }
+
+    // UPDATE public.users SET passkey_only = TRUE
+    const { error: updateError } = await this.supabaseService.supabase
+      .from('users')
+      .update({ passkey_only: true })
+      .eq('id', user.id);
+
+    if (updateError) {
+      console.error('[AuthService] Error marcando passkey_only:', updateError.message);
+      throw updateError;
+    }
+
+    console.log('[AuthService] Passkey registrada exitosamente y marcada como obligatoria.');
+  }
+
+  public parseJwt(token: string): any {
+    try {
+      const base64Url = token.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+      }).join(''));
+      return JSON.parse(jsonPayload);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  async getSessionAmr(): Promise<string[]> {
+    try {
+      const { data: { session } } = await this.supabaseService.supabase.auth.getSession();
+      if (!session || !session.access_token) return [];
+      const payload = this.parseJwt(session.access_token);
+      return payload?.amr || [];
+    } catch (e) {
+      console.error('[AuthService] Error obteniendo AMR:', e);
+      return [];
+    }
+  }
+
 
   /**
    * Verifica si un correo electrónico ya está registrado en Supabase Auth.
@@ -322,8 +467,9 @@ export class AuthService {
     let name = 'Usuario Offline';
     
     if (term.includes('admin')) {
-      role = 'Admin';
-      name = 'Administrador de Sistema';
+      console.error('[SECURITY] Admin role no disponible en modo offline. Asignando Estudiante.');
+      role = 'Estudiante';
+      name = 'Estudiante Offline (Admin Fallback)';
     } else if (term.includes('psic') || term.includes('doctor') || term.includes('rivera') || term.includes('osei')) {
       role = 'Psicologo';
       name = 'Dr. Rivera (Simulado)';
@@ -338,7 +484,6 @@ export class AuthService {
       id: 'mock-user-id-123',
       name: name,
       faculty: faculty
-
     });
     this.isLoggedIn.set(true);
     // ponytail: Registrar actividad inicial al activar sesión simulada
@@ -420,7 +565,7 @@ export class AuthService {
     }
   }
 
-  async logout(): Promise<void> {
+  async logout(redirectRoute: string = '/auth/login'): Promise<void> {
     if (this.inactivityTimeout) {
       clearTimeout(this.inactivityTimeout);
     }
@@ -429,6 +574,6 @@ export class AuthService {
     this.cryptoService.clearKey();
     this.currentUser.set(null);
     this.isLoggedIn.set(false);
-    this.router.navigate(['/auth/login']);
+    this.router.navigate([redirectRoute]);
   }
 }

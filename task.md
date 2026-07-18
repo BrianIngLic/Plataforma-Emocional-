@@ -359,4 +359,74 @@
 - `[x]` Actualizar la Especificación Maestra (`spec.md`) de ambos proyectos.
 - `[x]` Registrar procedimientos y logs de auditoría para rotación de llaves.
 
+---
+
+## Skill 17: Passkeys para Administradores — Ruta Secreta + Ciclo de Vida Multi-Admin
+
+> **Estrategia:** Ruta secreta `/sistema/acceso` fuera del prefijo `/auth/` — no vinculada desde ningún lugar público.
+> **Diseño:** Formal y elegante — negro `#0A0A0A` + dorado `#C9A84C` + logo amati + Turnstile captcha.
+> **Provisioning:** Externo (Script TI `admin-manager.js`). URL compartida solo por canal seguro fuera de la app.
+> **Passkeys:** Vinculadas al hardware (device-bound, no sincronizables).
+> **Multi-admin:** Múltiples administradores con ciclo de vida independiente.
+> **Login general:** `/auth/login` **sin ningún cambio**.
+
+**17.1. Base de Datos (Migración SQL)**
+- `[x]` Añadir columna `passkey_only BOOLEAN NOT NULL DEFAULT FALSE` a `public.users`.
+- `[x]` `UPDATE public.users SET passkey_only = TRUE WHERE role_id = 1` para el admin existente.
+- `[ ]` Crear tabla `admin_audit_log` (id, admin_email, action, performed_by, details JSONB, ip_address, created_at).
+- `[ ]` RLS en `admin_audit_log`: solo accesible vía `service_role_key` (TI). Ningún rol del ecosistema puede leer ni escribir.
+
+**17.2. Supabase — Configuración**
+- `[ ]` Habilitar Passkeys (WebAuthn) en Authentication > Sign-In Methods del proyecto.
+- `[x]` Confirmar `@supabase/supabase-js` ≥ 2.43 en `package.json`.
+- `[x]` Habilitar flag experimental `passkey: true` en `SupabaseService` (`createClient` options).
+
+**17.3. Core — Auth Service (`auth.service.ts`)**
+- `[x]` Añadir `loginWithPasskey(email: string, captchaToken?: string): Promise<boolean>` — challenge WebAuthn + validación `role_id = 1` + captcha Turnstile.
+- `[x]` Añadir `registerPasskey(): Promise<void>` — enrollment WebAuthn + UPDATE `passkey_only = TRUE`.
+- `[ ]` Forzar attestation hardware-bound en `registerPasskey()`: `authenticatorAttachment: 'platform'`, `residentKey: 'required'`, `userVerification: 'required'`, `attestation: 'direct'`.
+- `[x]` Añadir `sendMagicLink(email: string): Promise<boolean>` — para flujo de enrolamiento inicial.
+- `[x]` Eliminar rama de rol `Admin` en `activateMockSession()` — caer al default `Estudiante` + `console.error`.
+
+**17.4. Core — Auth Guard (`auth.guard.ts`)**
+- `[x]` Para rutas `/admin/**`: verificar `session.amr` contiene WebAuthn. Si no → `signOut()` + redirect `/sistema/acceso`.
+
+**17.5. App Routes (`app.routes.ts`)**
+- `[x]` Registrar ruta de primer nivel `sistema > acceso` con children + lazy load hacia `AdminAccessComponent`.
+
+**17.6. Feature — Componente de Acceso Administrativo**
+- `[x]` Crear directorio `src/app/features/admin-access/` (fuera de `features/auth/`).
+- `[x]` `admin-access.component.ts` — standalone, dos modos: `login` (default) y `register` (`?mode=register`). Turnstile captcha integrado.
+- `[x]` `admin-access.component.html` — título "Acceso al Sistema", campo email, Turnstile container, botón "Verificar identidad", meta tag `noindex nofollow`, logo amati.
+- `[x]` `admin-access.component.scss` — paleta negro+dorado, `Playfair Display`, banda decorativa, captcha-group.
+- `[ ]` Detección de soporte WebAuthn: verificar `PublicKeyCredential` y `isUserVerifyingPlatformAuthenticatorAvailable()` antes de mostrar formulario. Mensaje de error claro si no soportado.
+
+**17.7. Feature — Panel Admin (Seguridad)**
+- `[x]` Añadir card "Seguridad" en panel Admin con botón "Registrar nuevo dispositivo" → `authService.registerPasskey()`.
+
+**17.8. Script TI — Gestión de Ciclo de Vida (`scripts/admin-manager.js`)**
+- `[ ]` Crear directorio `scripts/` en raíz del proyecto (fuera de `src/`).
+- `[ ]` Implementar comando `create <email>` — crear usuario en Supabase Auth + insertar en `public.users` (role_id=1) + enviar Magic Link.
+- `[ ]` Implementar comando `revoke <email>` — eliminar credenciales WebAuthn + invalidar todas las sesiones activas.
+- `[ ]` Implementar comando `reenroll <email>` — revocar passkey actual + enviar nuevo Magic Link para re-enrolamiento.
+- `[ ]` Implementar comando `disable <email>` — desactivar cuenta temporalmente (`is_active=false`) + invalidar sesiones.
+- `[ ]` Implementar comando `enable <email>` — reactivar cuenta desactivada (`is_active=true`).
+- `[ ]` Implementar comando `update-email <viejo> <nuevo>` — cambiar correo en Supabase Auth + revocar + re-enrolar.
+- `[ ]` Implementar comando `status <email>` — mostrar estado actual (activo, passkey registrada, última sesión).
+- `[ ]` Implementar comando `list` — listar todos los admins con estado, fecha de creación y última actividad.
+- `[ ]` Registrar cada operación en `admin_audit_log` con `performed_by`, `details` y `ip_address`.
+- `[ ]` Documentar uso del script en `README` o `scripts/README.md`.
+
+**17.9. Spec y Documentación**
+- `[x]` Actualizar `spec.md` con Skill 17 completo (ciclo de vida, multi-admin, hardware-bound, audit log).
+- `[x]` Actualizar `task.md` con tareas extendidas de Skill 17.
+
+**17.10. Sincronización entre Repositorios**
+- `[ ]` Sincronizar `spec.md` actualizado a `Ecosistema-de-Asistencia-Emocional-con-IA-Generativa`.
+- `[ ]` Sincronizar `task.md` actualizado a `Ecosistema-de-Asistencia-Emocional-con-IA-Generativa`.
+- `[ ]` Sincronizar todos los archivos modificados de `src/` entre ambos repositorios.
+
+
+
+
 

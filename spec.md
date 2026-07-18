@@ -230,6 +230,169 @@ Pesos clínicos (suma = 1.0):
 - **Prevención de Rupturas por Teclado:** Evitar que el teclado virtual en navegadores móviles rompa el layout visual fijando el contenedor `:host` con `position: fixed; inset: 0` y utilizando `100dvh` (Dynamic Viewport Height).
 - **Alineación Vertical:** Apilar las columnas y grillas de componentes complejos (como el Diario Emocional y las secciones del Psicólogo) para que queden legibles en pantallas estrechas.
 
+### Skill 16: Cifrado en Servidor y Rotación de Llaves
+- **Cifrado Transparente:** Columnas sensibles cifradas con `pgcrypto` (`pgp_sym_encrypt`) en PostgreSQL.
+- **Vistas y Triggers:** Vistas con `security_invoker = on` que descifran en SELECT e insertan vía triggers `INSTEAD OF`.
+- **Almacén de Llaves:** `public.encryption_keys` protegida por RLS. Función `rotate_encryption_keys` para rotación y re-encriptación.
+
+### Skill 17: Autenticación por Passkeys para Administradores — Ruta Secreta
+
+**Objetivo:** Hacer obligatorio el uso de Passkeys (WebAuthn/FIDO2 vía Supabase) como único método de autenticación para `role_id = 1` (Admin). El flujo de email+contraseña queda intacto para los demás roles. El punto de entrada del Admin es **completamente invisible** para el resto del sistema. Soporte para **múltiples administradores** con ciclo de vida gestionado exclusivamente por TI.
+
+#### 17.1. Estrategia: Ruta secreta fuera del prefijo `/auth/`
+- **`/auth/login`** — sin ningún cambio. Sin enlace, sin referencia, sin comentario sobre acceso admin.
+- **`/sistema/acceso`** — ruta de primer nivel, fuera del prefijo `/auth/`, con nombre no revelador. No vinculada desde ningún componente público de la app.
+- La URL solo se comparte con administradores por **canal seguro fuera de la aplicación** (correo institucional, mensaje cifrado).
+- Cualquier persona que la encuentre por error ve una pantalla de login genérica que simplemente falla.
+
+#### 17.2. Sistema de diseño — Interfaz Administrativa
+Pantalla **formal y elegante**, sin glassmorphism ni gamificación:
+
+| Token | Color | Uso |
+|-------|-------|-----|
+| `--admin-bg` | `#0A0A0A` | Fondo (negro profundo) |
+| `--admin-surface` | `#111111` | Superficie de la card |
+| `--admin-gold` | `#C9A84C` | Acentos primarios, CTA, bordes activos |
+| `--admin-gold-light` | `#E2C07A` | Hover del CTA |
+| `--admin-text` | `#F5F0E8` | Texto principal (crema cálido) |
+| `--admin-muted` | `#6B6560` | Placeholders, labels |
+| `--role-purple` | `#7C3AED` | Banda decorativa Psicólogo |
+| `--role-green` | `#059669` | Banda decorativa Nutricionista |
+| `--role-blue` | `#2563EB` | Banda decorativa Estudiante |
+
+Tipografía: `Playfair Display` (título) + `Inter` (body). Título: **"Acceso al Sistema"** — sin mencionar "Admin" en el HTML. Banda inferior: 3 franjas de color de rol, 4px, solo decorativas. Entrada: `opacity 0→1 + translateY(12px→0)`, 400ms `ease-out`. Logo amati con texto lateral.
+
+#### 17.3. Ciclo de Vida del Administrador — Gestión por TI
+
+El ciclo de vida del administrador es gestionado **exclusivamente desde el área de TI**, fuera del ecosistema. No existe UI de creación de Admin dentro de la aplicación. Se soportan **múltiples administradores** simultáneos, cada uno con ciclo independiente.
+
+**Fases:**
+```
+CREAR ──► ENROLAR ──► OPERAR ──► REVOCAR ──► RE-ENROLAR
+  ▲                                              │
+  └──────────────────────────────────────────────┘
+```
+
+**17.3.1. Script de Gestión TI (`scripts/admin-manager.js`)**
+
+Script Node.js que utiliza la `service_role_key` de Supabase para operaciones administrativas. Vive fuera del directorio `src/` (no se despliega al navegador).
+
+| Comando | Descripción |
+|---------|-------------|
+| `create <email>` | Crear usuario Admin + fila en `public.users` + enviar Magic Link |
+| `revoke <email>` | Eliminar credenciales WebAuthn + invalidar sesiones |
+| `reenroll <email>` | Revocar passkey actual + enviar nuevo Magic Link |
+| `disable <email>` | Desactivar cuenta temporalmente (sin borrar credenciales) |
+| `enable <email>` | Reactivar cuenta desactivada |
+| `update-email <viejo> <nuevo>` | Cambiar correo institucional + revocar + re-enrolar |
+| `status <email>` | Consultar estado actual del admin |
+| `list` | Listar todos los admins y su estado |
+
+Cada operación registra una entrada en `admin_audit_log`.
+
+**17.3.2. Flujo de Creación**
+1. TI ejecuta `node admin-manager.js create admin@institucion.mx`
+2. Script crea usuario en Supabase Auth (sin contraseña de acceso)
+3. Inserta fila en `public.users` con `role_id=1`, `passkey_only=false`
+4. Supabase envía Magic Link al correo vía SMTP propio
+5. Admin abre Magic Link → sesión temporal
+6. Admin redirigido a `/sistema/acceso?mode=register`
+7. Admin registra Passkey (hardware-bound, biometría)
+8. `passkey_only=true` se activa
+9. Accesos posteriores solo por Passkey
+
+**17.3.3. Escenarios de Recuperación/Revocación**
+
+| Escenario | Acción TI | Resultado |
+|-----------|-----------|-----------|
+| Pierde dispositivo | `reenroll <email>` | Nueva passkey en nuevo dispositivo |
+| Cambio de personal | `revoke` + `disable` viejo, `create` nuevo | Baja anterior, alta nuevo |
+| Dispositivo dañado | `reenroll <email>` | Misma persona, nuevo dispositivo |
+| Baja temporal (licencia) | `disable <email>` | Sin acceso, credenciales preservadas |
+| Regreso de baja | `enable` + `reenroll <email>` | Reactivación + nueva passkey |
+| Sospecha de compromiso | `revoke <email>` inmediato | Bloqueo preventivo |
+| Cambio de correo | `update-email <viejo> <nuevo>` | Nuevo correo + nueva passkey |
+
+**17.3.4. Verificación de identidad pre-recuperación:** Antes de ejecutar `reenroll`, `enable` o `update-email`, TI verifica identidad del solicitante por canal independiente (presencial, llamada verificada, protocolo interno).
+
+#### 17.4. Passkeys Vinculadas al Hardware (Device-Bound)
+
+Las passkeys de administradores **no se sincronizan** entre dispositivos (no Apple iCloud Keychain, no Google Password Manager):
+
+```typescript
+authenticatorSelection: {
+  authenticatorAttachment: 'platform',
+  residentKey: 'required',
+  requireResidentKey: true,
+  userVerification: 'required'
+}
+attestation: 'direct'
+```
+
+**Implicación:** Si el admin pierde el dispositivo, la passkey se pierde con él. TI es el único camino de recuperación.
+
+#### 17.5. Tabla de Auditoría (`admin_audit_log`)
+
+```sql
+CREATE TABLE admin_audit_log (
+  id           UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  admin_email  TEXT NOT NULL,
+  action       TEXT NOT NULL CHECK (action IN (
+    'create','revoke','reenroll','disable','enable','update_email','login_success','login_failure'
+  )),
+  performed_by TEXT NOT NULL,
+  details      JSONB DEFAULT '{}',
+  ip_address   TEXT,
+  created_at   TIMESTAMPTZ DEFAULT now()
+);
+```
+
+RLS: Solo lectura vía `service_role_key` (TI). Ningún rol del ecosistema puede leer ni escribir.
+
+#### 17.6. Detección de Soporte WebAuthn
+
+Antes de mostrar el formulario, el componente verifica:
+```typescript
+const isSupported = window.PublicKeyCredential !== undefined;
+const isPlatformAvailable = await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable();
+```
+Si no hay soporte: mensaje claro indicando incompatibilidad del navegador/dispositivo.
+
+#### 17.7. Soporte Multi-Admin
+- Múltiples administradores simultáneos con ciclo de vida independiente.
+- Revocar un admin **no afecta** a los demás.
+- Todos los admins son iguales (sin jerarquía super-admin dentro del ecosistema).
+- `admin_audit_log` registra operaciones por admin.
+
+#### 17.8. Correo — SMTP Propio
+- Servicio de correo vía SMTP propio configurado en Supabase (igual que invitaciones a especialistas).
+- Sin límite de 4 emails/hora del plan gratuito.
+- Templates personalizados con branding amati.
+- Magic Links enviados desde dominio institucional verificado.
+
+#### 17.9. Casos de Borde
+
+| Caso | Mitigación |
+|------|------------|
+| Magic Link expirado | TI re-ejecuta `reenroll` |
+| Sesión expira antes de registrar Passkey | UI temporizador + mensaje inmediato |
+| Email no llega | TI verifica logs Supabase → re-envía |
+| Navegador no soporta WebAuthn | Detección previa, error claro |
+| Múltiples Magic Links enviados | Solo el último válido (Supabase invalida anteriores) |
+| `service_role_key` comprometida | Rotar clave, solo en variables de entorno seguras |
+| Supabase Auth caído | Modo offline bloqueado para admin, mostrar mantenimiento |
+
+#### 17.10. Componentes Angular
+- **`features/admin-access/`** — Standalone, dos modos, paleta negro+dorado, logo amati, Turnstile captcha, detección WebAuthn.
+- **`app.routes.ts`** — ruta `sistema > acceso` con children, lazy load.
+- **`auth.service.ts`** — `loginWithPasskey(email, captchaToken?)`, `registerPasskey()`, `sendMagicLink(email)`. Bloqueo Admin en `activateMockSession()`.
+- **`auth.guard.ts`** — verifica `session.amr` WebAuthn en `/admin/**`.
+
+#### 17.11. Seguridad y Modo Offline
+- `activateMockSession()` **no puede asignar rol `Admin`**.
+- No hay traza de la ruta secreta en el código del login público.
+- Modo offline para todos los roles se depreca en sprint futuro.
+
 ### Skill 15: Animaciones Premium y Micro-Interacciones
 - **Transición de Entrada de Páginas (Page Transitions):** Todas las vistas principales del sistema (diario, chat, triage, agenda, etc.) se deslizarán suavemente hacia arriba y se desvanecerán al cargarse usando una curva `cubic-bezier(0.16, 1, 0.3, 1)` para un efecto fluido y premium.
 - **Entrada Dinámica de Mensajes:** Las burbujas del chat no aparecerán bruscamente; en su lugar, se animarán con una escala sutil y elevación hacia arriba cuando se agreguen al flujo.

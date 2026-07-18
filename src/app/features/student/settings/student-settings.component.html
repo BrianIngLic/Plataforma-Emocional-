@@ -79,7 +79,13 @@
           <div class="form-row">
             <div class="form-group">
               <label>Número de Teléfono Celular *</label>
-              <input type="text" [(ngModel)]="userCelular" class="styled-input" placeholder="Ej. 2221234567">
+              <input
+                type="tel"
+                [(ngModel)]="userCelular"
+                class="styled-input"
+                placeholder="Ej. 222-123-4567"
+                inputmode="numeric"
+                mask="000-000-0000">
             </div>
             <div class="form-group">
               <label>Fecha de Nacimiento *</label>
@@ -110,7 +116,7 @@
           </div>
         </div>
         <div class="actions" style="margin-top: 1.5rem; padding: 0 1.5rem 1.5rem 1.5rem; display: flex; justify-content: flex-end;">
-          <button mat-flat-button color="primary" (click)="confirmSave()" [disabled]="isSaving" class="btn-primary" style="background: #8b5cf6; border-color: #8b5cf6;">
+          <button mat-flat-button color="primary" (click)="confirmSave('personal')" [disabled]="isSaving" class="btn-primary" style="background: #8b5cf6; border-color: #8b5cf6;">
             <mat-icon>save</mat-icon> Guardar Datos Personales
           </button>
         </div>
@@ -152,7 +158,7 @@
           </div>
         </div>
         <div class="actions" style="margin-top: 1.5rem; padding: 0 1.5rem 1.5rem 1.5rem; display: flex; justify-content: flex-end;">
-          <button mat-flat-button color="primary" (click)="confirmSave()" [disabled]="isSaving" class="btn-primary" style="background: #8b5cf6; border-color: #8b5cf6;">
+          <button mat-flat-button color="primary" (click)="confirmSave('academic')" [disabled]="isSaving" class="btn-primary" style="background: #8b5cf6; border-color: #8b5cf6;">
             <mat-icon>save</mat-icon> Guardar Información Académica
           </button>
         </div>
@@ -235,7 +241,7 @@
       </div>
 
       <div class="actions" style="margin-top: 1.5rem; display: flex; justify-content: flex-end;">
-        <button mat-flat-button color="primary" (click)="confirmSave()" [disabled]="isSaving" class="btn-primary" style="background: #8b5cf6; border-color: #8b5cf6;">
+        <button mat-flat-button color="primary" (click)="confirmSave('domicilio')" [disabled]="isSaving" class="btn-primary" style="background: #8b5cf6; border-color: #8b5cf6;">
           <mat-icon>save</mat-icon> Guardar Domicilio
         </button>
       </div>
@@ -254,12 +260,34 @@
           <div class="tree-visualization">
             
             <!-- Nivel 1: Padres -->
-            <div class="tree-level parents-level">
+            <div class="tree-level parents-level" style="gap: 40px; position: relative;">
+              
               <!-- Padre -->
               <div class="tree-node" 
                    [class.selected]="selectedTreeNode === 'padre'" 
                    [class.completed]="isNodeComplete('padre')" 
-                   (click)="selectTreeNode('padre')">
+                   (click)="selectTreeNode('padre')"
+                   style="position: relative; z-index: 10;">
+                
+                <!-- ponytail: Pareja del Padre (Pasivo, posicionado absolutamente a la izquierda para preservar el centro del árbol) -->
+                <div class="tree-node passive-node animate-scale-in" 
+                     *ngIf="expediente.historia_familiar.padres_estado_civil === 'Divorciados' && (expediente.historia_familiar.padre.nueva_pareja.tiene === true || expediente.historia_familiar.padre.nueva_pareja.tiene === 'true' || expediente.historia_familiar.padre.nueva_pareja.tiene === 'si' || expediente.historia_familiar.padre.nueva_pareja.tiene === 'Sí')"
+                     (click)="$event.stopPropagation(); selectTreeNode('padre')"
+                     style="position: absolute; right: calc(100% + 25px); top: 0; opacity: 0.8; border-style: dotted; background: var(--bg-card); width: 120px; cursor: pointer; transition: all 0.2s; z-index: 15;">
+                  <div class="avatar-ring" style="width: 42px; height: 42px; font-size: 1.2rem; border-color: var(--border-color); opacity: 0.85; margin: 0 auto 8px auto;">
+                    <span class="node-emoji">👩&zwj;❤️&zwj;👨</span>
+                  </div>
+                  <span class="node-label" style="font-size: 0.8rem; font-weight: 500; display: block; text-align: center;">Pareja de Papá</span>
+                  <span class="node-sublabel" style="font-size: 0.65rem; display: block; text-align: center;">
+                    {{ expediente.historia_familiar.padre.nueva_pareja.figura_vida || 'Ninguna' }}
+                  </span>
+                </div>
+
+                <!-- Conector Pareja Padre (Línea punteada posicionada absolutamente) -->
+                <div class="tree-line connection-dashed" 
+                     *ngIf="expediente.historia_familiar.padres_estado_civil === 'Divorciados' && (expediente.historia_familiar.padre.nueva_pareja.tiene === true || expediente.historia_familiar.padre.nueva_pareja.tiene === 'true' || expediente.historia_familiar.padre.nueva_pareja.tiene === 'si' || expediente.historia_familiar.padre.nueva_pareja.tiene === 'Sí')"
+                     style="position: absolute; right: 100%; width: 25px; border-top: 2px dotted var(--border-color); top: 35px; height: 0; z-index: 5;"></div>
+
                 <div class="avatar-ring">
                   <span class="node-emoji">👨</span>
                   <div class="completion-dot" *ngIf="isNodeComplete('padre')">✓</div>
@@ -270,14 +298,27 @@
                 </span>
               </div>
 
-              <!-- Conexión Horizontal de Padres -->
-              <div class="tree-line horizontal-parents"></div>
+              <!-- Conexión Horizontal de Padres con Relación Conyugal -->
+              <div class="parents-connection-wrapper" style="position: relative; display: flex; align-items: center; justify-content: center; width: 100px; z-index: 10;">
+                <div class="tree-line horizontal-parents" style="width: 100%; position: absolute; top: 50%; transform: translateY(-50%); z-index: 1;"></div>
+                <div class="conyugal-node" 
+                     [class.selected]="selectedTreeNode === 'parents_relation'" 
+                     [class.completed]="isNodeComplete('parents_relation')"
+                     (click)="selectTreeNode('parents_relation')"
+                     style="width: 36px; height: 36px; border-radius: 50%; background: var(--input-bg); border: 2px solid var(--border-color); display: flex; align-items: center; justify-content: center; z-index: 2; cursor: pointer; transition: all 0.2s;"
+                     [style.borderColor]="selectedTreeNode === 'parents_relation' ? 'var(--accent-purple)' : (isNodeComplete('parents_relation') ? '#10b981' : 'var(--border-color)')">
+                  <span style="font-size: 1.1rem; line-height: 1;">💍</span>
+                  <div class="completion-dot" *ngIf="isNodeComplete('parents_relation')" style="position: absolute; bottom: -2px; right: -2px; background: #10b981; color: white; border-radius: 50%; width: 12px; height: 12px; font-size: 8px; display: flex; align-items: center; justify-content: center; font-weight: bold; border: 1px solid var(--bg-card);">✓</div>
+                </div>
+              </div>
 
               <!-- Madre -->
               <div class="tree-node" 
                    [class.selected]="selectedTreeNode === 'madre'" 
                    [class.completed]="isNodeComplete('madre')" 
-                   (click)="selectTreeNode('madre')">
+                   (click)="selectTreeNode('madre')"
+                   style="position: relative; z-index: 10;">
+                
                 <div class="avatar-ring">
                   <span class="node-emoji">👩</span>
                   <div class="completion-dot" *ngIf="isNodeComplete('madre')">✓</div>
@@ -286,6 +327,25 @@
                 <span class="node-sublabel">
                   {{ expediente.historia_familiar.madre.estado === 'finado' ? 'Finada' : (expediente.historia_familiar.madre.ocupacion || 'Sin configurar') }}
                 </span>
+
+                <!-- Conector Pareja Madre (Línea punteada posicionada absolutamente) -->
+                <div class="tree-line connection-dashed" 
+                     *ngIf="expediente.historia_familiar.padres_estado_civil === 'Divorciados' && (expediente.historia_familiar.madre.nueva_pareja.tiene === true || expediente.historia_familiar.madre.nueva_pareja.tiene === 'true' || expediente.historia_familiar.madre.nueva_pareja.tiene === 'si' || expediente.historia_familiar.madre.nueva_pareja.tiene === 'Sí')"
+                     style="position: absolute; left: 100%; width: 25px; border-top: 2px dotted var(--border-color); top: 35px; height: 0; z-index: 5;"></div>
+
+                <!-- Pareja de la Madre (Pasivo, abre editor de Madre) -->
+                <div class="tree-node passive-node animate-scale-in" 
+                     *ngIf="expediente.historia_familiar.padres_estado_civil === 'Divorciados' && (expediente.historia_familiar.madre.nueva_pareja.tiene === true || expediente.historia_familiar.madre.nueva_pareja.tiene === 'true' || expediente.historia_familiar.madre.nueva_pareja.tiene === 'si' || expediente.historia_familiar.madre.nueva_pareja.tiene === 'Sí')"
+                     (click)="$event.stopPropagation(); selectTreeNode('madre')"
+                     style="position: absolute; left: calc(100% + 25px); top: 0; opacity: 0.8; border-style: dotted; background: var(--bg-card); width: 120px; cursor: pointer; transition: all 0.2s; z-index: 15;">
+                  <div class="avatar-ring" style="width: 42px; height: 42px; font-size: 1.2rem; border-color: var(--border-color); opacity: 0.85; margin: 0 auto 8px auto;">
+                    <span class="node-emoji">👨&zwj;❤️&zwj;👩</span>
+                  </div>
+                  <span class="node-label" style="font-size: 0.8rem; font-weight: 500; display: block; text-align: center;">Pareja de Mamá</span>
+                  <span class="node-sublabel" style="font-size: 0.65rem; display: block; text-align: center;">
+                    {{ expediente.historia_familiar.madre.nueva_pareja.figura_vida || 'Ninguna' }}
+                  </span>
+                </div>
               </div>
             </div>
 
@@ -350,6 +410,40 @@
       <!-- EDITOR EN CALIENTE DEL MIEMBRO SELECCIONADO EN EL ÁRBOL -->
       <div class="card settings-card node-editor-box animate-scale-in" style="margin-top: 1.5rem;" *ngIf="selectedTreeNode && selectedTreeNode !== 'yo'">
         
+        <!-- EDITOR DE RELACIÓN CONYUGAL DE LOS PADRES -->
+        <div *ngIf="selectedTreeNode === 'parents_relation'">
+          <div class="editor-header">
+            <h4>💍 Configurar Relación Conyugal de los Padres</h4>
+            <span class="badge" [class.badge-success]="isNodeComplete('parents_relation')">
+              {{ isNodeComplete('parents_relation') ? '✓ Completo' : 'Incompleto' }}
+            </span>
+          </div>
+          <div class="editor-body">
+            <div class="form-row">
+              <div class="form-group">
+                <label>Estado Civil de los Padres</label>
+                <select [(ngModel)]="expediente.historia_familiar.padres_estado_civil" class="styled-select">
+                  <option value="">Selecciona una opción</option>
+                  <option value="Casados">Casados</option>
+                  <option value="Divorciados">Divorciados / Separados</option>
+                  <option value="Unión Libre">Unión Libre</option>
+                  <option value="Viudez">Viudez</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>¿Cómo se llevan actualmente entre ellos?</label>
+                <select [(ngModel)]="expediente.historia_familiar.padres_relacion" class="styled-select">
+                  <option value="">Selecciona una opción</option>
+                  <option value="Buena">Buena / Respetuosa</option>
+                  <option value="Regular">Regular / Sin comunicación</option>
+                  <option value="Conflictiva">Conflictiva / Hostil</option>
+                  <option value="Nula">Nula / Distanciados por completo</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- EDITOR DE PADRE -->
         <div *ngIf="selectedTreeNode === 'padre'">
           <div class="editor-header">
@@ -403,6 +497,36 @@
                   <option value="Conflictiva">Conflictiva</option>
                   <option value="Nula">Nula / Sin contacto</option>
                 </select>
+              </div>
+            </div>
+
+            <!-- ponytail: Condicional nueva pareja si los padres están divorciados/separados -->
+            <div class="divorce-fields" *ngIf="expediente.historia_familiar.padres_estado_civil === 'Divorciados'" style="margin-top: 1.25rem; padding-top: 1.25rem; border-top: 1px dashed var(--border-color);">
+              <h5 style="margin: 0 0 1rem 0; font-size: 0.9rem; font-weight: 600; color: var(--text-primary);">Relación de Pareja del Padre (Divorcio)</h5>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>¿El padre tiene una nueva pareja?</label>
+                  <select [(ngModel)]="expediente.historia_familiar.padre.nueva_pareja.tiene" class="styled-select">
+                    <option value="">Selecciona una opción</option>
+                    <option [ngValue]="true">Sí</option>
+                    <option [ngValue]="false">No</option>
+                  </select>
+                </div>
+                <div class="form-group" *ngIf="expediente.historia_familiar.padre.nueva_pareja.tiene">
+                  <label>¿Cómo se lleva con esta relación?</label>
+                  <select [(ngModel)]="expediente.historia_familiar.padre.nueva_pareja.tipo_relacion" class="styled-select">
+                    <option value="">Selecciona una opción</option>
+                    <option value="Buena">Buena / Estable</option>
+                    <option value="Regular">Regular / Distante</option>
+                    <option value="Conflictiva">Conflictiva / Tensa</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-row" *ngIf="expediente.historia_familiar.padre.nueva_pareja.tiene">
+                <div class="form-group">
+                  <label>¿Qué figura ocupa en tu vida?</label>
+                  <input type="text" [(ngModel)]="expediente.historia_familiar.padre.nueva_pareja.figura_vida" class="styled-input" placeholder="Ej. Figura paterna secundaria, Ninguna, etc.">
+                </div>
               </div>
             </div>
           </div>
@@ -461,6 +585,36 @@
                   <option value="Conflictiva">Conflictiva</option>
                   <option value="Nula">Nula / Sin contacto</option>
                 </select>
+              </div>
+            </div>
+
+            <!-- ponytail: Condicional nueva pareja si los padres están divorciados/separados -->
+            <div class="divorce-fields" *ngIf="expediente.historia_familiar.padres_estado_civil === 'Divorciados'" style="margin-top: 1.25rem; padding-top: 1.25rem; border-top: 1px dashed var(--border-color);">
+              <h5 style="margin: 0 0 1rem 0; font-size: 0.9rem; font-weight: 600; color: var(--text-primary);">Relación de Pareja de la Madre (Divorcio)</h5>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>¿La madre tiene una nueva pareja?</label>
+                  <select [(ngModel)]="expediente.historia_familiar.madre.nueva_pareja.tiene" class="styled-select">
+                    <option value="">Selecciona una opción</option>
+                    <option [ngValue]="true">Sí</option>
+                    <option [ngValue]="false">No</option>
+                  </select>
+                </div>
+                <div class="form-group" *ngIf="expediente.historia_familiar.madre.nueva_pareja.tiene">
+                  <label>¿Cómo se lleva con esta relación?</label>
+                  <select [(ngModel)]="expediente.historia_familiar.madre.nueva_pareja.tipo_relacion" class="styled-select">
+                    <option value="">Selecciona una opción</option>
+                    <option value="Buena">Buena / Estable</option>
+                    <option value="Regular">Regular / Distante</option>
+                    <option value="Conflictiva">Conflictiva / Tensa</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-row" *ngIf="expediente.historia_familiar.madre.nueva_pareja.tiene">
+                <div class="form-group">
+                  <label>¿Qué figura ocupa en tu vida?</label>
+                  <input type="text" [(ngModel)]="expediente.historia_familiar.madre.nueva_pareja.figura_vida" class="styled-input" placeholder="Ej. Figura materna secundaria, Ninguna, etc.">
+                </div>
               </div>
             </div>
           </div>
@@ -563,132 +717,13 @@
       </div>
 
       <div class="actions" style="margin-top: 1.5rem;">
-        <button mat-flat-button color="primary" (click)="confirmSave()" [disabled]="isSaving" class="btn-primary">
+        <button mat-flat-button color="primary" (click)="confirmSave('arbol')" [disabled]="isSaving" class="btn-primary">
           <mat-icon>save</mat-icon> Guardar Cambios del Árbol
         </button>
       </div>
     </div>
 
-    <!-- SECCIÓN 5: HISTORIAL FAMILIAR DETALLADO -->
-    <div id="sec-historial" class="settings-section-block" style="margin-top: 1.5rem;">
-      <div class="card settings-card">
-        <div class="card-header">
-          <h3><mat-icon style="color: var(--accent-purple);">supervisor_account</mat-icon> Relación Conyugal de los Padres</h3>
-          <p>Detalles generales sobre el entorno parental de origen.</p>
-        </div>
-        <div class="card-body">
-          <div class="form-row">
-            <div class="form-group">
-              <label>Estado Civil de los Padres</label>
-              <select [(ngModel)]="expediente.historia_familiar.padres_estado_civil" class="styled-select">
-                <option value="">Selecciona una opción</option>
-                <option value="Casados">Casados</option>
-                <option value="Divorciados">Divorciados / Separados</option>
-                <option value="Unión Libre">Unión Libre</option>
-                <option value="Viudez">Viudez</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label>¿Cómo se llevan actualmente entre ellos?</label>
-              <select [(ngModel)]="expediente.historia_familiar.padres_relacion" class="styled-select">
-                <option value="">Selecciona una opción</option>
-                <option value="Buena">Buena / Respetuosa</option>
-                <option value="Regular">Regular / Sin comunicación</option>
-                <option value="Conflictiva">Conflictiva / Hostil</option>
-                <option value="Nula">Nula / Distanciados por completo</option>
-              </select>
-            </div>
-          </div>
-        </div>
-      </div>
 
-      <!-- ACCESO DIRECTO A DETALLES CLÍNICOS DEL PADRE Y LA MADRE -->
-      <div class="form-row" style="margin-top: 1.5rem;">
-        <!-- Padre -->
-        <div class="card settings-card">
-          <div class="card-header">
-            <h3>👨 Datos Clínicos del Padre</h3>
-          </div>
-          <div class="card-body">
-            <div class="form-group" style="margin-bottom: 1rem;">
-              <label>Estatus</label>
-              <select [(ngModel)]="expediente.historia_familiar.padre.estado" class="styled-select">
-                <option value="">Selecciona una opción</option>
-                <option value="presente">Presente</option>
-                <option value="ausente">Ausente</option>
-                <option value="finado">Finado</option>
-              </select>
-            </div>
-            <div class="form-group" style="margin-bottom: 1rem;" *ngIf="expediente.historia_familiar.padre.estado !== 'finado'">
-              <label>Edad</label>
-              <input type="number" [(ngModel)]="expediente.historia_familiar.padre.edad" class="styled-input">
-            </div>
-            <div class="form-group" style="margin-bottom: 1rem;" *ngIf="expediente.historia_familiar.padre.estado !== 'finado'">
-              <label>Ocupación</label>
-              <input type="text" [(ngModel)]="expediente.historia_familiar.padre.ocupacion" class="styled-input">
-            </div>
-            <div class="form-group" style="margin-bottom: 1rem;">
-              <label>Antecedentes Trastorno Psiquiátrico</label>
-              <select [(ngModel)]="expediente.historia_familiar.padre.antecedentes_psiquiatricos" class="styled-select">
-                <option value="">Selecciona una opción</option>
-                <option value="si">Sí</option>
-                <option value="no">No</option>
-                <option value="no_se">No sé</option>
-              </select>
-            </div>
-            <div class="form-group" style="margin-bottom: 1rem;">
-              <label>Diagnóstico Crónico Degenerativo</label>
-              <input type="text" [(ngModel)]="expediente.historia_familiar.padre.enfermedad_cronica" class="styled-input" placeholder="Ej. Diabetes, o 'Ninguno'">
-            </div>
-          </div>
-        </div>
-
-        <!-- Madre -->
-        <div class="card settings-card">
-          <div class="card-header">
-            <h3>👩 Datos Clínicos de la Madre</h3>
-          </div>
-          <div class="card-body">
-            <div class="form-group" style="margin-bottom: 1rem;">
-              <label>Estatus</label>
-              <select [(ngModel)]="expediente.historia_familiar.madre.estado" class="styled-select">
-                <option value="">Selecciona una opción</option>
-                <option value="presente">Presente</option>
-                <option value="ausente">Ausente</option>
-                <option value="finado">Finado</option>
-              </select>
-            </div>
-            <div class="form-group" style="margin-bottom: 1rem;" *ngIf="expediente.historia_familiar.madre.estado !== 'finado'">
-              <label>Edad</label>
-              <input type="number" [(ngModel)]="expediente.historia_familiar.madre.edad" class="styled-input">
-            </div>
-            <div class="form-group" style="margin-bottom: 1rem;" *ngIf="expediente.historia_familiar.madre.estado !== 'finado'">
-              <label>Ocupación</label>
-              <input type="text" [(ngModel)]="expediente.historia_familiar.madre.ocupacion" class="styled-input">
-            </div>
-            <div class="form-group" style="margin-bottom: 1rem;">
-              <label>Antecedentes Trastorno Psiquiátrico</label>
-              <select [(ngModel)]="expediente.historia_familiar.madre.antecedentes_psiquiatricos" class="styled-select">
-                <option value="">Selecciona una opción</option>
-                <option value="si">Sí</option>
-                <option value="no">No</option>
-                <option value="no_se">No sé</option>
-              </select>
-            </div>
-            <div class="form-group" style="margin-bottom: 1rem;">
-              <label>Diagnóstico Crónico Degenerativo</label>
-              <input type="text" [(ngModel)]="expediente.historia_familiar.madre.enfermedad_cronica" class="styled-input" placeholder="Ej. Hipertensión, o 'Ninguno'">
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="actions" style="margin-top: 1.5rem;">
-        <button mat-flat-button color="primary" (click)="confirmSave()" [disabled]="isSaving" class="btn-primary">
-          <mat-icon>save</mat-icon> Guardar Historial Familiar
-        </button>
-      </div>
-    </div>
 
     <!-- SECCIÓN 6: CONTACTOS DE EMERGENCIA -->
     <div id="sec-emergencia" class="settings-section-block" style="margin-top: 1.5rem;">
@@ -726,13 +761,23 @@
                     <!-- Predefinir parentesco para contactos 1 y 2 según especificación, libre para el resto -->
                     <select [(ngModel)]="contact.parentesco" class="styled-select-table" *ngIf="i < 2">
                       <option value="">Selecciona una opción</option>
-                      <option value="Madre/padre/tutor legal" *ngIf="i === 0">Madre/Padre/Tutor legal</option>
-                      <option value="Pareja/amistad/otros" *ngIf="i === 1">Pareja/Amistad/Otros</option>
+                      <option value="Madre" *ngIf="i === 0">Madre</option>
+                      <option value="Padre" *ngIf="i === 0">Padre</option>
+                      <option value="Tutor legal" *ngIf="i === 0">Tutor legal</option>
+                      <option value="Pareja" *ngIf="i === 1">Pareja</option>
+                      <option value="Amistad" *ngIf="i === 1">Amistad</option>
+                      <option value="Otros" *ngIf="i === 1">Otros</option>
                     </select>
                     <input type="text" [(ngModel)]="contact.parentesco" class="styled-input-table" placeholder="Parentesco" *ngIf="i >= 2">
                   </td>
                   <td>
-                    <input type="text" [(ngModel)]="contact.telefono" class="styled-input-table" placeholder="10 dígitos">
+                    <input
+                      type="tel"
+                      [(ngModel)]="contact.telefono"
+                      class="styled-input-table"
+                      placeholder="Ej. 222-123-4567"
+                      inputmode="numeric"
+                      mask="000-000-0000">
                   </td>
                   <td style="text-align: center;">
                     <button mat-icon-button color="warn" (click)="removeEmergencyContact(i)" [disabled]="expediente.contactos_emergencia.length <= 2">
@@ -747,7 +792,7 @@
       </div>
 
       <div class="actions" style="margin-top: 1.5rem;">
-        <button mat-flat-button color="primary" (click)="confirmSave()" [disabled]="isSaving" class="btn-primary">
+        <button mat-flat-button color="primary" (click)="confirmSave('emergency')" [disabled]="isSaving" class="btn-primary">
           <mat-icon>save</mat-icon> Guardar Contactos
         </button>
       </div>

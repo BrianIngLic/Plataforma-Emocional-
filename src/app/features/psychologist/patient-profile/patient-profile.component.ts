@@ -179,9 +179,10 @@ export class PatientProfileComponent implements OnInit {
     
     try {
       // 1. Fetch user + profile + clinical record
+      // ponytail: Removed invalid column 'celular' from profiles query
       const { data: userData, error: userError } = await this.supabase
         .from('users')
-        .select('id, matricula, mobile_phone, profiles(first_name, last_name, avatar_url, antecedentes_familiares, sexo, fecha_nacimiento, faculty, programa_educativo, celular, expediente_completo), student_clinical_records!student_clinical_records_student_id_fkey(known_conditions, additional_notes)')
+        .select('id, matricula, mobile_phone, profiles(first_name, last_name, avatar_url, antecedentes_familiares, sexo, fecha_nacimiento, faculty, programa_educativo, expediente_completo), student_clinical_records!student_clinical_records_student_id_fkey(known_conditions, additional_notes)')
         .eq('id', id)
         .single();
 
@@ -228,6 +229,17 @@ export class PatientProfileComponent implements OnInit {
           calculatedAge = age;
         }
 
+        // ponytail: Cargar y descifrar expediente_completo para el psicólogo
+        let decryptedExpediente = null;
+        if (p?.expediente_completo && p.expediente_completo.data) {
+          try {
+            const decrypted = this.crypto.decrypt(p.expediente_completo.data);
+            decryptedExpediente = JSON.parse(decrypted);
+          } catch (err) {
+            console.error('Error al descifrar expediente del paciente:', err);
+          }
+        }
+
         this.patient = {
           id: userData.id,
           firstName: p?.first_name || 'Paciente',
@@ -244,13 +256,13 @@ export class PatientProfileComponent implements OnInit {
           riskLevel: (this.eat26Result && this.eat26Result.hasRisk) ? "Alto" : (conditions && conditions.length > 0 ? "Moderado" : "Bajo"),
           notes: notes,
           antecedentes_familiares: antecedentesFamiliares,
-          celular: userData?.mobile_phone || p?.celular || '',
+          celular: userData?.mobile_phone || '',
           matricula: userData?.matricula || '',
           fecha_nacimiento: p?.fecha_nacimiento || '',
           faculty: p?.faculty || '',
           programa_educativo: p?.programa_educativo || '',
           sexo: p?.sexo || '',
-          expediente_completo: p?.expediente_completo || null
+          expediente_completo: decryptedExpediente
         };
       }
 
@@ -358,8 +370,10 @@ export class PatientProfileComponent implements OnInit {
           nextSessionText = `${day}/${month}/${d.getFullYear()}`;
         }
 
-        this.patient.sessionCount = completedSessions;
-        this.patient.nextSession = nextSessionText;
+        if (this.patient) {
+          this.patient.sessionCount = completedSessions;
+          this.patient.nextSession = nextSessionText;
+        }
       }
 
       // 4. Obtener evaluaciones de alianza terapéutica (FIT/SRS) para historial de gráfica

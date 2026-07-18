@@ -9,6 +9,12 @@ export class SupabaseService {
   public supabase: SupabaseClient;
 
   constructor() {
-    this.supabase = createClient(environment.supabaseUrl, environment.supabaseKey);
+    this.supabase = createClient(environment.supabaseUrl, environment.supabaseKey, {
+      auth: {
+        experimental: {
+          passkey: true
+        }
+      }
+    });
   }
 }

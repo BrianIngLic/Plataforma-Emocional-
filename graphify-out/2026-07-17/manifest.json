@@ -50,8 +50,8 @@
     "semantic_hash": ""
   },
   "src/app/core/guards/auth.guard.ts": {
-    "mtime": 1784393115.5666423,
-    "ast_hash": "80d88843f12d7063fe23a92aed627f21",
+    "mtime": 1784331599.9980414,
+    "ast_hash": "e622fac53cb98d05949cca49644ed99e",
     "semantic_hash": ""
   },
   "src/app/core/guards/role.guard.ts": {
@@ -80,8 +80,8 @@
     "semantic_hash": ""
   },
   "src/app/core/services/auth.service.ts": {
-    "mtime": 1784352061.9452102,
-    "ast_hash": "3cfe7f597e3dd0df9055bc5f1a7d88f3",
+    "mtime": 1784351833.8576884,
+    "ast_hash": "32f9a668ba68267ab556354f04fd2746",
     "semantic_hash": ""
   },
   "src/app/core/services/chat.service.ts": {
@@ -1415,8 +1415,8 @@
     "semantic_hash": ""
   },
   "src/app/features/admin-access/admin-access.component.ts": {
-    "mtime": 1784352068.7959888,
-    "ast_hash": "422f276ca2a6cf3f8ac2339f57d5ce66",
+    "mtime": 1784351846.6080365,
+    "ast_hash": "697fab1fbe5c4882814f1c984ac938a1",
     "semantic_hash": ""
   },
   "src/app/features/admin-access/admin-access.component.html": {

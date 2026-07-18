@@ -13,6 +13,7 @@ import { GamificationService } from '../../../core/services/gamification.service
 import { FeedbackModalComponent } from '../../../shared/components/feedback-modal/feedback-modal.component';
 import { ProfileAvatarComponent } from '../../../shared/components/profile-avatar/profile-avatar.component';
 import { ArcoSettingsComponent } from '../../../shared/components/arco-settings/arco-settings.component';
+import { NgxMaskDirective } from 'ngx-mask';
 
 @Component({
   selector: 'app-student-settings',
@@ -24,7 +25,8 @@ import { ArcoSettingsComponent } from '../../../shared/components/arco-settings/
     MatButtonModule,
     MatDialogModule,
     ProfileAvatarComponent,
-    ArcoSettingsComponent
+    ArcoSettingsComponent,
+    NgxMaskDirective
   ],
   templateUrl: './student-settings.component.html',
   styleUrls: ['./student-settings.component.scss']
@@ -124,7 +126,12 @@ export class StudentSettingsComponent implements OnInit {
         ocupacion: '',
         antecedentes_psiquiatricos: '', // si, no, no_se
         enfermedad_cronica: '',
-        tipo_relacion: ''
+        tipo_relacion: '',
+        nueva_pareja: {
+          tiene: '' as any,
+          tipo_relacion: '',
+          figura_vida: ''
+        }
       },
       madre: {
         estado: '', // presente, ausente, finado
@@ -132,7 +139,12 @@ export class StudentSettingsComponent implements OnInit {
         ocupacion: '',
         antecedentes_psiquiatricos: '', // si, no, no_se
         enfermedad_cronica: '',
-        tipo_relacion: ''
+        tipo_relacion: '',
+        nueva_pareja: {
+          tiene: '' as any,
+          tipo_relacion: '',
+          figura_vida: ''
+        }
       },
       hermanos: {
         tiene: '' as any,
@@ -212,6 +224,39 @@ export class StudentSettingsComponent implements OnInit {
             };
           }
 
+          // ponytail: Asegurar inicialización de estructuras anidadas para evitar errores de tipo undefined en la plantilla
+          if (!this.expediente.personal) {
+            this.expediente.personal = { estado_civil: '' };
+          }
+          if (!this.expediente.academico) {
+            this.expediente.academico = {
+              semestre: '' as any,
+              domicilio_actual: { estado: 'Puebla', municipio: 'Puebla', colonia: '', calle: '', numero: '', con_quien_vive: '' },
+              domicilio_origin: { estado: '', municipio: '', colonia: '', calle: '', numero: '' }
+            };
+          }
+          if (!this.expediente.academico.domicilio_actual) {
+            this.expediente.academico.domicilio_actual = { estado: 'Puebla', municipio: 'Puebla', colonia: '', calle: '', numero: '', con_quien_vive: '' };
+          }
+          if (!this.expediente.academico.domicilio_origin) {
+            this.expediente.academico.domicilio_origin = { estado: '', municipio: '', colonia: '', calle: '', numero: '' };
+          }
+          if (!this.expediente.historia_familiar) {
+            this.expediente.historia_familiar = {} as any;
+          }
+          if (!this.expediente.historia_familiar.padre) {
+            this.expediente.historia_familiar.padre = {} as any;
+          }
+          if (!this.expediente.historia_familiar.padre.nueva_pareja) {
+            this.expediente.historia_familiar.padre.nueva_pareja = { tiene: '' as any, tipo_relacion: '', figura_vida: '' };
+          }
+          if (!this.expediente.historia_familiar.madre) {
+            this.expediente.historia_familiar.madre = {} as any;
+          }
+          if (!this.expediente.historia_familiar.madre.nueva_pareja) {
+            this.expediente.historia_familiar.madre.nueva_pareja = { tiene: '' as any, tipo_relacion: '', figura_vida: '' };
+          }
+
           // Forzar sincronización de campos clave por si cambiaron de forma externa
           this.userCelular = user.mobile_phone || this.userCelular;
           this.fechaNacimiento = prof.fecha_nacimiento || this.fechaNacimiento;
@@ -276,13 +321,14 @@ export class StudentSettingsComponent implements OnInit {
     if (this.userFaculty) earnedPoints++;
     if (this.userProgramaEducativo) earnedPoints++;
 
-    // Domicilio actual (4 campos)
-    totalPoints += 4;
+    // Domicilio actual (5 campos)
+    totalPoints += 5;
     const dom = this.expediente.academico.domicilio_actual;
     if (dom.estado) earnedPoints++;
     if (dom.municipio) earnedPoints++;
     if (dom.colonia) earnedPoints++;
     if (dom.calle) earnedPoints++;
+    if (dom.con_quien_vive) earnedPoints++;
 
     // Domicilio origen (si es foráneo)
     if (this.isForaneo) {
@@ -299,27 +345,79 @@ export class StudentSettingsComponent implements OnInit {
     if (this.expediente.historia_familiar.padres_estado_civil) earnedPoints++;
     if (this.expediente.historia_familiar.padres_relacion) earnedPoints++;
 
-    // Padre (3 campos)
-    totalPoints += 3;
+    // Padre (según estatus)
     const f = this.expediente.historia_familiar.padre;
-    if (f.estado) earnedPoints++;
-    if (f.ocupacion) earnedPoints++;
-    if (f.tipo_relacion) earnedPoints++;
+    if (f.estado === 'finado' || f.estado === 'ausente') {
+      totalPoints += 1;
+      if (f.estado) earnedPoints++;
+    } else {
+      totalPoints += 3;
+      if (f.estado) earnedPoints++;
+      if (f.ocupacion) earnedPoints++;
+      if (f.tipo_relacion) earnedPoints++;
+    }
 
-    // Madre (3 campos)
-    totalPoints += 3;
+    // Madre (según estatus)
     const m = this.expediente.historia_familiar.madre;
-    if (m.estado) earnedPoints++;
-    if (m.ocupacion) earnedPoints++;
-    if (m.tipo_relacion) earnedPoints++;
+    if (m.estado === 'finado' || m.estado === 'ausente') {
+      totalPoints += 1;
+      if (m.estado) earnedPoints++;
+    } else {
+      totalPoints += 3;
+      if (m.estado) earnedPoints++;
+      if (m.ocupacion) earnedPoints++;
+      if (m.tipo_relacion) earnedPoints++;
+    }
 
-    // Hermanos (1 campo)
-    totalPoints += 1;
-    if (this.expediente.historia_familiar.hermanos.tiene !== undefined) earnedPoints++;
+    // ponytail: Nueva pareja si están separados (conyugal)
+    if (this.expediente.historia_familiar.padres_estado_civil === 'Divorciados') {
+      if (f.estado !== 'finado' && f.estado !== 'ausente') {
+        totalPoints++;
+        if (f.nueva_pareja?.tiene !== undefined && f.nueva_pareja?.tiene !== '') {
+          earnedPoints++;
+          if (f.nueva_pareja.tiene === true || f.nueva_pareja.tiene === 'true' || f.nueva_pareja.tiene === 'si' || f.nueva_pareja.tiene === 'Sí') {
+            totalPoints += 2;
+            if (f.nueva_pareja.tipo_relacion) earnedPoints++;
+            if (f.nueva_pareja.figura_vida) earnedPoints++;
+          }
+        }
+      }
 
-    // Pareja (1 campo)
+      if (m.estado !== 'finado' && m.estado !== 'ausente') {
+        totalPoints++;
+        if (m.nueva_pareja?.tiene !== undefined && m.nueva_pareja?.tiene !== '') {
+          earnedPoints++;
+          if (m.nueva_pareja.tiene === true || m.nueva_pareja.tiene === 'true' || m.nueva_pareja.tiene === 'si' || m.nueva_pareja.tiene === 'Sí') {
+            totalPoints += 2;
+            if (m.nueva_pareja.tipo_relacion) earnedPoints++;
+            if (m.nueva_pareja.figura_vida) earnedPoints++;
+          }
+        }
+      }
+    }
+
+    // Hermanos
     totalPoints += 1;
-    if (this.expediente.historia_familiar.pareja.tiene !== undefined) earnedPoints++;
+    if (this.expediente.historia_familiar.hermanos.tiene === true || this.expediente.historia_familiar.hermanos.tiene === 'true' || this.expediente.historia_familiar.hermanos.tiene === 'si' || this.expediente.historia_familiar.hermanos.tiene === 'Sí') {
+      earnedPoints++;
+      totalPoints += 2; // cantidad y tipo_relacion
+      if (this.expediente.historia_familiar.hermanos.cantidad) earnedPoints++;
+      if (this.expediente.historia_familiar.hermanos.tipo_relacion) earnedPoints++;
+    } else if (this.expediente.historia_familiar.hermanos.tiene === false || this.expediente.historia_familiar.hermanos.tiene === 'false' || this.expediente.historia_familiar.hermanos.tiene === 'no' || this.expediente.historia_familiar.hermanos.tiene === 'No') {
+      earnedPoints++;
+    }
+
+    // Pareja
+    totalPoints += 1;
+    if (this.expediente.historia_familiar.pareja.tiene === true || this.expediente.historia_familiar.pareja.tiene === 'true' || this.expediente.historia_familiar.pareja.tiene === 'si' || this.expediente.historia_familiar.pareja.tiene === 'Sí') {
+      earnedPoints++;
+      totalPoints += 3; // edad, ocupacion, tipo_relacion
+      if (this.expediente.historia_familiar.pareja.edad) earnedPoints++;
+      if (this.expediente.historia_familiar.pareja.ocupacion) earnedPoints++;
+      if (this.expediente.historia_familiar.pareja.tipo_relacion) earnedPoints++;
+    } else if (this.expediente.historia_familiar.pareja.tiene === false || this.expediente.historia_familiar.pareja.tiene === 'false' || this.expediente.historia_familiar.pareja.tiene === 'no' || this.expediente.historia_familiar.pareja.tiene === 'No') {
+      earnedPoints++;
+    }
 
     // Contactos de emergencia (4 campos para los dos requeridos)
     totalPoints += 4;
@@ -341,13 +439,32 @@ export class StudentSettingsComponent implements OnInit {
     if (node === 'yo') {
       return !!(this.userCelular && this.fechaNacimiento && this.expediente.personal.estado_civil && this.userSexo);
     }
+    if (node === 'parents_relation') {
+      return !!(this.expediente.historia_familiar.padres_estado_civil && this.expediente.historia_familiar.padres_relacion);
+    }
     if (node === 'padre') {
       const f = this.expediente.historia_familiar.padre;
-      return f.estado === 'ausente' || f.estado === 'finado' || !!(f.edad && f.ocupacion && f.tipo_relacion);
+      const base = f.estado === 'ausente' || f.estado === 'finado' || !!(f.edad && f.ocupacion && f.tipo_relacion);
+      if (!base) return false;
+      if (this.expediente.historia_familiar.padres_estado_civil === 'Divorciados') {
+        if (f.nueva_pareja?.tiene === undefined || f.nueva_pareja?.tiene === '') return false;
+        if (f.nueva_pareja.tiene === true || f.nueva_pareja.tiene === 'true' || f.nueva_pareja.tiene === 'si' || f.nueva_pareja.tiene === 'Sí') {
+          return !!(f.nueva_pareja.tipo_relacion && f.nueva_pareja.figura_vida);
+        }
+      }
+      return true;
     }
     if (node === 'madre') {
       const m = this.expediente.historia_familiar.madre;
-      return m.estado === 'ausente' || m.estado === 'finado' || !!(m.edad && m.ocupacion && m.tipo_relacion);
+      const base = m.estado === 'ausente' || m.estado === 'finado' || !!(m.edad && m.ocupacion && m.tipo_relacion);
+      if (!base) return false;
+      if (this.expediente.historia_familiar.padres_estado_civil === 'Divorciados') {
+        if (m.nueva_pareja?.tiene === undefined || m.nueva_pareja?.tiene === '') return false;
+        if (m.nueva_pareja.tiene === true || m.nueva_pareja.tiene === 'true' || m.nueva_pareja.tiene === 'si' || m.nueva_pareja.tiene === 'Sí') {
+          return !!(m.nueva_pareja.tipo_relacion && m.nueva_pareja.figura_vida);
+        }
+      }
+      return true;
     }
     if (node === 'hermanos') {
       const h = this.expediente.historia_familiar.hermanos;
@@ -372,7 +489,7 @@ export class StudentSettingsComponent implements OnInit {
   addEmergencyContact() {
     this.expediente.contactos_emergencia.push({
       nombre: '',
-      parentesco: 'Pareja/amistad/otros',
+      parentesco: 'Otros',
       telefono: ''
     });
   }
@@ -480,7 +597,8 @@ export class StudentSettingsComponent implements OnInit {
     }
   }
 
-  confirmSave() {
+  // ponytail: confirmSave recibe sección para validar solo lo necesario
+  confirmSave(section?: string) {
     const dialogRef = this.dialog.open(FeedbackModalComponent, {
       width: '400px',
       data: {
@@ -494,7 +612,7 @@ export class StudentSettingsComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.performSave();
+        this.performSave(section);
       }
     });
   }
@@ -576,41 +694,97 @@ export class StudentSettingsComponent implements OnInit {
     }, 5000);
   }
 
-  async performSave() {
+  // ponytail: performSave valida solo la sección modificada para evitar bloqueos en guardado parcial
+  async performSave(section?: string) {
     this.isSaving = true;
     const user = this.authService.currentUser();
 
     if (user && user.id) {
-      // ponytail: Validar que no se guarde con la opción por defecto en combos obligatorios
-      if (!this.userFaculty || 
-          !this.expediente.academico.semestre || 
-          !this.expediente.academico.domicilio_actual.con_quien_vive || 
-          !this.expediente.personal.estado_civil) {
-        
-        this.isSaving = false;
-        this.dialog.open(FeedbackModalComponent, {
-          width: '400px',
-          data: { 
-            type: 'error', 
-            title: 'Selección Inválida', 
-            message: 'Por favor, selecciona una opción válida en todos los menús desplegables obligatorios (Unidad Académica, Semestre, Con quién vives y Estado Civil).' 
-          }
-        });
-        return;
-      }
-
-      if (this.expediente.contactos_emergencia && this.expediente.contactos_emergencia.length >= 2) {
-        if (!this.expediente.contactos_emergencia[0].parentesco || !this.expediente.contactos_emergencia[1].parentesco) {
+      if (section === 'personal') {
+        if (!this.firstName || !this.lastName || !this.userCelular || !this.fechaNacimiento || !this.userSexo || !this.expediente.personal.estado_civil) {
           this.isSaving = false;
           this.dialog.open(FeedbackModalComponent, {
             width: '400px',
-            data: { 
-              type: 'error', 
-              title: 'Parentesco Vacío', 
-              message: 'Por favor, selecciona el parentesco de tus dos contactos de emergencia obligatorios.' 
+            data: {
+              type: 'error',
+              title: 'Selección Inválida',
+              message: 'Por favor, completa todos los campos obligatorios de Datos Personales (Nombre, Apellido, Celular, Fecha de Nacimiento, Sexo y Estado Civil).'
             }
           });
           return;
+        }
+
+        // ponytail: Validar número de teléfono celular a 10 dígitos
+        const cleanCelular = this.userCelular.replace(/\D/g, '');
+        if (cleanCelular.length !== 10) {
+          this.isSaving = false;
+          this.dialog.open(FeedbackModalComponent, {
+            width: '400px',
+            data: {
+              type: 'error',
+              title: 'Teléfono Inválido',
+              message: 'El número de teléfono celular debe tener exactamente 10 dígitos.'
+            }
+          });
+          return;
+        }
+      } else if (section === 'academic') {
+        if (!this.userFaculty || !this.expediente.academico.semestre) {
+          this.isSaving = false;
+          this.dialog.open(FeedbackModalComponent, {
+            width: '400px',
+            data: {
+              type: 'error',
+              title: 'Selección Inválida',
+              message: 'Por favor, selecciona una opción válida en Unidad Académica y Semestre.'
+            }
+          });
+          return;
+        }
+      } else if (section === 'domicilio') {
+        if (!this.expediente.academico.domicilio_actual.con_quien_vive) {
+          this.isSaving = false;
+          this.dialog.open(FeedbackModalComponent, {
+            width: '400px',
+            data: {
+              type: 'error',
+              title: 'Selección Inválida',
+              message: 'Por favor, selecciona con quién vives actualmente.'
+            }
+          });
+          return;
+        }
+      } else if (section === 'emergency') {
+        if (this.expediente.contactos_emergencia && this.expediente.contactos_emergencia.length >= 2) {
+          const c1 = this.expediente.contactos_emergencia[0];
+          const c2 = this.expediente.contactos_emergencia[1];
+          if (!c1.nombre || !c1.parentesco || !c1.telefono || !c2.nombre || !c2.parentesco || !c2.telefono) {
+            this.isSaving = false;
+            this.dialog.open(FeedbackModalComponent, {
+              width: '400px',
+              data: {
+                type: 'error',
+                title: 'Contactos Incompletos',
+                message: 'Por favor, completa todos los campos (Nombre, Parentesco y Teléfono) de tus dos contactos de emergencia obligatorios.'
+              }
+            });
+            return;
+          }
+          // ponytail: Validar 10 dígitos para teléfonos de contactos de emergencia
+          const t1 = c1.telefono.replace(/\D/g, '');
+          const t2 = c2.telefono.replace(/\D/g, '');
+          if (t1.length !== 10 || t2.length !== 10) {
+            this.isSaving = false;
+            this.dialog.open(FeedbackModalComponent, {
+              width: '400px',
+              data: {
+                type: 'error',
+                title: 'Teléfono Inválido',
+                message: 'Los números de teléfono de los contactos de emergencia deben tener exactamente 10 dígitos.'
+              }
+            });
+            return;
+          }
         }
       }
 
@@ -633,7 +807,6 @@ export class StudentSettingsComponent implements OnInit {
         last_name: this.lastName,
         faculty: this.userFaculty || this.selectedFaculty,
         programa_educativo: this.userProgramaEducativo || null,
-        celular: this.userCelular,
         fecha_nacimiento: this.fechaNacimiento || null,
         sexo: this.userSexo,
         expediente_completo: { data: encryptedText }

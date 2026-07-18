@@ -1,0 +1,67 @@
+<meta name="robots" content="noindex, nofollow">
+<div class="admin-access-container">
+  <div class="logo-container">
+    <img src="/amati-logo.svg" alt="amati logo" class="amati-logo">
+    <div class="logo-text-group">
+      <span class="logo-text-main">amati</span>
+      <span class="logo-text-sub">SISTEMA</span>
+    </div>
+  </div>
+
+  <div class="access-card">
+    <div class="card-header">
+      <svg class="key-icon" viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="1.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25a3 3 0 013 3m3 0a6 6 0 01-7.02 5.912L9 17.25H7.5v-1.5M9 10.125a3 3 0 11-6 0 3 3 0 016 0z" />
+      </svg>
+      <h1>Acceso al Sistema</h1>
+    </div>
+
+    <hr class="header-divider">
+
+    <div *ngIf="!webAuthnSupported" class="unsupported-error">
+      <p>⚠️ El inicio de sesión o registro de Passkeys requiere soporte de hardware biométrico (Face ID, huella digital o llave física).</p>
+      <p>Por favor, ingresa desde un dispositivo y navegador compatibles.</p>
+    </div>
+
+    <form *ngIf="webAuthnSupported" (ngSubmit)="onSubmit()" #accessForm="ngForm" class="access-form">
+      <div class="form-group">
+        <label for="email">Identificador Institucional</label>
+        <input 
+          type="email" 
+          id="email" 
+          name="email" 
+          [(ngModel)]="email" 
+          required 
+          placeholder="correo@buap.mx"
+          [disabled]="isLoading"
+          class="email-input"
+        >
+      </div>
+
+      <div *ngIf="mode === 'login' || (mode === 'register' && !hasSession)" class="captcha-group">
+        <div id="turnstile-container"></div>
+      </div>
+
+      <button type="submit" [disabled]="isLoading || !accessForm.valid || ((mode === 'login' || (mode === 'register' && !hasSession)) && !turnstileToken)" class="submit-btn">
+        <span *ngIf="!isLoading">
+          {{ mode === 'login' ? '🔑 Verificar identidad' : (hasSession ? '➕ Registrar dispositivo' : '✉️ Enviar enlace temporal') }}
+        </span>
+        <span *ngIf="isLoading" class="spinner"></span>
+      </button>
+
+      <div *ngIf="errorMessage" class="error-msg">
+        {{ errorMessage }}
+      </div>
+
+      <div *ngIf="successMessage" class="success-msg">
+        {{ successMessage }}
+      </div>
+    </form>
+  </div>
+
+  <div class="bottom-bands">
+    <div class="band purple-band"></div>
+    <div class="band green-band"></div>
+    <div class="band blue-band"></div>
+  </div>
+</div>

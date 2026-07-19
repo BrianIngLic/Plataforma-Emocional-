@@ -154,7 +154,44 @@ import { CryptoService } from '../../../core/services/crypto.service';
               </quill-editor>
             </div>
           </div>
-             <!-- Redactor de Notas Clínicas (Quill) -->
+
+          <!-- Módulo de Vulnerabilidad y Violencia (Solo Psicólogo) -->
+          <div *ngIf="isPsychologist" class="panel shared-panel" style="margin-bottom: 2rem; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.5rem;">
+            <div class="panel-header" style="display: flex; align-items: center; gap: 0.5rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem; margin-bottom: 1rem;">
+              <h3 class="section-title" style="display: flex; align-items: center; gap: 0.5rem; margin: 0; font-size: 1.15rem; font-weight: 700; color: var(--text-primary); border-bottom: none; padding-bottom: 0;">
+                <mat-icon style="color: #ef4444;">gavel</mat-icon> Indicadores de Vulnerabilidad y Riesgo de Violencia ({{ vulnerabilityWindow }})
+              </h3>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+              <p style="color: var(--text-secondary); font-size: 0.85rem; margin: 0;">
+                Marque si el estudiante se encuentra en situación de riesgo de violencia física, psicológica o sexual derivado de factores de vulnerabilidad en el periodo académico actual.
+              </p>
+              <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem;">
+                <label style="display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-primary); cursor: pointer;">
+                  <input type="checkbox" [(ngModel)]="vulnerabilities.edad" (ngModelChange)="onFieldChange()" [disabled]="isReadOnly || isSigned" style="width: 18px; height: 18px; cursor: pointer;" />
+                  Violencia por edad
+                </label>
+                <label style="display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-primary); cursor: pointer;">
+                  <input type="checkbox" [(ngModel)]="vulnerabilities.genero" (ngModelChange)="onFieldChange()" [disabled]="isReadOnly || isSigned" style="width: 18px; height: 18px; cursor: pointer;" />
+                  Violencia por género
+                </label>
+                <label style="display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-primary); cursor: pointer;">
+                  <input type="checkbox" [(ngModel)]="vulnerabilities.discapacidad" (ngModelChange)="onFieldChange()" [disabled]="isReadOnly || isSigned" style="width: 18px; height: 18px; cursor: pointer;" />
+                  Violencia por discapacidad
+                </label>
+                <label style="display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-primary); cursor: pointer;">
+                  <input type="checkbox" [(ngModel)]="vulnerabilities.condicion_socioeconomica" (ngModelChange)="onFieldChange()" [disabled]="isReadOnly || isSigned" style="width: 18px; height: 18px; cursor: pointer;" />
+                  Violencia por cond. socioeconómica
+                </label>
+                <label style="display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-primary); cursor: pointer;">
+                  <input type="checkbox" [(ngModel)]="vulnerabilities.origen_etnico" (ngModelChange)="onFieldChange()" [disabled]="isReadOnly || isSigned" style="width: 18px; height: 18px; cursor: pointer;" />
+                  Violencia por origen étnico
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Redactor de Notas Clínicas (Quill) -->
           <div class="editor-section">
             <h3 class="section-title">Evolución y Notas de la Sesión</h3>
             <quill-editor 
@@ -307,6 +344,16 @@ export class ClinicalNoteComponent implements OnInit, OnDestroy {
   referralSpecialist = '';
   referralSpecialistOther = '';
 
+  // ponytail: Vulnerability indicators (violence risk factors) by semester window
+  vulnerabilityWindow = '';
+  vulnerabilities = {
+    edad: false,
+    genero: false,
+    discapacidad: false,
+    condicion_socioeconomica: false,
+    origen_etnico: false
+  };
+
   // Meta Seal Signature
   isSigned = false;
   signatureName = '';
@@ -355,6 +402,17 @@ export class ClinicalNoteComponent implements OnInit, OnDestroy {
         
       if (apptError) throw apptError;
       this.appointment = appt;
+
+      // ponytail: Determine semester window from appointment scheduled date
+      if (this.appointment && this.appointment.scheduled_date) {
+        const apptDate = new Date(this.appointment.scheduled_date);
+        const term = apptDate.getMonth() < 6 ? 'Primavera' : 'Otoño';
+        this.vulnerabilityWindow = `${term} ${apptDate.getFullYear()}`;
+      } else {
+        const today = new Date();
+        const term = today.getMonth() < 6 ? 'Primavera' : 'Otoño';
+        this.vulnerabilityWindow = `${term} ${today.getFullYear()}`;
+      }
 
       // Determine professional's role
       const { data: { user } } = await this.supabase.auth.getUser();
@@ -474,6 +532,14 @@ export class ClinicalNoteComponent implements OnInit, OnDestroy {
               if (fechaNacimiento === 'N/A') fechaNacimiento = gen.fecha_nacimiento || 'N/A';
               if (gen.antecedentes_familiares && !antecedentesFamiliares) {
                 antecedentesFamiliares = gen.antecedentes_familiares;
+              }
+              
+              // Load vulnerability indicators by window
+              if (parsed.vulnerabilidad_violencia && parsed.vulnerabilidad_violencia[this.vulnerabilityWindow]) {
+                this.vulnerabilities = {
+                  ...this.vulnerabilities,
+                  ...parsed.vulnerabilidad_violencia[this.vulnerabilityWindow]
+                };
               }
             } catch(e) {
               console.warn('Error decrypting notes for general data:', e);
@@ -614,6 +680,8 @@ export class ClinicalNoteComponent implements OnInit, OnDestroy {
         p_user_id: this.patient.student_id,
         p_category: 'appointment'
       });
+      // ponytail: Save vulnerability indicators to student clinical records profile
+      await this.saveVulnerabilityToProfile();
     }
       
     this.loading = false;
@@ -809,10 +877,50 @@ export class ClinicalNoteComponent implements OnInit, OnDestroy {
         .eq('id', this.appointmentId);
       
       if (error) throw error;
+
+      // ponytail: Save vulnerability indicators to profile in real-time draft updates
+      await this.saveVulnerabilityToProfile();
+
       this.autoSaveStatus = 'Cambios guardados automáticamente';
     } catch (e) {
       console.warn('Auto-save failed:', e);
       this.autoSaveStatus = 'Error al guardar automáticamente';
+    }
+  }
+
+  // ponytail: Save vulnerability indicators by window in student_clinical_records table
+  async saveVulnerabilityToProfile() {
+    if (!this.patient || !this.isPsychologist) return;
+
+    try {
+      const { data: recordData } = await this.supabase
+        .from('student_clinical_records')
+        .select('additional_notes')
+        .eq('student_id', this.patient.student_id)
+        .maybeSingle();
+
+      let clinicalNotesObj: any = {};
+      if (recordData?.additional_notes) {
+        try {
+          const decrypted = this.crypto.decrypt(recordData.additional_notes);
+          clinicalNotesObj = JSON.parse(decrypted);
+        } catch(e) {
+          console.warn('Error decrypting clinical record on save:', e);
+        }
+      }
+
+      clinicalNotesObj.vulnerabilidad_violencia = clinicalNotesObj.vulnerabilidad_violencia || {};
+      clinicalNotesObj.vulnerabilidad_violencia[this.vulnerabilityWindow] = this.vulnerabilities;
+
+      const encryptedNotes = this.crypto.encrypt(JSON.stringify(clinicalNotesObj));
+
+      await this.supabase
+        .from('student_clinical_records')
+        .update({ additional_notes: encryptedNotes })
+        .eq('student_id', this.patient.student_id);
+
+    } catch(err) {
+      console.error('Error saving vulnerability indicators:', err);
     }
   }
 

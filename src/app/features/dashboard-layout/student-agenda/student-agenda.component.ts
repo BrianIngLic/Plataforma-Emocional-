@@ -64,6 +64,7 @@ export class StudentAgendaComponent implements OnInit {
 
   availableProfessionals: any[] = [];
   studentFaculty: string = '';
+  nextSessionTasks: string = '';
 
   async ngOnInit() {
     this.generateCalendar(); 
@@ -92,6 +93,30 @@ export class StudentAgendaComponent implements OnInit {
         this.loading = false;
       } else {
         this.loading = false;
+      }
+
+      // ponytail: Fetch last completed appointment to extract tasks/activities for the next session
+      const user = this.authService.currentUser();
+      if (user) {
+        const { data: lastCompletedAppt } = await this.supabase
+          .from('appointments')
+          .select('notes')
+          .eq('student_id', user.id)
+          .eq('status', 'completed')
+          .order('scheduled_date', { ascending: false })
+          .limit(1)
+          .maybeSingle();
+
+        if (lastCompletedAppt && lastCompletedAppt.notes) {
+          const tasksMatch = lastCompletedAppt.notes.match(/<div class="next-session-tasks-content">([\s\S]*?)<\/div>/);
+          if (tasksMatch) {
+            this.nextSessionTasks = tasksMatch[1].trim();
+          } else {
+            this.nextSessionTasks = '';
+          }
+        } else {
+          this.nextSessionTasks = '';
+        }
       }
     } catch (e) {
       console.error('Error inicializando agenda:', e);

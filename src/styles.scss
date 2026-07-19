@@ -54,6 +54,35 @@
   }
 }
 
+/* ==========================================================================
+   ADMIN GOLD THEME
+   ========================================================================== */
+.admin-theme {
+  /* Default: Modo Claro - Acentos dorados optimizados para fondos claros */
+  --admin-accent: #b58920; 
+  --admin-accent-hover: #967018;
+  --admin-accent-rgb: 181, 137, 32;
+  --btn-primary-bg: linear-gradient(135deg, #b58920, #967018);
+  --btn-primary-text: #ffffff;
+  --btn-secondary-bg: #ffffff;
+  --btn-secondary-border: #cbd5e1;
+  --btn-secondary-text: #334155;
+  --accent-purple: #b58920;
+  
+  /* Modo Oscuro - Acentos dorados optimizados para fondos oscuros */
+  @media (prefers-color-scheme: dark) {
+    --admin-accent: #d4af37; 
+    --admin-accent-hover: #e5c158;
+    --admin-accent-rgb: 212, 175, 55;
+    --btn-primary-bg: linear-gradient(135deg, #d4af37, #b58920);
+    --btn-primary-text: #0f172a;
+    --btn-secondary-bg: transparent;
+    --btn-secondary-border: rgba(255, 255, 255, 0.1);
+    --btn-secondary-text: #cbd5e1;
+    --accent-purple: #d4af37;
+  }
+}
+
 body {
   margin: 0;
   font-family: 'Inter', 'Roboto', 'Segoe UI', sans-serif;

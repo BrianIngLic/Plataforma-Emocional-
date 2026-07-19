@@ -90,7 +90,7 @@
   .logo { 
     width: 40px; 
     height: 40px; 
-    background: linear-gradient(135deg, #3b82f6, #60a5fa); 
+    background: linear-gradient(135deg, var(--admin-accent), var(--admin-accent-hover)); 
     border-radius: 50%; 
     display: flex; 
     align-items: center; 
@@ -99,7 +99,7 @@
     mat-icon { font-size: 20px; width: 20px; height: 20px; }
   }
   .brand-text { 
-    h2 { margin: 0; font-size: 1.1rem; font-weight: 700; color: #3b82f6; } 
+    h2 { margin: 0; font-size: 1.1rem; font-weight: 700; color: var(--admin-accent); } 
     p { margin: 0; font-size: 0.75rem; color: var(--text-secondary, #94a3b8); font-family: monospace; } 
   }
 }
@@ -138,9 +138,9 @@
   }
 
   &.active { 
-    background: rgba(59, 130, 246, 0.1); 
+    background: rgba(var(--admin-accent-rgb), 0.1); 
     color: var(--text-primary, #f8fafc); 
-    mat-icon { color: #3b82f6; } 
+    mat-icon { color: var(--admin-accent); } 
   }
   &:hover { background: rgba(255,255,255,0.03); }
   
@@ -223,12 +223,12 @@
   .avatar {
     width: 36px;
     height: 36px;
-    background: rgba(59, 130, 246, 0.2);
+    background: rgba(var(--admin-accent-rgb), 0.2);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #3b82f6;
+    color: var(--admin-accent);
   }
 
   .user-info {
@@ -254,7 +254,7 @@
   margin-left: auto;
   
   &:hover {
-    background-color: rgba(59, 130, 246, 0.15);
+    background-color: rgba(var(--admin-accent-rgb), 0.15);
   }
 }
 
@@ -266,7 +266,7 @@
 
   &.rotated {
     transform: rotate(180deg);
-    color: #3b82f6;
+    color: var(--admin-accent);
   }
 }
 
@@ -298,15 +298,15 @@
     transition: background 0.15s;
 
     &:hover {
-      background: rgba(59, 130, 246, 0.08);
+      background: rgba(var(--admin-accent-rgb), 0.08);
 
-      mat-icon { color: #3b82f6; }
+      mat-icon { color: var(--admin-accent); }
       span { color: var(--text-primary); }
     }
 
     mat-icon {
       font-size: 20px; width: 20px; height: 20px;
-      color: #3b82f6;
+      color: var(--admin-accent);
       flex-shrink: 0;
     }
 

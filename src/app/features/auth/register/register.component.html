@@ -189,6 +189,9 @@
               <mat-error *ngIf="profileFormGroup.get('fechaNacimiento')?.hasError('required')">
                 La fecha de nacimiento es obligatoria.
               </mat-error>
+              <mat-error *ngIf="profileFormGroup.get('fechaNacimiento')?.hasError('minAge')">
+                Debes tener al menos 12 años de edad.
+              </mat-error>
             </mat-form-field>
           </div>
 

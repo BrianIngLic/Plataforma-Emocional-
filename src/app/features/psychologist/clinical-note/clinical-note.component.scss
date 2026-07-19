@@ -311,3 +311,10 @@
     }
   }
 }
+
+.editor-section.tasks-editor {
+  ::ng-deep .ql-container.ql-snow,
+  ::ng-deep .ql-editor {
+    min-height: 150px !important;
+  }
+}

@@ -443,3 +443,95 @@
     }
   }
 }
+
+/* ponytail: Added genealogy tree visualizer styles copied from student settings to fix layout and squished text. */
+.tree-visualization {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 600px;
+  margin: 0 auto;
+  position: relative;
+  padding: 1rem 0;
+
+  .tree-node {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: var(--bg-card);
+    border: 2px solid var(--border-color);
+    border-radius: 14px;
+    padding: 12px;
+    width: 140px;
+    cursor: pointer;
+    position: relative;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 15px -3px rgba(139, 92, 246, 0.15);
+      border-color: #8b5cf6;
+    }
+
+    &.selected {
+      border-color: #8b5cf6;
+      background: linear-gradient(135deg, var(--bg-card), rgba(139, 92, 246, 0.05));
+      box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2), 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+
+    &.completed {
+      border-color: #10b981;
+      
+      .avatar-ring {
+        box-shadow: 0 0 10px rgba(16, 185, 129, 0.2);
+      }
+    }
+
+    &.patient-node {
+      border-width: 2.5px;
+      background: linear-gradient(135deg, var(--bg-card), rgba(251, 191, 36, 0.03));
+      
+      .gold-ring {
+        border-color: #fbbf24;
+      }
+
+      &.selected {
+        border-color: #fbbf24;
+        box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.2), 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      }
+    }
+
+    .avatar-ring {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      border: 2px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--input-bg);
+      margin-bottom: 8px;
+      position: relative;
+      font-size: 1.5rem;
+    }
+
+    .node-label {
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: var(--text-primary);
+      margin-bottom: 2px;
+    }
+
+    .node-sublabel {
+      font-size: 0.72rem;
+      color: var(--text-secondary);
+      text-align: center;
+      max-width: 100%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+}
+

@@ -714,6 +714,29 @@ export class StudentSettingsComponent implements OnInit {
           return;
         }
 
+        // ponytail: Validar que el estudiante tenga al menos 12 años
+        if (this.fechaNacimiento) {
+          const birthDate = new Date(this.fechaNacimiento);
+          const today = new Date();
+          let age = today.getFullYear() - birthDate.getFullYear();
+          const m = today.getMonth() - birthDate.getMonth();
+          if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+            age--;
+          }
+          if (age < 12) {
+            this.isSaving = false;
+            this.dialog.open(FeedbackModalComponent, {
+              width: '400px',
+              data: {
+                type: 'error',
+                title: 'Edad Mínima No Cumplida',
+                message: 'Debes tener al menos 12 años de edad para registrarte en la plataforma.'
+              }
+            });
+            return;
+          }
+        }
+
         // ponytail: Validar número de teléfono celular a 10 dígitos
         const cleanCelular = this.userCelular.replace(/\D/g, '');
         if (cleanCelular.length !== 10) {

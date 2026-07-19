@@ -233,6 +233,20 @@ export class ProfileAvatarComponent implements OnInit {
       return;
     }
 
+    if (this.fechaNacimiento) {
+      const birthDate = new Date(this.fechaNacimiento);
+      const today = new Date();
+      let age = today.getFullYear() - birthDate.getFullYear();
+      const m = today.getMonth() - birthDate.getMonth();
+      if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+      }
+      if (age < 12) {
+        this.showFeedback('error', 'Edad Mínima No Cumplida', 'Debes tener al menos 12 años de edad para registrarte en la plataforma.');
+        return;
+      }
+    }
+
     const dialogRef = this.dialog.open(FeedbackModalComponent, {
       width: '400px',
       data: {

@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -44,6 +44,12 @@ import { CryptoService } from '../../../core/services/crypto.service';
                 <span class="status-badge" [ngStyle]="{'background': isReadOnly ? '#bbf7d0' : '#fef08a', 'color': isReadOnly ? '#166534' : '#854d0e'}">
                   {{ isReadOnly ? 'Finalizada' : 'Borrador' }}
                 </span>
+              </p>
+              <!-- Auto-save status indicator -->
+              <p *ngIf="!isReadOnly && !isSigned" style="margin: 0.15rem 0; font-size: 0.8rem; color: #64748b; font-style: italic; display: flex; align-items: center; justify-content: flex-end; gap: 4px;">
+                <mat-icon style="font-size: 14px; width: 14px; height: 14px; color: #10b981;" *ngIf="isAutoSaving && autoSaveStatus.startsWith('Cambios')">cloud_done</mat-icon>
+                <mat-icon style="font-size: 14px; width: 14px; height: 14px; color: #3b82f6;" *ngIf="autoSaveStatus === 'Escribiendo...'">sync</mat-icon>
+                <span>{{ autoSaveStatus || 'Listo para editar' }}</span>
               </p>
             </div>
             <div class="logo" style="display: flex; align-items: center; gap: 0.35rem; font-size: 1.4rem; font-weight: 800; color: var(--text-primary);">
@@ -153,11 +159,54 @@ import { CryptoService } from '../../../core/services/crypto.service';
             <h3 class="section-title">Evolución y Notas de la Sesión</h3>
             <quill-editor 
               [(ngModel)]="notesContent" 
+              (ngModelChange)="onFieldChange()"
               [modules]="isReadOnly ? { toolbar: false } : quillModules" 
               [readOnly]="isReadOnly || isSigned"
               placeholder="Redacte la nota clínica aquí..."
               theme="snow">
             </quill-editor>
+          </div>
+
+          <!-- Tareas/Actividades para la próxima sesión (Solo Psicólogo) -->
+          <div *ngIf="isPsychologist" class="editor-section tasks-editor">
+            <h3 class="section-title">Tareas / Actividades para la próxima sesión</h3>
+            <quill-editor 
+              [(ngModel)]="nextSessionTasks" 
+              (ngModelChange)="onFieldChange()"
+              [modules]="isReadOnly || isSigned ? { toolbar: false } : quillModules" 
+              [readOnly]="isReadOnly || isSigned"
+              placeholder="Escriba las tareas o actividades acordadas para la próxima sesión aquí..."
+              theme="snow">
+            </quill-editor>
+          </div>
+
+          <!-- Referencia a Especialista (Para Ambos) -->
+          <div class="panel shared-panel" style="margin-top: 1.5rem; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem;">
+            <div class="panel-header" style="display: flex; align-items: center; gap: 0.5rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem; margin-bottom: 1rem;">
+              <h3 class="section-title" style="display: flex; align-items: center; gap: 0.5rem; margin: 0; font-size: 1.15rem; font-weight: 700; color: var(--text-primary); border-bottom: none; padding-bottom: 0;">
+                <mat-icon style="color: #f59e0b;">hail</mat-icon> Referencia a otro especialista
+              </h3>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+              <p style="color: var(--text-secondary); font-size: 0.85rem; margin: 0;">
+                Indique si el paciente requiere ser canalizado o referenciado a otro profesional de la salud.
+              </p>
+              <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                <label style="font-size: 0.9rem; font-weight: 600; color: var(--text-secondary);">Seleccione el especialista:</label>
+                <select [(ngModel)]="referralSpecialist" (ngModelChange)="onFieldChange()" [disabled]="isReadOnly || isSigned" style="width: 100%; max-width: 300px; padding: 8px 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 14px; background: var(--bg-card); color: var(--text-primary); outline: none;">
+                  <option value="">Ninguna referencia</option>
+                  <option value="Nutriólogo">Nutriólogo</option>
+                  <option value="Psicólogo">Psicólogo</option>
+                  <option value="Psiquiatra">Psiquiatra</option>
+                  <option value="Médico General">Médico General</option>
+                  <option value="Otro">Otro (Especificar)</option>
+                </select>
+              </div>
+              <div *ngIf="referralSpecialist === 'Otro'" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                <label style="font-size: 0.9rem; font-weight: 600; color: var(--text-secondary);">Especifique el especialista:</label>
+                <input type="text" [(ngModel)]="referralSpecialistOther" (ngModelChange)="onFieldChange()" [disabled]="isReadOnly || isSigned" placeholder="Ej. Cardiólogo, Neurólogo..." style="width: 100%; max-width: 300px; padding: 8px 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 14px; background: var(--bg-card); color: var(--text-primary); outline: none;" />
+              </div>
+            </div>
           </div>
 
           <!-- Firma Electrónica -->
@@ -220,7 +269,7 @@ import { CryptoService } from '../../../core/services/crypto.service';
   `,
   styleUrls: ['./clinical-note.component.scss']
 })
-export class ClinicalNoteComponent implements OnInit {
+export class ClinicalNoteComponent implements OnInit, OnDestroy {
   supabase = inject(SupabaseService).supabase;
   crypto = inject(CryptoService);
   location = inject(Location);
@@ -249,6 +298,14 @@ export class ClinicalNoteComponent implements OnInit {
   isEditingAntecedentes = false;
   savingAntecedentes = false;
   antecedentesContent = '';
+
+  // ponytail: Simplified storage of next session tasks inside note HTML.
+  isPsychologist = false;
+  nextSessionTasks = '';
+
+  // ponytail: Simplified referral tracking inside notes HTML to avoid schema migration.
+  referralSpecialist = '';
+  referralSpecialistOther = '';
 
   // Meta Seal Signature
   isSigned = false;
@@ -299,9 +356,43 @@ export class ClinicalNoteComponent implements OnInit {
       if (apptError) throw apptError;
       this.appointment = appt;
 
+      // Determine professional's role
+      const { data: { user } } = await this.supabase.auth.getUser();
+      if (user) {
+        const { data: userRole } = await this.supabase
+          .from('users')
+          .select('role_id')
+          .eq('id', user.id)
+          .single();
+        this.isPsychologist = userRole?.role_id === 3;
+      }
+
       if (this.appointment.status === 'completed' || this.appointment.status === 'no_show') {
         this.isReadOnly = true;
         this.notesContent = this.appointment.notes || '';
+
+        // ponytail: Extract next session tasks snapshot from notesContent if present
+        if (this.notesContent) {
+          const tasksMatch = this.notesContent.match(/<div class="next-session-tasks-content">([\s\S]*?)<\/div>/);
+          if (tasksMatch) {
+            this.nextSessionTasks = tasksMatch[1].trim();
+          }
+        }
+
+        // ponytail: Extract referral info if present
+        if (this.notesContent) {
+          const referralMatch = this.notesContent.match(/Referenciado a (.*?)</);
+          if (referralMatch) {
+            const spec = referralMatch[1].trim();
+            const predefined = ['Nutriólogo', 'Psicólogo', 'Psiquiatra', 'Médico General'];
+            if (predefined.includes(spec)) {
+              this.referralSpecialist = spec;
+            } else {
+              this.referralSpecialist = 'Otro';
+              this.referralSpecialistOther = spec;
+            }
+          }
+        }
         
         if (this.notesContent && (this.notesContent.includes('META-SEAL-SECURE-SIGNATURE-SHA256') || this.notesContent.includes('Firma Digital Autorizada:'))) {
           this.isSigned = true;
@@ -321,13 +412,41 @@ export class ClinicalNoteComponent implements OnInit {
         }
       } else if (this.mode === 'discharge') {
         this.notesContent = '<p><strong>Nota de Alta / Cierre de Tratamiento:</strong> </p><p></p>';
+      } else {
+        // Draft mode
+        if (this.appointment.notes) {
+          const rawNotes = this.appointment.notes;
+
+          // 1. Extract next session tasks draft
+          const tasksMatch = rawNotes.match(/<div class="draft-next-session-tasks" style="display:none;">([\s\S]*?)<\/div>/);
+          if (tasksMatch) {
+            this.nextSessionTasks = tasksMatch[1].trim();
+          }
+
+          // 2. Extract referral draft
+          const referralMatch = rawNotes.match(/<div class="draft-referral-specialist" style="display:none;">([\s\S]*?)<\/div>/);
+          if (referralMatch) {
+            this.referralSpecialist = referralMatch[1].trim();
+          }
+          const referralOtherMatch = rawNotes.match(/<div class="draft-referral-other" style="display:none;">([\s\S]*?)<\/div>/);
+          if (referralOtherMatch) {
+            this.referralSpecialistOther = referralOtherMatch[1].trim();
+          }
+
+          // 3. Clean draft elements from notesContent
+          this.notesContent = rawNotes
+            .replace(/<div class="draft-next-session-tasks" style="display:none;">[\s\S]*?<\/div>/g, '')
+            .replace(/<div class="draft-referral-specialist" style="display:none;">[\s\S]*?<\/div>/g, '')
+            .replace(/<div class="draft-referral-other" style="display:none;">[\s\S]*?<\/div>/g, '')
+            .trim();
+        }
       }
 
       // Fetch Patient (User -> profiles)
       if (this.appointment && this.appointment.student_id) {
         const { data: pData, error: pError } = await this.supabase
           .from('users')
-          .select('id, matricula, mobile_phone, profiles(first_name, last_name, faculty, antecedentes_familiares), student_clinical_records!student_clinical_records_student_id_fkey(additional_notes)')
+          .select('id, matricula, mobile_phone, profiles(first_name, last_name, faculty, antecedentes_familiares, sexo, fecha_nacimiento), student_clinical_records!student_clinical_records_student_id_fkey(additional_notes)')
           .eq('id', this.appointment.student_id)
           .single();
           
@@ -340,8 +459,8 @@ export class ClinicalNoteComponent implements OnInit {
           let matricula = pData.matricula || 'N/A';
           let faculty = profile?.faculty || 'N/A';
           let celular = pData.mobile_phone || 'N/A';
-          let sexo = 'N/A';
-          let fechaNacimiento = 'N/A';
+          let sexo = profile?.sexo || 'N/A';
+          let fechaNacimiento = profile?.fecha_nacimiento || 'N/A';
           let edad = 'N/A';
           let antecedentesFamiliares = profile?.antecedentes_familiares || '';
 
@@ -350,15 +469,41 @@ export class ClinicalNoteComponent implements OnInit {
               const decrypted = this.crypto.decrypt(recordObj.additional_notes);
               const parsed = JSON.parse(decrypted);
               const gen = parsed.general_data || {};
-              celular = gen.celular || pData.mobile_phone || 'N/A';
-              sexo = gen.sexo || 'N/A';
-              fechaNacimiento = gen.fecha_nacimiento || 'N/A';
-              edad = gen.edad ? `${gen.edad} años` : 'N/A';
-              if (gen.antecedentes_familiares) {
+              if (celular === 'N/A') celular = gen.celular || 'N/A';
+              if (sexo === 'N/A') sexo = gen.sexo || 'N/A';
+              if (fechaNacimiento === 'N/A') fechaNacimiento = gen.fecha_nacimiento || 'N/A';
+              if (gen.antecedentes_familiares && !antecedentesFamiliares) {
                 antecedentesFamiliares = gen.antecedentes_familiares;
               }
             } catch(e) {
               console.warn('Error decrypting notes for general data:', e);
+            }
+          }
+
+          // Calculate age based on birth date and session date to keep it locked relative to the note's session date
+          if (fechaNacimiento && fechaNacimiento !== 'N/A') {
+            try {
+              const birthDate = new Date(fechaNacimiento);
+              const sessionDate = this.appointment?.scheduled_date ? new Date(this.appointment.scheduled_date) : new Date();
+              let calculatedAge = sessionDate.getFullYear() - birthDate.getFullYear();
+              const m = sessionDate.getMonth() - birthDate.getMonth();
+              if (m < 0 || (m === 0 && sessionDate.getDate() < birthDate.getDate())) {
+                calculatedAge--;
+              }
+              edad = `${calculatedAge} años`;
+            } catch (e) {
+              console.warn('Error calculating age:', e);
+            }
+          }
+
+          // Format birthdate nicely
+          let formattedBirthdate = fechaNacimiento;
+          if (fechaNacimiento && fechaNacimiento !== 'N/A' && fechaNacimiento.includes('-')) {
+            try {
+              const [y, m, d] = fechaNacimiento.split('-');
+              formattedBirthdate = `${d.padStart(2, '0')} - ${m.padStart(2, '0')} - ${y}`;
+            } catch (e) {
+              formattedBirthdate = fechaNacimiento;
             }
           }
 
@@ -370,7 +515,7 @@ export class ClinicalNoteComponent implements OnInit {
             faculty: faculty,
             celular: celular,
             sexo: sexo,
-            fecha_nacimiento: fechaNacimiento,
+            fecha_nacimiento: formattedBirthdate,
             edad: edad,
             antecedentes_familiares: antecedentesFamiliares
           };
@@ -411,8 +556,33 @@ export class ClinicalNoteComponent implements OnInit {
 
     this.loading = true;
 
-    // Append signature and snapshot to notesContent HTML
+    // Append signature, snapshot, and next session tasks to notesContent HTML
     const formattedDate = this.signatureDate ? this.signatureDate.toLocaleString() : new Date().toLocaleString();
+    
+    // ponytail: Append next session tasks inside notes HTML to avoid schema migration
+    let tasksHtml = '';
+    if (this.isPsychologist && this.nextSessionTasks && this.nextSessionTasks.trim()) {
+      tasksHtml = `
+        <div class="next-session-tasks-snapshot" style="margin-top: 1.5rem; padding: 0.75rem; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px;">
+          <p style="margin: 0 0 0.5rem 0; color: #15803d;"><strong>Tareas / Actividades para la próxima sesión:</strong></p>
+          <div class="next-session-tasks-content">${this.nextSessionTasks}</div>
+        </div>
+      `;
+    }
+
+    // ponytail: Append referral information inside notes HTML to avoid schema migration
+    let referralHtml = '';
+    if (this.referralSpecialist) {
+      const spec = this.referralSpecialist === 'Otro' ? this.referralSpecialistOther : this.referralSpecialist;
+      if (spec && spec.trim()) {
+        referralHtml = `
+          <div class="referral-snapshot" style="margin-top: 1.5rem; padding: 0.75rem; background: #fffbeb; border: 1px solid #fde68a; border-radius: 8px;">
+            <p style="margin: 0;"><strong>Referencia clínica:</strong> Referenciado a ${spec}</p>
+          </div>
+        `;
+      }
+    }
+
     const signatureHtml = this.mode === 'discharge' ? `
       <div class="signature-block" style="margin-top: 2rem; border-top: 2px dashed #dc2626; padding-top: 1rem; color: #334155;">
         <p><strong>Firmado Electrónicamente:</strong></p>
@@ -431,7 +601,7 @@ export class ClinicalNoteComponent implements OnInit {
       </div>
     `;
 
-    const finalNotes = this.notesContent + signatureHtml;
+    const finalNotes = this.notesContent + tasksHtml + referralHtml + signatureHtml;
 
     const { error } = await this.supabase
       .from('appointments')
@@ -592,6 +762,57 @@ export class ClinicalNoteComponent implements OnInit {
       this.showFeedback('error', 'Error al Guardar', 'Ocurrió un error al intentar guardar los antecedentes familiares.');
     } finally {
       this.savingAntecedentes = false;
+    }
+  }
+
+  // ponytail: Auto-save debouncer and logic
+  private autoSaveTimeout: any = null;
+  isAutoSaving = false;
+  autoSaveStatus = '';
+
+  ngOnDestroy() {
+    if (this.autoSaveTimeout) {
+      clearTimeout(this.autoSaveTimeout);
+    }
+  }
+
+  onFieldChange() {
+    if (this.isReadOnly || this.isSigned) return;
+    this.autoSaveStatus = 'Escribiendo...';
+    
+    if (this.autoSaveTimeout) {
+      clearTimeout(this.autoSaveTimeout);
+    }
+    
+    this.autoSaveTimeout = setTimeout(() => {
+      this.autoSaveDraft();
+    }, 2500);
+  }
+
+  async autoSaveDraft() {
+    if (this.isReadOnly || this.isSigned) return;
+
+    this.isAutoSaving = true;
+    this.autoSaveStatus = 'Guardando automáticamente...';
+
+    // Format draft elements
+    const draftTasksHtml = this.nextSessionTasks ? `<div class="draft-next-session-tasks" style="display:none;">${this.nextSessionTasks}</div>` : '';
+    const draftReferralHtml = this.referralSpecialist ? `<div class="draft-referral-specialist" style="display:none;">${this.referralSpecialist}</div>` : '';
+    const draftReferralOtherHtml = this.referralSpecialistOther ? `<div class="draft-referral-other" style="display:none;">${this.referralSpecialistOther}</div>` : '';
+
+    const draftContent = this.notesContent + draftTasksHtml + draftReferralHtml + draftReferralOtherHtml;
+
+    try {
+      const { error } = await this.supabase
+        .from('appointments')
+        .update({ notes: draftContent })
+        .eq('id', this.appointmentId);
+      
+      if (error) throw error;
+      this.autoSaveStatus = 'Cambios guardados automáticamente';
+    } catch (e) {
+      console.warn('Auto-save failed:', e);
+      this.autoSaveStatus = 'Error al guardar automáticamente';
     }
   }
 

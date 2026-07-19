@@ -426,6 +426,17 @@
 - `[ ]` Sincronizar `task.md` actualizado a `Ecosistema-de-Asistencia-Emocional-con-IA-Generativa`.
 - `[ ]` Sincronizar todos los archivos modificados de `src/` entre ambos repositorios.
 
+## Skill 18: Políticas de Consulta, Límites de Sesiones y Reagendas
+- `[x]` Desarrollar lógica de persistencia en la tabla `student_policy_tracking` (creación de tabla y políticas RLS).
+- `[x]` Implementar verificación de inasistencias en la ventana académica actual (3 no-show = baja).
+- `[x]` Registrar y evaluar cancelaciones tardías en `executeCancellation()` (cancelaciones < 72h).
+- `[x]` Implementar verificación de inactividad mayor a 30 días tras última sesión completada.
+- `[x]` Limitar cambios de especialista a un máximo de 2 por ventana.
+- `[x]` Agregar controles de especialista para `bypass_session_limit`, actualización de alta médica (`'discharged'`) y Nota de Cierre de Tratamiento (`mode === 'closure'`).
+- `[x]` Disparar alerta/notificación al especialista anterior al reasignar automáticamente, requiriendo redacción de nota de cierre.
+- `[x]` Mostrar contadores y estados de políticas en el dashboard del estudiante y del psicólogo.
+- `[x]` Diseñar panel no intrusivo en el selector de citas mostrando sesiones restantes, políticas activas y placeholder de requisitos previos para asistir.
+
 
 
 

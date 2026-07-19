@@ -208,6 +208,72 @@
       </div>
     </div>
 
+    <!-- SECCIÓN DE POLÍTICAS Y REQUISITOS (SKILL 18) -->
+    <div class="policies-requirements-container" *ngIf="assignedProfessionalId && !loading && !errorMsg" style="grid-column: 1 / -1; display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+      
+      <!-- CARD 1: CONTROL DE SESIONES -->
+      <div class="policy-card-item" style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.02); display: flex; flex-direction: column; gap: 0.75rem;">
+        <div style="display: flex; align-items: center; gap: 0.5rem; color: #8b5cf6;">
+          <mat-icon style="font-size: 20px; width: 20px; height: 20px;">analytics</mat-icon>
+          <h3 style="margin: 0; font-size: 1.05rem; font-weight: 700; color: var(--text-primary);">Sesiones de este Periodo</h3>
+        </div>
+        <div style="display: flex; align-items: baseline; gap: 8px;">
+          <span style="font-size: 2rem; font-weight: 800; color: #8b5cf6;">
+            {{ bookingPolicyStatus?.bypass ? '∞' : (10 - (bookingPolicyStatus?.completedCount || 0)) }}
+          </span>
+          <span style="font-size: 0.9rem; color: var(--text-secondary);">sesiones restantes</span>
+        </div>
+        <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+          <p style="margin: 0;">Periodo académico: <strong>{{ bookingPolicyStatus?.period }}</strong></p>
+          <p style="margin: 4px 0 0 0;">Sesiones completadas: <strong>{{ bookingPolicyStatus?.completedCount || 0 }} de 10</strong></p>
+          <p *ngIf="bookingPolicyStatus?.bypass" style="margin: 4px 0 0 0; color: #10b981; font-weight: 600;">✨ Límite de sesiones desactivado por tu clínico.</p>
+        </div>
+      </div>
+
+      <!-- CARD 2: POLÍTICAS DE ASISTENCIA -->
+      <div class="policy-card-item" style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.02); display: flex; flex-direction: column; gap: 0.75rem;">
+        <div style="display: flex; align-items: center; gap: 0.5rem; color: #ef4444;">
+          <mat-icon style="font-size: 20px; width: 20px; height: 20px;">gavel</mat-icon>
+          <h3 style="margin: 0; font-size: 1.05rem; font-weight: 700; color: var(--text-primary);">Políticas de Permanencia</h3>
+        </div>
+        <div style="font-size: 0.85rem; color: var(--text-secondary); display: flex; flex-direction: column; gap: 6px; line-height: 1.4;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span>Cancelaciones tardías (&lt; 72h):</span>
+            <strong [style.color]="(policyTrackingRecord?.late_cancellations || 0) > 0 ? '#ef4444' : 'var(--text-primary)'">
+              {{ policyTrackingRecord?.late_cancellations || 0 }} / 3
+            </strong>
+          </div>
+          <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: -2px;">*Acumular 3 cancelaciones tardías causa baja.</div>
+          <div style="height: 1px; background: var(--border-color); margin: 2px 0;"></div>
+          <p style="margin: 0;">⚠️ <strong>Baja por Inasistencia:</strong> Faltar a 3 citas sin justificación causa baja automática.</p>
+          <p style="margin: 0;">⚠️ <strong>Baja por Inactividad:</strong> Transcurrir más de 30 días sin cita programada causa baja.</p>
+        </div>
+      </div>
+
+      <!-- CARD 3: REQUISITOS PREVIOS -->
+      <div class="policy-card-item" style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.02); display: flex; flex-direction: column; gap: 0.75rem;">
+        <div style="display: flex; align-items: center; gap: 0.5rem; color: #10b981;">
+          <mat-icon style="font-size: 20px; width: 20px; height: 20px;">fact_check</mat-icon>
+          <h3 style="margin: 0; font-size: 1.05rem; font-weight: 700; color: var(--text-primary);">Requisitos para tu Cita</h3>
+        </div>
+        <div style="font-size: 0.85rem; color: var(--text-secondary); display: flex; flex-direction: column; gap: 6px; line-height: 1.4;">
+          <div style="display: flex; align-items: flex-start; gap: 6px;">
+            <span>📌</span>
+            <span>Presentarse/Conectarse 5 minutos antes de la hora pactada.</span>
+          </div>
+          <div style="display: flex; align-items: flex-start; gap: 6px;">
+            <span>📌</span>
+            <span>Tener a la mano credencial de estudiante BUAP (digital o física).</span>
+          </div>
+          <div style="display: flex; align-items: flex-start; gap: 6px;">
+            <span>📌</span>
+            <span>[Requisitos adicionales del campus/modalidad por definir próximamente]</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
     <!-- CALENDARIO PREMIUM UNIFICADO -->
     <div class="calendar-card" *ngIf="assignedProfessionalId && !loading && !errorMsg">
 

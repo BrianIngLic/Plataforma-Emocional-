@@ -10,6 +10,7 @@ import { CalendarioService, RegistroAyerSnapshot } from '../../../core/services/
 import { AuthService } from '../../../core/services/auth.service';
 import { SupabaseService } from '../../../core/services/supabase.service';
 import { CryptoService } from '../../../core/services/crypto.service';
+import { AgendaService } from '../../../core/services/agenda.service';
 import { QuillModule } from 'ngx-quill';
 
 interface BloqueVisual {
@@ -34,6 +35,7 @@ export class ConsultaComponent implements OnInit {
   private supabaseService = inject(SupabaseService);
   private crypto = inject(CryptoService);
   private dialog = inject(MatDialog);
+  private agendaService = inject(AgendaService);
 
   showFeedback(type: 'success' | 'error', title: string, message: string) {
     this.dialog.open(FeedbackModalComponent, {
@@ -571,14 +573,34 @@ export class ConsultaComponent implements OnInit {
       .update({ status: 'no_show', notes: '<p><strong>Inasistencia:</strong> El paciente no se presentó a la consulta.</p>' })
       .eq('id', this.sessionId);
       
-    this.loading = false;
     if (error) {
+      this.loading = false;
       console.error(error);
       alert('Error al actualizar inasistencia');
-    } else {
-      alert('Inasistencia registrada.');
-      this.cancelar();
+      return;
     }
+
+    // Evaluate no-show policy
+    try {
+      if (this.pacienteId) {
+        const period = this.agendaService.getCurrentAcademicPeriod();
+        const noShowCount = await this.agendaService.countNoShows(this.pacienteId, period);
+        if (noShowCount >= 3) {
+          await this.supabaseService.supabase
+            .from('patient_settings')
+            .update({ status: 'dropout' })
+            .eq('student_id', this.pacienteId);
+          
+          alert('El paciente ha acumulado 3 inasistencias en este periodo. Se le ha dado de baja automáticamente.');
+        }
+      }
+    } catch (e) {
+      console.error('Error evaluando política de inasistencias:', e);
+    }
+
+    this.loading = false;
+    alert('Inasistencia registrada.');
+    this.cancelar();
   }
 
   toggleEditAntecedentes() {

@@ -8,6 +8,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { FeedbackModalComponent } from '../../../shared/components/feedback-modal/feedback-modal.component';
 import { SupabaseService } from '../../../core/services/supabase.service';
 import { CryptoService } from '../../../core/services/crypto.service';
+import { AgendaService } from '../../../core/services/agenda.service';
 
 @Component({
   selector: 'app-clinical-note',
@@ -31,7 +32,7 @@ import { CryptoService } from '../../../core/services/crypto.service';
           <div class="logo-area" style="display: flex; align-items: center; gap: 0.75rem;">
             <img *ngIf="institutionalLogoUrl" [src]="institutionalLogoUrl" alt="Logo Institucional" style="max-height: 54px; max-width: 130px; object-fit: contain;" />
             <div>
-              <div class="doc-title" style="font-size: 1.25rem; font-weight: 700; color: var(--text-primary); letter-spacing: 0.5px; margin-bottom: 0.25rem;">{{ mode === 'discharge' ? 'NOTA DE ALTA Y CIERRE CLÍNICO' : 'NOTA DE EVOLUCIÓN CLÍNICA' }}</div>
+              <div class="doc-title" style="font-size: 1.25rem; font-weight: 700; color: var(--text-primary); letter-spacing: 0.5px; margin-bottom: 0.25rem;">{{ mode === 'discharge' ? 'NOTA DE ALTA Y CIERRE CLÍNICO' : (mode === 'closure' ? 'NOTA DE CIERRE DE TRATAMIENTO' : 'NOTA DE EVOLUCIÓN CLÍNICA') }}</div>
               <div style="font-size: 0.9rem; color: #64748b; font-weight: 500;">Expediente Clínico del Estudiante</div>
             </div>
           </div>
@@ -107,6 +108,24 @@ import { CryptoService } from '../../../core/services/crypto.service';
                 </tr>
               </tbody>
             </table>
+          </div>
+
+          <!-- Control de Políticas del Estudiante (Límite de Sesiones) -->
+          <div *ngIf="isPsychologist" class="panel shared-panel" style="margin-bottom: 2rem; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.5rem;">
+            <div class="panel-header" style="display: flex; align-items: center; gap: 0.5rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem; margin-bottom: 1rem;">
+              <h3 class="section-title" style="display: flex; align-items: center; gap: 0.5rem; margin: 0; font-size: 1.15rem; font-weight: 700; color: var(--text-primary); border-bottom: none; padding-bottom: 0;">
+                <mat-icon style="color: #8b5cf6;">settings</mat-icon> Políticas y Control de Sesiones
+              </h3>
+            </div>
+            <div>
+              <label style="display: flex; align-items: center; gap: 8px; font-size: 0.95rem; color: var(--text-primary); cursor: pointer; font-weight: 600;">
+                <input type="checkbox" [(ngModel)]="bypassSessionLimit" [disabled]="isReadOnly || isSigned" style="width: 18px; height: 18px; cursor: pointer;" />
+                Desactivar límite de 10 sesiones para este estudiante
+              </label>
+              <p style="color: var(--text-secondary); font-size: 0.85rem; margin: 4px 0 0 26px;">
+                Permite al estudiante continuar agendando citas en este periodo semestral superando el límite reglamentario de 10 sesiones (caso de gravedad/urgencia).
+              </p>
+            </div>
           </div>
 
           <!-- Antecedentes Clínicos Familiares (Campo Compartido) -->
@@ -309,10 +328,12 @@ import { CryptoService } from '../../../core/services/crypto.service';
 export class ClinicalNoteComponent implements OnInit, OnDestroy {
   supabase = inject(SupabaseService).supabase;
   crypto = inject(CryptoService);
+  agendaService = inject(AgendaService);
   location = inject(Location);
   route = inject(ActivatedRoute);
   router = inject(Router);
   dialog = inject(MatDialog);
+  bypassSessionLimit = false;
 
   showFeedback(type: 'success' | 'error', title: string, message: string) {
     this.dialog.open(FeedbackModalComponent, {
@@ -607,6 +628,12 @@ export class ClinicalNoteComponent implements OnInit, OnDestroy {
         const year = d.getFullYear();
         this.appointment.formatted_date = `${day} - ${month} - ${year}`;
       }
+
+      // Load bypass session limit status
+      if (this.patient?.student_id) {
+        const tracking = await this.agendaService.getPolicyTracking(this.patient.student_id, this.vulnerabilityWindow);
+        this.bypassSessionLimit = tracking?.bypass_session_limit || false;
+      }
       
     } catch (err) {
       console.error('Error loading data:', err);
@@ -616,7 +643,9 @@ export class ClinicalNoteComponent implements OnInit, OnDestroy {
 
   async saveNote() {
     if (!this.isSigned) {
-      alert(this.mode === 'discharge' ? 'La nota de alta debe estar firmada electrónicamente antes de poder guardarse como final.' : 'La nota clínica debe estar firmada electrónicamente con META SEAL antes de poder guardarse como final.');
+      alert((this.mode === 'discharge' || this.mode === 'closure') 
+        ? 'La nota de cierre/alta debe estar firmada electrónicamente antes de poder guardarse como final.' 
+        : 'La nota clínica debe estar firmada electrónicamente con META SEAL antes de poder guardarse como final.');
       return;
     }
 
@@ -649,7 +678,7 @@ export class ClinicalNoteComponent implements OnInit, OnDestroy {
       }
     }
 
-    const signatureHtml = this.mode === 'discharge' ? `
+    const signatureHtml = (this.mode === 'discharge' || this.mode === 'closure') ? `
       <div class="signature-block" style="margin-top: 2rem; border-top: 2px dashed #dc2626; padding-top: 1rem; color: #334155;">
         <p><strong>Firmado Electrónicamente:</strong></p>
         <p><strong>Código de Verificación:</strong> <span style="font-family: monospace; color: #16a34a;">${this.signatureSeal}</span></p>
@@ -680,6 +709,27 @@ export class ClinicalNoteComponent implements OnInit, OnDestroy {
         p_user_id: this.patient.student_id,
         p_category: 'appointment'
       });
+      // Save bypassSessionLimit to student_policy_tracking
+      try {
+        await this.agendaService.updatePolicyTracking(this.patient.student_id, this.vulnerabilityWindow, {
+          bypass_session_limit: this.bypassSessionLimit
+        });
+      } catch (policyErr) {
+        console.warn('Error saving bypass policy:', policyErr);
+      }
+
+      // If discharging, set patient status to discharged
+      if (this.mode === 'discharge') {
+        try {
+          await this.supabase
+            .from('patient_settings')
+            .update({ status: 'discharged' })
+            .eq('student_id', this.patient.student_id);
+        } catch (settingsErr) {
+          console.warn('Error updating status to discharged:', settingsErr);
+        }
+      }
+
       // ponytail: Save vulnerability indicators to student clinical records profile
       await this.saveVulnerabilityToProfile();
     }
@@ -730,7 +780,7 @@ export class ClinicalNoteComponent implements OnInit, OnDestroy {
       }
       const hexHash = Math.abs(hash).toString(16).toUpperCase().padStart(8, '0');
 
-      if (this.mode === 'discharge') {
+      if (this.mode === 'discharge' || this.mode === 'closure') {
         this.signatureSeal = `${hexHash}-${this.patient?.student_id?.substring(0, 8).toUpperCase()}`;
       } else {
         this.signatureSeal = `META-SEAL-SECURE-SIGNATURE-SHA256: ${hexHash}-${this.patient?.student_id?.substring(0, 8).toUpperCase()}`;
@@ -760,13 +810,34 @@ export class ClinicalNoteComponent implements OnInit, OnDestroy {
       .update({ status: 'no_show', notes: '<p><strong>Inasistencia:</strong> El paciente no se presentó a la sesión.</p>' })
       .eq('id', this.appointmentId);
       
-    this.loading = false;
     if (error) {
+      this.loading = false;
       console.error(error);
       alert('Error al actualizar');
-    } else {
-      this.goBack();
+      return;
     }
+
+    // Evaluate no-show policy
+    try {
+      const studentId = this.appointment?.student_id;
+      if (studentId) {
+        const period = this.agendaService.getCurrentAcademicPeriod(this.appointment.scheduled_date);
+        const noShowCount = await this.agendaService.countNoShows(studentId, period);
+        if (noShowCount >= 3) {
+          await this.supabase
+            .from('patient_settings')
+            .update({ status: 'dropout' })
+            .eq('student_id', studentId);
+          
+          alert('El paciente ha acumulado 3 inasistencias en este periodo. Se le ha dado de baja automáticamente.');
+        }
+      }
+    } catch (e) {
+      console.error('Error evaluando política de inasistencias:', e);
+    }
+
+    this.loading = false;
+    this.goBack();
   }
 
   toggleEditAntecedentes() {

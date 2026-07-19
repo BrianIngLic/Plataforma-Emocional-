@@ -2754,7 +2754,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "scratch_find_achievements_routes",
-      "community": 149,
+      "community": 199,
       "norm_label": "find_achievements_routes.js"
     },
     {
@@ -2764,7 +2764,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "scratch_find_achievements_routes_fs",
-      "community": 149,
+      "community": 199,
       "norm_label": "fs"
     },
     {
@@ -2774,7 +2774,7 @@
       "source_location": "L2",
       "_origin": "ast",
       "id": "scratch_find_achievements_routes_path",
-      "community": 149,
+      "community": 199,
       "norm_label": "path"
     },
     {
@@ -2784,7 +2784,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "scratch_find_achievements_routes_searchdir",
-      "community": 149,
+      "community": 199,
       "norm_label": "searchdir()"
     },
     {
@@ -2914,7 +2914,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "scratch_find_db_connection",
-      "community": 195,
+      "community": 149,
       "norm_label": "find_db_connection.js"
     },
     {
@@ -2924,7 +2924,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "scratch_find_db_connection_fs",
-      "community": 195,
+      "community": 149,
       "norm_label": "fs"
     },
     {
@@ -2934,7 +2934,7 @@
       "source_location": "L2",
       "_origin": "ast",
       "id": "scratch_find_db_connection_path",
-      "community": 195,
+      "community": 149,
       "norm_label": "path"
     },
     {
@@ -2944,7 +2944,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "scratch_find_db_connection_searchdir",
-      "community": 195,
+      "community": 149,
       "norm_label": "searchdir()"
     },
     {
@@ -5034,7 +5034,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "guards_role_guard",
-      "community": 68,
+      "community": 197,
       "norm_label": "role.guard.ts"
     },
     {
@@ -5074,7 +5074,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_agenda_service",
-      "community": 59,
+      "community": 68,
       "norm_label": "agenda.service.ts"
     },
     {
@@ -5084,7 +5084,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "services_agenda_service_timeblock",
-      "community": 59,
+      "community": 68,
       "norm_label": "timeblock"
     },
     {
@@ -5094,7 +5094,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "services_agenda_service_workingday",
-      "community": 59,
+      "community": 68,
       "norm_label": "workingday"
     },
     {
@@ -5104,7 +5104,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "services_agenda_service_workingdaysmap",
-      "community": 59,
+      "community": 68,
       "norm_label": "workingdaysmap"
     },
     {
@@ -5114,7 +5114,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "services_agenda_service_agendaservice",
-      "community": 59,
+      "community": 68,
       "norm_label": "agendaservice"
     },
     {
@@ -5124,7 +5124,7 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "services_agenda_service_agendaservice_getsettings",
-      "community": 59,
+      "community": 68,
       "norm_label": ".getsettings()"
     },
     {
@@ -5134,7 +5134,7 @@
       "source_location": "L39",
       "_origin": "ast",
       "id": "services_agenda_service_agendaservice_savesettings",
-      "community": 59,
+      "community": 68,
       "norm_label": ".savesettings()"
     },
     {
@@ -5144,7 +5144,7 @@
       "source_location": "L57",
       "_origin": "ast",
       "id": "services_agenda_service_agendaservice_getexceptions",
-      "community": 59,
+      "community": 68,
       "norm_label": ".getexceptions()"
     },
     {
@@ -5154,7 +5154,7 @@
       "source_location": "L68",
       "_origin": "ast",
       "id": "services_agenda_service_agendaservice_addexception",
-      "community": 59,
+      "community": 68,
       "norm_label": ".addexception()"
     },
     {
@@ -5164,7 +5164,7 @@
       "source_location": "L90",
       "_origin": "ast",
       "id": "services_agenda_service_agendaservice_deleteexception",
-      "community": 59,
+      "community": 68,
       "norm_label": ".deleteexception()"
     },
     {
@@ -5174,7 +5174,7 @@
       "source_location": "L101",
       "_origin": "ast",
       "id": "services_agenda_service_agendaservice_getstudentavailableslots",
-      "community": 59,
+      "community": 68,
       "norm_label": ".getstudentavailableslots()"
     },
     {
@@ -5234,7 +5234,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_arco_service",
-      "community": 146,
+      "community": 59,
       "norm_label": "arco.service.ts"
     },
     {
@@ -5244,7 +5244,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "services_arco_service_privacysettings",
-      "community": 146,
+      "community": 59,
       "norm_label": "privacysettings"
     },
     {
@@ -5254,7 +5254,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "services_arco_service_arcorequest",
-      "community": 146,
+      "community": 59,
       "norm_label": "arcorequest"
     },
     {
@@ -5354,7 +5354,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_audit_service",
-      "community": 68,
+      "community": 197,
       "norm_label": "audit.service.ts"
     },
     {
@@ -5364,7 +5364,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "services_audit_service_auditservice",
-      "community": 68,
+      "community": 197,
       "norm_label": "auditservice"
     },
     {
@@ -5374,7 +5374,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "services_audit_service_auditservice_logevent",
-      "community": 68,
+      "community": 197,
       "norm_label": ".logevent()"
     },
     {
@@ -5384,7 +5384,7 @@
       "source_location": "L40",
       "_origin": "ast",
       "id": "services_audit_service_auditservice_logunauthorizedaccess",
-      "community": 68,
+      "community": 197,
       "norm_label": ".logunauthorizedaccess()"
     },
     {
@@ -5754,7 +5754,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_clinical_service",
-      "community": 136,
+      "community": 59,
       "norm_label": "clinical.service.ts"
     },
     {
@@ -5814,7 +5814,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_crypto_service",
-      "community": 136,
+      "community": 146,
       "norm_label": "crypto.service.ts"
     },
     {
@@ -5824,7 +5824,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "services_crypto_service_cryptoservice",
-      "community": 136,
+      "community": 146,
       "norm_label": "cryptoservice"
     },
     {
@@ -5834,7 +5834,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "services_crypto_service_cryptoservice_derivekey",
-      "community": 136,
+      "community": 146,
       "norm_label": ".derivekey()"
     },
     {
@@ -5844,7 +5844,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "services_crypto_service_cryptoservice_clearkey",
-      "community": 136,
+      "community": 146,
       "norm_label": ".clearkey()"
     },
     {
@@ -5854,7 +5854,7 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "services_crypto_service_cryptoservice_getkey",
-      "community": 136,
+      "community": 146,
       "norm_label": ".getkey()"
     },
     {
@@ -5864,7 +5864,7 @@
       "source_location": "L37",
       "_origin": "ast",
       "id": "services_crypto_service_cryptoservice_encrypt",
-      "community": 136,
+      "community": 146,
       "norm_label": ".encrypt()"
     },
     {
@@ -5874,7 +5874,7 @@
       "source_location": "L42",
       "_origin": "ast",
       "id": "services_crypto_service_cryptoservice_decrypt",
-      "community": 136,
+      "community": 146,
       "norm_label": ".decrypt()"
     },
     {
@@ -6014,7 +6014,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_dossier_export_service",
-      "community": 136,
+      "community": 146,
       "norm_label": "dossier-export.service.ts"
     },
     {
@@ -6024,7 +6024,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "services_dossier_export_service_dossierexportservice",
-      "community": 81,
+      "community": 146,
       "norm_label": "dossierexportservice"
     },
     {
@@ -6034,7 +6034,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "services_dossier_export_service_dossierexportservice_getbase64imagefromurl",
-      "community": 81,
+      "community": 146,
       "norm_label": ".getbase64imagefromurl()"
     },
     {
@@ -6044,7 +6044,7 @@
       "source_location": "L39",
       "_origin": "ast",
       "id": "services_dossier_export_service_dossierexportservice_convertimagetowhite",
-      "community": 81,
+      "community": 146,
       "norm_label": ".convertimagetowhite()"
     },
     {
@@ -6054,7 +6054,7 @@
       "source_location": "L80",
       "_origin": "ast",
       "id": "services_dossier_export_service_dossierexportservice_convertimagetowatermark",
-      "community": 81,
+      "community": 146,
       "norm_label": ".convertimagetowatermark()"
     },
     {
@@ -6064,7 +6064,7 @@
       "source_location": "L118",
       "_origin": "ast",
       "id": "services_dossier_export_service_dossierexportservice_generatehmac",
-      "community": 81,
+      "community": 146,
       "norm_label": ".generatehmac()"
     },
     {
@@ -6074,7 +6074,7 @@
       "source_location": "L138",
       "_origin": "ast",
       "id": "services_dossier_export_service_dossierexportservice_getdossierdata",
-      "community": 81,
+      "community": 146,
       "norm_label": ".getdossierdata()"
     },
     {
@@ -6084,7 +6084,7 @@
       "source_location": "L388",
       "_origin": "ast",
       "id": "services_dossier_export_service_dossierexportservice_exportdossier",
-      "community": 81,
+      "community": 146,
       "norm_label": ".exportdossier()"
     },
     {
@@ -6454,7 +6454,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_internal_chat_service",
-      "community": 78,
+      "community": 198,
       "norm_label": "internal-chat.service.ts"
     },
     {
@@ -6464,7 +6464,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "services_internal_chat_service_whatsappmessage",
-      "community": 78,
+      "community": 198,
       "norm_label": "whatsappmessage"
     },
     {
@@ -6474,7 +6474,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "services_internal_chat_service_conversation",
-      "community": 78,
+      "community": 198,
       "norm_label": "conversation"
     },
     {
@@ -6484,7 +6484,7 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "services_internal_chat_service_internalchatservice",
-      "community": 78,
+      "community": 195,
       "norm_label": "internalchatservice"
     },
     {
@@ -6494,7 +6494,7 @@
       "source_location": "L35",
       "_origin": "ast",
       "id": "services_internal_chat_service_internalchatservice_getconversations",
-      "community": 78,
+      "community": 195,
       "norm_label": ".getconversations()"
     },
     {
@@ -6504,7 +6504,7 @@
       "source_location": "L88",
       "_origin": "ast",
       "id": "services_internal_chat_service_internalchatservice_getmessages",
-      "community": 78,
+      "community": 195,
       "norm_label": ".getmessages()"
     },
     {
@@ -6514,7 +6514,7 @@
       "source_location": "L107",
       "_origin": "ast",
       "id": "services_internal_chat_service_internalchatservice_sendmessage",
-      "community": 78,
+      "community": 195,
       "norm_label": ".sendmessage()"
     },
     {
@@ -6524,7 +6524,7 @@
       "source_location": "L202",
       "_origin": "ast",
       "id": "services_internal_chat_service_internalchatservice_markasread",
-      "community": 78,
+      "community": 195,
       "norm_label": ".markasread()"
     },
     {
@@ -6534,7 +6534,7 @@
       "source_location": "L215",
       "_origin": "ast",
       "id": "services_internal_chat_service_internalchatservice_subscribetomessages",
-      "community": 78,
+      "community": 195,
       "norm_label": ".subscribetomessages()"
     },
     {
@@ -6544,7 +6544,7 @@
       "source_location": "L238",
       "_origin": "ast",
       "id": "services_internal_chat_service_internalchatservice_getorcreateconversation",
-      "community": 78,
+      "community": 195,
       "norm_label": ".getorcreateconversation()"
     },
     {
@@ -6704,7 +6704,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_profile_service",
-      "community": 68,
+      "community": 142,
       "norm_label": "profile.service.ts"
     },
     {
@@ -6754,7 +6754,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_session_evaluation_service",
-      "community": 181,
+      "community": 136,
       "norm_label": "session-evaluation.service.ts"
     },
     {
@@ -6764,7 +6764,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "services_session_evaluation_service_sessionevaluationpayload",
-      "community": 181,
+      "community": 136,
       "norm_label": "sessionevaluationpayload"
     },
     {
@@ -6774,7 +6774,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "services_session_evaluation_service_sessionevaluation",
-      "community": 181,
+      "community": 136,
       "norm_label": "sessionevaluation"
     },
     {
@@ -6784,7 +6784,7 @@
       "source_location": "L33",
       "_origin": "ast",
       "id": "services_session_evaluation_service_pendingevaluationitem",
-      "community": 181,
+      "community": 136,
       "norm_label": "pendingevaluationitem"
     },
     {
@@ -6794,7 +6794,7 @@
       "source_location": "L40",
       "_origin": "ast",
       "id": "services_session_evaluation_service_professionalevaluationsummary",
-      "community": 181,
+      "community": 136,
       "norm_label": "professionalevaluationsummary"
     },
     {
@@ -6924,7 +6924,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "admin_access_admin_access_component",
-      "community": 81,
+      "community": 146,
       "norm_label": "admin-access.component.ts"
     },
     {
@@ -7004,7 +7004,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "admin_layout_admin_layout_component",
-      "community": 68,
+      "community": 18,
       "norm_label": "admin-layout.component.ts"
     },
     {
@@ -7104,7 +7104,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "admin_settings_admin_settings_component",
-      "community": 146,
+      "community": 142,
       "norm_label": "admin-settings.component.ts"
     },
     {
@@ -7114,7 +7114,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "admin_settings_admin_settings_component_adminsettingscomponent",
-      "community": 146,
+      "community": 142,
       "norm_label": "adminsettingscomponent"
     },
     {
@@ -7124,7 +7124,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "admin_settings_admin_settings_component_adminsettingscomponent_onregisterpasskey",
-      "community": 146,
+      "community": 142,
       "norm_label": ".onregisterpasskey()"
     },
     {
@@ -7154,7 +7154,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_features_admin_agenda_agenda_component_ts_agenda_agenda_component",
-      "community": 68,
+      "community": 59,
       "norm_label": "agenda.component.ts"
     },
     {
@@ -7164,7 +7164,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "agenda_agenda_component_appointment",
-      "community": 68,
+      "community": 59,
       "norm_label": "appointment"
     },
     {
@@ -7514,7 +7514,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "arco_requests_arco_requests_component",
-      "community": 146,
+      "community": 59,
       "norm_label": "arco-requests.component.ts"
     },
     {
@@ -9184,7 +9184,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "psychologists_psychologists_component",
-      "community": 81,
+      "community": 146,
       "norm_label": "psychologists.component.ts"
     },
     {
@@ -9194,7 +9194,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "psychologists_psychologists_component_psychologist",
-      "community": 81,
+      "community": 146,
       "norm_label": "psychologist"
     },
     {
@@ -9674,7 +9674,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_admin_exceptions_service",
-      "community": 68,
+      "community": 130,
       "norm_label": "admin-exceptions.service.ts"
     },
     {
@@ -9684,7 +9684,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "services_admin_exceptions_service_holiday",
-      "community": 68,
+      "community": 130,
       "norm_label": "holiday"
     },
     {
@@ -9854,7 +9854,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_admin_stats_service",
-      "community": 81,
+      "community": 59,
       "norm_label": "admin-stats.service.ts"
     },
     {
@@ -9874,7 +9874,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "services_admin_stats_service_chartdatapoint",
-      "community": 81,
+      "community": 59,
       "norm_label": "chartdatapoint"
     },
     {
@@ -10194,7 +10194,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "login_login_component",
-      "community": 81,
+      "community": 146,
       "norm_label": "login.component.ts"
     },
     {
@@ -10334,7 +10334,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "register_register_component",
-      "community": 81,
+      "community": 59,
       "norm_label": "register.component.ts"
     },
     {
@@ -10974,7 +10974,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "student_agenda_student_agenda_component",
-      "community": 59,
+      "community": 68,
       "norm_label": "student-agenda.component.ts"
     },
     {
@@ -11504,7 +11504,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "achievements_dashboard_achievements_dashboard_component",
-      "community": 17,
+      "community": 136,
       "norm_label": "achievements-dashboard.component.ts"
     },
     {
@@ -11824,7 +11824,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "emergency_change_modal_emergency_change_modal_component",
-      "community": 59,
+      "community": 68,
       "norm_label": "emergency-change-modal.component.ts"
     },
     {
@@ -11834,7 +11834,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "emergency_change_modal_emergency_change_modal_component_emergencymodaldata",
-      "community": 59,
+      "community": 68,
       "norm_label": "emergencymodaldata"
     },
     {
@@ -11914,7 +11914,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "command_center_chat_command_center_chat_component",
-      "community": 78,
+      "community": 198,
       "norm_label": "command-center-chat.component.ts"
     },
     {
@@ -12204,7 +12204,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_features_health_professional_settings_settings_component_ts_settings_settings_component",
-      "community": 59,
+      "community": 68,
       "norm_label": "settings.component.ts"
     },
     {
@@ -12934,7 +12934,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_features_nutritionist_dashboard_dashboard_component_ts_dashboard_dashboard_component",
-      "community": 68,
+      "community": 146,
       "norm_label": "dashboard.component.ts"
     },
     {
@@ -12994,7 +12994,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "nutritionist_layout_nutritionist_layout_component",
-      "community": 68,
+      "community": 18,
       "norm_label": "nutritionist-layout.component.ts"
     },
     {
@@ -13234,7 +13234,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "perfil_paciente_perfil_paciente_component",
-      "community": 136,
+      "community": 146,
       "norm_label": "perfil-paciente.component.ts"
     },
     {
@@ -13544,7 +13544,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_features_nutritionist_settings_settings_component_ts_settings_settings_component",
-      "community": 59,
+      "community": 68,
       "norm_label": "settings.component.ts"
     },
     {
@@ -13831,7 +13831,7 @@
       "label": "ClinicalNoteComponent",
       "file_type": "code",
       "source_file": "src/app/features/psychologist/clinical-note/clinical-note.component.ts",
-      "source_location": "L272",
+      "source_location": "L309",
       "_origin": "ast",
       "id": "clinical_note_clinical_note_component_clinicalnotecomponent",
       "community": 27,
@@ -13841,7 +13841,7 @@
       "label": ".showFeedback()",
       "file_type": "code",
       "source_file": "src/app/features/psychologist/clinical-note/clinical-note.component.ts",
-      "source_location": "L280",
+      "source_location": "L317",
       "_origin": "ast",
       "id": "clinical_note_clinical_note_component_clinicalnotecomponent_showfeedback",
       "community": 27,
@@ -13851,7 +13851,7 @@
       "label": ".ngOnInit()",
       "file_type": "code",
       "source_file": "src/app/features/psychologist/clinical-note/clinical-note.component.ts",
-      "source_location": "L338",
+      "source_location": "L385",
       "_origin": "ast",
       "id": "clinical_note_clinical_note_component_clinicalnotecomponent_ngoninit",
       "community": 27,
@@ -13861,7 +13861,7 @@
       "label": ".loadData()",
       "file_type": "code",
       "source_file": "src/app/features/psychologist/clinical-note/clinical-note.component.ts",
-      "source_location": "L346",
+      "source_location": "L393",
       "_origin": "ast",
       "id": "clinical_note_clinical_note_component_clinicalnotecomponent_loaddata",
       "community": 27,
@@ -13871,7 +13871,7 @@
       "label": ".saveNote()",
       "file_type": "code",
       "source_file": "src/app/features/psychologist/clinical-note/clinical-note.component.ts",
-      "source_location": "L551",
+      "source_location": "L617",
       "_origin": "ast",
       "id": "clinical_note_clinical_note_component_clinicalnotecomponent_savenote",
       "community": 27,
@@ -13881,7 +13881,7 @@
       "label": ".signWithMetaSeal()",
       "file_type": "code",
       "source_file": "src/app/features/psychologist/clinical-note/clinical-note.component.ts",
-      "source_location": "L628",
+      "source_location": "L696",
       "_origin": "ast",
       "id": "clinical_note_clinical_note_component_clinicalnotecomponent_signwithmetaseal",
       "community": 27,
@@ -13891,7 +13891,7 @@
       "label": ".unsignMetaSeal()",
       "file_type": "code",
       "source_file": "src/app/features/psychologist/clinical-note/clinical-note.component.ts",
-      "source_location": "L679",
+      "source_location": "L747",
       "_origin": "ast",
       "id": "clinical_note_clinical_note_component_clinicalnotecomponent_unsignmetaseal",
       "community": 27,
@@ -13901,7 +13901,7 @@
       "label": ".markNoShow()",
       "file_type": "code",
       "source_file": "src/app/features/psychologist/clinical-note/clinical-note.component.ts",
-      "source_location": "L686",
+      "source_location": "L754",
       "_origin": "ast",
       "id": "clinical_note_clinical_note_component_clinicalnotecomponent_marknoshow",
       "community": 27,
@@ -13911,7 +13911,7 @@
       "label": ".toggleEditAntecedentes()",
       "file_type": "code",
       "source_file": "src/app/features/psychologist/clinical-note/clinical-note.component.ts",
-      "source_location": "L704",
+      "source_location": "L772",
       "_origin": "ast",
       "id": "clinical_note_clinical_note_component_clinicalnotecomponent_toggleeditantecedentes",
       "community": 27,
@@ -13921,7 +13921,7 @@
       "label": ".cancelEditAntecedentes()",
       "file_type": "code",
       "source_file": "src/app/features/psychologist/clinical-note/clinical-note.component.ts",
-      "source_location": "L708",
+      "source_location": "L776",
       "_origin": "ast",
       "id": "clinical_note_clinical_note_component_clinicalnotecomponent_canceleditantecedentes",
       "community": 27,
@@ -13931,7 +13931,7 @@
       "label": ".guardarAntecedentes()",
       "file_type": "code",
       "source_file": "src/app/features/psychologist/clinical-note/clinical-note.component.ts",
-      "source_location": "L713",
+      "source_location": "L781",
       "_origin": "ast",
       "id": "clinical_note_clinical_note_component_clinicalnotecomponent_guardarantecedentes",
       "community": 27,
@@ -13941,7 +13941,7 @@
       "label": ".ngOnDestroy()",
       "file_type": "code",
       "source_file": "src/app/features/psychologist/clinical-note/clinical-note.component.ts",
-      "source_location": "L773",
+      "source_location": "L841",
       "_origin": "ast",
       "id": "clinical_note_clinical_note_component_clinicalnotecomponent_ngondestroy",
       "community": 27,
@@ -13951,7 +13951,7 @@
       "label": ".onFieldChange()",
       "file_type": "code",
       "source_file": "src/app/features/psychologist/clinical-note/clinical-note.component.ts",
-      "source_location": "L779",
+      "source_location": "L847",
       "_origin": "ast",
       "id": "clinical_note_clinical_note_component_clinicalnotecomponent_onfieldchange",
       "community": 27,
@@ -13961,17 +13961,27 @@
       "label": ".autoSaveDraft()",
       "file_type": "code",
       "source_file": "src/app/features/psychologist/clinical-note/clinical-note.component.ts",
-      "source_location": "L792",
+      "source_location": "L860",
       "_origin": "ast",
       "id": "clinical_note_clinical_note_component_clinicalnotecomponent_autosavedraft",
       "community": 27,
       "norm_label": ".autosavedraft()"
     },
     {
+      "label": ".saveVulnerabilityToProfile()",
+      "file_type": "code",
+      "source_file": "src/app/features/psychologist/clinical-note/clinical-note.component.ts",
+      "source_location": "L892",
+      "_origin": "ast",
+      "id": "clinical_note_clinical_note_component_clinicalnotecomponent_savevulnerabilitytoprofile",
+      "community": 27,
+      "norm_label": ".savevulnerabilitytoprofile()"
+    },
+    {
       "label": ".goBack()",
       "file_type": "code",
       "source_file": "src/app/features/psychologist/clinical-note/clinical-note.component.ts",
-      "source_location": "L819",
+      "source_location": "L927",
       "_origin": "ast",
       "id": "clinical_note_clinical_note_component_clinicalnotecomponent_goback",
       "community": 27,
@@ -14014,7 +14024,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "patient_profile_patient_profile_component",
-      "community": 136,
+      "community": 146,
       "norm_label": "patient-profile.component.ts"
     },
     {
@@ -14424,7 +14434,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "psychologist_layout_psychologist_layout_component",
-      "community": 68,
+      "community": 18,
       "norm_label": "psychologist-layout.component.ts"
     },
     {
@@ -14534,7 +14544,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_features_psychologist_settings_settings_component_ts_settings_settings_component",
-      "community": 59,
+      "community": 68,
       "norm_label": "settings.component.ts"
     },
     {
@@ -14784,7 +14794,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "settings_student_settings_component",
-      "community": 136,
+      "community": 59,
       "norm_label": "student-settings.component.ts"
     },
     {
@@ -15024,7 +15034,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "arco_settings_arco_settings_component",
-      "community": 146,
+      "community": 59,
       "norm_label": "arco-settings.component.ts"
     },
     {
@@ -15214,7 +15224,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "profile_avatar_profile_avatar_component",
-      "community": 136,
+      "community": 142,
       "norm_label": "profile-avatar.component.ts"
     },
     {
@@ -15384,7 +15394,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "environments_environment",
-      "community": 81,
+      "community": 146,
       "norm_label": "environment.ts"
     },
     {
@@ -15394,7 +15404,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "environments_environment_environment",
-      "community": 81,
+      "community": 146,
       "norm_label": "environment"
     },
     {
@@ -41955,6 +41965,16 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/app/features/psychologist/clinical-note/clinical-note.component.ts",
+      "source_location": "L892",
+      "weight": 1.0,
+      "source": "clinical_note_clinical_note_component_clinicalnotecomponent",
+      "target": "clinical_note_clinical_note_component_clinicalnotecomponent_savevulnerabilitytoprofile",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/features/psychologist/clinical-note/clinical-note.component.ts",
       "source_location": "L192",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -42029,11 +42049,33 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/app/features/psychologist/clinical-note/clinical-note.component.ts",
+      "source_location": "L684",
+      "weight": 1.0,
+      "source": "clinical_note_clinical_note_component_clinicalnotecomponent_savenote",
+      "target": "clinical_note_clinical_note_component_clinicalnotecomponent_savevulnerabilitytoprofile",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/features/psychologist/clinical-note/clinical-note.component.ts",
       "source_location": "L233",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "clinical_note_clinical_note_component_clinicalnotecomponent_marknoshow",
       "target": "clinical_note_clinical_note_component_clinicalnotecomponent_goback"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/features/psychologist/clinical-note/clinical-note.component.ts",
+      "source_location": "L882",
+      "weight": 1.0,
+      "source": "clinical_note_clinical_note_component_clinicalnotecomponent_autosavedraft",
+      "target": "clinical_note_clinical_note_component_clinicalnotecomponent_savevulnerabilitytoprofile",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",

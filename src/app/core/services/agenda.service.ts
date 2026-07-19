@@ -222,4 +222,205 @@ export class AgendaService {
     
     return { daysMap: availableDays, hasActiveReservation, activeReservationDetails };
   }
+
+  // --- Skill 18: Políticas de Consulta y Reagendas ---
+
+  getCurrentAcademicPeriod(dateInput?: Date | string): string {
+    const d = dateInput ? new Date(dateInput) : new Date();
+    const term = d.getMonth() < 6 ? 'Primavera' : 'Otoño';
+    return `${term} ${d.getFullYear()}`;
+  }
+
+  getPeriodDateRange(period: string) {
+    const [term, yearStr] = period.split(' ');
+    const year = parseInt(yearStr, 10);
+    if (term === 'Primavera') {
+      return {
+        start: `${year}-01-01`,
+        end: `${year}-06-30`
+      };
+    } else {
+      return {
+        start: `${year}-07-01`,
+        end: `${year}-12-31`
+      };
+    }
+  }
+
+  async getPolicyTracking(studentId: string, period: string) {
+    const { data, error } = await this.supabase
+      .from('student_policy_tracking')
+      .select('*')
+      .eq('student_id', studentId)
+      .eq('academic_period', period)
+      .maybeSingle();
+
+    if (error && error.code !== 'PGRST116') {
+      console.error('Error fetching policy tracking:', error);
+    }
+    return data;
+  }
+
+  async ensurePolicyTracking(studentId: string, period: string) {
+    const existing = await this.getPolicyTracking(studentId, period);
+    if (existing) return existing;
+
+    const { data, error } = await this.supabase
+      .from('student_policy_tracking')
+      .insert({
+        student_id: studentId,
+        academic_period: period,
+        late_cancellations: 0,
+        specialist_changes_psychologist: 0,
+        specialist_changes_nutritionist: 0,
+        bypass_session_limit: false
+      })
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Error creating policy tracking:', error);
+    }
+    return data;
+  }
+
+  async updatePolicyTracking(studentId: string, period: string, updates: any) {
+    await this.ensurePolicyTracking(studentId, period);
+    const { data, error } = await this.supabase
+      .from('student_policy_tracking')
+      .update(updates)
+      .eq('student_id', studentId)
+      .eq('academic_period', period)
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Error updating policy tracking:', error);
+      throw error;
+    }
+    return data;
+  }
+
+  async countCompletedSessions(studentId: string, period: string, professionalId?: string) {
+    const range = this.getPeriodDateRange(period);
+    let query = this.supabase
+      .from('appointments')
+      .select('id', { count: 'exact', head: true })
+      .eq('student_id', studentId)
+      .eq('status', 'completed')
+      .gte('scheduled_date', range.start)
+      .lte('scheduled_date', range.end);
+      
+    if (professionalId) {
+      query = query.eq('professional_id', professionalId);
+    }
+
+    const { count, error } = await query;
+    if (error) {
+      console.error('Error counting completed sessions:', error);
+      return 0;
+    }
+    return count || 0;
+  }
+
+  async countNoShows(studentId: string, period: string) {
+    const range = this.getPeriodDateRange(period);
+    const { count, error } = await this.supabase
+      .from('appointments')
+      .select('id', { count: 'exact', head: true })
+      .eq('student_id', studentId)
+      .eq('status', 'no_show')
+      .gte('scheduled_date', range.start)
+      .lte('scheduled_date', range.end);
+
+    if (error) {
+      console.error('Error counting no-shows:', error);
+      return 0;
+    }
+    return count || 0;
+  }
+
+  async checkInactivityDropout(studentId: string) {
+    const { data: lastCompleted, error: lastError } = await this.supabase
+      .from('appointments')
+      .select('scheduled_date')
+      .eq('student_id', studentId)
+      .eq('status', 'completed')
+      .order('scheduled_date', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    if (lastError || !lastCompleted) return false;
+
+    const todayStr = new Date().toISOString().split('T')[0];
+    const { data: futureAppts, error: futureError } = await this.supabase
+      .from('appointments')
+      .select('id')
+      .eq('student_id', studentId)
+      .eq('status', 'scheduled')
+      .gte('scheduled_date', todayStr)
+      .limit(1);
+
+    if (futureError || (futureAppts && futureAppts.length > 0)) return false;
+
+    const lastDate = new Date(lastCompleted.scheduled_date);
+    const today = new Date();
+    const diffTime = today.getTime() - lastDate.getTime();
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    if (diffDays > 30) {
+      await this.supabase
+        .from('patient_settings')
+        .update({ status: 'dropout' })
+        .eq('student_id', studentId);
+      return true;
+    }
+    return false;
+  }
+
+  async verifyBookingStatus(studentId: string, professionalId: string) {
+    const period = this.getCurrentAcademicPeriod();
+    
+    const { data: settings, error: settingsError } = await this.supabase
+      .from('patient_settings')
+      .select('status')
+      .eq('student_id', studentId)
+      .maybeSingle();
+
+    if (settingsError) {
+      console.error('Error fetching patient settings:', settingsError);
+    }
+
+    const currentStatus = settings?.status || 'active';
+
+    if (currentStatus === 'dropout') {
+      return { allowed: false, reason: 'dropout', period };
+    }
+
+    const isInactive = await this.checkInactivityDropout(studentId);
+    if (isInactive) {
+      return { allowed: false, reason: 'dropout', period };
+    }
+
+    const completedCount = await this.countCompletedSessions(studentId, period, professionalId);
+    const policy = await this.getPolicyTracking(studentId, period);
+    const bypass = policy?.bypass_session_limit || false;
+
+    if (completedCount >= 10 && !bypass) {
+      return { 
+        allowed: false, 
+        reason: 'session_limit_exceeded', 
+        completedCount,
+        period 
+      };
+    }
+
+    return { 
+      allowed: true, 
+      reason: 'ok', 
+      completedCount, 
+      bypass, 
+      period 
+    };
+  }
 }

@@ -20,8 +20,8 @@
     "semantic_hash": ""
   },
   "db/schema.sql": {
-    "mtime": 1784349925.3931684,
-    "ast_hash": "01b77f6831070402d4824d0e7d8c477b",
+    "mtime": 1784450233.0645273,
+    "ast_hash": "975b8815aca1c5f3b055ad11f0a96fb7",
     "semantic_hash": ""
   },
   "package.json": {
@@ -65,8 +65,8 @@
     "semantic_hash": "898ed4a8ee353b9b706390692ed5c74d"
   },
   "src/app/core/services/agenda.service.ts": {
-    "mtime": 1782609650.5699134,
-    "ast_hash": "2b55e7197e5cb61b08a116c7407d354b",
+    "mtime": 1784450473.9889672,
+    "ast_hash": "8b8783a844d36822947c8e6e4388e589",
     "semantic_hash": ""
   },
   "src/app/core/services/ai-triage-mock.service.ts": {
@@ -220,8 +220,8 @@
     "semantic_hash": ""
   },
   "src/app/features/dashboard-layout/student-agenda/student-agenda.component.ts": {
-    "mtime": 1784448462.6204767,
-    "ast_hash": "a360f6d3386969d870c3804718d55180",
+    "mtime": 1784450520.4198527,
+    "ast_hash": "1f1f0de4107c0458d8d906b3417a6fe9",
     "semantic_hash": ""
   },
   "src/app/features/diary/dashboard/diary-dashboard.component.ts": {
@@ -240,8 +240,8 @@
     "semantic_hash": ""
   },
   "src/app/features/psychologist/clinical-note/clinical-note.component.ts": {
-    "mtime": 1784448856.9913347,
-    "ast_hash": "680d208ed07c739c5be05cca5f365fa9",
+    "mtime": 1784450587.5967119,
+    "ast_hash": "7ae55fa5e2f7d7fa4839561fb6325121",
     "semantic_hash": ""
   },
   "src/app/features/psychologist/dashboard/dashboard.component.ts": {
@@ -360,8 +360,8 @@
     "semantic_hash": "e9fbe2f84e3d2e67d94ed6d56840ff5d"
   },
   "spec.md": {
-    "mtime": 1784349227.6798394,
-    "ast_hash": "dfc45ba0db6f5b3fd3610089590fbdf0",
+    "mtime": 1784450216.7653935,
+    "ast_hash": "3008f134456633d49356c4fca3c3acc8",
     "semantic_hash": ""
   },
   "src/app/app.html": {
@@ -425,8 +425,8 @@
     "semantic_hash": ""
   },
   "src/app/features/dashboard-layout/student-agenda/student-agenda.component.html": {
-    "mtime": 1784448468.6583638,
-    "ast_hash": "70b842c6bca689183783e0b91b5b9712",
+    "mtime": 1784450685.0479364,
+    "ast_hash": "afdac510a98d85ba1211ede7857ebac6",
     "semantic_hash": ""
   },
   "src/app/features/diary/dashboard/diary-dashboard.component.html": {
@@ -480,8 +480,8 @@
     "semantic_hash": ""
   },
   "task.md": {
-    "mtime": 1784349277.6020892,
-    "ast_hash": "83d5e0481ee436a15c73ef4fac8e02be",
+    "mtime": 1784450212.0151904,
+    "ast_hash": "78b6213cf5650c45b20a9de45f7d6bb1",
     "semantic_hash": ""
   },
   "public/amati-logo.svg": {
@@ -860,8 +860,8 @@
     "semantic_hash": ""
   },
   "src/app/features/nutritionist/consulta/consulta.component.ts": {
-    "mtime": 1783968424.8336704,
-    "ast_hash": "da757928f6ff67e0177787d12a6c59ce",
+    "mtime": 1784450602.717975,
+    "ast_hash": "c6ca07fe95bee8f4c47a20bf93067179",
     "semantic_hash": ""
   },
   "src/app/features/nutritionist/consulta/consulta.types.ts": {
@@ -1437,6 +1437,11 @@
   "scripts/README.md": {
     "mtime": 1784349943.7420144,
     "ast_hash": "08e926e050ef4e810b743a00a912a03d",
+    "semantic_hash": ""
+  },
+  "db/migration_student_policy_tracking.sql": {
+    "mtime": 1784450219.4686518,
+    "ast_hash": "a29b02e3ff6763fff56b912637716538",
     "semantic_hash": ""
   }
 }

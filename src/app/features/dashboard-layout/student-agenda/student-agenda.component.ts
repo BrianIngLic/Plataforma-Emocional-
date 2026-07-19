@@ -63,6 +63,8 @@ export class StudentAgendaComponent implements OnInit {
   errorMsg: string | null = null;
 
   availableProfessionals: any[] = [];
+  bookingPolicyStatus: any = null;
+  policyTrackingRecord: any = null;
   studentFaculty: string = '';
   nextSessionTasks: string = '';
 
@@ -221,22 +223,72 @@ export class StudentAgendaComponent implements OnInit {
     const user = this.authService.currentUser();
     if (!user) return;
     this.loading = true;
-    
-    const updateField = this.selectedSpecialty === 'psychologist' ? { primary_psychologist_id: profId } : { primary_nutritionist_id: profId };
 
-    const { error } = await this.supabase
-      .from('student_clinical_records')
-      .update(updateField)
-      .eq('student_id', user.id);
-      
-    if (!error) {
-       this.showFeedback('success', `${this.professionalRoleTitle} Asignado`, 'Se te ha asignado al especialista correctamente. Ya puedes agendar citas en el calendario unificado.');
-       this.availableProfessionals = [];
-       await this.fetchAssignedProfessional(false);
-       if (this.assignedProfessionalId) await this.loadAvailability();
-    } else {
-       this.showFeedback('error', 'Error', `No se pudo asignar el ${this.professionalRoleTitle.toLowerCase()}. Asegúrate de tener tu expediente inicializado.`);
-       this.loading = false;
+    try {
+      const period = this.agendaService.getCurrentAcademicPeriod();
+      const tracking = await this.agendaService.ensurePolicyTracking(user.id, period);
+
+      const isPsych = this.selectedSpecialty === 'psychologist';
+      const changeField = isPsych ? 'specialist_changes_psychologist' : 'specialist_changes_nutritionist';
+      const changeCount = tracking ? (tracking[changeField] || 0) : 0;
+
+      // 1. Check if there is an existing specialist assigned to detect if this is a change
+      const selectField = isPsych ? 'primary_psychologist_id' : 'primary_nutritionist_id';
+      const { data: record } = await this.supabase
+        .from('student_clinical_records')
+        .select(selectField)
+        .eq('student_id', user.id)
+        .maybeSingle();
+
+      const oldProfId = record ? (record as any)[selectField] : null;
+      const isRealChange = oldProfId && oldProfId !== profId;
+
+      if (isRealChange) {
+        if (changeCount >= 2) {
+          this.showFeedback('error', 'Límite de Cambios de Especialista', `Has alcanzado el límite máximo de 2 cambios de ${this.professionalRoleTitle.toLowerCase()} para el periodo académico ${period}. Para cambios adicionales, solicita apoyo en administración.`);
+          this.loading = false;
+          return;
+        }
+      }
+
+      // 2. Perform assignment/reassignment
+      const updateField = isPsych ? { primary_psychologist_id: profId } : { primary_nutritionist_id: profId };
+      const { error } = await this.supabase
+        .from('student_clinical_records')
+        .update(updateField)
+        .eq('student_id', user.id);
+
+      if (error) throw error;
+
+      // 3. If it was a change, update tracking counter and notify previous specialist
+      if (isRealChange) {
+        const newCount = changeCount + 1;
+        await this.agendaService.updatePolicyTracking(user.id, period, {
+          [changeField]: newCount
+        });
+
+        // Notify previous specialist to write Treatment Closure Note
+        try {
+          const studentName = user.name || 'Estudiante';
+          await this.supabase.from('professional_notifications').insert({
+            professional_id: oldProfId,
+            student_id: user.id,
+            event_type: 'treatment_closure_needed',
+            message: `El paciente ${studentName} ha solicitado cambio de especialista. Por favor, redacte la nota de cierre de tratamiento para transferir el caso.`
+          });
+        } catch (notifyErr) {
+          console.warn('No se pudo notificar al médico anterior:', notifyErr);
+        }
+      }
+
+      this.showFeedback('success', `${this.professionalRoleTitle} Asignado`, 'Se te ha asignado al especialista correctamente. Ya puedes agendar citas en el calendario unificado.');
+      this.availableProfessionals = [];
+      await this.fetchAssignedProfessional(false);
+      if (this.assignedProfessionalId) await this.loadAvailability();
+    } catch (e: any) {
+      console.error('Error asignando profesional:', e);
+      this.showFeedback('error', 'Error', `No se pudo asignar el ${this.professionalRoleTitle.toLowerCase()}. Asegúrate de tener tu expediente inicializado.`);
+      this.loading = false;
     }
   }
 
@@ -249,8 +301,24 @@ export class StudentAgendaComponent implements OnInit {
   async loadAvailability() {
     if (!this.assignedProfessionalId) return;
     this.loading = true;
+    this.errorMsg = null;
     
     try {
+      const user = this.authService.currentUser();
+      if (user) {
+        this.bookingPolicyStatus = await this.agendaService.verifyBookingStatus(user.id, this.assignedProfessionalId);
+        this.policyTrackingRecord = await this.agendaService.getPolicyTracking(user.id, this.bookingPolicyStatus.period);
+
+        if (!this.bookingPolicyStatus.allowed && this.bookingPolicyStatus.reason === 'dropout') {
+          const nextP = this.bookingPolicyStatus.period.includes('Primavera') 
+            ? `Otoño ${this.bookingPolicyStatus.period.split(' ')[1]}` 
+            : `Primavera ${parseInt(this.bookingPolicyStatus.period.split(' ')[1], 10) + 1}`;
+          this.errorMsg = `Tu cuenta se encuentra en estado de BAJA temporal debido al incumplimiento de las políticas de asistencia, reagendas o inactividad. Podrás volver a solicitar cita a partir del siguiente periodo académico (${nextP}).`;
+          this.loading = false;
+          return;
+        }
+      }
+
       const startStr = new Date().toISOString().split('T')[0];
       const endObj = new Date();
       endObj.setMonth(endObj.getMonth() + 3);
@@ -335,6 +403,13 @@ export class StudentAgendaComponent implements OnInit {
     if (this.hasActiveReservation && slot.status === 'available') {
       this.showFeedback('error', 'Cita Activa', `Ya tienes una cita programada con tu ${this.professionalRoleTitle.toLowerCase()}. No puedes agendar otra hasta que asistas o canceles.`);
       return;
+    }
+
+    if (this.bookingPolicyStatus && !this.bookingPolicyStatus.allowed && slot.status === 'available') {
+      if (this.bookingPolicyStatus.reason === 'session_limit_exceeded') {
+        this.showFeedback('error', 'Límite de Sesiones Superado', `Has completado el límite máximo de 10 sesiones con este especialista en el periodo académico actual (${this.bookingPolicyStatus.period}). Tu especialista debe desactivar el límite si se considera de gravedad.`);
+        return;
+      }
     }
 
     const [h, m] = slot.time.split(':').map(Number);
@@ -446,15 +521,70 @@ export class StudentAgendaComponent implements OnInit {
 
   async executeCancellation(appointmentId: string, reason: string = 'Sin motivo especificado') {
     this.loading = true;
-    const { error } = await this.supabase.from('appointments').update({ status: 'cancelled', cancellation_reason: reason }).eq('id', appointmentId);
-    if (error) {
-      console.error(error);
-      this.showFeedback('error', 'Error al Cancelar', 'Ocurrió un error: ' + error.message);
-      this.loading = false;
-    } else {
-      this.showFeedback('success', 'Cita Cancelada', `Tu cita con el ${this.professionalRoleTitle.toLowerCase()} ha sido cancelada correctamente y el espacio fue liberado.`);
+    const user = this.authService.currentUser();
+    if (!user) return;
+
+    try {
+      // 1. Fetch appointment details to check the 72 hour rule
+      const { data: appt, error: apptError } = await this.supabase
+        .from('appointments')
+        .select('scheduled_date, start_time')
+        .eq('id', appointmentId)
+        .single();
+
+      if (apptError) throw apptError;
+
+      // Calculate diff in hours
+      const apptDateTime = new Date(`${appt.scheduled_date}T${appt.start_time || '00:00:00'}`);
+      const now = new Date();
+      const diffMs = apptDateTime.getTime() - now.getTime();
+      const diffHours = diffMs / (1000 * 60 * 60);
+
+      const isLateCancellation = diffHours >= 0 && diffHours < 72;
+
+      // 2. Perform cancellation
+      const { error: cancelError } = await this.supabase
+        .from('appointments')
+        .update({ status: 'cancelled', cancellation_reason: reason })
+        .eq('id', appointmentId);
+
+      if (cancelError) throw cancelError;
+
+      let msg = `Tu cita con el ${this.professionalRoleTitle.toLowerCase()} ha sido cancelada correctamente y el espacio fue liberado.`;
+
+      // 3. Handle late cancellation policy
+      if (isLateCancellation) {
+        const period = this.agendaService.getCurrentAcademicPeriod(appt.scheduled_date);
+        const tracking = await this.agendaService.ensurePolicyTracking(user.id, period);
+        const lateCount = (tracking?.late_cancellations || 0) + 1;
+
+        await this.agendaService.updatePolicyTracking(user.id, period, {
+          late_cancellations: lateCount
+        });
+
+        if (lateCount >= 3) {
+          await this.supabase
+            .from('patient_settings')
+            .update({ status: 'dropout' })
+            .eq('student_id', user.id);
+          
+          this.showFeedback('error', 'Sanción de Baja Aplicada', 'Has cancelado 3 citas con menos de 72 horas de anticipación. Por reglamento, tu cuenta ha sido suspendida (BAJA) por el resto del periodo académico.');
+          this.selectedDateStr.set(null);
+          this.loading = false;
+          await this.initAgenda(false);
+          return;
+        } else {
+          msg = `Tu cita ha sido cancelada. AVISO: Esta cancelación se realizó con menos de 72 horas de anticipación (${lateCount}/3 permitidas). Acumular 3 cancelaciones tardías causa BAJA del servicio.`;
+        }
+      }
+
+      this.showFeedback('success', 'Cita Cancelada', msg);
       this.selectedDateStr.set(null);
-      this.loadAvailability();
+      await this.loadAvailability();
+    } catch (e: any) {
+      console.error('Error al cancelar cita:', e);
+      this.showFeedback('error', 'Error al Cancelar', 'Ocurrió un error: ' + e.message);
+      this.loading = false;
     }
   }
 

@@ -400,3 +400,15 @@ Si no hay soporte: mensaje claro indicando incompatibilidad del navegador/dispos
   - Los botones de estado de ánimo (`.mood-btn`) y botones de envío escalarán ligeramente hacia arriba (`scale(1.03)`) al pasar el ratón por encima, y se comprimirán (`scale(0.97)`) al ser presionados.
   - Las tarjetas de estadísticas y calendario se elevarán sutilmente y generarán una sombra profunda (`transform: translateY(-4px)`) en hover.
   - Los ítems de navegación lateral (`.nav-item`) se desplazarán lateralmente hacia la derecha (`transform: translateX(4px)`) al pasar el cursor para guiar el foco visual.
+
+### Skill 18: Políticas de Consulta, Límites de Sesiones y Reagendas
+- **Persistencia de Control:** Se crea la tabla relacional `student_policy_tracking` indexada por `student_id` y `academic_period` para registrar de manera estructurada las cancelaciones tardías, los cambios de especialista y el bypass del límite.
+- **Límite de Sesiones:** Máximo 10 sesiones con el especialista por ventana académica.
+  - **Excepción:** El especialista puede activar un bypass (`bypass_session_limit = true` en `student_policy_tracking`) para omitir el límite.
+  - **UI del Estudiante:** Mostrar contador de sesiones restantes (ej. "Sesiones restantes: X / 10").
+- **Baja por Inasistencia:** Si el estudiante acumula 3 inasistencias (`status = 'no_show'`) en la ventana actual, se actualiza su estado en `patient_settings` a `'dropout'` (baja).
+- **Baja por Reagendas Tardías:** Cancelaciones de citas realizadas con menos de 72 horas de anticipación se consideran tardías. Si acumula 3 cancelaciones tardías en la ventana actual, se actualiza a `'dropout'` (baja).
+- **Baja por Inactividad:** Si transcurren más de 30 días tras su última consulta completada sin que el estudiante tenga una nueva sesión agendada, se le considera `'dropout'` (baja).
+- **Tratamiento del Alta:** Si el especialista da de alta al estudiante (`mode = 'discharge'`), su estatus en `patient_settings` cambia a `'discharged'` (alta), permitiéndole volver a solicitar atención inmediatamente sin esperar la ventana del siguiente periodo.
+- **Cambio de Especialista:** Se limita a un máximo de 2 cambios de especialista por ventana (psicólogos y nutriólogos). Si se intenta un tercer cambio, se bloquea y se le instruye realizar una solicitud formal a la administración.
+  - **Nota de Cierre de Tratamiento (`mode = 'closure'`):** En reasignaciones automáticas, se notifica al especialista anterior que debe redactar y firmar una Nota de Cierre de Tratamiento para transferir adecuadamente el caso antes de que el nuevo profesional continúe el tratamiento.

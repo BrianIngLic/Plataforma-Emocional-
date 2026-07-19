@@ -96,6 +96,18 @@ CREATE TABLE public.patient_settings (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE public.student_policy_tracking (
+    student_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+    academic_period VARCHAR(20) NOT NULL,
+    late_cancellations INTEGER DEFAULT 0,
+    specialist_changes_psychologist INTEGER DEFAULT 0,
+    specialist_changes_nutritionist INTEGER DEFAULT 0,
+    bypass_session_limit BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (student_id, academic_period)
+);
+
 -- =========================================================================================
 -- CHAT AMATI (ASISTENTE IA) - ALTA SEGURIDAD
 -- =========================================================================================
@@ -413,6 +425,30 @@ ALTER TABLE public.health_professional_exceptions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.audit_logs ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.web_push_subscriptions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.whatsapp_routing_sessions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.student_policy_tracking ENABLE ROW LEVEL SECURITY;
+
+-- Políticas de student_policy_tracking
+CREATE POLICY student_policy_tracking_select ON public.student_policy_tracking
+    FOR SELECT TO authenticated
+    USING (auth.uid() = student_id);
+
+CREATE POLICY student_policy_tracking_insert ON public.student_policy_tracking
+    FOR INSERT TO authenticated
+    WITH CHECK (auth.uid() = student_id);
+
+CREATE POLICY student_policy_tracking_update ON public.student_policy_tracking
+    FOR UPDATE TO authenticated
+    USING (auth.uid() = student_id)
+    WITH CHECK (auth.uid() = student_id);
+
+CREATE POLICY professional_admin_policy_tracking_all ON public.student_policy_tracking
+    FOR ALL TO authenticated
+    USING (
+        EXISTS (
+            SELECT 1 FROM public.users
+            WHERE id = auth.uid() AND role_id IN (1, 3, 4)
+        )
+    );
 
 -- Política de Usuarios: Un usuario solo puede ver y editar su propia data pública
 CREATE POLICY user_own_data ON public.users FOR ALL USING (id = auth.uid());

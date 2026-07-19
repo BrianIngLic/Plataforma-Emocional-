@@ -47,9 +47,20 @@ export class AgendaComponent implements OnInit {
 
   // Modal Bloquear Día Manual
   showBlockDayModal = false;
+  blockMode: 'single' | 'range' = 'single';
   blockDayDate = '';
+  blockDayEndDate = '';
   blockDayReason = '';
   isSavingBlockDay = false;
+
+  // Modal Ver Días Bloqueados
+  showBlockedDaysModal = false;
+  isLoadingBlockedDays = false;
+  blockedDays: any[] = [];
+  confirmingId: string | null = null;
+  confirmTimeout: any = null;
+
+
 
 
   // Vista Semana vs Día
@@ -116,7 +127,9 @@ export class AgendaComponent implements OnInit {
 
   openBlockDayModal() {
     this.showBlockDayModal = true;
+    this.blockMode = 'single';
     this.blockDayDate = '';
+    this.blockDayEndDate = '';
     this.blockDayReason = '';
   }
 
@@ -125,29 +138,130 @@ export class AgendaComponent implements OnInit {
   }
 
   async saveBlockDayException() {
-    if (!this.blockDayDate || !this.blockDayReason) return;
+    if (this.blockMode === 'single') {
+      if (!this.blockDayDate || !this.blockDayReason) return;
+    } else {
+      if (!this.blockDayDate || !this.blockDayEndDate || !this.blockDayReason) return;
+    }
+    
     this.isSavingBlockDay = true;
     try {
-      const result = await this.exceptionsService.addException(this.blockDayDate, this.blockDayReason, null);
-      if (result.error) throw result.error;
-      
-      this.dialog.open(FeedbackModalComponent, {
-        width: '400px',
-        data: { type: 'success', title: 'Día Bloqueado', message: `Se ha bloqueado el día ${this.blockDayDate} globalmente.` }
-      });
+      if (this.blockMode === 'single') {
+        const result = await this.exceptionsService.addException(this.blockDayDate, this.blockDayReason, null);
+        if (result.error) throw result.error;
+        
+        this.dialog.open(FeedbackModalComponent, {
+          width: '400px',
+          data: { type: 'success', title: 'Día Bloqueado', message: `Se ha bloqueado el día ${this.blockDayDate} globalmente.` }
+        });
+      } else {
+        // Generate all dates between start and end (inclusive)
+        const dates: string[] = [];
+        let current = new Date(this.blockDayDate + 'T00:00:00');
+        const end = new Date(this.blockDayEndDate + 'T00:00:00');
+        
+        if (end < current) {
+          throw new Error('La fecha de fin debe ser posterior a la fecha de inicio.');
+        }
+
+        while (current <= end) {
+          dates.push(current.toISOString().split('T')[0]);
+          current.setDate(current.getDate() + 1);
+        }
+
+        const records = dates.map(d => ({
+          professional_id: null,
+          exception_date: d,
+          description: this.blockDayReason
+        }));
+
+        // Ponytail: batch insert exceptions for date range
+        const { error } = await this.supabaseService.supabase
+          .from('health_professional_exceptions')
+          .insert(records);
+
+        if (error) throw error;
+
+        this.dialog.open(FeedbackModalComponent, {
+          width: '400px',
+          data: { type: 'success', title: 'Periodo Bloqueado', message: `Se ha bloqueado el periodo del ${this.blockDayDate} al ${this.blockDayEndDate} globalmente.` }
+        });
+      }
       
       this.closeBlockDayModal();
       await this.loadAppointments(); // Recargar agenda
-    } catch (err) {
-      console.error('Error al bloquear día:', err);
+    } catch (err: any) {
+      console.error('Error al bloquear:', err);
       this.dialog.open(FeedbackModalComponent, {
         width: '400px',
-        data: { type: 'error', title: 'Error', message: 'No se pudo bloquear el día. Verifique los datos e intente nuevamente.' }
+        data: { type: 'error', title: 'Error', message: err.message || 'No se pudo procesar el bloqueo. Verifique los datos e intente nuevamente.' }
       });
     } finally {
       this.isSavingBlockDay = false;
     }
   }
+
+  openBlockedDaysModal() {
+    this.showBlockedDaysModal = true;
+    this.loadBlockedDays();
+  }
+
+  closeBlockedDaysModal() {
+    this.showBlockedDaysModal = false;
+  }
+
+  async loadBlockedDays() {
+    this.isLoadingBlockedDays = true;
+    try {
+      const { data, error } = await this.exceptionsService.getGlobalExceptions();
+      if (error) throw error;
+      this.blockedDays = data || [];
+    } catch (err) {
+      console.error('Error al cargar días bloqueados:', err);
+    } finally {
+      this.isLoadingBlockedDays = false;
+    }
+  }
+
+  revokeBlockedDay(id: string) {
+    if (this.confirmingId === id) {
+      if (this.confirmTimeout) {
+        clearTimeout(this.confirmTimeout);
+        this.confirmTimeout = null;
+      }
+      this.confirmingId = null;
+      this.executeRevocation(id);
+    } else {
+      this.confirmingId = id;
+      if (this.confirmTimeout) clearTimeout(this.confirmTimeout);
+      this.confirmTimeout = setTimeout(() => {
+        this.confirmingId = null;
+      }, 3000); // 3 segundos para confirmar
+    }
+  }
+
+  async executeRevocation(id: string) {
+    try {
+      const { error } = await this.exceptionsService.deleteException(id);
+      if (error) throw error;
+
+      this.dialog.open(FeedbackModalComponent, {
+        width: '400px',
+        data: { type: 'success', title: 'Bloqueo Revocado', message: 'El bloqueo ha sido eliminado exitosamente.' }
+      });
+
+      await this.loadBlockedDays(); // Recargar listado
+      await this.loadAppointments(); // Recargar agenda principal
+    } catch (err) {
+      console.error('Error al revocar bloqueo:', err);
+      this.dialog.open(FeedbackModalComponent, {
+        width: '400px',
+        data: { type: 'error', title: 'Error', message: 'No se pudo revocar el bloqueo de agenda.' }
+      });
+    }
+  }
+
+
 
   async ngOnInit() {
     this.loading = true;

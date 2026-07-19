@@ -85,4 +85,24 @@ export class AdminExceptionsService {
       
     return { data, error };
   }
+
+  // Obtener todas las excepciones globales (festivos o bloqueos de admin)
+  async getGlobalExceptions() {
+    const { data, error } = await this.supabaseService.supabase
+      .from('health_professional_exceptions')
+      .select('*')
+      .is('professional_id', null)
+      .order('exception_date', { ascending: false });
+    return { data, error };
+  }
+
+  // Revocar/eliminar una excepción
+  async deleteException(id: string) {
+    const { error } = await this.supabaseService.supabase
+      .from('health_professional_exceptions')
+      .delete()
+      .eq('id', id);
+    return { error };
+  }
 }
+

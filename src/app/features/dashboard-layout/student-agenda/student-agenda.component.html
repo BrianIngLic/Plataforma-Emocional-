@@ -256,7 +256,9 @@
           <mat-icon style="font-size: 20px; width: 20px; height: 20px;">fact_check</mat-icon>
           <h3 style="margin: 0; font-size: 1.05rem; font-weight: 700; color: var(--text-primary);">Requisitos para tu Cita</h3>
         </div>
-        <div style="font-size: 0.85rem; color: var(--text-secondary); display: flex; flex-direction: column; gap: 6px; line-height: 1.4;">
+
+        <!-- Requisitos Psicología (Default) -->
+        <div *ngIf="selectedSpecialty !== 'nutritionist'" style="font-size: 0.85rem; color: var(--text-secondary); display: flex; flex-direction: column; gap: 6px; line-height: 1.4;">
           <div style="display: flex; align-items: flex-start; gap: 6px;">
             <span>📌</span>
             <span>Presentarse/Conectarse 5 minutos antes de la hora pactada.</span>
@@ -268,6 +270,35 @@
           <div style="display: flex; align-items: flex-start; gap: 6px;">
             <span>📌</span>
             <span>[Requisitos adicionales del campus/modalidad por definir próximamente]</span>
+          </div>
+        </div>
+
+        <!-- Requisitos Nutrición (Específicos) -->
+        <div *ngIf="selectedSpecialty === 'nutritionist'" style="font-size: 0.85rem; color: var(--text-secondary); display: flex; flex-direction: column; gap: 8px; line-height: 1.4;">
+          <div style="background: rgba(16, 185, 129, 0.05); padding: 8px; border-radius: 8px; border: 1px solid rgba(16, 185, 129, 0.1); margin-bottom: 4px;">
+            <strong style="color: #047857; display: block; margin-bottom: 2px;">Duración: 30 minutos</strong>
+            <ol style="margin: 0; padding-left: 1rem; color: var(--text-secondary); font-size: 0.8rem;">
+              <li>Entrevista inicial: Hábitos, gustos, metas y objetivos.</li>
+              <li>Evaluación: Medición de complexión física.</li>
+              <li>Orientación nutricional: Explicación del sistema de equivalentes y porciones.</li>
+            </ol>
+          </div>
+          <strong style="color: var(--text-primary); font-size: 0.8rem;">Asiste a tu consulta cumpliendo lo siguiente:</strong>
+          <div style="display: flex; align-items: flex-start; gap: 6px;">
+            <span>🥛</span>
+            <span>Ayuno mínimo de 3 horas.</span>
+          </div>
+          <div style="display: flex; align-items: flex-start; gap: 6px;">
+            <span>🚫💧</span>
+            <span>No haber ingerido agua o bebidas 1 hora antes.</span>
+          </div>
+          <div style="display: flex; align-items: flex-start; gap: 6px;">
+            <span>👕</span>
+            <span>Lleva ropa cómoda y ligera.</span>
+          </div>
+          <div style="display: flex; align-items: flex-start; gap: 6px;">
+            <span>🧼</span>
+            <span>Mantener higiene personal y pasar al baño antes de la consulta.</span>
           </div>
         </div>
       </div>

@@ -153,7 +153,7 @@ export class HealthProfessionalAgendaComponent implements OnInit {
     
     const { data, error } = await this.supabase
       .from('appointments')
-      .select('*, student:users!appointments_student_id_fkey(profiles(first_name, last_name, avatar_url)), session_evaluations(q1_global, q2_bond, q3_goals, q4_impact, q5_comment, score_global, rupture_flag)')
+      .select('*, student:users!appointments_student_id_fkey(profiles(first_name, last_name, avatar_url)), session_evaluations(q1_global, q2_bond, q3_goals, q4_impact, score_global, rupture_flag)')
       .eq('professional_id', this.currentUserId)
       .order('scheduled_date', { ascending: false });
 
@@ -208,7 +208,7 @@ export class HealthProfessionalAgendaComponent implements OnInit {
     // 3. Obtener Citas de este día exacto con evaluaciones asociadas
     const { data: appts, error } = await this.supabase
       .from('appointments')
-      .select('*, student:users!appointments_student_id_fkey(profiles(first_name, last_name, avatar_url)), session_evaluations(q1_global, q2_bond, q3_goals, q4_impact, q5_comment, score_global, rupture_flag)')
+      .select('*, student:users!appointments_student_id_fkey(profiles(first_name, last_name, avatar_url)), session_evaluations(q1_global, q2_bond, q3_goals, q4_impact, score_global, rupture_flag)')
       .eq('professional_id', this.currentUserId)
       .eq('scheduled_date', dateString)
       .not('status', 'in', '(cancelled,canceled)')

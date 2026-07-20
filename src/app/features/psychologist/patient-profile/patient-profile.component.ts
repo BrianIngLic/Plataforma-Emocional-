@@ -55,6 +55,22 @@ export class PatientProfileComponent implements OnInit {
   sessionHistory: any[] = [];
   phq9Config: any = { mode: 'weeks', value: 4 };
   latestPhq9: any = null;
+  activeVulnerabilities: string[] = [];
+  vulnerabilityPeriod = '';
+  patientReferral = '';
+  phq9Entries: any[] = [];
+  selectedPhq9Detail: any = null;
+  phq9Questions = [
+    { id: 'q1', text: 'Poco interés o placer en hacer las cosas' },
+    { id: 'q2', text: 'Sentirse decaído/a, deprimido/a o sin esperanzas' },
+    { id: 'q3', text: 'Dificultad para conciliar/mantener el sueño, o dormir demasiado' },
+    { id: 'q4', text: 'Sentirse cansado/a o con poca energía' },
+    { id: 'q5', text: 'Poco apetito o comer en exceso' },
+    { id: 'q6', text: 'Sentirse mal consigo mismo/a, fracasado/a o decepción' },
+    { id: 'q7', text: 'Dificultad para concentrarse en actividades' },
+    { id: 'q8', text: 'Moverse o hablar lento, o estar demasiado inquieto/a' },
+    { id: 'q9', text: 'Pensamientos de estar muerto/a o hacerse daño' }
+  ];
 
   public lineChartData: ChartConfiguration<'line'>['data'] = {
     labels: [],
@@ -65,7 +81,12 @@ export class PatientProfileComponent implements OnInit {
         borderColor: '#8b5cf6',
         backgroundColor: 'rgba(139, 92, 246, 0.1)',
         tension: 0.4,
-        fill: true
+        fill: true,
+        pointRadius: 6,
+        pointHoverRadius: 8,
+        pointBackgroundColor: '#8b5cf6',
+        pointBorderColor: '#ffffff',
+        pointBorderWidth: 2
       }
     ]
   };
@@ -76,7 +97,14 @@ export class PatientProfileComponent implements OnInit {
     plugins: { legend: { display: false } },
     scales: {
       x: { grid: { display: false } },
-      y: { grid: { color: 'rgba(255, 255, 255, 0.05)' }, min: 0, max: 27 }
+      y: { 
+        grid: { color: 'rgba(255, 255, 255, 0.05)' }, 
+        min: 0, 
+        max: 27,
+        ticks: {
+          stepSize: 3
+        }
+      }
     }
   };
 
@@ -206,6 +234,10 @@ export class PatientProfileComponent implements OnInit {
           this.phq9Config = { mode: 'weeks', value: 4 };
         }
 
+        this.activeVulnerabilities = [];
+        this.vulnerabilityPeriod = '';
+        this.patientReferral = '';
+
         let antecedentesFamiliares = p?.antecedentes_familiares || '';
 
         if (notes) {
@@ -217,6 +249,34 @@ export class PatientProfileComponent implements OnInit {
             }
             if (parsedNotes.general_data && parsedNotes.general_data.antecedentes_familiares) {
               antecedentesFamiliares = parsedNotes.general_data.antecedentes_familiares;
+            }
+            // Extraer indicadores de vulnerabilidad
+            const vv = parsedNotes.vulnerabilidad_violencia || {};
+            const sortedPeriods = Object.keys(vv).sort((a, b) => {
+              const [termA, yearA] = a.split(' ');
+              const [termB, yearB] = b.split(' ');
+              const yA = parseInt(yearA) || 0;
+              const yB = parseInt(yearB) || 0;
+              if (yA !== yB) return yB - yA;
+              const rankA = termA === 'Otoño' ? 2 : 1;
+              const rankB = termB === 'Otoño' ? 2 : 1;
+              return rankB - rankA;
+            });
+            if (sortedPeriods.length > 0) {
+              this.vulnerabilityPeriod = sortedPeriods[0];
+              const latestVulnerabilities = vv[this.vulnerabilityPeriod] || {};
+              const labelMap: {[key: string]: string} = {
+                edad: 'Violencia por edad',
+                genero: 'Violencia por género',
+                discapacidad: 'Violencia por discapacidad',
+                condicion_socioeconomica: 'Violencia por cond. socioeconómica',
+                origen_etnico: 'Violencia por origen étnico'
+              };
+              Object.keys(latestVulnerabilities).forEach(key => {
+                if (latestVulnerabilities[key] === true && labelMap[key]) {
+                  this.activeVulnerabilities.push(labelMap[key]);
+                }
+              });
             }
             notes = decrypted;
           } catch(e) {
@@ -278,7 +338,7 @@ export class PatientProfileComponent implements OnInit {
       // 2. Fetch diary entries
       const { data: diaryData, error: diaryError } = await this.supabase
         .from('diary_entries')
-        .select('id, content, moods, high_risk, created_at, entry_type, phq9_score')
+        .select('id, content, moods, high_risk, created_at, entry_type, phq9_score, survey_data')
         .eq('student_id', id)
         .order('created_at', { ascending: false });
         
@@ -302,21 +362,24 @@ export class PatientProfileComponent implements OnInit {
             moodIcon: entry.high_risk ? 'warning' : 'sentiment_satisfied',
             content: decryptedContent,
             entry_type: entry.entry_type,
-            phq9_score: entry.phq9_score
+            phq9_score: entry.phq9_score,
+            survey_data: entry.survey_data
           };
         });
 
         // Procesar histórico PHQ-9
-        const phq9Entries = diaryData
+        this.phq9Entries = diaryData
           .filter((entry: any) => entry.entry_type === 'phq9' && entry.phq9_score !== null)
           .sort((a: any, b: any) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
 
-        if (phq9Entries.length > 0) {
-          const phq9Labels = phq9Entries.map((e: any) => {
+        if (this.phq9Entries.length > 0) {
+          const phq9Labels = this.phq9Entries.map((e: any) => {
             const d = new Date(e.created_at);
-            return `${d.getDate()}/${d.getMonth() + 1}`;
+            const day = d.getDate().toString().padStart(2, '0');
+            const month = (d.getMonth() + 1).toString().padStart(2, '0');
+            return `${day}/${month}/${d.getFullYear()}`;
           });
-          const phq9Scores = phq9Entries.map((e: any) => e.phq9_score);
+          const phq9Scores = this.phq9Entries.map((e: any) => e.phq9_score);
 
           this.lineChartData = {
             labels: phq9Labels,
@@ -338,7 +401,7 @@ export class PatientProfileComponent implements OnInit {
           };
 
           // Último test PHQ-9
-          const lastEntry = phq9Entries[phq9Entries.length - 1];
+          const lastEntry = this.phq9Entries[this.phq9Entries.length - 1];
           const score = lastEntry.phq9_score;
           let severity = 'Mínima';
           let color = '#10b981';
@@ -427,6 +490,18 @@ export class PatientProfileComponent implements OnInit {
             mood: a.status === 'scheduled' ? 'Programada' : a.status === 'completed' ? 'Completada' : 'Ausente'
           }
         });
+
+        // Extraer referencia si existe en las notas de sesión
+        this.patientReferral = '';
+        for (const appt of appts) {
+          if (appt.notes) {
+            const match = appt.notes.match(/Referenciado a (.*?)(?:<\/p>|<\/div>|<)/);
+            if (match && match[1]) {
+              this.patientReferral = match[1].trim();
+              break;
+            }
+          }
+        }
 
         // Actualizar estadísticas del paciente basándose en las citas reales
         const completedSessions = appts.filter((a: any) => a.status === 'completed').length;
@@ -848,5 +923,90 @@ export class PatientProfileComponent implements OnInit {
       console.error(e);
       alert('Error inesperado al guardar la configuración.');
     }
+  }
+
+  onChartClick(event: any): void {
+    if (event.active && event.active.length > 0) {
+      const activePoint = event.active[0];
+      const index = activePoint.index;
+      this.selectPhq9Entry(index);
+    }
+  }
+
+  selectPhq9Entry(index: number) {
+    const entry = this.phq9Entries[index];
+    if (!entry) return;
+
+    let score = entry.phq9_score;
+    let severity = '';
+    let action = '';
+    if (score <= 4) {
+      severity = 'Depresión Mínima / Sin depresión';
+      action = 'Ninguno en particular.';
+    } else if (score <= 9) {
+      severity = 'Depresión Leve';
+      action = 'Vigilancia clínica y re-evaluación periódica.';
+    } else if (score <= 14) {
+      severity = 'Depresión Moderada';
+      action = 'Plan de tratamiento activo (asesoramiento, seguimiento y/o farmacoterapia).';
+    } else if (score <= 19) {
+      severity = 'Depresión Moderadamente Severa';
+      action = 'Tratamiento activo inmediato con psicoterapia y/o farmacoterapia.';
+    } else {
+      severity = 'Depresión Severa';
+      action = 'Intervención inmediata, psicoterapia intensiva y/o derivación psiquiátrica urgente.';
+    }
+
+    const answersList: any[] = [];
+    const surveyData = entry.survey_data || {};
+    this.phq9Questions.forEach((q) => {
+      const ans = surveyData[q.id] || {};
+      answersList.push({
+        question: q.text,
+        text: ans.text || 'Sin respuesta',
+        value: ans.value !== undefined ? ans.value : '-'
+      });
+    });
+
+    this.selectedPhq9Detail = {
+      date: new Date(entry.created_at).toLocaleDateString(),
+      score: score,
+      severity: severity,
+      action: action,
+      answers: answersList
+    };
+  }
+
+  clearSelectedPhq9Detail() {
+    this.selectedPhq9Detail = null;
+  }
+
+  getPhq9SeverityAndAction(score: number | null): { severity: string; action: string } {
+    if (score === null || score === undefined) return { severity: '-', action: '-' };
+    if (score <= 4) {
+      return { severity: 'Depresión Mínima / Sin depresión', action: 'Ninguno en particular.' };
+    } else if (score <= 9) {
+      return { severity: 'Depresión Leve', action: 'Vigilancia clínica y re-evaluación periódica.' };
+    } else if (score <= 14) {
+      return { severity: 'Depresión Moderada', action: 'Plan de tratamiento activo (asesoramiento, seguimiento y/o farmacoterapia).' };
+    } else if (score <= 19) {
+      return { severity: 'Depresión Moderadamente Severa', action: 'Tratamiento activo inmediato con psicoterapia y/o farmacoterapia.' };
+    } else {
+      return { severity: 'Depresión Severa', action: 'Intervención inmediata, psicoterapia intensiva y/o derivación psiquiátrica urgente.' };
+    }
+  }
+
+  getPhq9AnswersList(surveyData: any): any[] {
+    const list: any[] = [];
+    const data = surveyData || {};
+    this.phq9Questions.forEach((q) => {
+      const ans = data[q.id] || {};
+      list.push({
+        question: q.text,
+        text: ans.text || 'Sin respuesta',
+        value: ans.value !== undefined ? ans.value : '-'
+      });
+    });
+    return list;
   }
 }

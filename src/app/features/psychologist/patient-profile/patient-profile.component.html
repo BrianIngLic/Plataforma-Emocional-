@@ -59,23 +59,44 @@
     <div class="col-main">
       <!-- Clinical Info -->
       <div class="card">
-        <h2 class="card-title"><mat-icon class="text-primary">assignment</mat-icon> Información Clínica</h2>
-        <div class="info-grid">
-          <div>
-            <label>Diagnóstico</label>
-            <p>{{patient.diagnosis}}</p>
+        <h2 class="card-title">
+          <mat-icon class="text-primary">assignment</mat-icon> Información Clínica
+        </h2>
+        
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 1.25rem;">
+          <!-- Antecedentes Familiares -->
+          <div style="grid-column: span 3; border-bottom: 1px solid var(--border-color); padding-bottom: 1.25rem;">
+            <label style="font-size: 11px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; display: block; margin-bottom: 6px; letter-spacing: 0.5px;">Antecedentes Familiares</label>
+            <div [innerHTML]="patient.antecedentes_familiares || 'Sin antecedentes familiares registrados.'" style="color: var(--text-primary); font-size: 14px; font-weight: 500; line-height: 1.5;"></div>
           </div>
-          <div>
-            <label>Plan de Tratamiento</label>
-            <p>{{patient.treatmentPlan}}</p>
+
+          <!-- Indicadores de Vulnerabilidad y Riesgo de Violencia -->
+          <div style="grid-column: span 2;">
+            <label style="font-size: 11px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; display: block; margin-bottom: 6px; letter-spacing: 0.5px;">
+              Indicadores de Vulnerabilidad y Riesgo de Violencia {{ vulnerabilityPeriod ? '(' + vulnerabilityPeriod + ')' : '' }}
+            </label>
+            <div *ngIf="activeVulnerabilities && activeVulnerabilities.length > 0" style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px;">
+              <span *ngFor="let vul of activeVulnerabilities" style="display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; padding: 5px 12px; border-radius: 20px; background: rgba(239, 68, 68, 0.08); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.12);">
+                <mat-icon style="font-size: 14px; width: 14px; height: 14px; display: inline-block; vertical-align: middle;">gavel</mat-icon> {{ vul }}
+              </span>
+            </div>
+            <div *ngIf="!vulnerabilityPeriod" style="color: var(--text-secondary); font-size: 13px; font-style: italic; margin-top: 6px;">
+              No se han capturado indicadores de vulnerabilidad para este paciente.
+            </div>
+            <div *ngIf="vulnerabilityPeriod && (!activeVulnerabilities || activeVulnerabilities.length === 0)" style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; padding: 5px 12px; border-radius: 6px; background: rgba(16, 185, 129, 0.08); color: #10b981; margin-top: 6px;">
+              <mat-icon style="font-size: 16px; width: 16px; height: 16px; color: #10b981;">check_circle</mat-icon> Sin indicadores de riesgo activos en el periodo
+            </div>
           </div>
+
+          <!-- Referencia a otro especialista -->
           <div>
-            <label>Medicamentos</label>
-            <ul><li *ngFor="let med of patient.medications"><mat-icon class="text-primary">medication</mat-icon> {{med}}</li></ul>
-          </div>
-          <div style="grid-column: span 3;" *ngIf="patient.antecedentes_familiares">
-            <label>Antecedentes Familiares</label>
-            <div [innerHTML]="patient.antecedentes_familiares" style="margin: 0.25rem 0 0; color: var(--text-primary); font-weight: 500;"></div>
+            <label style="font-size: 11px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; display: block; margin-bottom: 6px; letter-spacing: 0.5px;">Referencia a Especialista</label>
+            <div *ngIf="patientReferral" style="display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; color: #f59e0b; padding: 6px 12px; border-radius: 8px; background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.12); margin-top: 6px;">
+              <mat-icon style="font-size: 18px; width: 18px; height: 18px; color: #f59e0b;">hail</mat-icon> Canalizado a: {{ patientReferral }}
+            </div>
+            <div *ngIf="!patientReferral" style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 500; color: var(--text-secondary); margin-top: 6px;">
+              <mat-icon style="font-size: 18px; width: 18px; height: 18px; color: var(--text-secondary);">check</mat-icon> Sin referencias activas
+            </div>
           </div>
         </div>
       </div>
@@ -301,68 +322,7 @@
         </div>
       </div>
 
-      <!-- Progress Chart & Config -->
-      <div class="card">
-        <h2 class="card-title" style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
-          <span style="display: inline-flex; align-items: center; gap: 0.5rem;">
-            <mat-icon class="text-blue">trending_up</mat-icon> Evolución y Diagnóstico PHQ-9
-          </span>
-          <span *ngIf="latestPhq9" class="badge" [style.background]="latestPhq9.color" style="font-size: 0.75rem; padding: 4px 8px; border-radius: 6px; color: white; font-weight: bold;">
-            Último score: {{ latestPhq9.score }} ({{ latestPhq9.severity }}) - {{ latestPhq9.date }}
-          </span>
-        </h2>
-        
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 1rem; align-items: start;">
-          <!-- Columna Izquierda: Gráfica -->
-          <div class="chart-wrapper" style="height: 250px;">
-             <canvas baseChart [data]="lineChartData" [options]="lineChartOptions" type="line"></canvas>
-          </div>
 
-          <!-- Columna Derecha: Configuración Clínico y Resumen -->
-          <div style="display: flex; flex-direction: column; gap: 1rem; background: rgba(139, 92, 246, 0.02); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.25rem;">
-            <div>
-              <h4 style="margin: 0 0 6px 0; font-size: 0.9rem; font-weight: 700; color: var(--text-primary);">Configuración de Re-aplicación del PHQ-9</h4>
-              <p style="margin: 0; font-size: 0.78rem; color: var(--text-secondary); line-height: 1.4;">
-                Define la periodicidad con la que el sistema solicitará al estudiante contestar el PHQ-9 al entrar al diario.
-              </p>
-            </div>
-
-            <!-- Selector de Frecuencia -->
-            <div style="display: flex; flex-direction: column; gap: 8px;">
-              <div style="display: flex; gap: 10px; align-items: center;">
-                <select [(ngModel)]="phq9Config.mode" style="flex: 1; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 13px; font-family: inherit; background: var(--bg-card); color: var(--text-primary); box-sizing: border-box; height: 36px; outline: none;">
-                  <option value="weeks">Frecuencia por Semanas</option>
-                  <option value="months">Frecuencia por Meses</option>
-                  <option value="next_session">Previo a la Próxima Consulta</option>
-                  <option value="manual">Manual (A Demanda)</option>
-                </select>
-
-                <input *ngIf="phq9Config.mode === 'weeks' || phq9Config.mode === 'months'" 
-                       type="number" 
-                       [(ngModel)]="phq9Config.value" 
-                       min="1" 
-                       max="52" 
-                       style="width: 70px; padding: 8px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 13px; text-align: center; background: var(--bg-card); color: var(--text-primary); height: 36px; box-sizing: border-box;" />
-              </div>
-
-              <!-- Explicación de la opción seleccionada -->
-              <p style="margin: 4px 0 0 0; font-size: 0.78rem; font-style: italic; color: var(--text-secondary);">
-                <span *ngIf="phq9Config.mode === 'weeks'">El estudiante contestará el test cada <strong>{{ phq9Config.value || 4 }}</strong> semana(s).</span>
-                <span *ngIf="phq9Config.mode === 'months'">El estudiante contestará el test cada <strong>{{ phq9Config.value || 1 }}</strong> mes(es).</span>
-                <span *ngIf="phq9Config.mode === 'next_session'">El estudiante deberá contestar el test antes de su próxima consulta terapéutica.</span>
-                <span *ngIf="phq9Config.mode === 'manual'">El test PHQ-9 solo se re-aplicará de forma manual o discrecional.</span>
-              </p>
-            </div>
-
-            <!-- Botón de Guardado -->
-            <button class="btn btn-primary" (click)="savePhq9Config()" 
-                    style="width: 100%; background: #1e3a8a; color: white; border: none; padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 13px; transition: background 0.2s;">
-              <mat-icon style="font-size: 18px; width: 18px; height: 18px;">save</mat-icon>
-              Guardar Configuración
-            </button>
-          </div>
-        </div>
-      </div>
 
       <!-- Alianza Terapéutica Chart & Rupture Flag Alert -->
       <div class="card" *ngIf="allianceChartData.labels && allianceChartData.labels.length > 0">
@@ -533,6 +493,103 @@
     </div> <!-- Cierre de col-side -->
   </div> <!-- Cierre de content-grid -->
 
+  <!-- Full Width Section: Evolución y Diagnóstico PHQ-9 -->
+  <div class="full-width-section" style="margin-bottom: 2rem;">
+    <div class="card">
+      <h2 class="card-title" style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+        <span style="display: inline-flex; align-items: center; gap: 0.5rem;">
+          <mat-icon class="text-blue">trending_up</mat-icon> Evolución y Diagnóstico PHQ-9
+        </span>
+        <span *ngIf="latestPhq9" class="badge" [style.background]="latestPhq9.color" style="font-size: 0.75rem; padding: 4px 8px; border-radius: 6px; color: white; font-weight: bold;">
+          Último score: {{ latestPhq9.score }} ({{ latestPhq9.severity }}) - {{ latestPhq9.date }}
+        </span>
+      </h2>
+      
+      <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; margin-top: 1rem; align-items: start;">
+        <!-- Columna Izquierda: Gráfica (2/3) -->
+        <div class="chart-wrapper" style="height: 300px;">
+           <canvas baseChart [data]="lineChartData" [options]="lineChartOptions" type="line" (chartClick)="onChartClick($event)"></canvas>
+        </div>
+
+        <!-- Columna Derecha (1/3): Condicional -->
+        <!-- Caso A: Detalle del Test Seleccionado -->
+        <div *ngIf="selectedPhq9Detail" style="display: flex; flex-direction: column; gap: 1rem; background: rgba(139, 92, 246, 0.03); border: 1px solid #8b5cf6; border-radius: 16px; padding: 1.25rem; box-sizing: border-box; width: 100%;" class="animate-scale-in">
+          <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(139, 92, 246, 0.2); padding-bottom: 8px;">
+            <div>
+              <h4 style="margin: 0; font-size: 0.9rem; font-weight: 700; color: #8b5cf6;">Respuestas PHQ-9 ({{ selectedPhq9Detail.date }})</h4>
+              <p style="margin: 2px 0 0 0; font-size: 0.78rem; font-weight: 600; color: var(--text-primary);">
+                Puntaje: <span style="font-size: 0.85rem; color: #8b5cf6; font-weight: 700;">{{ selectedPhq9Detail.score }}/27</span> ({{ selectedPhq9Detail.severity }})
+              </p>
+            </div>
+            <button (click)="clearSelectedPhq9Detail()" style="background: transparent; border: none; cursor: pointer; color: var(--text-secondary); display: flex; align-items: center; outline: none; padding: 4px;">
+              <mat-icon style="font-size: 20px; width: 20px; height: 20px;">close</mat-icon>
+            </button>
+          </div>
+
+          <!-- Recomendación -->
+          <div style="background: rgba(139, 92, 246, 0.05); padding: 8px 12px; border-radius: 8px; font-size: 0.75rem; line-height: 1.4; color: var(--text-primary); border-left: 3px solid #8b5cf6;">
+            <strong>Recomendación clínica:</strong> {{ selectedPhq9Detail.action }}
+          </div>
+
+          <!-- Respuestas -->
+          <div style="display: flex; flex-direction: column; gap: 8px; max-height: 175px; overflow-y: auto; padding-right: 4px;">
+            <div *ngFor="let ans of selectedPhq9Detail.answers; let idx = index" style="border-bottom: 1px solid var(--border-color); padding-bottom: 6px; font-size: 0.75rem;">
+              <p style="margin: 0 0 3px 0; font-weight: 600; color: var(--text-primary);">{{ idx + 1 }}. {{ ans.question }}</p>
+              <div style="display: flex; justify-content: space-between; color: var(--text-secondary);">
+                <span>Respuesta: <strong style="color: var(--text-primary);">{{ ans.text }}</strong></span>
+                <span style="font-weight: 700; color: #8b5cf6;">Pts: {{ ans.value }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Caso B: Configuración Clínico y Resumen -->
+        <div *ngIf="!selectedPhq9Detail" style="display: flex; flex-direction: column; gap: 1rem; background: rgba(139, 92, 246, 0.02); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.25rem; box-sizing: border-box; width: 100%;">
+          <div>
+            <h4 style="margin: 0 0 6px 0; font-size: 0.9rem; font-weight: 700; color: var(--text-primary);">Configuración de Re-aplicación del PHQ-9</h4>
+            <p style="margin: 0; font-size: 0.78rem; color: var(--text-secondary); line-height: 1.4;">
+              Define la periodicidad con la que el sistema solicitará al estudiante contestar el PHQ-9 al entrar al diario.
+            </p>
+          </div>
+
+          <!-- Selector de Frecuencia -->
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <div style="display: flex; gap: 10px; align-items: center;">
+              <select [(ngModel)]="phq9Config.mode" style="flex: 1; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 13px; font-family: inherit; background: var(--bg-card); color: var(--text-primary); box-sizing: border-box; height: 36px; outline: none;">
+                <option value="weeks">Frecuencia por Semanas</option>
+                <option value="months">Frecuencia por Meses</option>
+                <option value="next_session">Previo a la Próxima Consulta</option>
+                <option value="manual">Manual (A Demanda)</option>
+              </select>
+
+              <input *ngIf="phq9Config.mode === 'weeks' || phq9Config.mode === 'months'" 
+                     type="number" 
+                     [(ngModel)]="phq9Config.value" 
+                     min="1" 
+                     max="52" 
+                     style="width: 70px; padding: 8px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 13px; text-align: center; background: var(--bg-card); color: var(--text-primary); height: 36px; box-sizing: border-box;" />
+            </div>
+
+            <!-- Explicación de la opción seleccionada -->
+            <p style="margin: 4px 0 0 0; font-size: 0.78rem; font-style: italic; color: var(--text-secondary);">
+              <span *ngIf="phq9Config.mode === 'weeks'">El estudiante contestará el test cada <strong>{{ phq9Config.value || 4 }}</strong> semana(s).</span>
+              <span *ngIf="phq9Config.mode === 'months'">El estudiante contestará el test cada <strong>{{ phq9Config.value || 1 }}</strong> mes(es).</span>
+              <span *ngIf="phq9Config.mode === 'next_session'">El estudiante deberá contestar el test antes de su próxima consulta terapéutica.</span>
+              <span *ngIf="phq9Config.mode === 'manual'">El test PHQ-9 solo se re-aplicará de forma manual o discrecional.</span>
+            </p>
+          </div>
+
+          <!-- Botón de Guardado -->
+          <button class="btn btn-primary" (click)="savePhq9Config()" 
+                  style="width: 100%; background: #1e3a8a; color: white; border: none; padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 13px; transition: background 0.2s;">
+            <mat-icon style="font-size: 18px; width: 18px; height: 18px;">save</mat-icon>
+            Guardar Configuración
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Full Width Section: Diario Emocional interactivo -->
   <div class="full-width-section">
     <div class="diary-dashboard-layout">
@@ -607,12 +664,34 @@
         </div>
 
         <div class="diary-list" *ngIf="displayedDiaryEntries.length > 0">
-           <div class="diary-item" *ngFor="let entry of displayedDiaryEntries">
+           <div class="diary-item" *ngFor="let entry of displayedDiaryEntries" [style.border-left]="entry.entry_type === 'phq9' ? '4px solid #8b5cf6' : ''">
              <div class="diary-header">
                <span class="date">{{entry.date}}</span>
                <span class="mood"><mat-icon [ngClass]="entry.moodColor">{{entry.moodIcon}}</mat-icon> {{entry.mood}}</span>
              </div>
-             <div class="content" [innerHTML]="entry.content"></div>
+             
+             <!-- Si es PHQ-9, mostrar formato especial estructurado -->
+             <div *ngIf="entry.entry_type === 'phq9'" style="display: flex; flex-direction: column; gap: 0.75rem; margin-top: 8px;">
+               <div style="background: rgba(139, 92, 246, 0.05); padding: 8px 12px; border-radius: 8px; font-size: 0.75rem; line-height: 1.4; color: var(--text-primary); border-left: 3px solid #8b5cf6;">
+                 <strong>Puntuación total:</strong> <span style="color: #8b5cf6; font-weight: 700;">{{ entry.phq9_score }}/27</span> ({{ getPhq9SeverityAndAction(entry.phq9_score).severity }})
+                 <br/>
+                 <strong>Recomendación clínica:</strong> {{ getPhq9SeverityAndAction(entry.phq9_score).action }}
+               </div>
+
+               <!-- Detalle de Respuestas -->
+               <div style="display: flex; flex-direction: column; gap: 6px; padding-left: 4px;">
+                 <div *ngFor="let ans of getPhq9AnswersList(entry.survey_data); let idx = index" style="border-bottom: 1px solid var(--border-color); padding-bottom: 6px; font-size: 0.75rem;">
+                   <p style="margin: 0 0 3px 0; font-weight: 600; color: var(--text-primary);">{{ idx + 1 }}. {{ ans.question }}</p>
+                   <div style="display: flex; justify-content: space-between; color: var(--text-secondary);">
+                     <span>Respuesta: <strong style="color: var(--text-primary);">{{ ans.text }}</strong></span>
+                     <span style="font-weight: 700; color: #8b5cf6;">Pts: {{ ans.value }}</span>
+                   </div>
+                 </div>
+               </div>
+             </div>
+
+             <!-- Si es diario normal, mostrar contenido estándar -->
+             <div *ngIf="entry.entry_type !== 'phq9'" class="content" [innerHTML]="entry.content"></div>
            </div>
         </div>
 

@@ -225,8 +225,8 @@
     "semantic_hash": ""
   },
   "src/app/features/diary/dashboard/diary-dashboard.component.ts": {
-    "mtime": 1784528716.7522275,
-    "ast_hash": "bcb66791f1fcb9f7afd69a7bc5b277b9",
+    "mtime": 1784535129.4904406,
+    "ast_hash": "4e5e345451185818798039b7a2547a1a",
     "semantic_hash": ""
   },
   "src/app/features/diary/diary.routes.ts": {
@@ -250,8 +250,8 @@
     "semantic_hash": "b29381fde22297a402e92bd8ee8e620a"
   },
   "src/app/features/psychologist/patient-profile/patient-profile.component.ts": {
-    "mtime": 1784505133.8055792,
-    "ast_hash": "7b94a289bc0fda540ad02a90de42e8a1",
+    "mtime": 1784535660.219627,
+    "ast_hash": "34c282563896be4c39dcd366ea892977",
     "semantic_hash": ""
   },
   "src/app/features/psychologist/patients/patients.component.ts": {
@@ -445,8 +445,8 @@
     "semantic_hash": "a70cf8f9800814f3488ae124af135091"
   },
   "src/app/features/psychologist/patient-profile/patient-profile.component.html": {
-    "mtime": 1784505141.5528064,
-    "ast_hash": "1eb38c3b4c777288b43d6359b0ac37aa",
+    "mtime": 1784535669.0322635,
+    "ast_hash": "5e98244ec7bf0f87044d38473d3e26c5",
     "semantic_hash": ""
   },
   "src/app/features/psychologist/patients/patients.component.html": {
@@ -565,8 +565,8 @@
     "semantic_hash": ""
   },
   "src/app/features/nutritionist/perfil-paciente/perfil-paciente.component.ts": {
-    "mtime": 1784505160.2631288,
-    "ast_hash": "f6bb2518436fa2bf0e274215d861bfdf",
+    "mtime": 1784535664.0682907,
+    "ast_hash": "9e441942af71dfb31c213bab576bb0d1",
     "semantic_hash": ""
   },
   "src/app/features/nutritionist/settings/settings.component.ts": {

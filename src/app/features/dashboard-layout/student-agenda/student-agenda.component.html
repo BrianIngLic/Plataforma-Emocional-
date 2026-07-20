@@ -38,26 +38,60 @@
   <!-- CONTENIDO DE LA AGENDA (SE EVALÚA EL LOADING PRIMERO) -->
   <ng-container *ngIf="!loading; else spinner">
 
-    <!-- BLOQUEADOR SI EL CUESTIONARIO PHQ-9 CLÍNICO ESTÁ PENDIENTE -->
-    <div *ngIf="phq9Pending" class="phq9-blocker-container" style="max-width: 800px; margin: 3rem auto; padding: 0 2rem; text-align: center;">
+    <!-- BLOQUEADOR SI HAY REQUISITOS PENDIENTES (PHQ-9 O PERFIL AL 100%) -->
+    <div *ngIf="phq9Pending || profilePending" class="phq9-blocker-container" style="max-width: 800px; margin: 3rem auto; padding: 0 2rem; text-align: center;">
       <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 24px; padding: 3.5rem 2rem; box-shadow: 0 8px 32px rgba(139, 92, 246, 0.08); backdrop-filter: blur(12px); display: flex; flex-direction: column; align-items: center; gap: 1.5rem;">
-        <div style="font-size: 4rem; animation: floatBob 2s ease-in-out infinite;">🐬</div>
-        <h2 style="margin: 0; color: var(--text-primary); font-size: 2rem; font-weight: 700; letter-spacing: -0.5px;">Evaluación de Salud Requerida</h2>
+        <div style="font-size: 4rem; animation: floatBob 2s ease-in-out infinite;">🔒</div>
+        <h2 style="margin: 0; color: var(--text-primary); font-size: 2rem; font-weight: 700; letter-spacing: -0.5px;">Requisitos Previos de Agenda</h2>
         <p style="margin: 0; color: var(--text-secondary); font-size: 1.05rem; line-height: 1.6; max-width: 600px;">
-          Hola. Por tu seguridad y para poder asignarte el mejor acompañamiento, es necesario que completes el <strong>Cuestionario de Salud del Paciente (PHQ-9)</strong> en tu diario antes de poder agendar tu primera cita.
+          Por tu seguridad y para garantizar la mejor asignación de especialistas, es necesario completar los siguientes pasos antes de poder agendar citas:
         </p>
-        <p style="margin: -0.5rem 0 0 0; color: var(--text-secondary); font-size: 0.95rem; font-style: italic;">
-          Esta evaluación inicial te tomará menos de 2 minutos.
-        </p>
-        <a href="/sistema/diario" style="margin-top: 1rem; display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, #8b5cf6, #a78bfa); color: white; padding: 0.8rem 2.2rem; border-radius: 20px; font-weight: 700; text-decoration: none; box-shadow: 0 4px 15px rgba(139, 92, 246, 0.35); transition: all 0.2s;">
-          <mat-icon style="font-size: 20px; width: 20px; height: 20px;">edit_note</mat-icon>
-          Completar PHQ-9 en mi Diario
-        </a>
+
+        <!-- Lista de Requisitos -->
+        <div style="width: 100%; max-width: 500px; display: flex; flex-direction: column; gap: 12px; text-align: left; margin: 1rem 0;">
+          
+          <!-- Requisito 1: PHQ-9 -->
+          <div style="display: flex; align-items: center; justify-content: space-between; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px 16px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div [style.background]="phq9Pending ? 'rgba(239, 68, 68, 0.1)' : 'rgba(16, 185, 129, 0.1)'" 
+                   [style.color]="phq9Pending ? '#ef4444' : '#10b981'"
+                   style="width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700;">
+                <mat-icon style="font-size: 18px; width: 18px; height: 18px; line-height: 18px; text-align: center;">{{ phq9Pending ? 'close' : 'done' }}</mat-icon>
+              </div>
+              <div>
+                <strong style="font-size: 0.95rem; color: var(--text-primary);">Responder el PHQ-9</strong>
+                <p style="margin: 2px 0 0 0; font-size: 0.8rem; color: var(--text-secondary);">Cuestionario inicial de salud mental</p>
+              </div>
+            </div>
+            <a *ngIf="phq9Pending" href="/sistema/diario" class="btn btn-primary" style="font-size: 0.8rem; padding: 6px 12px; border-radius: 8px; text-decoration: none; background: #8b5cf6; color: white; font-weight: 600;">Completar</a>
+            <span *ngIf="!phq9Pending" style="font-size: 0.85rem; font-weight: bold; color: #10b981;">Completado</span>
+          </div>
+
+          <!-- Requisito 2: Perfil Completo -->
+          <div style="display: flex; align-items: center; justify-content: space-between; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px 16px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div [style.background]="profilePending ? 'rgba(239, 68, 68, 0.1)' : 'rgba(16, 185, 129, 0.1)'" 
+                   [style.color]="profilePending ? '#ef4444' : '#10b981'"
+                   style="width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700;">
+                <mat-icon style="font-size: 18px; width: 18px; height: 18px; line-height: 18px; text-align: center;">{{ profilePending ? 'close' : 'done' }}</mat-icon>
+              </div>
+              <div>
+                <strong style="font-size: 0.95rem; color: var(--text-primary);">Expediente Familiar y Perfil</strong>
+                <p style="margin: 2px 0 0 0; font-size: 0.8rem; color: var(--text-secondary);">
+                  Progreso actual: <strong>{{ profileCompletionPercentage }}%</strong> (Requiere 100%)
+                </p>
+              </div>
+            </div>
+            <a *ngIf="profilePending" href="/sistema/configuracion" class="btn btn-primary" style="font-size: 0.8rem; padding: 6px 12px; border-radius: 8px; text-decoration: none; background: #8b5cf6; color: white; font-weight: 600;">Completar</a>
+            <span *ngIf="!profilePending" style="font-size: 0.85rem; font-weight: bold; color: #10b981;">Completado</span>
+          </div>
+
+        </div>
       </div>
     </div>
 
-    <!-- SECCIÓN NORMAL SI YA RESPONDIÓ EL CUESTIONARIO -->
-    <ng-container *ngIf="!phq9Pending">
+    <!-- SECCIÓN NORMAL SI YA CUMPLIÓ AMBOS REQUISITOS -->
+    <ng-container *ngIf="!phq9Pending && !profilePending">
       <!-- COMBO BOX DE SELECCIÓN DE SERVICIO UNIFICADO -->
       <div class="specialty-selector-container" style="max-width: 1200px; margin: 0 auto 2rem auto; padding: 0 2rem;">
         <div class="selector-card" style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.5rem; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); flex-wrap: wrap; gap: 1rem;">

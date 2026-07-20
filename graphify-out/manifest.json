@@ -220,13 +220,13 @@
     "semantic_hash": ""
   },
   "src/app/features/dashboard-layout/student-agenda/student-agenda.component.ts": {
-    "mtime": 1784505080.218858,
-    "ast_hash": "2284d69a5d705c02957300ef2b66d189",
+    "mtime": 1784535831.1340463,
+    "ast_hash": "332a5bab7326f98123eb4c73004b9220",
     "semantic_hash": ""
   },
   "src/app/features/diary/dashboard/diary-dashboard.component.ts": {
-    "mtime": 1784528716.7522275,
-    "ast_hash": "bcb66791f1fcb9f7afd69a7bc5b277b9",
+    "mtime": 1784535129.4904406,
+    "ast_hash": "4e5e345451185818798039b7a2547a1a",
     "semantic_hash": ""
   },
   "src/app/features/diary/diary.routes.ts": {
@@ -250,8 +250,8 @@
     "semantic_hash": "b29381fde22297a402e92bd8ee8e620a"
   },
   "src/app/features/psychologist/patient-profile/patient-profile.component.ts": {
-    "mtime": 1784529189.3975697,
-    "ast_hash": "527d7ea9eec2c2f7d9b36b94af29f9bb",
+    "mtime": 1784535660.219627,
+    "ast_hash": "34c282563896be4c39dcd366ea892977",
     "semantic_hash": ""
   },
   "src/app/features/psychologist/patients/patients.component.ts": {
@@ -425,8 +425,8 @@
     "semantic_hash": ""
   },
   "src/app/features/dashboard-layout/student-agenda/student-agenda.component.html": {
-    "mtime": 1784505099.1590369,
-    "ast_hash": "da6d55ce0afc4e8cbbdbe7a9fec150d1",
+    "mtime": 1784535849.3375404,
+    "ast_hash": "4f1dc338fe5a0abaaed7426272d07f67",
     "semantic_hash": ""
   },
   "src/app/features/diary/dashboard/diary-dashboard.component.html": {
@@ -445,8 +445,8 @@
     "semantic_hash": "a70cf8f9800814f3488ae124af135091"
   },
   "src/app/features/psychologist/patient-profile/patient-profile.component.html": {
-    "mtime": 1784529341.6666272,
-    "ast_hash": "7461688f21050084b2a78bf19259e26c",
+    "mtime": 1784535669.0322635,
+    "ast_hash": "5e98244ec7bf0f87044d38473d3e26c5",
     "semantic_hash": ""
   },
   "src/app/features/psychologist/patients/patients.component.html": {
@@ -565,8 +565,8 @@
     "semantic_hash": ""
   },
   "src/app/features/nutritionist/perfil-paciente/perfil-paciente.component.ts": {
-    "mtime": 1784529193.5051222,
-    "ast_hash": "36d8f81495bd67eed984b4b21d996ad2",
+    "mtime": 1784535664.0682907,
+    "ast_hash": "9e441942af71dfb31c213bab576bb0d1",
     "semantic_hash": ""
   },
   "src/app/features/nutritionist/settings/settings.component.ts": {

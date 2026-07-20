@@ -339,7 +339,7 @@ export class DiaryDashboardComponent implements OnInit {
 
       this.phq9Messages.push({
         sender: 'amati',
-        text: `¡Excelente! Has terminado la evaluación. Tu puntuación total es de ${totalScore}/27 (${severity}). Tus respuestas han sido guardadas de forma segura y encriptada en tu expediente clínico para el seguimiento del profesional de la salud. 🐬💙`
+        text: `¡Excelente! Has completado el cuestionario de forma exitosa. Tus respuestas han sido guardadas de forma segura y encriptada en tu expediente clínico para que tu especialista pueda darte un mejor seguimiento. ¡Muchas gracias por tu valiosa participación! 🐬💙`
       });
 
       this.scrollToBottom();

@@ -9,6 +9,7 @@ import { AppointmentModalComponent } from './appointment-modal/appointment-modal
 import { FeedbackModalComponent } from '../../../shared/components/feedback-modal/feedback-modal.component';
 import { AiTriageMockService, UrgencyLevel } from '../../../core/services/ai-triage-mock.service';
 import { SupabaseService } from '../../../core/services/supabase.service';
+import { CryptoService } from '../../../core/services/crypto.service';
 
 @Component({
   selector: 'app-student-agenda',
@@ -23,6 +24,7 @@ export class StudentAgendaComponent implements OnInit {
   aiMock = inject(AiTriageMockService);
   supabase = inject(SupabaseService).supabase;
   dialog = inject(MatDialog);
+  cryptoService = inject(CryptoService);
 
   urgencyLevel = this.aiMock.currentUrgency;
 
@@ -68,11 +70,14 @@ export class StudentAgendaComponent implements OnInit {
   studentFaculty: string = '';
   nextSessionTasks: string = '';
   phq9Pending = false;
+  profilePending = false;
+  profileCompletionPercentage = 0;
 
   async ngOnInit() {
     this.generateCalendar(); 
     await this.checkPhq9Requirement();
-    if (!this.phq9Pending) {
+    await this.checkProfileCompletion();
+    if (!this.phq9Pending && !this.profilePending) {
       await this.initAgenda(true);
     } else {
       this.loading = false;
@@ -96,6 +101,224 @@ export class StudentAgendaComponent implements OnInit {
     } catch (e) {
       console.warn('Error al verificar requerimiento PHQ-9, asumiendo completado:', e);
       this.phq9Pending = false;
+    }
+  }
+
+  async checkProfileCompletion() {
+    const user = this.authService.currentUser();
+    if (!user) return;
+    try {
+      const { data: prof, error } = await this.supabase
+        .from('profiles')
+        .select('first_name, last_name, fecha_nacimiento, sexo, faculty, programa_educativo, expediente_completo')
+        .eq('user_id', user.id)
+        .maybeSingle();
+
+      if (error || !prof) {
+        this.profilePending = true;
+        this.profileCompletionPercentage = 0;
+        return;
+      }
+
+      const userCelular = user.mobile_phone || '';
+      const fechaNacimiento = prof.fecha_nacimiento || '';
+      const userSexo = prof.sexo || '';
+      const userFaculty = prof.faculty || user.faculty || '';
+      const userProgramaEducativo = prof.programa_educativo || '';
+
+      let expediente: any = {
+        personal: { estado_civil: '' },
+        academico: {
+          semestre: '',
+          domicilio_actual: { estado: '', municipio: '', colonia: '', calle: '', con_quien_vive: '' },
+          domicilio_origin: { estado: '', municipio: '', colonia: '', calle: '' }
+        },
+        historia_familiar: {
+          padres_estado_civil: '',
+          padres_relacion: '',
+          padre: { estado: '', ocupacion: '', tipo_relacion: '', nueva_pareja: { tiene: '', tipo_relacion: '', figura_vida: '' } },
+          madre: { estado: '', ocupacion: '', tipo_relacion: '', nueva_pareja: { tiene: '', tipo_relacion: '', figura_vida: '' } },
+          hermanos: { tiene: '', cantidad: 0, tipo_relacion: '' },
+          pareja: { tiene: '', edad: null, ocupacion: '', tipo_relacion: '' }
+        },
+        contactos_emergencia: []
+      };
+
+      if (prof.expediente_completo && Object.keys(prof.expediente_completo).length > 0) {
+        let decryptedData = null;
+        if (prof.expediente_completo.data) {
+          try {
+            const decryptedText = this.cryptoService.decrypt(prof.expediente_completo.data);
+            decryptedData = JSON.parse(decryptedText);
+          } catch (err) {
+            console.error('Error descifrando expediente en agenda:', err);
+          }
+        } else {
+          decryptedData = prof.expediente_completo;
+        }
+
+        if (decryptedData) {
+          expediente = {
+            ...expediente,
+            ...decryptedData
+          };
+        }
+      }
+
+      if (!expediente.personal) expediente.personal = { estado_civil: '' };
+      if (!expediente.academico) {
+        expediente.academico = {
+          semestre: '',
+          domicilio_actual: { estado: '', municipio: '', colonia: '', calle: '', con_quien_vive: '' },
+          domicilio_origin: { estado: '', municipio: '', colonia: '', calle: '' }
+        };
+      }
+      if (!expediente.academico.domicilio_actual) {
+        expediente.academico.domicilio_actual = { estado: '', municipio: '', colonia: '', calle: '', con_quien_vive: '' };
+      }
+      if (!expediente.academico.domicilio_origin) {
+        expediente.academico.domicilio_origin = { estado: '', municipio: '', colonia: '', calle: '' };
+      }
+      if (!expediente.historia_familiar) expediente.historia_familiar = {};
+      if (!expediente.historia_familiar.padre) expediente.historia_familiar.padre = {};
+      if (!expediente.historia_familiar.madre) expediente.historia_familiar.madre = {};
+      if (!expediente.contactos_emergencia) expediente.contactos_emergencia = [];
+
+      const isForaneo = !!(expediente.academico.domicilio_origin && expediente.academico.domicilio_origin.estado);
+
+      let totalPoints = 0;
+      let earnedPoints = 0;
+
+      // Contacto y Personal (4 campos)
+      totalPoints += 4;
+      if (userCelular) earnedPoints++;
+      if (fechaNacimiento) earnedPoints++;
+      if (expediente.personal.estado_civil) earnedPoints++;
+      if (userSexo) earnedPoints++;
+
+      // Académico (3 campos)
+      totalPoints += 3;
+      if (expediente.academico.semestre) earnedPoints++;
+      if (userFaculty) earnedPoints++;
+      if (userProgramaEducativo) earnedPoints++;
+
+      // Domicilio actual (5 campos)
+      totalPoints += 5;
+      const dom = expediente.academico.domicilio_actual;
+      if (dom.estado) earnedPoints++;
+      if (dom.municipio) earnedPoints++;
+      if (dom.colonia) earnedPoints++;
+      if (dom.calle) earnedPoints++;
+      if (dom.con_quien_vive) earnedPoints++;
+
+      // Domicilio origen (si es foráneo)
+      if (isForaneo) {
+        totalPoints += 4;
+        const domO = expediente.academico.domicilio_origin;
+        if (domO.estado) earnedPoints++;
+        if (domO.municipio) earnedPoints++;
+        if (domO.colonia) earnedPoints++;
+        if (domO.calle) earnedPoints++;
+      }
+
+      // Historia Familiar - Padres (2 campos)
+      totalPoints += 2;
+      if (expediente.historia_familiar.padres_estado_civil) earnedPoints++;
+      if (expediente.historia_familiar.padres_relacion) earnedPoints++;
+
+      // Padre
+      const f = expediente.historia_familiar.padre;
+      if (f.estado === 'finado' || f.estado === 'ausente') {
+        totalPoints += 1;
+        if (f.estado) earnedPoints++;
+      } else {
+        totalPoints += 3;
+        if (f.estado) earnedPoints++;
+        if (f.ocupacion) earnedPoints++;
+        if (f.tipo_relacion) earnedPoints++;
+      }
+
+      // Madre
+      const m = expediente.historia_familiar.madre;
+      if (m.estado === 'finado' || m.estado === 'ausente') {
+        totalPoints += 1;
+        if (m.estado) earnedPoints++;
+      } else {
+        totalPoints += 3;
+        if (m.estado) earnedPoints++;
+        if (m.ocupacion) earnedPoints++;
+        if (m.tipo_relacion) earnedPoints++;
+      }
+
+      // Divorcio y parejas
+      if (expediente.historia_familiar.padres_estado_civil === 'Divorciados') {
+        if (f.estado !== 'finado' && f.estado !== 'ausente') {
+          totalPoints++;
+          if (f.nueva_pareja?.tiene !== undefined && f.nueva_pareja?.tiene !== '') {
+            earnedPoints++;
+            if (f.nueva_pareja.tiene === true || f.nueva_pareja.tiene === 'true' || f.nueva_pareja.tiene === 'si' || f.nueva_pareja.tiene === 'Sí') {
+              totalPoints += 2;
+              if (f.nueva_pareja.tipo_relacion) earnedPoints++;
+              if (f.nueva_pareja.figura_vida) earnedPoints++;
+            }
+          }
+        }
+        if (m.estado !== 'finado' && m.estado !== 'ausente') {
+          totalPoints++;
+          if (m.nueva_pareja?.tiene !== undefined && m.nueva_pareja?.tiene !== '') {
+            earnedPoints++;
+            if (m.nueva_pareja.tiene === true || m.nueva_pareja.tiene === 'true' || m.nueva_pareja.tiene === 'si' || m.nueva_pareja.tiene === 'Sí') {
+              totalPoints += 2;
+              if (m.nueva_pareja.tipo_relacion) earnedPoints++;
+              if (m.nueva_pareja.figura_vida) earnedPoints++;
+            }
+          }
+        }
+      }
+
+      // Hermanos
+      totalPoints += 1;
+      const h = expediente.historia_familiar.hermanos;
+      if (h.tiene === true || h.tiene === 'true' || h.tiene === 'si' || h.tiene === 'Sí') {
+        earnedPoints++;
+        totalPoints += 2;
+        if (h.cantidad) earnedPoints++;
+        if (h.tipo_relacion) earnedPoints++;
+      } else if (h.tiene === false || h.tiene === 'false' || h.tiene === 'no' || h.tiene === 'No') {
+        earnedPoints++;
+      }
+
+      // Pareja
+      totalPoints += 1;
+      const p = expediente.historia_familiar.pareja;
+      if (p.tiene === true || p.tiene === 'true' || p.tiene === 'si' || p.tiene === 'Sí') {
+        earnedPoints++;
+        totalPoints += 3;
+        if (p.edad) earnedPoints++;
+        if (p.ocupacion) earnedPoints++;
+        if (p.tipo_relacion) earnedPoints++;
+      } else if (p.tiene === false || p.tiene === 'false' || p.tiene === 'no' || p.tiene === 'No') {
+        earnedPoints++;
+      }
+
+      // Contactos de emergencia
+      totalPoints += 4;
+      const contacts = expediente.contactos_emergencia || [];
+      if (contacts.length >= 1) {
+        if (contacts[0].nombre) earnedPoints++;
+        if (contacts[0].telefono) earnedPoints++;
+      }
+      if (contacts.length >= 2) {
+        if (contacts[1].nombre) earnedPoints++;
+        if (contacts[1].telefono) earnedPoints++;
+      }
+
+      this.profileCompletionPercentage = Math.round((earnedPoints / totalPoints) * 100);
+      this.profilePending = this.profileCompletionPercentage < 100;
+    } catch (e) {
+      console.warn('Error verificando completitud del perfil, asumiendo pendiente:', e);
+      this.profilePending = true;
+      this.profileCompletionPercentage = 0;
     }
   }
 

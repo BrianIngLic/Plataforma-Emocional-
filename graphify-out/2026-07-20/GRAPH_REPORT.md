@@ -1,16 +1,16 @@
 # Graph Report - Plataforma-Emocional-  (2026-07-20)
 
 ## Corpus Check
-- 235 files · ~203,327 words
+- 235 files · ~205,508 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1984 nodes · 2755 edges · 206 communities (104 shown, 102 thin omitted)
+- 1994 nodes · 2767 edges · 210 communities (106 shown, 104 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 24 edges (avg confidence: 0.89)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `25b7c51e`
+- Built from commit: `b739a655`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -202,14 +202,16 @@
 - [[_COMMUNITY_Community 195|Community 195]]
 - [[_COMMUNITY_Community 196|Community 196]]
 - [[_COMMUNITY_Community 197|Community 197]]
+- [[_COMMUNITY_Community 198|Community 198]]
 - [[_COMMUNITY_Community 200|Community 200]]
 - [[_COMMUNITY_Community 201|Community 201]]
-- [[_COMMUNITY_Community 202|Community 202]]
 - [[_COMMUNITY_Community 203|Community 203]]
 - [[_COMMUNITY_Community 204|Community 204]]
+- [[_COMMUNITY_Community 205|Community 205]]
 - [[_COMMUNITY_Community 206|Community 206]]
 - [[_COMMUNITY_Community 207|Community 207]]
 - [[_COMMUNITY_Community 208|Community 208]]
+- [[_COMMUNITY_Community 214|Community 214]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `DirectoryComponent` - 64 edges
@@ -219,9 +221,9 @@
 5. `AgendaComponent` - 39 edges
 6. `DiaryDashboardComponent` - 38 edges
 7. `ConsultaComponent` - 37 edges
-8. `FacultiesComponent` - 31 edges
-9. `PerfilPaciente` - 31 edges
-10. `PatientProfileComponent` - 29 edges
+8. `PerfilPaciente` - 36 edges
+9. `PatientProfileComponent` - 34 edges
+10. `FacultiesComponent` - 31 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `Skill 9: RoleGuard Security` --semantically_similar_to--> `Ciberseguridad y Privacidad`  [INFERRED] [semantically similar]
@@ -244,7 +246,7 @@
 - **Student Emotional Assistance and Care Flow** — dashboard_layout_dashboard_layout_component_student_sidebar, dashboard_dashboard_component_chat_view, dashboard_diary_dashboard_component_therapeutic_refuge, student_agenda_student_agenda_component_appointment_scheduler [INFERRED 0.85]
 - **Psychologist Clinical Command Center and Triage Flow** — psychologist_layout_psychologist_layout_component_psychologist_sidebar, dashboard_dashboard_component_psychologist_triage_view, patients_patients_component_patient_directory, agenda_agenda_component_clinical_timeline, patient_profile_patient_profile_component_clinical_expedient_view [INFERRED 0.85]
 
-## Communities (206 total, 102 thin omitted)
+## Communities (210 total, 104 thin omitted)
 
 ### Community 0 - "Community 0"
 Cohesion: 0.05
@@ -283,8 +285,8 @@ Cohesion: 0.12
 Nodes (16): Skill 10: Sistema de Logros y Gamificación (Estilo Duolingo), Skill 11: Chat Interno Conectado con Meta Cloud API (WhatsApp Bidireccional), Skill 12: Dossier Clínico Unificado, Marca de Agua y Meta Seal (Exportación Masiva PDF), Skill 14: Responsividad Móvil y Optimización de Layouts, Skill 15: Animaciones Premium y Micro-Interacciones, Skill 16: Cifrado en Servidor y Rotación de Llaves, Skill 18: Políticas de Consulta, Límites de Sesiones y Reagendas, Skill 1: Capa de Datos (PostgreSQL + PostgREST) (+8 more)
 
 ### Community 27 - "Clinical Note Management"
-Cohesion: 0.06
-Nodes (4): ClinicalNoteComponent, EmergencyChangeModalComponent, InstitutionalSettingsComponent, NutritionistFieldsComponent
+Cohesion: 0.08
+Nodes (3): ClinicalNoteComponent, EmergencyChangeModalComponent, InstitutionalSettingsComponent
 
 ### Community 28 - "AI Command Center Integration"
 Cohesion: 0.40
@@ -323,8 +325,8 @@ Cohesion: 0.25
 Nodes (10): detect_file_type(), _is_code_line(), _is_json_content(), _is_yaml_content(), Return True if the file is natural language and should be compressed., Check if a line looks like code., Check if content is valid JSON., Heuristic: check if content looks like YAML. (+2 more)
 
 ### Community 68 - "Community 68"
-Cohesion: 0.15
-Nodes (3): AgendaService, CalendarDay, CalendarDay
+Cohesion: 0.11
+Nodes (7): EmergencyModalData, AgendaService, EmergencyChangeRequest, WebPushSubscriptionPayload, WhatsAppRoutingSession, CalendarDay, CalendarDay
 
 ### Community 71 - "Community 71"
 Cohesion: 0.08
@@ -335,8 +337,8 @@ Cohesion: 0.25
 Nodes (10): detect_file_type(), _is_code_line(), _is_json_content(), _is_yaml_content(), Return True if the file is natural language and should be compressed., Check if a line looks like code., Check if content is valid JSON., Heuristic: check if content looks like YAML. (+2 more)
 
 ### Community 75 - "Community 75"
-Cohesion: 0.25
-Nodes (6): SimpleDialogComponent, CalendarioService, RegistroAyerSnapshot, CampoFormularioTipo, ConsultaNutricionRow, NuevaConsultaNutricionPayload
+Cohesion: 0.27
+Nodes (5): SimpleDialogComponent, CalendarioService, RegistroAyerSnapshot, CampoFormularioTipo, NuevaConsultaNutricionPayload
 
 ### Community 78 - "Community 78"
 Cohesion: 0.14
@@ -344,7 +346,7 @@ Nodes (4): CommandCenterChatComponent, Conversation, InternalChatService, WhatsA
 
 ### Community 81 - "Community 81"
 Cohesion: 0.09
-Nodes (10): SpecialistItem, StudentItem, environment, Psychologist, HealthProfessionalItem, HealthProfessionalRegistrationPayload, PatientAssignmentPayload, AdminStatsService (+2 more)
+Nodes (11): Appointment, SpecialistItem, StudentItem, environment, Psychologist, HealthProfessionalItem, HealthProfessionalRegistrationPayload, PatientAssignmentPayload (+3 more)
 
 ### Community 84 - "Community 84"
 Cohesion: 0.28
@@ -356,7 +358,7 @@ Nodes (17): args, { createClient }, fs, getAdminUser(), handleCreate(), handleDi
 
 ### Community 88 - "Community 88"
 Cohesion: 0.09
-Nodes (3): BloqueVisual, ConsultaComponent, CampoFormulario
+Nodes (4): BloqueVisual, ConsultaComponent, CampoFormulario, ConsultaNutricionRow
 
 ### Community 89 - "Community 89"
 Cohesion: 0.22
@@ -486,10 +488,6 @@ Nodes (3): CampoFormulario, CampoFormularioTipo, ConsultaNutricionRow
 Cohesion: 0.50
 Nodes (3): assetGroups, index, $schema
 
-### Community 136 - "Community 136"
-Cohesion: 0.09
-Nodes (12): AchievementsDashboardComponent, MOOD_OPTIONS, QUILL_MODULES, SLEEP_OPTIONS, EmojiScaleComponent, FoodDiaryEntry, Achievement, PendingEvaluationItem (+4 more)
-
 ### Community 137 - "Community 137"
 Cohesion: 0.32
 Nodes (7): CryptoJS, deriveLegacyKey(), { execSync }, fs, migrate(), path, runQuery()
@@ -508,7 +506,7 @@ Nodes (3): cli, analytics, @angular/cli
 
 ### Community 146 - "Community 146"
 Cohesion: 0.12
-Nodes (9): Appointment, CampoFormulario, Holiday, ChatMessage, CryptoService, DiaryEntry, GamificationService, UserStreak (+1 more)
+Nodes (7): EmojiScaleComponent, GamificationService, PendingEvaluationItem, ProfessionalEvaluationSummary, SessionEvaluation, SessionEvaluationPayload, StreakBadgeComponent
 
 ### Community 149 - "Community 149"
 Cohesion: 0.19
@@ -562,6 +560,10 @@ Nodes (4): dbDir, files, fs, path
 Cohesion: 0.29
 Nodes (6): content, fs, lines, occurrences, path, schemaPath
 
+### Community 170 - "Community 170"
+Cohesion: 0.15
+Nodes (8): CampoFormulario, Holiday, ChatMessage, CryptoService, DiaryEntry, UserStreak, SupabaseService, CalendarDay
+
 ### Community 171 - "Community 171"
 Cohesion: 0.14
 Nodes (13): 1. Listar todos los administradores, 2. Crear un nuevo administrador, 3. Consultar estado detallado de un administrador, 4. Revocar credenciales (Passkeys) y sesiones, 5. Re-enrolar administrador (Pérdida de dispositivo o nuevo equipo), 6. Desactivar administrador (Baja temporal), 7. Reactivar administrador, 8. Actualizar correo electrónico institucional (+5 more)
@@ -582,17 +584,9 @@ Nodes (3): https, makeRequest(), run()
 Cohesion: 0.47
 Nodes (5): CryptoJS, deriveLegacyKey(), { execSync }, find(), runQuery()
 
-### Community 179 - "Community 179"
-Cohesion: 0.25
-Nodes (5): EmergencyModalData, EmergencyChangeRequest, WebPushSubscriptionPayload, WhatsAppRoutingSession, CalendarDay
-
 ### Community 180 - "Community 180"
 Cohesion: 0.17
 Nodes (12): 17.10. Componentes Angular, 17.11. Seguridad y Modo Offline, 17.1. Estrategia: Ruta secreta fuera del prefijo `/auth/`, 17.2. Sistema de diseño — Interfaz Administrativa, 17.3. Ciclo de Vida del Administrador — Gestión por TI, 17.4. Passkeys Vinculadas al Hardware (Device-Bound), 17.5. Tabla de Auditoría (`admin_audit_log`), 17.6. Detección de Soporte WebAuthn (+4 more)
-
-### Community 189 - "Community 189"
-Cohesion: 0.50
-Nodes (3): fs, migrationPath, path
 
 ### Community 190 - "Community 190"
 Cohesion: 0.70
@@ -601,6 +595,10 @@ Nodes (4): benchmark_pair(), count_tokens(), main(), print_table()
 ### Community 195 - "Community 195"
 Cohesion: 0.36
 Nodes (3): AdminSettingsComponent, ArcoRequest, PrivacySettings
+
+### Community 198 - "Community 198"
+Cohesion: 0.50
+Nodes (3): fs, migrationPath, path
 
 ### Community 201 - "Community 201"
 Cohesion: 0.25
@@ -618,19 +616,23 @@ Nodes (6): 19.1. Lógica de Negocio y Base de Datos (PostgreSQL), 19.2. Lógica 
 Cohesion: 0.40
 Nodes (4): Arquitectura General, Capa de Cifrado (Cifrado en Servidor - Caso B), Comunicación Front <-> IA, Especificación Maestra (Spec.md) - Plataforma Emocional
 
+### Community 208 - "Community 208"
+Cohesion: 0.25
+Nodes (5): MOOD_OPTIONS, QUILL_MODULES, SLEEP_OPTIONS, DIARY_ROUTES, FoodDiaryEntry
+
 ## Knowledge Gaps
 - **563 isolated node(s):** `$schema`, `version`, `newProjectRoot`, `projectType`, `style` (+558 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **102 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **104 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `AuthService` connect `Dashboard Main Navigation Layout` to `Community 192`, `Community 195`, `Community 68`, `Community 136`, `Community 75`, `Community 78`, `Main App Security Interceptors`, `Community 81`, `Community 146`, `Community 179`, `Community 58`, `Community 59`?**
-  _High betweenness centrality (0.054) - this node is a cross-community bridge._
-- **Why does `SupabaseService` connect `Community 146` to `Community 192`, `Community 195`, `Community 68`, `Community 136`, `Community 75`, `Main App Security Interceptors`, `Community 78`, `Community 81`, `Dashboard Main Navigation Layout`, `Community 179`, `Community 59`?**
-  _High betweenness centrality (0.053) - this node is a cross-community bridge._
-- **Why does `AgendaComponent` connect `Admin Agenda Metrics` to `Community 146`?**
+- **Why does `AuthService` connect `Dashboard Main Navigation Layout` to `Community 192`, `Community 195`, `Community 68`, `Community 170`, `Community 75`, `Community 78`, `Main App Security Interceptors`, `Community 81`, `Community 146`, `Community 58`, `Community 59`?**
+  _High betweenness centrality (0.052) - this node is a cross-community bridge._
+- **Why does `SupabaseService` connect `Community 170` to `Community 192`, `Community 195`, `Community 68`, `Community 75`, `Main App Security Interceptors`, `Community 78`, `Community 81`, `Dashboard Main Navigation Layout`, `Community 146`, `Community 59`?**
+  _High betweenness centrality (0.051) - this node is a cross-community bridge._
+- **Why does `AgendaComponent` connect `Admin Agenda Metrics` to `Community 81`?**
   _High betweenness centrality (0.036) - this node is a cross-community bridge._
 - **What connects `Caveman compress scripts.  This package provides tools to compress natural lan`, `Split YAML frontmatter from body. Returns (frontmatter, body).      Memory fil`, `Resolve the out-of-tree backup directory for a given source file.      Backups` to the rest of the system?**
   _591 weakly-connected nodes found - possible documentation gaps or missing edges._

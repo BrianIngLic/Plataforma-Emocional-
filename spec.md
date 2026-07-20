@@ -456,3 +456,26 @@ Al ingresar al diario (`diary-dashboard`):
 - **Tarjeta de Resultados:** Se dibuja una tarjeta similar a la de EAT-26 detallando la última puntuación, su severidad (Leve, Moderada, Severa) y la sugerencia de acción clínica basada en protocolos.
 - **Nutriólogo:** El nutriólogo visualiza la evolución real en su perfil de paciente mediante la gráfica pero no tiene acceso al control de configuración de re-aplicación.
 
+### Skill 20: Recordatorio de Citas de 24 Horas por Correo
+
+**Objetivo:** Enviar automáticamente un correo recordatorio premium con diseño Amati y logotipo institucional al paciente 24 horas antes de su cita agendada.
+
+#### 20.1. Modelo de Datos (PostgreSQL)
+- **Columna Adicional:** Añadir `reminder_24h_sent` BOOLEAN DEFAULT FALSE a `public.appointments` para registrar el estado de envío y evitar duplicación.
+- **Índice de Optimización:** Crear índice compuesto en `(status, scheduled_date, reminder_24h_sent)` en la tabla `public.appointments`.
+
+#### 20.2. Edge Function de Supabase (`send-appointment-reminder`)
+- **Consulta de Citas:** Obtener citas en estado `'scheduled'` que inicien en un rango de 23 a 25 horas a partir del momento de ejecución, donde `reminder_24h_sent = false`.
+- **Recuperación de Datos:** Obtener el correo y nombre del paciente (`profiles` + `auth.users`), nombre del especialista, y los detalles del consultorio (modalidad, facultad, edificio, consultorio, enlace de recorrido virtual o enlace de reunión virtual).
+- **Envío de Correo:** Usar SMTP configurado en variables de entorno (`SMTP_USER`, `SMTP_PASS`, `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`) mediante `nodemailer` en Deno.
+- **Diseño Premium HTML (Amati style):**
+  - Encabezado con degradado de marca (violeta/índigo: `#6366f1` a `#8b5cf6`), logo de Amati en SVG blanco, tipografía Inter/sans-serif.
+  - Sección estructurada con los detalles de la cita en caja clara con borde de color de acento.
+  - Botón CTA de acceso directo a la plataforma.
+  - Mensaje aclaratorio sobre la política de reagendas tardías y cancelación (72h) y cumplimiento NOM-024 / HIPAA.
+- **Actualización de Estado:** Marcar `reminder_24h_sent = true` para evitar reenvíos.
+
+#### 20.3. Programación Periódica (Cron)
+- **Frecuencia:** Cada hora (ej. `0 * * * *`).
+- **Orquestación:** Usar `pg_cron` en Supabase para invocar la Edge Function mediante petición HTTP POST segura autenticada con la clave `service_role`.
+

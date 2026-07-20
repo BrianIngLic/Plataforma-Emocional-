@@ -486,6 +486,26 @@
 - `[x]` En `perfil-paciente.component.ts` (Nutriólogo):
   - `[x]` Sincronizar para leer y graficar los datos reales de PHQ-9 en su propia gráfica de evolución.
 
+---
+
+## Skill 20: Recordatorio de Citas de 24 Horas por Correo
+
+**20.1. Base de Datos (Migración SQL)**
+- `[x]` Crear script de migración `db/migration_appointment_reminder_flag.sql`.
+- `[x]` Añadir columna `reminder_24h_sent` a la tabla `public.appointments` con default `false`.
+- `[x]` Crear índice en `(status, scheduled_date, reminder_24h_sent)` en `public.appointments`.
+
+**20.2. Edge Function de Supabase (`send-appointment-reminder`)**
+- `[x]` Crear directorio `supabase/functions/send-appointment-reminder/`.
+- `[x]` Implementar consulta a base de datos de citas en rango de 23 a 25 horas sin recordar.
+- `[x]` Diseñar plantilla responsiva HTML premium con degradado de marca (índigo/violeta), logo de Amati en SVG, detalles de la cita y botón de acceso.
+- `[x]` Integrar envío de email mediante `nodemailer` usando las variables de entorno de SMTP.
+- `[x]` Implementar actualización de flag `reminder_24h_sent = true` en base de datos al enviar con éxito.
+
+**20.3. Programación Periódica (Cron)**
+- `[x]` Registrar tarea cron `send-appointment-reminders` en la base de datos usando `pg_cron` para invocar la Edge Function cada hora.
+
+
 
 
 

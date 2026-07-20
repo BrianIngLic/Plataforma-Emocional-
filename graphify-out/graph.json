@@ -674,7 +674,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "agent_skills_caveman_compress_scripts_benchmark_py_scripts_benchmark",
-      "community": 190,
+      "community": 149,
       "norm_label": "benchmark.py"
     },
     {
@@ -684,7 +684,7 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "agent_skills_caveman_compress_scripts_benchmark_py_scripts_benchmark_count_tokens",
-      "community": 190,
+      "community": 149,
       "norm_label": "count_tokens()"
     },
     {
@@ -694,7 +694,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "agent_skills_caveman_compress_scripts_benchmark_py_scripts_benchmark_benchmark_pair",
-      "community": 190,
+      "community": 149,
       "norm_label": "benchmark_pair()"
     },
     {
@@ -704,7 +704,7 @@
       "source_location": "L37",
       "_origin": "ast",
       "id": "agent_skills_caveman_compress_scripts_benchmark_py_scripts_benchmark_print_table",
-      "community": 190,
+      "community": 149,
       "norm_label": "print_table()"
     },
     {
@@ -714,7 +714,7 @@
       "source_location": "L44",
       "_origin": "ast",
       "id": "agent_skills_caveman_compress_scripts_benchmark_py_scripts_benchmark_main",
-      "community": 190,
+      "community": 149,
       "norm_label": "main()"
     },
     {
@@ -1204,7 +1204,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "angular",
-      "community": 141,
+      "community": 0,
       "norm_label": "angular.json"
     },
     {
@@ -1214,7 +1214,7 @@
       "source_location": "L2",
       "_origin": "ast",
       "id": "angular_schema",
-      "community": 141,
+      "community": 0,
       "norm_label": "$schema"
     },
     {
@@ -1224,7 +1224,7 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "angular_version",
-      "community": 141,
+      "community": 0,
       "norm_label": "version"
     },
     {
@@ -1234,7 +1234,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "angular_newprojectroot",
-      "community": 141,
+      "community": 0,
       "norm_label": "newprojectroot"
     },
     {
@@ -1244,7 +1244,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "angular_projects",
-      "community": 141,
+      "community": 0,
       "norm_label": "projects"
     },
     {
@@ -1254,7 +1254,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "angular_projects_plataforma_emocional",
-      "community": 189,
+      "community": 0,
       "norm_label": "plataforma_emocional"
     },
     {
@@ -1264,7 +1264,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "angular_plataforma_emocional_projecttype",
-      "community": 189,
+      "community": 0,
       "norm_label": "projecttype"
     },
     {
@@ -1274,7 +1274,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "angular_plataforma_emocional_schematics",
-      "community": 189,
+      "community": 0,
       "norm_label": "schematics"
     },
     {
@@ -1284,7 +1284,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "angular_schematics_schematics_angular_component",
-      "community": 189,
+      "community": 0,
       "norm_label": "@schematics/angular:component"
     },
     {
@@ -1294,7 +1294,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "angular_schematics_angular_component_style",
-      "community": 189,
+      "community": 0,
       "norm_label": "style"
     },
     {
@@ -1304,7 +1304,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "angular_plataforma_emocional_root",
-      "community": 189,
+      "community": 0,
       "norm_label": "root"
     },
     {
@@ -1314,7 +1314,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "angular_plataforma_emocional_sourceroot",
-      "community": 189,
+      "community": 0,
       "norm_label": "sourceroot"
     },
     {
@@ -1324,7 +1324,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "angular_plataforma_emocional_prefix",
-      "community": 189,
+      "community": 0,
       "norm_label": "prefix"
     },
     {
@@ -1334,7 +1334,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "angular_plataforma_emocional_architect",
-      "community": 209,
+      "community": 0,
       "norm_label": "architect"
     },
     {
@@ -1364,7 +1364,7 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "angular_build_options",
-      "community": 140,
+      "community": 0,
       "norm_label": "options"
     },
     {
@@ -1374,7 +1374,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "angular_options_browser",
-      "community": 140,
+      "community": 0,
       "norm_label": "browser"
     },
     {
@@ -1384,7 +1384,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "angular_options_polyfills",
-      "community": 140,
+      "community": 0,
       "norm_label": "polyfills"
     },
     {
@@ -1394,7 +1394,7 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "angular_options_tsconfig",
-      "community": 140,
+      "community": 0,
       "norm_label": "tsconfig"
     },
     {
@@ -1404,7 +1404,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "angular_options_inlinestylelanguage",
-      "community": 140,
+      "community": 0,
       "norm_label": "inlinestylelanguage"
     },
     {
@@ -1414,7 +1414,7 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "angular_options_assets",
-      "community": 140,
+      "community": 0,
       "norm_label": "assets"
     },
     {
@@ -1424,7 +1424,7 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "angular_options_styles",
-      "community": 140,
+      "community": 0,
       "norm_label": "styles"
     },
     {
@@ -1444,7 +1444,7 @@
       "source_location": "L37",
       "_origin": "ast",
       "id": "angular_configurations_production",
-      "community": 139,
+      "community": 0,
       "norm_label": "production"
     },
     {
@@ -1454,7 +1454,7 @@
       "source_location": "L38",
       "_origin": "ast",
       "id": "angular_production_budgets",
-      "community": 139,
+      "community": 0,
       "norm_label": "budgets"
     },
     {
@@ -1464,7 +1464,7 @@
       "source_location": "L50",
       "_origin": "ast",
       "id": "angular_production_outputhashing",
-      "community": 139,
+      "community": 0,
       "norm_label": "outputhashing"
     },
     {
@@ -1474,7 +1474,7 @@
       "source_location": "L51",
       "_origin": "ast",
       "id": "angular_production_serviceworker",
-      "community": 139,
+      "community": 0,
       "norm_label": "serviceworker"
     },
     {
@@ -1534,7 +1534,7 @@
       "source_location": "L61",
       "_origin": "ast",
       "id": "angular_architect_serve",
-      "community": 139,
+      "community": 0,
       "norm_label": "serve"
     },
     {
@@ -1544,7 +1544,7 @@
       "source_location": "L62",
       "_origin": "ast",
       "id": "angular_serve_builder",
-      "community": 139,
+      "community": 0,
       "norm_label": "builder"
     },
     {
@@ -1554,7 +1554,7 @@
       "source_location": "L63",
       "_origin": "ast",
       "id": "angular_serve_configurations",
-      "community": 139,
+      "community": 0,
       "norm_label": "configurations"
     },
     {
@@ -1564,7 +1564,7 @@
       "source_location": "L65",
       "_origin": "ast",
       "id": "angular_production_buildtarget",
-      "community": 139,
+      "community": 0,
       "norm_label": "buildtarget"
     },
     {
@@ -1584,7 +1584,7 @@
       "source_location": "L71",
       "_origin": "ast",
       "id": "angular_serve_defaultconfiguration",
-      "community": 139,
+      "community": 0,
       "norm_label": "defaultconfiguration"
     },
     {
@@ -1594,7 +1594,7 @@
       "source_location": "L73",
       "_origin": "ast",
       "id": "angular_architect_extract_i18n",
-      "community": 209,
+      "community": 0,
       "norm_label": "extract-i18n"
     },
     {
@@ -1604,7 +1604,7 @@
       "source_location": "L74",
       "_origin": "ast",
       "id": "angular_extract_i18n_builder",
-      "community": 209,
+      "community": 0,
       "norm_label": "builder"
     },
     {
@@ -1614,7 +1614,7 @@
       "source_location": "L76",
       "_origin": "ast",
       "id": "angular_architect_test",
-      "community": 209,
+      "community": 0,
       "norm_label": "test"
     },
     {
@@ -1624,7 +1624,7 @@
       "source_location": "L77",
       "_origin": "ast",
       "id": "angular_test_builder",
-      "community": 209,
+      "community": 0,
       "norm_label": "builder"
     },
     {
@@ -1634,7 +1634,7 @@
       "source_location": "L78",
       "_origin": "ast",
       "id": "angular_test_options",
-      "community": 140,
+      "community": 0,
       "norm_label": "options"
     },
     {
@@ -1704,7 +1704,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "package",
-      "community": 2,
+      "community": 139,
       "norm_label": "package.json"
     },
     {
@@ -1714,7 +1714,7 @@
       "source_location": "L2",
       "_origin": "ast",
       "id": "package_name",
-      "community": 2,
+      "community": 139,
       "norm_label": "name"
     },
     {
@@ -1724,7 +1724,7 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "package_version",
-      "community": 2,
+      "community": 139,
       "norm_label": "version"
     },
     {
@@ -1734,7 +1734,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "package_scripts",
-      "community": 2,
+      "community": 140,
       "norm_label": "scripts"
     },
     {
@@ -1744,7 +1744,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "package_scripts_ng",
-      "community": 2,
+      "community": 140,
       "norm_label": "ng"
     },
     {
@@ -1754,7 +1754,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "package_scripts_start",
-      "community": 2,
+      "community": 140,
       "norm_label": "start"
     },
     {
@@ -1764,7 +1764,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "package_scripts_build",
-      "community": 2,
+      "community": 140,
       "norm_label": "build"
     },
     {
@@ -1774,7 +1774,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "package_scripts_watch",
-      "community": 2,
+      "community": 140,
       "norm_label": "watch"
     },
     {
@@ -1784,7 +1784,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "package_scripts_test",
-      "community": 2,
+      "community": 140,
       "norm_label": "test"
     },
     {
@@ -1794,7 +1794,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "package_prettier",
-      "community": 2,
+      "community": 139,
       "norm_label": "prettier"
     },
     {
@@ -1804,7 +1804,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "package_prettier_printwidth",
-      "community": 2,
+      "community": 139,
       "norm_label": "printwidth"
     },
     {
@@ -1814,7 +1814,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "package_prettier_singlequote",
-      "community": 2,
+      "community": 139,
       "norm_label": "singlequote"
     },
     {
@@ -1824,7 +1824,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "package_prettier_overrides",
-      "community": 2,
+      "community": 139,
       "norm_label": "overrides"
     },
     {
@@ -1834,7 +1834,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "package_private",
-      "community": 2,
+      "community": 139,
       "norm_label": "private"
     },
     {
@@ -2794,7 +2794,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "scratch_find_achievements_table",
-      "community": 197,
+      "community": 149,
       "norm_label": "find_achievements_table.js"
     },
     {
@@ -2804,7 +2804,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "scratch_find_achievements_table_fs",
-      "community": 197,
+      "community": 149,
       "norm_label": "fs"
     },
     {
@@ -2814,7 +2814,7 @@
       "source_location": "L2",
       "_origin": "ast",
       "id": "scratch_find_achievements_table_path",
-      "community": 197,
+      "community": 149,
       "norm_label": "path"
     },
     {
@@ -2824,7 +2824,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "scratch_find_achievements_table_searchsqlfiles",
-      "community": 197,
+      "community": 149,
       "norm_label": "searchsqlfiles()"
     },
     {
@@ -4094,7 +4094,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "scratch_search_user_achievements_migration",
-      "community": 149,
+      "community": 189,
       "norm_label": "search_user_achievements_migration.js"
     },
     {
@@ -4104,7 +4104,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "scratch_search_user_achievements_migration_fs",
-      "community": 149,
+      "community": 189,
       "norm_label": "fs"
     },
     {
@@ -4114,7 +4114,7 @@
       "source_location": "L2",
       "_origin": "ast",
       "id": "scratch_search_user_achievements_migration_path",
-      "community": 149,
+      "community": 189,
       "norm_label": "path"
     },
     {
@@ -4124,7 +4124,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "scratch_search_user_achievements_migration_migrationpath",
-      "community": 149,
+      "community": 189,
       "norm_label": "migrationpath"
     },
     {
@@ -5074,7 +5074,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_agenda_service",
-      "community": 59,
+      "community": 198,
       "norm_label": "agenda.service.ts"
     },
     {
@@ -5084,7 +5084,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "services_agenda_service_timeblock",
-      "community": 59,
+      "community": 198,
       "norm_label": "timeblock"
     },
     {
@@ -5094,7 +5094,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "services_agenda_service_workingday",
-      "community": 59,
+      "community": 198,
       "norm_label": "workingday"
     },
     {
@@ -5324,7 +5324,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_arco_service",
-      "community": 195,
+      "community": 166,
       "norm_label": "arco.service.ts"
     },
     {
@@ -5334,7 +5334,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "services_arco_service_privacysettings",
-      "community": 195,
+      "community": 166,
       "norm_label": "privacysettings"
     },
     {
@@ -5344,7 +5344,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "services_arco_service_arcorequest",
-      "community": 195,
+      "community": 166,
       "norm_label": "arcorequest"
     },
     {
@@ -5994,7 +5994,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "services_diary_service_fooddiaryentry",
-      "community": 208,
+      "community": 146,
       "norm_label": "fooddiaryentry"
     },
     {
@@ -6124,7 +6124,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "services_dossier_export_service_dossierexportservice",
-      "community": 202,
+      "community": 199,
       "norm_label": "dossierexportservice"
     },
     {
@@ -6134,7 +6134,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "services_dossier_export_service_dossierexportservice_getbase64imagefromurl",
-      "community": 202,
+      "community": 199,
       "norm_label": ".getbase64imagefromurl()"
     },
     {
@@ -6144,7 +6144,7 @@
       "source_location": "L39",
       "_origin": "ast",
       "id": "services_dossier_export_service_dossierexportservice_convertimagetowhite",
-      "community": 202,
+      "community": 199,
       "norm_label": ".convertimagetowhite()"
     },
     {
@@ -6154,7 +6154,7 @@
       "source_location": "L80",
       "_origin": "ast",
       "id": "services_dossier_export_service_dossierexportservice_convertimagetowatermark",
-      "community": 202,
+      "community": 199,
       "norm_label": ".convertimagetowatermark()"
     },
     {
@@ -6164,7 +6164,7 @@
       "source_location": "L118",
       "_origin": "ast",
       "id": "services_dossier_export_service_dossierexportservice_generatehmac",
-      "community": 202,
+      "community": 199,
       "norm_label": ".generatehmac()"
     },
     {
@@ -6174,7 +6174,7 @@
       "source_location": "L138",
       "_origin": "ast",
       "id": "services_dossier_export_service_dossierexportservice_getdossierdata",
-      "community": 202,
+      "community": 199,
       "norm_label": ".getdossierdata()"
     },
     {
@@ -6184,7 +6184,7 @@
       "source_location": "L388",
       "_origin": "ast",
       "id": "services_dossier_export_service_dossierexportservice_exportdossier",
-      "community": 202,
+      "community": 199,
       "norm_label": ".exportdossier()"
     },
     {
@@ -6454,7 +6454,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_gamification_service",
-      "community": 146,
+      "community": 170,
       "norm_label": "gamification.service.ts"
     },
     {
@@ -6464,7 +6464,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "services_gamification_service_userstreak",
-      "community": 146,
+      "community": 170,
       "norm_label": "userstreak"
     },
     {
@@ -6474,7 +6474,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "services_gamification_service_achievement",
-      "community": 205,
+      "community": 146,
       "norm_label": "achievement"
     },
     {
@@ -6804,7 +6804,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_profile_service",
-      "community": 170,
+      "community": 142,
       "norm_label": "profile.service.ts"
     },
     {
@@ -7204,7 +7204,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "admin_settings_admin_settings_component",
-      "community": 195,
+      "community": 166,
       "norm_label": "admin-settings.component.ts"
     },
     {
@@ -7214,7 +7214,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "admin_settings_admin_settings_component_adminsettingscomponent",
-      "community": 195,
+      "community": 166,
       "norm_label": "adminsettingscomponent"
     },
     {
@@ -7224,7 +7224,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "admin_settings_admin_settings_component_adminsettingscomponent_onregisterpasskey",
-      "community": 195,
+      "community": 166,
       "norm_label": ".onregisterpasskey()"
     },
     {
@@ -7664,7 +7664,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "arco_requests_arco_requests_component",
-      "community": 195,
+      "community": 166,
       "norm_label": "arco-requests.component.ts"
     },
     {
@@ -10774,7 +10774,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_features_chat_dashboard_dashboard_component_ts_dashboard_dashboard_component",
-      "community": 146,
+      "community": 170,
       "norm_label": "dashboard.component.ts"
     },
     {
@@ -11144,7 +11144,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "student_agenda_student_agenda_component",
-      "community": 59,
+      "community": 170,
       "norm_label": "student-agenda.component.ts"
     },
     {
@@ -11394,7 +11394,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "dashboard_diary_dashboard_component",
-      "community": 208,
+      "community": 146,
       "norm_label": "diary-dashboard.component.ts"
     },
     {
@@ -11404,7 +11404,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "dashboard_diary_dashboard_component_mood_options",
-      "community": 208,
+      "community": 146,
       "norm_label": "mood_options"
     },
     {
@@ -11414,7 +11414,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "dashboard_diary_dashboard_component_sleep_options",
-      "community": 208,
+      "community": 146,
       "norm_label": "sleep_options"
     },
     {
@@ -11424,7 +11424,7 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "dashboard_diary_dashboard_component_quill_modules",
-      "community": 208,
+      "community": 146,
       "norm_label": "quill_modules"
     },
     {
@@ -11464,7 +11464,7 @@
       "source_location": "L144",
       "_origin": "ast",
       "id": "dashboard_diary_dashboard_component_diarydashboardcomponent_triggerdolphinjump",
-      "community": 211,
+      "community": 17,
       "norm_label": ".triggerdolphinjump()"
     },
     {
@@ -11494,7 +11494,7 @@
       "source_location": "L214",
       "_origin": "ast",
       "id": "dashboard_diary_dashboard_component_diarydashboardcomponent_startquiz",
-      "community": 211,
+      "community": 17,
       "norm_label": ".startquiz()"
     },
     {
@@ -11504,7 +11504,7 @@
       "source_location": "L222",
       "_origin": "ast",
       "id": "dashboard_diary_dashboard_component_diarydashboardcomponent_askquestion",
-      "community": 211,
+      "community": 17,
       "norm_label": ".askquestion()"
     },
     {
@@ -11514,7 +11514,7 @@
       "source_location": "L248",
       "_origin": "ast",
       "id": "dashboard_diary_dashboard_component_diarydashboardcomponent_selectphq9option",
-      "community": 211,
+      "community": 17,
       "norm_label": ".selectphq9option()"
     },
     {
@@ -11544,7 +11544,7 @@
       "source_location": "L310",
       "_origin": "ast",
       "id": "dashboard_diary_dashboard_component_diarydashboardcomponent_finishphq9quiz",
-      "community": 211,
+      "community": 17,
       "norm_label": ".finishphq9quiz()"
     },
     {
@@ -11564,7 +11564,7 @@
       "source_location": "L388",
       "_origin": "ast",
       "id": "dashboard_diary_dashboard_component_diarydashboardcomponent_scrolltobottom",
-      "community": 211,
+      "community": 17,
       "norm_label": ".scrolltobottom()"
     },
     {
@@ -11584,7 +11584,7 @@
       "source_location": "L410",
       "_origin": "ast",
       "id": "dashboard_diary_dashboard_component_diarydashboardcomponent_getcurrenttime",
-      "community": 212,
+      "community": 17,
       "norm_label": ".getcurrenttime()"
     },
     {
@@ -11594,7 +11594,7 @@
       "source_location": "L415",
       "_origin": "ast",
       "id": "dashboard_diary_dashboard_component_diarydashboardcomponent_striphtml",
-      "community": 212,
+      "community": 17,
       "norm_label": ".striphtml()"
     },
     {
@@ -11664,7 +11664,7 @@
       "source_location": "L509",
       "_origin": "ast",
       "id": "dashboard_diary_dashboard_component_diarydashboardcomponent_openfoodform",
-      "community": 212,
+      "community": 17,
       "norm_label": ".openfoodform()"
     },
     {
@@ -11674,7 +11674,7 @@
       "source_location": "L518",
       "_origin": "ast",
       "id": "dashboard_diary_dashboard_component_diarydashboardcomponent_editfoodentry",
-      "community": 208,
+      "community": 146,
       "norm_label": ".editfoodentry()"
     },
     {
@@ -11684,7 +11684,7 @@
       "source_location": "L529",
       "_origin": "ast",
       "id": "dashboard_diary_dashboard_component_diarydashboardcomponent_cancelfoodform",
-      "community": 212,
+      "community": 17,
       "norm_label": ".cancelfoodform()"
     },
     {
@@ -11694,7 +11694,7 @@
       "source_location": "L538",
       "_origin": "ast",
       "id": "dashboard_diary_dashboard_component_diarydashboardcomponent_isfoodformvalid",
-      "community": 212,
+      "community": 17,
       "norm_label": ".isfoodformvalid()"
     },
     {
@@ -11704,7 +11704,7 @@
       "source_location": "L547",
       "_origin": "ast",
       "id": "dashboard_diary_dashboard_component_diarydashboardcomponent_savefoodentry",
-      "community": 212,
+      "community": 17,
       "norm_label": ".savefoodentry()"
     },
     {
@@ -11804,7 +11804,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "diary_diary_routes",
-      "community": 208,
+      "community": 17,
       "norm_label": "diary.routes.ts"
     },
     {
@@ -11814,7 +11814,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "diary_diary_routes_diary_routes",
-      "community": 208,
+      "community": 17,
       "norm_label": "diary_routes"
     },
     {
@@ -11834,7 +11834,7 @@
       "source_location": "L104",
       "_origin": "ast",
       "id": "achievements_dashboard_achievements_dashboard_component_achievementsdashboardcomponent",
-      "community": 205,
+      "community": 146,
       "norm_label": "achievementsdashboardcomponent"
     },
     {
@@ -11844,7 +11844,7 @@
       "source_location": "L128",
       "_origin": "ast",
       "id": "achievements_dashboard_achievements_dashboard_component_achievementsdashboardcomponent_ngoninit",
-      "community": 205,
+      "community": 146,
       "norm_label": ".ngoninit()"
     },
     {
@@ -11854,7 +11854,7 @@
       "source_location": "L132",
       "_origin": "ast",
       "id": "achievements_dashboard_achievements_dashboard_component_achievementsdashboardcomponent_selectcategory",
-      "community": 205,
+      "community": 146,
       "norm_label": ".selectcategory()"
     },
     {
@@ -11864,7 +11864,7 @@
       "source_location": "L136",
       "_origin": "ast",
       "id": "achievements_dashboard_achievements_dashboard_component_achievementsdashboardcomponent_getleveltitle",
-      "community": 205,
+      "community": 146,
       "norm_label": ".getleveltitle()"
     },
     {
@@ -11874,7 +11874,7 @@
       "source_location": "L145",
       "_origin": "ast",
       "id": "achievements_dashboard_achievements_dashboard_component_achievementsdashboardcomponent_getbadgeicon",
-      "community": 205,
+      "community": 146,
       "norm_label": ".getbadgeicon()"
     },
     {
@@ -11884,7 +11884,7 @@
       "source_location": "L157",
       "_origin": "ast",
       "id": "achievements_dashboard_achievements_dashboard_component_achievementsdashboardcomponent_getbadgecolor",
-      "community": 205,
+      "community": 146,
       "norm_label": ".getbadgecolor()"
     },
     {
@@ -11894,7 +11894,7 @@
       "source_location": "L170",
       "_origin": "ast",
       "id": "achievements_dashboard_achievements_dashboard_component_achievementsdashboardcomponent_getbadgebg",
-      "community": 205,
+      "community": 146,
       "norm_label": ".getbadgebg()"
     },
     {
@@ -13314,7 +13314,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "nutritionist_layout_nutritionist_layout_component",
-      "community": 58,
+      "community": 170,
       "norm_label": "nutritionist-layout.component.ts"
     },
     {
@@ -14204,7 +14204,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "clinical_note_clinical_note_component",
-      "community": 59,
+      "community": 170,
       "norm_label": "clinical-note.component.ts"
     },
     {
@@ -15234,7 +15234,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "settings_student_settings_component",
-      "community": 170,
+      "community": 59,
       "norm_label": "student-settings.component.ts"
     },
     {
@@ -15474,7 +15474,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "arco_settings_arco_settings_component",
-      "community": 195,
+      "community": 166,
       "norm_label": "arco-settings.component.ts"
     },
     {
@@ -15664,7 +15664,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "profile_avatar_profile_avatar_component",
-      "community": 170,
+      "community": 59,
       "norm_label": "profile-avatar.component.ts"
     },
     {
@@ -15956,6 +15956,26 @@
       "id": "migrate_data_index_derivelegacykey",
       "community": 193,
       "norm_label": "derivelegacykey()"
+    },
+    {
+      "label": "index.ts",
+      "file_type": "code",
+      "source_file": "supabase/functions/send-appointment-reminder/index.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "send_appointment_reminder_index",
+      "community": 195,
+      "norm_label": "index.ts"
+    },
+    {
+      "label": "corsHeaders",
+      "file_type": "code",
+      "source_file": "supabase/functions/send-appointment-reminder/index.ts",
+      "source_location": "L4",
+      "_origin": "ast",
+      "id": "send_appointment_reminder_index_corsheaders",
+      "community": 195,
+      "norm_label": "corsheaders"
     },
     {
       "label": "index.ts",
@@ -19298,6 +19318,46 @@
       "norm_label": "19.5. panel de control y configuracion clinica (psicologo)"
     },
     {
+      "label": "Skill 20: Recordatorio de Citas de 24 Horas por Correo",
+      "file_type": "document",
+      "source_file": "spec.md",
+      "source_location": "L459",
+      "_origin": "ast",
+      "id": "spec_skill_20_recordatorio_de_citas_de_24_horas_por_correo",
+      "community": 190,
+      "norm_label": "skill 20: recordatorio de citas de 24 horas por correo"
+    },
+    {
+      "label": "20.1. Modelo de Datos (PostgreSQL)",
+      "file_type": "document",
+      "source_file": "spec.md",
+      "source_location": "L463",
+      "_origin": "ast",
+      "id": "spec_20_1_modelo_de_datos_postgresql",
+      "community": 190,
+      "norm_label": "20.1. modelo de datos (postgresql)"
+    },
+    {
+      "label": "20.2. Edge Function de Supabase (`send-appointment-reminder`)",
+      "file_type": "document",
+      "source_file": "spec.md",
+      "source_location": "L467",
+      "_origin": "ast",
+      "id": "spec_20_2_edge_function_de_supabase_send_appointment_reminder",
+      "community": 190,
+      "norm_label": "20.2. edge function de supabase (`send-appointment-reminder`)"
+    },
+    {
+      "label": "20.3. Programaci\u00f3n Peri\u00f3dica (Cron)",
+      "file_type": "document",
+      "source_file": "spec.md",
+      "source_location": "L478",
+      "_origin": "ast",
+      "id": "spec_20_3_programaci\u00f3n_peri\u00f3dica_cron",
+      "community": 190,
+      "norm_label": "20.3. programacion periodica (cron)"
+    },
+    {
       "label": "task.md",
       "file_type": "document",
       "source_file": "task.md",
@@ -19536,6 +19596,16 @@
       "id": "task_skill_19_cuestionario_phq_9_en_el_diario_y_expediente_cl\u00ednico_fase_actual_ejecuci\u00f3n",
       "community": 55,
       "norm_label": "skill 19: cuestionario phq-9 en el diario y expediente clinico (fase actual: ejecucion)"
+    },
+    {
+      "label": "Skill 20: Recordatorio de Citas de 24 Horas por Correo",
+      "file_type": "document",
+      "source_file": "task.md",
+      "source_location": "L491",
+      "_origin": "ast",
+      "id": "task_skill_20_recordatorio_de_citas_de_24_horas_por_correo",
+      "community": 55,
+      "norm_label": "skill 20: recordatorio de citas de 24 horas por correo"
     },
     {
       "label": "graphify_rule",
@@ -29357,9 +29427,9 @@
       "source_file": "src/app/features/dashboard-layout/student-agenda/student-agenda.component.ts",
       "source_location": "L12",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "student_agenda_student_agenda_component",
-      "target": "services_crypto_service",
-      "confidence_score": 1.0
+      "target": "services_crypto_service"
     },
     {
       "relation": "imports",
@@ -29517,9 +29587,9 @@
       "source_file": "src/app/features/dashboard-layout/student-agenda/student-agenda.component.ts",
       "source_location": "L12",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "student_agenda_student_agenda_component",
-      "target": "services_crypto_service_cryptoservice",
-      "confidence_score": 1.0
+      "target": "services_crypto_service_cryptoservice"
     },
     {
       "relation": "calls",
@@ -38714,9 +38784,9 @@
       "source_file": "src/app/features/dashboard-layout/student-agenda/student-agenda.component.ts",
       "source_location": "L107",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "student_agenda_student_agenda_component_studentagendacomponent",
-      "target": "student_agenda_student_agenda_component_studentagendacomponent_checkprofilecompletion",
-      "confidence_score": 1.0
+      "target": "student_agenda_student_agenda_component_studentagendacomponent_checkprofilecompletion"
     },
     {
       "relation": "method",
@@ -38926,9 +38996,9 @@
       "source_file": "src/app/features/dashboard-layout/student-agenda/student-agenda.component.ts",
       "source_location": "L79",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "student_agenda_student_agenda_component_studentagendacomponent_ngoninit",
-      "target": "student_agenda_student_agenda_component_studentagendacomponent_checkprofilecompletion",
-      "confidence_score": 1.0
+      "target": "student_agenda_student_agenda_component_studentagendacomponent_checkprofilecompletion"
     },
     {
       "relation": "calls",
@@ -45305,6 +45375,16 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "supabase/functions/send-appointment-reminder/index.ts",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "send_appointment_reminder_index",
+      "target": "send_appointment_reminder_index_corsheaders",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "supabase/functions/send-welcome-email/index.ts",
       "source_location": "L3",
       "weight": 1.0,
@@ -47926,6 +48006,16 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "spec.md",
+      "source_location": "L459",
+      "weight": 1.0,
+      "source": "spec_skills_a_desarrollar_orden_num\u00e9rico_estricto",
+      "target": "spec_skill_20_recordatorio_de_citas_de_24_horas_por_correo",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "spec.md",
       "source_location": "L20",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -48255,6 +48345,36 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "spec.md",
+      "source_location": "L463",
+      "weight": 1.0,
+      "source": "spec_skill_20_recordatorio_de_citas_de_24_horas_por_correo",
+      "target": "spec_20_1_modelo_de_datos_postgresql",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "spec.md",
+      "source_location": "L467",
+      "weight": 1.0,
+      "source": "spec_skill_20_recordatorio_de_citas_de_24_horas_por_correo",
+      "target": "spec_20_2_edge_function_de_supabase_send_appointment_reminder",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "spec.md",
+      "source_location": "L478",
+      "weight": 1.0,
+      "source": "spec_skill_20_recordatorio_de_citas_de_24_horas_por_correo",
+      "target": "spec_20_3_programaci\u00f3n_peri\u00f3dica_cron",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "task.md",
       "source_location": "L1",
       "weight": 1.0,
@@ -48401,6 +48521,16 @@
       "confidence_score": 1.0,
       "source": "task_tareas_de_implementaci\u00f3n_spec_driven_development",
       "target": "task_skill_1_capa_de_datos_postgresql_postgrest"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "task.md",
+      "source_location": "L491",
+      "weight": 1.0,
+      "source": "task_tareas_de_implementaci\u00f3n_spec_driven_development",
+      "target": "task_skill_20_recordatorio_de_citas_de_24_horas_por_correo",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -48926,5 +49056,5 @@
       "source_file": "src/app/features/psychologist/psychologist-layout/psychologist-layout.component.html"
     }
   ],
-  "built_at_commit": "b739a6551ff91a92da4b454c17fc5ac747920d94"
+  "built_at_commit": "e1cee22952940ed130c896dd8698f66eb4acb656"
 }

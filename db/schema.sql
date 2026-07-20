@@ -150,6 +150,7 @@ CREATE TABLE public.appointments (
     emergency_change_type VARCHAR(50),
     emergency_change_details TEXT,
     cancellation_notified_at TIMESTAMP WITH TIME ZONE,
+    reminder_24h_sent BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -587,6 +588,7 @@ CREATE POLICY whatsapp_sessions_own ON public.whatsapp_routing_sessions
 CREATE INDEX idx_chats_student ON public.chats(student_id);
 CREATE INDEX idx_messages_chat ON public.messages(chat_id);
 CREATE INDEX idx_appointments_professional ON public.appointments(professional_id);
+CREATE INDEX idx_appointments_reminder_lookup ON public.appointments (status, scheduled_date, reminder_24h_sent);
 CREATE INDEX idx_diary_student ON public.diary_entries(student_id);
 CREATE INDEX idx_nutrition_logs ON public.nutrition_logs(student_id, log_date);
 CREATE INDEX idx_web_push_user ON public.web_push_subscriptions(user_id);
@@ -1693,4 +1695,66 @@ BEGIN
     DELETE FROM auth.sessions WHERE user_id = p_user_id;
 END;
 $$;
+
+
+-- =========================================================================================
+-- RECORDATORIO DE CITAS DE 24 HORAS POR CORREO
+-- =========================================================================================
+
+CREATE OR REPLACE FUNCTION public.get_appointments_for_reminder()
+RETURNS TABLE (
+  appointment_id UUID,
+  scheduled_date TIMESTAMP,
+  start_time TIME,
+  end_time TIME,
+  student_first_name TEXT,
+  student_last_name TEXT,
+  student_email VARCHAR,
+  prof_first_name TEXT,
+  prof_last_name TEXT,
+  prof_role TEXT,
+  modality TEXT,
+  location TEXT,
+  building TEXT,
+  office_room TEXT,
+  faculty_name TEXT,
+  virtual_tour_url TEXT
+)
+LANGUAGE plpgsql
+SECURITY DEFINER -- Ejecuta con privilegios del creador para acceder a auth.users
+AS $$
+BEGIN
+  RETURN QUERY
+  SELECT 
+    a.id AS appointment_id,
+    a.scheduled_date,
+    a.start_time,
+    a.end_time,
+    sp.first_name AS student_first_name,
+    sp.last_name AS student_last_name,
+    au.email::VARCHAR AS student_email,
+    pp.first_name AS prof_first_name,
+    pp.last_name AS prof_last_name,
+    r.name::TEXT AS prof_role,
+    hps.modality,
+    hps.location,
+    hps.building,
+    hps.office_room,
+    f.name AS faculty_name,
+    f.virtual_tour_url
+  FROM public.appointments a
+  JOIN public.profiles sp ON a.student_id = sp.user_id
+  JOIN auth.users au ON a.student_id = au.id
+  JOIN public.users pu ON a.professional_id = pu.id
+  JOIN public.roles r ON pu.role_id = r.id
+  JOIN public.profiles pp ON a.professional_id = pp.user_id
+  LEFT JOIN public.health_professional_settings hps ON a.professional_id = hps.professional_id
+  LEFT JOIN public.faculties f ON hps.faculty_id = f.id
+  WHERE a.status = 'scheduled'
+    AND a.reminder_24h_sent = false
+    AND ((a.scheduled_date::date + a.start_time) AT TIME ZONE 'America/Mexico_City') >= (now() + interval '23 hours')
+    AND ((a.scheduled_date::date + a.start_time) AT TIME ZONE 'America/Mexico_City') <= (now() + interval '25 hours');
+END;
+$$;
+
 

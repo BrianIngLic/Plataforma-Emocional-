@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild, effect, inject, OnInit } from '@angular/core';
+import { Component, ElementRef, ViewChild, effect, inject, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -16,6 +16,10 @@ import { GamificationService } from '../../../core/services/gamification.service
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
+  @Input() studentId?: string;
+  @Input() readOnly = false;
+  @Output() back = new EventEmitter<void>();
+
   chatService = inject(ChatService);
   authService = inject(AuthService);
   gamificationService = inject(GamificationService);
@@ -42,6 +46,9 @@ export class DashboardComponent implements OnInit {
   ];
   showMobileActions = false;
 
+  studentChats: any[] = [];
+  selectedChatId: string | null = null;
+
   @ViewChild('chatScroll') private chatScrollContainer!: ElementRef;
 
   constructor() {
@@ -53,8 +60,22 @@ export class DashboardComponent implements OnInit {
   }
 
   async ngOnInit() {
-    // Cargar datos de racha y logros para mantener sincronizada la UI
-    await this.gamificationService.loadGamificationData();
+    if (this.readOnly && this.studentId) {
+      // Cargar lista de chats para este estudiante
+      this.studentChats = await this.chatService.getStudentChatHistory(this.studentId);
+      if (this.studentChats.length > 0) {
+        this.selectedChatId = this.studentChats[0].id;
+        await this.chatService.loadSpecificChat(this.selectedChatId!);
+      }
+    } else {
+      // Cargar datos de racha y logros para mantener sincronizada la UI
+      await this.gamificationService.loadGamificationData();
+    }
+  }
+
+  async onChatChange(chatId: string) {
+    this.selectedChatId = chatId;
+    await this.chatService.loadSpecificChat(chatId);
   }
 
   toggleMobileActions() {

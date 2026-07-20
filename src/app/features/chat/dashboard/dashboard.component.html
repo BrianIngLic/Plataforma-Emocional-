@@ -3,18 +3,37 @@
   <!-- Encabezado Limpio y Tranquilo -->
   <header class="chat-header-minimal">
     <div class="header-brand">
+      <!-- Botón para regresar al expediente clínico si es modo lectura -->
+      <button *ngIf="readOnly" class="back-btn-chat" (click)="back.emit()" style="background: transparent; border: none; color: var(--text-primary); cursor: pointer; display: flex; align-items: center; gap: 0.5rem; margin-right: 1.5rem; padding: 0.5rem; border-radius: 8px; font-weight: 600; font-family: inherit; transition: background 0.2s;">
+        <mat-icon>arrow_back</mat-icon> Volver al Expediente
+      </button>
+
       <img src="/amati-logo.svg" alt="Amati Logo" class="amati-logo-minimal" />
       <div class="brand-titles">
         <h2>Amati <span>— Asistente Emocional</span></h2>
         <div class="status-minimal">
           <span class="dot-online"></span>
-          <p>Confidencialidad garantizada</p>
+          <p>{{ readOnly ? 'Historial de chats (Solo Lectura)' : 'Confidencialidad garantizada' }}</p>
         </div>
       </div>
     </div>
 
-    <!-- Gamificación Discreta y No Intrusiva -->
-    <div class="header-actions-minimal">
+    <!-- Selector de Historial de Chats para Psicólogo -->
+    <div class="header-actions-minimal" *ngIf="readOnly && studentChats.length > 0">
+      <div class="chat-selector-wrapper" style="display: flex; align-items: center; gap: 0.75rem;">
+        <span style="font-size: 0.8rem; font-weight: 600; color: var(--text-secondary);">Seleccionar sesión:</span>
+        <select [ngModel]="selectedChatId" 
+                (ngModelChange)="onChatChange($event)"
+                style="padding: 8px 12px; border: 1px solid var(--border-color, #cbd5e1); border-radius: 8px; font-size: 0.85rem; font-family: inherit; background: var(--bg-card, #ffffff); color: var(--text-primary, #0f172a); outline: none; cursor: pointer; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">
+          <option *ngFor="let chat of studentChats" [value]="chat.id">
+            {{ chat.created_at | date:'dd/MM/yyyy HH:mm' }} - {{ chat.title }}
+          </option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Gamificación Discreta y No Intrusiva (sólo para el estudiante) -->
+    <div class="header-actions-minimal" *ngIf="!readOnly">
       <div class="discreet-badge" title="Racha de cuidado personal">
         <mat-icon class="icon-streak">local_fire_department</mat-icon>
         <span>{{ streakDays }} días seguidos</span>
@@ -38,8 +57,15 @@
 
   <!-- Contenedor de Mensajes -->
   <div class="messages-container" #chatScroll>
-    <!-- Bienvenida Minimalista -->
-    <div class="welcome-minimal" *ngIf="messages().length === 0">
+    <!-- Estado vacío para clínico si el estudiante no tiene chats -->
+    <div class="welcome-minimal" *ngIf="readOnly && studentChats.length === 0">
+      <mat-icon class="welcome-icon">chat_bubble_outline</mat-icon>
+      <h3>Sin conversaciones registradas</h3>
+      <p>El estudiante no ha iniciado ninguna conversación con Amati todavía.</p>
+    </div>
+
+    <!-- Bienvenida Estudiante -->
+    <div class="welcome-minimal" *ngIf="!readOnly && messages().length === 0">
       <mat-icon class="welcome-icon">volunteer_activism</mat-icon>
       <h3>Hola. Estoy aquí para escucharte sin prisas ni juicios.</h3>
       <p>Tómate todo el tiempo que necesites. Lo que escribes aquí es completamente privado.</p>
@@ -75,7 +101,7 @@
   </div>
 
   <!-- Sugerencias Sutiles (Chispas de Valentía) -->
-  <div class="suggestions-minimal" *ngIf="messages().length <= 4">
+  <div class="suggestions-minimal" *ngIf="!readOnly && messages().length <= 4">
     <span class="suggestions-label">Ideas para comenzar:</span>
     <div class="suggestions-list">
       <button class="chip-minimal" *ngFor="let sug of suggestions" (click)="sendSuggestion(sug.label)">
@@ -85,7 +111,7 @@
   </div>
 
   <!-- Caja de Input Limpia -->
-  <div class="input-area-minimal">
+  <div class="input-area-minimal" *ngIf="!readOnly">
     <!-- Menú Desplegable de Acciones en Móvil -->
     <div class="mobile-actions-menu" *ngIf="showMobileActions">
       <button class="action-menu-item" (click)="showMobileActions = false">
@@ -119,7 +145,7 @@
              (keyup.enter)="sendMessage()" 
              placeholder="Escribe lo que sientes, a tu ritmo..."
              [disabled]="isTyping()">
-             
+              
       <div class="actions-right">
         <mat-icon class="icon-mic" title="Mensaje de voz">mic</mat-icon>
         <button class="btn-send" (click)="sendMessage()" [disabled]="!inputText.trim() || isTyping()">

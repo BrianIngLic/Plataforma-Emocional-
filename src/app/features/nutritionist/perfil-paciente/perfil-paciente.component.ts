@@ -14,11 +14,12 @@ import { FeedbackModalComponent } from '../../../shared/components/feedback-moda
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartConfiguration, ChartOptions } from 'chart.js';
 import { jsPDF } from 'jspdf';
+import { DashboardComponent } from '../../chat/dashboard/dashboard.component';
 
 @Component({
   selector: 'app-perfil-paciente',
   standalone: true,
-  imports: [CommonModule, MatIconModule, MatButtonModule, FormsModule, BaseChartDirective],
+  imports: [CommonModule, MatIconModule, MatButtonModule, FormsModule, BaseChartDirective, DashboardComponent],
   templateUrl: '../../psychologist/patient-profile/patient-profile.component.html',
   styleUrls: ['../../psychologist/patient-profile/patient-profile.component.scss']
 })
@@ -35,6 +36,7 @@ export class PerfilPaciente implements OnInit {
   foodDiaryEntries: any[] = [];
   loading = true;
   isExporting = false;
+  showChatHistory = false;
   sessionHistory: any[] = [];
   eat26Result: any = null;
   patientStreak: any = { current_streak: 0, best_streak: 0, total_xp: 0 };

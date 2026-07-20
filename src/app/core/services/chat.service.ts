@@ -151,6 +151,23 @@ export class ChatService {
     return [];
   }
 
+  async getStudentChatHistory(studentId: string) {
+    const { data } = await this.supabaseService.supabase
+      .from('chats')
+      .select('id, title, created_at')
+      .eq('student_id', studentId)
+      .order('created_at', { ascending: false });
+      
+    if (data) {
+      return data.map(c => {
+        let decTitle = 'Chat sin título';
+        try { decTitle = this.cryptoService.decrypt(c.title); } catch(e){}
+        return { ...c, title: decTitle };
+      });
+    }
+    return [];
+  }
+
   async loadSpecificChat(chatId: string) {
     this.activeChatId = chatId;
     await this.loadMessages();

@@ -14,7 +14,8 @@
   </div>
 
   <ng-container *ngIf="!loading && patient">
-    <!-- Header Card -->
+    <ng-container *ngIf="!showChatHistory">
+      <!-- Header Card -->
     <div class="card header-card">
     <div class="patient-header">
       <div class="avatar" [style.background-image]="patient.avatarUrl ? 'url(' + patient.avatarUrl + ')' : ''" [style.background-size]="'cover'" [style.background-position]="'center'">
@@ -295,6 +296,11 @@
             <div class="sentiment-value text-purple">Depresivo / Ansioso</div>
           </div>
           <p class="ai-text"><strong>Resumen de interacciones:</strong> El paciente ha reportado episodios de ideación de autolesión en conversaciones nocturnas. El sistema detectó palabras clave críticas el 16 de Junio. Se recomienda intervención en la próxima sesión.</p>
+          
+          <button *ngIf="authService.currentUser()?.role === 'Psicologo' || authService.currentUser()?.role === 'Admin'" (click)="showChatHistory = true" style="margin-top: 1rem; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; background: #8b5cf6; border: none; padding: 10px 18px; border-radius: 8px; color: white; cursor: pointer; font-weight: 600; width: 100%; box-sizing: border-box; transition: background 0.2s;" onmouseover="this.style.background='#7c3aed'" onmouseout="this.style.background='#8b5cf6'">
+            <mat-icon style="font-size: 18px; width: 18px; height: 18px; line-height: 1;">chat</mat-icon>
+            <span>Consultar Historial de Chat</span>
+          </button>
         </div>
       </div>
 
@@ -729,5 +735,14 @@
     </button>
   </div>
 
+  </ng-container> <!-- Close of !showChatHistory -->
+
+  <ng-container *ngIf="showChatHistory">
+    <app-chat-dashboard
+      [studentId]="patient?.id"
+      [readOnly]="true"
+      (back)="showChatHistory = false">
+    </app-chat-dashboard>
   </ng-container>
+</ng-container> <!-- Close of !loading && patient -->
 </div>

@@ -20,8 +20,8 @@
     "semantic_hash": ""
   },
   "db/schema.sql": {
-    "mtime": 1784450233.0645273,
-    "ast_hash": "975b8815aca1c5f3b055ad11f0a96fb7",
+    "mtime": 1784568423.6411104,
+    "ast_hash": "fe7ab79fac744d40d0d262fcfb2b03d8",
     "semantic_hash": ""
   },
   "package.json": {
@@ -360,8 +360,8 @@
     "semantic_hash": "e9fbe2f84e3d2e67d94ed6d56840ff5d"
   },
   "spec.md": {
-    "mtime": 1784504952.5693903,
-    "ast_hash": "e372c80da9bae397d801faa42b0e8060",
+    "mtime": 1784538606.597922,
+    "ast_hash": "c12a602bf7f1c67e0d6b7f6a962d6ed8",
     "semantic_hash": ""
   },
   "src/app/app.html": {
@@ -480,8 +480,8 @@
     "semantic_hash": ""
   },
   "task.md": {
-    "mtime": 1784505991.1842358,
-    "ast_hash": "211b82187d6721ca595a19128436dc0f",
+    "mtime": 1784538610.7458665,
+    "ast_hash": "794b5727e79b97266a50f0d78140312b",
     "semantic_hash": ""
   },
   "public/amati-logo.svg": {
@@ -1447,6 +1447,16 @@
   "db/migration_phq9.sql": {
     "mtime": 1784505969.8719776,
     "ast_hash": "998294c66306dd39d794e00533140999",
+    "semantic_hash": ""
+  },
+  "db/migration_appointment_reminder_flag.sql": {
+    "mtime": 1784538613.793398,
+    "ast_hash": "713bfa83958f94af8f83fb10a81d2f54",
+    "semantic_hash": ""
+  },
+  "supabase/functions/send-appointment-reminder/index.ts": {
+    "mtime": 1784538618.498929,
+    "ast_hash": "ceb8fda8ce33d2e6656ce3a902acd6fa",
     "semantic_hash": ""
   }
 }

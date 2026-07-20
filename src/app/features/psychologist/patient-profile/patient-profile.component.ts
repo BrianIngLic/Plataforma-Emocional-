@@ -12,11 +12,12 @@ import { FormsModule } from '@angular/forms';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartConfiguration, ChartOptions } from 'chart.js';
 import { FeedbackModalComponent } from '../../../shared/components/feedback-modal/feedback-modal.component';
+import { DashboardComponent } from '../../chat/dashboard/dashboard.component';
 
 @Component({
   selector: 'app-patient-profile',
   standalone: true,
-  imports: [CommonModule, MatIconModule, BaseChartDirective, FormsModule],
+  imports: [CommonModule, MatIconModule, BaseChartDirective, FormsModule, DashboardComponent],
   templateUrl: './patient-profile.component.html',
   styleUrls: ['./patient-profile.component.scss']
 })
@@ -37,6 +38,7 @@ export class PatientProfileComponent implements OnInit {
   foodDiaryEntries: any[] = [];
   loading = true;
   isExporting = false;
+  showChatHistory = false;
 
   // Datos de Gamificación del Paciente
   patientStreak: any = { current_streak: 0, best_streak: 0, total_xp: 0 };

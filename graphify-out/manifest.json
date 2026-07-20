@@ -20,8 +20,8 @@
     "semantic_hash": ""
   },
   "db/schema.sql": {
-    "mtime": 1784568423.6411104,
-    "ast_hash": "fe7ab79fac744d40d0d262fcfb2b03d8",
+    "mtime": 1784569328.6744716,
+    "ast_hash": "11fa8cd7ece64012fa4cf1ed126c5555",
     "semantic_hash": ""
   },
   "package.json": {
@@ -85,9 +85,9 @@
     "semantic_hash": ""
   },
   "src/app/core/services/chat.service.ts": {
-    "mtime": 1782251501.647259,
-    "ast_hash": "e5f3475d29274e29bf694f9ff8b0f090",
-    "semantic_hash": "e5f3475d29274e29bf694f9ff8b0f090"
+    "mtime": 1784570244.1444802,
+    "ast_hash": "a97c060edb6a7e9647bd7b629021a7e8",
+    "semantic_hash": ""
   },
   "src/app/core/services/clinical.service.ts": {
     "mtime": 1783910201.6012702,
@@ -200,8 +200,8 @@
     "semantic_hash": "f39da1f3b207ea48445b3fdefa28b3d2"
   },
   "src/app/features/chat/dashboard/dashboard.component.ts": {
-    "mtime": 1783668250.8411703,
-    "ast_hash": "f2c43d73b142c97e511bae5b263ea800",
+    "mtime": 1784570368.6504974,
+    "ast_hash": "edcd6ad7dd9f24b2ac35721bea61903a",
     "semantic_hash": ""
   },
   "src/app/features/dashboard-layout/dashboard-layout.component.ts": {
@@ -250,8 +250,8 @@
     "semantic_hash": "b29381fde22297a402e92bd8ee8e620a"
   },
   "src/app/features/psychologist/patient-profile/patient-profile.component.ts": {
-    "mtime": 1784535660.219627,
-    "ast_hash": "34c282563896be4c39dcd366ea892977",
+    "mtime": 1784570289.6782527,
+    "ast_hash": "9b918c277ec48117233638c09e05aaf0",
     "semantic_hash": ""
   },
   "src/app/features/psychologist/patients/patients.component.ts": {
@@ -360,8 +360,8 @@
     "semantic_hash": "e9fbe2f84e3d2e67d94ed6d56840ff5d"
   },
   "spec.md": {
-    "mtime": 1784538606.597922,
-    "ast_hash": "c12a602bf7f1c67e0d6b7f6a962d6ed8",
+    "mtime": 1784570005.990445,
+    "ast_hash": "6de45477d883982a89711e329a519dde",
     "semantic_hash": ""
   },
   "src/app/app.html": {
@@ -415,8 +415,8 @@
     "semantic_hash": ""
   },
   "src/app/features/chat/dashboard/dashboard.component.html": {
-    "mtime": 1783668250.839171,
-    "ast_hash": "c178f94fcd55fb1094a698bc5a9fee1b",
+    "mtime": 1784570265.4925177,
+    "ast_hash": "5c16f15b16cc39e084411875001e6452",
     "semantic_hash": ""
   },
   "src/app/features/dashboard-layout/dashboard-layout.component.html": {
@@ -445,8 +445,8 @@
     "semantic_hash": "a70cf8f9800814f3488ae124af135091"
   },
   "src/app/features/psychologist/patient-profile/patient-profile.component.html": {
-    "mtime": 1784535669.0322635,
-    "ast_hash": "5e98244ec7bf0f87044d38473d3e26c5",
+    "mtime": 1784570441.0295417,
+    "ast_hash": "7466d1928f10edd8710d7a0404a4bfae",
     "semantic_hash": ""
   },
   "src/app/features/psychologist/patients/patients.component.html": {
@@ -480,8 +480,8 @@
     "semantic_hash": ""
   },
   "task.md": {
-    "mtime": 1784538610.7458665,
-    "ast_hash": "794b5727e79b97266a50f0d78140312b",
+    "mtime": 1784570308.4040868,
+    "ast_hash": "69d326ca52120e5388e132dff799d3fd",
     "semantic_hash": ""
   },
   "public/amati-logo.svg": {
@@ -565,8 +565,8 @@
     "semantic_hash": ""
   },
   "src/app/features/nutritionist/perfil-paciente/perfil-paciente.component.ts": {
-    "mtime": 1784535664.0682907,
-    "ast_hash": "9e441942af71dfb31c213bab576bb0d1",
+    "mtime": 1784570377.3360388,
+    "ast_hash": "4674ea8368d576341b8a09276c7f2996",
     "semantic_hash": ""
   },
   "src/app/features/nutritionist/settings/settings.component.ts": {
@@ -1450,13 +1450,18 @@
     "semantic_hash": ""
   },
   "db/migration_appointment_reminder_flag.sql": {
-    "mtime": 1784538613.793398,
-    "ast_hash": "713bfa83958f94af8f83fb10a81d2f54",
+    "mtime": 1784569333.771332,
+    "ast_hash": "087df77f4129e3c9d79ee86aab4bcd71",
     "semantic_hash": ""
   },
   "supabase/functions/send-appointment-reminder/index.ts": {
     "mtime": 1784538618.498929,
     "ast_hash": "ceb8fda8ce33d2e6656ce3a902acd6fa",
+    "semantic_hash": ""
+  },
+  "db/migration_chats_view_psychologist.sql": {
+    "mtime": 1784570223.040278,
+    "ast_hash": "d9258f8b421b49b70e1a47132212f993",
     "semantic_hash": ""
   }
 }

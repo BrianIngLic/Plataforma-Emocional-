@@ -479,3 +479,21 @@ Al ingresar al diario (`diary-dashboard`):
 - **Frecuencia:** Cada hora (ej. `0 * * * *`).
 - **Orquestación:** Usar `pg_cron` en Supabase para invocar la Edge Function mediante petición HTTP POST segura autenticada con la clave `service_role`.
 
+
+### Skill 21: Visor del Historial de Chat de Amati (Psicólogo)
+
+**Objetivo:** Permitir al psicólogo y al administrador consultar de manera segura el historial exacto de conversaciones que el estudiante ha sostenido con la Inteligencia Artificial Amati, facilitando el análisis clínico longitudinal.
+
+#### 21.1. Seguridad y RLS en Base de Datos
+- Las políticas de seguridad RLS en `public.chats` y `public.messages` se modifican para habilitar el acceso en consulta (`SELECT`) a psicólogos (`role_id = 3`) y administradores (`role_id = 1`), manteniendo bloqueada la escritura.
+
+#### 21.2. Reutilización de Interfaz en Modo Solo Lectura
+- El componente `DashboardComponent` de chat se adapta para aceptar los inputs `@Input() studentId` y `@Input() readOnly`.
+- En modo `readOnly = true`, se deshabilita y oculta por completo el área de entrada de texto, los micrófonos, y las sugerencias de chat.
+- El header muestra un selector de sesiones que permite al profesional cambiar dinámicamente entre chats históricos recuperados de Supabase.
+
+#### 21.3. Integración en el Expediente Clínico
+- Se coloca un botón de consulta en el bloque de "Análisis de Amati" del expediente del paciente.
+- Al hacer clic, se oculta el expediente y se despliega la interfaz del chat en pantalla completa, incorporando un botón destacado para regresar al expediente principal.
+
+

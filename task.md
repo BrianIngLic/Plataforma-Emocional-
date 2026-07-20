@@ -503,7 +503,39 @@
 - `[x]` Implementar actualización de flag `reminder_24h_sent = true` en base de datos al enviar con éxito.
 
 **20.3. Programación Periódica (Cron)**
-- `[x]` Registrar tarea cron `send-appointment-reminders` en la base de datos usando `pg_cron` para invocar la Edge Function cada hora.
+- `[x]` Registrar tarea cron `send-appointment-reminders` in la base de datos usando `pg_cron` para invocar la Edge Function cada hora.
+
+---
+
+## Skill 21: Visor del Historial de Chat de Amati (Psicólogo)
+
+**21.1. Base de Datos (Migración SQL)**
+- `[x]` Crear script de migración `db/migration_chats_view_psychologist.sql` con las políticas actualizadas para `public.chats` y `public.messages` que permiten el acceso en lectura a psicólogos (`role_id = 3`) y administradores (`role_id = 1`).
+
+**21.2. Capa de Servicios (`core/services`)**
+- `[x]` En `chat.service.ts`:
+  - `[x]` Añadir el método `getStudentChatHistory(studentId: string)` para consultar todas las sesiones de chat del estudiante en Supabase (descifrando sus títulos con `CryptoService.decrypt`).
+
+**21.3. Reutilización del Chat en Solo Lectura (`features/chat/dashboard`)**
+- `[x]` En `dashboard.component.ts`:
+  - `[x]` Declarar inputs `@Input() studentId?: string;` y `@Input() readOnly = false;`.
+  - `[x]` Declarar output `@Output() back = new EventEmitter<void>();`.
+  - `[x]` En `ngOnInit()`, si `readOnly` es true y `studentId` está definido, cargar la lista de chats del estudiante, seleccionar la sesión más reciente y cargar sus mensajes. Omitir carga de gamificación de racha.
+  - `[x]` Añadir método `onChatChange(chatId: string)` para cargar otra sesión histórica seleccionada.
+- `[x]` En `dashboard.component.html`:
+  - `[x]` Condicionalmente, si `readOnly` es true, ocultar las sugerencias (`suggestions-minimal`), la barra de entrada de mensajes (`input-area-minimal`) y los widgets de racha/pausa activa.
+  - `[x]` En el encabezado minimalista, si `readOnly` es true, añadir un botón de "Volver al Expediente" (que emita `back`) y un combo de selección de chat con la lista de conversaciones cargadas.
+  - `[x]` Mostrar un estado de bienvenida vacío personalizado si el estudiante no tiene ningún chat previo con Amati.
+
+**21.4. Expediente Clínico del Psicólogo (`features/psychologist/patient-profile`)**
+- `[x]` En `patient-profile.component.ts`:
+  - `[x]` Importar `DashboardComponent` de `../../chat/dashboard/dashboard.component` en el arreglo `imports`.
+  - `[x]` Declarar la variable de control de vista `showChatHistory = false;`.
+- `[x]` En `patient-profile.component.html`:
+  - `[x]` En la tarjeta de Análisis de Amati (`ai-card`), añadir un botón "Consultar Historial de Chat" con ícono de mat-icon `chat` para activar `showChatHistory = true`.
+  - `[x]` Envolver el layout del expediente clínico en un `<ng-container *ngIf="!showChatHistory">`.
+  - `[x]` Al final del archivo, añadir el componente `<app-chat-dashboard>` de manera condicional con `*ngIf="showChatHistory"`, pasándole `patient.id` y `readOnly = true`, enlazando el evento `back` para desactivar la vista.
+
 
 
 

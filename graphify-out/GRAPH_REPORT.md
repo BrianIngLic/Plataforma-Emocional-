@@ -1,16 +1,16 @@
 # Graph Report - Plataforma-Emocional-  (2026-07-20)
 
 ## Corpus Check
-- 238 files · ~209,907 words
+- 238 files · ~209,959 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 2009 nodes · 2786 edges · 214 communities (111 shown, 103 thin omitted)
+- 2009 nodes · 2786 edges · 214 communities (110 shown, 104 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 24 edges (avg confidence: 0.89)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `fcb67171`
+- Built from commit: `cb1db1cc`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -214,8 +214,8 @@
 - [[_COMMUNITY_Community 209|Community 209]]
 - [[_COMMUNITY_Community 210|Community 210]]
 - [[_COMMUNITY_Community 211|Community 211]]
+- [[_COMMUNITY_Community 212|Community 212]]
 - [[_COMMUNITY_Community 213|Community 213]]
-- [[_COMMUNITY_Community 215|Community 215]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `DirectoryComponent` - 64 edges
@@ -250,7 +250,7 @@
 - **Student Emotional Assistance and Care Flow** — dashboard_layout_dashboard_layout_component_student_sidebar, dashboard_dashboard_component_chat_view, dashboard_diary_dashboard_component_therapeutic_refuge, student_agenda_student_agenda_component_appointment_scheduler [INFERRED 0.85]
 - **Psychologist Clinical Command Center and Triage Flow** — psychologist_layout_psychologist_layout_component_psychologist_sidebar, dashboard_dashboard_component_psychologist_triage_view, patients_patients_component_patient_directory, agenda_agenda_component_clinical_timeline, patient_profile_patient_profile_component_clinical_expedient_view [INFERRED 0.85]
 
-## Communities (214 total, 103 thin omitted)
+## Communities (214 total, 104 thin omitted)
 
 ### Community 0 - "Community 0"
 Cohesion: 0.22
@@ -505,8 +505,8 @@ Cohesion: 0.25
 Nodes (7): cli, analytics, newProjectRoot, projects, $schema, version, @angular/cli
 
 ### Community 146 - "Community 146"
-Cohesion: 0.12
-Nodes (7): EmojiScaleComponent, GamificationService, PendingEvaluationItem, ProfessionalEvaluationSummary, SessionEvaluation, SessionEvaluationPayload, StreakBadgeComponent
+Cohesion: 0.14
+Nodes (7): ChatMessage, GamificationService, PendingEvaluationItem, ProfessionalEvaluationSummary, SessionEvaluation, SessionEvaluationPayload, StreakBadgeComponent
 
 ### Community 149 - "Community 149"
 Cohesion: 0.19
@@ -561,8 +561,8 @@ Cohesion: 0.29
 Nodes (6): content, fs, lines, occurrences, path, schemaPath
 
 ### Community 170 - "Community 170"
-Cohesion: 0.12
-Nodes (8): CampoFormulario, Holiday, AuditService, ChatMessage, CryptoService, DiaryEntry, UserStreak, SupabaseService
+Cohesion: 0.16
+Nodes (6): CampoFormulario, Holiday, CryptoService, DiaryEntry, UserStreak, SupabaseService
 
 ### Community 171 - "Community 171"
 Cohesion: 0.14
@@ -597,20 +597,12 @@ Cohesion: 0.50
 Nodes (4): 20.1. Modelo de Datos (PostgreSQL), 20.2. Edge Function de Supabase (`send-appointment-reminder`), 20.3. Programación Periódica (Cron), Skill 20: Recordatorio de Citas de 24 Horas por Correo
 
 ### Community 192 - "Community 192"
-Cohesion: 0.36
-Nodes (3): AdminSettingsComponent, ArcoRequest, PrivacySettings
+Cohesion: 0.12
+Nodes (9): AdminSettingsComponent, EmergencyModalData, ArcoRequest, PrivacySettings, AuditService, EmergencyChangeRequest, WebPushSubscriptionPayload, WhatsAppRoutingSession (+1 more)
 
 ### Community 197 - "Community 197"
 Cohesion: 0.39
 Nodes (8): options, assets, browser, inlineStyleLanguage, polyfills, styles, tsConfig, options
-
-### Community 198 - "Community 198"
-Cohesion: 0.25
-Nodes (5): EmergencyModalData, EmergencyChangeRequest, WebPushSubscriptionPayload, WhatsAppRoutingSession, CalendarDay
-
-### Community 199 - "Community 199"
-Cohesion: 0.25
-Nodes (8): prefix, projectType, root, schematics, sourceRoot, Plataforma_Emocional, style, @schematics/angular:component
 
 ### Community 201 - "Community 201"
 Cohesion: 0.25
@@ -637,17 +629,21 @@ Cohesion: 0.70
 Nodes (4): benchmark_pair(), count_tokens(), main(), print_table()
 
 ### Community 210 - "Community 210"
-Cohesion: 0.40
-Nodes (5): extract-i18n, test, builder, architect, builder
+Cohesion: 0.25
+Nodes (8): prefix, projectType, root, schematics, sourceRoot, Plataforma_Emocional, style, @schematics/angular:component
 
 ### Community 211 - "Community 211"
 Cohesion: 0.50
 Nodes (4): 21.1. Seguridad y RLS en Base de Datos, 21.2. Reutilización de Interfaz en Modo Solo Lectura, 21.3. Integración en el Expediente Clínico, Skill 21: Visor del Historial de Chat de Amati (Psicólogo)
 
+### Community 212 - "Community 212"
+Cohesion: 0.40
+Nodes (5): extract-i18n, test, builder, architect, builder
+
 ## Knowledge Gaps
 - **572 isolated node(s):** `$schema`, `version`, `newProjectRoot`, `projectType`, `style` (+567 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **103 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **104 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_

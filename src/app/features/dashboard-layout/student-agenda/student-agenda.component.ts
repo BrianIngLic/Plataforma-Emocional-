@@ -784,7 +784,8 @@ export class StudentAgendaComponent implements OnInit {
       if (apptError) throw apptError;
 
       // Calculate diff in hours
-      const apptDateTime = new Date(`${appt.scheduled_date}T${appt.start_time || '00:00:00'}`);
+      const datePart = appt.scheduled_date.split('T')[0];
+      const apptDateTime = new Date(`${datePart}T${appt.start_time || '00:00:00'}`);
       const now = new Date();
       const diffMs = apptDateTime.getTime() - now.getTime();
       const diffHours = diffMs / (1000 * 60 * 60);
@@ -815,7 +816,7 @@ export class StudentAgendaComponent implements OnInit {
           await this.supabase
             .from('patient_settings')
             .update({ status: 'dropout' })
-            .eq('student_id', user.id);
+            .eq('patient_id', user.id);
           
           this.showFeedback('error', 'Sanción de Baja Aplicada', 'Has cancelado 3 citas con menos de 72 horas de anticipación. Por reglamento, tu cuenta ha sido suspendida (BAJA) por el resto del periodo académico.');
           this.selectedDateStr.set(null);

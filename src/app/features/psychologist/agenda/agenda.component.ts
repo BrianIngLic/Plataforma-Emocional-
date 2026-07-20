@@ -200,6 +200,7 @@ export class AgendaComponent implements OnInit {
       .select('*, student:users!appointments_student_id_fkey(profiles(first_name, last_name, avatar_url))')
       .eq('professional_id', this.currentUserId)
       .eq('scheduled_date', dateString)
+      .not('status', 'in', '(cancelled,canceled)')
       .order('start_time', { ascending: true });
 
     if (error) console.error('Error fetching appointments:', error);

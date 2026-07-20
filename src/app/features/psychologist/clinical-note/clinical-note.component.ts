@@ -724,7 +724,7 @@ export class ClinicalNoteComponent implements OnInit, OnDestroy {
           await this.supabase
             .from('patient_settings')
             .update({ status: 'discharged' })
-            .eq('student_id', this.patient.student_id);
+            .eq('patient_id', this.patient.student_id);
         } catch (settingsErr) {
           console.warn('Error updating status to discharged:', settingsErr);
         }
@@ -827,7 +827,7 @@ export class ClinicalNoteComponent implements OnInit, OnDestroy {
           await this.supabase
             .from('patient_settings')
             .update({ status: 'dropout' })
-            .eq('student_id', studentId);
+            .eq('patient_id', studentId);
           
           alert('El paciente ha acumulado 3 inasistencias en este periodo. Se le ha dado de baja automáticamente.');
         }

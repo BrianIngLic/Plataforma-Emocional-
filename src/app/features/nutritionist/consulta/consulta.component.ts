@@ -589,7 +589,7 @@ export class ConsultaComponent implements OnInit {
           await this.supabaseService.supabase
             .from('patient_settings')
             .update({ status: 'dropout' })
-            .eq('student_id', this.pacienteId);
+            .eq('patient_id', this.pacienteId);
           
           alert('El paciente ha acumulado 3 inasistencias en este periodo. Se le ha dado de baja automáticamente.');
         }

@@ -372,7 +372,7 @@ export class AgendaService {
       await this.supabase
         .from('patient_settings')
         .update({ status: 'dropout' })
-        .eq('student_id', studentId);
+        .eq('patient_id', studentId);
       return true;
     }
     return false;
@@ -384,7 +384,7 @@ export class AgendaService {
     const { data: settings, error: settingsError } = await this.supabase
       .from('patient_settings')
       .select('status')
-      .eq('student_id', studentId)
+      .eq('patient_id', studentId)
       .maybeSingle();
 
     if (settingsError) {

@@ -65,8 +65,8 @@
     "semantic_hash": "898ed4a8ee353b9b706390692ed5c74d"
   },
   "src/app/core/services/agenda.service.ts": {
-    "mtime": 1784450473.9889672,
-    "ast_hash": "8b8783a844d36822947c8e6e4388e589",
+    "mtime": 1784571004.544727,
+    "ast_hash": "b37a38e3925c75b83d21d9c7bbb53d36",
     "semantic_hash": ""
   },
   "src/app/core/services/ai-triage-mock.service.ts": {
@@ -130,8 +130,8 @@
     "semantic_hash": ""
   },
   "src/app/features/admin/agenda/agenda.component.ts": {
-    "mtime": 1784501988.087308,
-    "ast_hash": "bee24314e2ae51f3f59c1a86b9695dc2",
+    "mtime": 1784572604.5237856,
+    "ast_hash": "58bff59a718b7fbb0316b4cf23dd5535",
     "semantic_hash": ""
   },
   "src/app/features/admin/faculties/faculties.component.ts": {
@@ -150,8 +150,8 @@
     "semantic_hash": ""
   },
   "src/app/features/admin/psychologists/psychologists.component.ts": {
-    "mtime": 1783883367.394651,
-    "ast_hash": "f0569286d53d72a5393c54dd9abe715e",
+    "mtime": 1784572361.0840511,
+    "ast_hash": "d979c17ca653f9fcb21a3f1b888c6c27",
     "semantic_hash": ""
   },
   "src/app/features/admin/reports/reports.component.ts": {
@@ -165,8 +165,8 @@
     "semantic_hash": ""
   },
   "src/app/features/admin/services/admin-stats.service.ts": {
-    "mtime": 1783910215.6598454,
-    "ast_hash": "9ca13530243bec9d081162e3d44f247d",
+    "mtime": 1784571920.840253,
+    "ast_hash": "5e108c3dd302ec96de4ce281039985bf",
     "semantic_hash": ""
   },
   "src/app/features/alimentary/alimentary-dashboard/alimentary-dashboard.component.ts": {
@@ -220,8 +220,8 @@
     "semantic_hash": ""
   },
   "src/app/features/dashboard-layout/student-agenda/student-agenda.component.ts": {
-    "mtime": 1784535831.1340463,
-    "ast_hash": "332a5bab7326f98123eb4c73004b9220",
+    "mtime": 1784572882.199183,
+    "ast_hash": "43103a2e160cfacf490d79659cd33570",
     "semantic_hash": ""
   },
   "src/app/features/diary/dashboard/diary-dashboard.component.ts": {
@@ -235,13 +235,13 @@
     "semantic_hash": "00e8db93bb61cda011e76d93b9e9955d"
   },
   "src/app/features/psychologist/agenda/agenda.component.ts": {
-    "mtime": 1783668250.88517,
-    "ast_hash": "2a25974b2510632ab4cde5b94db4e7f4",
+    "mtime": 1784572363.9380448,
+    "ast_hash": "84e956107afd850440caee02a71683d7",
     "semantic_hash": ""
   },
   "src/app/features/psychologist/clinical-note/clinical-note.component.ts": {
-    "mtime": 1784450587.5967119,
-    "ast_hash": "7ae55fa5e2f7d7fa4839561fb6325121",
+    "mtime": 1784571010.6398952,
+    "ast_hash": "fef9cbca2b6b3b6490c0dc8e68e936c8",
     "semantic_hash": ""
   },
   "src/app/features/psychologist/dashboard/dashboard.component.ts": {
@@ -515,8 +515,8 @@
     "semantic_hash": ""
   },
   "src/app/features/health-professional/agenda/agenda.component.ts": {
-    "mtime": 1782775460.0697706,
-    "ast_hash": "adcc58bb78b6b05a788f77c151491da6",
+    "mtime": 1784572366.846938,
+    "ast_hash": "6bddb38da973d4be207b36d32461d5dd",
     "semantic_hash": ""
   },
   "src/app/features/health-professional/agenda/emergency-change-modal/emergency-change-modal.component.ts": {
@@ -540,8 +540,8 @@
     "semantic_hash": ""
   },
   "src/app/features/nutritionist/agenda/agenda.component.ts": {
-    "mtime": 1783668250.862591,
-    "ast_hash": "020e34470bc7293a5c7a029be895b423",
+    "mtime": 1784572369.501788,
+    "ast_hash": "ade087c5499e672159a9e26abcba93d3",
     "semantic_hash": ""
   },
   "src/app/features/nutritionist/dashboard/dashboard.component.ts": {
@@ -860,8 +860,8 @@
     "semantic_hash": ""
   },
   "src/app/features/nutritionist/consulta/consulta.component.ts": {
-    "mtime": 1784450602.717975,
-    "ast_hash": "c6ca07fe95bee8f4c47a20bf93067179",
+    "mtime": 1784571008.781633,
+    "ast_hash": "7fc9b91611d2e869cfe057e0befd8bcc",
     "semantic_hash": ""
   },
   "src/app/features/nutritionist/consulta/consulta.types.ts": {
@@ -1080,8 +1080,8 @@
     "semantic_hash": ""
   },
   "src/app/features/admin/directory/directory.component.ts": {
-    "mtime": 1783910385.5091417,
-    "ast_hash": "faef63d42725118829931e80bf4f7a45",
+    "mtime": 1784572357.4669323,
+    "ast_hash": "c86cb46cfe75b64b38d1011d4c4690d9",
     "semantic_hash": ""
   },
   "src/app/features/admin/directory/directory.component.html": {
@@ -1450,12 +1450,12 @@
     "semantic_hash": ""
   },
   "db/migration_appointment_reminder_flag.sql": {
-    "mtime": 1784569333.771332,
+    "mtime": 1784569351.1731794,
     "ast_hash": "087df77f4129e3c9d79ee86aab4bcd71",
     "semantic_hash": ""
   },
   "supabase/functions/send-appointment-reminder/index.ts": {
-    "mtime": 1784538618.498929,
+    "mtime": 1784537348.171389,
     "ast_hash": "ceb8fda8ce33d2e6656ce3a902acd6fa",
     "semantic_hash": ""
   },

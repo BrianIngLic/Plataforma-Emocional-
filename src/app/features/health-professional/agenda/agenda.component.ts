@@ -211,6 +211,7 @@ export class HealthProfessionalAgendaComponent implements OnInit {
       .select('*, student:users!appointments_student_id_fkey(profiles(first_name, last_name, avatar_url)), session_evaluations(q1_global, q2_bond, q3_goals, q4_impact, q5_comment, score_global, rupture_flag)')
       .eq('professional_id', this.currentUserId)
       .eq('scheduled_date', dateString)
+      .not('status', 'in', '(cancelled,canceled)')
       .order('start_time', { ascending: true });
 
     if (error) console.error('Error fetching appointments:', error);

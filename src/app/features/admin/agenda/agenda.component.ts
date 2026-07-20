@@ -342,32 +342,35 @@ export class AgendaComponent implements OnInit {
     this.currentDateRangeString = `${startStr} – ${endStr}`;
 
     const dbAppts = await this.adminStats.getAgendaAppointments(startOfWeek, endOfWeek);
+    console.log('Citas cargadas del servidor:', dbAppts);
 
-    this.appointments = dbAppts.map((a: any) => {
-      const dDate = new Date(a.date + 'T00:00:00'); // Evitar timezone shift
-      let dayIdx = dDate.getDay() - 1; 
-      if (dayIdx < 0) dayIdx = 0; 
-      if (dayIdx > 4) dayIdx = 4;
+    this.appointments = dbAppts
+      .filter((a: any) => a.status !== 'cancelled' && a.status !== 'canceled')
+      .map((a: any) => {
+        const dDate = new Date(a.date + 'T00:00:00'); // Evitar timezone shift
+        let dayIdx = dDate.getDay() - 1; 
+        if (dayIdx < 0) dayIdx = 0; 
+        if (dayIdx > 4) dayIdx = 4;
 
-      let hourIdx = parseInt(a.startTime.split(':')[0]) - 7;
-      if (hourIdx < 0) hourIdx = 0;
-      if (hourIdx >= this.hours.length) hourIdx = this.hours.length - 1;
+        let hourIdx = parseInt(a.startTime.split(':')[0]) - 7;
+        if (hourIdx < 0) hourIdx = 0;
+        if (hourIdx >= this.hours.length) hourIdx = this.hours.length - 1;
 
-      return {
-        id: a.id,
-        psychologist: a.psychologist,
-        patient: a.patient,
-        faculty: a.faculty,
-        day: dayIdx,
-        hour: hourIdx,
-        startTime: a.startTime,
-        endTime: a.endTime,
-        type: a.type,
-        status: a.status,
-        notes: a.notes,
-        date: a.date
-      };
-    });
+        return {
+          id: a.id,
+          psychologist: a.psychologist,
+          patient: a.patient,
+          faculty: a.faculty,
+          day: dayIdx,
+          hour: hourIdx,
+          startTime: a.startTime,
+          endTime: a.endTime,
+          type: a.type,
+          status: a.status,
+          notes: a.notes,
+          date: a.date
+        };
+      });
 
     const facStats = await this.adminStats.getFacultiesWithStats();
     const colors = ['#3b82f6', '#0ea5e9', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899'];
@@ -406,6 +409,7 @@ export class AgendaComponent implements OnInit {
   getStatusClass(status: string): string {
     if (status === 'confirmed') return 'status-confirmed';
     if (status === 'urgent') return 'status-urgent';
+    if (status === 'cancelled' || status === 'canceled') return 'status-cancelled';
     return 'status-pending';
   }
 
@@ -427,6 +431,7 @@ export class AgendaComponent implements OnInit {
   getStatusText(status: string): string {
     if (status === 'confirmed') return 'Confirmada';
     if (status === 'urgent') return 'Urgente';
+    if (status === 'cancelled' || status === 'canceled') return 'Cancelada';
     return 'Pendiente';
   }
 

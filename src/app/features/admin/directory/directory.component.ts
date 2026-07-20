@@ -677,9 +677,11 @@ export class DirectoryComponent implements OnInit {
     const allAppointments: any[] = [];
     if (appts) {
       appts.forEach((a: any) => {
-        const d = a.scheduled_date.split('T')[0];
-        apptMap[d] = (apptMap[d] || 0) + (a.status !== 'canceled' && a.status !== 'cancelled' ? 1 : 0);
-        allAppointments.push(a);
+        if (a.status !== 'canceled' && a.status !== 'cancelled') {
+          const d = a.scheduled_date.split('T')[0];
+          apptMap[d] = (apptMap[d] || 0) + 1;
+          allAppointments.push(a);
+        }
       });
     }
     this.selectedPsychologistAppointments = allAppointments;

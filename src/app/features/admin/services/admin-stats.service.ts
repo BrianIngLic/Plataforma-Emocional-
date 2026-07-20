@@ -421,7 +421,8 @@ export class AdminStatsService {
         .from('appointments')
         .select('id, student_id, professional_id, scheduled_date, start_time, end_time, status, notes')
         .gte('scheduled_date', startDate.toISOString())
-        .lte('scheduled_date', endDate.toISOString());
+        .lte('scheduled_date', endDate.toISOString())
+        .not('status', 'in', '(cancelled,canceled)');
 
       if (error) throw error;
       if (!appointments || appointments.length === 0) return [];

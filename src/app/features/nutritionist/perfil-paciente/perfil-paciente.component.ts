@@ -49,14 +49,17 @@ export class PerfilPaciente implements OnInit {
   // ponytail: nodo seleccionado en árbol familiar
   selectedTreeNode: string | null = 'yo';
 
+  phq9Config: any = { mode: 'weeks', value: 4 };
+  latestPhq9: any = null;
+
   public lineChartData: ChartConfiguration<'line'>['data'] = {
-    labels: ['Sem 1', 'Sem 2', 'Sem 3', 'Sem 4', 'Sem 5', 'Sem 6', 'Sem 7', 'Sem 8'],
+    labels: [],
     datasets: [
       {
-        data: [18, 16, 15, 14, 12, 11, 10, 9],
+        data: [],
         label: 'Puntuación PHQ-9',
-        borderColor: '#1a56db',
-        backgroundColor: 'rgba(26, 86, 219, 0.1)',
+        borderColor: '#8b5cf6',
+        backgroundColor: 'rgba(139, 92, 246, 0.1)',
         tension: 0.4,
         fill: true
       }
@@ -214,7 +217,7 @@ export class PerfilPaciente implements OnInit {
       // 1. Obtener usuario + perfil + expediente clínico
       const { data: userData, error: userError } = await this.supabase
         .from('users')
-        .select('id, matricula, mobile_phone, profiles(first_name, last_name, avatar_url, faculty, antecedentes_familiares, expediente_completo), student_clinical_records!student_clinical_records_student_id_fkey(known_conditions, additional_notes)')
+        .select('id, matricula, mobile_phone, profiles(first_name, last_name, avatar_url, faculty, antecedentes_familiares, expediente_completo), student_clinical_records!student_clinical_records_student_id_fkey(known_conditions, additional_notes, phq9_config)')
         .eq('id', id)
         .single();
 
@@ -229,6 +232,12 @@ export class PerfilPaciente implements OnInit {
         
         const conditions = recordObj?.known_conditions;
         let notes = recordObj?.additional_notes;
+
+        if (recordObj?.phq9_config) {
+          this.phq9Config = { ...recordObj.phq9_config };
+        } else {
+          this.phq9Config = { mode: 'weeks', value: 4 };
+        }
 
         if (notes) {
           notes = this.crypto.decrypt(notes);
@@ -329,7 +338,7 @@ export class PerfilPaciente implements OnInit {
       // 2. Obtener entradas del diario del estudiante
       const { data: diaryData, error: diaryError } = await this.supabase
         .from('diary_entries')
-        .select('id, content, moods, high_risk, created_at')
+        .select('id, content, moods, high_risk, created_at, entry_type, phq9_score')
         .eq('student_id', id)
         .order('created_at', { ascending: false });
         
@@ -339,15 +348,82 @@ export class PerfilPaciente implements OnInit {
 
       if (diaryData) {
         this.diaryEntries = diaryData.map((entry: any) => {
+          let decryptedContent = '';
+          try {
+            decryptedContent = this.crypto.decrypt(entry.content);
+          } catch(e) {
+            decryptedContent = entry.content; // fallback
+          }
           return {
             rawDate: new Date(entry.created_at),
             date: new Date(entry.created_at).toLocaleDateString() + ' ' + new Date(entry.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
             mood: entry.moods && entry.moods.length > 0 ? entry.moods.join(', ') : 'Neutro',
             moodColor: entry.high_risk ? 'text-red' : 'text-primary',
             moodIcon: entry.high_risk ? 'warning' : 'sentiment_satisfied',
-            content: this.crypto.decrypt(entry.content)
+            content: decryptedContent,
+            entry_type: entry.entry_type,
+            phq9_score: entry.phq9_score
           };
         });
+
+        // Procesar histórico PHQ-9 para la gráfica del nutriólogo (se comparte plantilla)
+        const phq9Entries = diaryData
+          .filter((entry: any) => entry.entry_type === 'phq9' && entry.phq9_score !== null)
+          .sort((a: any, b: any) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
+
+        if (phq9Entries.length > 0) {
+          const phq9Labels = phq9Entries.map((e: any) => {
+            const d = new Date(e.created_at);
+            return `${d.getDate()}/${d.getMonth() + 1}`;
+          });
+          const phq9Scores = phq9Entries.map((e: any) => e.phq9_score);
+
+          this.lineChartData = {
+            labels: phq9Labels,
+            datasets: [
+              {
+                data: phq9Scores,
+                label: 'Puntuación PHQ-9',
+                borderColor: '#8b5cf6',
+                backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                tension: 0.4,
+                fill: true
+              }
+            ]
+          };
+
+          // Último test PHQ-9
+          const lastEntry = phq9Entries[phq9Entries.length - 1];
+          const score = lastEntry.phq9_score;
+          let severity = 'Mínima';
+          let color = '#10b981';
+          if (score >= 20) { severity = 'Grave (Depresión grave)'; color = '#ef4444'; }
+          else if (score >= 15) { severity = 'Moderadamente Grave'; color = '#f97316'; }
+          else if (score >= 10) { severity = 'Moderada'; color = '#f59e0b'; }
+          else if (score >= 5) { severity = 'Leve'; color = '#eab308'; }
+
+          this.latestPhq9 = {
+            score,
+            severity,
+            color,
+            date: new Date(lastEntry.created_at).toLocaleDateString()
+          };
+        } else {
+          this.latestPhq9 = null;
+          this.lineChartData = {
+            labels: [],
+            datasets: [
+              {
+                data: [],
+                label: 'Puntuación PHQ-9',
+                borderColor: '#8b5cf6',
+                backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                tension: 0.4,
+                fill: true
+              }
+            ]
+          };
+        }
       }
 
       // 2b. Fetch food diary entries
@@ -1024,5 +1100,25 @@ export class PerfilPaciente implements OnInit {
 
   selectTreeNode(node: string) {
     this.selectedTreeNode = node;
+  }
+
+  async savePhq9Config() {
+    if (!this.patient?.id) return;
+    try {
+      const { error } = await this.supabase
+        .from('student_clinical_records')
+        .update({ phq9_config: this.phq9Config })
+        .eq('student_id', this.patient.id);
+
+      if (error) {
+        console.error('Error al guardar configuración de PHQ-9:', error);
+        alert('No se pudo guardar la configuración de PHQ-9.');
+      } else {
+        alert('Configuración de re-aplicación PHQ-9 guardada con éxito.');
+      }
+    } catch (e) {
+      console.error(e);
+      alert('Error inesperado al guardar la configuración.');
+    }
   }
 }

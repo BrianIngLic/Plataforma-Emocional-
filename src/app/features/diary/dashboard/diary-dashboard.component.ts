@@ -107,13 +107,301 @@ export class DiaryDashboardComponent implements OnInit {
   newMoodAfter   = '';
   isSavingFood   = false;
 
+  // ─── Estado: PHQ-9 Chatbot ────────────────────────────────────────
+  showPhq9 = false;
+  phq9CurrentQuestionIndex = 0;
+  phq9Answers: any = {};
+  phq9Finished = false;
+  isPhq9Typing = false;
+  isJumping = false;
+  phq9Messages: any[] = [];
+  primaryPsychologistId: string | null = null;
+  phq9Config: any = null;
+  lastPhq9CompletedDate: string | null = null;
+  hasUpcomingSession = false;
+
+  phq9Questions = [
+    { id: 'q1', text: 'Poco interés o placer en hacer cosas.' },
+    { id: 'q2', text: 'Se ha sentido decaído(a), deprimido(a) o sin esperanzas.' },
+    { id: 'q3', text: 'Ha tenido dificultad para quedarse o permanecer dormido(a), o ha dormido demasiado.' },
+    { id: 'q4', text: 'Se ha sentido cansado(a) o con poca energía.' },
+    { id: 'q5', text: 'Sin apetito o ha comido en exceso.' },
+    { id: 'q6', text: 'Se ha sentido mal con usted mismo(a) – o que es un fracaso o que ha quedado mal con usted mismo(a) o con su familia.' },
+    { id: 'q7', text: 'Ha tenido dificultad para concentrarse en ciertas actividades, tales como leer el periódico o ver la televisión.' },
+    { id: 'q8', text: '¿Se ha movido o hablado tan lento que otras personas podrían haberlo notado? o lo contrario – muy inquieto(a) o agitado(a) que ha estado moviéndose mucho más de lo normal.' },
+    { id: 'q9', text: 'Pensamientos de que estaría mejor muerto(a) o de lastimarse de alguna manera.' },
+    { id: 'q10', text: '¿Qué tanta dificultad le han dado estos problemas para hacer su trabajo, encargarse de las tareas del hogar, o llevarse bien con otras personas?' }
+  ];
+
+  get currentPhq9Question() {
+    return this.phq9Questions[this.phq9CurrentQuestionIndex];
+  }
+
+  getProgressRatio(): number {
+    return this.phq9CurrentQuestionIndex / (this.phq9Questions.length - 1);
+  }
+
+  triggerDolphinJump() {
+    this.isJumping = true;
+    setTimeout(() => {
+      this.isJumping = false;
+    }, 600);
+  }
+
+  async checkPhq9Status() {
+    const configData = await this.diaryService.getPhq9Config();
+    this.phq9Config = configData.config;
+    this.primaryPsychologistId = configData.primary_psychologist_id;
+    this.lastPhq9CompletedDate = configData.lastCompleted;
+    this.hasUpcomingSession = configData.hasUpcomingSession;
+
+    // Si no ha completado el PHQ-9 nunca, es obligatorio
+    if (!this.lastPhq9CompletedDate) {
+      this.showPhq9 = true;
+      this.startPhq9Chat();
+      return;
+    }
+
+    const mode = this.phq9Config?.mode || 'weeks';
+    const value = this.phq9Config?.value ?? 4;
+    
+    // Si no hay psicólogo asignado, el fallback es 4 semanas (28 días)
+    const targetMode = this.primaryPsychologistId ? mode : 'weeks';
+    const targetValue = this.primaryPsychologistId ? value : 4;
+
+    if (targetMode === 'manual') {
+      this.showPhq9 = false;
+      return;
+    }
+
+    const lastCompleted = new Date(this.lastPhq9CompletedDate);
+    const today = new Date();
+    const diffTime = Math.abs(today.getTime() - lastCompleted.getTime());
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    if (targetMode === 'weeks') {
+      const daysLimit = targetValue * 7;
+      if (diffDays >= daysLimit) {
+        this.showPhq9 = true;
+        this.startPhq9Chat();
+      }
+    } else if (targetMode === 'months') {
+      const daysLimit = targetValue * 30;
+      if (diffDays >= daysLimit) {
+        this.showPhq9 = true;
+        this.startPhq9Chat();
+      }
+    } else if (targetMode === 'before_session') {
+      if (this.hasUpcomingSession && diffDays >= 3) {
+        this.showPhq9 = true;
+        this.startPhq9Chat();
+      }
+    }
+  }
+
+  startPhq9Chat() {
+    this.phq9CurrentQuestionIndex = 0;
+    this.phq9Answers = {};
+    this.phq9Finished = false;
+    this.phq9Messages = [
+      {
+        sender: 'amati',
+        text: '¡Hola! 🐬 Soy Amati, tu delfín guía de bienestar. Hoy realizaremos el Cuestionario de Salud del Paciente (PHQ-9) sobre cómo te has sentido en las últimas 2 semanas. Consta de 9 preguntas rápidas sobre tu bienestar. ¿Comenzamos?'
+      }
+    ];
+  }
+
+  startQuiz() {
+    this.phq9Messages.push({
+      sender: 'user',
+      text: '¡Sí, comencemos!'
+    });
+    this.askQuestion(0);
+  }
+
+  askQuestion(index: number) {
+    this.isPhq9Typing = true;
+    setTimeout(() => {
+      this.isPhq9Typing = false;
+      const question = this.phq9Questions[index];
+      this.phq9Messages.push({
+        sender: 'amati',
+        text: question.text,
+        isQuestion: true,
+        questionId: question.id,
+        options: index < 9 ? [
+          { text: 'Ningún día', value: 0 },
+          { text: 'Varios días', value: 1 },
+          { text: 'Más de la mitad de los días', value: 2 },
+          { text: 'Casi todos los días', value: 3 }
+        ] : [
+          { text: 'No ha sido difícil', value: 0 },
+          { text: 'Un poco difícil', value: 1 },
+          { text: 'Muy difícil', value: 2 },
+          { text: 'Extremadamente difícil', value: 3 }
+        ]
+      });
+      this.scrollToBottom();
+    }, 600);
+  }
+
+  selectPhq9Option(questionId: string, text: string, value: number) {
+    const lastMsg = this.phq9Messages[this.phq9Messages.length - 1];
+    if (!lastMsg || lastMsg.questionId !== questionId) return;
+
+    lastMsg.isQuestion = false;
+    this.phq9Answers[questionId] = { text, value };
+
+    const currentOptions = questionId === 'q10' ? [
+      { text: 'No ha sido difícil', value: 0 },
+      { text: 'Un poco difícil', value: 1 },
+      { text: 'Muy difícil', value: 2 },
+      { text: 'Extremadamente difícil', value: 3 }
+    ] : [
+      { text: 'Ningún día', value: 0 },
+      { text: 'Varios días', value: 1 },
+      { text: 'Más de la mitad de los días', value: 2 },
+      { text: 'Casi todos los días', value: 3 }
+    ];
+
+    this.phq9Messages.push({
+      sender: 'user',
+      text: text,
+      questionId: questionId,
+      options: currentOptions
+    });
+
+    this.triggerDolphinJump();
+    this.scrollToBottom();
+
+    if (this.phq9CurrentQuestionIndex < 8) {
+      this.phq9CurrentQuestionIndex++;
+      this.askQuestion(this.phq9CurrentQuestionIndex);
+    } else if (this.phq9CurrentQuestionIndex === 8) {
+      let totalScore = 0;
+      for (let i = 1; i <= 9; i++) {
+        totalScore += this.phq9Answers['q' + i]?.value ?? 0;
+      }
+
+      if (totalScore > 0) {
+        this.phq9CurrentQuestionIndex = 9;
+        this.askQuestion(9);
+      } else {
+        this.finishPhq9Quiz();
+      }
+    } else {
+      this.finishPhq9Quiz();
+    }
+  }
+
+  editPhq9Answer(msg: any) {
+    if (msg.sender !== 'user' || this.isPhq9Typing || this.phq9Finished) return;
+    msg.isEditing = true;
+  }
+
+  savePhq9Edit(msg: any, newOpt: { text: string; value: number }) {
+    if (msg.questionId) {
+      this.phq9Answers[msg.questionId] = { text: newOpt.text, value: newOpt.value };
+    }
+    msg.text = newOpt.text;
+    msg.isEditing = false;
+  }
+
+  async finishPhq9Quiz() {
+    this.isPhq9Typing = true;
+    setTimeout(async () => {
+      this.isPhq9Typing = false;
+      this.phq9Finished = true;
+
+      let totalScore = 0;
+      for (let i = 1; i <= 9; i++) {
+        totalScore += this.phq9Answers['q' + i]?.value ?? 0;
+      }
+
+      let severity = '';
+      let action = '';
+      if (totalScore <= 4) {
+        severity = 'Depresión Mínima / Sin depresión';
+        action = 'Ninguno en particular.';
+      } else if (totalScore <= 9) {
+        severity = 'Depresión Leve';
+        action = 'Vigilancia clínica y re-evaluación periódica.';
+      } else if (totalScore <= 14) {
+        severity = 'Depresión Moderada';
+        action = 'Plan de tratamiento activo (asesoramiento, seguimiento y/o farmacoterapia).';
+      } else if (totalScore <= 19) {
+        severity = 'Depresión Moderadamente Severa';
+        action = 'Tratamiento activo inmediato con psicoterapia y/o farmacoterapia.';
+      } else {
+        severity = 'Depresión Severa';
+        action = 'Intervención inmediata, psicoterapia intensiva y/o derivación psiquiátrica urgente.';
+      }
+
+      this.phq9Messages.push({
+        sender: 'amati',
+        text: `¡Excelente! Has terminado la evaluación. Tu puntuación total es de ${totalScore}/27 (${severity}). Tus respuestas han sido guardadas de forma segura y encriptada en tu expediente clínico para el seguimiento del profesional de la salud. 🐬💙`
+      });
+
+      this.scrollToBottom();
+
+      let summaryText = `**Cuestionario de Salud del Paciente (PHQ-9) completado**\n\n`;
+      summaryText += `- **Puntuación total:** ${totalScore}/27\n`;
+      summaryText += `- **Nivel de severidad:** ${severity}\n`;
+      summaryText += `- **Recomendación clínica:** ${action}\n\n`;
+      summaryText += `**Respuestas detalladas:**\n`;
+      this.phq9Questions.forEach((q, idx) => {
+        const ans = this.phq9Answers[q.id];
+        if (ans) {
+          summaryText += `${idx + 1}. ${q.text}: **${ans.text}** (Puntaje: ${ans.value})\n`;
+        }
+      });
+
+      await this.diaryService.saveEntry(
+        summaryText,
+        ['📊 PHQ-9'],
+        null,
+        'phq9',
+        totalScore,
+        this.phq9Answers
+      );
+
+      this.streakDays++;
+      
+      this.dialog.open(FeedbackModalComponent, {
+        width: '420px',
+        data: {
+          type: 'success',
+          title: '¡Cuestionario Completado!',
+          message: '🌟 Tus respuestas se han registrado correctamente en el expediente y has fortalecido tu racha. ¡Sigue así!',
+          btnText: 'Aceptar'
+        }
+      });
+
+    }, 1000);
+  }
+
+  closePhq9UI() {
+    this.showPhq9 = false;
+    this.diaryService.loadEntries();
+  }
+
+  scrollToBottom() {
+    setTimeout(() => {
+      const chatContainer = document.querySelector('.phq9-chat-messages');
+      if (chatContainer) {
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+      }
+    }, 100);
+  }
+
   // ════════════════════════════════════════════════════════════════
   // CICLO DE VIDA
   // ════════════════════════════════════════════════════════════════
-  ngOnInit() {
+  async ngOnInit() {
     this.generateCalendar();
     this.diaryService.loadFoodEntries();
     this.diaryService.loadEntries();
+    await this.checkPhq9Status();
   }
 
   // ════════════════════════════════════════════════════════════════

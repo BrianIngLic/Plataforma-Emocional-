@@ -67,10 +67,36 @@ export class StudentAgendaComponent implements OnInit {
   policyTrackingRecord: any = null;
   studentFaculty: string = '';
   nextSessionTasks: string = '';
+  phq9Pending = false;
 
   async ngOnInit() {
     this.generateCalendar(); 
-    await this.initAgenda(true);
+    await this.checkPhq9Requirement();
+    if (!this.phq9Pending) {
+      await this.initAgenda(true);
+    } else {
+      this.loading = false;
+    }
+  }
+
+  async checkPhq9Requirement() {
+    const user = this.authService.currentUser();
+    if (!user) return;
+    try {
+      const { data, error } = await this.supabase
+        .from('diary_entries')
+        .select('id')
+        .eq('student_id', user.id)
+        .eq('entry_type', 'phq9')
+        .limit(1);
+      
+      if (!error) {
+        this.phq9Pending = (!data || data.length === 0);
+      }
+    } catch (e) {
+      console.warn('Error al verificar requerimiento PHQ-9, asumiendo completado:', e);
+      this.phq9Pending = false;
+    }
   }
 
   async onSpecialtyChange() {

@@ -177,7 +177,7 @@ export class GamificationService {
    * Registra una actividad del estudiante (diario, alimentación, amati, cita) 
    * invocando el motor de rachas en base de datos.
    */
-  async registerActivity(category: 'diary' | 'nutrition' | 'amati' | 'appointment'): Promise<any> {
+  async registerActivity(category: 'diary' | 'nutrition' | 'amati' | 'appointment' | 'phq9'): Promise<any> {
     const user = this.authService.currentUser();
     if (!user?.id) return null;
 

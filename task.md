@@ -437,6 +437,56 @@
 - `[x]` Mostrar contadores y estados de políticas en el dashboard del estudiante y del psicólogo.
 - `[x]` Diseñar panel no intrusivo en el selector de citas mostrando sesiones restantes, políticas activas y placeholder de requisitos previos para asistir.
 
+---
+
+## Skill 19: Cuestionario PHQ-9 en el Diario y Expediente Clínico (Fase actual: Ejecución)
+
+**19.1. Base de Datos (Migración SQL)**
+- `[x]` Crear script de migración `db/migration_phq9.sql` con las columnas `phq9_config`, `entry_type`, `phq9_score` y `survey_data`.
+- `[x]` Insertar logro "Primer Diagnóstico PHQ-9" en `public.achievements` con `xp_value = 50` y `requirement_type = 'phq9'`.
+- `[x]` Modificar la función `update_user_activity_streak` en PostgreSQL para soportar la categoría `'phq9'`.
+- `[x]` Ejecutar la migración SQL (Ejecutada con éxito vía Supabase CLI).
+
+**19.2. Capa de Servicios (`core/services`)**
+- `[x]` En `diary.service.ts`:
+  - `[x]` Actualizar la interfaz `DiaryEntry` y el mapeo en `loadEntries()` para incluir las nuevas columnas del PHQ-9.
+  - `[x]` Actualizar `saveEntry()` para aceptar y guardar datos de PHQ-9.
+  - `[x]` Implementar el método `getPhq9Config()` que retorne la configuración, fecha de última aplicación del test y si hay citas programadas.
+- `[x]` En `gamification.service.ts`:
+  - `[x]` Actualizar el tipo de categoría en `registerActivity` para soportar `'phq9'`.
+
+**19.3. Diario Estudiantil - Chatbot de PHQ-9 (`features/diary/dashboard`)**
+- `[x]` En `diary-dashboard.component.ts`:
+  - `[x]` Definir las preguntas del PHQ-9, opciones de puntuación y mapeo de severidad clínicamente exacto.
+  - `[x]` Implementar lógica de re-aplicación: evaluar fallback por defecto (4 semanas sin psicólogo) y las configuraciones del psicólogo (semanas, meses, pre-consulta).
+  - `[x]` Desarrollar el chatbot interactivo manteniendo la barra de progreso fluida y el delfín saltarín.
+  - `[x]` Implementar el flujo condicional para la pregunta 10 (solo si la puntuación Q1-Q9 > 0).
+  - `[x]` Integrar validación de riesgo clínico (Q9 > 0 activa `high_risk = true`).
+  - `[x]` Formatear el resumen plano cifrado para el campo `content` e invocar el guardado de la entrada de diario y el registro de la actividad gamificada con `registerActivity('phq9')`.
+- `[x]` En `diary-dashboard.component.html`:
+  - `[x]` Si `showPhq9` es verdadero, renderizar el chatbot interactivo con el delfín animado en la columna derecha (reemplazando el editor Quill).
+- `[x]` En `diary-dashboard.component.scss`:
+  - `[x]` Adaptar y pulir los estilos del chatbot y sus animaciones.
+
+**19.4. Restricción de Agenda Estudiantil (`features/dashboard-layout/student-agenda`)**
+- `[x]` En `student-agenda.component.ts`:
+  - `[x]` Comprobar al iniciar si el alumno ha completado al menos un PHQ-9.
+  - `[x]` Si no se ha completado, establecer `phq9Pending = true` y bloquear la carga de disponibilidad.
+- `[x]` En `student-agenda.component.html`:
+  - `[x]` Si `phq9Pending` es verdadero, mostrar una tarjeta de advertencia estilizada (glassmorphic) con enlace al diario para obligar a realizar el test clínico inicial.
+
+**19.5. Command Center Clínico (Psicólogo y Nutriólogo)**
+- `[x]` En `patient-profile.component.ts` (Psicólogo):
+  - `[x]` Leer la configuración `phq9_config` y el historial real de PHQ-9 en `loadPatientData()`.
+  - `[x]` Poblar dinámicamente la gráfica de línea con los puntajes reales en orden cronológico.
+  - `[x]` Crear `updatePhq9Config(mode: string, value: number)` para actualizar en Supabase.
+- `[x]` En `patient-profile.component.html` (Psicólogo):
+  - `[x]` Mostrar la tarjeta de resultados del último test PHQ-9 con puntaje, severidad e interpretación.
+  - `[x]` Renderizar el panel de control dinámico (selector de modalidad y valor numérico) exclusivo para psicólogos.
+- `[x]` En `perfil-paciente.component.ts` (Nutriólogo):
+  - `[x]` Sincronizar para leer y graficar los datos reales de PHQ-9 en su propia gráfica de evolución.
+
+
 
 
 

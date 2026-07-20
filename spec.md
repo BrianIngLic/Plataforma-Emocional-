@@ -412,3 +412,47 @@ Si no hay soporte: mensaje claro indicando incompatibilidad del navegador/dispos
 - **Tratamiento del Alta:** Si el especialista da de alta al estudiante (`mode = 'discharge'`), su estatus en `patient_settings` cambia a `'discharged'` (alta), permitiéndole volver a solicitar atención inmediatamente sin esperar la ventana del siguiente periodo.
 - **Cambio de Especialista:** Se limita a un máximo de 2 cambios de especialista por ventana (psicólogos y nutriólogos). Si se intenta un tercer cambio, se bloquea y se le instruye realizar una solicitud formal a la administración.
   - **Nota de Cierre de Tratamiento (`mode = 'closure'`):** En reasignaciones automáticas, se notifica al especialista anterior que debe redactar y firmar una Nota de Cierre de Tratamiento para transferir adecuadamente el caso antes de que el nuevo profesional continúe el tratamiento.
+
+### Skill 19: Cuestionario PHQ-9 en el Diario y Expediente Clínico
+
+**Objetivo:** Integrar la escala PHQ-9 (Cuestionario sobre la Salud del Paciente) de 9 ítems de depresión en la vista del Diario Estudiantil mediante un chatbot gamificado interactivo, restringir el agendamiento de citas si no ha sido respondido por primera vez, permitir la configuración de frecuencia por parte del psicólogo (semanas, meses, previo a consulta o manual/nunca) y otorgar logros en la plataforma.
+
+#### 19.1. Lógica de Negocio y Base de Datos (PostgreSQL)
+- **Capa de Almacenamiento:**
+  - `public.student_clinical_records` -> Añadir `phq9_config` JSONB NOT NULL DEFAULT `'{"mode": "weeks", "value": 4}'::jsonb`.
+  - `public.diary_entries` -> Añadir columnas:
+    - `entry_type` VARCHAR(50) DEFAULT 'diary' NOT NULL (valores: `'diary'`, `'phq9'`).
+    - `phq9_score` INTEGER NULL (rango 0 a 27).
+    - `survey_data` JSONB NULL (respuestas a preguntas individuales).
+- **Gamificación e Integración de Logros:**
+  - Agregar logro global con `requirement_type = 'phq9'` para la primera completación del test, otorgando 50 XP y la insignia "Primer Diagnóstico PHQ-9".
+  - Actualizar la función `update_user_activity_streak` para contar registros con `entry_type = 'phq9'` al procesar la categoría `'phq9'`.
+
+#### 19.2. Lógica de Re-aplicación del Cuestionario
+Al ingresar al diario (`diary-dashboard`):
+- Si el estudiante **no tiene asignado un psicólogo** (`primary_psychologist_id` es NULL en `student_clinical_records`), se aplica la regla de fallback por defecto: **cada 4 semanas (28 días)**.
+- Si el estudiante **tiene psicólogo asignado**, se consulta su `phq9_config` y se aplica el test si:
+  - No existe ninguna entrada previa de tipo `phq9`.
+  - `mode = 'weeks'` y han transcurrido `value * 7` días desde la última aplicación.
+  - `mode = 'months'` y han transcurrido `value * 30` días desde la última aplicación.
+  - `mode = 'before_session'` y existe una cita programada (`status = 'scheduled'`) en los siguientes días, y no se ha respondido un test en los últimos 3 días.
+  - `mode = 'manual'` -> El test no se reactiva automáticamente, solo se aplica cuando el psicólogo lo active manualmente.
+
+#### 19.3. Chatbot Estudiantil (Diario - Columna Derecha)
+- Cuando el test está pendiente, el editor estándar Quill de la columna derecha del diario se sustituye por la ventana de **Amati Clínico** (chatbot).
+- El chatbot realiza las 9 preguntas secuencialmente utilizando el estilo gamificado con barra de agua progresiva y el delfín saltarín.
+- **Flujo condicional (Pregunta 10):** Si el estudiante marcó molestia en cualquiera de las 9 preguntas (puntaje > 0), se realiza la pregunta 10 sobre dificultad en actividades diarias. Si no, se salta directamente al cierre.
+- **Validación de Riesgo Clínico:** Si la pregunta 9 (ideación/pensamientos de daño) recibe una respuesta diferente de "Ningún día" (puntaje > 0), la entrada se marcará automáticamente con `high_risk = true` y se alertará al psicólogo asignado.
+- Al terminar, se formatea un resumen legible de los resultados en `content` (el cual es encriptado en Supabase) para mantener retrocompatibilidad con las exportaciones de PDF del expediente.
+
+#### 19.4. Restricción de Agenda Estudiantil
+- En el componente de agenda del estudiante (`student-agenda.component.ts`), si no se encuentra ningún registro en `diary_entries` con `entry_type = 'phq9'`, se bloquea la vista del calendario.
+- En su lugar, se despliega una tarjeta informativa centrada y estilizada con fondo glassmorphic indicando que por seguridad del paciente debe completar su evaluación PHQ-9 en el diario antes de poder agendar su primera sesión.
+
+#### 19.5. Panel de Control y Configuración Clínica (Psicólogo)
+- **Configuración Dinámica:** En el perfil del paciente en el Command Center del Psicólogo, se añade un control de periodicidad dinámico.
+  - El psicólogo selecciona la modalidad ("Semanas", "Meses", "Previo a consulta", "Manual/Nunca") y el valor numérico para actualizar en vivo el objeto `phq9_config`.
+- **Evolución Histórica:** La gráfica de evolución PHQ-9 se conecta a la base de datos real consultando el historial de `diary_entries` del paciente de tipo `phq9`, ordenados de forma ascendente.
+- **Tarjeta de Resultados:** Se dibuja una tarjeta similar a la de EAT-26 detallando la última puntuación, su severidad (Leve, Moderada, Severa) y la sugerencia de acción clínica basada en protocolos.
+- **Nutriólogo:** El nutriólogo visualiza la evolución real en su perfil de paciente mediante la gráfica pero no tiene acceso al control de configuración de re-aplicación.
+

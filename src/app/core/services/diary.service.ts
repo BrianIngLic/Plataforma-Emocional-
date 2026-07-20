@@ -11,6 +11,9 @@ export interface DiaryEntry {
   moods: string[];
   sleepHours?: number | null;
   highRisk: boolean;
+  entry_type?: 'diary' | 'phq9';
+  phq9_score?: number | null;
+  survey_data?: any | null;
 }
 
 /** Entrada del Diario Alimentario Personal del estudiante */
@@ -59,7 +62,7 @@ export class DiaryService {
 
     const { data, error } = await this.supabaseService.supabase
       .from('diary_entries')
-      .select('*')
+      .select('id, content, moods, sleep_hours, high_risk, created_at, entry_type, phq9_score, survey_data')
       .eq('student_id', user.id)
       .order('created_at', { ascending: false });
 
@@ -70,19 +73,34 @@ export class DiaryService {
         content: this.cryptoService.decrypt(row.content),
         moods: row.moods || [],
         sleepHours: row.sleep_hours || null,
-        highRisk: row.high_risk
+        highRisk: row.high_risk,
+        entry_type: row.entry_type,
+        phq9_score: row.phq9_score,
+        survey_data: row.survey_data
       }));
       this.entriesSignal.set(parsedEntries);
     }
   }
 
-  async saveEntry(content: string, moods: string[], sleepHours: number | null = null) {
+  async saveEntry(
+    content: string, 
+    moods: string[], 
+    sleepHours: number | null = null, 
+    entryType: 'diary' | 'phq9' = 'diary',
+    phq9Score: number | null = null,
+    surveyData: any = null
+  ) {
     const user = this.authService.currentUser();
     if (!user) return;
 
     const lowerContent = content.toLowerCase();
     const highRiskWords = ['morir', 'suicidio', 'no vale la pena', 'acabar con todo', 'no quiero vivir'];
-    const isHighRisk = highRiskWords.some(word => lowerContent.includes(word));
+    let isHighRisk = highRiskWords.some(word => lowerContent.includes(word));
+
+    // Si es un PHQ-9 y la pregunta 9 es de riesgo, forzar high_risk a true
+    if (entryType === 'phq9' && surveyData && surveyData.q9 && surveyData.q9 !== 'Ningún día') {
+      isHighRisk = true;
+    }
 
     const encryptedContent = this.cryptoService.encrypt(content);
 
@@ -93,13 +111,17 @@ export class DiaryService {
         content: encryptedContent,
         moods: moods,
         sleep_hours: sleepHours,
-        high_risk: isHighRisk
+        high_risk: isHighRisk,
+        entry_type: entryType,
+        phq9_score: phq9Score,
+        survey_data: surveyData
       })
       .select()
       .single();
 
     if (data && !error) {
-      this.gamificationService.registerActivity('diary').then(res => {
+      const gamificationCategory = entryType === 'phq9' ? 'phq9' : 'diary';
+      this.gamificationService.registerActivity(gamificationCategory as any).then(res => {
         if (res?.unlocked_achievements?.length > 0) {
           console.log('🏆 ¡Logros desbloqueados!', res.unlocked_achievements);
         }
@@ -111,7 +133,10 @@ export class DiaryService {
         content: content,
         moods: data.moods,
         sleepHours: data.sleep_hours || sleepHours,
-        highRisk: data.high_risk
+        highRisk: data.high_risk,
+        entry_type: data.entry_type,
+        phq9_score: data.phq9_score,
+        survey_data: data.survey_data
       };
 
       this.entriesSignal.update(entries => [newEntry, ...entries]);
@@ -120,7 +145,58 @@ export class DiaryService {
         console.warn('ALERTA CLÍNICA: Entrada marcada con alto riesgo.');
       }
     }
-   }
+  }
+
+  async getPhq9Config(): Promise<{ config: any; primary_psychologist_id: string | null; lastCompleted: string | null; hasUpcomingSession: boolean }> {
+    const user = this.authService.currentUser();
+    if (!user) return { config: { mode: 'weeks', value: 4 }, primary_psychologist_id: null, lastCompleted: null, hasUpcomingSession: false };
+
+    try {
+      const { data: record, error: recordErr } = await this.supabaseService.supabase
+        .from('student_clinical_records')
+        .select('phq9_config, primary_psychologist_id')
+        .eq('student_id', user.id)
+        .maybeSingle();
+
+      if (recordErr) throw recordErr;
+
+      const { data: lastEntry, error: lastEntryErr } = await this.supabaseService.supabase
+        .from('diary_entries')
+        .select('created_at')
+        .eq('student_id', user.id)
+        .eq('entry_type', 'phq9')
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle();
+
+      if (lastEntryErr) throw lastEntryErr;
+
+      const { data: appt, error: apptErr } = await this.supabaseService.supabase
+        .from('appointments')
+        .select('id')
+        .eq('student_id', user.id)
+        .eq('status', 'scheduled')
+        .limit(1)
+        .maybeSingle();
+
+      if (apptErr) throw apptErr;
+
+      return {
+        config: record?.phq9_config || { mode: 'weeks', value: 4 },
+        primary_psychologist_id: record?.primary_psychologist_id || null,
+        lastCompleted: lastEntry?.created_at || null,
+        hasUpcomingSession: !!appt
+      };
+    } catch (e) {
+      console.warn('[DiaryService] Error cargando config PHQ-9 (posible tabla no migrada, usando defaults):', e);
+      return {
+        config: { mode: 'weeks', value: 4 },
+        primary_psychologist_id: null,
+        lastCompleted: null,
+        hasUpcomingSession: false
+      };
+    }
+  }
 
    async updateEntry(id: string, content: string, moods: string[], sleepHours: number | null = null) {
      const user = this.authService.currentUser();

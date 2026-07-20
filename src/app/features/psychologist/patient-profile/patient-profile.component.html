@@ -301,11 +301,66 @@
         </div>
       </div>
 
-      <!-- Progress Chart -->
+      <!-- Progress Chart & Config -->
       <div class="card">
-        <h2 class="card-title"><mat-icon class="text-blue">trending_up</mat-icon> Evolución PHQ-9</h2>
-        <div class="chart-wrapper">
-           <canvas baseChart [data]="lineChartData" [options]="lineChartOptions" type="line"></canvas>
+        <h2 class="card-title" style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+          <span style="display: inline-flex; align-items: center; gap: 0.5rem;">
+            <mat-icon class="text-blue">trending_up</mat-icon> Evolución y Diagnóstico PHQ-9
+          </span>
+          <span *ngIf="latestPhq9" class="badge" [style.background]="latestPhq9.color" style="font-size: 0.75rem; padding: 4px 8px; border-radius: 6px; color: white; font-weight: bold;">
+            Último score: {{ latestPhq9.score }} ({{ latestPhq9.severity }}) - {{ latestPhq9.date }}
+          </span>
+        </h2>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 1rem; align-items: start;">
+          <!-- Columna Izquierda: Gráfica -->
+          <div class="chart-wrapper" style="height: 250px;">
+             <canvas baseChart [data]="lineChartData" [options]="lineChartOptions" type="line"></canvas>
+          </div>
+
+          <!-- Columna Derecha: Configuración Clínico y Resumen -->
+          <div style="display: flex; flex-direction: column; gap: 1rem; background: rgba(139, 92, 246, 0.02); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.25rem;">
+            <div>
+              <h4 style="margin: 0 0 6px 0; font-size: 0.9rem; font-weight: 700; color: var(--text-primary);">Configuración de Re-aplicación del PHQ-9</h4>
+              <p style="margin: 0; font-size: 0.78rem; color: var(--text-secondary); line-height: 1.4;">
+                Define la periodicidad con la que el sistema solicitará al estudiante contestar el PHQ-9 al entrar al diario.
+              </p>
+            </div>
+
+            <!-- Selector de Frecuencia -->
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              <div style="display: flex; gap: 10px; align-items: center;">
+                <select [(ngModel)]="phq9Config.mode" style="flex: 1; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 13px; font-family: inherit; background: var(--bg-card); color: var(--text-primary); box-sizing: border-box; height: 36px; outline: none;">
+                  <option value="weeks">Frecuencia por Semanas</option>
+                  <option value="months">Frecuencia por Meses</option>
+                  <option value="next_session">Previo a la Próxima Consulta</option>
+                  <option value="manual">Manual (A Demanda)</option>
+                </select>
+
+                <input *ngIf="phq9Config.mode === 'weeks' || phq9Config.mode === 'months'" 
+                       type="number" 
+                       [(ngModel)]="phq9Config.value" 
+                       min="1" 
+                       max="52" 
+                       style="width: 70px; padding: 8px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 13px; text-align: center; background: var(--bg-card); color: var(--text-primary); height: 36px; box-sizing: border-box;" />
+              </div>
+
+              <!-- Explicación de la opción seleccionada -->
+              <p style="margin: 4px 0 0 0; font-size: 0.78rem; font-style: italic; color: var(--text-secondary);">
+                <span *ngIf="phq9Config.mode === 'weeks'">El estudiante contestará el test cada <strong>{{ phq9Config.value || 4 }}</strong> semana(s).</span>
+                <span *ngIf="phq9Config.mode === 'months'">El estudiante contestará el test cada <strong>{{ phq9Config.value || 1 }}</strong> mes(es).</span>
+                <span *ngIf="phq9Config.mode === 'next_session'">El estudiante deberá contestar el test antes de su próxima consulta terapéutica.</span>
+                <span *ngIf="phq9Config.mode === 'manual'">El test PHQ-9 solo se re-aplicará de forma manual o discrecional.</span>
+              </p>
+            </div>
+
+            <!-- Botón de Guardado -->
+            <button class="btn btn-primary" (click)="savePhq9Config()" 
+                    style="width: 100%; background: #1e3a8a; color: white; border: none; padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 13px; transition: background 0.2s;">
+              <mat-icon style="font-size: 18px; width: 18px; height: 18px;">save</mat-icon>
+              Guardar Configuración
+            </button>
+          </div>
         </div>
       </div>
 

@@ -1,7 +1,7 @@
 # Graph Report - Plataforma-Emocional-  (2026-07-20)
 
 ## Corpus Check
-- 235 files · ~203,327 words
+- 235 files · ~203,357 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `25b7c51e`
+- Built from commit: `a34ae060`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -202,6 +202,7 @@
 - [[_COMMUNITY_Community 195|Community 195]]
 - [[_COMMUNITY_Community 196|Community 196]]
 - [[_COMMUNITY_Community 197|Community 197]]
+- [[_COMMUNITY_Community 198|Community 198]]
 - [[_COMMUNITY_Community 200|Community 200]]
 - [[_COMMUNITY_Community 201|Community 201]]
 - [[_COMMUNITY_Community 202|Community 202]]
@@ -209,7 +210,6 @@
 - [[_COMMUNITY_Community 204|Community 204]]
 - [[_COMMUNITY_Community 206|Community 206]]
 - [[_COMMUNITY_Community 207|Community 207]]
-- [[_COMMUNITY_Community 208|Community 208]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `DirectoryComponent` - 64 edges
@@ -511,8 +511,8 @@ Cohesion: 0.12
 Nodes (9): Appointment, CampoFormulario, Holiday, ChatMessage, CryptoService, DiaryEntry, GamificationService, UserStreak (+1 more)
 
 ### Community 149 - "Community 149"
-Cohesion: 0.19
-Nodes (9): benchmark_pair(), count_tokens(), main(), print_table(), Path, fs, path, fs (+1 more)
+Cohesion: 0.70
+Nodes (4): benchmark_pair(), count_tokens(), main(), print_table()
 
 ### Community 150 - "Community 150"
 Cohesion: 0.33
@@ -595,8 +595,8 @@ Cohesion: 0.50
 Nodes (3): fs, migrationPath, path
 
 ### Community 190 - "Community 190"
-Cohesion: 0.70
-Nodes (4): benchmark_pair(), count_tokens(), main(), print_table()
+Cohesion: 0.19
+Nodes (9): benchmark_pair(), count_tokens(), main(), print_table(), Path, fs, path, fs (+1 more)
 
 ### Community 195 - "Community 195"
 Cohesion: 0.36

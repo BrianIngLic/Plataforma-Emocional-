@@ -387,7 +387,12 @@ export class PerfilPaciente implements OnInit {
                 borderColor: '#8b5cf6',
                 backgroundColor: 'rgba(139, 92, 246, 0.1)',
                 tension: 0.4,
-                fill: true
+                fill: true,
+                pointRadius: 6,
+                pointHoverRadius: 8,
+                pointBackgroundColor: '#8b5cf6',
+                pointBorderColor: '#ffffff',
+                pointBorderWidth: 2
               }
             ]
           };

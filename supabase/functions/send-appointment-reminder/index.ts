@@ -55,14 +55,24 @@ serve(async (req: Request) => {
 
     if (!appointments || appointments.length === 0) {
       return new Response(
-        JSON.stringify({ message: "No hay citas programadas para notificar en las próximas 24 horas" }),
+        JSON.stringify({ 
+          message: "No hay citas programadas para notificar en las próximas 24 horas",
+          debug: {
+            supabaseUrl,
+            hasServiceKey: !!supabaseServiceKey,
+            denoTime: new Date().toISOString(),
+            appointmentsCount: appointments ? appointments.length : null,
+            rawAppointments: appointments,
+            fetchError: fetchError
+          }
+        }),
         { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 200 }
       );
     }
 
-    console.log(`📅 Se encontraron ${appointments.length} cita(s) para enviar recordatorio.`);
     const appUrl = Deno.env.get('APP_URL') || 'https://amati-app.vercel.app';
     const sentAppointments: string[] = [];
+    const failedAppointments: any[] = [];
 
     // 2. Enviar correos
     for (const appt of appointments) {
@@ -229,11 +239,21 @@ serve(async (req: Request) => {
 
       } catch (err: any) {
         console.error(`❌ Error al procesar recordatorio para cita ${appt.appointment_id}:`, err.message);
+        failedAppointments.push({
+          appointment_id: appt.appointment_id,
+          error: err.message,
+          stack: err.stack
+        });
       }
     }
 
     return new Response(
-      JSON.stringify({ success: true, message: `Recordatorios enviados: ${sentAppointments.length}`, sent: sentAppointments }),
+      JSON.stringify({ 
+        success: true, 
+        message: `Recordatorios enviados: ${sentAppointments.length}`, 
+        sent: sentAppointments,
+        failed: failedAppointments
+      }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 200 }
     );
 

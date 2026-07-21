@@ -14,9 +14,9 @@ ON public.appointments (status, scheduled_date, reminder_24h_sent);
 CREATE OR REPLACE FUNCTION public.get_appointments_for_reminder()
 RETURNS TABLE (
   appointment_id UUID,
-  scheduled_date TIMESTAMP,
-  start_time TIME,
-  end_time TIME,
+  scheduled_date TIMESTAMP WITH TIME ZONE,
+  start_time TIME WITHOUT TIME ZONE,
+  end_time TIME WITHOUT TIME ZONE,
   student_first_name TEXT,
   student_last_name TEXT,
   student_email VARCHAR,
@@ -36,28 +36,28 @@ AS $$
 BEGIN
   RETURN QUERY
   SELECT 
-    a.id AS appointment_id,
-    a.scheduled_date,
-    a.start_time,
-    a.end_time,
-    sp.first_name AS student_first_name,
-    sp.last_name AS student_last_name,
-    au.email::VARCHAR AS student_email,
-    pp.first_name AS prof_first_name,
-    pp.last_name AS prof_last_name,
-    r.name::TEXT AS prof_role,
-    hps.modality,
-    hps.location,
-    hps.building,
-    hps.office_room,
-    f.name AS faculty_name,
-    f.virtual_tour_url
+    a.id::UUID AS appointment_id,
+    a.scheduled_date::timestamp with time zone,
+    a.start_time::time without time zone,
+    a.end_time::time without time zone,
+    COALESCE(sp.first_name, 'Paciente')::text AS student_first_name,
+    COALESCE(sp.last_name, '')::text AS student_last_name,
+    au.email::varchar AS student_email,
+    COALESCE(pp.first_name, 'Especialista')::text AS prof_first_name,
+    COALESCE(pp.last_name, '')::text AS prof_last_name,
+    COALESCE(r.name::text, 'Especialista')::text AS prof_role,
+    COALESCE(hps.modality::text, 'virtual')::text AS modality,
+    COALESCE(hps.location::text, 'Consultorio Virtual')::text AS location,
+    hps.building::text,
+    hps.office_room::text,
+    f.name::text AS faculty_name,
+    f.virtual_tour_url::text
   FROM public.appointments a
-  JOIN public.profiles sp ON a.student_id = sp.user_id
+  LEFT JOIN public.profiles sp ON a.student_id = sp.user_id
   JOIN auth.users au ON a.student_id = au.id
-  JOIN public.users pu ON a.professional_id = pu.id
-  JOIN public.roles r ON pu.role_id = r.id
-  JOIN public.profiles pp ON a.professional_id = pp.user_id
+  LEFT JOIN public.users pu ON a.professional_id = pu.id
+  LEFT JOIN public.roles r ON pu.role_id = r.id
+  LEFT JOIN public.profiles pp ON a.professional_id = pp.user_id
   LEFT JOIN public.health_professional_settings hps ON a.professional_id = hps.professional_id
   LEFT JOIN public.faculties f ON hps.faculty_id = f.id
   WHERE a.status = 'scheduled'

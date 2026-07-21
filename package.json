@@ -44,6 +44,7 @@
     "ngx-markdown": "^20.0.0",
     "ngx-mask": "^20.0.3",
     "ngx-quill": "^28.0.2",
+    "nodemailer": "^9.0.3",
     "pdf-lib": "^1.17.1",
     "pdfmake": "^0.3.11",
     "quill": "^2.0.3",

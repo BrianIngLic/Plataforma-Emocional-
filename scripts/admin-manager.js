@@ -100,8 +100,11 @@ async function run() {
   try {
     switch (command) {
       case 'create':
-        if (!targetEmail) throw new Error('Uso: node admin-manager.js create <email>');
-        await handleCreate(targetEmail);
+        if (!targetEmail) throw new Error('Uso: node admin-manager.js create <email> [nombre] [apellido] [campus]');
+        const firstName = args[2] || 'Admin';
+        const lastName = args[3] || 'Institucional';
+        const faculty = args[4] || null;
+        await handleCreate(targetEmail, firstName, lastName, faculty);
         break;
 
       case 'revoke':
@@ -165,7 +168,7 @@ Comandos disponibles:
 `);
 }
 
-async function handleCreate(email) {
+async function handleCreate(email, firstName = 'Admin', lastName = 'Institucional', faculty = null) {
   console.log(`\n⏳ Creando administrador: ${email}...`);
   
   // Verificar si ya existe
@@ -178,7 +181,7 @@ async function handleCreate(email) {
   const { data: newUser, error: createError } = await supabase.auth.admin.createUser({
     email,
     email_confirm: true,
-    user_metadata: { role: 'Admin' }
+    user_metadata: { role: 'Admin', first_name: firstName, last_name: lastName }
   });
 
   if (createError || !newUser.user) {
@@ -210,8 +213,9 @@ async function handleCreate(email) {
     .from('profiles')
     .insert({
       user_id: userId,
-      first_name: 'Admin',
-      last_name: 'Institucional'
+      first_name: firstName,
+      last_name: lastName,
+      faculty: faculty
     });
 
   if (profileError) {
@@ -220,7 +224,7 @@ async function handleCreate(email) {
 
   // 3. Generar enlace de invitación (y enviarlo por correo)
   const { data: linkData, error: inviteError } = await supabase.auth.admin.generateLink({
-    type: 'invite',
+    type: 'magiclink',
     email,
     options: {
       redirectTo: `${appUrl}/sistema/acceso?mode=register&email=${encodeURIComponent(email)}`
@@ -232,7 +236,7 @@ async function handleCreate(email) {
     console.log(`TI debe pedir al administrador entrar a: ${appUrl}/sistema/acceso?mode=register&email=${email} y solicitar enlace.`);
   } else {
     if (linkData && linkData.properties && linkData.properties.action_link) {
-      await sendAdminInvitationEmail(email, linkData.properties.action_link, false);
+      await sendAdminInvitationEmail(email, linkData.properties.action_link, false, `${firstName} ${lastName}`.trim());
     } else {
       console.warn(`[Advertencia] No se pudo obtener el enlace de invitación del resultado.`);
     }
@@ -483,7 +487,7 @@ Matrícula     | Correo Electrónico             | Estado     | Passkey      | C
   console.log('========================================================================================');
 }
 
-async function sendAdminInvitationEmail(email, actionLink, isReenroll = false) {
+async function sendAdminInvitationEmail(email, actionLink, isReenroll = false, name = 'Administrador') {
   let nodemailer;
   try {
     nodemailer = require('nodemailer');
@@ -516,7 +520,7 @@ async function sendAdminInvitationEmail(email, actionLink, isReenroll = false) {
       ? 'Amati: Re-enrolamiento de tu cuenta de Administrador'
       : 'Amati: Invitación a la plataforma - Configuración de cuenta de Administrador';
 
-    const greeting = '¡Hola, Administrador! 👋';
+    const greeting = `¡Hola, ${name}! 👋`;
     const description = isReenroll
       ? 'Se ha solicitado un re-enrolamiento para tu cuenta de administrador en la plataforma <strong>Amati</strong> para la gestión del ecosistema emocional.'
       : 'Se ha configurado tu cuenta oficial de administrador en la plataforma <strong>Amati</strong> para la gestión y supervisión del ecosistema de asistencia emocional.';

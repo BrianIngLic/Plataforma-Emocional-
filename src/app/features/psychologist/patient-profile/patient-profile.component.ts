@@ -818,6 +818,12 @@ export class PatientProfileComponent implements OnInit {
     this.router.navigate(['/psychologist/whatsapp-chat'], { queryParams: { studentId: this.patient.id } });
   }
 
+  // ponytail: Agendar cita desde expediente
+  openBookingModal() {
+    if (!this.patient?.id) return;
+    this.router.navigate(['/psychologist/agenda'], { queryParams: { studentId: this.patient.id } });
+  }
+
   async iniciarAltaPaciente() {
     if (!this.patient?.id || !this.currentUserId) return;
 

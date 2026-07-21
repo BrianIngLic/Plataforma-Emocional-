@@ -781,6 +781,12 @@ export class PerfilPaciente implements OnInit {
     return this.foodDiaryEntries.slice(0, 3);
   }
 
+  // ponytail: Agendar cita desde expediente
+  openBookingModal() {
+    if (!this.patient?.id) return;
+    this.router.navigate(['/nutritionist/agenda'], { queryParams: { studentId: this.patient.id } });
+  }
+
   goBack() {
     this.router.navigate(['/nutritionist/pacientes']);
   }

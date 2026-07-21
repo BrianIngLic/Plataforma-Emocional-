@@ -46,7 +46,11 @@ El sistema está compuesto por un Frontend Angular, un Backend PostgREST (Postgr
   - **Dashboard Principal (Triage):** Vista de alto nivel con estadísticas, lista de casos de emergencia (`urgency_score` alto), agenda del día y métricas (gráficas).
   - **Directorio de Pacientes:** Tabla filtrable y buscable con los pacientes asignados y su nivel de riesgo.
   - **Visor Clínico Integral (Perfil):** Pantalla de detalle del paciente con información clínica, gráficas de progreso y lectura del historial de chat de Amati IA.
-  - **Agenda Clínica:** Pantalla dedicada con vista de calendario para organizar, agendar y cancelar citas de los pacientes.
+  - **Agenda Clínica:** Pantalla dedicada con vista de calendario para organizar, agendar y cancelar citas de los pacientes. Incluye:
+    - **Agendamiento Clínico Directo desde el Expediente:** El especialista puede iniciar el proceso de reserva para un estudiante específico. El botón de agendado en el visor clínico redirige a la agenda pasando `studentId` como parámetro.
+    - **Reutilización del Calendario y Horas Libres:** La agenda muestra el calendario de reserva y la botonera con todos los slots disponibles del especialista (obtenidos con la prioridad `alto_riesgo` para evadir restricciones de días ciegos).
+    - **Advertencia de Proporcionalidad:** Muestra un aviso sugerente si se programa en una fecha reservada para urgencias según el riesgo del paciente (menos de 7 días para Bajo, menos de 2 días para Moderado), sin bloquear la reserva.
+    - **Banner de Triage:** La agenda incorpora un banner superior descriptivo que computa y muestra la composición y cantidad total de pacientes asignados por nivel de riesgo de triaje IA (🔴 Alto, 🟡 Moderado, 🟢 Bajo).
   - **Ajustes Clínicos y Modalidad Híbrida (Virtual / Presencial):**
     - Switch interactivo para alternar entre atención `Virtual` (con enlace de reunión) y `Presencial`.
     - Configuración presencial con selector de Facultad base predeterminada, Edificio y Número de Oficina/Aula.

@@ -120,6 +120,15 @@
 - `[ ]` Backend Webhook: Programar Orquestador Híbrido Simultáneo en Supabase Edge Functions (`Promise.allSettled` para Web Push y WhatsApp API).
 - `[ ]` Interfaz del Especialista: Refactorizar modal de cancelación de emergencia en `agenda.component.ts` de especialistas para incorporar motivo explícito y selección de emisión dual.
 
+**5.9. Agendamiento Clínico Directo y Banner de Triage**
+- `[ ]` Botón de Agendar: Agregar botón en `patient-profile.component.html` para redirigir a `/psychologist/agenda?studentId=...` o `/nutritionist/agenda?studentId=...`.
+- `[ ]` Redirección en Controladores: Añadir métodos en `patient-profile.component.ts` y `perfil-paciente.component.ts` para navegar pasando `studentId`.
+- `[ ]` Lectura de Parámetro y Disponibilidad: Configurar `HealthProfessionalAgendaComponent` para leer `studentId`, cargar nombre y riesgo del estudiante, y obtener slots libres sin restricciones de proporcionalidad (`alto_riesgo`).
+- `[ ]` Interfaz de Reserva en Agenda: Mostrar un bloque de calendario interactivo y la botonera de slots cuando `studentId` está presente.
+- `[ ]` Advertencia de Proporcionalidad: Calcular si la fecha viola la proporcionalidad y desplegar el aviso sugerente.
+- `[ ]` Confirmar Reserva: Implementar inserción en `appointments` y mostrar retroalimentación.
+- `[ ]` Banner de Triage: Implementar método `loadTriageStats` en `HealthProfessionalAgendaComponent` que compute la distribución de riesgo (Alto, Moderado, Bajo) de los pacientes asignados y mostrarla en un banner superior.
+
 ---
 
 ## Skill 6: Mi Diario Personal (Fase actual: Ejecución)

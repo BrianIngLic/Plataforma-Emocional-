@@ -250,8 +250,8 @@
     "semantic_hash": "b29381fde22297a402e92bd8ee8e620a"
   },
   "src/app/features/psychologist/patient-profile/patient-profile.component.ts": {
-    "mtime": 1784645462.2669506,
-    "ast_hash": "bd3644b7ec492bc45c608d0ba56cfdf0",
+    "mtime": 1784570289.6782527,
+    "ast_hash": "9b918c277ec48117233638c09e05aaf0",
     "semantic_hash": ""
   },
   "src/app/features/psychologist/patients/patients.component.ts": {
@@ -360,8 +360,8 @@
     "semantic_hash": "e9fbe2f84e3d2e67d94ed6d56840ff5d"
   },
   "spec.md": {
-    "mtime": 1784645289.9862306,
-    "ast_hash": "b774f01ab1e95e2de6d9714d64eaa9b9",
+    "mtime": 1784570005.990445,
+    "ast_hash": "6de45477d883982a89711e329a519dde",
     "semantic_hash": ""
   },
   "src/app/app.html": {
@@ -445,8 +445,8 @@
     "semantic_hash": "a70cf8f9800814f3488ae124af135091"
   },
   "src/app/features/psychologist/patient-profile/patient-profile.component.html": {
-    "mtime": 1784645459.13672,
-    "ast_hash": "ba6b6b8e92b8eb406838ff5cfe24f0dd",
+    "mtime": 1784570441.0295417,
+    "ast_hash": "7466d1928f10edd8710d7a0404a4bfae",
     "semantic_hash": ""
   },
   "src/app/features/psychologist/patients/patients.component.html": {
@@ -480,8 +480,8 @@
     "semantic_hash": ""
   },
   "task.md": {
-    "mtime": 1784645294.8722553,
-    "ast_hash": "df26c47bf3812eccedfc04df696a41ac",
+    "mtime": 1784570308.4040868,
+    "ast_hash": "69d326ca52120e5388e132dff799d3fd",
     "semantic_hash": ""
   },
   "public/amati-logo.svg": {
@@ -515,8 +515,8 @@
     "semantic_hash": ""
   },
   "src/app/features/health-professional/agenda/agenda.component.ts": {
-    "mtime": 1784645612.3044128,
-    "ast_hash": "addfa573620bf7b36765acd485c0e63f",
+    "mtime": 1784573155.5787263,
+    "ast_hash": "8d39faceca2e44f5592f9f9d91757c7e",
     "semantic_hash": ""
   },
   "src/app/features/health-professional/agenda/emergency-change-modal/emergency-change-modal.component.ts": {
@@ -565,8 +565,8 @@
     "semantic_hash": ""
   },
   "src/app/features/nutritionist/perfil-paciente/perfil-paciente.component.ts": {
-    "mtime": 1784645469.223072,
-    "ast_hash": "ae5cf8375560bcfe3931da1b2d30f105",
+    "mtime": 1784570377.3360388,
+    "ast_hash": "4674ea8368d576341b8a09276c7f2996",
     "semantic_hash": ""
   },
   "src/app/features/nutritionist/settings/settings.component.ts": {
@@ -575,8 +575,8 @@
     "semantic_hash": ""
   },
   "src/app/features/health-professional/agenda/agenda.component.html": {
-    "mtime": 1784645508.517601,
-    "ast_hash": "dde583d13c15ed6c299e86d36b686864",
+    "mtime": 1784573149.7929387,
+    "ast_hash": "b338f375ebefde72513a6372bfaccf7b",
     "semantic_hash": ""
   },
   "src/app/features/health-professional/dashboard/dashboard.component.html": {

@@ -231,9 +231,10 @@ async function handleCreate(email) {
     console.warn(`[Advertencia] No se pudo generar el enlace de invitación: ${inviteError.message}`);
     console.log(`TI debe pedir al administrador entrar a: ${appUrl}/sistema/acceso?mode=register&email=${email} y solicitar enlace.`);
   } else {
-    console.log(`📨 Correo de invitación enviado exitosamente (si SMTP está activo).`);
     if (linkData && linkData.properties && linkData.properties.action_link) {
-      console.log(`\n🔗 Enlace de enrolamiento manual (TI lo puede entregar de forma segura):\n${linkData.properties.action_link}`);
+      await sendAdminInvitationEmail(email, linkData.properties.action_link, false);
+    } else {
+      console.warn(`[Advertencia] No se pudo obtener el enlace de invitación del resultado.`);
     }
   }
 
@@ -311,9 +312,10 @@ async function handleReenroll(email) {
   if (otpError) throw new Error(`Error generando Magic Link: ${otpError.message}`);
 
   await logAudit(email, 'reenroll', operator);
-  console.log(`📨 Magic Link enviado exitosamente al correo del administrador (si SMTP está activo).`);
   if (linkData && linkData.properties && linkData.properties.action_link) {
-    console.log(`\n🔗 Enlace de re-enrolamiento manual (TI lo puede entregar de forma segura):\n${linkData.properties.action_link}`);
+    await sendAdminInvitationEmail(email, linkData.properties.action_link, true);
+  } else {
+    console.warn(`[Advertencia] No se pudo obtener el enlace de re-enrolamiento del resultado.`);
   }
   console.log(`El administrador deberá acceder y registrar su nuevo dispositivo.`);
 }
@@ -387,9 +389,10 @@ async function handleUpdateEmail(oldEmail, newEmail) {
 
   await logAudit(newEmail, 'update_email', operator, { oldEmail, userId: user.auth.id });
   console.log(`\n✅ Correo modificado con éxito.`);
-  console.log(`📨 Magic Link enviado al nuevo correo institucional (si SMTP está activo).`);
   if (linkData && linkData.properties && linkData.properties.action_link) {
-    console.log(`\n🔗 Enlace de re-enrolamiento manual (TI lo puede entregar de forma segura):\n${linkData.properties.action_link}`);
+    await sendAdminInvitationEmail(newEmail, linkData.properties.action_link, true);
+  } else {
+    console.warn(`[Advertencia] No se pudo obtener el enlace de re-enrolamiento del resultado.`);
   }
 }
 
@@ -478,6 +481,139 @@ Matrícula     | Correo Electrónico             | Estado     | Passkey      | C
     console.log(`${matricula} | ${email} | ${estado} | ${passkey} | ${creado}`);
   });
   console.log('========================================================================================');
+}
+
+async function sendAdminInvitationEmail(email, actionLink, isReenroll = false) {
+  let nodemailer;
+  try {
+    nodemailer = require('nodemailer');
+  } catch (e) {
+    console.log(`\n🔗 Enlace de enrolamiento manual (TI lo puede entregar de forma segura):\n${actionLink}`);
+    return;
+  }
+
+  const user = process.env.SMTP_USER;
+  const pass = process.env.SMTP_PASS;
+  const host = process.env.SMTP_HOST || 'smtp.gmail.com';
+  const port = parseInt(process.env.SMTP_PORT || '465');
+  const secure = process.env.SMTP_SECURE === 'true' || port === 465;
+
+  if (!user || !pass) {
+    console.warn(`[Advertencia] Faltan variables SMTP_USER o SMTP_PASS en el archivo .env para enviar el correo automáticamente.`);
+    console.log(`\n🔗 Enlace de enrolamiento manual:\n${actionLink}`);
+    return;
+  }
+
+  try {
+    const transporter = nodemailer.createTransport({
+      host,
+      port,
+      secure,
+      auth: { user, pass },
+    });
+
+    const subject = isReenroll 
+      ? 'Amati: Re-enrolamiento de tu cuenta de Administrador'
+      : 'Amati: Invitación a la plataforma - Configuración de cuenta de Administrador';
+
+    const greeting = '¡Hola, Administrador! 👋';
+    const description = isReenroll
+      ? 'Se ha solicitado un re-enrolamiento para tu cuenta de administrador en la plataforma <strong>Amati</strong> para la gestión del ecosistema emocional.'
+      : 'Se ha configurado tu cuenta oficial de administrador en la plataforma <strong>Amati</strong> para la gestión y supervisión del ecosistema de asistencia emocional.';
+
+    const actionText = 'Por favor, accede a continuación para activar tu perfil y registrar tu llave de seguridad (Passkey):';
+
+    const mailOptions = {
+      from: `"Amati" <${user}>`,
+      to: email,
+      subject: subject,
+      html: `
+        <!DOCTYPE html>
+        <html lang="es">
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Configuración de Cuenta - Amati</title>
+          <style>
+            body {
+              margin: 0;
+              padding: 0;
+              background-color: #f8fafc;
+              font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            }
+          </style>
+        </head>
+        <body style="background-color: #f8fafc; padding: 20px 10px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+          <div style="font-family: sans-serif; color: #1e293b; max-width: 600px; margin: 0 auto; background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);">
+            
+            <!-- Encabezado Premium -->
+            <div style="background: linear-gradient(135deg, #6366f1, #8b5cf6); padding: 32px 24px; text-align: center; color: #ffffff;">
+              <h1 style="margin: 0; font-size: 28px; font-weight: 700; letter-spacing: -0.5px;">Amati</h1>
+              <p style="margin: 8px 0 0 0; font-size: 14px; font-weight: 500; color: rgba(255, 255, 255, 0.85); text-transform: uppercase; letter-spacing: 1px;">
+                Ecosistema de Asistencia Emocional
+              </p>
+            </div>
+            
+            <!-- Cuerpo del Correo -->
+            <div style="padding: 32px 24px;">
+              <h2 style="color: #0f172a; font-size: 20px; font-weight: 700; margin-top: 0; margin-bottom: 16px;">
+                \${greeting}
+              </h2>
+              <p style="color: #475569; font-size: 15px; line-height: 1.6; margin: 0 0 20px 0;">
+                \${description}
+              </p>
+              
+              <!-- Detalles de seguridad Zero-Trust -->
+              <div style="background-color: #f8fafc; border-left: 4px solid #6366f1; border-radius: 0 12px 12px 0; padding: 20px; margin: 24px 0;">
+                <h3 style="color: #0f172a; font-size: 15px; font-weight: 600; margin-top: 0; margin-bottom: 8px;">
+                  🔒 Seguridad Confidencial (Zero-Trust)
+                </h3>
+                <p style="margin: 0; color: #475569; font-size: 14px; line-height: 1.5;">
+                  Por lineamientos de ciberseguridad y protección de datos, no generamos contraseñas temporales. Al hacer clic en el botón inferior podrás ingresar directamente a tu portal y establecer tu propia llave de seguridad (Passkey).
+                </p>
+              </div>
+
+              <p style="color: #475569; font-size: 15px; line-height: 1.6; margin: 20px 0;">
+                \${actionText}
+              </p>
+              
+              <!-- Botón CTA -->
+              <div style="text-align: center; margin: 32px 0 24px 0;">
+                <a href="\${actionLink}" target="_blank" style="background: linear-gradient(135deg, #6366f1, #8b5cf6); color: #ffffff; padding: 14px 28px; text-decoration: none; border-radius: 9999px; font-weight: 600; font-size: 15px; display: inline-block; box-shadow: 0 4px 10px rgba(99, 102, 241, 0.2);">
+                  Configurar mi Cuenta
+                </a>
+              </div>
+              
+              <p style="color: #94a3b8; font-size: 12px; text-align: center; margin: 0;">
+                Si el botón no funciona, copia y pega el siguiente enlace en tu navegador:<br>
+                <a href="\${actionLink}" target="_blank" style="color: #6366f1; text-decoration: underline; word-break: break-all;">
+                  \${actionLink}
+                </a>
+              </p>
+            </div>
+            
+            <!-- Pie de página (NOM-024 / HIPAA) -->
+            <div style="background-color: #f1f5f9; padding: 20px 24px; border-top: 1px solid #e2e8f0; text-align: center;">
+              <p style="margin: 0; color: #64748b; font-size: 11px; line-height: 1.5;">
+                <strong>Aviso de Seguridad de Acceso:</strong> Este enlace es de carácter de un solo uso y expirará en 24 horas por medidas de ciberseguridad institucionales. No compartas este correo con nadie.
+              </p>
+              <p style="margin: 10px 0 0 0; color: #94a3b8; font-size: 11px;">
+                © \${new Date().getFullYear()} Amati Ecosistema Emocional. Todos los derechos reservados.
+              </p>
+            </div>
+            
+          </div>
+        </body>
+        </html>
+      `
+    };
+
+    await transporter.sendMail(mailOptions);
+    console.log(`📨 Correo de invitación enviado exitosamente al administrador.`);
+  } catch (err) {
+    console.warn(`[Advertencia] No se pudo enviar el correo de forma automática: \${err.message}`);
+    console.log(`\n🔗 Enlace de enrolamiento manual:\n\${actionLink}`);
+  }
 }
 
 run();

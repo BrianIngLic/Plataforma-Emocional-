@@ -561,10 +561,10 @@ async function sendAdminInvitationEmail(email, actionLink, isReenroll = false, n
             <!-- Cuerpo del Correo -->
             <div style="padding: 32px 24px;">
               <h2 style="color: #0f172a; font-size: 20px; font-weight: 700; margin-top: 0; margin-bottom: 16px;">
-                \${greeting}
+                ${greeting}
               </h2>
               <p style="color: #475569; font-size: 15px; line-height: 1.6; margin: 0 0 20px 0;">
-                \${description}
+                ${description}
               </p>
               
               <!-- Detalles de seguridad Zero-Trust -->
@@ -578,20 +578,20 @@ async function sendAdminInvitationEmail(email, actionLink, isReenroll = false, n
               </div>
 
               <p style="color: #475569; font-size: 15px; line-height: 1.6; margin: 20px 0;">
-                \${actionText}
+                ${actionText}
               </p>
               
               <!-- Botón CTA -->
               <div style="text-align: center; margin: 32px 0 24px 0;">
-                <a href="\${actionLink}" target="_blank" style="background: linear-gradient(135deg, #6366f1, #8b5cf6); color: #ffffff; padding: 14px 28px; text-decoration: none; border-radius: 9999px; font-weight: 600; font-size: 15px; display: inline-block; box-shadow: 0 4px 10px rgba(99, 102, 241, 0.2);">
+                <a href="${actionLink}" target="_blank" style="background: linear-gradient(135deg, #6366f1, #8b5cf6); color: #ffffff; padding: 14px 28px; text-decoration: none; border-radius: 9999px; font-weight: 600; font-size: 15px; display: inline-block; box-shadow: 0 4px 10px rgba(99, 102, 241, 0.2);">
                   Configurar mi Cuenta
                 </a>
               </div>
               
               <p style="color: #94a3b8; font-size: 12px; text-align: center; margin: 0;">
                 Si el botón no funciona, copia y pega el siguiente enlace en tu navegador:<br>
-                <a href="\${actionLink}" target="_blank" style="color: #6366f1; text-decoration: underline; word-break: break-all;">
-                  \${actionLink}
+                <a href="${actionLink}" target="_blank" style="color: #6366f1; text-decoration: underline; word-break: break-all;">
+                  ${actionLink}
                 </a>
               </p>
             </div>
@@ -602,7 +602,7 @@ async function sendAdminInvitationEmail(email, actionLink, isReenroll = false, n
                 <strong>Aviso de Seguridad de Acceso:</strong> Este enlace es de carácter de un solo uso y expirará en 24 horas por medidas de ciberseguridad institucionales. No compartas este correo con nadie.
               </p>
               <p style="margin: 10px 0 0 0; color: #94a3b8; font-size: 11px;">
-                © \${new Date().getFullYear()} Amati Ecosistema Emocional. Todos los derechos reservados.
+                © ${new Date().getFullYear()} Amati Ecosistema Emocional. Todos los derechos reservados.
               </p>
             </div>
             
@@ -615,8 +615,8 @@ async function sendAdminInvitationEmail(email, actionLink, isReenroll = false, n
     await transporter.sendMail(mailOptions);
     console.log(`📨 Correo de invitación enviado exitosamente al administrador.`);
   } catch (err) {
-    console.warn(`[Advertencia] No se pudo enviar el correo de forma automática: \${err.message}`);
-    console.log(`\n🔗 Enlace de enrolamiento manual:\n\${actionLink}`);
+    console.warn(`[Advertencia] No se pudo enviar el correo de forma automática: ${err.message}`);
+    console.log(`\n🔗 Enlace de enrolamiento manual:\n${actionLink}`);
   }
 }
 

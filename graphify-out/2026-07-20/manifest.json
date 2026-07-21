@@ -20,8 +20,8 @@
     "semantic_hash": ""
   },
   "db/schema.sql": {
-    "mtime": 1784569328.6744716,
-    "ast_hash": "11fa8cd7ece64012fa4cf1ed126c5555",
+    "mtime": 1784596378.0328896,
+    "ast_hash": "25927d5da2c08ac424b9b10e74b73f00",
     "semantic_hash": ""
   },
   "package.json": {
@@ -1080,13 +1080,13 @@
     "semantic_hash": ""
   },
   "src/app/features/admin/directory/directory.component.ts": {
-    "mtime": 1784572357.4669323,
-    "ast_hash": "c86cb46cfe75b64b38d1011d4c4690d9",
+    "mtime": 1784595626.416731,
+    "ast_hash": "dff7ee177c6931a869f261042c823b2a",
     "semantic_hash": ""
   },
   "src/app/features/admin/directory/directory.component.html": {
-    "mtime": 1783910401.1696217,
-    "ast_hash": "33c81d4fea9965fd6b2379d803b75761",
+    "mtime": 1784595641.5813339,
+    "ast_hash": "c117c4044be9ca896acfeb9948ddbb0f",
     "semantic_hash": ""
   },
   "scratch/test_join.js": {
@@ -1430,8 +1430,8 @@
     "semantic_hash": ""
   },
   "scripts/admin-manager.js": {
-    "mtime": 1784351596.022171,
-    "ast_hash": "c5e9e7a88b5c3b1eefa603ebad62822a",
+    "mtime": 1784604194.2677803,
+    "ast_hash": "2337c663506d4ffdbe6c6a4cffc2caff",
     "semantic_hash": ""
   },
   "scripts/README.md": {
@@ -1450,28 +1450,18 @@
     "semantic_hash": ""
   },
   "db/migration_appointment_reminder_flag.sql": {
-    "mtime": 1784569351.1731794,
-    "ast_hash": "087df77f4129e3c9d79ee86aab4bcd71",
+    "mtime": 1784596382.2142577,
+    "ast_hash": "befffb5b507b56dd01aea024f712ed40",
     "semantic_hash": ""
   },
   "supabase/functions/send-appointment-reminder/index.ts": {
-    "mtime": 1784537348.171389,
-    "ast_hash": "ceb8fda8ce33d2e6656ce3a902acd6fa",
+    "mtime": 1784596791.957883,
+    "ast_hash": "acb684cb31163e75f4e6624d89e359cf",
     "semantic_hash": ""
   },
   "db/migration_chats_view_psychologist.sql": {
     "mtime": 1784570223.040278,
     "ast_hash": "d9258f8b421b49b70e1a47132212f993",
-    "semantic_hash": ""
-  },
-  "scratch/check_columns.js": {
-    "mtime": 1784595161.4764745,
-    "ast_hash": "da60406c3d81fb17d53581235b43a9c0",
-    "semantic_hash": ""
-  },
-  "scratch/check_eval_schema.js": {
-    "mtime": 1784573367.6549737,
-    "ast_hash": "b68bf979c7592108b05ac7c8196773f1",
     "semantic_hash": ""
   }
 }

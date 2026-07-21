@@ -25,8 +25,8 @@
     "semantic_hash": ""
   },
   "package.json": {
-    "mtime": 1783668250.762247,
-    "ast_hash": "e594ee6772a58a7aafb18bda0bafaaa9",
+    "mtime": 1784604429.8381562,
+    "ast_hash": "0cbae8f83f400c3aeb61a79e4ea8b8a6",
     "semantic_hash": ""
   },
   "src/app/app.config.ts": {
@@ -1430,8 +1430,8 @@
     "semantic_hash": ""
   },
   "scripts/admin-manager.js": {
-    "mtime": 1784351596.022171,
-    "ast_hash": "c5e9e7a88b5c3b1eefa603ebad62822a",
+    "mtime": 1784605486.7907176,
+    "ast_hash": "5792f675d0a8029f020a7f0d7f0401fa",
     "semantic_hash": ""
   },
   "scripts/README.md": {

@@ -102,7 +102,10 @@ export class DirectoryComponent implements OnInit {
 
   // Selected Specialist detail views
   selectedPsychologist: SpecialistItem | null = null;
-  activeTab: 'profile' | 'calendar' | 'stats' = 'profile';
+  activeTab: 'profile' | 'calendar' | 'stats' | 'evaluations' = 'profile';
+  evaluations: any[] = [];
+  filteredEvaluations: any[] = [];
+  selectedPatientFilterId = 'all';
   profileContainerScrollTop = 0;
 
   // Forms
@@ -575,10 +578,15 @@ export class DirectoryComponent implements OnInit {
       capacity: p.capacity
     });
 
+    this.selectedPatientFilterId = 'all';
+    this.evaluations = [];
+    this.filteredEvaluations = [];
+
     this.generateCalendar();
     this.loadAssignedPatients();
     this.loadAvailableStudents();
     this.loadPerformanceChart(p.id);
+    this.loadEvaluations(p.id);
   }
 
   closeDetail() {
@@ -586,8 +594,65 @@ export class DirectoryComponent implements OnInit {
     this.selectedSpecialistFilterId = '';
   }
 
-  setTab(tab: 'profile' | 'calendar' | 'stats') {
+  setTab(tab: 'profile' | 'calendar' | 'stats' | 'evaluations') {
     this.activeTab = tab;
+  }
+
+  async loadEvaluations(professionalId: string) {
+    const { data, error } = await this.supabase
+      .from('session_evaluations')
+      .select(`
+        id,
+        appointment_id,
+        patient_id,
+        professional_id,
+        q1_global,
+        q2_bond,
+        q3_goals,
+        q4_impact,
+        q5_comment,
+        score_global,
+        rupture_flag,
+        created_at
+      `)
+      .eq('professional_id', professionalId)
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error('Error loading evaluations:', error);
+      this.evaluations = [];
+      this.filteredEvaluations = [];
+      return;
+    }
+
+    // Resolve patient profiles
+    const patientIds = (data || []).map(e => e.patient_id).filter(Boolean);
+    const { data: patientProfiles } = await this.supabase
+      .from('profiles')
+      .select('user_id, first_name, last_name')
+      .in('user_id', patientIds);
+
+    const profilesMap = new Map<string, string>();
+    if (patientProfiles) {
+      patientProfiles.forEach(p => {
+        profilesMap.set(p.user_id, `${p.first_name || ''} ${p.last_name || ''}`.trim());
+      });
+    }
+
+    this.evaluations = (data || []).map(e => ({
+      ...e,
+      patientName: profilesMap.get(e.patient_id) || 'Estudiante Desconocido'
+    }));
+
+    this.applyEvaluationsFilter();
+  }
+
+  applyEvaluationsFilter() {
+    if (this.selectedPatientFilterId === 'all') {
+      this.filteredEvaluations = this.evaluations;
+    } else {
+      this.filteredEvaluations = this.evaluations.filter(e => e.patient_id === this.selectedPatientFilterId);
+    }
   }
 
   async saveProfileChanges() {

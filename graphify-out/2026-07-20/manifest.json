@@ -150,8 +150,8 @@
     "semantic_hash": ""
   },
   "src/app/features/admin/psychologists/psychologists.component.ts": {
-    "mtime": 1784572361.0840511,
-    "ast_hash": "d979c17ca653f9fcb21a3f1b888c6c27",
+    "mtime": 1784595200.3257513,
+    "ast_hash": "93910fad91e5ca3bad5a9d09ba3d29ec",
     "semantic_hash": ""
   },
   "src/app/features/admin/reports/reports.component.ts": {
@@ -220,8 +220,8 @@
     "semantic_hash": ""
   },
   "src/app/features/dashboard-layout/student-agenda/student-agenda.component.ts": {
-    "mtime": 1784571006.5330722,
-    "ast_hash": "72a97ab053fe4ebc1528180879704641",
+    "mtime": 1784572882.199183,
+    "ast_hash": "43103a2e160cfacf490d79659cd33570",
     "semantic_hash": ""
   },
   "src/app/features/diary/dashboard/diary-dashboard.component.ts": {
@@ -395,8 +395,8 @@
     "semantic_hash": ""
   },
   "src/app/features/admin/psychologists/psychologists.component.html": {
-    "mtime": 1783883374.036626,
-    "ast_hash": "8d37dbc62b4749ab218e5fd441287d7e",
+    "mtime": 1784595228.26453,
+    "ast_hash": "8ff76d67037f448bd9fb34ed4a0dc480",
     "semantic_hash": ""
   },
   "src/app/features/admin/reports/reports.component.html": {
@@ -515,8 +515,8 @@
     "semantic_hash": ""
   },
   "src/app/features/health-professional/agenda/agenda.component.ts": {
-    "mtime": 1784572366.846938,
-    "ast_hash": "6bddb38da973d4be207b36d32461d5dd",
+    "mtime": 1784573155.5787263,
+    "ast_hash": "8d39faceca2e44f5592f9f9d91757c7e",
     "semantic_hash": ""
   },
   "src/app/features/health-professional/agenda/emergency-change-modal/emergency-change-modal.component.ts": {
@@ -575,8 +575,8 @@
     "semantic_hash": ""
   },
   "src/app/features/health-professional/agenda/agenda.component.html": {
-    "mtime": 1782775468.7515256,
-    "ast_hash": "848e001e81997d83989ae95a6992099b",
+    "mtime": 1784573149.7929387,
+    "ast_hash": "b338f375ebefde72513a6372bfaccf7b",
     "semantic_hash": ""
   },
   "src/app/features/health-professional/dashboard/dashboard.component.html": {
@@ -1462,6 +1462,16 @@
   "db/migration_chats_view_psychologist.sql": {
     "mtime": 1784570223.040278,
     "ast_hash": "d9258f8b421b49b70e1a47132212f993",
+    "semantic_hash": ""
+  },
+  "scratch/check_columns.js": {
+    "mtime": 1784595161.4764745,
+    "ast_hash": "da60406c3d81fb17d53581235b43a9c0",
+    "semantic_hash": ""
+  },
+  "scratch/check_eval_schema.js": {
+    "mtime": 1784573367.6549737,
+    "ast_hash": "b68bf979c7592108b05ac7c8196773f1",
     "semantic_hash": ""
   }
 }

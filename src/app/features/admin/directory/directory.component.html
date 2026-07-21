@@ -259,248 +259,367 @@
       </div>
     </div>
 
-    <!-- Details layout grid -->
-    <div class="details-layout">
-      <!-- Left Column: Config edit form -->
-      <div class="left-col">
-        <div class="card">
-          <h3><mat-icon>edit</mat-icon> Configuración</h3>
-          
-          <form [formGroup]="editForm" (ngSubmit)="saveProfileChanges()" class="edit-form-style">
-            <div class="form-row-2col">
-              <div class="form-item">
-                <label>Nombre</label>
-                <input type="text" formControlName="firstName" />
-              </div>
-              <div class="form-item">
-                <label>Apellidos</label>
-                <input type="text" formControlName="lastName" />
-              </div>
-            </div>
-
-            <div class="form-item">
-              <label>Facultad Asignada</label>
-              <select formControlName="faculty">
-                <option *ngFor="let f of faculties" [value]="f">{{ f }}</option>
-              </select>
-            </div>
-
-            <div class="form-item">
-              <label>Especialidad Principal</label>
-              <input type="text" formControlName="specialty" />
-            </div>
-
-            <div class="form-item">
-              <label>Capacidad Máxima</label>
-              <input type="number" formControlName="capacity" />
-            </div>
-
-            <button type="submit" class="save-profile-btn" [disabled]="editForm.invalid || isSavingProfile">
-              <mat-icon>save</mat-icon>
-              <span>{{ isSavingProfile ? 'Guardando...' : 'Guardar Cambios' }}</span>
-            </button>
-          </form>
-        </div>
-      </div>
-
-      <!-- Right Column: Performance Stats and charts -->
-      <div class="right-col">
-        <div class="card flex-stats-card">
-          <h3><mat-icon>analytics</mat-icon> Rendimiento Operativo</h3>
-          
-          <div class="stats-split-row">
-            <!-- Chart -->
-            <div class="chart-box">
-              <canvas baseChart [data]="barChartData" [options]="barChartOptions" type="bar"></canvas>
-            </div>
-            
-            <!-- Statistics -->
-            <div class="stats-info-box">
-              <div class="capacity-bar-container">
-                <div class="labels">
-                  <span>Nivel de Carga</span>
-                  <span [style.color]="getChargeColor(getPct(selectedPsychologist))" class="val-bold">
-                    {{ getPct(selectedPsychologist) }}% ({{ selectedPsychologist.patients }} / {{ selectedPsychologist.capacity }} Pacientes)
-                  </span>
-                </div>
-                <div class="progress-bar-bg">
-                  <div class="progress-bar-fill" [style.width]="getPct(selectedPsychologist) + '%'" [style.backgroundColor]="getChargeColor(getPct(selectedPsychologist))"></div>
-                </div>
-              </div>
-
-              <div class="metrics-grid">
-                <div class="metric-card">
-                  <span class="lbl">Completadas</span>
-                  <span class="val">{{ selectedPsychologist.sessionsCompleted }}</span>
-                </div>
-                <div class="metric-card">
-                  <span class="lbl">Programadas</span>
-                  <span class="val">{{ selectedPsychologist.sessionsScheduled }}</span>
-                </div>
-                <div class="metric-card">
-                  <span class="lbl">Asistencia</span>
-                  <span class="val green-text">{{ selectedPsychologist.attendanceRate }}%</span>
-                </div>
-                <div class="metric-card">
-                  <span class="lbl">Eficiencia</span>
-                  <span class="val blue-text">{{ getEfficiency(selectedPsychologist) }}%</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Assigned patients list -->
-        <div class="card patients-assign-card">
-          <div class="header-row">
-            <h3><mat-icon>people</mat-icon> Pacientes Asignados</h3>
-            
-            <!-- Add patient autocomplete search input -->
-            <div class="assign-search-wrapper">
-              <div class="input-container">
-                <mat-icon>person_add</mat-icon>
-                <input type="text" 
-                       [(ngModel)]="searchStudentQuery" 
-                       (focus)="showAssignDropdown = true"
-                       placeholder="Asignar alumno..." />
-                <button *ngIf="searchStudentQuery" (click)="searchStudentQuery = ''; showAssignDropdown = false" class="close-input-btn">
-                  <mat-icon>close</mat-icon>
-                </button>
-              </div>
-              
-              <!-- Autocomplete suggestions -->
-              <div *ngIf="showAssignDropdown && filteredAvailableStudents.length > 0" class="autocomplete-dropdown">
-                <div *ngFor="let student of filteredAvailableStudents" 
-                     (click)="assignPatient(student.id)"
-                     class="suggestion-item">
-                  <span class="name">{{ student.profiles?.first_name }} {{ student.profiles?.last_name }}</span>
-                  <span class="details">Matrícula: {{ student.matricula }} • {{ student.profiles?.faculty }}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div *ngIf="assignedPatients.length === 0" class="empty-patients-box">
-            <mat-icon>people_outline</mat-icon>
-            <p>No hay pacientes asignados a este especialista.</p>
-          </div>
-
-          <div *ngIf="assignedPatients.length > 0" class="patients-grid-list">
-            <div *ngFor="let patient of assignedPatients" class="patient-grid-card">
-              <div class="left">
-                <div class="avatar-circle">
-                  {{ patient.profiles?.first_name?.charAt(0) || 'P' }}{{ patient.profiles?.last_name?.charAt(0) || '' }}
-                </div>
-                <div class="info">
-                  <span class="name">{{ patient.profiles?.first_name }} {{ patient.profiles?.last_name }}</span>
-                  <span class="sub">Matrícula: {{ patient.matricula }} • {{ patient.profiles?.faculty }}</span>
-                </div>
-              </div>
-              
-              <div class="right-actions">
-                <button type="button" class="btn-icon-circle view" (click)="openStudentProfile(patient)" title="Ver Perfil">
-                  <mat-icon>visibility</mat-icon>
-                </button>
-                <button type="button" class="btn-icon-circle export" (click)="downloadPatientDossier(patient.id, patient.profiles?.first_name + ' ' + patient.profiles?.last_name)" [disabled]="isExporting[patient.id]" title="Exportar Dossier PDF">
-                  <mat-icon>{{ isExporting[patient.id] ? 'hourglass_empty' : 'assignment' }}</mat-icon>
-                </button>
-                <button type="button" class="btn-icon-circle delete" (click)="openUnassignModal(patient.id, patient.profiles?.first_name + ' ' + patient.profiles?.last_name)" title="Dar de baja de especialista">
-                  <mat-icon>person_remove</mat-icon>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+    <!-- Tab navigation bar -->
+    <div class="tabs-navigation" style="display: flex; gap: 1rem; border-bottom: 1px solid var(--border-color, rgba(255, 255, 255, 0.08)); padding: 0.5rem 0.5rem 0.25rem 0.5rem; margin-bottom: 0.5rem;">
+      <button type="button" (click)="setTab('profile')" [class.active]="activeTab === 'profile'" style="background: transparent; border: none; padding: 0.5rem 1rem; cursor: pointer; font-size: 0.9rem; font-weight: 600; color: var(--text-secondary, #94a3b8); border-bottom: 2px solid transparent; transition: all 0.2s;" [ngStyle]="activeTab === 'profile' ? {'color': '#6366f1', 'border-bottom-color': '#6366f1'} : {}">
+        <mat-icon style="font-size: 18px; width: 18px; height: 18px; vertical-align: middle; margin-right: 4px;">assignment_ind</mat-icon>
+        Gestión y Configuración
+      </button>
+      <button type="button" (click)="setTab('calendar')" [class.active]="activeTab === 'calendar'" style="background: transparent; border: none; padding: 0.5rem 1rem; cursor: pointer; font-size: 0.9rem; font-weight: 600; color: var(--text-secondary, #94a3b8); border-bottom: 2px solid transparent; transition: all 0.2s;" [ngStyle]="activeTab === 'calendar' ? {'color': '#6366f1', 'border-bottom-color': '#6366f1'} : {}">
+        <mat-icon style="font-size: 18px; width: 18px; height: 18px; vertical-align: middle; margin-right: 4px;">calendar_month</mat-icon>
+        Calendario y Citas
+      </button>
+      <button type="button" (click)="setTab('evaluations')" [class.active]="activeTab === 'evaluations'" style="background: transparent; border: none; padding: 0.5rem 1rem; cursor: pointer; font-size: 0.9rem; font-weight: 600; color: var(--text-secondary, #94a3b8); border-bottom: 2px solid transparent; transition: all 0.2s;" [ngStyle]="activeTab === 'evaluations' ? {'color': '#6366f1', 'border-bottom-color': '#6366f1'} : {}">
+        <mat-icon style="font-size: 18px; width: 18px; height: 18px; vertical-align: middle; margin-right: 4px;">rate_review</mat-icon>
+        Evaluaciones y Reseñas
+      </button>
     </div>
 
-    <!-- Calendar & Sessions row -->
-    <div class="calendar-sessions-layout">
-      <!-- Calendar -->
-      <div class="calendar-card-panel">
-        <div class="card">
-          <div class="calendar-header">
-            <h3><mat-icon>calendar_month</mat-icon> Calendario</h3>
-            <div class="month-nav">
-              <button type="button" (click)="prevMonth()"><mat-icon>chevron_left</mat-icon></button>
-              <span class="month-label">{{ currentMonthDate | date:'MMM yyyy':'':'es' | titlecase }}</span>
-              <button type="button" (click)="nextMonth()"><mat-icon>chevron_right</mat-icon></button>
-            </div>
-          </div>
+    <!-- Gestión y Configuración Tab -->
+    <ng-container *ngIf="activeTab === 'profile'">
+      <!-- Details layout grid -->
+      <div class="details-layout">
+        <!-- Left Column: Config edit form -->
+        <div class="left-col">
+          <div class="card">
+            <h3><mat-icon>edit</mat-icon> Configuración</h3>
+            
+            <form [formGroup]="editForm" (ngSubmit)="saveProfileChanges()" class="edit-form-style">
+              <div class="form-row-2col">
+                <div class="form-item">
+                  <label>Nombre</label>
+                  <input type="text" formControlName="firstName" />
+                </div>
+                <div class="form-item">
+                  <label>Apellidos</label>
+                  <input type="text" formControlName="lastName" />
+                </div>
+              </div>
 
-          <div class="calendar-grid">
-            <div class="day-header">D</div>
-            <div class="day-header">L</div>
-            <div class="day-header">M</div>
-            <div class="day-header">M</div>
-            <div class="day-header">J</div>
-            <div class="day-header">V</div>
-            <div class="day-header">S</div>
+              <div class="form-item">
+                <label>Facultad Asignada</label>
+                <select formControlName="faculty">
+                  <option *ngFor="let f of faculties" [value]="f">{{ f }}</option>
+                </select>
+              </div>
 
-            <div *ngFor="let day of calendarDays" 
-                 (click)="selectedDate = day.date"
-                 [ngClass]="{
-                   'other-month': !day.isCurrentMonth,
-                   'selected': selectedDate && day.date.toDateString() === selectedDate.toDateString()
-                 }"
-                 class="day-cell">
-              <span class="day-number">{{ day.date.getDate() }}</span>
-              <div *ngIf="day.appointments > 0 || day.blocked" 
-                   [ngClass]="day.blocked ? 'blocked-dot' : 'appt-dot'" 
-                   class="status-dot"></div>
-            </div>
-          </div>
+              <div class="form-item">
+                <label>Especialidad Principal</label>
+                <input type="text" formControlName="specialty" />
+              </div>
 
-          <div class="calendar-legends">
-            <span class="legend"><span class="dot red"></span> Bloqueado</span>
-            <span class="legend"><span class="dot green"></span> Con Citas</span>
+              <div class="form-item">
+                <label>Capacidad Máxima</label>
+                <input type="number" formControlName="capacity" />
+              </div>
+
+              <button type="submit" class="save-profile-btn" [disabled]="editForm.invalid || isSavingProfile">
+                <mat-icon>save</mat-icon>
+                <span>{{ isSavingProfile ? 'Guardando...' : 'Guardar Cambios' }}</span>
+              </button>
+            </form>
           </div>
         </div>
-      </div>
 
-      <!-- Daily Sessions -->
-      <div class="sessions-card-panel">
-        <div class="card">
-          <div class="sessions-header">
-            <h3><mat-icon>history</mat-icon> Sesiones del Día</h3>
-            <span class="date-lbl">{{ selectedDate | date:'longDate':'':'es' | titlecase }}</span>
-          </div>
-
-          <div class="sessions-timeline-list">
-            <div *ngIf="appointmentsForSelectedDate.length === 0" class="empty-sessions">
-              <mat-icon>coffee</mat-icon>
-              <p>No hay sesiones programadas para este día.</p>
-            </div>
-
-            <div *ngIf="appointmentsForSelectedDate.length > 0" class="timeline">
-              <div *ngFor="let appt of appointmentsForSelectedDate" class="timeline-item">
-                <span class="time-lbl">{{ appt.scheduled_date | date:'shortTime' }}</span>
-                <div class="timeline-bullet-wrapper">
-                  <div class="bullet"></div>
-                  <div class="line"></div>
-                </div>
-                <div class="session-info-card">
-                  <div class="details">
-                    <span class="patient-name">
-                      {{ appt.patient?.profiles?.first_name }} {{ appt.patient?.profiles?.last_name }}
+        <!-- Right Column: Performance Stats and charts -->
+        <div class="right-col">
+          <div class="card flex-stats-card">
+            <h3><mat-icon>analytics</mat-icon> Rendimiento Operativo</h3>
+            
+            <div class="stats-split-row">
+              <!-- Chart -->
+              <div class="chart-box">
+                <canvas baseChart [data]="barChartData" [options]="barChartOptions" type="bar"></canvas>
+              </div>
+              
+              <!-- Statistics -->
+              <div class="stats-info-box">
+                <div class="capacity-bar-container">
+                  <div class="labels">
+                    <span>Nivel de Carga</span>
+                    <span [style.color]="getChargeColor(getPct(selectedPsychologist))" class="val-bold">
+                      {{ getPct(selectedPsychologist) }}% ({{ selectedPsychologist.patients }} / {{ selectedPsychologist.capacity }} Pacientes)
                     </span>
-                    <span class="patient-faculty">Facultad: {{ appt.patient?.profiles?.faculty }}</span>
                   </div>
-                  <div class="badges">
-                    <span class="badge priority" [ngClass]="appt.priority_level">
-                      {{ appt.priority_level === 'Emergency' || appt.priority_level === 'emergency' ? 'Urgencia' : 'Rutina' }}
-                    </span>
-                    <span class="badge status" [ngClass]="appt.status">
-                      {{ appt.status === 'completed' ? 'Completada' : 'Programada' }}
-                    </span>
+                  <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" [style.width]="getPct(selectedPsychologist) + '%'" [style.backgroundColor]="getChargeColor(getPct(selectedPsychologist))"></div>
+                  </div>
+                </div>
+
+                <div class="metrics-grid">
+                  <div class="metric-card">
+                    <span class="lbl">Completadas</span>
+                    <span class="val">{{ selectedPsychologist.sessionsCompleted }}</span>
+                  </div>
+                  <div class="metric-card">
+                    <span class="lbl">Programadas</span>
+                    <span class="val">{{ selectedPsychologist.sessionsScheduled }}</span>
+                  </div>
+                  <div class="metric-card">
+                    <span class="lbl">Asistencia</span>
+                    <span class="val green-text">{{ selectedPsychologist.attendanceRate }}%</span>
+                  </div>
+                  <div class="metric-card">
+                    <span class="lbl">Eficiencia</span>
+                    <span class="val blue-text">{{ getEfficiency(selectedPsychologist) }}%</span>
                   </div>
                 </div>
               </div>
             </div>
           </div>
+
+          <!-- Assigned patients list -->
+          <div class="card patients-assign-card">
+            <div class="header-row">
+              <h3><mat-icon>people</mat-icon> Pacientes Asignados</h3>
+              
+              <!-- Add patient autocomplete search input -->
+              <div class="assign-search-wrapper">
+                <div class="input-container">
+                  <mat-icon>person_add</mat-icon>
+                  <input type="text" 
+                         [(ngModel)]="searchStudentQuery" 
+                         (focus)="showAssignDropdown = true"
+                         placeholder="Asignar alumno..." />
+                  <button *ngIf="searchStudentQuery" (click)="searchStudentQuery = ''; showAssignDropdown = false" class="close-input-btn">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </div>
+                
+                <!-- Autocomplete suggestions -->
+                <div *ngIf="showAssignDropdown && filteredAvailableStudents.length > 0" class="autocomplete-dropdown">
+                  <div *ngFor="let student of filteredAvailableStudents" 
+                       (click)="assignPatient(student.id)"
+                       class="suggestion-item">
+                    <span class="name">{{ student.profiles?.first_name }} {{ student.profiles?.last_name }}</span>
+                    <span class="details">Matrícula: {{ student.matricula }} • {{ student.profiles?.faculty }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div *ngIf="assignedPatients.length === 0" class="empty-patients-box">
+              <mat-icon>people_outline</mat-icon>
+              <p>No hay pacientes asignados a este especialista.</p>
+            </div>
+
+            <div *ngIf="assignedPatients.length > 0" class="patients-grid-list">
+              <div *ngFor="let patient of assignedPatients" class="patient-grid-card">
+                <div class="left">
+                  <div class="avatar-circle">
+                    {{ patient.profiles?.first_name?.charAt(0) || 'P' }}{{ patient.profiles?.last_name?.charAt(0) || '' }}
+                  </div>
+                  <div class="info">
+                    <span class="name">{{ patient.profiles?.first_name }} {{ patient.profiles?.last_name }}</span>
+                    <span class="sub">Matrícula: {{ patient.matricula }} • {{ patient.profiles?.faculty }}</span>
+                  </div>
+                </div>
+                
+                <div class="right-actions">
+                  <button type="button" class="btn-icon-circle view" (click)="openStudentProfile(patient)" title="Ver Perfil">
+                    <mat-icon>visibility</mat-icon>
+                  </button>
+                  <button type="button" class="btn-icon-circle export" (click)="downloadPatientDossier(patient.id, patient.profiles?.first_name + ' ' + patient.profiles?.last_name)" [disabled]="isExporting[patient.id]" title="Exportar Dossier PDF">
+                    <mat-icon>{{ isExporting[patient.id] ? 'hourglass_empty' : 'assignment' }}</mat-icon>
+                  </button>
+                  <button type="button" class="btn-icon-circle delete" (click)="openUnassignModal(patient.id, patient.profiles?.first_name + ' ' + patient.profiles?.last_name)" title="Dar de baja de especialista">
+                    <mat-icon>person_remove</mat-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+    </ng-container>
+
+    <!-- Calendario y Citas Tab -->
+    <ng-container *ngIf="activeTab === 'calendar'">
+      <!-- Calendar & Sessions row -->
+      <div class="calendar-sessions-layout" style="margin-top: 0.5rem;">
+        <!-- Calendar -->
+        <div class="calendar-card-panel">
+          <div class="card">
+            <div class="calendar-header">
+              <h3><mat-icon>calendar_month</mat-icon> Calendario</h3>
+              <div class="month-nav">
+                <button type="button" (click)="prevMonth()"><mat-icon>chevron_left</mat-icon></button>
+                <span class="month-label">{{ currentMonthDate | date:'MMM yyyy':'':'es' | titlecase }}</span>
+                <button type="button" (click)="nextMonth()"><mat-icon>chevron_right</mat-icon></button>
+              </div>
+            </div>
+
+            <div class="calendar-grid">
+              <div class="day-header">D</div>
+              <div class="day-header">L</div>
+              <div class="day-header">M</div>
+              <div class="day-header">M</div>
+              <div class="day-header">J</div>
+              <div class="day-header">V</div>
+              <div class="day-header">S</div>
+
+              <div *ngFor="let day of calendarDays" 
+                   (click)="selectedDate = day.date"
+                   [ngClass]="{
+                     'other-month': !day.isCurrentMonth,
+                     'selected': selectedDate && day.date.toDateString() === selectedDate.toDateString()
+                   }"
+                   class="day-cell">
+                <span class="day-number">{{ day.date.getDate() }}</span>
+                <div *ngIf="day.appointments > 0 || day.blocked" 
+                     [ngClass]="day.blocked ? 'blocked-dot' : 'appt-dot'" 
+                     class="status-dot"></div>
+              </div>
+            </div>
+
+            <div class="calendar-legends">
+              <span class="legend"><span class="dot red"></span> Bloqueado</span>
+              <span class="legend"><span class="dot green"></span> Con Citas</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Daily Sessions -->
+        <div class="sessions-card-panel">
+          <div class="card">
+            <div class="sessions-header">
+              <h3><mat-icon>history</mat-icon> Sesiones del Día</h3>
+              <span class="date-lbl">{{ selectedDate | date:'longDate':'':'es' | titlecase }}</span>
+            </div>
+
+            <div class="sessions-timeline-list">
+              <div *ngIf="appointmentsForSelectedDate.length === 0" class="empty-sessions">
+                <mat-icon>coffee</mat-icon>
+                <p>No hay sesiones programadas para este día.</p>
+              </div>
+
+              <div *ngIf="appointmentsForSelectedDate.length > 0" class="timeline">
+                <div *ngFor="let appt of appointmentsForSelectedDate" class="timeline-item">
+                  <span class="time-lbl">{{ appt.scheduled_date | date:'shortTime' }}</span>
+                  <div class="timeline-bullet-wrapper">
+                    <div class="bullet"></div>
+                    <div class="line"></div>
+                  </div>
+                  <div class="session-info-card">
+                    <div class="details">
+                      <span class="patient-name">
+                        {{ appt.patient?.profiles?.first_name }} {{ appt.patient?.profiles?.last_name }}
+                      </span>
+                      <span class="patient-faculty">Facultad: {{ appt.patient?.profiles?.faculty }}</span>
+                    </div>
+                    <div class="badges">
+                      <span class="badge priority" [ngClass]="appt.priority_level">
+                        {{ appt.priority_level === 'Emergency' || appt.priority_level === 'emergency' ? 'Urgencia' : 'Rutina' }}
+                      </span>
+                      <span class="badge status" [ngClass]="appt.status">
+                        {{ appt.status === 'completed' ? 'Completada' : 'Programada' }}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <!-- Evaluaciones y Reseñas Tab -->
+    <ng-container *ngIf="activeTab === 'evaluations'">
+      <div class="evaluations-tab-content" style="display: flex; flex-direction: column; gap: 1.5rem; animation: fade-in 0.3s ease; width: 100%; box-sizing: border-box; margin-top: 0.5rem;">
+        
+        <!-- Summary & Filter Header Card -->
+        <div class="card" style="padding: 1.5rem; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1.5rem; box-sizing: border-box;">
+          
+          <div style="display: flex; align-items: center; gap: 1.5rem;">
+            <!-- Promedio y Estrellas -->
+            <div style="display: flex; flex-direction: column; gap: 4px;">
+              <span style="font-size: 0.75rem; color: var(--text-secondary); text-transform: uppercase; font-family: monospace; letter-spacing: 0.05em;">Promedio General</span>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 2rem; font-weight: 800; color: var(--text-primary);">{{ selectedPsychologist.evaluation | number:'1.1-1' }}</span>
+                <div style="display: flex; flex-direction: column;">
+                  <div class="stars-row" style="margin: 0;">
+                    <mat-icon *ngFor="let star of getRatingStars(selectedPsychologist.evaluation)" [ngClass]="star === 1 ? 'star-filled' : 'star-empty'" style="font-size: 16px; width: 16px; height: 16px;">star</mat-icon>
+                  </div>
+                  <span style="font-size: 0.7rem; color: var(--text-secondary);">Basado en {{ evaluations.length }} evaluaciones</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Filtro por Paciente -->
+          <div style="display: flex; flex-direction: column; gap: 4px; min-width: 250px;">
+            <label style="font-size: 0.75rem; color: var(--text-secondary); font-weight: 500;">Filtrar por Paciente</label>
+            <select [(ngModel)]="selectedPatientFilterId" (change)="applyEvaluationsFilter()" style="padding: 10px 12px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-hover, rgba(255,255,255,0.03)); color: var(--text-primary); font-size: 0.85rem; outline: none; width: 100%; cursor: pointer;">
+              <option value="all">Todos los pacientes ({{ evaluations.length }})</option>
+              <option *ngFor="let patient of assignedPatients" [value]="patient.id">
+                {{ patient.profiles?.first_name }} {{ patient.profiles?.last_name }} (Matrícula: {{ patient.matricula }})
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Evaluations List -->
+        <div style="display: flex; flex-direction: column; gap: 1rem;">
+          
+          <!-- Empty State -->
+          <div *ngIf="filteredEvaluations.length === 0" style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 3rem; text-align: center; color: var(--text-secondary);">
+            <mat-icon style="font-size: 48px; width: 48px; height: 48px; margin-bottom: 0.75rem; opacity: 0.5;">rate_review</mat-icon>
+            <h4 style="margin: 0 0 4px 0; color: var(--text-primary); font-size: 1.1rem; font-weight: 600;">Sin Evaluaciones</h4>
+            <p style="margin: 0; font-size: 0.85rem;">No se encontraron evaluaciones registradas que coincidan con el filtro seleccionado.</p>
+          </div>
+
+          <!-- Cards List -->
+          <div *ngFor="let eval of filteredEvaluations" class="card" style="padding: 1.5rem; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; display: flex; flex-direction: column; gap: 1rem; box-sizing: border-box; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
+            
+            <!-- Card Header -->
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 0.75rem; border-bottom: 1px solid var(--border-color, rgba(255, 255, 255, 0.06)); padding-bottom: 0.75rem;">
+              <div style="display: flex; flex-direction: column; gap: 2px;">
+                <h4 style="margin: 0; font-size: 0.95rem; font-weight: 700; color: var(--text-primary);">{{ eval.patientName }}</h4>
+                <span style="font-size: 0.75rem; color: var(--text-secondary);">Fecha de Sesión: {{ eval.created_at | date:'longDate':'':'es' }}</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <!-- Rupture Status Badge -->
+                <span class="badge" [ngClass]="eval.rupture_flag === 'critical' ? 'alert-red' : (eval.rupture_flag === 'decline' ? 'alert-amber' : 'alert-green')" style="padding: 4px 10px; font-weight: 600; border-radius: 99px;">
+                  {{ eval.rupture_flag === 'critical' ? '⚠️ Ruptura' : (eval.rupture_flag === 'decline' ? '📉 Caída' : '✅ Sólida') }}
+                </span>
+                <!-- Global score -->
+                <span class="badge alert-blue" style="padding: 4px 10px; font-weight: 600; border-radius: 99px;">
+                  Score Global: {{ eval.score_global | number:'1.1-1' }} / 5.0
+                </span>
+              </div>
+            </div>
+
+            <!-- Score Grid Questions -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 0.75rem; margin-top: 0.25rem;">
+              <div style="background: rgba(255, 255, 255, 0.015); border: 1px solid var(--border-color, rgba(255,255,255,0.04)); border-radius: 8px; padding: 0.75rem; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 4px;">
+                <span style="font-size: 0.65rem; color: var(--text-secondary); text-transform: uppercase; font-family: monospace; font-weight: 600;">Evaluación Global</span>
+                <span style="font-size: 1.15rem; font-weight: 800; color: var(--text-primary);">{{ eval.q1_global | number:'1.1-1' }}</span>
+              </div>
+              <div style="background: rgba(255, 255, 255, 0.015); border: 1px solid var(--border-color, rgba(255,255,255,0.04)); border-radius: 8px; padding: 0.75rem; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 4px;">
+                <span style="font-size: 0.65rem; color: var(--text-secondary); text-transform: uppercase; font-family: monospace; font-weight: 600;">Alianza / Vínculo</span>
+                <span style="font-size: 1.15rem; font-weight: 800; color: var(--text-primary);">{{ eval.q2_bond | number:'1.1-1' }}</span>
+              </div>
+              <div style="background: rgba(255, 255, 255, 0.015); border: 1px solid var(--border-color, rgba(255,255,255,0.04)); border-radius: 8px; padding: 0.75rem; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 4px;">
+                <span style="font-size: 0.65rem; color: var(--text-secondary); text-transform: uppercase; font-family: monospace; font-weight: 600;">Objetivos / Tareas</span>
+                <span style="font-size: 1.15rem; font-weight: 800; color: var(--text-primary);">{{ eval.q3_goals | number:'1.1-1' }}</span>
+              </div>
+              <div style="background: rgba(255, 255, 255, 0.015); border: 1px solid var(--border-color, rgba(255,255,255,0.04)); border-radius: 8px; padding: 0.75rem; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 4px;">
+                <span style="font-size: 0.65rem; color: var(--text-secondary); text-transform: uppercase; font-family: monospace; font-weight: 600;">Impacto de Sesión</span>
+                <span style="font-size: 1.15rem; font-weight: 800; color: var(--text-primary);">{{ eval.q4_impact | number:'1.1-1' }}</span>
+              </div>
+            </div>
+
+            <!-- Comment review if present -->
+            <div *ngIf="eval.q5_comment" style="margin-top: 0.25rem; padding: 0.75rem 1.25rem; background: rgba(99, 102, 241, 0.04); border-left: 3px solid #6366f1; border-radius: 4px;">
+              <span style="font-size: 0.7rem; color: #8b5cf6; font-weight: 600; text-transform: uppercase; font-family: monospace; display: block; margin-bottom: 4px;">Comentario de sesión</span>
+              <p style="margin: 0; font-size: 0.85rem; color: var(--text-primary); font-style: italic; line-height: 1.5;">"{{ eval.q5_comment }}"</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </ng-container>
   </div>
 
   <!-- MODAL: ADD HEALTH PROFESSIONAL -->

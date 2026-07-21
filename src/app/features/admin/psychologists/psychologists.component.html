@@ -178,300 +178,418 @@
       </div>
     </div>
 
-    <!-- Main Content Area: Left Column (Profile & Calendar) and Right Column (Operative Stats & Session Timeline) -->
-    <div class="details-layout" style="display: grid; grid-template-columns: 340px 1fr; gap: 1.5rem; align-items: start; width: 100%;">
-      
-      <!-- Left Column: Profile Card & Calendar Card -->
-      <div class="left-col" style="display: flex; flex-direction: column; gap: 1.5rem; width: 100%; box-sizing: border-box;">
+    <!-- Tab navigation bar -->
+    <div class="tabs-navigation" style="display: flex; gap: 1rem; border-bottom: 1px solid var(--border-color, rgba(255, 255, 255, 0.08)); padding: 0.5rem 0.5rem 0.25rem 0.5rem; margin-bottom: 0.5rem;">
+      <button type="button" (click)="setTab('profile')" [class.active]="activeTab === 'profile'" style="background: transparent; border: none; padding: 0.5rem 1rem; cursor: pointer; font-size: 0.9rem; font-weight: 600; color: var(--text-secondary, #94a3b8); border-bottom: 2px solid transparent; transition: all 0.2s;" [ngStyle]="activeTab === 'profile' ? {'color': '#6366f1', 'border-bottom-color': '#6366f1'} : {}">
+        <mat-icon style="font-size: 18px; width: 18px; height: 18px; vertical-align: middle; margin-right: 4px;">assignment_ind</mat-icon>
+        Gestión y Configuración
+      </button>
+      <button type="button" (click)="setTab('calendar')" [class.active]="activeTab === 'calendar'" style="background: transparent; border: none; padding: 0.5rem 1rem; cursor: pointer; font-size: 0.9rem; font-weight: 600; color: var(--text-secondary, #94a3b8); border-bottom: 2px solid transparent; transition: all 0.2s;" [ngStyle]="activeTab === 'calendar' ? {'color': '#6366f1', 'border-bottom-color': '#6366f1'} : {}">
+        <mat-icon style="font-size: 18px; width: 18px; height: 18px; vertical-align: middle; margin-right: 4px;">calendar_month</mat-icon>
+        Calendario y Citas
+      </button>
+      <button type="button" (click)="setTab('evaluations')" [class.active]="activeTab === 'evaluations'" style="background: transparent; border: none; padding: 0.5rem 1rem; cursor: pointer; font-size: 0.9rem; font-weight: 600; color: var(--text-secondary, #94a3b8); border-bottom: 2px solid transparent; transition: all 0.2s;" [ngStyle]="activeTab === 'evaluations' ? {'color': '#6366f1', 'border-bottom-color': '#6366f1'} : {}">
+        <mat-icon style="font-size: 18px; width: 18px; height: 18px; vertical-align: middle; margin-right: 4px;">rate_review</mat-icon>
+        Evaluaciones y Reseñas
+      </button>
+    </div>
+
+    <!-- Gestión y Configuración Tab -->
+    <ng-container *ngIf="activeTab === 'profile'">
+      <!-- Main Content Area: Left Column (Profile & Calendar) and Right Column (Operative Stats & Session Timeline) -->
+      <div class="details-layout" style="display: grid; grid-template-columns: 340px 1fr; gap: 1.5rem; align-items: start; width: 100%;">
         
-        <!-- Profile Card -->
-        <div class="card" style="padding: 1.25rem; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; display: flex; flex-direction: column; gap: 1rem; box-sizing: border-box;">
-          <h3 style="margin: 0; color: var(--text-primary); font-size: 1.1rem; font-weight: 600; display: flex; align-items: center; gap: 6px;"><mat-icon style="color: #6366f1; font-size: 20px; width:20px; height:20px;">edit</mat-icon> Configuración</h3>
+        <!-- Left Column: Profile Card & Calendar Card -->
+        <div class="left-col" style="display: flex; flex-direction: column; gap: 1.5rem; width: 100%; box-sizing: border-box;">
           
-          <form [formGroup]="editForm" (ngSubmit)="saveProfileChanges()" style="display: flex; flex-direction: column; gap: 0.75rem;">
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
-              <div style="display: flex; flex-direction: column; gap: 2px;">
-                <label style="font-size: 0.7rem; color: var(--text-secondary); font-weight: 500;">Nombre</label>
-                <input type="text" formControlName="firstName" style="padding: 8px 10px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-hover, rgba(255,255,255,0.03)); color: var(--text-primary); font-size: 0.8rem; outline: none; width: 100%; box-sizing: border-box;" />
-              </div>
-              <div style="display: flex; flex-direction: column; gap: 2px;">
-                <label style="font-size: 0.7rem; color: var(--text-secondary); font-weight: 500;">Apellidos</label>
-                <input type="text" formControlName="lastName" style="padding: 8px 10px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-hover, rgba(255,255,255,0.03)); color: var(--text-primary); font-size: 0.8rem; outline: none; width: 100%; box-sizing: border-box;" />
-              </div>
-            </div>
-
-            <div style="display: flex; flex-direction: column; gap: 2px;">
-              <label style="font-size: 0.7rem; color: var(--text-secondary); font-weight: 500;">Facultad Asignada</label>
-              <select formControlName="faculty" style="padding: 8px 10px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-hover, rgba(255,255,255,0.03)); color: var(--text-primary); font-size: 0.8rem; outline: none; width: 100%; box-sizing: border-box;">
-                <option *ngFor="let f of faculties" [value]="f">{{ f }}</option>
-              </select>
-            </div>
-
-            <div style="display: flex; flex-direction: column; gap: 2px;">
-              <label style="font-size: 0.7rem; color: var(--text-secondary); font-weight: 500;">Especialidad Principal</label>
-              <input type="text" formControlName="specialty" style="padding: 8px 10px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-hover, rgba(255,255,255,0.03)); color: var(--text-primary); font-size: 0.8rem; outline: none; width: 100%; box-sizing: border-box;" />
-            </div>
-
-            <div style="display: flex; flex-direction: column; gap: 2px;">
-              <label style="font-size: 0.7rem; color: var(--text-secondary); font-weight: 500;">Capacidad Máxima</label>
-              <input type="number" formControlName="capacity" style="padding: 8px 10px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-hover, rgba(255,255,255,0.03)); color: var(--text-primary); font-size: 0.8rem; outline: none; width: 100%; box-sizing: border-box;" />
-            </div>
-
-            <button type="submit" style="width: 100%; background: #6366f1; color: white; border: none; padding: 10px; border-radius: 6px; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 6px; font-weight: 600; font-size: 0.8rem; transition: background 0.2s; margin-top: 4px;" [disabled]="editForm.invalid || isSavingProfile">
-              <mat-icon style="width: 16px; height: 16px; font-size: 16px;">save</mat-icon>
-              <span>{{ isSavingProfile ? 'Guardando...' : 'Guardar Cambios' }}</span>
-            </button>
-          </form>
-        </div>
-
-      </div>
-
-      <!-- Right Column: Operative Stats Card & Timeline Card -->
-      <div class="right-col" style="display: flex; flex-direction: column; gap: 1.5rem; min-width: 0; width: 100%; box-sizing: border-box;">
-        
-        <!-- Stats & Graph Card (Side-by-side flex layout) -->
-        <div class="card" style="padding: 1.25rem; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; display: flex; flex-direction: column; gap: 1rem; box-sizing: border-box;">
-          <h3 style="margin: 0; color: var(--text-primary); font-size: 1.1rem; font-weight: 600; display: flex; align-items: center; gap: 6px;"><mat-icon style="color: #a855f7; font-size: 20px; width:20px; height:20px;">analytics</mat-icon> Rendimiento Operativo</h3>
-          
-          <div style="display: flex; flex-wrap: wrap; gap: 1.5rem; align-items: center; width: 100%;">
-            <!-- Chart on Left -->
-            <div style="flex: 1; min-width: 250px; height: 180px; position: relative; background: var(--bg-hover, rgba(255,255,255,0.02)); padding: 0.5rem; border-radius: 8px; border: 1px solid var(--border-color); box-sizing: border-box;">
-              <canvas baseChart [data]="barChartData" [options]="barChartOptions" type="bar"></canvas>
-            </div>
+          <!-- Profile Card -->
+          <div class="card" style="padding: 1.25rem; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; display: flex; flex-direction: column; gap: 1rem; box-sizing: border-box;">
+            <h3 style="margin: 0; color: var(--text-primary); font-size: 1.1rem; font-weight: 600; display: flex; align-items: center; gap: 6px;"><mat-icon style="color: #6366f1; font-size: 20px; width:20px; height:20px;">edit</mat-icon> Configuración</h3>
             
-            <!-- Cards & Load bar on Right -->
-            <div style="flex: 1.2; min-width: 300px; display: flex; flex-direction: column; gap: 1rem;">
-              <!-- Caseload progress bar -->
-              <div>
-                <div style="display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 0.8rem; font-weight: 500;">
-                  <span style="color: var(--text-secondary);">Nivel de Carga</span>
-                  <span [style.color]="getChargeColor(getPct(selectedPsychologist))" style="font-weight: 700;">
-                    {{ getPct(selectedPsychologist) }}% ({{ selectedPsychologist.patients }} / {{ selectedPsychologist.capacity }} Pacientes)
-                  </span>
+            <form [formGroup]="editForm" (ngSubmit)="saveProfileChanges()" style="display: flex; flex-direction: column; gap: 0.75rem;">
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+                <div style="display: flex; flex-direction: column; gap: 2px;">
+                  <label style="font-size: 0.7rem; color: var(--text-secondary); font-weight: 500;">Nombre</label>
+                  <input type="text" formControlName="firstName" style="padding: 8px 10px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-hover, rgba(255,255,255,0.03)); color: var(--text-primary); font-size: 0.8rem; outline: none; width: 100%; box-sizing: border-box;" />
                 </div>
-                <div style="height: 10px; background: var(--bg-hover, rgba(255,255,255,0.05)); border-radius: 6px; overflow: hidden;">
-                  <div [style.width]="getPct(selectedPsychologist) + '%'" [style.backgroundColor]="getChargeColor(getPct(selectedPsychologist))" style="height: 100%; transition: width 0.5s ease; border-radius: 6px;"></div>
+                <div style="display: flex; flex-direction: column; gap: 2px;">
+                  <label style="font-size: 0.7rem; color: var(--text-secondary); font-weight: 500;">Apellidos</label>
+                  <input type="text" formControlName="lastName" style="padding: 8px 10px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-hover, rgba(255,255,255,0.03)); color: var(--text-primary); font-size: 0.8rem; outline: none; width: 100%; box-sizing: border-box;" />
                 </div>
               </div>
 
-              <!-- Stats grid (2x2) -->
-              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
-                <div style="background: var(--bg-hover, rgba(255,255,255,0.02)); padding: 0.75rem; border-radius: 8px; border: 1px solid var(--border-color); display: flex; flex-direction: column;">
-                  <span style="color: var(--text-secondary); font-size: 0.7rem; font-weight: 500;">Sesiones Completadas</span>
-                  <span style="font-size: 1.35rem; font-weight: 700; color: var(--text-primary); margin-top: 2px;">{{ selectedPsychologist.sessionsCompleted }}</span>
-                </div>
-                <div style="background: var(--bg-hover, rgba(255,255,255,0.02)); padding: 0.75rem; border-radius: 8px; border: 1px solid var(--border-color); display: flex; flex-direction: column;">
-                  <span style="color: var(--text-secondary); font-size: 0.7rem; font-weight: 500;">Sesiones Programadas</span>
-                  <span style="font-size: 1.35rem; font-weight: 700; color: var(--text-primary); margin-top: 2px;">{{ selectedPsychologist.sessionsScheduled }}</span>
-                </div>
-                <div style="background: var(--bg-hover, rgba(255,255,255,0.02)); padding: 0.75rem; border-radius: 8px; border: 1px solid var(--border-color); display: flex; flex-direction: column;">
-                  <span style="color: var(--text-secondary); font-size: 0.7rem; font-weight: 500;">Tasa de Asistencia</span>
-                  <span style="font-size: 1.35rem; font-weight: 700; color: #10b981; margin-top: 2px;">{{ selectedPsychologist.attendanceRate }}%</span>
-                </div>
-                <div style="background: var(--bg-hover, rgba(255,255,255,0.02)); padding: 0.75rem; border-radius: 8px; border: 1px solid var(--border-color); display: flex; flex-direction: column;">
-                  <span style="color: var(--text-secondary); font-size: 0.7rem; font-weight: 500;">Eficiencia Operativa</span>
-                  <span style="font-size: 1.35rem; font-weight: 700; color: #3b82f6; margin-top: 2px;">{{ getEfficiency(selectedPsychologist) }}%</span>
-                </div>
+              <div style="display: flex; flex-direction: column; gap: 2px;">
+                <label style="font-size: 0.7rem; color: var(--text-secondary); font-weight: 500;">Facultad Asignada</label>
+                <select formControlName="faculty" style="padding: 8px 10px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-hover, rgba(255,255,255,0.03)); color: var(--text-primary); font-size: 0.8rem; outline: none; width: 100%; box-sizing: border-box;">
+                  <option *ngFor="let f of faculties" [value]="f">{{ f }}</option>
+                </select>
               </div>
-            </div>
+
+              <div style="display: flex; flex-direction: column; gap: 2px;">
+                <label style="font-size: 0.7rem; color: var(--text-secondary); font-weight: 500;">Especialidad Principal</label>
+                <input type="text" formControlName="specialty" style="padding: 8px 10px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-hover, rgba(255,255,255,0.03)); color: var(--text-primary); font-size: 0.8rem; outline: none; width: 100%; box-sizing: border-box;" />
+              </div>
+
+              <div style="display: flex; flex-direction: column; gap: 2px;">
+                <label style="font-size: 0.7rem; color: var(--text-secondary); font-weight: 500;">Capacidad Máxima</label>
+                <input type="number" formControlName="capacity" style="padding: 8px 10px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-hover, rgba(255,255,255,0.03)); color: var(--text-primary); font-size: 0.8rem; outline: none; width: 100%; box-sizing: border-box;" />
+              </div>
+
+              <button type="submit" style="width: 100%; background: #6366f1; color: white; border: none; padding: 10px; border-radius: 6px; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 6px; font-weight: 600; font-size: 0.8rem; transition: background 0.2s; margin-top: 4px;" [disabled]="editForm.invalid || isSavingProfile">
+                <mat-icon style="width: 16px; height: 16px; font-size: 16px;">save</mat-icon>
+                <span>{{ isSavingProfile ? 'Guardando...' : 'Guardar Cambios' }}</span>
+              </button>
+            </form>
           </div>
+
         </div>
 
-        <!-- Pacientes Asignados Card (Alta y Baja de Pacientes + Ver Expediente / Perfil) -->
-        <div class="card" style="padding: 1.25rem; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; display: flex; flex-direction: column; gap: 1rem; box-sizing: border-box;">
-          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; border-bottom: 1px solid var(--border-color, rgba(255,255,255,0.06)); padding-bottom: 0.75rem;">
-            <h3 style="margin: 0; color: var(--text-primary); font-size: 1.1rem; font-weight: 600; display: flex; align-items: center; gap: 6px;"><mat-icon style="color: #6366f1; font-size: 20px; width:20px; height:20px;">people</mat-icon> Pacientes Asignados</h3>
+        <!-- Right Column: Operative Stats Card & Timeline Card -->
+        <div class="right-col" style="display: flex; flex-direction: column; gap: 1.5rem; min-width: 0; width: 100%; box-sizing: border-box;">
+          
+          <!-- Stats & Graph Card (Side-by-side flex layout) -->
+          <div class="card" style="padding: 1.25rem; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; display: flex; flex-direction: column; gap: 1rem; box-sizing: border-box;">
+            <h3 style="margin: 0; color: var(--text-primary); font-size: 1.1rem; font-weight: 600; display: flex; align-items: center; gap: 6px;"><mat-icon style="color: #a855f7; font-size: 20px; width:20px; height:20px;">analytics</mat-icon> Rendimiento Operativo</h3>
             
-            <!-- Buscador para Asignar Paciente (Alta) -->
-            <div style="position: relative; width: 220px; box-sizing: border-box;">
-              <div style="display: flex; align-items: center; background: var(--bg-hover, rgba(255,255,255,0.03)); border: 1px solid var(--border-color); border-radius: 8px; padding: 4px 8px;">
-                <mat-icon style="font-size: 16px; width: 16px; height: 16px; color: var(--text-secondary); margin-right: 4px;">person_add</mat-icon>
-                <input type="text" 
-                       [(ngModel)]="searchStudentQuery" 
-                       (focus)="showAssignDropdown = true"
-                       placeholder="Asignar alumno..." 
-                       style="border: none; background: transparent; color: var(--text-primary); font-size: 0.75rem; outline: none; width: 100%;" />
-                <button *ngIf="searchStudentQuery" 
-                        (click)="searchStudentQuery = ''; showAssignDropdown = false" 
-                        style="background: transparent; border: none; color: var(--text-secondary); cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0;">
-                  <mat-icon style="font-size: 14px; width: 14px; height: 14px;">close</mat-icon>
-                </button>
+            <div style="display: flex; flex-wrap: wrap; gap: 1.5rem; align-items: center; width: 100%;">
+              <!-- Chart on Left -->
+              <div style="flex: 1; min-width: 250px; height: 180px; position: relative; background: var(--bg-hover, rgba(255,255,255,0.02)); padding: 0.5rem; border-radius: 8px; border: 1px solid var(--border-color); box-sizing: border-box;">
+                <canvas baseChart [data]="barChartData" [options]="barChartOptions" type="bar"></canvas>
               </div>
               
-              <!-- Dropdown de alumnos sugeridos -->
-              <div *ngIf="showAssignDropdown && filteredAvailableStudents.length > 0" 
-                   style="position: absolute; top: 100%; right: 0; background: var(--bg-card, #1e293b); border: 1px solid var(--border-color); border-radius: 8px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3); z-index: 50; width: 100%; max-height: 200px; overflow-y: auto; margin-top: 4px; box-sizing: border-box; display: flex; flex-direction: column;">
-                <div *ngFor="let student of filteredAvailableStudents" 
-                     (click)="assignPatient(student.id)"
-                     style="padding: 8px 10px; cursor: pointer; display: flex; flex-direction: column; gap: 2px; border-bottom: 1px solid var(--border-color, rgba(255,255,255,0.04)); transition: background 0.15s;" 
-                     onmouseover="this.style.background='rgba(99, 102, 241, 0.1)'" 
-                     onmouseout="this.style.background='transparent'">
-                  <span style="font-weight: 600; font-size: 0.75rem; color: var(--text-primary);">{{ student.profiles?.first_name }} {{ student.profiles?.last_name }}</span>
-                  <span style="font-size: 0.65rem; color: var(--text-secondary);">Matrícula: {{ student.matricula }} • {{ student.profiles?.faculty || 'Sin Fac.' }}</span>
+              <!-- Cards & Load bar on Right -->
+              <div style="flex: 1.2; min-width: 300px; display: flex; flex-direction: column; gap: 1rem;">
+                <!-- Caseload progress bar -->
+                <div>
+                  <div style="display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 0.8rem; font-weight: 500;">
+                    <span style="color: var(--text-secondary);">Nivel de Carga</span>
+                    <span [style.color]="getChargeColor(getPct(selectedPsychologist))" style="font-weight: 700;">
+                      {{ getPct(selectedPsychologist) }}% ({{ selectedPsychologist.patients }} / {{ selectedPsychologist.capacity }} Pacientes)
+                    </span>
+                  </div>
+                  <div style="height: 10px; background: var(--bg-hover, rgba(255,255,255,0.05)); border-radius: 6px; overflow: hidden;">
+                    <div [style.width]="getPct(selectedPsychologist) + '%'" [style.backgroundColor]="getChargeColor(getPct(selectedPsychologist))" style="height: 100%; transition: width 0.5s ease; border-radius: 6px;"></div>
+                  </div>
+                </div>
+
+                <!-- Stats grid (2x2) -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+                  <div style="background: var(--bg-hover, rgba(255,255,255,0.02)); padding: 0.75rem; border-radius: 8px; border: 1px solid var(--border-color); display: flex; flex-direction: column;">
+                    <span style="color: var(--text-secondary); font-size: 0.7rem; font-weight: 500;">Sesiones Completadas</span>
+                    <span style="font-size: 1.35rem; font-weight: 700; color: var(--text-primary); margin-top: 2px;">{{ selectedPsychologist.sessionsCompleted }}</span>
+                  </div>
+                  <div style="background: var(--bg-hover, rgba(255,255,255,0.02)); padding: 0.75rem; border-radius: 8px; border: 1px solid var(--border-color); display: flex; flex-direction: column;">
+                    <span style="color: var(--text-secondary); font-size: 0.7rem; font-weight: 500;">Sesiones Programadas</span>
+                    <span style="font-size: 1.35rem; font-weight: 700; color: var(--text-primary); margin-top: 2px;">{{ selectedPsychologist.sessionsScheduled }}</span>
+                  </div>
+                  <div style="background: var(--bg-hover, rgba(255,255,255,0.02)); padding: 0.75rem; border-radius: 8px; border: 1px solid var(--border-color); display: flex; flex-direction: column;">
+                    <span style="color: var(--text-secondary); font-size: 0.7rem; font-weight: 500;">Tasa de Asistencia</span>
+                    <span style="font-size: 1.35rem; font-weight: 700; color: #10b981; margin-top: 2px;">{{ selectedPsychologist.attendanceRate }}%</span>
+                  </div>
+                  <div style="background: var(--bg-hover, rgba(255,255,255,0.02)); padding: 0.75rem; border-radius: 8px; border: 1px solid var(--border-color); display: flex; flex-direction: column;">
+                    <span style="color: var(--text-secondary); font-size: 0.7rem; font-weight: 500;">Eficiencia Operativa</span>
+                    <span style="font-size: 1.35rem; font-weight: 700; color: #3b82f6; margin-top: 2px;">{{ getEfficiency(selectedPsychologist) }}%</span>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- Empty State -->
-          <div *ngIf="assignedPatients.length === 0" style="text-align: center; padding: 2rem; color: var(--text-secondary);">
-            <mat-icon style="font-size: 36px; width: 36px; height: 36px; margin-bottom: 0.5rem; opacity: 0.5;">people_outline</mat-icon>
-            <p style="margin: 0; font-size: 0.85rem;">No hay pacientes asignados a este especialista.</p>
+          <!-- Pacientes Asignados Card (Alta y Baja de Pacientes + Ver Expediente / Perfil) -->
+          <div class="card" style="padding: 1.25rem; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; display: flex; flex-direction: column; gap: 1rem; box-sizing: border-box;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; border-bottom: 1px solid var(--border-color, rgba(255,255,255,0.06)); padding-bottom: 0.75rem;">
+              <h3 style="margin: 0; color: var(--text-primary); font-size: 1.1rem; font-weight: 600; display: flex; align-items: center; gap: 6px;"><mat-icon style="color: #6366f1; font-size: 20px; width:20px; height:20px;">people</mat-icon> Pacientes Asignados</h3>
+              
+              <!-- Buscador para Asignar Paciente (Alta) -->
+              <div style="position: relative; width: 220px; box-sizing: border-box;">
+                <div style="display: flex; align-items: center; background: var(--bg-hover, rgba(255,255,255,0.03)); border: 1px solid var(--border-color); border-radius: 8px; padding: 4px 8px;">
+                  <mat-icon style="font-size: 16px; width: 16px; height: 16px; color: var(--text-secondary); margin-right: 4px;">person_add</mat-icon>
+                  <input type="text" 
+                         [(ngModel)]="searchStudentQuery" 
+                         (focus)="showAssignDropdown = true"
+                         placeholder="Asignar alumno..." 
+                         style="border: none; background: transparent; color: var(--text-primary); font-size: 0.75rem; outline: none; width: 100%;" />
+                  <button *ngIf="searchStudentQuery" 
+                          (click)="searchStudentQuery = ''; showAssignDropdown = false" 
+                          style="background: transparent; border: none; color: var(--text-secondary); cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0;">
+                    <mat-icon style="font-size: 14px; width: 14px; height: 14px;">close</mat-icon>
+                  </button>
+                </div>
+                
+                <!-- Dropdown de alumnos sugeridos -->
+                <div *ngIf="showAssignDropdown && filteredAvailableStudents.length > 0" 
+                     style="position: absolute; top: 100%; right: 0; background: var(--bg-card, #1e293b); border: 1px solid var(--border-color); border-radius: 8px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3); z-index: 50; width: 100%; max-height: 200px; overflow-y: auto; margin-top: 4px; box-sizing: border-box; display: flex; flex-direction: column;">
+                  <div *ngFor="let student of filteredAvailableStudents" 
+                       (click)="assignPatient(student.id)"
+                       style="padding: 8px 10px; cursor: pointer; display: flex; flex-direction: column; gap: 2px; border-bottom: 1px solid var(--border-color, rgba(255,255,255,0.04)); transition: background 0.15s;" 
+                       onmouseover="this.style.background='rgba(99, 102, 241, 0.1)'" 
+                       onmouseout="this.style.background='transparent'">
+                    <span style="font-weight: 600; font-size: 0.75rem; color: var(--text-primary);">{{ student.profiles?.first_name }} {{ student.profiles?.last_name }}</span>
+                    <span style="font-size: 0.65rem; color: var(--text-secondary);">Matrícula: {{ student.matricula }} • {{ student.profiles?.faculty || 'Sin Fac.' }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Empty State -->
+            <div *ngIf="assignedPatients.length === 0" style="text-align: center; padding: 2rem; color: var(--text-secondary);">
+              <mat-icon style="font-size: 36px; width: 36px; height: 36px; margin-bottom: 0.5rem; opacity: 0.5;">people_outline</mat-icon>
+              <p style="margin: 0; font-size: 0.85rem;">No hay pacientes asignados a este especialista.</p>
+            </div>
+
+            <!-- Patients List -->
+            <div *ngIf="assignedPatients.length > 0" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 0.75rem;">
+              <div style="background: var(--bg-hover, rgba(255,255,255,0.02)); border: 1px solid var(--border-color); border-radius: 8px; padding: 0.75rem; display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;" *ngFor="let patient of assignedPatients">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <div style="width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #10b981, #3b82f6); color: white; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 700; flex-shrink: 0;">
+                    {{ patient.profiles?.first_name?.charAt(0) || 'P' }}{{ patient.profiles?.last_name?.charAt(0) || '' }}
+                  </div>
+                  <div style="display: flex; flex-direction: column;">
+                    <span style="font-weight: 600; font-size: 0.8rem; color: var(--text-primary);">
+                      {{ patient.profiles?.first_name }} {{ patient.profiles?.last_name }}
+                    </span>
+                    <span style="font-size: 0.7rem; color: var(--text-secondary);">
+                      Matrícula: {{ patient.matricula }} • {{ patient.profiles?.faculty || 'Sin Fac.' }}
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Actions -->
+                <div style="display: flex; align-items: center; gap: 4px; flex-shrink: 0;">
+                  <button type="button" 
+                          (click)="openStudentProfile(patient)" 
+                          title="Ver Perfil" 
+                          style="background: transparent; border: none; color: #3b82f6; cursor: pointer; display: flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 6px; transition: background 0.2s;"
+                          onmouseover="this.style.background='rgba(59, 130, 246, 0.1)'" 
+                          onmouseout="this.style.background='transparent'">
+                    <mat-icon style="font-size: 18px; width: 18px; height: 18px;">visibility</mat-icon>
+                  </button>
+                  <button type="button" 
+                          (click)="downloadPatientDossier(patient.id, patient.profiles?.first_name + ' ' + patient.profiles?.last_name)" 
+                          [disabled]="isExporting[patient.id]"
+                          title="Ver Expediente (Dossier PDF)" 
+                          style="background: transparent; border: none; color: #10b981; cursor: pointer; display: flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 6px; transition: background 0.2s;"
+                          onmouseover="this.style.background='rgba(16, 185, 201, 0.1)'" 
+                          onmouseout="this.style.background='transparent'">
+                    <mat-icon style="font-size: 18px; width: 18px; height: 18px;">{{ isExporting[patient.id] ? 'hourglass_empty' : 'assignment' }}</mat-icon>
+                  </button>
+                  <button type="button" 
+                          (click)="openUnassignModal(patient.id, patient.profiles?.first_name + ' ' + patient.profiles?.last_name)" 
+                          title="Dar de Baja de Especialista" 
+                          style="background: transparent; border: none; color: #ef4444; cursor: pointer; display: flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 6px; transition: background 0.2s;"
+                          onmouseover="this.style.background='rgba(239, 68, 68, 0.1)'" 
+                          onmouseout="this.style.background='transparent'">
+                    <mat-icon style="font-size: 18px; width: 18px; height: 18px;">person_remove</mat-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
+        </div> <!-- Cierre de right-col -->
+      </div> <!-- Cierre de Details Layout -->
+    </ng-container>
 
-          <!-- Patients List -->
-          <div *ngIf="assignedPatients.length > 0" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 0.75rem;">
-            <div *ngFor="let patient of assignedPatients" 
-                 style="background: var(--bg-hover, rgba(255,255,255,0.02)); border: 1px solid var(--border-color); border-radius: 8px; padding: 0.75rem; display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;">
-              <div style="display: flex; align-items: center; gap: 8px;">
-                <div style="width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #10b981, #3b82f6); color: white; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 700; flex-shrink: 0;">
-                  {{ patient.profiles?.first_name?.charAt(0) || 'P' }}{{ patient.profiles?.last_name?.charAt(0) || '' }}
-                </div>
-                <div style="display: flex; flex-direction: column;">
-                  <span style="font-weight: 600; font-size: 0.8rem; color: var(--text-primary);">
-                    {{ patient.profiles?.first_name }} {{ patient.profiles?.last_name }}
-                  </span>
-                  <span style="font-size: 0.7rem; color: var(--text-secondary);">
-                    Matrícula: {{ patient.matricula }} • {{ patient.profiles?.faculty || 'Sin Fac.' }}
-                  </span>
-                </div>
+    <!-- Calendario y Citas Tab -->
+    <ng-container *ngIf="activeTab === 'calendar'">
+      <!-- New Row: Calendar Card & Session Timeline Card (Aligned Side-by-side) -->
+      <!-- ponytail: Aligned calendar with sessions of the day under a grid to start at the exact same height -->
+      <div class="calendar-sessions-layout" style="display: grid; grid-template-columns: 340px 1fr; gap: 1.5rem; align-items: start; width: 100%; margin-top: 0.5rem; box-sizing: border-box;">
+        <!-- Left Column: Calendar Card -->
+        <div class="calendar-col" style="display: flex; flex-direction: column; width: 100%; box-sizing: border-box;">
+          <!-- Compact Calendar Card -->
+          <div class="card" style="padding: 1.25rem; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; display: flex; flex-direction: column; gap: 1rem; box-sizing: border-box;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+              <h3 style="margin: 0; color: var(--text-primary); font-size: 1.05rem; font-weight: 600; display: flex; align-items: center; gap: 6px;"><mat-icon style="color: #f59e0b; font-size: 20px; width:20px; height:20px;">calendar_month</mat-icon> Calendario</h3>
+              <div style="display: flex; align-items: center; gap: 0.25rem;">
+                <button type="button" (click)="prevMonth()" style="background: var(--bg-hover, rgba(255,255,255,0.03)); border: 1px solid var(--border-color); color: var(--text-primary); border-radius: 6px; width: 28px; height: 28px; cursor: pointer; display: flex; align-items: center; justify-content: center;"><mat-icon style="font-size: 16px; width:16px; height:16px;">chevron_left</mat-icon></button>
+                <span style="font-size: 0.8rem; color: var(--text-primary); font-weight: 600; min-width: 75px; text-align: center;">{{ currentMonthDate | date:'MMM yyyy':'':'es' | titlecase }}</span>
+                <button type="button" (click)="nextMonth()" style="background: var(--bg-hover, rgba(255,255,255,0.03)); border: 1px solid var(--border-color); color: var(--text-primary); border-radius: 6px; width: 28px; height: 28px; cursor: pointer; display: flex; align-items: center; justify-content: center;"><mat-icon style="font-size: 16px; width:16px; height:16px;">chevron_right</mat-icon></button>
               </div>
+            </div>
 
-              <!-- Actions -->
-              <div style="display: flex; align-items: center; gap: 4px; flex-shrink: 0;">
-                <button type="button" 
-                        (click)="openStudentProfile(patient)" 
-                        title="Ver Perfil" 
-                        style="background: transparent; border: none; color: #3b82f6; cursor: pointer; display: flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 6px; transition: background 0.2s;"
-                        onmouseover="this.style.background='rgba(59, 130, 246, 0.1)'" 
-                        onmouseout="this.style.background='transparent'">
-                  <mat-icon style="font-size: 18px; width: 18px; height: 18px;">visibility</mat-icon>
-                </button>
-                <button type="button" 
-                        (click)="downloadPatientDossier(patient.id, patient.profiles?.first_name + ' ' + patient.profiles?.last_name)" 
-                        [disabled]="isExporting[patient.id]"
-                        title="Ver Expediente (Dossier PDF)" 
-                        style="background: transparent; border: none; color: #10b981; cursor: pointer; display: flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 6px; transition: background 0.2s;"
-                        onmouseover="this.style.background='rgba(16, 185, 201, 0.1)'" 
-                        onmouseout="this.style.background='transparent'">
-                  <mat-icon style="font-size: 18px; width: 18px; height: 18px;">{{ isExporting[patient.id] ? 'hourglass_empty' : 'assignment' }}</mat-icon>
-                </button>
-                <button type="button" 
-                        (click)="openUnassignModal(patient.id, patient.profiles?.first_name + ' ' + patient.profiles?.last_name)" 
-                        title="Dar de Baja de Especialista" 
-                        style="background: transparent; border: none; color: #ef4444; cursor: pointer; display: flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 6px; transition: background 0.2s;"
-                        onmouseover="this.style.background='rgba(239, 68, 68, 0.1)'" 
-                        onmouseout="this.style.background='transparent'">
-                  <mat-icon style="font-size: 18px; width: 18px; height: 18px;">person_remove</mat-icon>
-                </button>
+            <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px;">
+              <div style="text-align: center; color: var(--text-secondary); font-weight: 600; font-size: 0.75rem; padding-bottom: 4px;">D</div>
+              <div style="text-align: center; color: var(--text-secondary); font-weight: 600; font-size: 0.75rem; padding-bottom: 4px;">L</div>
+              <div style="text-align: center; color: var(--text-secondary); font-weight: 600; font-size: 0.75rem; padding-bottom: 4px;">M</div>
+              <div style="text-align: center; color: var(--text-secondary); font-weight: 600; font-size: 0.75rem; padding-bottom: 4px;">M</div>
+              <div style="text-align: center; color: var(--text-secondary); font-weight: 600; font-size: 0.75rem; padding-bottom: 4px;">J</div>
+              <div style="text-align: center; color: var(--text-secondary); font-weight: 600; font-size: 0.75rem; padding-bottom: 4px;">V</div>
+              <div style="text-align: center; color: var(--text-secondary); font-weight: 600; font-size: 0.75rem; padding-bottom: 4px;">S</div>
+
+              <div *ngFor="let day of calendarDays" 
+                   (click)="selectedDate = day.date"
+                   [style.opacity]="day.isCurrentMonth ? '1' : '0.4'"
+                   [style.background]="selectedDate && day.date.toDateString() === selectedDate.toDateString() ? 'rgba(99, 102, 241, 0.15)' : 'var(--bg-hover, rgba(255,255,255,0.02))'"
+                   [style.border-color]="selectedDate && day.date.toDateString() === selectedDate.toDateString() ? '#6366f1' : 'var(--border-color)'"
+                   style="aspect-ratio: 1; border: 1px solid var(--border-color); border-radius: 6px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; position: relative; box-sizing: border-box;">
+                <span style="font-weight: 600; font-size: 0.8rem; color: var(--text-primary);">{{ day.date.getDate() }}</span>
+                <div *ngIf="day.appointments > 0 || day.blocked" style="width: 4px; height: 4px; border-radius: 50%; position: absolute; bottom: 3px;" [style.background]="day.blocked ? '#ef4444' : '#10b981'"></div>
               </div>
+            </div>
+
+            <div style="display: flex; gap: 1rem; justify-content: center; padding-top: 0.75rem; border-top: 1px solid var(--border-color, rgba(255,255,255,0.06)); margin-top: 0.25rem;">
+              <div style="display: flex; align-items: center; gap: 4px; font-size: 0.7rem; color: var(--text-secondary);"><span style="width: 8px; height: 8px; border-radius: 50%; background: #ef4444; display: inline-block;"></span> Bloqueado</div>
+              <div style="display: flex; align-items: center; gap: 4px; font-size: 0.7rem; color: var(--text-secondary);"><span style="width: 8px; height: 8px; border-radius: 50%; background: #10b981; display: inline-block;"></span> Con Citas</div>
             </div>
           </div>
         </div>
-      </div> <!-- Cierre de right-col -->
-    </div> <!-- Cierre de Details Layout -->
 
-    <!-- New Row: Calendar Card & Session Timeline Card (Aligned Side-by-side) -->
-    <!-- ponytail: Aligned calendar with sessions of the day under a grid to start at the exact same height -->
-    <div class="calendar-sessions-layout" style="display: grid; grid-template-columns: 340px 1fr; gap: 1.5rem; align-items: start; width: 100%; margin-top: 1.5rem; box-sizing: border-box;">
-      <!-- Left Column: Calendar Card -->
-      <div class="calendar-col" style="display: flex; flex-direction: column; width: 100%; box-sizing: border-box;">
-        <!-- Compact Calendar Card -->
-        <div class="card" style="padding: 1.25rem; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; display: flex; flex-direction: column; gap: 1rem; box-sizing: border-box;">
-          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
-            <h3 style="margin: 0; color: var(--text-primary); font-size: 1.05rem; font-weight: 600; display: flex; align-items: center; gap: 6px;"><mat-icon style="color: #f59e0b; font-size: 20px; width:20px; height:20px;">calendar_month</mat-icon> Calendario</h3>
-            <div style="display: flex; align-items: center; gap: 0.25rem;">
-              <button type="button" (click)="prevMonth()" style="background: var(--bg-hover, rgba(255,255,255,0.03)); border: 1px solid var(--border-color); color: var(--text-primary); border-radius: 6px; width: 28px; height: 28px; cursor: pointer; display: flex; align-items: center; justify-content: center;"><mat-icon style="font-size: 16px; width:16px; height:16px;">chevron_left</mat-icon></button>
-              <span style="font-size: 0.8rem; color: var(--text-primary); font-weight: 600; min-width: 75px; text-align: center;">{{ currentMonthDate | date:'MMM yyyy':'':'es' | titlecase }}</span>
-              <button type="button" (click)="nextMonth()" style="background: var(--bg-hover, rgba(255,255,255,0.03)); border: 1px solid var(--border-color); color: var(--text-primary); border-radius: 6px; width: 28px; height: 28px; cursor: pointer; display: flex; align-items: center; justify-content: center;"><mat-icon style="font-size: 16px; width:16px; height:16px;">chevron_right</mat-icon></button>
-            </div>
-          </div>
-
-          <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px;">
-            <div style="text-align: center; color: var(--text-secondary); font-weight: 600; font-size: 0.75rem; padding-bottom: 4px;">D</div>
-            <div style="text-align: center; color: var(--text-secondary); font-weight: 600; font-size: 0.75rem; padding-bottom: 4px;">L</div>
-            <div style="text-align: center; color: var(--text-secondary); font-weight: 600; font-size: 0.75rem; padding-bottom: 4px;">M</div>
-            <div style="text-align: center; color: var(--text-secondary); font-weight: 600; font-size: 0.75rem; padding-bottom: 4px;">M</div>
-            <div style="text-align: center; color: var(--text-secondary); font-weight: 600; font-size: 0.75rem; padding-bottom: 4px;">J</div>
-            <div style="text-align: center; color: var(--text-secondary); font-weight: 600; font-size: 0.75rem; padding-bottom: 4px;">V</div>
-            <div style="text-align: center; color: var(--text-secondary); font-weight: 600; font-size: 0.75rem; padding-bottom: 4px;">S</div>
-
-            <div *ngFor="let day of calendarDays" 
-                 (click)="selectedDate = day.date"
-                 [style.opacity]="day.isCurrentMonth ? '1' : '0.4'"
-                 [style.background]="selectedDate && day.date.toDateString() === selectedDate.toDateString() ? 'rgba(99, 102, 241, 0.15)' : 'var(--bg-hover, rgba(255,255,255,0.02))'"
-                 [style.border-color]="selectedDate && day.date.toDateString() === selectedDate.toDateString() ? '#6366f1' : 'var(--border-color)'"
-                 style="aspect-ratio: 1; border: 1px solid var(--border-color); border-radius: 6px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; position: relative; box-sizing: border-box;">
-              <span style="font-weight: 600; font-size: 0.8rem; color: var(--text-primary);">{{ day.date.getDate() }}</span>
-              <div *ngIf="day.appointments > 0 || day.blocked" style="width: 4px; height: 4px; border-radius: 50%; position: absolute; bottom: 3px;" [style.background]="day.blocked ? '#ef4444' : '#10b981'"></div>
-            </div>
-          </div>
-
-          <div style="display: flex; gap: 1rem; justify-content: center; padding-top: 0.75rem; border-top: 1px solid var(--border-color, rgba(255,255,255,0.06)); margin-top: 0.25rem;">
-            <div style="display: flex; align-items: center; gap: 4px; font-size: 0.7rem; color: var(--text-secondary);"><span style="width: 8px; height: 8px; border-radius: 50%; background: #ef4444; display: inline-block;"></span> Bloqueado</div>
-            <div style="display: flex; align-items: center; gap: 4px; font-size: 0.7rem; color: var(--text-secondary);"><span style="width: 8px; height: 8px; border-radius: 50%; background: #10b981; display: inline-block;"></span> Con Citas</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Right Column: Session Timeline Card -->
-      <div class="sessions-col" style="display: flex; flex-direction: column; width: 100%; box-sizing: border-box;">
-        <!-- Session Timeline Card (Right Bottom) -->
-        <div class="card" style="padding: 1.25rem; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; display: flex; flex-direction: column; gap: 1rem; flex: 1; box-sizing: border-box;">
-          <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color, rgba(255,255,255,0.06)); padding-bottom: 0.75rem; flex-wrap: wrap; gap: 0.5rem;">
-            <h3 style="margin: 0; color: var(--text-primary); font-size: 1.1rem; font-weight: 600; display: flex; align-items: center; gap: 6px;"><mat-icon style="color: #10b981; font-size: 20px; width:20px; height:20px;">history</mat-icon> Sesiones del Día</h3>
-            <span style="font-size: 0.85rem; color: var(--text-secondary); font-weight: 500;">{{ selectedDate | date:'longDate':'':'es' | titlecase }}</span>
-          </div>
-
-          <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 0.25rem;">
-            <!-- Empty state -->
-            <div *ngIf="appointmentsForSelectedDate.length === 0" style="text-align: center; padding: 2.5rem; color: var(--text-secondary);">
-              <mat-icon style="font-size: 40px; width: 40px; height: 40px; margin-bottom: 0.5rem; opacity: 0.5;">coffee</mat-icon>
-              <p style="margin: 0; font-size: 0.85rem;">No hay sesiones programadas para este día.</p>
+        <!-- Right Column: Session Timeline Card -->
+        <div class="sessions-col" style="display: flex; flex-direction: column; width: 100%; box-sizing: border-box;">
+          <!-- Session Timeline Card (Right Bottom) -->
+          <div class="card" style="padding: 1.25rem; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; display: flex; flex-direction: column; gap: 1rem; flex: 1; box-sizing: border-box;">
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color, rgba(255,255,255,0.06)); padding-bottom: 0.75rem; flex-wrap: wrap; gap: 0.5rem;">
+              <h3 style="margin: 0; color: var(--text-primary); font-size: 1.1rem; font-weight: 600; display: flex; align-items: center; gap: 6px;"><mat-icon style="color: #10b981; font-size: 20px; width:20px; height:20px;">history</mat-icon> Sesiones del Día</h3>
+              <span style="font-size: 0.85rem; color: var(--text-secondary); font-weight: 500;">{{ selectedDate | date:'longDate':'':'es' | titlecase }}</span>
             </div>
 
-            <!-- List of appointments in timeline -->
-            <div *ngIf="appointmentsForSelectedDate.length > 0" style="display: flex; flex-direction: column; gap: 1rem; padding-left: 0.5rem;">
-              <div *ngFor="let appt of appointmentsForSelectedDate" style="display: flex; gap: 1rem; align-items: flex-start; position: relative;">
-                
-                <!-- Time -->
-                <div style="font-family: monospace; font-size: 0.8rem; color: var(--text-primary); font-weight: 600; width: 85px; flex-shrink: 0; text-align: right; padding-top: 5px;">
-                  {{ appt.scheduled_date | date:'shortTime' }}
-                </div>
-                
-                <!-- Bullet indicator -->
-                <div style="display: flex; flex-direction: column; align-items: center; align-self: stretch; width: 12px; flex-shrink: 0;">
-                  <div style="width: 8px; height: 8px; border-radius: 50%; background: #6366f1; margin-top: 8px;"></div>
-                  <div style="width: 2px; flex: 1; background: var(--border-color, rgba(255,255,255,0.06)); margin-top: 4px;"></div>
-                </div>
-                
-                <!-- Appointment details card -->
-                <div [class.appt-past-alert]="isAlertAppointment(appt)" style="flex: 1; background: var(--bg-hover, rgba(255,255,255,0.02)); border: 1px solid var(--border-color); border-radius: 8px; padding: 0.75rem 1rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem; box-sizing: border-box;">
-                  <div>
-                    <div style="font-weight: 600; font-size: 0.85rem; color: var(--text-primary);">
-                      {{ appt.patient?.profiles?.first_name || 'Paciente' }} {{ appt.patient?.profiles?.last_name || '' }}
+            <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 0.25rem;">
+              <!-- Empty state -->
+              <div *ngIf="appointmentsForSelectedDate.length === 0" style="text-align: center; padding: 2.5rem; color: var(--text-secondary);">
+                <mat-icon style="font-size: 40px; width: 40px; height: 40px; margin-bottom: 0.5rem; opacity: 0.5;">coffee</mat-icon>
+                <p style="margin: 0; font-size: 0.85rem;">No hay sesiones programadas para este día.</p>
+              </div>
+
+              <!-- List of appointments in timeline -->
+              <div *ngIf="appointmentsForSelectedDate.length > 0" style="display: flex; flex-direction: column; gap: 1rem; padding-left: 0.5rem;">
+                <div *ngFor="let appt of appointmentsForSelectedDate" style="display: flex; gap: 1rem; align-items: flex-start; position: relative;">
+                  
+                  <!-- Time -->
+                  <div style="font-family: monospace; font-size: 0.8rem; color: var(--text-primary); font-weight: 600; width: 85px; flex-shrink: 0; text-align: right; padding-top: 5px;">
+                    {{ appt.scheduled_date | date:'shortTime' }}
+                  </div>
+                  
+                  <!-- Bullet indicator -->
+                  <div style="display: flex; flex-direction: column; align-items: center; align-self: stretch; width: 12px; flex-shrink: 0;">
+                    <div style="width: 8px; height: 8px; border-radius: 50%; background: #6366f1; margin-top: 8px;"></div>
+                    <div style="width: 2px; flex: 1; background: var(--border-color, rgba(255,255,255,0.06)); margin-top: 4px;"></div>
+                  </div>
+                  
+                  <!-- Appointment details card -->
+                  <div [class.appt-past-alert]="isAlertAppointment(appt)" style="flex: 1; background: var(--bg-hover, rgba(255,255,255,0.02)); border: 1px solid var(--border-color); border-radius: 8px; padding: 0.75rem 1rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem; box-sizing: border-box;">
+                    <div>
+                      <div style="font-weight: 600; font-size: 0.85rem; color: var(--text-primary);">
+                        {{ appt.patient?.profiles?.first_name || 'Paciente' }} {{ appt.patient?.profiles?.last_name || '' }}
+                      </div>
+                      <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 2px;">
+                        Facultad: {{ appt.patient?.profiles?.faculty || 'Sin asignar' }}
+                      </div>
                     </div>
-                    <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 2px;">
-                      Facultad: {{ appt.patient?.profiles?.faculty || 'Sin asignar' }}
+                    
+                    <div style="display: flex; align-items: center; gap: 0.5rem; flex-shrink: 0;">
+                      <span class="badge" [style.background]="(appt.priority_level === 'Emergency' || appt.priority_level === 'emergency') ? 'rgba(239, 68, 68, 0.1)' : 'rgba(99, 102, 241, 0.1)'" [style.color]="(appt.priority_level === 'Emergency' || appt.priority_level === 'emergency') ? '#ef4444' : '#6366f1'" style="font-size: 0.7rem; padding: 2px 6px; border-radius: 4px; font-weight: 600;">
+                        {{ (appt.priority_level === 'Routine' || appt.priority_level === 'routine') ? 'Rutina' : ((appt.priority_level === 'Emergency' || appt.priority_level === 'emergency') ? 'Urgencia' : (appt.priority_level || 'General')) }}
+                      </span>
+                      <span class="badge" [style.background]="isAlertAppointment(appt) ? 'rgba(245, 158, 11, 0.15)' : (appt.status === 'completed' ? 'rgba(16, 185, 129, 0.1)' : 'rgba(245, 158, 11, 0.1)')" [style.color]="isAlertAppointment(appt) ? '#f59e0b' : (appt.status === 'completed' ? '#10b981' : '#f59e0b')" style="font-size: 0.7rem; padding: 2px 6px; border-radius: 4px; font-weight: 600;">
+                        {{ isAlertAppointment(appt) ? 'Alerta' : (appt.status === 'completed' ? 'Completada' : (appt.status === 'scheduled' ? 'Programada' : appt.status)) }}
+                      </span>
                     </div>
                   </div>
                   
-                  <div style="display: flex; align-items: center; gap: 0.5rem; flex-shrink: 0;">
-                    <span class="badge" [style.background]="(appt.priority_level === 'Emergency' || appt.priority_level === 'emergency') ? 'rgba(239, 68, 68, 0.1)' : 'rgba(99, 102, 241, 0.1)'" [style.color]="(appt.priority_level === 'Emergency' || appt.priority_level === 'emergency') ? '#ef4444' : '#6366f1'" style="font-size: 0.7rem; padding: 2px 6px; border-radius: 4px; font-weight: 600;">
-                      {{ (appt.priority_level === 'Routine' || appt.priority_level === 'routine') ? 'Rutina' : ((appt.priority_level === 'Emergency' || appt.priority_level === 'emergency') ? 'Urgencia' : (appt.priority_level || 'General')) }}
-                    </span>
-                    <span class="badge" [style.background]="isAlertAppointment(appt) ? 'rgba(245, 158, 11, 0.15)' : (appt.status === 'completed' ? 'rgba(16, 185, 129, 0.1)' : 'rgba(245, 158, 11, 0.1)')" [style.color]="isAlertAppointment(appt) ? '#f59e0b' : (appt.status === 'completed' ? '#10b981' : '#f59e0b')" style="font-size: 0.7rem; padding: 2px 6px; border-radius: 4px; font-weight: 600;">
-                      {{ isAlertAppointment(appt) ? 'Alerta' : (appt.status === 'completed' ? 'Completada' : (appt.status === 'scheduled' ? 'Programada' : appt.status)) }}
-                    </span>
-                  </div>
                 </div>
-                
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div><!-- Cierre de calendar-sessions-layout -->
+    </ng-container>
+
+    <!-- Evaluaciones y Reseñas Tab -->
+    <ng-container *ngIf="activeTab === 'evaluations'">
+      <div class="evaluations-tab-content" style="display: flex; flex-direction: column; gap: 1.5rem; animation: fade-in 0.3s ease; width: 100%; box-sizing: border-box; margin-top: 0.5rem;">
+        
+        <!-- Summary & Filter Header Card -->
+        <div class="card" style="padding: 1.5rem; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1.5rem; box-sizing: border-box;">
+          
+          <div style="display: flex; align-items: center; gap: 1.5rem;">
+            <!-- Promedio y Estrellas -->
+            <div style="display: flex; flex-direction: column; gap: 4px;">
+              <span style="font-size: 0.75rem; color: var(--text-secondary); text-transform: uppercase; font-family: monospace; letter-spacing: 0.05em;">Promedio General</span>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 2rem; font-weight: 800; color: var(--text-primary);">{{ selectedPsychologist.evaluation | number:'1.1-1' }}</span>
+                <div style="display: flex; flex-direction: column;">
+                  <div class="stars-row" style="margin: 0;">
+                    <mat-icon *ngFor="let star of getRatingStars(selectedPsychologist.evaluation)" [ngClass]="star === 1 ? 'star-filled' : 'star-empty'" style="font-size: 16px; width: 16px; height: 16px;">star</mat-icon>
+                  </div>
+                  <span style="font-size: 0.7rem; color: var(--text-secondary);">Basado en {{ evaluations.length }} evaluaciones</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Filtro por Paciente -->
+          <div style="display: flex; flex-direction: column; gap: 4px; min-width: 250px;">
+            <label style="font-size: 0.75rem; color: var(--text-secondary); font-weight: 500;">Filtrar por Paciente</label>
+            <select [(ngModel)]="selectedPatientFilterId" (change)="applyEvaluationsFilter()" style="padding: 10px 12px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-hover, rgba(255,255,255,0.03)); color: var(--text-primary); font-size: 0.85rem; outline: none; width: 100%; cursor: pointer;">
+              <option value="all">Todos los pacientes ({{ evaluations.length }})</option>
+              <option *ngFor="let patient of assignedPatients" [value]="patient.id">
+                {{ patient.profiles?.first_name }} {{ patient.profiles?.last_name }} (Matrícula: {{ patient.matricula }})
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Evaluations List -->
+        <div style="display: flex; flex-direction: column; gap: 1rem;">
+          
+          <!-- Empty State -->
+          <div *ngIf="filteredEvaluations.length === 0" style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 3rem; text-align: center; color: var(--text-secondary);">
+            <mat-icon style="font-size: 48px; width: 48px; height: 48px; margin-bottom: 0.75rem; opacity: 0.5;">rate_review</mat-icon>
+            <h4 style="margin: 0 0 4px 0; color: var(--text-primary); font-size: 1.1rem; font-weight: 600;">Sin Evaluaciones</h4>
+            <p style="margin: 0; font-size: 0.85rem;">No se encontraron evaluaciones registradas que coincidan con el filtro seleccionado.</p>
+          </div>
+
+          <!-- Cards List -->
+          <div *ngFor="let eval of filteredEvaluations" class="card" style="padding: 1.5rem; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; display: flex; flex-direction: column; gap: 1rem; box-sizing: border-box; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
+            
+            <!-- Card Header -->
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 0.75rem; border-bottom: 1px solid var(--border-color, rgba(255, 255, 255, 0.06)); padding-bottom: 0.75rem;">
+              <div style="display: flex; flex-direction: column; gap: 2px;">
+                <h4 style="margin: 0; font-size: 0.95rem; font-weight: 700; color: var(--text-primary);">{{ eval.patientName }}</h4>
+                <span style="font-size: 0.75rem; color: var(--text-secondary);">Fecha de Sesión: {{ eval.created_at | date:'longDate':'':'es' }}</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <!-- Rupture Status Badge -->
+                <span class="badge" [ngClass]="eval.rupture_flag === 'critical' ? 'alert-red' : (eval.rupture_flag === 'decline' ? 'alert-amber' : 'alert-green')" style="padding: 4px 10px; font-weight: 600; border-radius: 99px;">
+                  {{ eval.rupture_flag === 'critical' ? '⚠️ Ruptura' : (eval.rupture_flag === 'decline' ? '📉 Caída' : '✅ Sólida') }}
+                </span>
+                <!-- Global score -->
+                <span class="badge alert-blue" style="padding: 4px 10px; font-weight: 600; border-radius: 99px;">
+                  Score Global: {{ eval.score_global | number:'1.1-1' }} / 5.0
+                </span>
+              </div>
+            </div>
+
+            <!-- Score Grid Questions -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 0.75rem; margin-top: 0.25rem;">
+              <div style="background: rgba(255, 255, 255, 0.015); border: 1px solid var(--border-color, rgba(255,255,255,0.04)); border-radius: 8px; padding: 0.75rem; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 4px;">
+                <span style="font-size: 0.65rem; color: var(--text-secondary); text-transform: uppercase; font-family: monospace; font-weight: 600;">Evaluación Global</span>
+                <span style="font-size: 1.15rem; font-weight: 800; color: var(--text-primary);">{{ eval.q1_global | number:'1.1-1' }}</span>
+              </div>
+              <div style="background: rgba(255, 255, 255, 0.015); border: 1px solid var(--border-color, rgba(255,255,255,0.04)); border-radius: 8px; padding: 0.75rem; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 4px;">
+                <span style="font-size: 0.65rem; color: var(--text-secondary); text-transform: uppercase; font-family: monospace; font-weight: 600;">Alianza / Vínculo</span>
+                <span style="font-size: 1.15rem; font-weight: 800; color: var(--text-primary);">{{ eval.q2_bond | number:'1.1-1' }}</span>
+              </div>
+              <div style="background: rgba(255, 255, 255, 0.015); border: 1px solid var(--border-color, rgba(255,255,255,0.04)); border-radius: 8px; padding: 0.75rem; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 4px;">
+                <span style="font-size: 0.65rem; color: var(--text-secondary); text-transform: uppercase; font-family: monospace; font-weight: 600;">Objetivos / Tareas</span>
+                <span style="font-size: 1.15rem; font-weight: 800; color: var(--text-primary);">{{ eval.q3_goals | number:'1.1-1' }}</span>
+              </div>
+              <div style="background: rgba(255, 255, 255, 0.015); border: 1px solid var(--border-color, rgba(255,255,255,0.04)); border-radius: 8px; padding: 0.75rem; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 4px;">
+                <span style="font-size: 0.65rem; color: var(--text-secondary); text-transform: uppercase; font-family: monospace; font-weight: 600;">Impacto de Sesión</span>
+                <span style="font-size: 1.15rem; font-weight: 800; color: var(--text-primary);">{{ eval.q4_impact | number:'1.1-1' }}</span>
+              </div>
+            </div>
+
+            <!-- Comment review if present -->
+            <div *ngIf="eval.q5_comment" style="margin-top: 0.25rem; padding: 0.75rem 1.25rem; background: rgba(99, 102, 241, 0.04); border-left: 3px solid #6366f1; border-radius: 4px;">
+              <span style="font-size: 0.7rem; color: #8b5cf6; font-weight: 600; text-transform: uppercase; font-family: monospace; display: block; margin-bottom: 4px;">Comentario de sesión</span>
+              <p style="margin: 0; font-size: 0.85rem; color: var(--text-primary); font-style: italic; line-height: 1.5;">"{{ eval.q5_comment }}"</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </ng-container>
   </div>
 
   <!-- Secure Add Psychologist Modal (Formulario seguro de Alta de Personal Clínico) -->

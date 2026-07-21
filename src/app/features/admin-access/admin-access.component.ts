@@ -19,6 +19,7 @@ export class AdminAccessComponent implements OnInit, AfterViewInit, OnDestroy {
   private ngZone = inject(NgZone);
 
   email: string = '';
+  initialEmail: string = '';
   mode: 'login' | 'register' = 'login';
   errorMessage: string = '';
   successMessage: string = '';
@@ -62,6 +63,7 @@ export class AdminAccessComponent implements OnInit, AfterViewInit, OnDestroy {
       
       if (params['email']) {
         this.email = params['email'];
+        this.initialEmail = params['email'];
       }
     });
   }
@@ -124,6 +126,11 @@ export class AdminAccessComponent implements OnInit, AfterViewInit, OnDestroy {
     
     if (!this.email || !this.email.includes('@')) {
       this.errorMessage = 'Por favor ingresa un correo electrónico válido.';
+      return;
+    }
+
+    if (this.mode === 'register' && (!this.email || this.email !== this.initialEmail)) {
+      this.errorMessage = 'Acceso denegado: El correo no coincide con el enlace de invitación original.';
       return;
     }
 

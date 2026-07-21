@@ -33,7 +33,7 @@
           [(ngModel)]="email" 
           required 
           placeholder="correo@buap.mx"
-          [disabled]="isLoading"
+          [disabled]="isLoading || mode === 'register'"
           class="email-input"
         >
       </div>

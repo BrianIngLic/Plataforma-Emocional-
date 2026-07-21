@@ -19,6 +19,10 @@ export class AdminSettingsComponent {
   successMessage = '';
   errorMessage = '';
 
+  isSendingLink = false;
+  linkSuccessMessage = '';
+  linkErrorMessage = '';
+
   async onRegisterPasskey(): Promise<void> {
     this.isLoading = true;
     this.successMessage = '';
@@ -30,6 +34,24 @@ export class AdminSettingsComponent {
       this.errorMessage = e?.message || 'Error al registrar la Passkey.';
     } finally {
       this.isLoading = false;
+    }
+  }
+
+  async onSendEnrollmentLink(): Promise<void> {
+    this.isSendingLink = true;
+    this.linkSuccessMessage = '';
+    this.linkErrorMessage = '';
+    try {
+      const sent = await this.authService.sendEnrollmentLinkForOtherDevice();
+      if (sent) {
+        this.linkSuccessMessage = 'Se ha enviado un enlace de enrolamiento a tu correo institucional. Abre ese correo en tu nuevo dispositivo.';
+      } else {
+        this.linkErrorMessage = 'No se pudo enviar el enlace. Verifica la configuración de tu correo.';
+      }
+    } catch (e: any) {
+      this.linkErrorMessage = e?.message || 'Error al enviar el enlace.';
+    } finally {
+      this.isSendingLink = false;
     }
   }
 }

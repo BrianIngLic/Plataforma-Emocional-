@@ -25,6 +25,26 @@
         </button>
         <p *ngIf="successMessage" class="success-feedback">{{ successMessage }}</p>
         <p *ngIf="errorMessage" class="error-feedback">{{ errorMessage }}</p>
+
+        <hr class="card-divider" style="margin: 1.5rem 0; border: 0; border-top: 1px dashed #e2e8f0;">
+        
+        <div class="enroll-other-device-section">
+          <h4 style="margin: 0 0 0.5rem 0; color: #0f172a; font-size: 1rem; font-weight: 600;">Enrolar otro dispositivo</h4>
+          <p style="font-size: 0.85rem; color: #64748b; margin: 0 0 1rem 0; line-height: 1.4;">
+            ¿Quieres acceder desde tu celular u otra computadora? Envía un enlace de acceso temporal a tu correo institucional para iniciar sesión en el nuevo dispositivo y registrar su biometría.
+          </p>
+          <button 
+            (click)="onSendEnrollmentLink()" 
+            [disabled]="isSendingLink" 
+            class="enroll-link-btn"
+            style="background: transparent; border: 1.5px solid #6366f1; color: #6366f1; display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; border-radius: 8px; font-weight: 500; cursor: pointer; transition: all 0.2s;"
+          >
+            <mat-icon style="font-size: 1.2rem; width: 1.2rem; height: 1.2rem;">mail</mat-icon>
+            <span>{{ isSendingLink ? 'Enviando enlace...' : 'Enviar enlace a mi correo' }}</span>
+          </button>
+          <p *ngIf="linkSuccessMessage" class="success-feedback" style="color: #10b981; font-size: 0.85rem; margin: 0.5rem 0 0 0;">{{ linkSuccessMessage }}</p>
+          <p *ngIf="linkErrorMessage" class="error-feedback" style="color: #ef4444; font-size: 0.85rem; margin: 0.5rem 0 0 0;">{{ linkErrorMessage }}</p>
+        </div>
       </div>
     </div>
   </div>

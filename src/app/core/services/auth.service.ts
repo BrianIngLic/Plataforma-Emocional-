@@ -314,6 +314,30 @@ export class AuthService {
     }
   }
 
+  async sendEnrollmentLinkForOtherDevice(): Promise<boolean> {
+    try {
+      const { data: { user }, error: userError } = await this.supabaseService.supabase.auth.getUser();
+      if (userError || !user || !user.email) {
+        throw new Error('No se pudo determinar el correo del administrador.');
+      }
+      
+      const { error } = await this.supabaseService.supabase.auth.signInWithOtp({
+        email: user.email,
+        options: {
+          shouldCreateUser: false,
+          emailRedirectTo: window.location.origin + '/sistema/acceso?mode=register&email=' + encodeURIComponent(user.email)
+        }
+      });
+      if (error) {
+        throw error;
+      }
+      return true;
+    } catch (e: any) {
+      console.error('[AuthService] Error en sendEnrollmentLinkForOtherDevice:', e);
+      throw e;
+    }
+  }
+
   async registerPasskey(): Promise<void> {
     const user = this.currentUser();
     if (!user || user.role !== 'Admin') {

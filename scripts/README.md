@@ -12,6 +12,13 @@ El acceso de administradores está protegido obligatoriamente por Passkeys (WebA
    SUPABASE_URL=https://tu-proyecto.supabase.co
    SUPABASE_SERVICE_ROLE_KEY=tu-service-role-key-secreta
    APP_URL=http://localhost:4200   # URL base del frontend para los enlaces de acceso
+
+   # Configuración SMTP opcional para el script TI CLI (para enviar correos automáticamente)
+   SMTP_HOST=smtp.gmail.com
+   SMTP_PORT=465
+   SMTP_SECURE=true
+   SMTP_USER=tu_correo@gmail.com
+   SMTP_PASS=tu_contraseña_de_aplicacion
    ```
 
 > [!CAUTION]
@@ -19,7 +26,7 @@ El acceso de administradores está protegido obligatoriamente por Passkeys (WebA
 
 ## Instalación de dependencias del script
 
-Si ejecutas el script por primera vez desde la raíz del proyecto, asegúrate de tener instaladas las dependencias del proyecto:
+Si ejecutas el script por primera vez desde la raíz del proyecto, asegúrate de tener instaladas las dependencias del proyecto (incluye `nodemailer` para el envío automático de correos):
 ```bash
 npm install
 ```
@@ -35,10 +42,20 @@ node scripts/admin-manager.js list
 ```
 
 ### 2. Crear un nuevo administrador
-Crea la cuenta en Supabase Auth, inserta su registro en `public.users` con privilegios de administrador (`role_id: 1`), inicializa su perfil y envía un correo automático de invitación (Magic Link) para enrolar su dispositivo en el primer acceso.
+Crea la cuenta en Supabase Auth con metadatos personalizados, inserta su registro en `public.users` con privilegios de administrador (`role_id: 1`), inicializa su perfil en `public.profiles` con su nombre y campus asignado, y envía un correo automático de invitación (Magic Link) estilizado con el diseño de Amati para enrolar su dispositivo en el primer acceso.
+
+**Parámetros:**
+- `email` (obligatorio): Correo institucional del nuevo administrador.
+- `nombre` (opcional, por defecto 'Admin'): Nombre de pila del administrador.
+- `apellido` (opcional, por defecto 'Institucional'): Apellidos del administrador.
+- `campus` (opcional, por defecto null): Campus o facultad asignada.
+
 ```bash
-node scripts/admin-manager.js create admin@buap.mx
+node scripts/admin-manager.js create admin@buap.mx "Guillermo" "Avila Mora" "Facultad de Medicina"
 ```
+
+> [!TIP]
+> Si no configuras las variables SMTP en el archivo `.env` o la librería `nodemailer` no está instalada, el script emitirá una advertencia e imprimirá el enlace de enrolamiento directamente en la consola para que el área de TI lo entregue manualmente de forma segura.
 
 ### 3. Consultar estado detallado de un administrador
 Muestra el ID del usuario, matrícula, estado (activo/suspendido), si la passkey es obligatoria, dispositivos registrados y los últimos 5 logs de auditoría.

@@ -11,6 +11,7 @@ import { environment } from '../../../../environments/environment';
 import localeEs from '@angular/common/locales/es';
 import { DossierExportService } from '../../../core/services/dossier-export.service';
 import { AdminSkill8Service } from '../services/admin-skill8.service';
+import { FacultyService } from '../../../core/services/faculty.service';
 
 registerLocaleData(localeEs, 'es');
 
@@ -47,9 +48,18 @@ export class PsychologistsComponent implements OnInit {
   adminStats = inject(AdminStatsService);
   adminSkill8 = inject(AdminSkill8Service);
   dossierExport = inject(DossierExportService);
+  facultyService = inject(FacultyService);
 
   psychologists: Psychologist[] = [];
   loading = true;
+  allFacultiesData: any[] = [];
+  buildings: any[] = [];
+  editBuildings: any[] = [];
+
+  showNewBuildingForm = false;
+  showEditNewBuildingForm = false;
+  newBuildingName = '';
+  newBuildingCode = '';
 
   // Patient Management State
   assignedPatients: any[] = [];
@@ -158,14 +168,49 @@ export class PsychologistsComponent implements OnInit {
   }
 
   async loadFaculties() {
-    const { data, error } = await this.supabase.from('faculties').select('name');
+    const { data, error } = await this.supabase.from('faculties').select('id, name');
     if (data && !error) {
+      this.allFacultiesData = data;
       this.faculties = data.map((f: any) => f.name);
       if (this.faculties.length > 0) {
         this.addForm.patchValue({ faculty: this.faculties[0] });
+        await this.onAddFacultyChange(this.faculties[0]);
       }
     } else {
       console.error('Error loading faculties:', error?.message);
+    }
+  }
+
+  async onAddFacultyChange(facName: string) {
+    const fac = this.allFacultiesData.find(f => f.name === facName);
+    if (fac) {
+      this.buildings = await this.facultyService.getBuildingsByFaculty(fac.id);
+      if (this.buildings.length > 0) {
+        this.addForm.patchValue({ building_id: this.buildings[0].id });
+      } else {
+        this.addForm.patchValue({ building_id: null });
+      }
+    } else {
+      this.buildings = [];
+      this.addForm.patchValue({ building_id: null });
+    }
+  }
+
+  async onEditFacultyChange(facName: string) {
+    const fac = this.allFacultiesData.find(f => f.name === facName);
+    if (fac) {
+      this.editBuildings = await this.facultyService.getBuildingsByFaculty(fac.id);
+      if (this.editBuildings.length > 0) {
+        const currentBId = this.editForm.value.building_id;
+        if (!this.editBuildings.some(b => b.id === currentBId)) {
+          this.editForm.patchValue({ building_id: this.editBuildings[0].id });
+        }
+      } else {
+        this.editForm.patchValue({ building_id: null });
+      }
+    } else {
+      this.editBuildings = [];
+      this.editForm.patchValue({ building_id: null });
     }
   }
 
@@ -178,6 +223,8 @@ export class PsychologistsComponent implements OnInit {
       matricula: ['', [Validators.required]],
       cedula: ['', [Validators.required]],
       faculty: [this.faculties.length > 0 ? this.faculties[0] : '', [Validators.required]],
+      building_id: [null],
+      office_room: [''],
       specialty: ['', [Validators.required]],
       capacity: [35, [Validators.required, Validators.min(1), Validators.max(200)]]
     });
@@ -186,8 +233,18 @@ export class PsychologistsComponent implements OnInit {
       firstName: ['', [Validators.required, Validators.minLength(2)]],
       lastName: ['', [Validators.required, Validators.minLength(2)]],
       faculty: ['', [Validators.required]],
+      building_id: [null],
+      office_room: [''],
       specialty: ['', [Validators.required]],
       capacity: [35, [Validators.required, Validators.min(1), Validators.max(200)]]
+    });
+
+    this.addForm.get('faculty')?.valueChanges.subscribe(async (facName) => {
+      await this.onAddFacultyChange(facName || '');
+    });
+
+    this.editForm.get('faculty')?.valueChanges.subscribe(async (facName) => {
+      await this.onEditFacultyChange(facName || '');
     });
   }
 
@@ -257,7 +314,7 @@ export class PsychologistsComponent implements OnInit {
     return 'Normal';
   }
 
-  viewDetail(p: Psychologist) {
+  async viewDetail(p: Psychologist) {
     this.selectedPsychologist = p;
     this.activeTab = 'profile';
     this.selectedDate = new Date();
@@ -267,10 +324,27 @@ export class PsychologistsComponent implements OnInit {
     const first = parts[0] || '';
     const last = parts.slice(1).join(' ') || '';
 
+    // Obtener configuración del especialista de la base de datos
+    const { data: settings } = await this.supabase
+      .from('health_professional_settings')
+      .select('building_id, office_room')
+      .eq('professional_id', p.id)
+      .maybeSingle();
+
+    // Cargar edificios para la facultad antes de parchar
+    const fac = this.allFacultiesData.find(f => f.name === p.faculty);
+    if (fac) {
+      this.editBuildings = await this.facultyService.getBuildingsByFaculty(fac.id);
+    } else {
+      this.editBuildings = [];
+    }
+
     this.editForm.patchValue({
       firstName: first,
       lastName: last,
       faculty: p.faculty,
+      building_id: settings?.building_id || null,
+      office_room: settings?.office_room || '',
       specialty: p.specialty,
       capacity: p.capacity
     });
@@ -356,8 +430,10 @@ export class PsychologistsComponent implements OnInit {
     this.isSavingProfile = true;
 
     try {
-      const { firstName, lastName, faculty, specialty, capacity } = this.editForm.value;
+      const { firstName, lastName, faculty, specialty, capacity, building_id, office_room } = this.editForm.value;
       const userId = this.selectedPsychologist.id;
+
+      const fac = this.allFacultiesData.find(f => f.name === faculty);
 
       const { error: pError } = await this.supabase
         .from('profiles')
@@ -368,7 +444,12 @@ export class PsychologistsComponent implements OnInit {
 
       const { error: sError } = await this.supabase
         .from('health_professional_settings')
-        .update({ capacity: capacity })
+        .update({ 
+          capacity: capacity,
+          building_id: building_id || null,
+          office_room: office_room || '',
+          faculty_id: fac ? fac.id : null
+        })
         .eq('professional_id', userId);
 
       if (sError) throw sError;
@@ -513,7 +594,7 @@ export class PsychologistsComponent implements OnInit {
     this.formErrorMessage = '';
     this.formSuccessMessage = '';
 
-    const { role, firstName, lastName, email, matricula, cedula, faculty, specialty, capacity } = this.addForm.value;
+    const { role, firstName, lastName, email, matricula, cedula, faculty, specialty, capacity, building_id, office_room } = this.addForm.value;
     const roleName = Number(role) === 4 ? 'Nutriólogo' : 'Psicólogo';
 
     try {
@@ -548,6 +629,29 @@ export class PsychologistsComponent implements OnInit {
 
       this.psychologists.unshift(newPsych);
 
+      // Actualizar building_id, office_room y faculty_id del profesional registrado
+      let profId = data?.user_id || data?.id;
+      if (!profId) {
+        const { data: profUser } = await this.supabase
+          .from('profiles')
+          .select('user_id')
+          .eq('email', email)
+          .maybeSingle();
+        profId = profUser?.user_id;
+      }
+
+      if (profId) {
+        const facObj = this.allFacultiesData.find(f => f.name === faculty);
+        await this.supabase
+          .from('health_professional_settings')
+          .update({
+            building_id: building_id || null,
+            office_room: office_room || '',
+            faculty_id: facObj ? facObj.id : null
+          })
+          .eq('professional_id', profId);
+      }
+
       this.createdUser = { name: `Dr. ${firstName} ${lastName}`, email };
       this.formSuccessMessage = `¡Registro exitoso! Invitación oficial enviada por Supabase al ${roleName.toLowerCase()}.`;
 
@@ -567,6 +671,52 @@ export class PsychologistsComponent implements OnInit {
       this.createdUser = null;
     } finally {
       this.isSubmitting = false;
+    }
+  }
+
+  toggleAddBuildingForm() {
+    this.showNewBuildingForm = !this.showNewBuildingForm;
+    this.newBuildingName = '';
+    this.newBuildingCode = '';
+  }
+
+  toggleEditAddBuildingForm() {
+    this.showEditNewBuildingForm = !this.showEditNewBuildingForm;
+    this.newBuildingName = '';
+    this.newBuildingCode = '';
+  }
+
+  async addNewBuilding(isEditForm: boolean) {
+    const formGroup = isEditForm ? this.editForm : this.addForm;
+    const facName = formGroup.get('faculty')?.value;
+    if (!facName || !this.newBuildingName.trim()) return;
+
+    const fac = this.allFacultiesData.find(f => f.name === facName);
+    if (!fac) return;
+
+    const { data, error } = await this.facultyService.createBuilding(
+      fac.id,
+      this.newBuildingName.trim(),
+      this.newBuildingCode.trim() || undefined
+    );
+
+    if (error) {
+      alert('Error al crear el edificio: ' + (error.message || error));
+      return;
+    }
+
+    if (data) {
+      if (isEditForm) {
+        this.editBuildings = await this.facultyService.getBuildingsByFaculty(fac.id);
+        this.editForm.patchValue({ building_id: data.id });
+        this.showEditNewBuildingForm = false;
+      } else {
+        this.buildings = await this.facultyService.getBuildingsByFaculty(fac.id);
+        this.addForm.patchValue({ building_id: data.id });
+        this.showNewBuildingForm = false;
+      }
+      this.newBuildingName = '';
+      this.newBuildingCode = '';
     }
   }
 

@@ -7,11 +7,30 @@ export interface Faculty {
   campus_id?: number;
   virtual_tour_url?: string;
   campuses?: { name: string }; // Join relation
+  faculty_code?: string;
+  latitude?: number;
+  longitude?: number;
+  has_service?: boolean;
 }
 
 export interface Campus {
   id: number;
   name: string;
+  campus_code?: string;
+  latitude?: number;
+  longitude?: number;
+  map_type?: string;
+  map_config?: Record<string, any>;
+}
+
+export interface Building {
+  id: number | string;
+  faculty_id: number | string;
+  name: string;
+  code?: string;
+  latitude?: number;
+  longitude?: number;
+  created_at?: string;
 }
 
 @Injectable({
@@ -113,5 +132,38 @@ export class FacultyService {
       .eq('professional_id', professionalId);
 
     return { error: settingsError || profileError };
+  }
+
+  async getBuildingsByFaculty(facultyId: number | string): Promise<Building[]> {
+    const { data, error } = await this.supabaseService.supabase
+      .from('buildings')
+      .select('*')
+      .eq('faculty_id', facultyId)
+      .order('name', { ascending: true });
+
+    if (!error && data) return data as Building[];
+    return [];
+  }
+
+  async createBuilding(
+    facultyId: number | string,
+    name: string,
+    code?: string,
+    latitude?: number,
+    longitude?: number
+  ): Promise<{ data: any; error: any }> {
+    const payload: any = {
+      faculty_id: facultyId,
+      name
+    };
+    if (code) payload.code = code;
+    if (latitude !== undefined) payload.latitude = latitude;
+    if (longitude !== undefined) payload.longitude = longitude;
+
+    return await this.supabaseService.supabase
+      .from('buildings')
+      .insert(payload)
+      .select()
+      .single();
   }
 }

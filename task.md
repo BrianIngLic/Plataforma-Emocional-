@@ -543,11 +543,124 @@
 - `[x]` En `patient-profile.component.html`:
   - `[x]` En la tarjeta de Análisis de Amati (`ai-card`), añadir un botón "Consultar Historial de Chat" con ícono de mat-icon `chat` para activar `showChatHistory = true`.
   - `[x]` Envolver el layout del expediente clínico en un `<ng-container *ngIf="!showChatHistory">`.
-  - `[x]` Al final del archivo, añadir el componente `<app-chat-dashboard>` de manera condicional con `*ngIf="showChatHistory"`, pasándole `patient.id` y `readOnly = true`, enlazando el evento `back` para desactivar la vista.
+  - `[x]` Al final del archivo, añadir el componente `<app-chat-dashboard>` de manera c### 22.1. Base de Datos — Migración
 
+- `[x]` Crear `db/migration_specialist_choice.sql`
+- `[x]` `ALTER TABLE campuses` — agregar: `campus_code TEXT UNIQUE`, `latitude DECIMAL(10,7)`, `longitude DECIMAL(10,7)`, `map_type TEXT DEFAULT 'none'`, `map_config JSONB DEFAULT '{}'`
+- `[x]` `ALTER TABLE faculties` — agregar: `faculty_code TEXT`, `latitude DECIMAL(10,7)`, `longitude DECIMAL(10,7)`, `has_service BOOLEAN DEFAULT FALSE`
+- `[x]` `CREATE TABLE public.buildings` — con `faculty_id FK`, `name`, `code`, `latitude`, `longitude`, `created_at`
+- `[x]` `ALTER TABLE health_professional_settings` — agregar: `building_id BIGINT REFERENCES buildings(id) ON DELETE SET NULL`
+- `[x]` Poblar `campuses` BUAP: CU, CCU, CU2 + regionales con `campus_code` y `map_type`
+- `[x]` RLS en `buildings`: SELECT para autenticados, ALL para Admin (`get_auth_role() = 1`)
+- `[x]` Crear RPC `get_specialists_for_student(p_student_id UUID, p_role_id INTEGER)` con SECURITY DEFINER:
+  - Retorna: id, first_name, last_name, faculty_name, faculty_code, campus_name, campus_code, modality, building_name, office_room, rating_avg, total_evaluaciones, specialist_lat, specialist_lng, student_lat, student_lng, current_load, capacity
+  - Filtra: `is_active = TRUE` y `faculty_id IS NOT NULL`
+  - `rating_avg` = AVG(`score_global`) de `session_evaluations`
+  - Prioridad ubicación: `buildings.lat/lng` si `building_id`, sino `faculties.lat/lng`
+- `[x]` `NOTIFY pgrst, 'reload schema'` al final
+- `[x]` Ejecutar migración en Supabase SQL Editor y verificar
 
+---
 
+### 22.2. Script de Extracción Geo BUAP
 
+- `[x]` Crear `scripts/extract-buap-geo.js` (Node.js puro, sin dependencias del app)
+  - Descarga y parsea `markers.js` de `recorridosvirtuales.buap.mx/mapa-cu/`
+  - Por cada Feature: extrae `name`, `recorrido`, `info`, `ruta` (short URL Google Maps)
+  - Resuelve cada short URL → sigue HTTP redirect → extrae lat/lng del URL final
+  - Genera `public/assets/geo/cu-campus.geojson` (FeatureCollection RFC 7946)
+  - Genera `db/seeds/faculties-geo.sql` (UPDATE lat/lng + faculty_code por nombre)
+- `[x]` Crear directorio `public/assets/geo/`
+- `[x]` Ejecutar: `node scripts/extract-buap-geo.js`
+- `[x]` Validar GeoJSON en geojson.io — puntos deben caer en Campus BUAP Puebla
+- `[x]` Ejecutar `db/seeds/faculties-geo.sql` en Supabase
+
+---
+
+### 22.3. Servicios Angular
+
+#### ClinicalService
+
+- `[x]` Eliminar parámetro `assignmentMethod` de `submitClinicalRecords`
+- `[x]` Eliminar auto-asignación de especialista y inserción en `virtual_queue` en el registro
+- `[x]` Expediente creado con `primary_psychologist_id: null`, `primary_nutritionist_id: null`
+- `[x]` Nuevo método `getSpecialistsForStudent(studentId: string, roleId: 3 | 4): Promise<SpecialistRaw[]>` — llama RPC
+- `[x]` Nuevo método `selectSpecialist(studentId: string, professionalId: string, roleId: 3 | 4): Promise<{error: any}>`:
+  - Verificar cambios restantes en `student_policy_tracking`
+  - Si agotados → retornar error descriptivo
+  - Actualizar `student_clinical_records`
+  - Incrementar `specialist_changes_*` en `student_policy_tracking`
+  - Insertar evento en `audit_logs`
+
+#### FacultyService
+
+- `[x]` Actualizar interface `Faculty` — agregar: `faculty_code?`, `latitude?`, `longitude?`, `has_service?`
+- `[x]` Actualizar interface `Campus` — agregar: `campus_code?`, `latitude?`, `longitude?`, `map_type?`, `map_config?`
+- `[x]` Nueva interface `Building`: `{ id, faculty_id, name, code?, latitude?, longitude? }`
+- `[x]` Nuevo método `getBuildingsByFaculty(facultyId): Promise<Building[]>`
+- `[x]` Nuevo método `createBuilding(facultyId, name, code?, lat?, lng?): Promise<{data, error}>`
+
+---
+
+### 22.4. Registro — Eliminar Selector de Especialista
+
+- `[x]` `register.component.ts`: eliminar `assignmentMethod` del `consentFormGroup` y simplificar `submitRegistration`
+- `[x]` `register.component.html`: eliminar bloque UI de selección de método de asignación
+- `[ ]` Prueba: registrar estudiante → `primary_psychologist_id = NULL` en `student_clinical_records`
+
+---
+
+### 22.5. Configuración del Estudiante — UI
+
+#### student-settings.component.ts
+
+- `[x]` Agregar interface `SpecialistOption` con todos los campos del spec §22.6
+- `[x]` Agregar propiedades: `psychologists`, `nutritionists`, `isLoadingSpecialists`, `currentPsychologistId`, `currentNutritionistId`, `remainingPsyChanges`, `remainingNutChanges`
+- `[x]` Implementar `haversineKm(lat1, lng1, lat2, lng2): number`
+- `[x]` Implementar `getProximityTier(s)`: `'same_faculty' | 'same_campus' | 'other_campus'`
+- `[x]` Implementar `sortSpecialists(list)`: tier → distancia → rating → capacidad libre
+- `[x]` Implementar `loadSpecialists()`: carga ambos roles en paralelo, agrega distancia y tier, ordena, carga cambios restantes
+- `[x]` Implementar `getStars(avg): ('full'|'half'|'empty')[]`
+- `[x]` Implementar `chooseSpecialist(specialist, roleId)`: confirmación → `selectSpecialist` → reload
+- `[x]` Llamar `loadSpecialists()` en `ngOnInit` tras cargar el perfil
+
+#### student-settings.component.html
+
+- `[x]` Sección **"Mi Psicólogo"**: card del actual (si existe) + badge de cambios restantes + lista ordenada con: avatar, badge proximidad, edificio/consultorio, estrellas, chip modalidad, barra capacidad, botón "Elegir"
+- `[x]` Sección **"Mi Nutriólogo"**: estructura idéntica
+- `[x]` Spinner mientras `isLoadingSpecialists`
+- `[x]` Mensaje informativo si no hay especialistas en la facultad propia
+- `[x]` Responsividad mobile verificada
+
+---
+
+### 22.6. Admin — Facultad Obligatoria + Edificios
+
+- `[x]` Hacer `faculty_id` requerido en formulario de registro de profesional (`Validators.required` + mensaje)
+- `[x]` Agregar dropdown dinámico de edificios al seleccionar facultad (`getBuildingsByFaculty`)
+- `[x]` Si no hay edificios: campo `building TEXT` libre + nota informativa
+- `[x]` Botón "＋ Agregar edificio" con mini formulario (nombre, código)
+- `[x]` Bloqueo de guardado si `faculty_id` vacío
+
+### 22.7. Modalidad Híbrida del Especialista
+
+- `[x]` Permitir opción `'hibrido'` en TS de `settings.component` (psicólogo y salud)
+- `[x]` Permitir switch de tres vías (Virtual, Presencial, Híbrido) en HTML
+- `[x]` Mostrar simultáneamente campos presenciales y virtuales al seleccionar Híbrido
+
+---
+
+### 22.8. Verificación Final
+
+- `[x]` `ng build` compila sin errores
+- `[ ]` Registro sin selector de especialista → `primary_psychologist_id = NULL`
+- `[ ]` Configuración carga lista con rating y badge correcto
+- `[ ]` Especialista de misma facultad aparece primero
+- `[ ]` Sin edificio → usa coordenadas de facultad, muestra texto libre
+- `[ ]` Elegir especialista → BD actualizada, contador incrementado
+- `[ ]` Límite 2 cambios agotado → botón deshabilitado con mensaje
+- `[ ]` GeoJSON válido en geojson.io, puntos en BUAP Puebla
+- `[ ]` Admin: bloqueo si falta facultad al guardar especialista
 
 
 

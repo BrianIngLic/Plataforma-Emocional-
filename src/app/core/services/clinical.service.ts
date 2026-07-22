@@ -110,11 +110,14 @@ export class ClinicalService {
    * y asigna opcionalmente los especialistas de menor carga de forma automática.
    * Si están saturados, se inserta al estudiante en la fila virtual.
    */
+  /**
+   * Envía el formulario clínico a Supabase cifrando las notas (todo el JSON de respuestas).
+   * La asignación de especialista se realiza posteriormente desde la configuración del estudiante.
+   */
   async submitClinicalRecords(
     matricula: string, 
     conditions: string[], 
-    consent: boolean,
-    assignmentMethod: 'auto' | 'manual' = 'auto'
+    consent: boolean
   ): Promise<boolean> {
     const user = this.authService.currentUser();
     if (!user) return false;
@@ -122,14 +125,6 @@ export class ClinicalService {
     // Ciframos los resultados del test psicológico (EAT-26 / PHQ-9)
     // para garantizar total privacidad antes de que toquen la BD.
     const encryptedNotes = this.cryptoService.encrypt(conditions[0] || '{}');
-
-    let primaryPsychologistId: string | null = null;
-    let primaryNutritionistId: string | null = null;
-
-    if (assignmentMethod === 'auto') {
-      primaryPsychologistId = await this.getSpecialistWithLeastLoad(3, user.id);
-      primaryNutritionistId = await this.getSpecialistWithLeastLoad(4, user.id);
-    }
 
     try {
       const { error } = await this.supabaseService.supabase
@@ -139,8 +134,8 @@ export class ClinicalService {
           known_conditions: ['Test_Completado'],
           consent_given: consent,
           additional_notes: encryptedNotes, // Dato cifrado
-          primary_psychologist_id: primaryPsychologistId,
-          primary_nutritionist_id: primaryNutritionistId
+          primary_psychologist_id: null,
+          primary_nutritionist_id: null
         });
 
       if (error) {
@@ -151,41 +146,129 @@ export class ClinicalService {
         console.error('Error insertando clinical records:', error.message);
         return false;
       }
-
-      // Si no se asignaron especialistas por saturación, abrir fila de espera virtual
-      const { data: prof } = await this.supabaseService.supabase
-        .from('profiles')
-        .select('faculty')
-        .eq('user_id', user.id)
-        .maybeSingle();
-      const studentFaculty = prof?.faculty || 'Desconocida';
-
-      if (assignmentMethod === 'auto') {
-        if (!primaryPsychologistId) {
-          await this.supabaseService.supabase
-            .from('virtual_queue')
-            .insert({
-              student_id: user.id,
-              specialty: 'psychologist',
-              faculty: studentFaculty
-            });
-        }
-        if (!primaryNutritionistId) {
-          await this.supabaseService.supabase
-            .from('virtual_queue')
-            .insert({
-              student_id: user.id,
-              specialty: 'nutritionist',
-              faculty: studentFaculty
-            });
-        }
-      }
       
       return true;
     } catch (e) {
       console.warn('⚠️ MODO OFFLINE ACTIVADO: Expediente guardado localmente (Simulado) por excepción de red.');
       return true;
     }
+  }
+
+  /**
+   * Obtiene la lista de especialistas disponibles para el estudiante ordenados por proximidad y calificación.
+   */
+  async getSpecialistsForStudent(studentId: string, roleId: number): Promise<any[]> {
+    const { data, error } = await this.supabaseService.supabase
+      .rpc('get_specialists_for_student', {
+        p_student_id: studentId,
+        p_role_id: roleId
+      });
+
+    if (error) {
+      console.error('Error obteniendo especialistas para el estudiante:', error.message);
+      return [];
+    }
+    return data || [];
+  }
+
+  /**
+   * Permite al estudiante elegir o cambiar su especialista (psicólogo o nutriólogo).
+   * Respeta el límite de máximo 2 cambios por período académico.
+   */
+  async selectSpecialist(studentId: string, professionalId: string, roleId: 3 | 4): Promise<{ error: any }> {
+    const period = this.getCurrentAcademicPeriod();
+    const field = roleId === 3 ? 'primary_psychologist_id' : 'primary_nutritionist_id';
+    const changesField = roleId === 3 ? 'specialist_changes_psychologist' : 'specialist_changes_nutritionist';
+
+    try {
+      // 1. Obtener o crear registro de tracking de políticas
+      const tracking = await this.ensurePolicyTracking(studentId, period);
+      const currentChanges = tracking ? (tracking[changesField] || 0) : 0;
+
+      // 2. Verificar el límite de cambios (máximo 2 por período académico)
+      if (currentChanges >= 2) {
+        return {
+          error: {
+            message: 'Has alcanzado el límite máximo de 2 cambios de especialista por período académico. Para cambios adicionales, por favor realiza una solicitud formal a la administración.'
+          }
+        };
+      }
+
+      // 3. Consultar el especialista actual para registrar en la bitácora
+      const { data: currentRecord } = await this.supabaseService.supabase
+        .from('student_clinical_records')
+        .select(field)
+        .eq('student_id', studentId)
+        .maybeSingle();
+
+      const oldSpecialistId = currentRecord ? (currentRecord as any)[field] : null;
+
+      // 4. Actualizar el especialista asignado en el expediente clínico
+      const { error: updateError } = await this.supabaseService.supabase
+        .from('student_clinical_records')
+        .update({ [field]: professionalId })
+        .eq('student_id', studentId);
+
+      if (updateError) throw updateError;
+
+      // 5. Incrementar el contador de cambios en el tracking de políticas
+      const { error: trackingError } = await this.supabaseService.supabase
+        .from('student_policy_tracking')
+        .update({ [changesField]: currentChanges + 1 })
+        .eq('student_id', studentId)
+        .eq('academic_period', period);
+
+      if (trackingError) throw trackingError;
+
+      // 6. Registrar el evento en la bitácora de auditoría
+      await this.supabaseService.supabase
+        .from('audit_logs')
+        .insert({
+          user_id: studentId,
+          event_type: 'SPECIALIST_SELECTED',
+          description: `El estudiante seleccionó al especialista ${professionalId} para el rol ${roleId === 3 ? 'Psicólogo' : 'Nutriólogo'}. Anterior: ${oldSpecialistId || 'Ninguno'}. Cambio número: ${currentChanges + 1}`
+        });
+
+      return { error: null };
+    } catch (e: any) {
+      console.error('Error al seleccionar especialista:', e);
+      return { error: e };
+    }
+  }
+
+  private getCurrentAcademicPeriod(): string {
+    const d = new Date();
+    const term = d.getMonth() < 6 ? 'Primavera' : 'Otoño';
+    return `${term} ${d.getFullYear()}`;
+  }
+
+  private async ensurePolicyTracking(studentId: string, period: string): Promise<any> {
+    const { data: existing, error: selectError } = await this.supabaseService.supabase
+      .from('student_policy_tracking')
+      .select('*')
+      .eq('student_id', studentId)
+      .eq('academic_period', period)
+      .maybeSingle();
+
+    if (existing) return existing;
+
+    const { data, error } = await this.supabaseService.supabase
+      .from('student_policy_tracking')
+      .insert({
+        student_id: studentId,
+        academic_period: period,
+        late_cancellations: 0,
+        specialist_changes_psychologist: 0,
+        specialist_changes_nutritionist: 0,
+        bypass_session_limit: false
+      })
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Error creating policy tracking:', error);
+    }
+    return data;
   }
 
   async getClinicalRecord(): Promise<any> {

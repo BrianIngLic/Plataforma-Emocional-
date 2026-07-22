@@ -38,7 +38,7 @@ export class HealthProfessionalSettingsComponent implements OnInit {
 
   sessionDuration: number = 50;
   location: string = '';
-  modality: 'virtual' | 'presencial' = 'virtual';
+  modality: 'virtual' | 'presencial' | 'hibrido' = 'virtual';
   selectedFacultyId: any = null;
   building: string = '';
   officeRoom: string = '';

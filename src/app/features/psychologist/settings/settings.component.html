@@ -70,17 +70,20 @@
               <button class="tab-btn" [class.active]="modality === 'presencial'" (click)="modality = 'presencial'" style="flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 10px; border-radius: 8px; font-weight: 500;">
                 <mat-icon>business</mat-icon> Presencial
               </button>
+              <button class="tab-btn" [class.active]="modality === 'hibrido'" (click)="modality = 'hibrido'" style="flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 10px; border-radius: 8px; font-weight: 500;">
+                <mat-icon>alt_route</mat-icon> Ambos (Híbrido)
+              </button>
             </div>
 
             <!-- VIRTUAL -->
-            <div *ngIf="modality === 'virtual'" class="virtual-fields">
+            <div *ngIf="modality === 'virtual' || modality === 'hibrido'" class="virtual-fields" style="margin-bottom: 15px;">
               <label style="font-size: 0.85rem; color: #64748b; font-weight: 500;">Enlace de Reunión Virtual (Google Meet, Teams, Zoom, etc.)</label>
               <input type="text" [(ngModel)]="location" placeholder="https://meet.google.com/abc-defg-hij" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #cbd5e1; margin-top: 6px; font-size: 0.95rem;">
               <p style="font-size: 0.75rem; color: #94a3b8; margin-top: 6px; margin-bottom: 0;">El estudiante podrá conectarse directamente con un solo clic al llegar la fecha de su cita.</p>
             </div>
 
             <!-- PRESENCIAL -->
-            <div *ngIf="modality === 'presencial'" class="presential-fields" style="display: flex; flex-direction: column; gap: 15px;">
+            <div *ngIf="modality === 'presencial' || modality === 'hibrido'" class="presential-fields" style="display: flex; flex-direction: column; gap: 15px;">
               <div>
                 <label style="font-size: 0.85rem; color: #64748b; font-weight: 500;">Facultad / Sede de Atención</label>
                 <select [(ngModel)]="selectedFacultyId" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #cbd5e1; margin-top: 6px; font-size: 0.95rem; background: white;">

@@ -1,0 +1,1685 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.2029542,
+          18.9969573
+        ]
+      },
+      "properties": {
+        "name": "Centro de Detección Biomolecular",
+        "code": null,
+        "campus_code": "CU",
+        "area": "Ciencias Naturales y de la Salud",
+        "buap_info_url": "https://plantafisica.buap.mx/content/centro-de-detecci%c3%b3n-biomolecular",
+        "virtual_tour_url": "https://recorridosvirtuales.buap.mx/caeto/",
+        "google_maps_url": "https://maps.app.goo.gl/k1EYDxHNYYtkzE8H6",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.2011704,
+          19.0010654
+        ]
+      },
+      "properties": {
+        "name": "Facultad de Biología - BIO",
+        "code": "BIO",
+        "campus_code": "CU",
+        "area": "Ciencias Naturales y de la Salud",
+        "buap_info_url": "https://plantafisica.buap.mx/content/facultad-de-ciencias-biol%c3%b3gicas-bio",
+        "virtual_tour_url": "https://recorridosvirtuales.buap.mx/biologia/",
+        "google_maps_url": "https://maps.app.goo.gl/AGrZGUTLC2emJyJY8",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.2043182,
+          19.0043283
+        ]
+      },
+      "properties": {
+        "name": "Facultad de Ciencias Químicas - FCQ1-8",
+        "code": "FCQ",
+        "campus_code": "CU",
+        "area": "Ciencias Naturales y de la Salud",
+        "buap_info_url": "https://plantafisica.buap.mx/content/facultad-de-ciencias-qu%c3%admicas-fcq",
+        "virtual_tour_url": "https://recorridosvirtuales.buap.mx/computacion/",
+        "google_maps_url": "https://maps.app.goo.gl/5DcFM9r2GbecJ2kV6",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.2007929,
+          19.0018929
+        ]
+      },
+      "properties": {
+        "name": "Facultad de Ciencias Químicas - FCQ9-11",
+        "code": "FCQ",
+        "campus_code": "CU",
+        "area": "Ciencias Naturales y de la Salud",
+        "buap_info_url": "https://plantafisica.buap.mx/content/facultad-de-ciencias-qu%c3%admicas-fcq",
+        "virtual_tour_url": "https://recorridosvirtuales.buap.mx/biologia/",
+        "google_maps_url": "https://maps.app.goo.gl/RoacTPCjxNa2RpQS7",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.1950073,
+          19.0009641
+        ]
+      },
+      "properties": {
+        "name": "Facultad de Cultura Física - FCF",
+        "code": "FCF",
+        "campus_code": "CU",
+        "area": "Ciencias Naturales y de la Salud",
+        "buap_info_url": "https://plantafisica.buap.mx/content/facultad-de-cultura-f%c3%adsica-fcf",
+        "virtual_tour_url": "https://recorridosvirtuales.buap.mx/cultura-fisica/",
+        "google_maps_url": "https://maps.app.goo.gl/LhY8sjHw1ELMCwfi9",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.2029282,
+          18.9972889
+        ]
+      },
+      "properties": {
+        "name": "Facultad de Medicina Veterinaria y Zootecnia - MVZ",
+        "code": "MVZ",
+        "campus_code": "CU",
+        "area": "Ciencias Naturales y de la Salud",
+        "buap_info_url": "https://plantafisica.buap.mx/content/facultad-de-medicina-veterinaria-y-zootecnia-hospital-veterinario-puebla-mvz",
+        "virtual_tour_url": "https://recorridosvirtuales.buap.mx/caeto/",
+        "google_maps_url": "https://maps.app.goo.gl/DQ7kudGn6sFLM1uY6",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.1999466,
+          18.9951744
+        ]
+      },
+      "properties": {
+        "name": "Laboratorio de Innovación de Materiales Aplicados - LIMA1",
+        "code": "LIMA1",
+        "campus_code": "CU",
+        "area": "Ciencias Naturales y de la Salud",
+        "buap_info_url": null,
+        "virtual_tour_url": null,
+        "google_maps_url": "https://maps.app.goo.gl/ycN5ct2EAo73AnDu7",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.1992545,
+          19.0017659
+        ]
+      },
+      "properties": {
+        "name": "Facultad de Ciencias Políticas y Sociales - CPS",
+        "code": "CPS",
+        "campus_code": "CU",
+        "area": "Ciencias Sociales y Humanidades",
+        "buap_info_url": "https://plantafisica.buap.mx/content/facultad-de-ciencias-pol%C3%ADticas-y-ciencias-sociales-cps",
+        "virtual_tour_url": "https://recorridosvirtuales.buap.mx/derecho/",
+        "google_maps_url": "https://maps.app.goo.gl/UsGyS4qWiBSFEzuo6",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.1991006,
+          19.0025037
+        ]
+      },
+      "properties": {
+        "name": "Facultad de Derecho y Ciencias Sociales - DER",
+        "code": "DER",
+        "campus_code": "CU",
+        "area": "Ciencias Sociales y Humanidades",
+        "buap_info_url": "https://plantafisica.buap.mx/content/facultad-de-derecho-y-ciencias-sociales-der",
+        "virtual_tour_url": "https://recorridosvirtuales.buap.mx/derecho/",
+        "google_maps_url": "https://maps.app.goo.gl/bHwFna9yv7kZVozs5",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.196559,
+          19.0016306
+        ]
+      },
+      "properties": {
+        "name": "Facultad de Lenguas - LEN",
+        "code": "LEN",
+        "campus_code": "CU",
+        "area": "Ciencias Sociales y Humanidades",
+        "buap_info_url": "https://plantafisica.buap.mx/content/facultad-de-lenguas-len",
+        "virtual_tour_url": "https://recorridosvirtuales.buap.mx/caale/",
+        "google_maps_url": "https://maps.app.goo.gl/agcKncsUyqHo66Qj9",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.1953824,
+          18.9977743
+        ]
+      },
+      "properties": {
+        "name": "Facultad de Filosofía y Antropología - FIL",
+        "code": "FIL",
+        "campus_code": "CU",
+        "area": "Ciencias Sociales y Humanidades",
+        "buap_info_url": "https://plantafisica.buap.mx/content/facultad-de-filosof%c3%ada-y-antropolog%c3%ada-fil",
+        "virtual_tour_url": "https://recorridosvirtuales.buap.mx/stu/",
+        "google_maps_url": "https://maps.app.goo.gl/kVdoqEzPKccqUk6A8",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.2008146,
+          19.0023216
+        ]
+      },
+      "properties": {
+        "name": "Facultad de Administración - ADM",
+        "code": "ADM",
+        "campus_code": "CU",
+        "area": "Económico Administrativo",
+        "buap_info_url": "https://plantafisica.buap.mx/content/facultad-de-administraci%c3%b3n-adm",
+        "virtual_tour_url": "https://recorridosvirtuales.buap.mx/administracion/",
+        "google_maps_url": "https://maps.app.goo.gl/u66NrHJaG2Zc3pvT6",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.2046471,
+          18.9995213
+        ]
+      },
+      "properties": {
+        "name": "Facultad de Contaduría Pública - FCP",
+        "code": "FCP",
+        "campus_code": "CU",
+        "area": "Económico Administrativo",
+        "buap_info_url": "https://plantafisica.buap.mx/content/facultad-de-contadur%c3%ada-p%c3%bablica-fcp",
+        "virtual_tour_url": "https://recorridosvirtuales.buap.mx/contaduria/",
+        "google_maps_url": "https://maps.app.goo.gl/4ypruAHN9S5CmHr78",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.197548,
+          19.0016213
+        ]
+      },
+      "properties": {
+        "name": "Facultad de Economía - ECO",
+        "code": "ECO",
+        "campus_code": "CU",
+        "area": "Económico Administrativo",
+        "buap_info_url": "https://plantafisica.buap.mx/content/facultad-de-econom%c3%ada-eco",
+        "virtual_tour_url": "https://recorridosvirtuales.buap.mx/economia",
+        "google_maps_url": "https://maps.app.goo.gl/p1W1j1yGJJ44ofHU6",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.204103,
+          19.002818
+        ]
+      },
+      "properties": {
+        "name": "Facultad de Arquitectura - ARQ",
+        "code": "ARQ",
+        "campus_code": "CU",
+        "area": "Ingeniería y Ciencias Exactas",
+        "buap_info_url": "https://plantafisica.buap.mx/content/facultad-de-arquitectura-arq",
+        "virtual_tour_url": "https://recorridosvirtuales.buap.mx/arquitectura",
+        "google_maps_url": "https://maps.app.goo.gl/j4NYMB8mSXXhrm1r6",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.2044187,
+          19.0051844
+        ]
+      },
+      "properties": {
+        "name": "Facultad de Ciencias de la Computación - FCC",
+        "code": "FCC",
+        "campus_code": "CU",
+        "area": "Ingeniería y Ciencias Exactas",
+        "buap_info_url": "https://plantafisica.buap.mx/content/facultad-de-ciencias-de-la-computaci%c3%b3n-cco",
+        "virtual_tour_url": "https://recorridosvirtuales.buap.mx/computacion/",
+        "google_maps_url": "https://maps.app.goo.gl/hKErbDbBwnpzKLLS9",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.2023097,
+          19.0030641
+        ]
+      },
+      "properties": {
+        "name": "Facultad de Ciencias de la Electrónica - FCE",
+        "code": "FCE",
+        "campus_code": "CU",
+        "area": "Ingeniería y Ciencias Exactas",
+        "buap_info_url": "https://plantafisica.buap.mx/content/facultad-de-ciencias-de-la-electr%c3%b3nica-fce",
+        "virtual_tour_url": "https://recorridosvirtuales.buap.mx/fisico-matematicas/",
+        "google_maps_url": "https://maps.app.goo.gl/gi6Fvg5SX4ubysJm7",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.199268,
+          18.99528
+        ]
+      },
+      "properties": {
+        "name": "Facultad de Ciencias de la Electrónica - FCE8",
+        "code": "FCE",
+        "campus_code": "CU",
+        "area": "Ingeniería y Ciencias Exactas",
+        "buap_info_url": "https://plantafisica.buap.mx/content/facultad-de-ciencias-de-la-electr%c3%b3nica-fce",
+        "virtual_tour_url": "https://recorridosvirtuales.buap.mx/fisico-matematicas/",
+        "google_maps_url": "https://maps.app.goo.gl/scSutEZ38utPJker5",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.2011711,
+          19.0024863
+        ]
+      },
+      "properties": {
+        "name": "Facultad de Ciencias Físico-Matemáticas - FM",
+        "code": "FM",
+        "campus_code": "CU",
+        "area": "Ingeniería y Ciencias Exactas",
+        "buap_info_url": "https://plantafisica.buap.mx/content/facultad-de-ciencias-f%c3%adsico-matem%c3%a1ticas-fm",
+        "virtual_tour_url": "https://recorridosvirtuales.buap.mx/fisico-matematicas/",
+        "google_maps_url": "https://maps.app.goo.gl/PbbMunnrNrZ11zaTA",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.2028973,
+          19.0017103
+        ]
+      },
+      "properties": {
+        "name": "Facultad de Ingeniería - ING",
+        "code": "ING",
+        "campus_code": "CU",
+        "area": "Ingeniería y Ciencias Exactas",
+        "buap_info_url": "https://plantafisica.buap.mx/content/facultad-de-ingenier%c3%ada-ing",
+        "virtual_tour_url": "https://recorridosvirtuales.buap.mx/ingenieria/",
+        "google_maps_url": "https://maps.app.goo.gl/cwnjUC879QSFzvHE8",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.202677,
+          19.0036344
+        ]
+      },
+      "properties": {
+        "name": "Facultad de Ingeniería Química - FIQ",
+        "code": "FIQ",
+        "campus_code": "CU",
+        "area": "Ingeniería y Ciencias Exactas",
+        "buap_info_url": "https://plantafisica.buap.mx/content/facultad-de-ingenier%c3%ada-qu%c3%admica-fiq",
+        "virtual_tour_url": "https://recorridosvirtuales.buap.mx/ingenieria-quimica/",
+        "google_maps_url": "https://maps.app.goo.gl/Q4Bu7evzjJE2DkgJ9",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.203707,
+          19.000124
+        ]
+      },
+      "properties": {
+        "name": "Arena BUAP",
+        "code": null,
+        "campus_code": "CU",
+        "area": "Dependencias BUAP",
+        "buap_info_url": "https://plantafisica.buap.mx/content/arena-buap",
+        "virtual_tour_url": "https://recorridosvirtuales.buap.mx/caeto/",
+        "google_maps_url": "https://maps.app.goo.gl/XgsUanAjBqjibMgb8",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.2021016,
+          18.9958227
+        ]
+      },
+      "properties": {
+        "name": "Biblioteca Central",
+        "code": "BC",
+        "campus_code": "CU",
+        "area": "Dependencias BUAP",
+        "buap_info_url": "https://plantafisica.buap.mx/content/biblioteca-central",
+        "virtual_tour_url": null,
+        "google_maps_url": "https://maps.app.goo.gl/seJ49Qf2WAEXq9QU6",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.2041471,
+          19.0038304
+        ]
+      },
+      "properties": {
+        "name": "Bioterio - BCB",
+        "code": "BCB",
+        "campus_code": "CU",
+        "area": "Dependencias BUAP",
+        "buap_info_url": "https://plantafisica.buap.mx/content/bioterio",
+        "virtual_tour_url": "https://recorridosvirtuales.buap.mx/computacion/",
+        "google_maps_url": "https://maps.app.goo.gl/LCto6j5L6X71MHYn9",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.203414,
+          18.997883
+        ]
+      },
+      "properties": {
+        "name": "Centro de Apoyo Emocional y Terapia Ocupacional - CAETO",
+        "code": "CAETO",
+        "campus_code": "CU",
+        "area": "Dependencias BUAP",
+        "buap_info_url": "https://plantafisica.buap.mx/content/centro-de-apoyo-emocional-y-terapia-ocupacional",
+        "virtual_tour_url": "https://recorridosvirtuales.buap.mx/caeto/",
+        "google_maps_url": "https://maps.app.goo.gl/2K6CmS4tEn7QKS4v5",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.2020547,
+          19.0005871
+        ]
+      },
+      "properties": {
+        "name": "Centro de Convenciones",
+        "code": null,
+        "campus_code": "CU",
+        "area": "Dependencias BUAP",
+        "buap_info_url": "https://plantafisica.buap.mx/content/centro-de-convenciones",
+        "virtual_tour_url": "https://recorridosvirtuales.buap.mx/didecufi/",
+        "google_maps_url": "https://maps.app.goo.gl/4XGdGU4wAVXHKbvz7",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.2019839,
+          18.9946963
+        ]
+      },
+      "properties": {
+        "name": "Círculo Infantil - CI",
+        "code": "CI",
+        "campus_code": "CU",
+        "area": "Dependencias BUAP",
+        "buap_info_url": "https://plantafisica.buap.mx/content/circulo-infantil",
+        "virtual_tour_url": null,
+        "google_maps_url": "https://maps.app.goo.gl/rzK3UeVdmHrRuxrJA",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.1963462,
+          18.9997276
+        ]
+      },
+      "properties": {
+        "name": "Concha Acústica - CA",
+        "code": "CA",
+        "campus_code": "CU",
+        "area": "Dependencias BUAP",
+        "buap_info_url": "https://plantafisica.buap.mx/content/herbario-y-jard%C3%ADn-bot%C3%A1nico",
+        "virtual_tour_url": null,
+        "google_maps_url": "https://maps.app.goo.gl/xxGTf1eCQkVbSdNQ9",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.196519,
+          19.0013345
+        ]
+      },
+      "properties": {
+        "name": "Contraloria General",
+        "code": null,
+        "campus_code": "CU",
+        "area": "Dependencias BUAP",
+        "buap_info_url": "https://plantafisica.buap.mx/content/contralor%C3%ADa-general",
+        "virtual_tour_url": null,
+        "google_maps_url": "https://maps.app.goo.gl/BX6DHnWpS2pcDkZ76",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.200802,
+          19.000377
+        ]
+      },
+      "properties": {
+        "name": "Control Vehicular - DCV",
+        "code": "DCV",
+        "campus_code": "CU",
+        "area": "Dependencias BUAP",
+        "buap_info_url": "https://plantafisica.buap.mx/content/control-vehicular",
+        "virtual_tour_url": "https://recorridosvirtuales.buap.mx/didecufi/",
+        "google_maps_url": "https://maps.app.goo.gl/w2CNZdcf1k6ms9Z79",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.1957473,
+          18.9968757
+        ]
+      },
+      "properties": {
+        "name": "Coordinación General de Desarrollo Sustentable - STU",
+        "code": "STU",
+        "campus_code": "CU",
+        "area": "Dependencias BUAP",
+        "buap_info_url": "https://plantafisica.buap.mx/content/coordinaci%C3%B3n-general-de-desarrollo-sustentable",
+        "virtual_tour_url": "https://recorridosvirtuales.buap.mx/stu/",
+        "google_maps_url": "https://maps.app.goo.gl/h768eTAGW46HXJHDA",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.202758,
+          19.003254
+        ]
+      },
+      "properties": {
+        "name": "Dirección de Acompañamiento Universitario - DAU",
+        "code": "DAU",
+        "campus_code": "CU",
+        "area": "Dependencias BUAP",
+        "buap_info_url": "https://plantafisica.buap.mx/content/direcci%C3%B3n-de-acompa%C3%B1amiento-universitario",
+        "virtual_tour_url": null,
+        "google_maps_url": "https://maps.app.goo.gl/LrFh5CWyYXUqyYAf9",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.198638,
+          19.002897
+        ]
+      },
+      "properties": {
+        "name": "Dirección de Acompañamiento Universitario - DAU1",
+        "code": "DAU1",
+        "campus_code": "CU",
+        "area": "Dependencias BUAP",
+        "buap_info_url": "https://plantafisica.buap.mx/content/direcci%C3%B3n-de-acompa%C3%B1amiento-universitario",
+        "virtual_tour_url": null,
+        "google_maps_url": "https://maps.app.goo.gl/RiSddXXUnHfYJBr96",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.1947725,
+          18.9984171
+        ]
+      },
+      "properties": {
+        "name": "Dirección de Administración Escolar - DAE",
+        "code": "ADM",
+        "campus_code": "CU",
+        "area": "Dependencias BUAP",
+        "buap_info_url": "https://plantafisica.buap.mx/content/direcci%C3%B3n-de-administraci%C3%B3n-escolar",
+        "virtual_tour_url": "https://recorridosvirtuales.buap.mx/stu/",
+        "google_maps_url": "https://maps.app.goo.gl/KfoAx5sTZ7XmRu4P9",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.200093,
+          18.995656
+        ]
+      },
+      "properties": {
+        "name": "Dirección de Apoyo y Seguridad Universitaria - DASU",
+        "code": "DASU",
+        "campus_code": "CU",
+        "area": "Dependencias BUAP",
+        "buap_info_url": "https://plantafisica.buap.mx/content/direcci%C3%B3n-de-apoyo-y-seguridad-universitaria",
+        "virtual_tour_url": "https://recorridosvirtuales.buap.mx/dasu/",
+        "google_maps_url": "https://maps.app.goo.gl/XDtdmfj1DLGiWBRN6",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.2024558,
+          18.9999828
+        ]
+      },
+      "properties": {
+        "name": "Dirección de Deporte y Cultura Física - DCF1",
+        "code": "FCF",
+        "campus_code": "CU",
+        "area": "Dependencias BUAP",
+        "buap_info_url": "https://plantafisica.buap.mx/content/direcci%C3%B3n-de-deporte-y-cultura-f%C3%ADsica",
+        "virtual_tour_url": null,
+        "google_maps_url": "https://maps.app.goo.gl/xCR1PNZGXtA6zLuZ6",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.1998442,
+          18.9993337
+        ]
+      },
+      "properties": {
+        "name": "Dirección de Deporte y Cultura Física - DCF2-6",
+        "code": "FCF",
+        "campus_code": "CU",
+        "area": "Dependencias BUAP",
+        "buap_info_url": "https://plantafisica.buap.mx/content/direcci%C3%B3n-de-deporte-y-cultura-f%C3%ADsica",
+        "virtual_tour_url": "https://recorridosvirtuales.buap.mx/didecufi/",
+        "google_maps_url": "https://maps.app.goo.gl/qkeaaJA4M7AZDW3RA",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.198316,
+          18.9991396
+        ]
+      },
+      "properties": {
+        "name": "Dirección de Deporte y Cultura Física - DCF7",
+        "code": "FCF",
+        "campus_code": "CU",
+        "area": "Dependencias BUAP",
+        "buap_info_url": "https://plantafisica.buap.mx/content/direcci%C3%B3n-de-deporte-y-cultura-f%C3%ADsica",
+        "virtual_tour_url": null,
+        "google_maps_url": "https://maps.app.goo.gl/GLvUW5KbbUixExZ77",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.2006119,
+          18.9967866
+        ]
+      },
+      "properties": {
+        "name": "Dirección de Deporte y Cultura Física - DCF8",
+        "code": "FCF",
+        "campus_code": "CU",
+        "area": "Dependencias BUAP",
+        "buap_info_url": "https://plantafisica.buap.mx/content/direcci%C3%B3n-de-deporte-y-cultura-f%C3%ADsica",
+        "virtual_tour_url": "https://recorridosvirtuales.buap.mx/didecufi/",
+        "google_maps_url": "https://maps.app.goo.gl/Jc1htF2JjS6mM9Mu5",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.2030151,
+          18.9988177
+        ]
+      },
+      "properties": {
+        "name": "Dirección de Deporte y Cultura Física - DCF9-12",
+        "code": "FCF",
+        "campus_code": "CU",
+        "area": "Dependencias BUAP",
+        "buap_info_url": "https://plantafisica.buap.mx/content/direcci%C3%B3n-de-deporte-y-cultura-f%C3%ADsica",
+        "virtual_tour_url": "https://recorridosvirtuales.buap.mx/didecufi/",
+        "google_maps_url": "https://maps.app.goo.gl/H4ENgHnigBW7uT2f6",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.1946487,
+          18.9988441
+        ]
+      },
+      "properties": {
+        "name": "Dirección de Innovación y Transferencia de Conocimiento",
+        "code": null,
+        "campus_code": "CU",
+        "area": "Dependencias BUAP",
+        "buap_info_url": "https://plantafisica.buap.mx/content/direcci%C3%B3n-de-innovaci%C3%B3n-y-transferencia-de-conocimiento",
+        "virtual_tour_url": "https://recorridosvirtuales.buap.mx/stu/",
+        "google_maps_url": "https://maps.app.goo.gl/4cLy1JEv5SVaEYoU9",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.2008097,
+          18.9947965
+        ]
+      },
+      "properties": {
+        "name": "Dirección General de Cómputo y Tecnologías  y de la Información y Comunicaciones - DCyTIC",
+        "code": null,
+        "campus_code": "CU",
+        "area": "Dependencias BUAP",
+        "buap_info_url": "https://plantafisica.buap.mx/content/direcci%C3%B3n-general-de-c%C3%B3mputo-y-tecnolog%C3%ADas-de-la-informaci%C3%B3n-y-comunicaciones",
+        "virtual_tour_url": null,
+        "google_maps_url": "https://maps.app.goo.gl/LV29gvnc2yXQYoFj6",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.1983637,
+          19.0024992
+        ]
+      },
+      "properties": {
+        "name": "Dirección General de Cómputo y Tecnologías  y de la Información y Comunicaciones - DCyTIC2",
+        "code": null,
+        "campus_code": "CU",
+        "area": "Dependencias BUAP",
+        "buap_info_url": "https://plantafisica.buap.mx/content/direcci%C3%B3n-general-de-c%C3%B3mputo-y-tecnolog%C3%ADas-de-la-informaci%C3%B3n-y-comunicaciones",
+        "virtual_tour_url": null,
+        "google_maps_url": "https://maps.app.goo.gl/UPYSPXb9cvfwdFem7",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.2019853,
+          19.0021802
+        ]
+      },
+      "properties": {
+        "name": "Dirección General de Cómputo y Tecnologías  y de la Información y Comunicaciones - DCyTIC3",
+        "code": null,
+        "campus_code": "CU",
+        "area": "Dependencias BUAP",
+        "buap_info_url": "https://plantafisica.buap.mx/content/direcci%C3%B3n-general-de-c%C3%B3mputo-y-tecnolog%C3%ADas-de-la-informaci%C3%B3n-y-comunicaciones",
+        "virtual_tour_url": null,
+        "google_maps_url": "https://maps.app.goo.gl/6uMbJh1beXXtx8Y59",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.1944436,
+          18.9993042
+        ]
+      },
+      "properties": {
+        "name": "Estación Universitaria - ESU",
+        "code": "ESU",
+        "campus_code": "CU",
+        "area": "Dependencias BUAP",
+        "buap_info_url": "https://plantafisica.buap.mx/content/estaci%C3%B3n-de-servicio-universitaria",
+        "virtual_tour_url": "https://recorridosvirtuales.buap.mx/esu/",
+        "google_maps_url": "https://maps.app.goo.gl/i9tRTETFNRYSEyhA7",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.197287,
+          18.9972206
+        ]
+      },
+      "properties": {
+        "name": "Estadio Universitario - EU",
+        "code": "EU",
+        "campus_code": "CU",
+        "area": "Dependencias BUAP",
+        "buap_info_url": "https://plantafisica.buap.mx/content/estadio-universitario",
+        "virtual_tour_url": "https://recorridosvirtuales.buap.mx/didecufi/",
+        "google_maps_url": "https://maps.app.goo.gl/zeCth8Y7Ke96VwTK9",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.1964485,
+          18.9987148
+        ]
+      },
+      "properties": {
+        "name": "Herbario y Jardín Botánico - HJB",
+        "code": "HJB",
+        "campus_code": "CU",
+        "area": "Dependencias BUAP",
+        "buap_info_url": "https://plantafisica.buap.mx/content/herbario-y-jard%C3%ADn-bot%C3%A1nico",
+        "virtual_tour_url": "https://recorridosvirtuales.buap.mx/jardin-botanico/",
+        "google_maps_url": "https://maps.app.goo.gl/hfkd4csAgqowqVjU9",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.20074,
+          18.994741
+        ]
+      },
+      "properties": {
+        "name": "Museo de la Computación",
+        "code": "FCC",
+        "campus_code": "CU",
+        "area": "Dependencias BUAP",
+        "buap_info_url": "https://plantafisica.buap.mx/content/museo-de-la-computaci%C3%B3n",
+        "virtual_tour_url": null,
+        "google_maps_url": "https://maps.app.goo.gl/2eQkSSQE2iYfFcrdA",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.1971124,
+          18.9983059
+        ]
+      },
+      "properties": {
+        "name": "Secretaría Administrativa - Tienda BUAP",
+        "code": null,
+        "campus_code": "CU",
+        "area": "Dependencias BUAP",
+        "buap_info_url": "https://plantafisica.buap.mx/content/secretar%C3%ADa-administrativa-tienda-buap",
+        "virtual_tour_url": null,
+        "google_maps_url": "https://maps.app.goo.gl/VVqtcvT8RGcNmney5",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.195164,
+          18.998061
+        ]
+      },
+      "properties": {
+        "name": "Sistema Universitario de Alimentación Integral - SUA",
+        "code": "SUA",
+        "campus_code": "CU",
+        "area": "Dependencias BUAP",
+        "buap_info_url": null,
+        "virtual_tour_url": null,
+        "google_maps_url": "https://maps.app.goo.gl/crNY4KgCQYWfSQPh7",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.204396,
+          19.003495
+        ]
+      },
+      "properties": {
+        "name": "Teatro al Aire Libre - TAL",
+        "code": "TAL",
+        "campus_code": "CU",
+        "area": "Dependencias BUAP",
+        "buap_info_url": "https://plantafisica.buap.mx/content/teatro-al-aire-libre",
+        "virtual_tour_url": "https://recorridosvirtuales.buap.mx/multiaulas-lago/",
+        "google_maps_url": "https://maps.app.goo.gl/LLdmmE7J1jdfwn7N9",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.2017493,
+          19.0014465
+        ]
+      },
+      "properties": {
+        "name": "Torre General Académica y Servicios Administrativos - TGA",
+        "code": "TGA",
+        "campus_code": "CU",
+        "area": "Dependencias BUAP",
+        "buap_info_url": "https://plantafisica.buap.mx/content/torre-de-gesti%C3%B3n-acad%C3%A9mica-y-servicios-administrativos",
+        "virtual_tour_url": null,
+        "google_maps_url": "https://maps.app.goo.gl/zgrUWdAsYuGkb42D7",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.1992649,
+          18.9956414
+        ]
+      },
+      "properties": {
+        "name": "Unidad de Seminarios - US",
+        "code": "US",
+        "campus_code": "CU",
+        "area": "Dependencias BUAP",
+        "buap_info_url": "https://plantafisica.buap.mx/content/unidad-de-seminarios",
+        "virtual_tour_url": "https://recorridosvirtuales.buap.mx/dasu/",
+        "google_maps_url": "https://maps.app.goo.gl/gSekBYu1yjxTsepPA",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.203751,
+          19.003186
+        ]
+      },
+      "properties": {
+        "name": "EMA1",
+        "code": null,
+        "campus_code": "CU",
+        "area": "Edificios Multiaulas",
+        "buap_info_url": "https://plantafisica.buap.mx/content/edificio-multiaulas-ema1-0",
+        "virtual_tour_url": "https://recorridosvirtuales.buap.mx/multiaulas-lago/",
+        "google_maps_url": "https://maps.app.goo.gl/JTAR3vshtLp6o3QG9",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.2033586,
+          19.0024863
+        ]
+      },
+      "properties": {
+        "name": "EMA2",
+        "code": null,
+        "campus_code": "CU",
+        "area": "Edificios Multiaulas",
+        "buap_info_url": "https://plantafisica.buap.mx/content/edificio-multiaulas-ema2-0",
+        "virtual_tour_url": "https://recorridosvirtuales.buap.mx/arquitectura",
+        "google_maps_url": "https://maps.app.goo.gl/xFjQdKQZUPnEH1KU9",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.2022247,
+          19.0033875
+        ]
+      },
+      "properties": {
+        "name": "EMA3",
+        "code": null,
+        "campus_code": "CU",
+        "area": "Edificios Multiaulas",
+        "buap_info_url": "https://plantafisica.buap.mx/content/edificio-multiaulas-ema3-0",
+        "virtual_tour_url": "https://recorridosvirtuales.buap.mx/fisico-matematicas/",
+        "google_maps_url": "https://maps.app.goo.gl/LXVFChSLc5LRZfT78",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.2024124,
+          18.9972696
+        ]
+      },
+      "properties": {
+        "name": "EMA 4, 5  y 6",
+        "code": null,
+        "campus_code": "CU",
+        "area": "Edificios Multiaulas",
+        "buap_info_url": "https://plantafisica.buap.mx/content/edificio-multiaulas-ema4-0",
+        "virtual_tour_url": "https://recorridosvirtuales.buap.mx/caeto/",
+        "google_maps_url": "https://maps.app.goo.gl/H3hJSpT4imTBCBJKA",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.1996307,
+          18.9952984
+        ]
+      },
+      "properties": {
+        "name": "EMA7",
+        "code": null,
+        "campus_code": "CU",
+        "area": "Edificios Multiaulas",
+        "buap_info_url": "https://plantafisica.buap.mx/content/edificio-multiaulas-ema7",
+        "virtual_tour_url": "https://recorridosvirtuales.buap.mx/dasu/",
+        "google_maps_url": "https://maps.app.goo.gl/S7gZ8Prx64BnvQ52A",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.1998838,
+          19.0031114
+        ]
+      },
+      "properties": {
+        "name": "EMA8",
+        "code": null,
+        "campus_code": "CU",
+        "area": "Edificios Multiaulas",
+        "buap_info_url": "https://plantafisica.buap.mx/content/edificio-multiaulas-ema8-0",
+        "virtual_tour_url": "https://recorridosvirtuales.buap.mx/administracion/",
+        "google_maps_url": "https://maps.app.goo.gl/QbhyoSKzpFmb9ZQr8",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.2054654,
+          19.0056711
+        ]
+      },
+      "properties": {
+        "name": "Instituto de Ciencias - ICUAP1-4",
+        "code": "4",
+        "campus_code": "CU",
+        "area": "Institutos",
+        "buap_info_url": "https://plantafisica.buap.mx/content/icuap-instituto-de-ciencias-ic",
+        "virtual_tour_url": "https://recorridosvirtuales.buap.mx/icuap",
+        "google_maps_url": "https://maps.app.goo.gl/PukDteTXARDn46gJ8",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.204747,
+          19.004753
+        ]
+      },
+      "properties": {
+        "name": "Instituto de Ciencias - ICUAP5-6",
+        "code": "6",
+        "campus_code": "CU",
+        "area": "Institutos",
+        "buap_info_url": "https://plantafisica.buap.mx/content/icuap-instituto-de-ciencias-ic",
+        "virtual_tour_url": "https://recorridosvirtuales.buap.mx/computacion/",
+        "google_maps_url": "https://maps.app.goo.gl/uZ1sC5fbBYX2yDP89",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.2005396,
+          19.0014247
+        ]
+      },
+      "properties": {
+        "name": "Instituto de Ciencias - ICUAP7-10",
+        "code": "10",
+        "campus_code": "CU",
+        "area": "Institutos",
+        "buap_info_url": "https://plantafisica.buap.mx/content/icuap-instituto-de-ciencias-ic",
+        "virtual_tour_url": "https://recorridosvirtuales.buap.mx/biologia/",
+        "google_maps_url": "https://maps.app.goo.gl/UMidvgY4EdWMVJtk6",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.199742,
+          18.995547
+        ]
+      },
+      "properties": {
+        "name": "Instituto de Ciencias - ICUAP12",
+        "code": "ICUAP12",
+        "campus_code": "CU",
+        "area": "Institutos",
+        "buap_info_url": "https://plantafisica.buap.mx/content/icuap-instituto-de-ciencias-ic",
+        "virtual_tour_url": "https://recorridosvirtuales.buap.mx/dasu/",
+        "google_maps_url": "https://maps.app.goo.gl/EA4CJcGZ7iMvUKbS6",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.1959775,
+          19.0012384
+        ]
+      },
+      "properties": {
+        "name": "Instituto de Ciencias - ICUAP11 y 13",
+        "code": null,
+        "campus_code": "CU",
+        "area": "Institutos",
+        "buap_info_url": "https://plantafisica.buap.mx/content/icuap-instituto-de-ciencias-ic",
+        "virtual_tour_url": "https://recorridosvirtuales.buap.mx/caale/",
+        "google_maps_url": "https://maps.app.goo.gl/93QPT84wi626FryH7",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.2019881,
+          19.0040113
+        ]
+      },
+      "properties": {
+        "name": "IFUAP / Instituto de Física - IF",
+        "code": "IF",
+        "campus_code": "CU",
+        "area": "Institutos",
+        "buap_info_url": "https://plantafisica.buap.mx/content/ifuap-instituto-de-f%c3%adsica-if",
+        "virtual_tour_url": "https://recorridosvirtuales.buap.mx/fisico-matematicas/",
+        "google_maps_url": "https://maps.app.goo.gl/HMHtqTQLeBj8M2xe6",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.2054654,
+          19.0056711
+        ]
+      },
+      "properties": {
+        "name": "Instituto de Fisiología - IFI",
+        "code": "IFI",
+        "campus_code": "CU",
+        "area": "Institutos",
+        "buap_info_url": "https://plantafisica.buap.mx/content/instituto-de-fisiolog%c3%ada-ifi",
+        "virtual_tour_url": "https://recorridosvirtuales.buap.mx/icuap",
+        "google_maps_url": "https://maps.app.goo.gl/PukDteTXARDn46gJ8",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.1941332,
+          19.0007706
+        ]
+      },
+      "properties": {
+        "name": "Puerta 1",
+        "code": null,
+        "campus_code": "CU",
+        "area": "Accesos",
+        "buap_info_url": null,
+        "virtual_tour_url": null,
+        "google_maps_url": "https://maps.app.goo.gl/nezwikouXCLGNYXm9",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.196503,
+          18.9960588
+        ]
+      },
+      "properties": {
+        "name": "Puerta 2",
+        "code": null,
+        "campus_code": "CU",
+        "area": "Accesos",
+        "buap_info_url": null,
+        "virtual_tour_url": null,
+        "google_maps_url": "https://maps.app.goo.gl/igrqCoTGhukAoWmg7",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.2031196,
+          18.9964894
+        ]
+      },
+      "properties": {
+        "name": "Puerta 3",
+        "code": null,
+        "campus_code": "CU",
+        "area": "Accesos",
+        "buap_info_url": null,
+        "virtual_tour_url": null,
+        "google_maps_url": "https://maps.app.goo.gl/eUGY8b7ZQ8q7ZTix9",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.2041466,
+          18.9994197
+        ]
+      },
+      "properties": {
+        "name": "Puerta 4",
+        "code": null,
+        "campus_code": "CU",
+        "area": "Accesos",
+        "buap_info_url": null,
+        "virtual_tour_url": null,
+        "google_maps_url": "https://maps.app.goo.gl/cbpQqY3AZK8iY5A9A",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.204667,
+          19.001203
+        ]
+      },
+      "properties": {
+        "name": "Puerta 5",
+        "code": null,
+        "campus_code": "CU",
+        "area": "Accesos",
+        "buap_info_url": null,
+        "virtual_tour_url": null,
+        "google_maps_url": "https://maps.app.goo.gl/6v6EMjrPayUGenpk9",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.2037315,
+          19.001244
+        ]
+      },
+      "properties": {
+        "name": "Puerta 6",
+        "code": null,
+        "campus_code": "CU",
+        "area": "Accesos",
+        "buap_info_url": null,
+        "virtual_tour_url": null,
+        "google_maps_url": "https://maps.app.goo.gl/43QV8x6tk7Yg8sVW7",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.2044442,
+          19.0016995
+        ]
+      },
+      "properties": {
+        "name": "Puerta 7",
+        "code": null,
+        "campus_code": "CU",
+        "area": "Accesos",
+        "buap_info_url": null,
+        "virtual_tour_url": null,
+        "google_maps_url": "https://maps.app.goo.gl/kmxSHxLsUqMUtCc67",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.2057141,
+          19.0050821
+        ]
+      },
+      "properties": {
+        "name": "Puerta 9",
+        "code": null,
+        "campus_code": "CU",
+        "area": "Accesos",
+        "buap_info_url": null,
+        "virtual_tour_url": null,
+        "google_maps_url": "https://maps.app.goo.gl/nc6X8dM3Wt69Z54g8",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.205164,
+          19.005671
+        ]
+      },
+      "properties": {
+        "name": "Puerta 10",
+        "code": null,
+        "campus_code": "CU",
+        "area": "Accesos",
+        "buap_info_url": null,
+        "virtual_tour_url": null,
+        "google_maps_url": "https://maps.app.goo.gl/WqmV4KQuhQjPEvQh8",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.20499,
+          19.006044
+        ]
+      },
+      "properties": {
+        "name": "Puerta 11",
+        "code": null,
+        "campus_code": "CU",
+        "area": "Accesos",
+        "buap_info_url": null,
+        "virtual_tour_url": null,
+        "google_maps_url": "https://maps.app.goo.gl/brhrcZ3aeThHPKMT7",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.204304,
+          19.005512
+        ]
+      },
+      "properties": {
+        "name": "Puerta 12",
+        "code": null,
+        "campus_code": "CU",
+        "area": "Accesos",
+        "buap_info_url": null,
+        "virtual_tour_url": null,
+        "google_maps_url": "https://maps.app.goo.gl/toz24BwQ8Tk9fMGZA",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.2022005,
+          19.0044745
+        ]
+      },
+      "properties": {
+        "name": "Puerta 13",
+        "code": null,
+        "campus_code": "CU",
+        "area": "Accesos",
+        "buap_info_url": null,
+        "virtual_tour_url": null,
+        "google_maps_url": "https://maps.app.goo.gl/gP9j9cXpGq1JZ6bt5",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.1993386,
+          19.0032185
+        ]
+      },
+      "properties": {
+        "name": "Puerta 14",
+        "code": null,
+        "campus_code": "CU",
+        "area": "Accesos",
+        "buap_info_url": null,
+        "virtual_tour_url": null,
+        "google_maps_url": "https://maps.app.goo.gl/Ti9xN5bQ9QYYbKMN7",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.1969779,
+          19.0022178
+        ]
+      },
+      "properties": {
+        "name": "Puerta 15",
+        "code": null,
+        "campus_code": "CU",
+        "area": "Accesos",
+        "buap_info_url": null,
+        "virtual_tour_url": null,
+        "google_maps_url": "https://maps.app.goo.gl/5RffZ5ubZjC4gWhr8",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.1963929,
+          19.0019062
+        ]
+      },
+      "properties": {
+        "name": "Puerta 16",
+        "code": null,
+        "campus_code": "CU",
+        "area": "Accesos",
+        "buap_info_url": null,
+        "virtual_tour_url": null,
+        "google_maps_url": "https://maps.app.goo.gl/wKJy8w4T763q7Khq9",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.194622,
+          19.001146
+        ]
+      },
+      "properties": {
+        "name": "Puerta 17",
+        "code": null,
+        "campus_code": "CU",
+        "area": "Accesos",
+        "buap_info_url": null,
+        "virtual_tour_url": null,
+        "google_maps_url": "https://maps.app.goo.gl/mftdnyYW1xYwXJZW7",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.204428,
+          18.999541
+        ]
+      },
+      "properties": {
+        "name": "Puerta 18",
+        "code": null,
+        "campus_code": "CU",
+        "area": "Accesos",
+        "buap_info_url": null,
+        "virtual_tour_url": null,
+        "google_maps_url": "https://maps.app.goo.gl/i1VoyCfL8gkd9brq9",
+        "is_geo_accurate": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.206028,
+          18.998472
+        ]
+      },
+      "properties": {
+        "name": "Puerta 19",
+        "code": null,
+        "campus_code": "CU",
+        "area": "Accesos",
+        "buap_info_url": null,
+        "virtual_tour_url": null,
+        "google_maps_url": "https://maps.app.goo.gl/3L6BxMLv8xfj6YuN7",
+        "is_geo_accurate": true
+      }
+    }
+  ]
+}

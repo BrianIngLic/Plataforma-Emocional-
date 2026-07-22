@@ -54,6 +54,21 @@ export class StudentSettingsComponent implements OnInit {
   inPsychologistQueue = false;
   inNutritionistQueue = false;
 
+  isLoadingSpecialists = false;
+  psychologists: any[] = [];
+  nutritionists: any[] = [];
+  currentPsychologistId: string | null = null;
+  currentNutritionistId: string | null = null;
+  remainingPsyChanges = 2;
+  remainingNutChanges = 2;
+
+  currentPsychologist: any = null;
+  currentNutritionist: any = null;
+  psyEvalsFromStudent: any[] = [];
+  nutEvalsFromStudent: any[] = [];
+  showPsyDirectory = false;
+  showNutDirectory = false;
+
   // ponytail: control de pestañas y toggle de origen
   activeTab = 'general'; // general, family_tree, family_details, emergency, security
   isForaneo = false;
@@ -300,6 +315,8 @@ export class StudentSettingsComponent implements OnInit {
           if (q.specialty === 'nutritionist') this.inNutritionistQueue = true;
         });
       }
+
+      await this.loadSpecialists();
     }
   }
 
@@ -509,88 +526,271 @@ export class StudentSettingsComponent implements OnInit {
     }
   }
 
-  async solicitarEspecialista(specialty: 'psychologist' | 'nutritionist') {
+  async loadSpecialists() {
     const user = this.currentUser;
     if (!user || !user.id) return;
-    
-    if (!this.selectedFaculty) {
-      this.dialog.open(FeedbackModalComponent, {
-        width: '400px',
-        data: { 
-          type: 'error', 
-          title: 'Facultad Requerida', 
-          message: 'Por favor selecciona y guarda tu facultad primero para poder asignarte un especialista de tu área.' 
+
+    this.isLoadingSpecialists = true;
+    try {
+      // 1. Obtener expediente clínico del estudiante para saber especialistas actuales
+      const { data: rec } = await this.supabaseService.supabase
+        .from('student_clinical_records')
+        .select('primary_psychologist_id, primary_nutritionist_id')
+        .eq('student_id', user.id)
+        .maybeSingle();
+
+      if (rec) {
+        this.currentPsychologistId = rec.primary_psychologist_id;
+        this.currentNutritionistId = rec.primary_nutritionist_id;
+        this.hasPsychologist = !!rec.primary_psychologist_id;
+        this.hasNutritionist = !!rec.primary_nutritionist_id;
+      }
+
+      // 2. Obtener lista de especialistas desde la RPC para ambos roles
+      const [psyList, nutList] = await Promise.all([
+        this.clinicalService.getSpecialistsForStudent(user.id, 3),
+        this.clinicalService.getSpecialistsForStudent(user.id, 4)
+      ]);
+
+      // 3. Procesar listas: calcular distancia, tier de proximidad y ordenar
+      this.psychologists = this.processSpecialistOptions(psyList);
+      this.nutritionists = this.processSpecialistOptions(nutList);
+
+      // Encontrar objetos de especialistas actuales
+      if (this.currentPsychologistId) {
+        this.currentPsychologist = this.psychologists.find(p => p.id === this.currentPsychologistId);
+        if (!this.currentPsychologist) {
+          this.currentPsychologist = await this.fetchSpecialistProfile(this.currentPsychologistId);
         }
-      });
-      return;
+      } else {
+        this.currentPsychologist = null;
+      }
+
+      if (this.currentNutritionistId) {
+        this.currentNutritionist = this.nutritionists.find(n => n.id === this.currentNutritionistId);
+        if (!this.currentNutritionist) {
+          this.currentNutritionist = await this.fetchSpecialistProfile(this.currentNutritionistId);
+        }
+      } else {
+        this.currentNutritionist = null;
+      }
+
+      // 4. Obtener las evaluaciones que el estudiante le ha puesto a sus especialistas actuales
+      const { data: studentEvals } = await this.supabaseService.supabase
+        .from('session_evaluations')
+        .select('score_global, professional_id, q5_comment, created_at')
+        .eq('patient_id', user.id);
+
+      if (studentEvals) {
+        this.psyEvalsFromStudent = studentEvals.filter(e => e.professional_id === this.currentPsychologistId);
+        this.nutEvalsFromStudent = studentEvals.filter(e => e.professional_id === this.currentNutritionistId);
+      } else {
+        this.psyEvalsFromStudent = [];
+        this.nutEvalsFromStudent = [];
+      }
+
+      // 5. Obtener cambios restantes desde el tracking de políticas
+      const term = this.getCurrentAcademicPeriodValue();
+      const { data: policy } = await this.supabaseService.supabase
+        .from('student_policy_tracking')
+        .select('specialist_changes_psychologist, specialist_changes_nutritionist')
+        .eq('student_id', user.id)
+        .eq('academic_period', term)
+        .maybeSingle();
+
+      this.remainingPsyChanges = 2 - (policy?.specialist_changes_psychologist || 0);
+      this.remainingNutChanges = 2 - (policy?.specialist_changes_nutritionist || 0);
+    } catch (err) {
+      console.error('Error al cargar especialistas:', err);
+    } finally {
+      this.isLoadingSpecialists = false;
     }
+  }
+
+  async fetchSpecialistProfile(id: string): Promise<any> {
+    const { data: profile } = await this.supabaseService.supabase
+      .from('profiles')
+      .select('user_id, first_name, last_name, faculty')
+      .eq('user_id', id)
+      .maybeSingle();
+
+    if (!profile) return null;
+
+    const { data: settings } = await this.supabaseService.supabase
+      .from('health_professional_settings')
+      .select('office_room, building:buildings(name)')
+      .eq('professional_id', id)
+      .maybeSingle();
+
+    const { data: evals } = await this.supabaseService.supabase
+      .from('session_evaluations')
+      .select('score_global')
+      .eq('professional_id', id);
+
+    const scores = evals?.map(e => e.score_global) || [];
+    const rating_avg = scores.length > 0 ? parseFloat((scores.reduce((a,b)=>a+b, 0)/scores.length).toFixed(2)) : null;
+
+    return {
+      id: profile.user_id,
+      first_name: profile.first_name,
+      last_name: profile.last_name,
+      faculty_name: profile.faculty,
+      building_name: (settings as any)?.building?.name || null,
+      office_room: settings?.office_room || null,
+      rating_avg,
+      total_evaluaciones: scores.length
+    };
+  }
+
+  getStudentAvgRatingForSpecialist(evals: any[]): number | null {
+    if (!evals || evals.length === 0) return null;
+    const total = evals.reduce((sum, e) => sum + e.score_global, 0);
+    return parseFloat((total / evals.length).toFixed(2));
+  }
+
+  processSpecialistOptions(rawList: any[]): any[] {
+    const processed = rawList
+      .map(item => {
+        let distance_km: number | null = null;
+        if (item.student_lat && item.student_lng && item.specialist_lat && item.specialist_lng) {
+          distance_km = this.haversineKm(
+            Number(item.student_lat),
+            Number(item.student_lng),
+            Number(item.specialist_lat),
+            Number(item.specialist_lng)
+          );
+        }
+
+        // Tier de proximidad: same_faculty, same_campus, other_campus
+        let proximity_tier: 'same_faculty' | 'same_campus' | 'other_campus' = 'other_campus';
+        if (item.faculty_name && this.userFaculty && item.faculty_name.toLowerCase() === this.userFaculty.toLowerCase()) {
+          proximity_tier = 'same_faculty';
+        } else if (item.campus_code && item.student_lat && item.student_lng && item.specialist_lat && item.specialist_lng) {
+          proximity_tier = 'same_campus';
+        }
+
+        return {
+          ...item,
+          distancia_km: distance_km,
+          proximity_tier
+        };
+      })
+      .filter(item => {
+        // Mostrar siempre a los especialistas de su facultad (si los hay)
+        if (item.proximity_tier === 'same_faculty') {
+          return true;
+        }
+        // Para el resto de tratantes: mostrar sólo si tienen espacio disponible
+        const capacity = item.capacity || 35;
+        const currentLoad = item.current_load || 0;
+        return currentLoad < capacity;
+      });
+
+    return this.sortSpecialists(processed);
+  }
+
+  haversineKm(lat1: number, lon1: number, lat2: number, lon2: number): number {
+    const R = 6371; // Radio de la Tierra en km
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return parseFloat((R * c).toFixed(2));
+  }
+
+  sortSpecialists(list: any[]): any[] {
+    return list.sort((a, b) => {
+      // 1. Prioridad por Tier de proximidad
+      const tiers = { same_faculty: 1, same_campus: 2, other_campus: 3 };
+      const tierA = tiers[a.proximity_tier as 'same_faculty' | 'same_campus' | 'other_campus'] || 3;
+      const tierB = tiers[b.proximity_tier as 'same_faculty' | 'same_campus' | 'other_campus'] || 3;
+      if (tierA !== tierB) return tierA - tierB;
+
+      // 2. Distancia ASC
+      const distA = a.distancia_km ?? Infinity;
+      const distB = b.distancia_km ?? Infinity;
+      if (distA !== distB) return distA - distB;
+
+      // 3. Calificación DESC
+      const rateA = a.rating_avg ?? 0;
+      const rateB = b.rating_avg ?? 0;
+      if (rateA !== rateB) return rateB - rateA;
+
+      // 4. Capacidad libre DESC
+      const capA = (a.capacity || 35) - (a.current_load || 0);
+      const capB = (b.capacity || 35) - (b.current_load || 0);
+      return capB - capA;
+    });
+  }
+
+  getCurrentAcademicPeriodValue(): string {
+    const d = new Date();
+    const term = d.getMonth() < 6 ? 'Primavera' : 'Otoño';
+    return `${term} ${d.getFullYear()}`;
+  }
+
+  getStars(avg: number | null): ('full' | 'half' | 'empty')[] {
+    const stars: ('full' | 'half' | 'empty')[] = [];
+    if (!avg) {
+      return Array(5).fill('empty');
+    }
+    const floor = Math.floor(avg);
+    const decimal = avg - floor;
+    for (let i = 0; i < 5; i++) {
+      if (i < floor) {
+        stars.push('full');
+      } else if (i === floor && decimal >= 0.25 && decimal < 0.75) {
+        stars.push('half');
+      } else if (i === floor && decimal >= 0.75) {
+        stars.push('full');
+      } else {
+        stars.push('empty');
+      }
+    }
+    return stars;
+  }
+
+  async selectSpecialist(specialist: any, roleId: 3 | 4) {
+    const user = this.currentUser;
+    if (!user || !user.id) return;
 
     this.isSaving = true;
     try {
-      const roleId = specialty === 'psychologist' ? 3 : 4;
-      const assignedId = await this.clinicalService.getSpecialistWithLeastLoad(roleId, user.id);
-      
-      if (assignedId) {
-        const field = specialty === 'psychologist' ? 'primary_psychologist_id' : 'primary_nutritionist_id';
-        const { data: existing } = await this.supabaseService.supabase
-          .from('student_clinical_records')
-          .select('student_id')
-          .eq('student_id', user.id)
-          .maybeSingle();
-
-        if (existing) {
-          await this.supabaseService.supabase
-            .from('student_clinical_records')
-            .update({ [field]: assignedId })
-            .eq('student_id', user.id);
-        } else {
-          await this.supabaseService.supabase
-            .from('student_clinical_records')
-            .insert({
-              student_id: user.id,
-              [field]: assignedId,
-              known_conditions: ['Test_Completado'],
-              consent_given: true
-            });
-        }
-
-        if (specialty === 'psychologist') this.hasPsychologist = true;
-        else this.hasNutritionist = true;
-
+      const res = await this.clinicalService.selectSpecialist(user.id, specialist.id, roleId);
+      if (res.error) {
         this.dialog.open(FeedbackModalComponent, {
           width: '400px',
-          data: { 
-            type: 'success', 
-            title: 'Asignación Exitosa', 
-            message: `Se te ha asignado un ${specialty === 'psychologist' ? 'psicólogo' : 'nutriólogo'} de tu facultad exitosamente.` 
+          data: {
+            type: 'error',
+            title: 'Límite Excedido',
+            message: res.error.message || 'No se pudo cambiar de especialista.'
           }
         });
       } else {
-        const { error: queueErr } = await this.supabaseService.supabase
-          .from('virtual_queue')
-          .insert({
-            student_id: user.id,
-            specialty: specialty,
-            faculty: this.selectedFaculty
-          });
-
-        if (specialty === 'psychologist') this.inPsychologistQueue = true;
-        else this.inNutritionistQueue = true;
-
         this.dialog.open(FeedbackModalComponent, {
           width: '400px',
-          data: { 
-            type: 'success', 
-            title: 'Fila de Espera', 
-            message: `Todos los especialistas de tu facultad están saturados. Has sido colocado en la fila de espera virtual.` 
+          data: {
+            type: 'success',
+            title: 'Asignación Actualizada',
+            message: `Has seleccionado a ${specialist.first_name} ${specialist.last_name} como tu nuevo ${roleId === 3 ? 'psicólogo' : 'nutriólogo'} tratante.`
           }
         });
+        this.showPsyDirectory = false;
+        this.showNutDirectory = false;
+        await this.loadSpecialists();
       }
-    } catch (e) {
-      console.error(e);
+    } catch (err: any) {
+      console.error(err);
       this.dialog.open(FeedbackModalComponent, {
         width: '400px',
-        data: { type: 'error', title: 'Error', message: 'No se pudo procesar la solicitud de asignación.' }
+        data: {
+          type: 'error',
+          title: 'Error',
+          message: 'Ocurrió un error inesperado al procesar el cambio.'
+        }
       });
     } finally {
       this.isSaving = false;

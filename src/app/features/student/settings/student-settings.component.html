@@ -866,59 +866,382 @@
         </div>
       </div>
 
-      <!-- Asignación de Especialista -->
-      <div class="card settings-card" style="margin-top: 1.5rem;" *ngIf="!hasPsychologist || !hasNutritionist || inPsychologistQueue || inNutritionistQueue">
+      <!-- Asignación y Selección de Especialistas -->
+      <div class="card settings-card" style="margin-top: 1.5rem;">
         <div class="card-header">
-          <h3><mat-icon>assignment_ind</mat-icon> Asignación de Especialista</h3>
-          <p>Si no tienes un especialista asignado, puedes solicitarlo aquí. Buscaremos disponibilidad en tu facultad.</p>
+          <h3><mat-icon style="color: var(--accent-purple);">assignment_ind</mat-icon> Directorio y Selección de Especialistas</h3>
+          <p>Selecciona o cambia libremente tus especialistas tratantes. La lista se ordena por proximidad a tu facultad y calificación promedio.</p>
         </div>
         
-        <div class="card-body" style="display: flex; flex-direction: column; gap: 1.25rem;">
-          <!-- Psicología -->
-          <div style="border: 1px solid var(--border-color); border-radius: 10px; padding: 1rem; display: flex; justify-content: space-between; align-items: center; background: var(--glass-bg);">
-            <div>
-              <div style="font-weight: 700; color: var(--text-primary); font-size: 0.95rem; margin-bottom: 0.25rem; display: flex; align-items: center; gap: 0.4rem;">
-                <mat-icon style="color: #6366f1;">psychology</mat-icon> Área de Psicología
-              </div>
-              <div style="font-size: 0.8rem; color: var(--text-secondary);">
-                {{ hasPsychologist ? 'Psicólogo asignado' : (inPsychologistQueue ? 'En fila de espera virtual' : 'Sin psicólogo asignado') }}
-              </div>
-            </div>
-            <div>
-              <span *ngIf="hasPsychologist" style="color: #10b981; font-weight: 600; font-size: 0.85rem; display: flex; align-items: center; gap: 0.25rem;">
-                <mat-icon>check_circle</mat-icon> Asignado
-              </span>
-              <span *ngIf="!hasPsychologist && inPsychologistQueue" style="color: #f59e0b; font-weight: 600; font-size: 0.85rem; display: flex; align-items: center; gap: 0.25rem;">
-                <mat-icon>hourglass_empty</mat-icon> En Espera
-              </span>
-              <button *ngIf="!hasPsychologist && !inPsychologistQueue" mat-flat-button color="primary" (click)="solicitarEspecialista('psychologist')" [disabled]="isSaving">
-                Solicitar Psicólogo
-              </button>
-            </div>
+        <div class="card-body" style="display: flex; flex-direction: column; gap: 2rem;">
+          
+          <div *ngIf="isLoadingSpecialists" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem; gap: 10px;">
+            <mat-icon class="spin-icon" style="font-size: 2rem; width: 2rem; height: 2rem; color: var(--accent-purple);">sync</mat-icon>
+            <span style="font-size: 0.9rem; color: var(--text-secondary);">Cargando especialistas y calculando distancias...</span>
           </div>
 
-          <!-- Nutrición -->
-          <div style="border: 1px solid var(--border-color); border-radius: 10px; padding: 1rem; display: flex; justify-content: space-between; align-items: center; background: var(--glass-bg);">
-            <div>
-              <div style="font-weight: 700; color: var(--text-primary); font-size: 0.95rem; margin-bottom: 0.25rem; display: flex; align-items: center; gap: 0.4rem;">
-                <mat-icon style="color: #10b981;">restaurant</mat-icon> Área de Nutrición
+          <ng-container *ngIf="!isLoadingSpecialists">
+            <!-- ÁREA DE PSICOLOGÍA -->
+            <div class="specialist-role-section" style="display: flex; flex-direction: column; gap: 1rem;">
+              <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 0.5rem;">
+                <h4 style="margin: 0; font-size: 1.05rem; font-weight: 700; color: var(--text-primary); display: flex; align-items: center; gap: 0.5rem;">
+                  <mat-icon style="color: #8b5cf6;">psychology</mat-icon> Especialistas en Psicología
+                </h4>
+                <span class="badge" [class.badge-success]="remainingPsyChanges > 0" [class.badge-error]="remainingPsyChanges === 0" style="font-size: 0.75rem; padding: 0.3rem 0.6rem; border-radius: 20px;">
+                  {{ remainingPsyChanges }} de 2 cambios disponibles
+                </span>
               </div>
-              <div style="font-size: 0.8rem; color: var(--text-secondary);">
-                {{ hasNutritionist ? 'Nutriólogo asignado' : (inNutritionistQueue ? 'En fila de espera virtual' : 'Sin nutriólogo asignado') }}
+
+              <!-- Especialista Asignado Actual -->
+              <div *ngIf="currentPsychologist" style="border: 1px solid rgba(139, 92, 246, 0.2); background: rgba(139, 92, 246, 0.03); border-radius: 12px; padding: 1.25rem; display: flex; flex-direction: column; gap: 1rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                  <div style="display: flex; gap: 1rem; align-items: center;">
+                    <div style="width: 50px; height: 50px; border-radius: 50%; background: #8b5cf6; color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.2rem;">
+                      {{ currentPsychologist.first_name.charAt(0) }}{{ currentPsychologist.last_name.charAt(0) }}
+                    </div>
+                    <div>
+                      <div style="font-weight: 700; font-size: 1rem; color: var(--text-primary);">
+                        Psic. {{ currentPsychologist.first_name }} {{ currentPsychologist.last_name }}
+                      </div>
+                      <div style="font-size: 0.8rem; color: var(--text-secondary);">
+                        {{ currentPsychologist.faculty_name }} • {{ currentPsychologist.building_name || 'Edificio Principal' }} (Cub. {{ currentPsychologist.office_room || 'N/A' }})
+                      </div>
+                      <!-- Promedio General -->
+                      <div style="display: flex; align-items: center; gap: 6px; margin-top: 4px;">
+                        <span style="font-size: 0.78rem; color: var(--text-secondary);">Calificación General:</span>
+                        <div class="stars-rating" *ngIf="currentPsychologist.total_evaluaciones > 0" style="display: flex; align-items: center; gap: 1px;">
+                          <mat-icon *ngFor="let star of getStars(currentPsychologist.rating_avg)" style="font-size: 14px; width: 14px; height: 14px;" [style.color]="star === 'full' || star === 'half' ? '#fbbf24' : 'rgba(255,255,255,0.2)'">
+                            {{ star === 'full' ? 'star' : (star === 'half' ? 'star_half' : 'star_border') }}
+                          </mat-icon>
+                          <span style="font-size: 0.78rem; margin-left: 4px; font-weight: 600; color: var(--text-primary);">{{ currentPsychologist.rating_avg }}</span>
+                        </div>
+                        <span *ngIf="currentPsychologist.total_evaluaciones === 0" style="font-size: 0.72rem; color: var(--text-secondary); font-style: italic;">Sin evaluaciones aún</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <button mat-stroked-button color="accent" (click)="showPsyDirectory = !showPsyDirectory" style="border-radius: 8px;">
+                    <mat-icon>{{ showPsyDirectory ? 'close' : 'swap_horiz' }}</mat-icon>
+                    {{ showPsyDirectory ? 'Cancelar' : 'Cambiar de especialista' }}
+                  </button>
+                </div>
+
+                <!-- Tus Evaluaciones a este Psicólogo -->
+                <div style="background: rgba(255, 255, 255, 0.02); border-radius: 8px; padding: 1rem; border: 1px solid rgba(255,255,255,0.04);">
+                  <div style="font-weight: 600; font-size: 0.85rem; color: var(--text-primary); margin-bottom: 0.5rem; display: flex; align-items: center; justify-content: space-between;">
+                    <span>Tus Evaluaciones en Sesión:</span>
+                    <span *ngIf="psyEvalsFromStudent.length > 0" style="font-size: 0.8rem; color: var(--accent-purple); font-weight: 700; display: flex; align-items: center; gap: 4px;">
+                      Promedio: 
+                      <mat-icon *ngFor="let star of getStars(getStudentAvgRatingForSpecialist(psyEvalsFromStudent))" style="font-size: 12px; width: 12px; height: 12px; color: #fbbf24;">star</mat-icon>
+                      ({{ getStudentAvgRatingForSpecialist(psyEvalsFromStudent) }})
+                    </span>
+                  </div>
+                  
+                  <div *ngIf="psyEvalsFromStudent.length === 0" style="font-size: 0.8rem; color: var(--text-secondary); font-style: italic;">
+                    Aún no has evaluado a este especialista. Podrás hacerlo al calificar tus sesiones completadas.
+                  </div>
+                  
+                  <div *ngIf="psyEvalsFromStudent.length > 0" style="display: flex; flex-direction: column; gap: 0.5rem; max-height: 120px; overflow-y: auto; padding-right: 4px;">
+                    <div *ngFor="let ev of psyEvalsFromStudent" style="display: flex; flex-direction: column; gap: 2px; padding: 0.4rem; background: rgba(255,255,255,0.01); border-radius: 6px; border-left: 3px solid var(--accent-purple);">
+                      <div style="display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--text-secondary);">
+                        <span>{{ ev.created_at | date:'shortDate' }}</span>
+                        <div style="display: flex; align-items: center; gap: 1px;">
+                          <mat-icon style="font-size: 10px; width: 10px; height: 10px; color: #fbbf24;">star</mat-icon>
+                          <span>{{ ev.score_global }}</span>
+                        </div>
+                      </div>
+                      <div style="font-size: 0.75rem; color: var(--text-primary); font-style: italic;">
+                        {{ ev.q5_comment || 'Sin comentario escrito' }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- No Asignado State -->
+              <div *ngIf="!currentPsychologist" style="border: 1px dashed rgba(255,255,255,0.1); border-radius: 12px; padding: 2rem; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; text-align: center;">
+                <mat-icon style="font-size: 2.5rem; width: 2.5rem; height: 2.5rem; color: var(--text-secondary); opacity: 0.6;">psychology</mat-icon>
+                <div>
+                  <div style="font-weight: 700; font-size: 0.95rem; color: var(--text-primary);">No tienes un psicólogo asignado</div>
+                  <div style="font-size: 0.8rem; color: var(--text-secondary); max-width: 350px; margin-top: 4px;">
+                    Para recibir terapia psicológica, busca y selecciona un especialista del directorio de tu facultad.
+                  </div>
+                </div>
+                <button mat-flat-button color="primary" (click)="showPsyDirectory = !showPsyDirectory" style="border-radius: 8px;">
+                  <mat-icon>{{ showPsyDirectory ? 'close' : 'search' }}</mat-icon>
+                  {{ showPsyDirectory ? 'Ocultar directorio' : 'Buscar especialista' }}
+                </button>
+              </div>
+
+              <!-- Listado de psicólogos (Buscador/Directorio) -->
+              <div class="specialist-grid animate-scale-in" *ngIf="showPsyDirectory" style="display: grid; grid-template-columns: 1fr; gap: 1rem; margin-top: 0.5rem;">
+                <div *ngFor="let s of psychologists" 
+                     [style.border-color]="s.id === currentPsychologistId ? '#8b5cf6' : 'rgba(255,255,255,0.06)'"
+                     [style.background]="s.id === currentPsychologistId ? 'rgba(139, 92, 246, 0.05)' : 'var(--input-bg)'"
+                     style="border: 1px solid; border-radius: 12px; padding: 1.25rem; display: flex; gap: 1.25rem; align-items: center; transition: all 0.2s; position: relative; flex-wrap: wrap;">
+                  
+                  <!-- Avatar -->
+                  <div class="specialist-avatar" style="width: 50px; height: 50px; border-radius: 50%; background: #8b5cf6; color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.2rem; shrink: 0;">
+                    {{ s.first_name.charAt(0) }}{{ s.last_name.charAt(0) }}
+                  </div>
+
+                  <!-- Info -->
+                  <div style="flex: 1; min-width: 200px; display: flex; flex-direction: column; gap: 0.35rem;">
+                    <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                      <span style="font-weight: 700; font-size: 0.95rem; color: var(--text-primary);">
+                        Psic. {{ s.first_name }} {{ s.last_name }}
+                      </span>
+                      <!-- Proximity Badge -->
+                      <span *ngIf="s.proximity_tier === 'same_faculty'" style="background: rgba(16, 185, 129, 0.15); color: #10b981; font-size: 0.7rem; font-weight: 700; padding: 2px 6px; border-radius: 4px; display: flex; align-items: center; gap: 3px;">
+                        🏫 Tu facultad
+                      </span>
+                      <span *ngIf="s.proximity_tier === 'same_campus'" style="background: rgba(59, 130, 246, 0.15); color: #3b82f6; font-size: 0.7rem; font-weight: 700; padding: 2px 6px; border-radius: 4px; display: flex; align-items: center; gap: 3px;">
+                        🏛️ Mismo campus · {{ s.distancia_km }} km
+                      </span>
+                      <span *ngIf="s.proximity_tier === 'other_campus'" style="background: rgba(156, 163, 175, 0.15); color: #9ca3af; font-size: 0.7rem; font-weight: 700; padding: 2px 6px; border-radius: 4px; display: flex; align-items: center; gap: 3px;">
+                        📍 Otro campus: {{ s.faculty_name }} · {{ s.distancia_km }} km
+                      </span>
+                    </div>
+
+                    <div style="font-size: 0.8rem; color: var(--text-secondary); display: flex; align-items: center; gap: 4px; flex-wrap: wrap;">
+                      <span>{{ s.faculty_name }} ({{ s.campus_name }})</span>
+                      <span style="opacity: 0.5;">|</span>
+                      <span style="font-weight: 500; text-transform: capitalize;">{{ s.modality }}</span>
+                      <span *ngIf="s.building_name" style="opacity: 0.5;">|</span>
+                      <span *ngIf="s.building_name">{{ s.building_name }}, Cub. {{ s.office_room || 'N/A' }}</span>
+                    </div>
+
+                    <!-- Rating -->
+                    <div style="display: flex; align-items: center; gap: 6px;">
+                      <div class="stars-rating" *ngIf="s.total_evaluaciones > 0" style="display: flex; align-items: center; gap: 1px;">
+                        <mat-icon *ngFor="let star of getStars(s.rating_avg)" style="font-size: 14px; width: 14px; height: 14px;" [style.color]="star === 'full' || star === 'half' ? '#fbbf24' : 'rgba(255,255,255,0.2)'">
+                          {{ star === 'full' ? 'star' : (star === 'half' ? 'star_half' : 'star_border') }}
+                        </mat-icon>
+                        <span style="font-size: 0.78rem; margin-left: 4px; font-weight: 600; color: var(--text-primary);">{{ s.rating_avg }}</span>
+                        <span style="font-size: 0.7rem; color: var(--text-secondary); margin-left: 2px;">({{ s.total_evaluaciones }} evaluaciones)</span>
+                      </div>
+                      <div *ngIf="s.total_evaluaciones === 0" style="font-size: 0.72rem; color: var(--text-secondary); font-style: italic; display: flex; align-items: center; gap: 3px;">
+                        <mat-icon style="font-size: 14px; width: 14px; height: 14px;">star_outline</mat-icon> Sin evaluaciones aún
+                      </div>
+                    </div>
+
+                    <!-- Capacidad -->
+                    <div style="display: flex; align-items: center; gap: 8px; width: 100%; max-width: 300px; margin-top: 2px;">
+                      <div style="font-size: 0.72rem; color: var(--text-secondary); white-space: nowrap; width: 60px;">
+                        Carga: {{ s.current_load }} / {{ s.capacity || 35 }}
+                      </div>
+                      <div style="flex: 1; height: 4px; background: rgba(255,255,255,0.08); border-radius: 2px; overflow: hidden;">
+                        <div [style.width.%]="(s.current_load / (s.capacity || 35)) * 100"
+                             [style.background]="(s.current_load / (s.capacity || 35)) >= 0.9 ? '#ef4444' : '#10b981'"
+                             style="height: 100%; transition: width 0.3s;">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Acción -->
+                  <div style="shrink: 0; display: flex; flex-direction: column; align-items: flex-end; gap: 6px;">
+                    <span *ngIf="s.id === currentPsychologistId" style="color: #10b981; font-weight: 700; font-size: 0.82rem; display: flex; align-items: center; gap: 4px; background: rgba(16,185,129,0.1); padding: 4px 8px; border-radius: 6px;">
+                      <mat-icon style="font-size:16px; width:16px; height:16px;">check_circle</mat-icon> Asignado
+                    </span>
+                    <button *ngIf="s.id !== currentPsychologistId" 
+                            mat-flat-button 
+                            color="primary" 
+                            (click)="selectSpecialist(s, 3)" 
+                            [disabled]="isSaving || remainingPsyChanges === 0"
+                            style="border-radius: 8px; font-size: 0.8rem; padding: 0 1rem; height: 32px; line-height: 32px;">
+                      Elegir
+                    </button>
+                  </div>
+                </div>
+
+                <div *ngIf="psychologists.length === 0" style="padding: 1.5rem; text-align: center; color: var(--text-secondary); font-style: italic; background: rgba(255,255,255,0.02); border-radius: 8px; border: 1px dashed rgba(255,255,255,0.06);">
+                  No hay psicólogos con facultad asignada registrados en el sistema.
+                </div>
               </div>
             </div>
-            <div>
-              <span *ngIf="hasNutritionist" style="color: #10b981; font-weight: 600; font-size: 0.85rem; display: flex; align-items: center; gap: 0.25rem;">
-                <mat-icon>check_circle</mat-icon> Asignado
-              </span>
-              <span *ngIf="!hasNutritionist && inNutritionistQueue" style="color: #f59e0b; font-weight: 600; font-size: 0.85rem; display: flex; align-items: center; gap: 0.25rem;">
-                <mat-icon>hourglass_empty</mat-icon> En Espera
-              </span>
-              <button *ngIf="!hasNutritionist && !inNutritionistQueue" mat-flat-button color="primary" (click)="solicitarEspecialista('nutritionist')" [disabled]="isSaving">
-                Solicitar Nutriólogo
-              </button>
+
+            <!-- ÁREA DE NUTRICIÓN -->
+            <div class="specialist-role-section" style="display: flex; flex-direction: column; gap: 1rem; margin-top: 2rem;">
+              <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 0.5rem;">
+                <h4 style="margin: 0; font-size: 1.05rem; font-weight: 700; color: var(--text-primary); display: flex; align-items: center; gap: 0.5rem;">
+                  <mat-icon style="color: #10b981;">restaurant</mat-icon> Especialistas en Nutrición
+                </h4>
+                <span class="badge" [class.badge-success]="remainingNutChanges > 0" [class.badge-error]="remainingNutChanges === 0" style="font-size: 0.75rem; padding: 0.3rem 0.6rem; border-radius: 20px;">
+                  {{ remainingNutChanges }} de 2 cambios disponibles
+                </span>
+              </div>
+
+              <!-- Especialista Asignado Actual -->
+              <div *ngIf="currentNutritionist" style="border: 1px solid rgba(16, 185, 129, 0.2); background: rgba(16, 185, 129, 0.03); border-radius: 12px; padding: 1.25rem; display: flex; flex-direction: column; gap: 1rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                  <div style="display: flex; gap: 1rem; align-items: center;">
+                    <div style="width: 50px; height: 50px; border-radius: 50%; background: #10b981; color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.2rem;">
+                      {{ currentNutritionist.first_name.charAt(0) }}{{ currentNutritionist.last_name.charAt(0) }}
+                    </div>
+                    <div>
+                      <div style="font-weight: 700; font-size: 1rem; color: var(--text-primary);">
+                        Nutr. {{ currentNutritionist.first_name }} {{ currentNutritionist.last_name }}
+                      </div>
+                      <div style="font-size: 0.8rem; color: var(--text-secondary);">
+                        {{ currentNutritionist.faculty_name }} • {{ currentNutritionist.building_name || 'Edificio Principal' }} (Cub. {{ currentNutritionist.office_room || 'N/A' }})
+                      </div>
+                      <!-- Promedio General -->
+                      <div style="display: flex; align-items: center; gap: 6px; margin-top: 4px;">
+                        <span style="font-size: 0.78rem; color: var(--text-secondary);">Calificación General:</span>
+                        <div class="stars-rating" *ngIf="currentNutritionist.total_evaluaciones > 0" style="display: flex; align-items: center; gap: 1px;">
+                          <mat-icon *ngFor="let star of getStars(currentNutritionist.rating_avg)" style="font-size: 14px; width: 14px; height: 14px;" [style.color]="star === 'full' || star === 'half' ? '#fbbf24' : 'rgba(255,255,255,0.2)'">
+                            {{ star === 'full' ? 'star' : (star === 'half' ? 'star_half' : 'star_border') }}
+                          </mat-icon>
+                          <span style="font-size: 0.78rem; margin-left: 4px; font-weight: 600; color: var(--text-primary);">{{ currentNutritionist.rating_avg }}</span>
+                        </div>
+                        <span *ngIf="currentNutritionist.total_evaluaciones === 0" style="font-size: 0.72rem; color: var(--text-secondary); font-style: italic;">Sin evaluaciones aún</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <button mat-stroked-button color="accent" (click)="showNutDirectory = !showNutDirectory" style="border-radius: 8px;">
+                    <mat-icon>{{ showNutDirectory ? 'close' : 'swap_horiz' }}</mat-icon>
+                    {{ showNutDirectory ? 'Cancelar' : 'Cambiar de especialista' }}
+                  </button>
+                </div>
+
+                <!-- Tus Evaluaciones a este Nutriólogo -->
+                <div style="background: rgba(255, 255, 255, 0.02); border-radius: 8px; padding: 1rem; border: 1px solid rgba(255,255,255,0.04);">
+                  <div style="font-weight: 600; font-size: 0.85rem; color: var(--text-primary); margin-bottom: 0.5rem; display: flex; align-items: center; justify-content: space-between;">
+                    <span>Tus Evaluaciones en Sesión:</span>
+                    <span *ngIf="nutEvalsFromStudent.length > 0" style="font-size: 0.8rem; color: #10b981; font-weight: 700; display: flex; align-items: center; gap: 4px;">
+                      Promedio: 
+                      <mat-icon *ngFor="let star of getStars(getStudentAvgRatingForSpecialist(nutEvalsFromStudent))" style="font-size: 12px; width: 12px; height: 12px; color: #fbbf24;">star</mat-icon>
+                      ({{ getStudentAvgRatingForSpecialist(nutEvalsFromStudent) }})
+                    </span>
+                  </div>
+                  
+                  <div *ngIf="nutEvalsFromStudent.length === 0" style="font-size: 0.8rem; color: var(--text-secondary); font-style: italic;">
+                    Aún no has evaluado a este especialista. Podrás hacerlo al calificar tus sesiones completadas.
+                  </div>
+                  
+                  <div *ngIf="nutEvalsFromStudent.length > 0" style="display: flex; flex-direction: column; gap: 0.5rem; max-height: 120px; overflow-y: auto; padding-right: 4px;">
+                    <div *ngFor="let ev of nutEvalsFromStudent" style="display: flex; flex-direction: column; gap: 2px; padding: 0.4rem; background: rgba(255,255,255,0.01); border-radius: 6px; border-left: 3px solid #10b981;">
+                      <div style="display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--text-secondary);">
+                        <span>{{ ev.created_at | date:'shortDate' }}</span>
+                        <div style="display: flex; align-items: center; gap: 1px;">
+                          <mat-icon style="font-size: 10px; width: 10px; height: 10px; color: #fbbf24;">star</mat-icon>
+                          <span>{{ ev.score_global }}</span>
+                        </div>
+                      </div>
+                      <div style="font-size: 0.75rem; color: var(--text-primary); font-style: italic;">
+                        {{ ev.q5_comment || 'Sin comentario escrito' }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- No Asignado State -->
+              <div *ngIf="!currentNutritionist" style="border: 1px dashed rgba(255,255,255,0.1); border-radius: 12px; padding: 2rem; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; text-align: center;">
+                <mat-icon style="font-size: 2.5rem; width: 2.5rem; height: 2.5rem; color: var(--text-secondary); opacity: 0.6;">restaurant</mat-icon>
+                <div>
+                  <div style="font-weight: 700; font-size: 0.95rem; color: var(--text-primary);">No tienes un nutriólogo asignado</div>
+                  <div style="font-size: 0.8rem; color: var(--text-secondary); max-width: 350px; margin-top: 4px;">
+                    Para recibir orientación nutricional, busca y selecciona un especialista del directorio de tu facultad.
+                  </div>
+                </div>
+                <button mat-flat-button color="primary" (click)="showNutDirectory = !showNutDirectory" style="border-radius: 8px;">
+                  <mat-icon>{{ showNutDirectory ? 'close' : 'search' }}</mat-icon>
+                  {{ showNutDirectory ? 'Ocultar directorio' : 'Buscar especialista' }}
+                </button>
+              </div>
+
+              <!-- Listado de nutriólogos (Buscador/Directorio) -->
+              <div class="specialist-grid animate-scale-in" *ngIf="showNutDirectory" style="display: grid; grid-template-columns: 1fr; gap: 1rem; margin-top: 0.5rem;">
+                <div *ngFor="let s of nutritionists" 
+                     [style.border-color]="s.id === currentNutritionistId ? '#10b981' : 'rgba(255,255,255,0.06)'"
+                     [style.background]="s.id === currentNutritionistId ? 'rgba(16, 185, 129, 0.05)' : 'var(--input-bg)'"
+                     style="border: 1px solid; border-radius: 12px; padding: 1.25rem; display: flex; gap: 1.25rem; align-items: center; transition: all 0.2s; position: relative; flex-wrap: wrap;">
+                  
+                  <!-- Avatar -->
+                  <div class="specialist-avatar" style="width: 50px; height: 50px; border-radius: 50%; background: #10b981; color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.2rem; shrink: 0;">
+                    {{ s.first_name.charAt(0) }}{{ s.last_name.charAt(0) }}
+                  </div>
+
+                  <!-- Info -->
+                  <div style="flex: 1; min-width: 200px; display: flex; flex-direction: column; gap: 0.35rem;">
+                    <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                      <span style="font-weight: 700; font-size: 0.95rem; color: var(--text-primary);">
+                        Nutr. {{ s.first_name }} {{ s.last_name }}
+                      </span>
+                      <!-- Proximity Badge -->
+                      <span *ngIf="s.proximity_tier === 'same_faculty'" style="background: rgba(16, 185, 129, 0.15); color: #10b981; font-size: 0.7rem; font-weight: 700; padding: 2px 6px; border-radius: 4px; display: flex; align-items: center; gap: 3px;">
+                        🏫 Tu facultad
+                      </span>
+                      <span *ngIf="s.proximity_tier === 'same_campus'" style="background: rgba(59, 130, 246, 0.15); color: #3b82f6; font-size: 0.7rem; font-weight: 700; padding: 2px 6px; border-radius: 4px; display: flex; align-items: center; gap: 3px;">
+                        🏛️ Mismo campus · {{ s.distancia_km }} km
+                      </span>
+                      <span *ngIf="s.proximity_tier === 'other_campus'" style="background: rgba(156, 163, 175, 0.15); color: #9ca3af; font-size: 0.7rem; font-weight: 700; padding: 2px 6px; border-radius: 4px; display: flex; align-items: center; gap: 3px;">
+                        📍 Otro campus: {{ s.faculty_name }} · {{ s.distancia_km }} km
+                      </span>
+                    </div>
+
+                    <div style="font-size: 0.8rem; color: var(--text-secondary); display: flex; align-items: center; gap: 4px; flex-wrap: wrap;">
+                      <span>{{ s.faculty_name }} ({{ s.campus_name }})</span>
+                      <span style="opacity: 0.5;">|</span>
+                      <span style="font-weight: 500; text-transform: capitalize;">{{ s.modality }}</span>
+                      <span *ngIf="s.building_name" style="opacity: 0.5;">|</span>
+                      <span *ngIf="s.building_name">{{ s.building_name }}, Cub. {{ s.office_room || 'N/A' }}</span>
+                    </div>
+
+                    <!-- Rating -->
+                    <div style="display: flex; align-items: center; gap: 6px;">
+                      <div class="stars-rating" *ngIf="s.total_evaluaciones > 0" style="display: flex; align-items: center; gap: 1px;">
+                        <mat-icon *ngFor="let star of getStars(s.rating_avg)" style="font-size: 14px; width: 14px; height: 14px;" [style.color]="star === 'full' || star === 'half' ? '#fbbf24' : 'rgba(255,255,255,0.2)'">
+                          {{ star === 'full' ? 'star' : (star === 'half' ? 'star_half' : 'star_border') }}
+                        </mat-icon>
+                        <span style="font-size: 0.78rem; margin-left: 4px; font-weight: 600; color: var(--text-primary);">{{ s.rating_avg }}</span>
+                        <span style="font-size: 0.7rem; color: var(--text-secondary); margin-left: 2px;">({{ s.total_evaluaciones }} evaluaciones)</span>
+                      </div>
+                      <div *ngIf="s.total_evaluaciones === 0" style="font-size: 0.72rem; color: var(--text-secondary); font-style: italic; display: flex; align-items: center; gap: 3px;">
+                        <mat-icon style="font-size: 14px; width: 14px; height: 14px;">star_outline</mat-icon> Sin evaluaciones aún
+                      </div>
+                    </div>
+
+                    <!-- Capacidad -->
+                    <div style="display: flex; align-items: center; gap: 8px; width: 100%; max-width: 300px; margin-top: 2px;">
+                      <div style="font-size: 0.72rem; color: var(--text-secondary); white-space: nowrap; width: 60px;">
+                        Carga: {{ s.current_load }} / {{ s.capacity || 35 }}
+                      </div>
+                      <div style="flex: 1; height: 4px; background: rgba(255,255,255,0.08); border-radius: 2px; overflow: hidden;">
+                        <div [style.width.%]="(s.current_load / (s.capacity || 35)) * 100"
+                             [style.background]="(s.current_load / (s.capacity || 35)) >= 0.9 ? '#ef4444' : '#10b981'"
+                             style="height: 100%; transition: width 0.3s;">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Acción -->
+                  <div style="shrink: 0; display: flex; flex-direction: column; align-items: flex-end; gap: 6px;">
+                    <span *ngIf="s.id === currentNutritionistId" style="color: #10b981; font-weight: 700; font-size: 0.82rem; display: flex; align-items: center; gap: 4px; background: rgba(16,185,129,0.1); padding: 4px 8px; border-radius: 6px;">
+                      <mat-icon style="font-size:16px; width:16px; height:16px;">check_circle</mat-icon> Asignado
+                    </span>
+                    <button *ngIf="s.id !== currentNutritionistId" 
+                            mat-flat-button 
+                            color="primary" 
+                            (click)="selectSpecialist(s, 4)" 
+                            [disabled]="isSaving || remainingNutChanges === 0"
+                            style="border-radius: 8px; font-size: 0.8rem; padding: 0 1rem; height: 32px; line-height: 32px;">
+                      Elegir
+                    </button>
+                  </div>
+                </div>
+
+                <div *ngIf="nutritionists.length === 0" style="padding: 1.5rem; text-align: center; color: var(--text-secondary); font-style: italic; background: rgba(255,255,255,0.02); border-radius: 8px; border: 1px dashed rgba(255,255,255,0.06);">
+                  No hay nutriólogos con facultad asignada registrados en el sistema.
+                </div>
+              </div>
             </div>
-          </div>
+          </ng-container>
+
         </div>
       </div>
 

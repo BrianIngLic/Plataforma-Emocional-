@@ -245,9 +245,9 @@
     "semantic_hash": ""
   },
   "src/app/features/psychologist/dashboard/dashboard.component.ts": {
-    "mtime": 1782251535.550051,
-    "ast_hash": "b29381fde22297a402e92bd8ee8e620a",
-    "semantic_hash": "b29381fde22297a402e92bd8ee8e620a"
+    "mtime": 1784647135.595654,
+    "ast_hash": "9bde0f29ee96f1c48fa83b141d68171e",
+    "semantic_hash": ""
   },
   "src/app/features/psychologist/patient-profile/patient-profile.component.ts": {
     "mtime": 1784645462.2669506,
@@ -440,9 +440,9 @@
     "semantic_hash": ""
   },
   "src/app/features/psychologist/dashboard/dashboard.component.html": {
-    "mtime": 1781799018.895693,
-    "ast_hash": "a70cf8f9800814f3488ae124af135091",
-    "semantic_hash": "a70cf8f9800814f3488ae124af135091"
+    "mtime": 1784647141.2085044,
+    "ast_hash": "ee60c1cdd265f6b22433f12e1677aeac",
+    "semantic_hash": ""
   },
   "src/app/features/psychologist/patient-profile/patient-profile.component.html": {
     "mtime": 1784645459.13672,

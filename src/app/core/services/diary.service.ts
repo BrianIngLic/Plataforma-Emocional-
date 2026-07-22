@@ -98,8 +98,12 @@ export class DiaryService {
     let isHighRisk = highRiskWords.some(word => lowerContent.includes(word));
 
     // Si es un PHQ-9 y la pregunta 9 es de riesgo, forzar high_risk a true
-    if (entryType === 'phq9' && surveyData && surveyData.q9 && surveyData.q9 !== 'Ningún día') {
-      isHighRisk = true;
+    if (entryType === 'phq9' && surveyData && surveyData.q9) {
+      const q9Val = typeof surveyData.q9 === 'object' ? (surveyData.q9.value ?? 0) : 0;
+      const q9Text = typeof surveyData.q9 === 'object' ? (surveyData.q9.text ?? '') : '';
+      if (q9Val > 0 || (q9Text && q9Text !== 'Ningún día') || (typeof surveyData.q9 === 'string' && surveyData.q9 !== 'Ningún día')) {
+        isHighRisk = true;
+      }
     }
 
     const encryptedContent = this.cryptoService.encrypt(content);

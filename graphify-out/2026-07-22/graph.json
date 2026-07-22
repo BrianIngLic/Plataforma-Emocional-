@@ -134,7 +134,7 @@
       "source_location": "",
       "_origin": "ast",
       "id": "path",
-      "community": 149,
+      "community": 192,
       "norm_label": "path"
     },
     {
@@ -1204,7 +1204,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "angular",
-      "community": 0,
+      "community": 141,
       "norm_label": "angular.json"
     },
     {
@@ -1214,7 +1214,7 @@
       "source_location": "L2",
       "_origin": "ast",
       "id": "angular_schema",
-      "community": 0,
+      "community": 141,
       "norm_label": "$schema"
     },
     {
@@ -1224,7 +1224,7 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "angular_version",
-      "community": 0,
+      "community": 141,
       "norm_label": "version"
     },
     {
@@ -1234,7 +1234,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "angular_newprojectroot",
-      "community": 0,
+      "community": 141,
       "norm_label": "newprojectroot"
     },
     {
@@ -1244,7 +1244,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "angular_projects",
-      "community": 0,
+      "community": 141,
       "norm_label": "projects"
     },
     {
@@ -1254,7 +1254,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "angular_projects_plataforma_emocional",
-      "community": 0,
+      "community": 179,
       "norm_label": "plataforma_emocional"
     },
     {
@@ -1264,7 +1264,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "angular_plataforma_emocional_projecttype",
-      "community": 0,
+      "community": 179,
       "norm_label": "projecttype"
     },
     {
@@ -1274,7 +1274,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "angular_plataforma_emocional_schematics",
-      "community": 0,
+      "community": 179,
       "norm_label": "schematics"
     },
     {
@@ -1284,7 +1284,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "angular_schematics_schematics_angular_component",
-      "community": 0,
+      "community": 179,
       "norm_label": "@schematics/angular:component"
     },
     {
@@ -1294,7 +1294,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "angular_schematics_angular_component_style",
-      "community": 0,
+      "community": 179,
       "norm_label": "style"
     },
     {
@@ -1304,7 +1304,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "angular_plataforma_emocional_root",
-      "community": 0,
+      "community": 179,
       "norm_label": "root"
     },
     {
@@ -1314,7 +1314,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "angular_plataforma_emocional_sourceroot",
-      "community": 0,
+      "community": 179,
       "norm_label": "sourceroot"
     },
     {
@@ -1324,7 +1324,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "angular_plataforma_emocional_prefix",
-      "community": 0,
+      "community": 179,
       "norm_label": "prefix"
     },
     {
@@ -1334,7 +1334,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "angular_plataforma_emocional_architect",
-      "community": 0,
+      "community": 209,
       "norm_label": "architect"
     },
     {
@@ -1364,7 +1364,7 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "angular_build_options",
-      "community": 0,
+      "community": 148,
       "norm_label": "options"
     },
     {
@@ -1374,7 +1374,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "angular_options_browser",
-      "community": 0,
+      "community": 148,
       "norm_label": "browser"
     },
     {
@@ -1384,7 +1384,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "angular_options_polyfills",
-      "community": 0,
+      "community": 148,
       "norm_label": "polyfills"
     },
     {
@@ -1394,7 +1394,7 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "angular_options_tsconfig",
-      "community": 0,
+      "community": 148,
       "norm_label": "tsconfig"
     },
     {
@@ -1404,7 +1404,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "angular_options_inlinestylelanguage",
-      "community": 0,
+      "community": 148,
       "norm_label": "inlinestylelanguage"
     },
     {
@@ -1414,7 +1414,7 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "angular_options_assets",
-      "community": 0,
+      "community": 148,
       "norm_label": "assets"
     },
     {
@@ -1424,7 +1424,7 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "angular_options_styles",
-      "community": 0,
+      "community": 148,
       "norm_label": "styles"
     },
     {
@@ -1444,7 +1444,7 @@
       "source_location": "L37",
       "_origin": "ast",
       "id": "angular_configurations_production",
-      "community": 0,
+      "community": 140,
       "norm_label": "production"
     },
     {
@@ -1454,7 +1454,7 @@
       "source_location": "L38",
       "_origin": "ast",
       "id": "angular_production_budgets",
-      "community": 0,
+      "community": 140,
       "norm_label": "budgets"
     },
     {
@@ -1464,7 +1464,7 @@
       "source_location": "L50",
       "_origin": "ast",
       "id": "angular_production_outputhashing",
-      "community": 0,
+      "community": 140,
       "norm_label": "outputhashing"
     },
     {
@@ -1474,7 +1474,7 @@
       "source_location": "L51",
       "_origin": "ast",
       "id": "angular_production_serviceworker",
-      "community": 0,
+      "community": 140,
       "norm_label": "serviceworker"
     },
     {
@@ -1534,7 +1534,7 @@
       "source_location": "L61",
       "_origin": "ast",
       "id": "angular_architect_serve",
-      "community": 0,
+      "community": 140,
       "norm_label": "serve"
     },
     {
@@ -1544,7 +1544,7 @@
       "source_location": "L62",
       "_origin": "ast",
       "id": "angular_serve_builder",
-      "community": 0,
+      "community": 140,
       "norm_label": "builder"
     },
     {
@@ -1554,7 +1554,7 @@
       "source_location": "L63",
       "_origin": "ast",
       "id": "angular_serve_configurations",
-      "community": 0,
+      "community": 140,
       "norm_label": "configurations"
     },
     {
@@ -1564,7 +1564,7 @@
       "source_location": "L65",
       "_origin": "ast",
       "id": "angular_production_buildtarget",
-      "community": 0,
+      "community": 140,
       "norm_label": "buildtarget"
     },
     {
@@ -1584,7 +1584,7 @@
       "source_location": "L71",
       "_origin": "ast",
       "id": "angular_serve_defaultconfiguration",
-      "community": 0,
+      "community": 140,
       "norm_label": "defaultconfiguration"
     },
     {
@@ -1594,7 +1594,7 @@
       "source_location": "L73",
       "_origin": "ast",
       "id": "angular_architect_extract_i18n",
-      "community": 0,
+      "community": 209,
       "norm_label": "extract-i18n"
     },
     {
@@ -1604,7 +1604,7 @@
       "source_location": "L74",
       "_origin": "ast",
       "id": "angular_extract_i18n_builder",
-      "community": 0,
+      "community": 209,
       "norm_label": "builder"
     },
     {
@@ -1614,7 +1614,7 @@
       "source_location": "L76",
       "_origin": "ast",
       "id": "angular_architect_test",
-      "community": 0,
+      "community": 209,
       "norm_label": "test"
     },
     {
@@ -1624,7 +1624,7 @@
       "source_location": "L77",
       "_origin": "ast",
       "id": "angular_test_builder",
-      "community": 0,
+      "community": 209,
       "norm_label": "builder"
     },
     {
@@ -1634,7 +1634,7 @@
       "source_location": "L78",
       "_origin": "ast",
       "id": "angular_test_options",
-      "community": 0,
+      "community": 148,
       "norm_label": "options"
     },
     {
@@ -1704,7 +1704,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "package",
-      "community": 140,
+      "community": 2,
       "norm_label": "package.json"
     },
     {
@@ -1714,7 +1714,7 @@
       "source_location": "L2",
       "_origin": "ast",
       "id": "package_name",
-      "community": 140,
+      "community": 2,
       "norm_label": "name"
     },
     {
@@ -1724,7 +1724,7 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "package_version",
-      "community": 140,
+      "community": 2,
       "norm_label": "version"
     },
     {
@@ -1734,7 +1734,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "package_scripts",
-      "community": 179,
+      "community": 2,
       "norm_label": "scripts"
     },
     {
@@ -1744,7 +1744,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "package_scripts_ng",
-      "community": 179,
+      "community": 2,
       "norm_label": "ng"
     },
     {
@@ -1754,7 +1754,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "package_scripts_start",
-      "community": 179,
+      "community": 2,
       "norm_label": "start"
     },
     {
@@ -1764,7 +1764,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "package_scripts_build",
-      "community": 179,
+      "community": 2,
       "norm_label": "build"
     },
     {
@@ -1774,7 +1774,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "package_scripts_watch",
-      "community": 179,
+      "community": 2,
       "norm_label": "watch"
     },
     {
@@ -1784,7 +1784,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "package_scripts_test",
-      "community": 179,
+      "community": 2,
       "norm_label": "test"
     },
     {
@@ -1794,7 +1794,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "package_prettier",
-      "community": 140,
+      "community": 2,
       "norm_label": "prettier"
     },
     {
@@ -1804,7 +1804,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "package_prettier_printwidth",
-      "community": 140,
+      "community": 2,
       "norm_label": "printwidth"
     },
     {
@@ -1814,7 +1814,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "package_prettier_singlequote",
-      "community": 140,
+      "community": 2,
       "norm_label": "singlequote"
     },
     {
@@ -1824,7 +1824,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "package_prettier_overrides",
-      "community": 140,
+      "community": 2,
       "norm_label": "overrides"
     },
     {
@@ -1834,7 +1834,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "package_private",
-      "community": 140,
+      "community": 2,
       "norm_label": "private"
     },
     {
@@ -2724,7 +2724,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "scratch_find_achievements_files",
-      "community": 149,
+      "community": 210,
       "norm_label": "find_achievements_files.js"
     },
     {
@@ -2734,7 +2734,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "scratch_find_achievements_files_fs",
-      "community": 149,
+      "community": 210,
       "norm_label": "fs"
     },
     {
@@ -2744,7 +2744,7 @@
       "source_location": "L2",
       "_origin": "ast",
       "id": "scratch_find_achievements_files_path",
-      "community": 149,
+      "community": 210,
       "norm_label": "path"
     },
     {
@@ -2754,7 +2754,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "scratch_find_achievements_files_searchdir",
-      "community": 149,
+      "community": 210,
       "norm_label": "searchdir()"
     },
     {
@@ -2844,7 +2844,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "scratch_find_activity_registration",
-      "community": 149,
+      "community": 212,
       "norm_label": "find_activity_registration.js"
     },
     {
@@ -2854,7 +2854,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "scratch_find_activity_registration_fs",
-      "community": 149,
+      "community": 212,
       "norm_label": "fs"
     },
     {
@@ -2864,7 +2864,7 @@
       "source_location": "L2",
       "_origin": "ast",
       "id": "scratch_find_activity_registration_path",
-      "community": 149,
+      "community": 212,
       "norm_label": "path"
     },
     {
@@ -2874,7 +2874,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "scratch_find_activity_registration_searchdir",
-      "community": 149,
+      "community": 212,
       "norm_label": "searchdir()"
     },
     {
@@ -2924,7 +2924,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "scratch_find_db_connection",
-      "community": 202,
+      "community": 192,
       "norm_label": "find_db_connection.js"
     },
     {
@@ -2934,7 +2934,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "scratch_find_db_connection_fs",
-      "community": 202,
+      "community": 192,
       "norm_label": "fs"
     },
     {
@@ -2944,7 +2944,7 @@
       "source_location": "L2",
       "_origin": "ast",
       "id": "scratch_find_db_connection_path",
-      "community": 202,
+      "community": 192,
       "norm_label": "path"
     },
     {
@@ -2954,7 +2954,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "scratch_find_db_connection_searchdir",
-      "community": 202,
+      "community": 192,
       "norm_label": "searchdir()"
     },
     {
@@ -2964,7 +2964,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "scratch_find_food_diary_queries",
-      "community": 148,
+      "community": 192,
       "norm_label": "find_food_diary_queries.js"
     },
     {
@@ -2974,7 +2974,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "scratch_find_food_diary_queries_fs",
-      "community": 148,
+      "community": 192,
       "norm_label": "fs"
     },
     {
@@ -2984,7 +2984,7 @@
       "source_location": "L2",
       "_origin": "ast",
       "id": "scratch_find_food_diary_queries_path",
-      "community": 148,
+      "community": 192,
       "norm_label": "path"
     },
     {
@@ -2994,7 +2994,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "scratch_find_food_diary_queries_searchdir",
-      "community": 148,
+      "community": 192,
       "norm_label": "searchdir()"
     },
     {
@@ -4844,7 +4844,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "base_health_professional_base",
-      "community": 170,
+      "community": 129,
       "norm_label": "health-professional.base.ts"
     },
     {
@@ -5094,7 +5094,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_agenda_service",
-      "community": 59,
+      "community": 129,
       "norm_label": "agenda.service.ts"
     },
     {
@@ -5104,7 +5104,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "services_agenda_service_timeblock",
-      "community": 59,
+      "community": 129,
       "norm_label": "timeblock"
     },
     {
@@ -5114,7 +5114,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "services_agenda_service_workingday",
-      "community": 59,
+      "community": 129,
       "norm_label": "workingday"
     },
     {
@@ -5344,7 +5344,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_arco_service",
-      "community": 129,
+      "community": 59,
       "norm_label": "arco.service.ts"
     },
     {
@@ -5354,7 +5354,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "services_arco_service_privacysettings",
-      "community": 129,
+      "community": 59,
       "norm_label": "privacysettings"
     },
     {
@@ -5364,7 +5364,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "services_arco_service_arcorequest",
-      "community": 129,
+      "community": 59,
       "norm_label": "arcorequest"
     },
     {
@@ -6164,7 +6164,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "services_dossier_export_service_dossierexportservice",
-      "community": 157,
+      "community": 81,
       "norm_label": "dossierexportservice"
     },
     {
@@ -6174,7 +6174,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "services_dossier_export_service_dossierexportservice_getbase64imagefromurl",
-      "community": 157,
+      "community": 81,
       "norm_label": ".getbase64imagefromurl()"
     },
     {
@@ -6184,7 +6184,7 @@
       "source_location": "L39",
       "_origin": "ast",
       "id": "services_dossier_export_service_dossierexportservice_convertimagetowhite",
-      "community": 157,
+      "community": 81,
       "norm_label": ".convertimagetowhite()"
     },
     {
@@ -6194,7 +6194,7 @@
       "source_location": "L80",
       "_origin": "ast",
       "id": "services_dossier_export_service_dossierexportservice_convertimagetowatermark",
-      "community": 157,
+      "community": 81,
       "norm_label": ".convertimagetowatermark()"
     },
     {
@@ -6204,7 +6204,7 @@
       "source_location": "L118",
       "_origin": "ast",
       "id": "services_dossier_export_service_dossierexportservice_generatehmac",
-      "community": 157,
+      "community": 81,
       "norm_label": ".generatehmac()"
     },
     {
@@ -6214,7 +6214,7 @@
       "source_location": "L138",
       "_origin": "ast",
       "id": "services_dossier_export_service_dossierexportservice_getdossierdata",
-      "community": 157,
+      "community": 81,
       "norm_label": ".getdossierdata()"
     },
     {
@@ -6224,7 +6224,7 @@
       "source_location": "L388",
       "_origin": "ast",
       "id": "services_dossier_export_service_dossierexportservice_exportdossier",
-      "community": 157,
+      "community": 81,
       "norm_label": ".exportdossier()"
     },
     {
@@ -6234,7 +6234,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_emergency_notification_service",
-      "community": 146,
+      "community": 129,
       "norm_label": "emergency-notification.service.ts"
     },
     {
@@ -6244,7 +6244,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "services_emergency_notification_service_emergencychangerequest",
-      "community": 146,
+      "community": 129,
       "norm_label": "emergencychangerequest"
     },
     {
@@ -6254,7 +6254,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "services_emergency_notification_service_webpushsubscriptionpayload",
-      "community": 146,
+      "community": 129,
       "norm_label": "webpushsubscriptionpayload"
     },
     {
@@ -6264,7 +6264,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "services_emergency_notification_service_whatsapproutingsession",
-      "community": 146,
+      "community": 129,
       "norm_label": "whatsapproutingsession"
     },
     {
@@ -6764,7 +6764,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "nutrition_nutricion_service_consultanutricionrow",
-      "community": 88,
+      "community": 75,
       "norm_label": "consultanutricionrow"
     },
     {
@@ -6894,7 +6894,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_session_evaluation_service",
-      "community": 205,
+      "community": 146,
       "norm_label": "session-evaluation.service.ts"
     },
     {
@@ -6904,7 +6904,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "services_session_evaluation_service_sessionevaluationpayload",
-      "community": 205,
+      "community": 146,
       "norm_label": "sessionevaluationpayload"
     },
     {
@@ -6914,7 +6914,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "services_session_evaluation_service_sessionevaluation",
-      "community": 205,
+      "community": 146,
       "norm_label": "sessionevaluation"
     },
     {
@@ -6924,7 +6924,7 @@
       "source_location": "L33",
       "_origin": "ast",
       "id": "services_session_evaluation_service_pendingevaluationitem",
-      "community": 205,
+      "community": 146,
       "norm_label": "pendingevaluationitem"
     },
     {
@@ -6934,7 +6934,7 @@
       "source_location": "L40",
       "_origin": "ast",
       "id": "services_session_evaluation_service_professionalevaluationsummary",
-      "community": 205,
+      "community": 146,
       "norm_label": "professionalevaluationsummary"
     },
     {
@@ -7034,7 +7034,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_supabase_service",
-      "community": 170,
+      "community": 129,
       "norm_label": "supabase.service.ts"
     },
     {
@@ -7044,7 +7044,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "services_supabase_service_supabaseservice",
-      "community": 170,
+      "community": 129,
       "norm_label": "supabaseservice"
     },
     {
@@ -7054,7 +7054,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "services_supabase_service_supabaseservice_constructor",
-      "community": 170,
+      "community": 129,
       "norm_label": ".constructor()"
     },
     {
@@ -7064,7 +7064,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "admin_access_admin_access_component",
-      "community": 81,
+      "community": 129,
       "norm_label": "admin-access.component.ts"
     },
     {
@@ -7144,7 +7144,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "admin_layout_admin_layout_component",
-      "community": 18,
+      "community": 129,
       "norm_label": "admin-layout.component.ts"
     },
     {
@@ -7244,7 +7244,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "admin_settings_admin_settings_component",
-      "community": 129,
+      "community": 59,
       "norm_label": "admin-settings.component.ts"
     },
     {
@@ -7304,7 +7304,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_features_admin_agenda_agenda_component_ts_agenda_agenda_component",
-      "community": 170,
+      "community": 59,
       "norm_label": "agenda.component.ts"
     },
     {
@@ -7314,7 +7314,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "agenda_agenda_component_appointment",
-      "community": 170,
+      "community": 59,
       "norm_label": "appointment"
     },
     {
@@ -7714,7 +7714,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "arco_requests_arco_requests_component",
-      "community": 129,
+      "community": 59,
       "norm_label": "arco-requests.component.ts"
     },
     {
@@ -7774,7 +7774,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "directory_directory_component",
-      "community": 170,
+      "community": 81,
       "norm_label": "directory.component.ts"
     },
     {
@@ -7784,7 +7784,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "directory_directory_component_studentitem",
-      "community": 170,
+      "community": 81,
       "norm_label": "studentitem"
     },
     {
@@ -7794,7 +7794,7 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "directory_directory_component_specialistitem",
-      "community": 170,
+      "community": 81,
       "norm_label": "specialistitem"
     },
     {
@@ -8954,7 +8954,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "institutional_settings_institutional_settings_component",
-      "community": 170,
+      "community": 129,
       "norm_label": "institutional-settings.component.ts"
     },
     {
@@ -9074,7 +9074,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "nutritionist_fields_nutritionist_fields_component",
-      "community": 170,
+      "community": 129,
       "norm_label": "nutritionist-fields.component.ts"
     },
     {
@@ -9084,7 +9084,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "nutritionist_fields_nutritionist_fields_component_campoformulario",
-      "community": 170,
+      "community": 129,
       "norm_label": "campoformulario"
     },
     {
@@ -9314,7 +9314,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_features_admin_patients_patients_component_ts_patients_patients_component",
-      "community": 157,
+      "community": 81,
       "norm_label": "patients.component.ts"
     },
     {
@@ -9404,7 +9404,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "psychologists_psychologists_component",
-      "community": 81,
+      "community": 129,
       "norm_label": "psychologists.component.ts"
     },
     {
@@ -9414,7 +9414,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "psychologists_psychologists_component_psychologist",
-      "community": 81,
+      "community": 129,
       "norm_label": "psychologist"
     },
     {
@@ -9914,7 +9914,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_admin_exceptions_service",
-      "community": 170,
+      "community": 129,
       "norm_label": "admin-exceptions.service.ts"
     },
     {
@@ -9924,7 +9924,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "services_admin_exceptions_service_holiday",
-      "community": 170,
+      "community": 129,
       "norm_label": "holiday"
     },
     {
@@ -9994,7 +9994,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "services_admin_skill8_service",
-      "community": 170,
+      "community": 81,
       "norm_label": "admin-skill8.service.ts"
     },
     {
@@ -10004,7 +10004,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "services_admin_skill8_service_healthprofessionalregistrationpayload",
-      "community": 170,
+      "community": 81,
       "norm_label": "healthprofessionalregistrationpayload"
     },
     {
@@ -10014,7 +10014,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "services_admin_skill8_service_patientassignmentpayload",
-      "community": 170,
+      "community": 81,
       "norm_label": "patientassignmentpayload"
     },
     {
@@ -10024,7 +10024,7 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "services_admin_skill8_service_healthprofessionalitem",
-      "community": 157,
+      "community": 81,
       "norm_label": "healthprofessionalitem"
     },
     {
@@ -10034,7 +10034,7 @@
       "source_location": "L43",
       "_origin": "ast",
       "id": "services_admin_skill8_service_adminskill8service",
-      "community": 157,
+      "community": 202,
       "norm_label": "adminskill8service"
     },
     {
@@ -10044,7 +10044,7 @@
       "source_location": "L51",
       "_origin": "ast",
       "id": "services_admin_skill8_service_adminskill8service_gethealthprofessionals",
-      "community": 157,
+      "community": 202,
       "norm_label": ".gethealthprofessionals()"
     },
     {
@@ -10054,7 +10054,7 @@
       "source_location": "L102",
       "_origin": "ast",
       "id": "services_admin_skill8_service_adminskill8service_registerhealthprofessional",
-      "community": 157,
+      "community": 202,
       "norm_label": ".registerhealthprofessional()"
     },
     {
@@ -10064,7 +10064,7 @@
       "source_location": "L140",
       "_origin": "ast",
       "id": "services_admin_skill8_service_adminskill8service_assignpatienttoprofessionals",
-      "community": 157,
+      "community": 202,
       "norm_label": ".assignpatienttoprofessionals()"
     },
     {
@@ -10074,7 +10074,7 @@
       "source_location": "L169",
       "_origin": "ast",
       "id": "services_admin_skill8_service_adminskill8service_uploadinstitutionalasset",
-      "community": 157,
+      "community": 202,
       "norm_label": ".uploadinstitutionalasset()"
     },
     {
@@ -10084,7 +10084,7 @@
       "source_location": "L199",
       "_origin": "ast",
       "id": "services_admin_skill8_service_adminskill8service_getinstitutionalasseturl",
-      "community": 157,
+      "community": 202,
       "norm_label": ".getinstitutionalasseturl()"
     },
     {
@@ -10094,7 +10094,7 @@
       "source_location": "L210",
       "_origin": "ast",
       "id": "services_admin_skill8_service_adminskill8service_listinstitutionalassets",
-      "community": 157,
+      "community": 202,
       "norm_label": ".listinstitutionalassets()"
     },
     {
@@ -10104,7 +10104,7 @@
       "source_location": "L236",
       "_origin": "ast",
       "id": "services_admin_skill8_service_adminskill8service_getorphanedstudents",
-      "community": 157,
+      "community": 202,
       "norm_label": ".getorphanedstudents()"
     },
     {
@@ -10454,7 +10454,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "login_login_component",
-      "community": 81,
+      "community": 129,
       "norm_label": "login.component.ts"
     },
     {
@@ -10594,7 +10594,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "register_register_component",
-      "community": 81,
+      "community": 129,
       "norm_label": "register.component.ts"
     },
     {
@@ -12374,7 +12374,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "emergency_change_modal_emergency_change_modal_component",
-      "community": 68,
+      "community": 129,
       "norm_label": "emergency-change-modal.component.ts"
     },
     {
@@ -12384,7 +12384,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "emergency_change_modal_emergency_change_modal_component_emergencymodaldata",
-      "community": 68,
+      "community": 129,
       "norm_label": "emergencymodaldata"
     },
     {
@@ -12584,7 +12584,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_features_health_professional_dashboard_dashboard_component_ts_dashboard_dashboard_component",
-      "community": 170,
+      "community": 129,
       "norm_label": "dashboard.component.ts"
     },
     {
@@ -12914,7 +12914,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_features_nutritionist_agenda_agenda_component_ts_agenda_agenda_component",
-      "community": 170,
+      "community": 129,
       "norm_label": "agenda.component.ts"
     },
     {
@@ -12924,7 +12924,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "src_app_features_nutritionist_agenda_agenda_component_ts_agenda_agenda_component_calendarday",
-      "community": 170,
+      "community": 129,
       "norm_label": "calendarday"
     },
     {
@@ -13544,7 +13544,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "nutritionist_layout_nutritionist_layout_component",
-      "community": 18,
+      "community": 129,
       "norm_label": "nutritionist-layout.component.ts"
     },
     {
@@ -13664,7 +13664,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "pacientes_pacientes_component",
-      "community": 170,
+      "community": 129,
       "norm_label": "pacientes.component.ts"
     },
     {
@@ -14294,7 +14294,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_features_psychologist_agenda_agenda_component_ts_agenda_agenda_component",
-      "community": 170,
+      "community": 129,
       "norm_label": "agenda.component.ts"
     },
     {
@@ -14304,7 +14304,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "src_app_features_psychologist_agenda_agenda_component_ts_agenda_agenda_component_calendarday",
-      "community": 170,
+      "community": 129,
       "norm_label": "calendarday"
     },
     {
@@ -14614,14 +14614,14 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_features_psychologist_dashboard_dashboard_component_ts_dashboard_dashboard_component",
-      "community": 31,
+      "community": 129,
       "norm_label": "dashboard.component.ts"
     },
     {
       "label": "PsychologistDashboardComponent",
       "file_type": "code",
       "source_file": "src/app/features/psychologist/dashboard/dashboard.component.ts",
-      "source_location": "L14",
+      "source_location": "L17",
       "_origin": "ast",
       "id": "dashboard_dashboard_component_psychologistdashboardcomponent",
       "community": 31,
@@ -14631,11 +14631,31 @@
       "label": ".ngOnInit()",
       "file_type": "code",
       "source_file": "src/app/features/psychologist/dashboard/dashboard.component.ts",
-      "source_location": "L71",
+      "source_location": "L72",
       "_origin": "ast",
       "id": "dashboard_dashboard_component_psychologistdashboardcomponent_ngoninit",
       "community": 31,
       "norm_label": ".ngoninit()"
+    },
+    {
+      "label": ".loadDashboardData()",
+      "file_type": "code",
+      "source_file": "src/app/features/psychologist/dashboard/dashboard.component.ts",
+      "source_location": "L77",
+      "_origin": "ast",
+      "id": "dashboard_dashboard_component_psychologistdashboardcomponent_loaddashboarddata",
+      "community": 31,
+      "norm_label": ".loaddashboarddata()"
+    },
+    {
+      "label": ".updateChartsWithNoData()",
+      "file_type": "code",
+      "source_file": "src/app/features/psychologist/dashboard/dashboard.component.ts",
+      "source_location": "L328",
+      "_origin": "ast",
+      "id": "dashboard_dashboard_component_psychologistdashboardcomponent_updatechartswithnodata",
+      "community": 31,
+      "norm_label": ".updatechartswithnodata()"
     },
     {
       "label": "patient-profile.component.ts",
@@ -15004,7 +15024,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_features_psychologist_patients_patients_component_ts_patients_patients_component",
-      "community": 170,
+      "community": 129,
       "norm_label": "patients.component.ts"
     },
     {
@@ -15484,7 +15504,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "settings_student_settings_component",
-      "community": 129,
+      "community": 59,
       "norm_label": "student-settings.component.ts"
     },
     {
@@ -15724,7 +15744,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "arco_settings_arco_settings_component",
-      "community": 129,
+      "community": 59,
       "norm_label": "arco-settings.component.ts"
     },
     {
@@ -15824,7 +15844,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "feedback_modal_feedback_modal_component",
-      "community": 129,
+      "community": 59,
       "norm_label": "feedback-modal.component.ts"
     },
     {
@@ -15834,7 +15854,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "feedback_modal_feedback_modal_component_feedbackmodaldata",
-      "community": 129,
+      "community": 59,
       "norm_label": "feedbackmodaldata"
     },
     {
@@ -15844,7 +15864,7 @@
       "source_location": "L277",
       "_origin": "ast",
       "id": "feedback_modal_feedback_modal_component_feedbackmodalcomponent",
-      "community": 129,
+      "community": 59,
       "norm_label": "feedbackmodalcomponent"
     },
     {
@@ -15854,7 +15874,7 @@
       "source_location": "L278",
       "_origin": "ast",
       "id": "feedback_modal_feedback_modal_component_feedbackmodalcomponent_constructor",
-      "community": 129,
+      "community": 59,
       "norm_label": ".constructor()"
     },
     {
@@ -15864,7 +15884,7 @@
       "source_location": "L283",
       "_origin": "ast",
       "id": "feedback_modal_feedback_modal_component_feedbackmodalcomponent_close",
-      "community": 129,
+      "community": 59,
       "norm_label": ".close()"
     },
     {
@@ -15874,7 +15894,7 @@
       "source_location": "L287",
       "_origin": "ast",
       "id": "feedback_modal_feedback_modal_component_feedbackmodalcomponent_cancel",
-      "community": 129,
+      "community": 59,
       "norm_label": ".cancel()"
     },
     {
@@ -15914,7 +15934,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "profile_avatar_profile_avatar_component",
-      "community": 129,
+      "community": 59,
       "norm_label": "profile-avatar.component.ts"
     },
     {
@@ -16084,7 +16104,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "environments_environment",
-      "community": 81,
+      "community": 129,
       "norm_label": "environment.ts"
     },
     {
@@ -16094,7 +16114,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "environments_environment_environment",
-      "community": 81,
+      "community": 129,
       "norm_label": "environment"
     },
     {
@@ -28353,6 +28373,17 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "src/app/features/psychologist/dashboard/dashboard.component.ts",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "src_app_features_psychologist_dashboard_dashboard_component_ts_dashboard_dashboard_component",
+      "target": "services_auth_service",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "src/app/features/psychologist/patients/patients.component.ts",
       "source_location": "L7",
       "weight": 1.0,
@@ -28964,6 +28995,17 @@
       "confidence_score": 1.0,
       "source": "src_app_features_psychologist_agenda_agenda_component_ts_agenda_agenda_component",
       "target": "services_auth_service_authservice"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/features/psychologist/dashboard/dashboard.component.ts",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "src_app_features_psychologist_dashboard_dashboard_component_ts_dashboard_dashboard_component",
+      "target": "services_auth_service_authservice",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -29789,9 +29831,9 @@
       "source_file": "src/app/features/health-professional/agenda/agenda.component.ts",
       "source_location": "L10",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_app_features_health_professional_agenda_agenda_component_ts_agenda_agenda_component",
-      "target": "services_crypto_service",
-      "confidence_score": 1.0
+      "target": "services_crypto_service"
     },
     {
       "relation": "imports_from",
@@ -29803,6 +29845,17 @@
       "confidence_score": 1.0,
       "source": "src_app_features_nutritionist_dashboard_dashboard_component_ts_dashboard_dashboard_component",
       "target": "services_crypto_service"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/features/psychologist/dashboard/dashboard.component.ts",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "src_app_features_psychologist_dashboard_dashboard_component_ts_dashboard_dashboard_component",
+      "target": "services_crypto_service",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -29960,9 +30013,9 @@
       "source_file": "src/app/features/health-professional/agenda/agenda.component.ts",
       "source_location": "L10",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_app_features_health_professional_agenda_agenda_component_ts_agenda_agenda_component",
-      "target": "services_crypto_service_cryptoservice",
-      "confidence_score": 1.0
+      "target": "services_crypto_service_cryptoservice"
     },
     {
       "relation": "imports",
@@ -29974,6 +30027,17 @@
       "confidence_score": 1.0,
       "source": "src_app_features_nutritionist_dashboard_dashboard_component_ts_dashboard_dashboard_component",
       "target": "services_crypto_service_cryptoservice"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/features/psychologist/dashboard/dashboard.component.ts",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "src_app_features_psychologist_dashboard_dashboard_component_ts_dashboard_dashboard_component",
+      "target": "services_crypto_service_cryptoservice",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -32680,6 +32744,17 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "src/app/features/psychologist/dashboard/dashboard.component.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "src_app_features_psychologist_dashboard_dashboard_component_ts_dashboard_dashboard_component",
+      "target": "services_supabase_service",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "src/app/features/psychologist/patients/patients.component.ts",
       "source_location": "L6",
       "weight": 1.0,
@@ -32971,6 +33046,17 @@
       "confidence_score": 1.0,
       "source": "src_app_features_psychologist_agenda_agenda_component_ts_agenda_agenda_component",
       "target": "services_supabase_service_supabaseservice"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/features/psychologist/dashboard/dashboard.component.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "src_app_features_psychologist_dashboard_dashboard_component_ts_dashboard_dashboard_component",
+      "target": "services_supabase_service_supabaseservice",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -40545,9 +40631,9 @@
       "source_file": "src/app/features/health-professional/agenda/agenda.component.ts",
       "source_location": "L13",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_app_features_health_professional_agenda_agenda_component_ts_agenda_agenda_component",
-      "target": "feedback_modal_feedback_modal_component",
-      "confidence_score": 1.0
+      "target": "feedback_modal_feedback_modal_component"
     },
     {
       "relation": "imports",
@@ -40556,9 +40642,9 @@
       "source_file": "src/app/features/health-professional/agenda/agenda.component.ts",
       "source_location": "L13",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_app_features_health_professional_agenda_agenda_component_ts_agenda_agenda_component",
-      "target": "feedback_modal_feedback_modal_component_feedbackmodalcomponent",
-      "confidence_score": 1.0
+      "target": "feedback_modal_feedback_modal_component_feedbackmodalcomponent"
     },
     {
       "relation": "contains",
@@ -40586,9 +40672,9 @@
       "source_file": "src/app/features/health-professional/agenda/agenda.component.ts",
       "source_location": "L394",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agenda_agenda_component_healthprofessionalagendacomponent",
-      "target": "agenda_agenda_component_healthprofessionalagendacomponent_calculateendtime",
-      "confidence_score": 1.0
+      "target": "agenda_agenda_component_healthprofessionalagendacomponent_calculateendtime"
     },
     {
       "relation": "method",
@@ -40596,9 +40682,9 @@
       "source_file": "src/app/features/health-professional/agenda/agenda.component.ts",
       "source_location": "L405",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agenda_agenda_component_healthprofessionalagendacomponent",
-      "target": "agenda_agenda_component_healthprofessionalagendacomponent_cancelclinicalbooking",
-      "confidence_score": 1.0
+      "target": "agenda_agenda_component_healthprofessionalagendacomponent_cancelclinicalbooking"
     },
     {
       "relation": "method",
@@ -40606,9 +40692,9 @@
       "source_file": "src/app/features/health-professional/agenda/agenda.component.ts",
       "source_location": "L353",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agenda_agenda_component_healthprofessionalagendacomponent",
-      "target": "agenda_agenda_component_healthprofessionalagendacomponent_confirmclinicalbooking",
-      "confidence_score": 1.0
+      "target": "agenda_agenda_component_healthprofessionalagendacomponent_confirmclinicalbooking"
     },
     {
       "relation": "method",
@@ -40626,9 +40712,9 @@
       "source_file": "src/app/features/health-professional/agenda/agenda.component.ts",
       "source_location": "L246",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agenda_agenda_component_healthprofessionalagendacomponent",
-      "target": "agenda_agenda_component_healthprofessionalagendacomponent_generatebookingcalendar",
-      "confidence_score": 1.0
+      "target": "agenda_agenda_component_healthprofessionalagendacomponent_generatebookingcalendar"
     },
     {
       "relation": "method",
@@ -40676,9 +40762,9 @@
       "source_file": "src/app/features/health-professional/agenda/agenda.component.ts",
       "source_location": "L310",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agenda_agenda_component_healthprofessionalagendacomponent",
-      "target": "agenda_agenda_component_healthprofessionalagendacomponent_getformatteddatestr",
-      "confidence_score": 1.0
+      "target": "agenda_agenda_component_healthprofessionalagendacomponent_getformatteddatestr"
     },
     {
       "relation": "method",
@@ -40686,9 +40772,9 @@
       "source_file": "src/app/features/health-professional/agenda/agenda.component.ts",
       "source_location": "L347",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agenda_agenda_component_healthprofessionalagendacomponent",
-      "target": "agenda_agenda_component_healthprofessionalagendacomponent_getriskbadgeclass",
-      "confidence_score": 1.0
+      "target": "agenda_agenda_component_healthprofessionalagendacomponent_getriskbadgeclass"
     },
     {
       "relation": "method",
@@ -40706,9 +40792,9 @@
       "source_file": "src/app/features/health-professional/agenda/agenda.component.ts",
       "source_location": "L334",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agenda_agenda_component_healthprofessionalagendacomponent",
-      "target": "agenda_agenda_component_healthprofessionalagendacomponent_isproportionalityslot",
-      "confidence_score": 1.0
+      "target": "agenda_agenda_component_healthprofessionalagendacomponent_isproportionalityslot"
     },
     {
       "relation": "method",
@@ -40726,9 +40812,9 @@
       "source_file": "src/app/features/health-professional/agenda/agenda.component.ts",
       "source_location": "L185",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agenda_agenda_component_healthprofessionalagendacomponent",
-      "target": "agenda_agenda_component_healthprofessionalagendacomponent_loadstudentdetails",
-      "confidence_score": 1.0
+      "target": "agenda_agenda_component_healthprofessionalagendacomponent_loadstudentdetails"
     },
     {
       "relation": "method",
@@ -40736,9 +40822,9 @@
       "source_file": "src/app/features/health-professional/agenda/agenda.component.ts",
       "source_location": "L113",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agenda_agenda_component_healthprofessionalagendacomponent",
-      "target": "agenda_agenda_component_healthprofessionalagendacomponent_loadtriagestats",
-      "confidence_score": 1.0
+      "target": "agenda_agenda_component_healthprofessionalagendacomponent_loadtriagestats"
     },
     {
       "relation": "method",
@@ -40756,9 +40842,9 @@
       "source_file": "src/app/features/health-professional/agenda/agenda.component.ts",
       "source_location": "L302",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agenda_agenda_component_healthprofessionalagendacomponent",
-      "target": "agenda_agenda_component_healthprofessionalagendacomponent_nextbookingmonth",
-      "confidence_score": 1.0
+      "target": "agenda_agenda_component_healthprofessionalagendacomponent_nextbookingmonth"
     },
     {
       "relation": "method",
@@ -40806,9 +40892,9 @@
       "source_file": "src/app/features/health-professional/agenda/agenda.component.ts",
       "source_location": "L294",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agenda_agenda_component_healthprofessionalagendacomponent",
-      "target": "agenda_agenda_component_healthprofessionalagendacomponent_prevbookingmonth",
-      "confidence_score": 1.0
+      "target": "agenda_agenda_component_healthprofessionalagendacomponent_prevbookingmonth"
     },
     {
       "relation": "method",
@@ -40846,9 +40932,9 @@
       "source_file": "src/app/features/health-professional/agenda/agenda.component.ts",
       "source_location": "L317",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agenda_agenda_component_healthprofessionalagendacomponent",
-      "target": "agenda_agenda_component_healthprofessionalagendacomponent_selectbookingday",
-      "confidence_score": 1.0
+      "target": "agenda_agenda_component_healthprofessionalagendacomponent_selectbookingday"
     },
     {
       "relation": "method",
@@ -40876,9 +40962,9 @@
       "source_file": "src/app/features/health-professional/agenda/agenda.component.ts",
       "source_location": "L327",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agenda_agenda_component_healthprofessionalagendacomponent",
-      "target": "agenda_agenda_component_healthprofessionalagendacomponent_selectslot",
-      "confidence_score": 1.0
+      "target": "agenda_agenda_component_healthprofessionalagendacomponent_selectslot"
     },
     {
       "relation": "method",
@@ -40919,9 +41005,9 @@
       "source_file": "src/app/features/health-professional/agenda/agenda.component.ts",
       "source_location": "L98",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agenda_agenda_component_healthprofessionalagendacomponent_ngoninit",
-      "target": "agenda_agenda_component_healthprofessionalagendacomponent_loadtriagestats",
-      "confidence_score": 1.0
+      "target": "agenda_agenda_component_healthprofessionalagendacomponent_loadtriagestats"
     },
     {
       "relation": "calls",
@@ -40930,9 +41016,9 @@
       "source_file": "src/app/features/health-professional/agenda/agenda.component.ts",
       "source_location": "L307",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agenda_agenda_component_healthprofessionalagendacomponent_nextbookingmonth",
-      "target": "agenda_agenda_component_healthprofessionalagendacomponent_generatebookingcalendar",
-      "confidence_score": 1.0
+      "target": "agenda_agenda_component_healthprofessionalagendacomponent_generatebookingcalendar"
     },
     {
       "relation": "calls",
@@ -40941,9 +41027,9 @@
       "source_file": "src/app/features/health-professional/agenda/agenda.component.ts",
       "source_location": "L299",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agenda_agenda_component_healthprofessionalagendacomponent_prevbookingmonth",
-      "target": "agenda_agenda_component_healthprofessionalagendacomponent_generatebookingcalendar",
-      "confidence_score": 1.0
+      "target": "agenda_agenda_component_healthprofessionalagendacomponent_generatebookingcalendar"
     },
     {
       "relation": "calls",
@@ -40952,9 +41038,9 @@
       "source_file": "src/app/features/health-professional/agenda/agenda.component.ts",
       "source_location": "L320",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agenda_agenda_component_healthprofessionalagendacomponent_selectbookingday",
-      "target": "agenda_agenda_component_healthprofessionalagendacomponent_getformatteddatestr",
-      "confidence_score": 1.0
+      "target": "agenda_agenda_component_healthprofessionalagendacomponent_getformatteddatestr"
     },
     {
       "relation": "calls",
@@ -40963,9 +41049,9 @@
       "source_file": "src/app/features/health-professional/agenda/agenda.component.ts",
       "source_location": "L330",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agenda_agenda_component_healthprofessionalagendacomponent_selectslot",
-      "target": "agenda_agenda_component_healthprofessionalagendacomponent_isproportionalityslot",
-      "confidence_score": 1.0
+      "target": "agenda_agenda_component_healthprofessionalagendacomponent_isproportionalityslot"
     },
     {
       "relation": "calls",
@@ -40974,9 +41060,9 @@
       "source_file": "src/app/features/health-professional/agenda/agenda.component.ts",
       "source_location": "L358",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agenda_agenda_component_healthprofessionalagendacomponent_confirmclinicalbooking",
-      "target": "agenda_agenda_component_healthprofessionalagendacomponent_calculateendtime",
-      "confidence_score": 1.0
+      "target": "agenda_agenda_component_healthprofessionalagendacomponent_calculateendtime"
     },
     {
       "relation": "calls",
@@ -40985,9 +41071,9 @@
       "source_file": "src/app/features/health-professional/agenda/agenda.component.ts",
       "source_location": "L384",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agenda_agenda_component_healthprofessionalagendacomponent_confirmclinicalbooking",
-      "target": "agenda_agenda_component_healthprofessionalagendacomponent_cancelclinicalbooking",
-      "confidence_score": 1.0
+      "target": "agenda_agenda_component_healthprofessionalagendacomponent_cancelclinicalbooking"
     },
     {
       "relation": "calls",
@@ -43281,9 +43367,9 @@
       "source_file": "src/app/features/nutritionist/perfil-paciente/perfil-paciente.component.ts",
       "source_location": "L785",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "perfil_paciente_perfil_paciente_component_perfilpaciente",
-      "target": "perfil_paciente_perfil_paciente_component_perfilpaciente_openbookingmodal",
-      "confidence_score": 1.0
+      "target": "perfil_paciente_perfil_paciente_component_perfilpaciente_openbookingmodal"
     },
     {
       "relation": "method",
@@ -44150,11 +44236,53 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/app/features/psychologist/dashboard/dashboard.component.ts",
+      "source_location": "L77",
+      "weight": 1.0,
+      "source": "dashboard_dashboard_component_psychologistdashboardcomponent",
+      "target": "dashboard_dashboard_component_psychologistdashboardcomponent_loaddashboarddata",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/features/psychologist/dashboard/dashboard.component.ts",
       "source_location": "L71",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "dashboard_dashboard_component_psychologistdashboardcomponent",
       "target": "dashboard_dashboard_component_psychologistdashboardcomponent_ngoninit"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/features/psychologist/dashboard/dashboard.component.ts",
+      "source_location": "L328",
+      "weight": 1.0,
+      "source": "dashboard_dashboard_component_psychologistdashboardcomponent",
+      "target": "dashboard_dashboard_component_psychologistdashboardcomponent_updatechartswithnodata",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/features/psychologist/dashboard/dashboard.component.ts",
+      "source_location": "L73",
+      "weight": 1.0,
+      "source": "dashboard_dashboard_component_psychologistdashboardcomponent_ngoninit",
+      "target": "dashboard_dashboard_component_psychologistdashboardcomponent_loaddashboarddata",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/features/psychologist/dashboard/dashboard.component.ts",
+      "source_location": "L89",
+      "weight": 1.0,
+      "source": "dashboard_dashboard_component_psychologistdashboardcomponent_loaddashboarddata",
+      "target": "dashboard_dashboard_component_psychologistdashboardcomponent_updatechartswithnodata",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -44444,9 +44572,9 @@
       "source_file": "src/app/features/psychologist/patient-profile/patient-profile.component.ts",
       "source_location": "L822",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "patient_profile_patient_profile_component_patientprofilecomponent",
-      "target": "patient_profile_patient_profile_component_patientprofilecomponent_openbookingmodal",
-      "confidence_score": 1.0
+      "target": "patient_profile_patient_profile_component_patientprofilecomponent_openbookingmodal"
     },
     {
       "relation": "method",
@@ -49876,5 +50004,5 @@
       "source_file": "src/app/features/psychologist/psychologist-layout/psychologist-layout.component.html"
     }
   ],
-  "built_at_commit": "120a92e33a8f4923bd1988898fdb3ac247fb09b3"
+  "built_at_commit": "17948905bc91cc7ee56f3f1db2752bbf216d33a3"
 }

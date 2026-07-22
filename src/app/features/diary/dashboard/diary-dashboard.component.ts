@@ -337,9 +337,27 @@ export class DiaryDashboardComponent implements OnInit {
         action = 'Intervención inmediata, psicoterapia intensiva y/o derivación psiquiátrica urgente.';
       }
 
+      // ponytail: detect clinical crisis risk if q9 > 0 (suicidal ideation) or total score is severe (>= 20)
+      const q9Val = this.phq9Answers['q9']?.value ?? 0;
+      const isImminent = q9Val > 0 || totalScore >= 20;
+
+      let responseText = '';
+      if (isImminent) {
+        responseText = `¡Excelente! Has completado el cuestionario de forma exitosa. Tu puntuación total es de ${totalScore}/27 (${severity}).\n\n` +
+                       `⚠️ **IMPORTANTE:** Por favor comunícate a la línea de la vida o busca atención inmediata, así como comunicarte a la línea de atención de la BUAP:\n\n` +
+                       `**Línea de Atención a Crisis Emocional**\n` +
+                       `📞 **2223-44-89-05**\n` +
+                       `⏰ Lunes a domingo de 9 a 21 horas.\n` +
+                       `🎓 Servicio para Comunidad Estudiantil BUAP.\n` +
+                       `🏢 Dirección de Acompañamiento Universitario\n\n` +
+                       `Tus respuestas han sido guardadas de forma segura y encriptada en tu expediente clínico para el seguimiento del profesional de la salud. 🐬💙`;
+      } else {
+        responseText = `¡Excelente! Has completado el cuestionario de forma exitosa. Tu puntuación total es de ${totalScore}/27 (${severity}). Tus respuestas han sido guardadas de forma segura y encriptada en tu expediente clínico para el seguimiento del profesional de la salud. 🐬💙`;
+      }
+
       this.phq9Messages.push({
         sender: 'amati',
-        text: `¡Excelente! Has completado el cuestionario de forma exitosa. Tus respuestas han sido guardadas de forma segura y encriptada en tu expediente clínico para que tu especialista pueda darte un mejor seguimiento. ¡Muchas gracias por tu valiosa participación! 🐬💙`
+        text: responseText
       });
 
       this.scrollToBottom();
@@ -367,15 +385,28 @@ export class DiaryDashboardComponent implements OnInit {
 
       this.streakDays++;
       
-      this.dialog.open(FeedbackModalComponent, {
-        width: '420px',
-        data: {
-          type: 'success',
-          title: '¡Cuestionario Completado!',
-          message: '🌟 Tus respuestas se han registrado correctamente en el expediente y has fortalecido tu racha. ¡Sigue así!',
-          btnText: 'Aceptar'
-        }
-      });
+      if (isImminent) {
+        this.dialog.open(FeedbackModalComponent, {
+          width: '420px',
+          data: {
+            type: 'confirm',
+            title: 'Atención Requerida',
+            message: '⚠️ Por favor, comunícate a la Línea de la Vida o a la Línea de Atención a Crisis Emocional BUAP (2223-44-89-05) para brindarte apoyo inmediato.',
+            btnText: 'Entendido',
+            cancelBtnText: 'Cerrar'
+          }
+        });
+      } else {
+        this.dialog.open(FeedbackModalComponent, {
+          width: '420px',
+          data: {
+            type: 'success',
+            title: '¡Cuestionario Completado!',
+            message: '🌟 Tus respuestas se han registrado correctamente en el expediente y has fortalecido tu racha. ¡Sigue así!',
+            btnText: 'Aceptar'
+          }
+        });
+      }
 
     }, 1000);
   }

@@ -5,32 +5,32 @@
       <div class="icon-box"><mat-icon>people</mat-icon></div>
       <div class="info">
         <span class="label">Total Pacientes</span>
-        <span class="value">138</span>
-        <span class="sub">↑ 6 nuevos este mes</span>
+        <span class="value">{{ totalPatients }}</span>
+        <span class="sub">↑ {{ newPatientsThisMonth }} nuevos este mes</span>
       </div>
     </div>
     <div class="stat-card red">
-      <div class="icon-box"><mat-icon>warning</mat-icon></div>
+      <div class="icon-box"><mat-icon>gavel</mat-icon></div>
       <div class="info">
-        <span class="label">Casos de Emergencia</span>
-        <span class="value">4</span>
-        <span class="sub">2 requieren acción inmediata</span>
+        <span class="label">Riesgo de Violencia</span>
+        <span class="value">{{ violenceRiskCount }}</span>
+        <span class="sub">{{ violencePercentage | number:'1.0-0' }}% de tus pacientes</span>
       </div>
     </div>
     <div class="stat-card green">
       <div class="icon-box"><mat-icon>calendar_today</mat-icon></div>
       <div class="info">
         <span class="label">Sesiones Hoy</span>
-        <span class="value">6</span>
-        <span class="sub">Siguiente: Elena M. 09:00</span>
+        <span class="value">{{ agenda.length }}</span>
+        <span class="sub">{{ nextSessionText }}</span>
       </div>
     </div>
     <div class="stat-card purple">
-      <div class="icon-box"><mat-icon>verified</mat-icon></div>
+      <div class="icon-box"><mat-icon>bedtime</mat-icon></div>
       <div class="info">
-        <span class="label">Tasa de Recuperación</span>
-        <span class="value">68%</span>
-        <span class="sub">↑ 4% del trimestre pasado</span>
+        <span class="label">Promedio de Sueño</span>
+        <span class="value">{{ avgSleepHours | number:'1.1-1' }}h</span>
+        <span class="sub">Meta: 7-8 horas diarios</span>
       </div>
     </div>
   </div>
@@ -55,6 +55,9 @@
             <span class="date">{{c.lastContact}}</span>
           </div>
         </div>
+        <div *ngIf="emergencyCases.length === 0" style="padding: 2rem; text-align: center; color: var(--text-secondary);">
+          Sin casos críticos o de riesgo detectados recientemente.
+        </div>
       </div>
     </div>
 
@@ -64,7 +67,7 @@
         <div class="title"><mat-icon class="text-blue">schedule</mat-icon> Agenda de Hoy</div>
         <span class="badge muted">{{agenda.length}} sesiones</span>
       </div>
-      <div class="panel-list">
+      <div class="panel-list" *ngIf="agenda.length > 0">
         <div class="list-item agenda-item" *ngFor="let s of agenda">
           <div class="status-dot" [ngClass]="s.status"></div>
           <span class="time">{{s.time}}</span>
@@ -74,6 +77,12 @@
           </div>
           <span class="duration">{{s.duration}}m</span>
         </div>
+      </div>
+      <!-- ponytail: Beautiful fallback message when psychologist is free / has no sessions -->
+      <div class="no-sessions" *ngIf="agenda.length === 0" style="padding: 2rem; text-align: center; color: var(--text-secondary); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.5rem; flex: 1;">
+        <mat-icon style="font-size: 48px; width: 48px; height: 48px; color: var(--text-secondary); opacity: 0.5;">weekend</mat-icon>
+        <span style="font-weight: 600; color: var(--text-primary);">¡Día Libre!</span>
+        <span>No tienes sesiones programadas para hoy.</span>
       </div>
     </div>
   </div>
@@ -93,6 +102,9 @@
         </div>
         <span class="time">{{a.time}}</span>
       </div>
+      <div *ngIf="alerts.length === 0" style="padding: 2rem; text-align: center; color: var(--text-secondary);">
+        No hay alertas o notificaciones pendientes.
+      </div>
     </div>
   </div>
 
@@ -101,11 +113,9 @@
     <!-- Evolución -->
     <div class="panel col-span-3">
       <div class="panel-header border-b">
-        <div class="title"><mat-icon class="text-green">trending_up</mat-icon> Evolución General</div>
+        <div class="title"><mat-icon class="text-green">trending_up</mat-icon> Evolución de Horas de Sueño (Promedio)</div>
         <div class="legend">
-          <span class="legend-item"><div class="dot blue"></div> Mejoría</span>
-          <span class="legend-item"><div class="dot amber"></div> Estable</span>
-          <span class="legend-item"><div class="dot red"></div> Deterioro</span>
+          <span class="legend-item"><div class="dot" style="background-color: #8b5cf6;"></div> Horas de Sueño</span>
         </div>
       </div>
       <div class="chart-wrapper">
@@ -116,7 +126,7 @@
     <!-- Distribución Diagnóstico -->
     <div class="panel col-span-2">
       <div class="panel-header border-b">
-        <div class="title"><mat-icon class="text-blue">pie_chart</mat-icon> Distribución por Diagnóstico</div>
+        <div class="title"><mat-icon class="text-blue">pie_chart</mat-icon> Distribución de Emociones (Diario)</div>
       </div>
       <div class="chart-wrapper donut-wrapper">
         <canvas baseChart [data]="pieChartData" [options]="pieChartOptions" type="doughnut"></canvas>

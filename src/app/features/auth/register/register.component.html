@@ -226,17 +226,59 @@
       <mat-step [stepControl]="consentFormGroup" label="Términos">
         <form [formGroup]="consentFormGroup" class="step-form text-center">
 
-          <div class="disclaimer-box">
-            <h3>⚠️ Importante</h3>
-            <p>Amati es un asistente basado en Inteligencia Artificial. <strong>No sustituye bajo ninguna circunstancia el diagnóstico ni la terapia con un profesional de la salud mental.</strong></p>
+          <div class="privacy-summary-card">
+            <div class="privacy-intro">
+              Queremos que utilices esta plataforma con confianza. Por ello, nos comprometemos a proteger tu información personal y a tratarla con responsabilidad, confidencialidad y respeto.
+            </div>
+
+            <div class="privacy-title">
+              Aviso de Privacidad y Consentimiento de Uso
+            </div>
+
+            <p style="font-weight: 600; color: var(--text-primary); text-align: left;">
+              Tu privacidad y el cuidado de tu información son muy importantes para nosotros.
+            </p>
+
+            <p>
+              Los datos personales y la información que compartas durante el uso de esta plataforma serán tratados de forma confidencial y utilizados únicamente para brindarte un mejor acompañamiento, apoyar el seguimiento de tu bienestar emocional, mejorar el funcionamiento de la plataforma y, cuando exista tu autorización o la normativa lo permita, contribuir a proyectos de investigación científica mediante información anonimizada.
+            </p>
+
+            <p>
+              La plataforma incorpora herramientas de Inteligencia Artificial para apoyar el análisis de la información y ofrecer orientación durante las interacciones. Es importante que tengas presente que las respuestas generadas por la IA son únicamente de apoyo, por lo que no sustituyen la valoración, el diagnóstico ni el tratamiento de un profesional de la salud mental.
+            </p>
+
+            <p>
+              Si en algún momento experimentas una crisis emocional, pensamientos de hacerte daño o una situación que represente un riesgo para tu integridad, te recomendamos buscar atención inmediata con un profesional de la salud o comunicarte con los servicios de emergencia de tu localidad.
+            </p>
+
+            <div class="privacy-link-container">
+              <a href="#" (click)="openPrivacyModal($event)" style="color: var(--accent-purple); text-decoration: underline; font-weight: 600;">Leer Aviso de Privacidad COMPLETO</a>
+            </div>
+
+            <div class="privacy-confirmation-clause">
+              Al seleccionar la opción "Acepto", confirmas que has leído y comprendido el Aviso Integral de Privacidad, el Consentimiento Informado y las Condiciones de Uso, disponibles para tu consulta, y autorizas el tratamiento de tus datos personales conforme a las finalidades ahí descritas.
+            </div>
           </div>
 
-          <mat-checkbox formControlName="acceptedTerms" color="primary" class="consent-check">
-            He leído y acepto el <a href="#" (click)="openPrivacyModal($event)" style="color: var(--accent-purple); text-decoration: underline;">Aviso de Privacidad y Términos de Uso</a>.
-          </mat-checkbox>
-          <mat-error *ngIf="consentFormGroup.get('acceptedTerms')?.hasError('requiredTrue')" style="display: block; margin-top: 0.5rem;">
-            Debes aceptar los términos para continuar.
-          </mat-error>
+          <div class="consent-checkboxes-container">
+            <mat-checkbox formControlName="acceptedTerms" color="primary" class="consent-check">
+              He leído y acepto el Aviso Integral de Privacidad, el Consentimiento Informado y las Condiciones de Uso.
+            </mat-checkbox>
+            <mat-error *ngIf="consentFormGroup.get('acceptedTerms')?.hasError('requiredTrue') && consentFormGroup.get('acceptedTerms')?.touched">
+              Debes aceptar los términos para continuar.
+            </mat-error>
+
+            <mat-checkbox formControlName="acceptedSensitiveData" color="primary" class="consent-check">
+              Autorizo el tratamiento de mis datos personales sensibles para las finalidades descritas en el Aviso de Privacidad.
+            </mat-checkbox>
+            <mat-error *ngIf="consentFormGroup.get('acceptedSensitiveData')?.hasError('requiredTrue') && consentFormGroup.get('acceptedSensitiveData')?.touched">
+              Debes autorizar el tratamiento de tus datos personales sensibles para continuar.
+            </mat-error>
+
+            <mat-checkbox formControlName="acceptedResearch" color="primary" class="consent-check">
+              Autorizo que mi información, previamente anonimizada o disociada, pueda utilizarse con fines de investigación científica y desarrollo tecnológico.
+            </mat-checkbox>
+          </div>
 
           <!-- CAPTCHA de Cloudflare Turnstile -->
           <div class="turnstile-wrapper" style="display: flex; justify-content: center; margin: 1.5rem 0; min-height: 65px;">
@@ -268,30 +310,69 @@
 <div class="privacy-modal-overlay" *ngIf="showPrivacyModal" (click)="closePrivacyModal()">
   <div class="privacy-modal-card" (click)="$event.stopPropagation()">
     <div class="modal-header">
-      <h2>Aviso de Privacidad y Términos de Uso</h2>
+      <h2>Aviso Integral de Privacidad, Consentimiento Informado y Condiciones de Uso</h2>
       <button class="close-btn" (click)="closePrivacyModal()">✖</button>
     </div>
     <div class="modal-content">
-      <p><strong>Plataforma de Asistencia Emocional con Inteligencia Artificial</strong></p>
-      <p>En estricto cumplimiento a lo previsto en los artículos 6° fracciones II y III, y 16 Segundo Párrafo de la Constitución Política de los Estados Unidos Mexicanos; así como en la Ley aplicable de Protección de Datos Personales, la <strong>Plataforma de Asistencia Emocional</strong> (en adelante "La Plataforma") le informa que los datos personales, emocionales y clínicos que se recaban con motivo de su registro y uso de este ecosistema, son utilizados única y exclusivamente para fines de seguimiento, evaluación y asistencia psicológica.</p>
-      <p>Por tanto, respecto al tratamiento de dichos datos, La Plataforma hace de su conocimiento que:</p>
-      <ol>
-        <li>Cuenta con las medidas administrativas, técnicas y físicas necesarias para garantizar la seguridad, encriptación y estricta confidencialidad en el manejo y custodia de su información.</li>
-        <li>Procura que los datos almacenados sean exactos y actualizados.</li>
-        <li>En caso de tener conocimiento de algún dato personal inexacto o incompleto, procederá a sustituir, rectificar o completar los mismos a petición del titular.</li>
-        <li>Evitará estrictamente la transferencia de datos personales sin la autorización previa del titular, y dicha transferencia únicamente se realizará por orden de una autoridad competente o en situaciones de emergencia vital inminente.</li>
-      </ol>
-      <p><strong>Cláusulas y Condiciones sobre el Uso de Inteligencia Artificial</strong></p>
-      <p>Al completar su registro en La Plataforma, usted es consciente, comprende y acepta expresamente las siguientes condiciones operativas y tecnológicas:</p>
-      <ul>
-        <li><strong>Estatus de Prototipo Beta:</strong> El presente ecosistema tecnológico se encuentra actualmente en una fase de desarrollo, validación y experimentación (Prototipo Beta). Por ende, el servicio se proporciona "tal cual", sujeto a posibles interrupciones, errores técnicos y actualizaciones continuas.</li>
-        <li><strong>Procesamiento mediante IA Generativa:</strong> Parte de los análisis de sentimientos, interacciones conversacionales (Amati) y detección de patrones de riesgo, son impulsados por modelos de Inteligencia Artificial Generativa.</li>
-        <li><strong>Margen de Inexactitud e Imprecisión:</strong> La Inteligencia Artificial es una herramienta basada en probabilidades matemáticas, no en juicio clínico humano. Por su propia naturaleza, las respuestas, interpretaciones y análisis generados por la IA pueden llegar a ser <strong>inexactos, incompletos, sesgados o fuera de contexto</strong>.</li>
-        <li><strong>Deslinde de Responsabilidades Médicas:</strong> Las interacciones y resultados emitidos por la Inteligencia Artificial <strong>NO constituyen ni sustituyen en ningún caso el diagnóstico, tratamiento, prescripción o consejo de un profesional de la salud mental certificado</strong>. La Plataforma y su equipo de desarrollo se deslindan de cualquier responsabilidad médica, legal o moral derivada de las decisiones, acciones u omisiones tomadas por el usuario basándose en los textos generados por la IA.</li>
-        <li><strong>Protocolo de Emergencia:</strong> En caso de experimentar una crisis aguda, pensamientos de autolesión o requerir asistencia inmediata, el usuario no debe depender de la Inteligencia Artificial, debiendo acudir inmediatamente a los servicios de emergencia de su localidad o a profesionales humanos certificados.</li>
-      </ul>
-      <p>Para ejercer sus derechos derivados de la protección de datos en posesión de La Plataforma, podrá dirigirse directamente con la administración del sistema a través del correo de soporte designado o con su profesional clínico asignado.</p>
-      <p style="text-align: center; font-style: italic; margin-top: 1.5rem; color: var(--text-secondary);">“Innovación Tecnológica al Servicio del Bienestar Humano”</p>
+      <p style="font-weight: bold; font-size: 1.1rem; color: var(--text-primary); text-align: center;">AVISO INTEGRAL DE PRIVACIDAD, CONSENTIMIENTO INFORMADO Y CONDICIONES DE USO</p>
+      <p style="text-align: center; color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1.5rem;">
+        Plataforma de Asistencia Emocional basada en Inteligencia Artificial<br>
+        Última actualización: 24 de julio de 2026
+      </p>
+
+      <p><strong>1. Responsable del tratamiento de los datos personales</strong><br>
+      La Plataforma de Asistencia Emocional basada en Inteligencia Artificial es un proyecto de investigación y desarrollo tecnológico de la Benemérita Universidad Autónoma de Puebla (BUAP).<br>
+      La dependencia responsable del tratamiento de los datos personales será la Dirección de Acompañamiento Universitario (DAU) y la Facultad de Psicología de la BUAP.<br>
+      Domicilio: Avenida San Claudio, Ciudad Universitaria, Col. San Manuel, Puebla, Pue. C.P. 72570<br>
+      Correo electrónico para asuntos relacionados con protección de datos personales: transparencia&#64;correo.buap.mx<br>
+      Responsable de Protección de Datos: Unidad de Transparencia y Acceso a la Información de la BUAP.</p>
+
+      <p><strong>2. Finalidad de la plataforma</strong><br>
+      La plataforma tiene como objetivo apoyar el bienestar emocional de sus usuarios mediante herramientas de Inteligencia Artificial, ofreciendo recursos de orientación, análisis emocional y seguimiento, siempre como complemento al acompañamiento realizado por profesionales de la salud. La plataforma no sustituye la atención psicológica, psiquiátrica ni médica.</p>
+
+      <p><strong>3. Datos personales que podrán recabarse</strong><br>
+      Para el funcionamiento de la plataforma podrán solicitarse, entre otros, los siguientes datos:<br>
+      <strong>Datos de identificación:</strong> Nombre (cuando sea requerido), Correo electrónico, Edad, Sexo (opcional), Institución educativa (cuando aplique).<br>
+      <strong>Datos técnicos:</strong> Dirección IP, Fecha y hora de acceso, Información del dispositivo, Registros de uso de la plataforma.<br>
+      <strong>Datos personales sensibles:</strong> Dependiendo del uso de la plataforma podrán generarse o registrarse datos relacionados con: Estado emocional, Conversaciones sostenidas con la Inteligencia Artificial, Escalas de bienestar emocional, Factores de riesgo emocional, Indicadores relacionados con ansiedad, depresión o trastornos de la conducta alimentaria, e Información proporcionada voluntariamente por el usuario durante las interacciones. Estos datos son considerados datos personales sensibles, por lo que recibirán un tratamiento reforzado conforme a la legislación aplicable.</p>
+
+      <p><strong>4. Finalidades del tratamiento</strong><br>
+      Los datos personales serán utilizados para: Proporcionar acceso a la plataforma, Dar seguimiento al uso del sistema, Generar análisis mediante Inteligencia Artificial, Detectar patrones que permitan apoyar el bienestar emocional del usuario, Mejorar continuamente los modelos de Inteligencia Artificial y Desarrollar investigación científica y tecnológica. Cuando la información sea utilizada para investigación, ésta será previamente anonimizada o disociada, siempre que ello sea posible. Los datos personales no serán utilizados con fines comerciales.</p>
+
+      <p><strong>5. Confidencialidad y seguridad</strong><br>
+      La Universidad implementará medidas administrativas, técnicas y físicas razonables para proteger la información contra pérdida, alteración, acceso no autorizado, uso indebido o divulgación. Entre otras medidas podrán implementarse: Cifrado de comunicaciones, Control de acceso mediante autenticación, Registro de actividades, Copias de respaldo y Acceso restringido al personal autorizado.</p>
+
+      <p><strong>6. Uso de Inteligencia Artificial</strong><br>
+      La plataforma utiliza modelos de Inteligencia Artificial Generativa para apoyar diversas funciones como: análisis emocional; interacción conversacional; identificación de posibles factores de riesgo; y generación de recomendaciones generales. Las respuestas generadas por la Inteligencia Artificial son probabilísticas y pueden contener errores, omisiones o interpretaciones incorrectas. Por ello, no constituyen un diagnóstico clínico, no sustituyen la valoración de un profesional de la salud, y no deben utilizarse como única base para tomar decisiones relacionadas con la salud física o mental. Cuando la plataforma detecte indicadores de riesgo, podrá generar alertas para recomendar al usuario buscar atención profesional. Estas alertas constituyen únicamente mecanismos de apoyo y no garantizan la detección de todas las situaciones de riesgo.</p>
+
+      <p><strong>7. Situaciones de emergencia</strong><br>
+      Si el usuario presenta pensamientos suicidas, riesgo de autolesión, violencia, crisis emocional grave o cualquier situación que ponga en riesgo su integridad o la de terceros, deberá buscar atención inmediata mediante: servicios médicos de emergencia; líneas de atención en crisis; profesionales certificados en salud mental; o instituciones de salud correspondientes. La plataforma no ofrece atención psicológica de emergencia.</p>
+
+      <p><strong>8. Transferencia de datos e integraciones externas</strong><br>
+      Los datos personales no serán transferidos a terceros, salvo cuando exista consentimiento del titular, sea requerido por autoridad competente, la legislación aplicable así lo permita, o sea indispensable para proteger la vida o integridad del titular. Para su correcto funcionamiento, la plataforma utiliza servicios tecnológicos externos:
+      <br>• <strong>Servicios de Seguridad y Verificación (CAPTCHA):</strong> Se utiliza un mecanismo de verificación de terceros (como Cloudflare Turnstile o Google reCAPTCHA) para proteger los formularios contra abusos y spam. Este servicio recopila telemetría del navegador, dirección IP y cookies para validar interacciones humanas. Se sugiere al usuario revisar la política de privacidad de dichos proveedores.
+      <br>• <strong>Alojamiento en la Nube y Bases de Datos:</strong> La plataforma se apoya en servicios de infraestructura en la nube (como Supabase o Google Cloud) para el hosting de la aplicación y el almacenamiento seguro de las bases de datos. Por consiguiente, la información residirá físicamente en servidores de estos terceros proveedores.
+      <br>• <strong>Procesamiento de Inteligencia Artificial (APIs):</strong> En caso de utilizar servicios tecnológicos externos para el procesamiento de Inteligencia Artificial, éstos deberán cumplir con las medidas de seguridad y confidencialidad aplicables.</p>
+
+      <p><strong>9. Conservación de la información</strong><br>
+      Los datos personales únicamente serán conservados durante el tiempo necesario para cumplir las finalidades descritas en este documento y las obligaciones legales aplicables. Concluido dicho periodo, la información será eliminada o anonimizada conforme a la normativa vigente.</p>
+
+      <p><strong>10. Derechos ARCO</strong><br>
+      El titular podrá ejercer en cualquier momento sus derechos de Acceso, Rectificación, Cancelación y Oposición. Asimismo, podrá solicitar la limitación del tratamiento o, cuando proceda, la revocación del consentimiento otorgado. Las solicitudes podrán realizarse mediante el correo electrónico de la Unidad de Transparencia de la BUAP y serán atendidas conforme a los plazos previstos por la legislación aplicable.</p>
+
+      <p><strong>11. Consentimiento informado</strong><br>
+      Al registrarse y utilizar esta plataforma, el usuario manifiesta que: Ha leído y comprendido el presente Aviso Integral de Privacidad; Conoce que la plataforma utiliza Inteligencia Artificial Generativa; Comprende que las respuestas emitidas por la Inteligencia Artificial constituyen únicamente una herramienta de apoyo; Autoriza el tratamiento de sus datos personales y datos personales sensibles para las finalidades descritas; Comprende que puede ejercer en cualquier momento sus derechos ARCO; y Acepta utilizar la plataforma de manera responsable.</p>
+
+      <p><strong>12. Condiciones de uso</strong><br>
+      La plataforma se encuentra actualmente en fase de investigación, validación tecnológica y mejora continua. En consecuencia, algunas funciones podrán modificarse, podrán existir interrupciones temporales del servicio, y podrán incorporarse nuevas funcionalidades derivadas del proceso de investigación. El usuario se compromete a utilizar la plataforma de manera ética, responsable y conforme a la legislación vigente.</p>
+
+      <p><strong>13. Modificaciones</strong><br>
+      El presente Aviso podrá actualizarse cuando existan cambios en la legislación, en el desarrollo tecnológico de la plataforma o en los procesos institucionales. Las modificaciones serán publicadas dentro de la propia plataforma.</p>
+
+      <p><strong>14. Aceptación</strong><br>
+      Al seleccionar la opción "He leído y acepto el Aviso Integral de Privacidad, el Consentimiento Informado y las Condiciones de Uso", el usuario manifiesta su consentimiento libre, informado y expreso para el tratamiento de sus datos personales conforme a lo establecido en este documento.</p>
+
+      <p style="text-align: center; font-style: italic; margin-top: 1.5rem; color: var(--text-secondary);">"Innovación Tecnológica al Servicio del Bienestar Humano"</p>
     </div>
     <div class="modal-footer">
       <button mat-flat-button color="primary" (click)="closePrivacyModal()">Cerrar y Entendido</button>

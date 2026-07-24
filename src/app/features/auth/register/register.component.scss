@@ -257,6 +257,77 @@
   font-weight: 600;
 }
 
+.privacy-summary-card {
+  background: var(--input-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 1.5rem;
+  text-align: left;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+
+  .privacy-intro {
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    font-size: 1rem;
+  }
+
+  .privacy-title {
+    color: var(--accent-purple);
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.5rem;
+  }
+
+  p {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin-bottom: 0.75rem;
+    color: var(--text-secondary);
+  }
+
+  .privacy-link-container {
+    margin: 1.25rem 0;
+    text-align: center;
+  }
+
+  .privacy-confirmation-clause {
+    font-size: 0.85rem;
+    font-style: italic;
+    color: var(--text-secondary);
+    border-top: 1px dashed var(--border-color);
+    padding-top: 0.75rem;
+    margin-top: 1rem;
+  }
+}
+
+.consent-checkboxes-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  text-align: left;
+  margin: 1.5rem 0;
+
+  .consent-check {
+    ::ng-deep .mdc-label {
+      font-size: 0.9rem;
+      line-height: 1.4;
+      color: var(--text-primary) !important;
+    }
+  }
+
+  mat-error {
+    font-size: 0.8rem;
+    margin-top: -0.5rem;
+    margin-left: 2rem;
+    color: #ef4444;
+    display: block;
+  }
+}
+
 .disclaimer-box {
   background: rgba(245, 158, 11, 0.1);
   border-left: 4px solid #f59e0b;

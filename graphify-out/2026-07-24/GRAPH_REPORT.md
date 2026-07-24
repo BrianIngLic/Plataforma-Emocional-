@@ -1,7 +1,7 @@
-# Graph Report - Plataforma-Emocional-  (2026-07-24)
+# Graph Report - Plataforma-Emocional-  (2026-07-22)
 
 ## Corpus Check
-- 242 files · ~228,421 words
+- 242 files · ~226,306 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `b926541d`
+- Built from commit: `6e01388e`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -309,7 +309,7 @@ Nodes (7): Additional Resources, Building, Code scaffolding, Development server,
 
 ### Community 55 - "Community 55"
 Cohesion: 0.05
-Nodes (36): 22.2. Script de Extracción Geo BUAP, 22.3. Servicios Angular, 22.4. Registro — Eliminar Selector de Especialista, 22.5. Configuración del Estudiante — UI, 22.6. Admin — Facultad Obligatoria + Edificios, 22.7. Modalidad Híbrida del Especialista, 22.8. Verificación Final, ClinicalService (+28 more)
+Nodes (36): 22.2. Script de Extracción Geo BUAP, 22.3. Servicios Angular, 22.4. Registro — Eliminar Selector de Especialista, 22.5. Configuración del Estudiante — UI, 22.6. Admin — Facultad Obligatoria + Edificios, 22.7. Verificación Final, 22.7. Verificación Final, ClinicalService (+28 more)
 
 ### Community 57 - "Community 57"
 Cohesion: 0.29

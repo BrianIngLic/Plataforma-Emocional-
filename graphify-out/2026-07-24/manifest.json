@@ -190,8 +190,8 @@
     "semantic_hash": ""
   },
   "src/app/features/auth/register/register.component.ts": {
-    "mtime": 1784872712.3316984,
-    "ast_hash": "d60ace383724201535151b3b387a4512",
+    "mtime": 1784754899.7851696,
+    "ast_hash": "9e4bc6b2bb8c336dd74b251b070e1012",
     "semantic_hash": ""
   },
   "src/app/features/chat/chat.routes.ts": {
@@ -410,8 +410,8 @@
     "semantic_hash": ""
   },
   "src/app/features/auth/register/register.component.html": {
-    "mtime": 1784872738.2726676,
-    "ast_hash": "1614ff1a94294f739b3d254fd9f34dc2",
+    "mtime": 1784754910.491851,
+    "ast_hash": "e390193a876bd6666f688d118c40def2",
     "semantic_hash": ""
   },
   "src/app/features/chat/dashboard/dashboard.component.html": {
@@ -480,8 +480,8 @@
     "semantic_hash": ""
   },
   "task.md": {
-    "mtime": 1784756486.820006,
-    "ast_hash": "043c98dada750f1597bd71eb805ac36a",
+    "mtime": 1784756061.6453142,
+    "ast_hash": "7232dd873051025b7f2f54878696776a",
     "semantic_hash": ""
   },
   "public/amati-logo.svg": {
@@ -1345,8 +1345,8 @@
     "semantic_hash": ""
   },
   "src/app/shared/components/privacy-modal/privacy-modal.component.ts": {
-    "mtime": 1784872710.848432,
-    "ast_hash": "410948029a99a024cc01e5212fe79194",
+    "mtime": 1784062076.7769163,
+    "ast_hash": "bd2bedeb98f0786117a65c0e43a5da1c",
     "semantic_hash": ""
   },
   "scratch/check_db.js": {

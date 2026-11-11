@@ -1757,4 +1757,13 @@ BEGIN
 END;
 $$;
 
+-- Correciones
 
+DROP POLICY health_prof_access_records ON public.student_clinical_records;
+
+CREATE POLICY health_prof_access_records ON public.student_clinical_records
+FOR ALL TO authenticated
+USING (primary_psychologist_id = auth.uid()
+       OR primary_nutritionist_id = auth.uid())
+WITH CHECK (primary_psychologist_id = auth.uid()
+            OR primary_nutritionist_id = auth.uid());
